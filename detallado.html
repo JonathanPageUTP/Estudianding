@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explicación Detallada — Negocio Electrónico</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f4ef;
+  --ink: #1a1612;
+  --ink2: #3d3530;
+  --muted: #8a7e75;
+  --line: #ddd7cf;
+  --accent: #c84b2f;
+  --accent2: #2a6e4e;
+  --accent3: #1d4e8a;
+  --accent-light: #fdf0ed;
+  --green-light: #edf7f2;
+  --blue-light: #edf3fb;
+  --yellow: #f5a623;
+  --yellow-light: #fdf8ed;
+  --surface: #ffffff;
+  --surface2: #f0ece5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+/* ---- HEADER ---- */
+header {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 60px 40px 48px;
+  position: relative;
+  overflow: hidden;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--yellow), var(--accent2), var(--accent3));
+}
+.header-inner { max-width: 820px; margin: 0 auto; }
+.header-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 6vw, 58px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+header h1 em { color: var(--accent); font-style: italic; }
+header p {
+  font-size: 16px;
+  color: #b0a898;
+  max-width: 560px;
+}
+
+/* ---- TOC ---- */
+.toc {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.toc::-webkit-scrollbar { display: none; }
+.toc-inner {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.toc a {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.toc a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+.toc-sep {
+  color: var(--line);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ---- LAYOUT ---- */
+.page { max-width: 820px; margin: 0 auto; padding: 48px 24px 100px; }
+
+/* ---- CHAPTER HEADER ---- */
+.chapter {
+  margin-bottom: 64px;
+  padding-top: 32px;
+}
+.chapter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.chapter h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.chapter-divider {
+  height: 3px;
+  width: 60px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 12px 0 28px;
+}
+
+/* ---- SECTION ---- */
+.section {
+  margin-bottom: 48px;
+}
+.section h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.section h3 .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.section p {
+  font-size: 15.5px;
+  color: var(--ink2);
+  margin-bottom: 14px;
+  line-height: 1.8;
+}
+.section p strong { color: var(--ink); }
+
+/* ---- CALLOUT BOXES ---- */
+.callout {
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 20px 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.callout-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.callout.red { background: var(--accent-light); border-left: 3px solid var(--accent); }
+.callout.red .callout-label { color: var(--accent); }
+.callout.green { background: var(--green-light); border-left: 3px solid var(--accent2); }
+.callout.green .callout-label { color: var(--accent2); }
+.callout.blue { background: var(--blue-light); border-left: 3px solid var(--accent3); }
+.callout.blue .callout-label { color: var(--accent3); }
+.callout.yellow { background: var(--yellow-light); border-left: 3px solid var(--yellow); }
+.callout.yellow .callout-label { color: #b07a10; }
+
+/* ---- ANALOGY BOX ---- */
+.analogy {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 20px 0;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.analogy-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.analogy-content {}
+.analogy-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.analogy-text { font-size: 15px; color: var(--ink2); line-height: 1.7; }
+
+/* ---- COMPARISON GRID ---- */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+.compare-col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.compare-head {
+  padding: 12px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.compare-head.red { background: var(--accent-light); color: var(--accent); }
+.compare-head.green { background: var(--green-light); color: var(--accent2); }
+.compare-head.blue { background: var(--blue-light); color: var(--accent3); }
+.compare-head.yellow { background: var(--yellow-light); color: #b07a10; }
+.compare-body { padding: 14px 16px; }
+.compare-body li {
+  font-size: 14px;
+  color: var(--ink2);
+  margin-bottom: 7px;
+  padding-left: 16px;
+  position: relative;
+  list-style: none;
+  line-height: 1.5;
+}
+.compare-body li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---- TABLE ---- */
+.tbl-wrap { overflow-x: auto; margin: 16px 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+th {
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 11px 16px;
+  text-align: left;
+  font-weight: 500;
+}
+td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink2);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #faf8f5; }
+td strong { color: var(--ink); }
+
+/* ---- STAT ROW ---- */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+.stat {
+  flex: 1;
+  min-width: 130px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+.stat .val {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  display: block;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat .lbl { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* ---- STEP LIST ---- */
+.steps { margin: 16px 0; }
+.step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+.step-n {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.step-body { flex: 1; }
+.step-title { font-weight: 600; font-size: 15px; color: var(--ink); margin-bottom: 3px; }
+.step-desc { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+
+/* ---- BULLET LIST ---- */
+.blist { margin: 12px 0; padding-left: 0; list-style: none; }
+.blist li {
+  font-size: 15px;
+  color: var(--ink2);
+  padding: 6px 0 6px 20px;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  line-height: 1.6;
+}
+.blist li:last-child { border-bottom: none; }
+.blist li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 12px;
+  top: 8px;
+}
+
+/* ---- TAG ---- */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin: 2px;
+}
+.tr { background: var(--accent-light); color: var(--accent); }
+.tg { background: var(--green-light); color: var(--accent2); }
+.tb { background: var(--blue-light); color: var(--accent3); }
+.ty { background: var(--yellow-light); color: #b07a10; }
+
+/* ---- DIVIDER ---- */
+hr { border: none; border-top: 1px solid var(--line); margin: 48px 0; }
+
+/* ---- MODEL CARD ---- */
+.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+.model-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+  border-top: 3px solid var(--accent);
+}
+.model-card.green { border-top-color: var(--accent2); }
+.model-card.blue { border-top-color: var(--accent3); }
+.model-card.yellow { border-top-color: var(--yellow); }
+.model-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.model-full { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+.model-card li { font-size: 13px; color: var(--ink2); margin-bottom: 5px; padding-left: 14px; position: relative; list-style: none; }
+.model-card li::before { content: '·'; position: absolute; left: 0; color: var(--accent); font-size: 16px; top: -2px; }
+
+/* ---- FLOW DIAGRAM ---- */
+.flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 16px 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
+}
+.flow-node {
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 90px;
+}
+.flow-box {
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.flow-sub { font-size: 10px; color: var(--muted); }
+.flow-arrow {
+  color: var(--accent);
+  font-size: 20px;
+  padding: 0 8px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+
+/* ---- OWASP GRID ---- */
+.owasp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0; }
+.owasp-item {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.owasp-code {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+.owasp-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.owasp-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+@media (max-width: 600px) {
+  header { padding: 40px 20px 36px; }
+  .toc { padding: 14px 20px; }
+  .page { padding: 32px 16px 80px; }
+  .compare, .model-grid, .owasp-grid { grid-template-columns: 1fr; }
+  .stats .stat { min-width: 100px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-tag">Desarrollo de Software IX · UTP · Sesiones 1 y 2</div>
+    <h1>Negocio<br><em>Electrónico</em><br>— Explicado a Fondo</h1>
+    <p>Todos los temas explicados con detalle, ejemplos reales y analogías para que realmente los entiendas.</p>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#s1">E-Commerce vs E-Business</a><span class="toc-sep">·</span>
+    <a href="#s2">Historia</a><span class="toc-sep">·</span>
+    <a href="#s3">Estadísticas</a><span class="toc-sep">·</span>
+    <a href="#s4">Modelos</a><span class="toc-sep">·</span>
+    <a href="#s5">Marketplace vs Tienda</a><span class="toc-sep">·</span>
+    <a href="#s6">Omnicanal</a><span class="toc-sep">·</span>
+    <a href="#s7">Marketing Digital</a><span class="toc-sep">·</span>
+    <a href="#s8">Branding</a><span class="toc-sep">·</span>
+    <a href="#s9">Plataformas</a><span class="toc-sep">·</span>
+    <a href="#s10">Hosting</a><span class="toc-sep">·</span>
+    <a href="#s11">CDN</a><span class="toc-sep">·</span>
+    <a href="#s12">Pagos</a><span class="toc-sep">·</span>
+    <a href="#s13">Seguridad</a><span class="toc-sep">·</span>
+    <a href="#s14">Normativa</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ============================== SESIÓN 1 ============================== -->
+<div class="chapter" id="s1">
+  <div class="chapter-label">Sesión 1 — Tema 1</div>
+  <h2>E-Commerce vs E-Business</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Estos dos términos se confunden constantemente, pero son cosas muy distintas. Entenderlos bien es clave para el examen.</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🏬</div>
+      <div class="analogy-content">
+        <div class="analogy-title">Analogía del Supermercado</div>
+        <div class="analogy-text">Imagina un supermercado. <strong>La caja registradora</strong> (donde pagas) es el <strong>e-commerce</strong> — es la transacción en sí. Pero el supermercado también tiene un sistema de inventario, un departamento de RRHH, logística de proveedores, refrigeración, etc. <strong>Todo eso junto</strong> es el <strong>e-business</strong>. El e-commerce es solo UNA pieza del e-business.</div>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="compare-col">
+        <div class="compare-head red">E-Commerce</div>
+        <div class="compare-body">
+          <ul>
+            <li>Compra y venta por internet</li>
+            <li>Enfocado en la <strong>transacción</strong></li>
+            <li>Tiene inicio y fin claro (el pedido)</li>
+            <li>Ejemplos: Amazon, Mercado Libre, tienda de ropa online</li>
+            <li>Es un <em>subconjunto</em> del e-business</li>
+          </ul>
+        </div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head green">E-Business</div>
+        <div class="compare-body">
+          <ul>
+            <li>Digitalización de <strong>todos</strong> los procesos</li>
+            <li>Incluye CRM, ERP, supply chain, RRHH</li>
+            <li>Es una estrategia global de la empresa</li>
+            <li>No necesariamente vende en línea</li>
+            <li>Es el <em>concepto más amplio</em></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">📌 Para recordar en el examen</div>
+      IBM definió el e-business como <em>"la transformación de los procesos clave de negocio mediante el uso de tecnologías de Internet."</em> La palabra clave es <strong>"procesos clave"</strong> — no solo ventas.
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s2">
+  <div class="chapter-label">Sesión 1 — Tema 2</div>
+  <h2>Evolución Histórica del E-Commerce</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>El e-commerce no apareció de la noche a la mañana. Evolucionó en etapas bien marcadas que debes conocer, especialmente los hitos clave y sus fechas.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Año/Período</th><th>Evento</th><th>Por qué importa</th></tr>
+        <tr><td><strong>1979</strong></td><td>Primera transacción B2B online</td><td>El origen — antes de que existiera la web</td></tr>
+        <tr><td><strong>1990</strong></td><td>Tim Berners-Lee crea el primer navegador web</td><td>Sin esto, no habría internet comercial</td></tr>
+        <tr><td><strong>1994</strong></td><td>Primeras compras online (Netscape)</td><td>El comercio llega al público general</td></tr>
+        <tr><td><strong>1995</strong></td><td>Nacen Amazon y eBay</td><td>Los gigantes que definieron el retail online</td></tr>
+        <tr><td><strong>1998</strong></td><td>PayPal inicia operaciones</td><td>Por fin pagos digitales seguros y masivos</td></tr>
+        <tr><td><strong>2000</strong></td><td>Estallido burbuja .com</td><td>Las empresas sin modelo viable quiebran</td></tr>
+        <tr><td><strong>2007</strong></td><td>Lanzamiento del iPhone</td><td>Inicia el m-commerce (comercio móvil masivo)</td></tr>
+        <tr><td><strong>2014</strong></td><td>IPO de Alibaba ($25 mil millones)</td><td>El mayor IPO de la historia hasta ese momento</td></tr>
+        <tr><td><strong>2020</strong></td><td>COVID-19</td><td>+44% crecimiento: 5 años de adopción en 5 meses</td></tr>
+        <tr><td><strong>2023</strong></td><td>IA Generativa en e-commerce</td><td>Personalización y automatización a escala</td></tr>
+      </table>
+    </div>
+
+    <div class="callout yellow">
+      <div class="callout-label">💡 Dato que siempre sale en exámenes</div>
+      El COVID-19 comprimió <strong>5–7 años de adopción digital en solo 5 meses</strong>. El e-commerce global creció un <strong>+44%</strong> en 2020. Los compradores mayores de 65 años aumentaron un <strong>+160%</strong>. Y lo más importante: <strong>75%</strong> de esos nuevos compradores continuaron comprando nuevas marcas post-pandemia — el cambio fue permanente.
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s3">
+  <div class="chapter-label">Sesión 1 — Tema 3 y 4</div>
+  <h2>Estadísticas: Global y Panamá</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Estas cifras son las que más aparecen en preguntas de examen. Memorízalas con contexto para no confundirlas.</p>
+
+    <div class="stats">
+      <div class="stat"><span class="val">$5.8T</span><div class="lbl">Mercado global 2023 (USD)</div></div>
+      <div class="stat"><span class="val">14.7%</span><div class="lbl">Crecimiento anual proyectado</div></div>
+      <div class="stat"><span class="val">22.3%</span><div class="lbl">Del retail global ya es digital</div></div>
+      <div class="stat"><span class="val">2.14B</span><div class="lbl">Compradores digitales activos</div></div>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">🇵🇦 Panamá específicamente</div>
+      <strong>$628 millones</strong> en 2023 · Crecimiento <strong>15.8%</strong> (supera la media global) · Internet en <strong>76.5%</strong> de la población · <strong>65%</strong> de compras desde móvil · Método preferido: <strong>tarjetas de crédito (58%)</strong>, billeteras digitales (22%), transferencias (15%).
+    </div>
+
+    <h3 style="margin-top:24px; font-family:'Playfair Display',serif; font-size:18px;">Comportamiento del Consumidor Digital</h3>
+    <ul class="blist">
+      <li><strong>71%</strong> del tráfico e-commerce proviene de dispositivos móviles — si tu sitio no funciona en celular, pierdes la mayoría de visitas</li>
+      <li><strong>49%</strong> de los usuarios compran directamente desde apps móviles</li>
+      <li><strong>81%</strong> investigan online antes de comprar en tienda física (efecto ROPO: Research Online, Purchase Offline)</li>
+      <li><strong>5 minutos</strong> es el promedio de visita en un sitio de e-commerce — el contenido debe ser claro y rápido</li>
+    </ul>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s4">
+  <div class="chapter-label">Sesión 1 — Tema 8</div>
+  <h2>Tipos de Negocios Electrónicos</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Existen 4 modelos principales. La clave no es solo memorizar las siglas, sino entender cómo funciona cada uno y en qué se diferencia.</p>
+
+    <div class="model-grid">
+      <div class="model-card">
+        <div class="model-name">B2C</div>
+        <div class="model-full">Business to Consumer</div>
+        <ul>
+          <li>Empresa le vende directo al consumidor final</li>
+          <li>Ciclo de venta: minutos a días</li>
+          <li>Ticket promedio: bajo a medio</li>
+          <li>Factor crítico: UX y marketing</li>
+          <li><em>Ejemplos: Amazon, El Machetazo, tienda de ropa online</em></li>
+        </ul>
+      </div>
+      <div class="model-card green">
+        <div class="model-name">B2B</div>
+        <div class="model-full">Business to Business</div>
+        <ul>
+          <li>Una empresa le vende a otra empresa</li>
+          <li>Ciclo de venta: semanas a meses</li>
+          <li>Ticket promedio: alto a muy alto</li>
+          <li>Factor crítico: confianza y contratos</li>
+          <li><em>Ejemplos: Alibaba, distribuidores mayoristas, Grainger</em></li>
+        </ul>
+      </div>
+      <div class="model-card blue">
+        <div class="model-name">C2C</div>
+        <div class="model-full">Consumer to Consumer</div>
+        <ul>
+          <li>Personas venden a otras personas</li>
+          <li>Ciclo de venta: horas a días</li>
+          <li>Plataforma actúa como intermediario</li>
+          <li>Factor crítico: reputación del vendedor</li>
+          <li><em>Ejemplos: eBay, Encuentra24, Facebook Marketplace</em></li>
+        </ul>
+      </div>
+      <div class="model-card yellow">
+        <div class="model-name">B2G</div>
+        <div class="model-full">Business to Government</div>
+        <ul>
+          <li>Empresa le vende al gobierno</li>
+          <li>Ciclo de venta: meses a años</li>
+          <li>Procesos de licitación formales</li>
+          <li>Factor crítico: cumplimiento normativo</li>
+          <li><em>Ejemplos: PanamaCompra, SAM.gov (EEUU)</em></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="analogy">
+      <div class="analogy-icon">🎯</div>
+      <div class="analogy-content">
+        <div class="analogy-title">Truco para no confundirlos</div>
+        <div class="analogy-text">Piensa en quién <strong>compra</strong> y quién <strong>vende</strong>. La primera letra es el vendedor, la segunda es el comprador. B2C = Business (empresa) vende a Consumer (yo, tú). C2C = yo vendo a otro como yo. B2G = empresa vende al Government (gobierno).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s5">
+  <div class="chapter-label">Sesión 1 — Tema 9</div>
+  <h2>Marketplaces vs Tiendas Propias</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Esta es una decisión estratégica fundamental para cualquier negocio digital. Cada opción tiene ventajas y costos muy distintos.</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🏪</div>
+      <div class="analogy-content">
+        <div class="analogy-title">La Analogía del Centro Comercial</div>
+        <div class="analogy-text">Un <strong>marketplace</strong> es como alquilar un local dentro de un mall (Multiplaza). Ya tiene clientes que circulan, seguridad, luz, estacionamiento — pero pagas alquiler (15–40% de comisión) y no puedes decorar como quieras ni saber quiénes son exactamente tus clientes. Una <strong>tienda propia</strong> es como abrir tu propio local en la calle. Tú decides todo, conoces a tus clientes, no pagas comisión — pero tienes que atraer tú solo a la gente.</div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Criterio</th><th>Marketplace (Amazon, MercadoLibre)</th><th>Tienda Propia (tu dominio)</th></tr>
+        <tr><td>Inversión inicial</td><td>Baja — solo registro y comisiones</td><td>Media-Alta — plataforma + desarrollo</td></tr>
+        <tr><td>Control de precios</td><td>Parcial — hay presión competitiva</td><td>Total — tú decides</td></tr>
+        <tr><td>Datos del cliente</td><td>Muy limitados — el marketplace los tiene</td><td>Completos — comportamiento, CRM, emails</td></tr>
+        <tr><td>Tiempo al mercado</td><td>Días — subes y vendes</td><td>Semanas o meses</td></tr>
+        <tr><td>Margen neto</td><td>Bajo — 15–40% de comisión por venta</td><td>Alto — sin comisión de plataforma</td></tr>
+        <tr><td>SEO propio</td><td>No aplica — el SEO es del marketplace</td><td>Sí — construyes autoridad a largo plazo</td></tr>
+        <tr><td>Confianza del cliente</td><td>Alta desde el día 1 (marca del marketplace)</td><td>Debes construirla desde cero</td></tr>
+      </table>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">✅ La Estrategia Ganadora</div>
+      <strong>El 74% de las marcas exitosas usa estrategia híbrida</strong> — operan en ambos. Usan el marketplace para llegar a nuevos clientes y ganar visibilidad, y la tienda propia para fidelizar, construir marca y mejorar márgenes. No es una o la otra, sino las dos a la vez.
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s6">
+  <div class="chapter-label">Sesión 1 — Tema 11</div>
+  <h2>Estrategia Omnicanal</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Omnicanal es uno de los conceptos más importantes y más confundidos. No es simplemente "estar en varios canales" — es <strong>integrarlos</strong> de forma que el cliente tenga una experiencia sin fricciones sin importar por dónde interactúe.</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🔄</div>
+      <div class="analogy-content">
+        <div class="analogy-title">Multicanal vs Omnicanal — la diferencia real</div>
+        <div class="analogy-text"><strong>Multicanal:</strong> tienes web, app, tienda física e Instagram — pero cada uno funciona por separado. El inventario es diferente en cada uno, los precios pueden variar, y si empezaste una compra en la app no puedes continuarla en la tienda. <br><br><strong>Omnicanal:</strong> todos los canales están conectados. Compras online y recoges en tienda (BOPIS). Tu historial en la app aparece en la tienda física. Devuelves en cualquier canal. El empleado de la tienda ve lo que compraste online.</div>
+      </div>
+    </div>
+
+    <h3><span class="num">—</span> Componentes Clave del Omnicanal</h3>
+    <ul class="blist">
+      <li><strong>Inventario unificado en tiempo real</strong> — sabes exactamente cuánto stock hay sin importar el canal</li>
+      <li><strong>Precios consistentes en todos los canales</strong> — no puede ser más caro online que en tienda</li>
+      <li><strong>CRM único</strong> — historial de compras del cliente centralizado, sin importar dónde compró</li>
+      <li><strong>BOPIS</strong> (Buy Online, Pick-up In Store) — compras en línea y recoges en tienda</li>
+      <li><strong>Devoluciones en cualquier canal</strong> — compraste online, devuelves en tienda física</li>
+    </ul>
+
+    <div class="stats">
+      <div class="stat"><span class="val">73%</span><div class="lbl">Compradores usan múltiples canales en su proceso</div></div>
+      <div class="stat"><span class="val">4x</span><div class="lbl">Más gasta el cliente omnicanal vs monocanal</div></div>
+      <div class="stat"><span class="val">-10%</span><div class="lbl">Reducción en costos de inventario con omnicanal</div></div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s7">
+  <div class="chapter-label">Sesión 1 — Tema 13</div>
+  <h2>Marketing Digital</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>El marketing digital no es solo publicar en redes sociales. Es un ecosistema completo de estrategias medibles y optimizables en tiempo real.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Criterio</th><th>Marketing Tradicional</th><th>Marketing Digital</th></tr>
+        <tr><td>Medición</td><td>Métricas ambiguas (¿cuántos vieron la valla?)</td><td>ROI preciso en tiempo real (cuántos compraron)</td></tr>
+        <tr><td>Segmentación</td><td>Audiencias amplias (TV, radio)</td><td>Micro-segmentación (mujer, 28 años, Panamá, le gustan los perros)</td></tr>
+        <tr><td>Contenido</td><td>Estático — mismo mensaje para todos</td><td>Personalización dinámica — mensaje diferente por perfil</td></tr>
+        <tr><td>Ciclo</td><td>Campañas largas que se cambian cada trimestre</td><td>Testeo A/B continuo — cambias en horas</td></tr>
+        <tr><td>CAC (costo adquirir cliente)</td><td>$45–$65</td><td>$25–$30 — casi la mitad</td></tr>
+        <tr><td>CPM (costo por mil impresiones)</td><td>$20–$30 (TV)</td><td>$2–$10 (digital)</td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin-top:28px"><span class="num">—</span> Las 4 Estrategias Fundamentales</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-title">Inbound Marketing</div>
+          <div class="step-desc">En vez de interrumpir a la gente (como los anuncios en TV), <strong>atraes</strong> a clientes con contenido valioso. Blogs, SEO, podcasts, videos educativos. La gente llega porque encontró algo útil, no porque le pusiste un anuncio.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-title">Content Marketing</div>
+          <div class="step-desc">Crear y distribuir contenido relevante para captar y retener audiencias. No vendes directamente — <strong>educas y generas confianza</strong> primero. Ejemplo: una tienda de suplementos que publica artículos sobre nutrición.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-title">Funnel de Conversión (TOFU → MOFU → BOFU)</div>
+          <div class="step-desc"><strong>TOFU</strong> (Top of Funnel) = awareness, el cliente te descubre. <strong>MOFU</strong> (Middle) = considera comprarte, compara opciones. <strong>BOFU</strong> (Bottom) = está listo para comprar, necesitas cerrar. Cada etapa necesita contenido diferente.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-title">Remarketing</div>
+          <div class="step-desc">Reconectar con visitantes que NO compraron. Alguien visitó tu tienda, vio unos zapatos pero no compró — el remarketing le muestra esos mismos zapatos en Instagram dos días después. <strong>Tasa de recuperación: 10–25%</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout red">
+      <div class="callout-label">📊 Fuentes de tráfico e-commerce</div>
+      SEO orgánico lidera con <strong>51%</strong> del tráfico, seguido de SEM/pago (26%), Email Marketing (16%) y Social Media (16%). Invertir en SEO a largo plazo es la estrategia con mejor ROI.
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!-- ============================== SESIÓN 2 ============================== -->
+
+<div class="chapter" id="s8">
+  <div class="chapter-label">Sesión 2 — Temas 2 y 3</div>
+  <h2>Branding Digital y Propuesta de Valor</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>El branding digital es la <strong>identidad completa de tu marca en el entorno online</strong>: cómo te ven, cómo te reconocen y qué sienten cuando interactúan contigo. No es solo el logo — es todo.</p>
+
+    <div class="analogy">
+      <div class="analogy-icon">🧠</div>
+      <div class="analogy-content">
+        <div class="analogy-title">¿Por qué importa tanto el branding?</div>
+        <div class="analogy-text">Cuando ves una lata roja con letras blancas curvas, ya sabes que es Coca-Cola sin leer el nombre. Eso es branding poderoso. Las marcas con branding consistente en todos los canales digitales generan <strong>33% más de ingresos</strong>. El color consistente aumenta el reconocimiento un <strong>80%</strong>.</div>
+      </div>
+    </div>
+
+    <h3><span class="num">—</span> Los 3 Pilares del Branding Digital</h3>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-title">Nombre y Dominio</div>
+          <div class="step-desc">Debe ser <strong>memorable, fácil de pronunciar y deletrear</strong>, relevante para el negocio, disponible como .com o .net, y optimizado para SEO. Sin números ni guiones innecesarios. Mal ejemplo: tienda-ropa-panama-2024.com. Buen ejemplo: lamodapa.com</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-title">Identidad Visual</div>
+          <div class="step-desc">Logo adaptable a diferentes tamaños (funciona en favicon y en valla), paleta de colores definida (primarios y secundarios), tipografía web-safe y legible, iconografía y elementos gráficos consistentes. Todo esto debe estar documentado en un <strong>brand book</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-title">Tono y Personalidad</div>
+          <div class="step-desc">¿Cómo habla tu marca? ¿Es formal o casual? ¿Seria o divertida? Este tono debe ser <strong>consistente en todos los canales</strong>: web, redes sociales, email, atención al cliente. Necesitas una guía editorial documentada para que cualquier persona que escriba para la marca mantenga el mismo tono.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px"><span class="num">—</span> Propuesta de Valor</h3>
+    <p>Es la <strong>razón por la que alguien debería comprarte a ti y no a tu competencia</strong>. Debe responder: ¿qué problema resuelvo? ¿por qué soy diferente? ¿por qué debo creerte?</p>
+
+    <div class="callout blue">
+      <div class="callout-label">📝 Fórmula de Propuesta de Valor</div>
+      <strong>Para [cliente] que [necesidad], [marca] ofrece [beneficio] a diferencia de [competencia] porque [razón].</strong><br><br>
+      Ejemplo: Para <em>profesionales en Panamá</em> que <em>necesitan ropa formal sin perder tiempo</em>, <em>SuitUp</em> ofrece <em>trajes a medida entregados en 48 horas</em> a diferencia de <em>las sastrerías tradicionales</em> porque <em>usamos tecnología de escaneo 3D y tenemos taller propio</em>.
+    </div>
+
+    <p>Estrategias de posicionamiento: por calidad premium (Apple), precio competitivo (Amazon), nicho especializado (Thomann para músicos), experiencia única (Nike By You) o valores (Patagonia con sostenibilidad).</p>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s9">
+  <div class="chapter-label">Sesión 2 — Temas 4, 5 y 6</div>
+  <h2>Plataformas E-Commerce</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Elegir la plataforma equivocada puede costarle miles de dólares a un negocio. Hay dos grandes categorías: <strong>SaaS</strong> (pagas mensual, ellos administran el servidor) y <strong>Open Source</strong> (gratis pero tú lo instalas y mantienes).</p>
+
+    <div class="compare">
+      <div class="compare-col">
+        <div class="compare-head blue">SaaS (Software as a Service)</div>
+        <div class="compare-body">
+          <ul>
+            <li>Shopify, BigCommerce, Wix, Squarespace</li>
+            <li>Pagas mensualidad ($29–$299)</li>
+            <li>Ellos mantienen el servidor</li>
+            <li>Menos control pero más fácil</li>
+            <li>Ideal para negocios sin equipo técnico</li>
+            <li>Actualizaciones automáticas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head red">Open Source</div>
+        <div class="compare-body">
+          <ul>
+            <li>WooCommerce, PrestaShop, Magento, OpenCart</li>
+            <li>Software gratis, pero pagas hosting</li>
+            <li>Tú administras el servidor</li>
+            <li>Control total, pero requiere técnicos</li>
+            <li>Ideal para empresas con equipo de desarrollo</li>
+            <li>Actualizaciones manuales</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> Comparativa Detallada de las 5 Principales</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Plataforma</th><th>Costo impl.</th><th>Costo/mes</th><th>Complejidad</th><th>Personalización</th><th>Escalabilidad</th><th>SEO</th></tr>
+        <tr><td><strong>Magento</strong></td><td>$5k–$50k</td><td>$200–$3k</td><td>Alta</td><td>Muy alta</td><td>Excelente</td><td>Excelente</td></tr>
+        <tr><td><strong>PrestaShop</strong></td><td>$1k–$5k</td><td>$50–$500</td><td>Media</td><td>Alta</td><td>Buena</td><td>Bueno</td></tr>
+        <tr><td><strong>OpenCart</strong></td><td>$500–$3k</td><td>$30–$200</td><td>Baja–Media</td><td>Media</td><td>Media</td><td>Básico</td></tr>
+        <tr><td><strong>WooCommerce</strong></td><td>$500–$3k</td><td>$30–$300</td><td>Baja–Media</td><td>Alta</td><td>Media</td><td>Excelente</td></tr>
+        <tr><td><strong>Shopify</strong></td><td>$0–$2k</td><td>$29–$299</td><td>Baja</td><td>Media</td><td>Buena</td><td>Bueno</td></tr>
+      </table>
+    </div>
+
+    <div class="callout yellow">
+      <div class="callout-label">🧭 Matriz de Decisión por Tamaño</div>
+      <strong>Micro (1–100 productos):</strong> Shopify Lite, Wix, Facebook Shop<br>
+      <strong>Pequeño (100–1,000):</strong> Shopify, WooCommerce, PrestaShop<br>
+      <strong>Mediano (1,000–10,000):</strong> Shopify Plus, BigCommerce, Magento<br>
+      <strong>Grande (10,000+):</strong> Magento Commerce, desarrollo personalizado, SAP
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> Arquitecturas: Monolítico vs Headless</h3>
+    <p><strong>Monolítico:</strong> el frontend y backend están juntos en el mismo sistema. Más simple pero menos flexible. <strong>Headless:</strong> el frontend (lo que ve el usuario) está separado del backend (la base de datos y lógica). Permite crear experiencias para web, app, smartwatch, etc. con el mismo backend. Tendencia: crecimiento del <strong>27%</strong> en adopción headless en 2024–2025.</p>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s10">
+  <div class="chapter-label">Sesión 2 — Temas 8 y 9</div>
+  <h2>Hosting: Tipos y Comparativa</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>El hosting es donde "vive" tu tienda online. Elegir mal significa que tu sitio se cae en Black Friday cuando más vendes. Hay 4 tipos principales.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-title">Hosting Compartido — $3–$15/mes</div>
+          <div class="step-desc">Varios sitios web comparten el mismo servidor físico. Como un apartamento compartido — barato, pero si tu vecino hace una fiesta (mucho tráfico), todos sufren. Ideal solo para tiendas muy pequeñas con menos de 500 visitas al día. <span class="tag tr">No recomendado para e-commerce serio</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-title">VPS (Servidor Privado Virtual) — $20–$100/mes</div>
+          <div class="step-desc">Sigues compartiendo el servidor físico, pero tienes una partición dedicada — como tener tu propio cuarto en el apartamento compartido. Recursos garantizados, rendimiento predecible. Requiere algo de conocimiento técnico. Para 500–5,000 visitas/día.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-title">Servidor Dedicado — $100–$500+/mes</div>
+          <div class="step-desc">Toda la máquina física es solo tuya. Máximo rendimiento y control. Caro y requiere administración técnica avanzada. Para tiendas con más de 5,000 visitas/día que no quieren cloud.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-title">Cloud Hosting — $20–$1,000+/mes</div>
+          <div class="step-desc">Recursos distribuidos en múltiples servidores. Si uno falla, otro toma el relevo. Escala automáticamente: si de repente tienes 10x más tráfico (Black Friday), el sistema se adapta solo. Es el más recomendado para e-commerce moderno. <span class="tag tg">ROI 4.01x mayor que on-premises a 3 años</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> On-Premises vs Cloud</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Criterio</th><th>On-Premises (servidor propio)</th><th>Cloud Hosting</th></tr>
+        <tr><td>Inversión inicial</td><td>Alta — compras el hardware</td><td>Baja — sin capex significativo</td></tr>
+        <tr><td>Costos operativos</td><td>Fijos (personal, energía, mantenimiento)</td><td>Variables — pagas lo que usas</td></tr>
+        <tr><td>Escalabilidad</td><td>Limitada — debes comprar más hardware</td><td>Instantánea según demanda</td></tr>
+        <tr><td>Seguridad</td><td>Control total pero responsabilidad tuya</td><td>Compartida con certificaciones del proveedor</td></tr>
+        <tr><td>Implementación</td><td>Semanas o meses</td><td>Horas o días</td></tr>
+        <tr><td>Recuperación ante desastres</td><td>Debes construir tu propia redundancia</td><td>Incluida con replicación geográfica</td></tr>
+      </table>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">⚡ Requisitos Técnicos Clave</div>
+      <strong>Rendimiento:</strong> Tiempo de carga &lt;2 segundos · Nginx/Apache optimizado · Caching con Redis o Varnish<br>
+      <strong>Seguridad:</strong> SSL/TLS obligatorio · WAF · Protección DDoS · SLA mínimo 99.9% (solo 8.76 horas de caída al año)<br>
+      <strong>Cálculo de recursos:</strong> Por cada 100 usuarios concurrentes necesitas 2–4 GB RAM y 2–4 núcleos CPU
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s11">
+  <div class="chapter-label">Sesión 2 — Tema 10</div>
+  <h2>CDN — Red de Distribución de Contenido</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <div class="analogy">
+      <div class="analogy-icon">📡</div>
+      <div class="analogy-content">
+        <div class="analogy-title">¿Qué es un CDN? — La analogía de los almacenes</div>
+        <div class="analogy-text">Imagina que tu tienda (servidor) está en Ciudad de Panamá. Un cliente en Miami quiere cargar tu sitio — los datos tienen que viajar de Panamá a Miami, lo que toma tiempo. Un CDN coloca <strong>copias de tu contenido en servidores repartidos por el mundo</strong> — Miami, Nueva York, Madrid, São Paulo. Cuando el cliente de Miami carga tu sitio, los datos vienen del servidor más cercano, no desde Panamá. Como tener almacenes en vez de solo una fábrica central.</div>
+      </div>
+    </div>
+
+    <h3><span class="num">—</span> Beneficios Concretos para E-Commerce</h3>
+    <ul class="blist">
+      <li>Reducción del tiempo de carga en <strong>50–70%</strong></li>
+      <li>Cada 0.1 segundo menos de carga = <strong>+1% de conversión</strong> (ventas)</li>
+      <li><strong>53% de usuarios abandonan</strong> si la carga supera 3 segundos</li>
+      <li>Absorbe picos de tráfico sin que el servidor origen colapse</li>
+      <li>Ahorra 30–60% del ancho de banda del servidor origen</li>
+      <li>Capa adicional de protección contra ataques DDoS</li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Proveedor</th><th>Especialidad</th><th>Costo aprox.</th><th>Ideal para</th></tr>
+        <tr><td><strong>Cloudflare</strong></td><td>Seguridad + CDN + DDoS</td><td>$0–$200/mes</td><td>La mayoría de e-commerce — tiene plan gratis</td></tr>
+        <tr><td><strong>Akamai</strong></td><td>Rendimiento y cobertura global</td><td>Enterprise</td><td>Grandes corporaciones</td></tr>
+        <tr><td><strong>Amazon CloudFront</strong></td><td>Integración con AWS</td><td>$0.085/GB</td><td>Si ya usas infraestructura AWS</td></tr>
+        <tr><td><strong>Google Cloud CDN</strong></td><td>Rendimiento Google + analítica</td><td>$0.08/GB</td><td>Si ya usas Google Cloud</td></tr>
+        <tr><td><strong>Fastly</strong></td><td>Tiempo real y personalización</td><td>$0.12/GB</td><td>E-commerce avanzado con personalización</td></tr>
+      </table>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">🌎 Importante para Panamá y LATAM</div>
+      Para tener buena velocidad en la región, busca proveedores con nodos PoP en <strong>Ciudad de Panamá, Bogotá, Santiago y São Paulo</strong>. Cloudflare los tiene todos y tiene plan gratuito — es la primera opción a considerar.
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s12">
+  <div class="chapter-label">Sesión 2 — Temas 11, 12, 13 y 14</div>
+  <h2>Sistemas de Pago Electrónico</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Entender cómo funciona un pago electrónico es fundamental. Hay más actores involucrados de lo que parece cuando alguien hace clic en "Comprar".</p>
+
+    <h3><span class="num">—</span> Los Actores del Ecosistema</h3>
+
+    <div class="flow">
+      <div class="flow-node"><div class="flow-box">Comprador</div><div class="flow-sub">El que paga</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Comercio</div><div class="flow-sub">Tu tienda</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Pasarela</div><div class="flow-sub">Interfaz de pago</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Procesador</div><div class="flow-sub">Enruta la transacción</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Banco Emisor</div><div class="flow-sub">Banco del cliente</div></div>
+      <div class="flow-arrow">↔</div>
+      <div class="flow-node"><div class="flow-box">Banco Adquirente</div><div class="flow-sub">Banco del comercio</div></div>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">🔄 El flujo paso a paso (8 pasos en 2–3 segundos)</div>
+      1. Cliente elige producto y método de pago<br>
+      2. Ingresa datos en formulario seguro<br>
+      3. Datos enviados a la pasarela via SSL/TLS (cifrados)<br>
+      4. Pasarela redirige al procesador<br>
+      5. Procesador contacta al banco emisor del cliente<br>
+      6. Banco emisor <strong>autoriza o rechaza</strong> la transacción<br>
+      7. Respuesta regresa por la misma ruta<br>
+      8. Confirmación al cliente y creación de la orden
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> Pasarelas Globales vs Regionales</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Pasarela</th><th>Cobertura</th><th>Comisión</th><th>Destacado</th></tr>
+        <tr><td><strong>PayPal</strong></td><td>200+ países</td><td>2.9% + $0.30</td><td>Adopción global, máxima confianza del consumidor</td></tr>
+        <tr><td><strong>Stripe</strong></td><td>40+ países</td><td>2.9% + $0.30</td><td>La mejor API para desarrolladores</td></tr>
+        <tr><td><strong>2Checkout</strong></td><td>200+ países</td><td>3.5% + $0.30</td><td>Maneja impuestos globales automáticamente</td></tr>
+        <tr><td><strong>PagueloFácil</strong></td><td>Panamá</td><td>Variable</td><td>Certificada bancos locales, pagos recurrentes, ACH</td></tr>
+        <tr><td><strong>Yappy</strong></td><td>Panamá</td><td>Variable</td><td>Integración Banco General, QR, amplia adopción local</td></tr>
+        <tr><td><strong>Mercado Pago</strong></td><td>LATAM</td><td>Variable</td><td>Checkout transparente, gran adopción regional</td></tr>
+      </table>
+    </div>
+
+    <div class="callout yellow">
+      <div class="callout-label">🇵🇦 Contexto Crítico para Panamá y LATAM</div>
+      <strong>55%</strong> de latinoamericanos no tienen cuenta bancaria — debes ofrecer alternativas al pago con tarjeta.<br>
+      <strong>78%</strong> prefieren métodos de pago locales (Yappy, ACH, efectivo).<br>
+      Ofrecer pago en efectivo puede <strong>aumentar ventas hasta un 35%</strong>.<br>
+      Cuotas sin interés puede <strong>aumentar el valor promedio de compra hasta un 65%</strong>.
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> PCI DSS — El Estándar Obligatorio</h3>
+    <p><strong>PCI DSS</strong> (Payment Card Industry Data Security Standard) es el estándar de seguridad que TODOS los comercios deben cumplir si procesan pagos con tarjeta. Tiene <strong>12 requisitos</strong> que cubren: redes seguras, protección de datos del titular, control de vulnerabilidades, control de acceso, monitoreo de redes y políticas de seguridad. No cumplirlo puede resultar en multas o en que las redes de pago te bloqueen.</p>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> Checkout: La Zona Más Crítica</h3>
+    <p>El <strong>69.8%</strong> de los procesos de checkout son abandonados. Las razones principales son costos inesperados (49%), obligación de crear cuenta (28%) y checkout complicado (23%). La optimización (una sola página, autorrelleno, barra de progreso) puede reducir el abandono del 73% al 52%.</p>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s13">
+  <div class="chapter-label">Sesión 2 — Temas 15 y 16</div>
+  <h2>Seguridad en E-Commerce</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <div class="stats">
+      <div class="stat"><span class="val">$4.35M</span><div class="lbl">Costo promedio de una brecha de datos</div></div>
+      <div class="stat"><span class="val">85%</span><div class="lbl">No compran sin certificado SSL visible</div></div>
+      <div class="stat"><span class="val">43%</span><div class="lbl">Ataques cibernéticos van contra el comercio online</div></div>
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> La Triada CIA</h3>
+    <p>La seguridad en sistemas de información se organiza en tres pilares fundamentales:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">C</div>
+        <div class="step-body">
+          <div class="step-title">Confidencialidad</div>
+          <div class="step-desc">Solo usuarios autorizados pueden acceder a datos sensibles. Se implementa con <strong>cifrado SSL/TLS</strong> (datos en tránsito), <strong>tokenización de pagos</strong> (en vez de guardar el número de tarjeta, guardas un token inútil para hackers) y cifrado de datos almacenados.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">I</div>
+        <div class="step-body">
+          <div class="step-title">Integridad</div>
+          <div class="step-desc">Los datos no pueden ser alterados sin autorización. Se logra con <strong>validación de entradas</strong> (no aceptas datos maliciosos), <strong>firmas digitales</strong> y <strong>hashing</strong> (guardar contraseñas como hash, no en texto plano — si te hackean, el hacker ve solo un hash inútil).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">A</div>
+        <div class="step-body">
+          <div class="step-title">Disponibilidad</div>
+          <div class="step-desc">El sistema debe estar accesible cuando se necesita. Se logra con <strong>redundancia</strong>, <strong>balanceo de carga</strong>, <strong>backups automáticos</strong> y <strong>protección DDoS</strong>. El SLA mínimo aceptable es 99.9% uptime (máximo 8.76 horas caídas al año).</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px"><span class="num">—</span> Amenazas Comunes y sus Defensas</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Amenaza</th><th>Qué hace</th><th>Defensa principal</th></tr>
+        <tr><td><strong>SQL Injection</strong></td><td>Inyecta código malicioso en consultas a la base de datos para robar o borrar información</td><td>Consultas parametrizadas, WAF, usar ORM</td></tr>
+        <tr><td><strong>XSS (Cross-Site Scripting)</strong></td><td>Inyecta scripts maliciosos en el navegador de otros usuarios para robar cookies o sesiones</td><td>Sanitización de inputs, CSP (Content Security Policy)</td></tr>
+        <tr><td><strong>CSRF</strong></td><td>Engaña al usuario autenticado para que ejecute acciones no deseadas (ej: cambiar contraseña)</td><td>Tokens anti-CSRF en formularios, SameSite cookies</td></tr>
+        <tr><td><strong>Credential Stuffing</strong></td><td>Prueba millones de combinaciones usuario/contraseña robadas de otras brechas</td><td>CAPTCHA, rate limiting, 2FA obligatorio</td></tr>
+        <tr><td><strong>Card Testing</strong></td><td>Prueba tarjetas robadas haciendo micropagos para verificar cuáles funcionan</td><td>Análisis de comportamiento, reglas antifraude, límites de intentos</td></tr>
+        <tr><td><strong>DDoS</strong></td><td>Inunda tu servidor con tráfico falso hasta tumbarlo</td><td>CDN con protección DDoS (Cloudflare), WAF, rate limiting</td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin-top:28px"><span class="num">—</span> SSL/TLS y Tipos de Certificados</h3>
+    <p>HTTPS no es opcional en e-commerce — el 85% de los usuarios no compra si no lo ven. SSL/TLS cifra la comunicación entre el navegador del usuario y tu servidor.</p>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Tipo</th><th>Validación</th><th>Uso recomendado</th><th>Costo/año</th></tr>
+        <tr><td><strong>DV</strong> (Domain Validated)</td><td>Solo verifica que controlas el dominio</td><td>Blogs, sitios informativos</td><td>$0–$70 (Let's Encrypt es gratis)</td></tr>
+        <tr><td><strong>OV</strong> (Organization Validated)</td><td>Verifica identidad de la organización</td><td>E-commerce mediano</td><td>$50–$200</td></tr>
+        <tr><td><strong>EV</strong> (Extended Validation)</td><td>Validación extendida y rigurosa</td><td>E-commerce de alto valor, bancos</td><td>$200–$700</td></tr>
+        <tr><td><strong>Wildcard</strong></td><td>Varía</td><td>Cubres todos los subdominios con uno solo</td><td>$100–$700</td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin-top:28px"><span class="num">—</span> OWASP Top 10 (2021)</h3>
+    <p>OWASP es una organización que publica las 10 vulnerabilidades más críticas en aplicaciones web. Las más relevantes para e-commerce son:</p>
+    <div class="owasp-grid">
+      <div class="owasp-item"><div class="owasp-code">A01</div><div><div class="owasp-name">Broken Access Control</div><div class="owasp-desc">Usuarios acceden a recursos o acciones que no deberían (ver pedidos de otros clientes)</div></div></div>
+      <div class="owasp-item"><div class="owasp-code">A02</div><div><div class="owasp-name">Crypto Failures</div><div class="owasp-desc">Datos sensibles mal protegidos (contraseñas sin hash, tarjetas sin cifrar)</div></div></div>
+      <div class="owasp-item"><div class="owasp-code">A03</div><div><div class="owasp-name">Injection</div><div class="owasp-desc">SQL, NoSQL, LDAP injection — código malicioso en consultas</div></div></div>
+      <div class="owasp-item"><div class="owasp-code">A05</div><div><div class="owasp-name">Misconfiguration</div><div class="owasp-desc">Configuraciones por defecto inseguras, directorios expuestos, errores visibles</div></div></div>
+      <div class="owasp-item"><div class="owasp-code">A07</div><div><div class="owasp-name">Auth Failures</div><div class="owasp-desc">Fallos en autenticación: sesiones que no expiran, contraseñas débiles permitidas</div></div></div>
+      <div class="owasp-item"><div class="owasp-code">A10</div><div><div class="owasp-name">SSRF</div><div class="owasp-desc">Server-Side Request Forgery — el servidor hace peticiones no autorizadas</div></div></div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="chapter" id="s14">
+  <div class="chapter-label">Sesión 2 — Tema 17</div>
+  <h2>Cumplimiento Normativo en Panamá</h2>
+  <div class="chapter-divider"></div>
+
+  <div class="section">
+    <p>Tener un e-commerce en Panamá implica cumplir con leyes nacionales e internacionales. Ignorarlas puede resultar en multas millonarias o cierre del negocio.</p>
+
+    <h3><span class="num">—</span> Leyes Panameñas Clave</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">📋</div>
+        <div class="step-body">
+          <div class="step-title">Ley 81 de 2019 — Protección de Datos Personales</div>
+          <div class="step-desc">Regula cómo las empresas deben manejar los datos personales de sus clientes. Exige <strong>consentimiento explícito</strong> para recopilar datos, permite al usuario solicitar borrar sus datos, y obliga a implementar medidas de seguridad. Es el GDPR panameño.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">✍️</div>
+        <div class="step-body">
+          <div class="step-title">Ley 51 de 2008 — Documento y Firma Electrónica</div>
+          <div class="step-desc">Da validez legal a los documentos y contratos firmados digitalmente en Panamá. Fundamental para e-commerce B2B y cualquier contrato digital.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">⚠️</div>
+        <div class="step-body">
+          <div class="step-title">Ley 14 de 2007 — Delitos Informáticos</div>
+          <div class="step-desc">Tipifica como delitos: acceso no autorizado a sistemas, fraude informático, daño a datos. Protege tanto al comercio como a los clientes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">🛒</div>
+        <div class="step-body">
+          <div class="step-title">Ley 24 de 2002 — Comercio Electrónico</div>
+          <div class="step-desc">La ley base del e-commerce en Panamá. Reconoce las transacciones electrónicas, los mensajes de datos y establece el marco legal para el comercio por internet.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px"><span class="num">—</span> Normativas Internacionales que Aplican</h3>
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Normativa</th><th>Ámbito</th><th>Cuándo aplica a tu e-commerce panameño</th></tr>
+        <tr><td><strong>PCI DSS</strong></td><td>Global</td><td>Siempre que proceses pagos con tarjeta de crédito/débito</td></tr>
+        <tr><td><strong>GDPR</strong></td><td>Unión Europea</td><td>Si tienes clientes europeos o recopilas datos de ciudadanos de la UE</td></tr>
+        <tr><td><strong>CCPA/CPRA</strong></td><td>California, EEUU</td><td>Si tienes clientes de California</td></tr>
+      </table>
+    </div>
+
+    <div class="callout red">
+      <div class="callout-label">⚖️ Qué debes implementar sí o sí</div>
+      <strong>Privacidad:</strong> Política de privacidad visible · Consentimiento de cookies (banner) · Proceso para solicitar/borrar datos · Minimización de datos recopilados<br><br>
+      <strong>Seguridad:</strong> PCI DSS según tu volumen de transacciones · No almacenar datos completos de tarjetas · Tokenización · Auditorías periódicas<br><br>
+      <strong>Transparencia:</strong> Términos y condiciones claros · Confirmación de pedidos con todos los datos · Política de devoluciones visible
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">✅ Enfoque Recomendado (del material)</div>
+      Adopta los estándares más exigentes (GDPR, PCI DSS) como base y adapta a particularidades locales. El principio rector debe ser <strong>Privacy by Design</strong> — diseña la privacidad desde el inicio, no la agregues al final como parche.
+    </div>
+  </div>
+</div>
+
+</div><!-- end page -->
+
+</body>
+</html>

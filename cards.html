@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Negocio Electrónico</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05080f;
+    --surface: #0d1117;
+    --surface2: #161b22;
+    --surface3: #1c2230;
+    --border: #21262d;
+    --border2: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #d29922;
+    --accent4: #f85149;
+    --accent5: #bc8cff;
+    --accent6: #39d353;
+    --text: #c9d1d9;
+    --text2: #8b949e;
+    --white: #f0f6fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(88,166,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(88,166,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 48px 24px 36px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: 2px;
+    padding: 5px 14px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent2);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 8vw, 80px);
+    letter-spacing: 3px;
+    color: var(--white);
+    line-height: 0.95;
+    margin-bottom: 12px;
+  }
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    letter-spacing: 1px;
+  }
+
+  /* CONTROLS */
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5,8,15,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .counter-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .counter-display .num {
+    color: var(--accent);
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .progress-wrap {
+    flex: 1;
+    max-width: 300px;
+    height: 3px;
+    background: var(--border2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent5));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: rgba(88,166,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* MAIN CARD AREA */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  /* CARD FLIP */
+  .card-scene {
+    perspective: 1400px;
+    margin-bottom: 28px;
+  }
+
+  .fc {
+    position: relative;
+    width: 100%;
+    min-height: 320px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+  }
+  .fc.flipped { transform: rotateY(180deg); }
+
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 44px 48px;
+    text-align: center;
+    min-height: 320px;
+  }
+
+  .fc-front {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    position: relative;
+    overflow: hidden;
+  }
+  .fc-front::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-color, var(--accent)), transparent);
+  }
+  .fc-front::after {
+    content: attr(data-num);
+    position: absolute;
+    bottom: 16px;
+    right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .fc-back {
+    background: linear-gradient(145deg, #0d1525 0%, #091020 100%);
+    border: 1px solid rgba(88,166,255,0.2);
+    transform: rotateY(180deg);
+  }
+
+  .fc-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    border: 1px solid currentColor;
+    opacity: 0.7;
+  }
+
+  .fc-q {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.5;
+    max-width: 600px;
+  }
+
+  .fc-hint {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  .fc-a {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    max-width: 620px;
+    text-align: left;
+  }
+  .fc-a strong { color: var(--accent); font-weight: 600; }
+  .fc-a .val { color: var(--accent3); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .fc-a .good { color: var(--accent2); }
+  .fc-a .bad { color: var(--accent4); }
+
+  /* NAV BUTTONS */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 11px 24px;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.06); }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+  .btn-primary:hover { background: #79beff; border-color: #79beff; color: #000; }
+
+  .btn-shuffle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* CATEGORY COLORS */
+  .cat-conceptos    { --accent-color: #58a6ff; color: #58a6ff; border-color: rgba(88,166,255,0.4); }
+  .cat-estadisticas { --accent-color: #d29922; color: #d29922; border-color: rgba(210,153,34,0.4); }
+  .cat-plataformas  { --accent-color: #bc8cff; color: #bc8cff; border-color: rgba(188,140,255,0.4); }
+  .cat-seguridad    { --accent-color: #f85149; color: #f85149; border-color: rgba(248,81,73,0.4); }
+  .cat-pagos        { --accent-color: #3fb950; color: #3fb950; border-color: rgba(63,185,80,0.4); }
+  .cat-hosting      { --accent-color: #39d353; color: #39d353; border-color: rgba(57,211,83,0.4); }
+  .cat-branding     { --accent-color: #ff7b72; color: #ff7b72; border-color: rgba(255,123,114,0.4); }
+  .cat-marketing    { --accent-color: #ffa657; color: #ffa657; border-color: rgba(255,166,87,0.4); }
+  .cat-legal        { --accent-color: #a5d6ff; color: #a5d6ff; border-color: rgba(165,214,255,0.4); }
+
+  /* FLIP ANIMATION ENHANCEMENT */
+  .fc.flipped .fc-front { pointer-events: none; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .fc-face { padding: 28px 24px; }
+    .fc-q { font-size: 15px; }
+    .fc-a { font-size: 13.5px; }
+    .controls { padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Desarrollo de Software IX · UTP</div>
+  <h1>FLASH<span>CARDS</span></h1>
+  <p class="subtitle">Negocio Electrónico · 70 tarjetas · Sesiones 1 & 2</p>
+</header>
+
+<div class="controls">
+  <div class="counter-display">
+    <span class="num" id="cur">1</span>
+    <span>/</span>
+    <span class="num" id="tot">70</span>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="pbar" style="width:1.4%"></div>
+  </div>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
+    <button class="filter-btn" onclick="setFilter('conceptos',this)">Conceptos</button>
+    <button class="filter-btn" onclick="setFilter('estadisticas',this)">Stats</button>
+    <button class="filter-btn" onclick="setFilter('plataformas',this)">Plataformas</button>
+    <button class="filter-btn" onclick="setFilter('seguridad',this)">Seguridad</button>
+    <button class="filter-btn" onclick="setFilter('pagos',this)">Pagos</button>
+    <button class="filter-btn" onclick="setFilter('hosting',this)">Hosting</button>
+    <button class="filter-btn" onclick="setFilter('branding',this)">Branding</button>
+    <button class="filter-btn" onclick="setFilter('marketing',this)">Marketing</button>
+    <button class="filter-btn" onclick="setFilter('legal',this)">Legal</button>
+  </div>
+</div>
+
+<main>
+  <div class="card-scene">
+    <div class="fc" id="fc" onclick="flip()">
+      <div class="fc-face fc-front" id="front" data-num="">
+        <div class="fc-cat" id="cat"></div>
+        <div class="fc-q" id="q"></div>
+        <div class="fc-hint">↑ toca para revelar</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-cat" id="catBack"></div>
+        <div class="fc-a" id="a"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn" onclick="prev()">← Anterior</button>
+    <button class="btn btn-primary" onclick="next()">Siguiente →</button>
+    <button class="btn btn-shuffle" onclick="shuffle()">⇄ Mezclar</button>
+  </div>
+</main>
+
+<script>
+const ALL = [
+  // ── CONCEPTOS (1–15) ──────────────────────────────────────────────
+  { cat:'conceptos', q:'¿Cuál es la diferencia fundamental entre E-Commerce y E-Business?', a:'<strong>E-Commerce</strong> son transacciones comerciales digitales (compra/venta), enfocado en la transacción. <strong>E-Business</strong> es la transformación de <em>todos</em> los procesos de negocio con tecnologías de internet: supply chain, CRM, ERP, comunicación interna. IBM lo definió como "la transformación de los procesos clave de negocio mediante tecnologías de Internet". <strong>El e-business es el contenedor; el e-commerce es uno de sus componentes.</strong>' },
+  { cat:'conceptos', q:'¿Qué es el modelo B2C y cuáles son sus características clave?', a:'<strong>Business to Consumer</strong> — empresa vende directamente al consumidor final. Ejemplos: Amazon, El Machetazo, Mercado Libre. Ciclo de venta: <span class="val">minutos – días</span>. Ticket promedio: bajo–medio. Volumen: alto. Factor crítico: <strong>UX y marketing</strong>.' },
+  { cat:'conceptos', q:'¿Qué es el modelo B2B y qué lo diferencia del B2C?', a:'<strong>Business to Business</strong> — empresa vende a otra empresa. Ejemplos: Alibaba, Grainger, Tirson. Ciclo de venta: <span class="val">semanas – meses</span>. Ticket promedio: muy alto. Volumen: bajo. Requiere contratos, negociaciones formales y relaciones a largo plazo. Factor crítico: <strong>confianza y contrato</strong>.' },
+  { cat:'conceptos', q:'¿Qué es el modelo C2C y cuál es su factor crítico?', a:'<strong>Consumer to Consumer</strong> — consumidor vende a otro consumidor. Marketplace actúa como intermediario. Ejemplos: eBay, Encuentra24, Facebook Marketplace. Ciclo de venta: horas–días. Factor crítico: <strong>sistemas de reputación</strong>. Menor barrera de entrada, fomenta la economía colaborativa.' },
+  { cat:'conceptos', q:'¿Qué es el modelo B2G y qué lo hace diferente?', a:'<strong>Business to Government</strong> — empresa vende al gobierno. Ejemplos: PanamaCompra, GovWin IQ, SAM.gov. Ciclos de venta: <span class="val">meses – años</span>. Ticket promedio: muy alto. Procesos de licitación formales, requisitos estrictos y regulados, extensa documentación. Factor crítico: <strong>cumplimiento normativo</strong>.' },
+  { cat:'conceptos', q:'¿Cuáles son los 5 períodos de evolución del e-commerce?', a:'<strong>Pre-Web (1970s–1991):</strong> EDI, Minitel, primer navegador. <strong>Web 1.0 (1992–1999):</strong> Netscape, Amazon/eBay, PayPal. <strong>Web 2.0 (2000–2010):</strong> burbuja .com, redes sociales, iPhone. <strong>Era Móvil (2011–2019):</strong> IPO Alibaba, social commerce, wallets. <strong>Post-Pandemia (2020+):</strong> +44% crecimiento, IA generativa, $5.8 billones.' },
+  { cat:'conceptos', q:'¿Qué diferencia a un Marketplace de una Tienda Propia?', a:'<strong>Marketplace:</strong> tráfico existente, infraestructura lista, menor inversión inicial, pero comisiones <span class="val">15–40%</span>, datos de cliente restringidos, competencia directa. <strong>Tienda Propia:</strong> control total de marca, datos completos de CRM, sin comisiones, fidelización directa, pero requiere mayor inversión y generar tráfico desde cero.' },
+  { cat:'conceptos', q:'¿Qué es la estrategia Omnicanal y cuáles son sus componentes clave?', a:'Integración fluida entre canales físicos y digitales para ofrecer una experiencia <strong>unificada y coherente</strong> al cliente. Componentes: inventario unificado en tiempo real, precios consistentes, historial centralizado (CRM único), <strong>BOPIS</strong> (Buy Online, Pick-up In Store), devoluciones en cualquier canal.' },
+  { cat:'conceptos', q:'¿Qué es BOPIS?', a:'<strong>Buy Online, Pick-up In Store</strong> — Comprar en línea y recoger en tienda física. Es uno de los pilares de la estrategia omnicanal. Integra la experiencia digital con la presencia física, eliminando el tiempo de espera de envío para el cliente.' },
+  { cat:'conceptos', q:'¿Qué es el Headless Commerce?', a:'Arquitectura que <strong>separa el frontend del backend</strong> del e-commerce, permitiendo mayor flexibilidad y experiencias omnicanal verdaderas. El backend gestiona lógica de negocio y datos; el frontend puede ser cualquier interfaz (web, app, kiosko). Tendencia 2024–2025: crecimiento del <span class="val">27%</span> en adopción.' },
+  { cat:'conceptos', q:'¿Cuáles son los motivos para iniciar un negocio digital?', a:'<strong>Ampliación del mercado:</strong> alcance global 24/7, escalabilidad gradual. <strong>Mayor visibilidad:</strong> presencia digital permanente, SEO, estrategias multicanal. <strong>Reducción de costos:</strong> menor inversión en locales, automatización de procesos, inventario bajo demanda. Dato: presencia digital da <span class="val">2.8x</span> más reconocimiento de marca.' },
+  { cat:'conceptos', q:'¿Qué es la transformación digital y qué incluye más allá de la tecnología?', a:'No es solo tecnología: es un cambio integral que incluye <strong>procesos, cultura organizacional y modelo de negocio</strong>. Las 3 fases: (1) Evaluación y diagnóstico, (2) Roadmap de transformación, (3) Implementación ágil con MVP. El <span class="val">46%</span> de fracasos se debe a falta de estrategia, no de tecnología.' },
+  { cat:'conceptos', q:'¿Qué es el Framework ADKAR de gestión del cambio?', a:'Modelo de gestión del cambio con 5 etapas: <strong>A</strong>wareness (¿por qué cambiar?), <strong>D</strong>esire (¿qué gano yo?), <strong>K</strong>nowledge (¿cómo lo hago?), <strong>A</strong>bility (práctica y herramientas), <strong>R</strong>einforce (reconocimiento). Aplica a los <span class="val">68%</span> de proyectos e-commerce que enfrentan resistencia interna.' },
+  { cat:'conceptos', q:'¿Cuáles son los componentes de una Propuesta de Valor efectiva?', a:'<strong>Relevancia:</strong> soluciona un problema real. <strong>Exclusividad:</strong> beneficios únicos vs. competencia. <strong>Credibilidad:</strong> respaldada por evidencias y testimonios. <strong>Claridad:</strong> comunicada directa y comprensiblemente. Fórmula: "Para [cliente] que [necesidad], [marca] ofrece [beneficio] a diferencia de [competencia] porque [razón]."' },
+  { cat:'conceptos', q:'¿Cómo se diferencia el comercio tradicional del electrónico en sus dimensiones clave?', a:'<strong>Horario:</strong> 8–10hrs vs 24/7. <strong>Alcance:</strong> local/regional vs global. <strong>Relación cliente:</strong> presencial vs multicanal. <strong>Experiencia producto:</strong> táctil vs visual/virtual. <strong>Datos:</strong> manual y limitado vs automatizado en tiempo real. <strong>Escalar:</strong> alto costo (sucursales) vs bajo costo (digital).' },
+
+  // ── ESTADÍSTICAS (16–26) ─────────────────────────────────────────
+  { cat:'estadisticas', q:'¿Cuál fue el tamaño del mercado global de e-commerce en 2023 y su proyección?', a:'<span class="val">$5.8 billones (trillones) USD</span> en 2023. Crecimiento anual proyectado: <span class="val">14.7%</span> compuesto. Se proyecta superar los <span class="val">$8 billones</span> antes de 2027. Compradores digitales activos: <span class="val">2.14 billones</span>. Penetración del retail global: <span class="val">22.3%</span>.' },
+  { cat:'estadisticas', q:'¿Cuáles son las estadísticas clave del e-commerce en Panamá (2023)?', a:'Mercado: <span class="val">$628 millones</span>. Crecimiento anual: <span class="val">15.8%</span> (sobre media global). Penetración de internet: <span class="val">76.5%</span>. Comercio móvil: <span class="val">65%</span> de las compras. Método de pago preferido: tarjetas de crédito <span class="val">(58%)</span>, billeteras digitales (22%), transferencias (15%).' },
+  { cat:'estadisticas', q:'¿Cuál fue el impacto del COVID-19 en el e-commerce global?', a:'<span class="val">+44%</span> de crecimiento global en 2020. Aceleración de <span class="val">5–7 años</span> de adopción digital en solo 5 meses. <span class="val">+160%</span> en compradores mayores de 65 años. <span class="val">75%</span> continuaron comprando nuevas marcas post-pandemia. Sectores: Alimentos +66%, Hogar +52%, Salud +41%, Electrónica +31%.' },
+  { cat:'estadisticas', q:'¿Cómo se compara el crecimiento de Latinoamérica con el mundo en 2023?', a:'Latinoamérica creció <span class="val">22.4%</span> en 2023, por encima de la media global (14.7%). <strong>Brasil</strong> domina con <span class="val">32%</span> del mercado regional. <strong>México</strong> tiene <span class="val">28.5%</span>. <strong>Colombia</strong> creció <span class="val">20.2%</span>. <strong>Panamá</strong> creció <span class="val">15.8%</span>, también sobre la media global.' },
+  { cat:'estadisticas', q:'¿Cuáles son las estadísticas de dispositivos y comportamiento del comprador digital?', a:'<span class="val">71%</span> del tráfico e-commerce viene de móviles. <span class="val">49%</span> compra usando apps. <span class="val">81%</span> investiga online antes de comprar (ROPO — Research Online, Purchase Offline). <span class="val">5 minutos</span> promedio de visita en sitios de e-commerce. En Panamá: <span class="val">65%</span> de compras desde móvil.' },
+  { cat:'estadisticas', q:'¿Cuál es la comparativa de costos mensuales entre tienda física y tienda online?', a:'<strong>Tienda física:</strong> Alquiler $2,000 + Personal (3) $3,600 + Servicios $500 + Seguridad $400 + Marketing $1,000 = <span class="val">$7,500/mes</span>. Inventario mínimo $15,000. <strong>Tienda online:</strong> Hosting $100–300 + Mantenimiento $500 + Marketing $1,000 + Personal (1) $1,200 = <span class="val">$2,800–3,000/mes</span>. Ahorro: <span class="val">63%</span>.' },
+  { cat:'estadisticas', q:'¿Cuánto tiempo tarda en promedio alcanzar rentabilidad un e-commerce?', a:'Entre <span class="val">12–18 meses</span> hasta el punto de equilibrio. El ROI comparativo muestra: mes 1 tienda online –40% vs física –80%. Mes 12: online +45% vs física +15%. Mes 18: online +70% vs física +30%. El <span class="val">46%</span> de negocios tradicionales fracasan en digitalización por falta de estrategia.' },
+  { cat:'estadisticas', q:'¿Qué estadísticas justifican la importancia del diseño y la velocidad en e-commerce?', a:'<span class="val">38%</span> abandona por diseño poco atractivo. <span class="val">47%</span> espera carga en menos de 2 segundos. <span class="val">70%</span> abandona por problemas en checkout. <span class="val">85%</span> no compra sin certificado de seguridad. Los usuarios forman opinión visual en <span class="val">50 milisegundos</span>. Cada segundo extra reduce conversión <span class="val">4.42%</span>.' },
+  { cat:'estadisticas', q:'¿Cuáles son las razones de abandono en el proceso de checkout?', a:' <span class="val">49%</span>: costos adicionales inesperados (shipping, impuestos, fees). <span class="val">28%</span>: obligación de crear cuenta. <span class="val">23%</span>: checkout complicado. <span class="val">23%</span>: no mostrar costos totales. <span class="val">19%</span>: sitio no confiable. <span class="val">18%</span>: entrega lenta. La tasa promedio es <span class="val">69.8%</span>; optimización puede bajarla a 52%.' },
+  { cat:'estadisticas', q:'¿Cuáles son las estadísticas del cliente omnicanal vs monocanal?', a:'El cliente omnicanal gasta <span class="val">4 veces más</span> que el monocanal. <span class="val">73%</span> de compradores usan múltiples canales durante su proceso de compra. La estrategia omnicanal reduce un <span class="val">10%</span> los costos de inventario. El <span class="val">74%</span> de marcas exitosas opera en marketplace + canal propio (estrategia híbrida).' },
+  { cat:'estadisticas', q:'¿Qué estadísticas muestra el branding digital en términos de ROI?', a:'<span class="val">4.5x</span> mayor engagement con branding coherente. <span class="val">80%</span> mayor reconocimiento de marca con color consistente. <span class="val">65%</span> mayor conexión emocional por tono de comunicación. <span class="val">33%</span> aumento de ingresos con consistencia de marca en todos los canales. ROI del branding digital: supera el 120% a los 24 meses.' },
+
+  // ── PLATAFORMAS (27–35) ──────────────────────────────────────────
+  { cat:'plataformas', q:'¿Cuál es la cuota de mercado de las principales plataformas e-commerce en 2024?', a:'<strong>WooCommerce:</strong> <span class="val">32%</span> (líder). <strong>Shopify:</strong> <span class="val">28%</span>. <strong>Magento:</strong> <span class="val">20%</span>. <strong>PrestaShop:</strong> <span class="val">8%</span>. <strong>OpenCart:</strong> <span class="val">7%</span>. Otros: 5%.' },
+  { cat:'plataformas', q:'¿Qué plataforma recomiendas para cada tamaño de negocio?', a:'<strong>Micro (1–100 productos):</strong> Shopify Lite, Wix, Facebook Shop. <strong>Pequeño (100–1,000):</strong> Shopify, WooCommerce, PrestaShop. <strong>Mediano (1,000–10,000):</strong> Shopify Plus, BigCommerce, Magento. <strong>Grande (+10,000):</strong> Magento Commerce, desarrollo personalizado, SAP.' },
+  { cat:'plataformas', q:'¿Cuáles son los costos de implementación y mensual de cada plataforma?', a:'<strong>Shopify:</strong> impl. $0–2k, mensual $29–299. <strong>WooCommerce:</strong> impl. $500–3k, mensual $30–300. <strong>PrestaShop:</strong> impl. $1k–5k, mensual $50–500. <strong>OpenCart:</strong> impl. $500–3k, mensual $30–200. <strong>Magento:</strong> impl. <span class="val">$5k–50k</span>, mensual $200–3k.' },
+  { cat:'plataformas', q:'¿Cuáles son los requisitos técnicos de las principales plataformas?', a:'<strong>Magento:</strong> PHP 7.4+, MariaDB, Redis, Elasticsearch. <strong>PrestaShop:</strong> PHP 7.1+, MySQL 5.6+, 256MB RAM. <strong>WooCommerce:</strong> PHP 7.4+, MySQL 5.6+, 128MB+ WP memory. <strong>OpenCart:</strong> PHP 7.3+, MySQL, cURL, ZIP extension.' },
+  { cat:'plataformas', q:'¿Qué es una arquitectura Headless vs Monolítica en e-commerce?', a:'<strong>Monolítica:</strong> frontend y backend integrados en una sola aplicación. Más simple pero menos flexible. <strong>Headless:</strong> separa el frontend del backend mediante APIs. Mayor flexibilidad, permite experiencias omnicanal verdaderas, pero más compleja técnicamente. Crecimiento: <span class="val">27%</span> en adopción para 2024–2025.' },
+  { cat:'plataformas', q:'¿Qué caracteriza a Shopify vs Magento como opciones opuestas?', a:'<strong>Shopify:</strong> SaaS, complejidad <span class="good">baja</span>, $0–2k impl., $29–299/mes, escalabilidad buena, ideal para micro/pequeños negocios. <strong>Magento:</strong> Open Source, complejidad <span class="bad">alta</span>, $5k–50k impl., $200–3k/mes, escalabilidad excelente, SEO excelente, para grandes negocios con equipo técnico.' },
+  { cat:'plataformas', q:'¿Qué son las soluciones SaaS vs Open Source en plataformas e-commerce?', a:'<strong>SaaS (Software as a Service):</strong> Shopify, BigCommerce, Wix, Squarespace. Pago mensual, sin gestión de servidor, actualizaciones automáticas, menor control. <strong>Open Source:</strong> Magento, PrestaShop, OpenCart, WooCommerce. Mayor personalización y control, requiere hosting propio y conocimientos técnicos, sin cuota mensual de licencia.' },
+  { cat:'plataformas', q:'¿Cuáles son los factores clave para seleccionar una plataforma e-commerce?', a:'Tipo de negocio (B2C/B2B/D2C), tamaño de catálogo, presupuesto inicial y recurrente, conocimientos técnicos del equipo, <strong>escalabilidad</strong> a 2–3 años, integraciones necesarias (ERP, CRM, logística), internacionalización (multimoneda/multiidioma), y canales: web, móvil, marketplaces, social commerce.' },
+  { cat:'plataformas', q:'¿Qué son los estándares de API más comunes para integración de sistemas?', a:'<strong>REST:</strong> el más usado, arquitectura sin estado, HTTP. <strong>GraphQL:</strong> flexible, el cliente pide solo los datos que necesita. <strong>gRPC:</strong> alto rendimiento, ideal para microservicios. <strong>SOAP:</strong> enterprise legacy, XML, más verboso. La integración efectiva ERP↔e-commerce reduce errores de inventario en <span class="val">95%</span>.' },
+
+  // ── HOSTING (36–43) ──────────────────────────────────────────────
+  { cat:'hosting', q:'¿Cuáles son los 4 tipos de hosting y sus rangos de costo y capacidad?', a:'<strong>Compartido:</strong> $3–15/mes, &lt;500 visitas/día. <strong>VPS:</strong> $20–100/mes, 500–5,000 visitas/día. <strong>Dedicado:</strong> $100–500+/mes, 5,000+ visitas/día. <strong>Cloud:</strong> $20–1,000+/mes, tráfico variable/estacional. El <span class="val">76%</span> de tiendas con +1,000 productos migran a cloud.' },
+  { cat:'hosting', q:'¿Cuáles son las ventajas y desventajas del Hosting Compartido?', a:'<span class="good">✓ Ventajas:</span> económico y fácil de configurar, sin conocimientos técnicos especializados. <span class="bad">✗ Desventajas:</span> recursos limitados ("efecto vecino ruidoso"), rendimiento inconsistente bajo carga. Ideal para sitios pequeños con menos de 500 visitas diarias.' },
+  { cat:'hosting', q:'¿Cuáles son las ventajas y desventajas del VPS?', a:'<span class="good">✓ Ventajas:</span> recursos garantizados y mayor control, rendimiento predecible y configurable. <span class="bad">✗ Desventajas:</span> requiere conocimientos técnicos de administración, responsabilidad de actualizaciones de seguridad. Ideal para 500–5,000 visitas/día.' },
+  { cat:'hosting', q:'¿Cuáles son las ventajas y desventajas del Cloud Hosting?', a:'<span class="good">✓ Ventajas:</span> escalabilidad instantánea ante picos de tráfico, alta disponibilidad y redundancia geográfica. <span class="bad">✗ Desventajas:</span> costos variables difíciles de predecir, complejidad de configuración. <strong>ROI 4.01x mayor</strong> a 3 años vs on-premises. Incluye replicación geográfica para disaster recovery.' },
+  { cat:'hosting', q:'¿Cómo se compara On-Premises vs Cloud Hosting?', a:'<strong>Inversión inicial:</strong> alta vs baja. <strong>Costos:</strong> fijos vs variables. <strong>Escalabilidad:</strong> limitada vs instantánea. <strong>Seguridad:</strong> control total vs compartida con certificaciones. <strong>Implementación:</strong> semanas/meses vs horas/días. <strong>Disaster recovery:</strong> infraestructura propia vs incluida con replicación geográfica.' },
+  { cat:'hosting', q:'¿Cuál es la fórmula para calcular los recursos de servidor necesarios?', a:'Fórmula: <strong>Tráfico mensual ÷ 30 × 15–20% (hora pico) = visitas concurrentes</strong>. Por cada 100 usuarios concurrentes: <span class="val">2–4 GB RAM</span>, <span class="val">2–4 núcleos CPU</span>, <span class="val">15–20 Mbps</span> de ancho de banda. SLA mínimo recomendado: <span class="val">99.9%</span> (máximo 8.76 horas de caída al año).' },
+  { cat:'hosting', q:'¿Qué es un CDN y cuáles son sus beneficios para e-commerce?', a:'<strong>Content Delivery Network</strong> — red geográficamente distribuida de servidores proxy que almacenan copias de contenido para minimizar latencia. Beneficios: reducción de carga <span class="val">50–70%</span>, mejor experiencia internacional, absorción de picos de tráfico, protección DDoS, ahorro de ancho de banda <span class="val">30–60%</span>.' },
+  { cat:'hosting', q:'¿Cuáles son los principales proveedores CDN y sus costos?', a:'<strong>Cloudflare:</strong> $0–200/mes, seguridad + CDN + DDoS. <strong>Akamai:</strong> Enterprise, rendimiento y cobertura global. <strong>Amazon CloudFront:</strong> $0.085/GB, integración AWS. <strong>Google Cloud CDN:</strong> $0.08/GB, analítica Google. <strong>Fastly:</strong> $0.12/GB, tiempo real. Para LATAM: nodos PoP en Panamá, Bogotá, Santiago, São Paulo → latencias &lt;50ms.' },
+  { cat:'hosting', q:'¿Cuáles son los requisitos técnicos fundamentales de rendimiento y seguridad?', a:'<strong>Rendimiento:</strong> tiempo de carga &lt;2s, Nginx/Apache optimizado, caching avanzado (Redis, Varnish). <strong>Seguridad y disponibilidad:</strong> SSL/TLS obligatorio, WAF, protección DDoS, SLA mínimo 99.9% (8.76 horas caída/año), backups automáticos y monitorización 24/7.' },
+
+  // ── PAGOS (44–52) ─────────────────────────────────────────────────
+  { cat:'pagos', q:'¿Quiénes son los actores del ecosistema de pagos electrónicos?', a:'<strong>Comprador</strong> → <strong>Comercio</strong> → <strong>Pasarela de pago</strong> (procesa datos, interfaz entre tienda y procesador) → <strong>Procesador</strong> (enruta a redes de pago) → <strong>Banco emisor</strong> (banco del cliente, autoriza) → <strong>Banco adquirente</strong> (banco del comercio, recibe fondos). Proceso total: <span class="val">2–3 segundos</span>.' },
+  { cat:'pagos', q:'¿Cuál es el flujo de una transacción electrónica paso a paso?', a:'1. Cliente elige producto y método de pago. 2. Ingresa datos en formulario seguro. 3. Datos enviados a pasarela vía SSL/TLS. 4. Pasarela redirige al procesador. 5. Procesador contacta banco emisor. 6. Banco emisor autoriza o rechaza. 7. Respuesta regresa por la misma ruta. 8. <strong>Confirmación al cliente y creación de orden.</strong>' },
+  { cat:'pagos', q:'¿Qué es PCI DSS y por qué es obligatorio?', a:'<strong>Payment Card Industry Data Security Standard</strong> — estándar internacional obligatorio para comercios que procesan tarjetas de crédito. Tiene <span class="val">12 requisitos</span> agrupados en: redes seguras, protección de datos de tarjeta, programa de gestión de vulnerabilidades, control de acceso, y políticas de seguridad. Comisión típica por transacción: <span class="val">1–5%</span>.' },
+  { cat:'pagos', q:'¿Cuáles son las principales pasarelas globales de pago y sus comisiones?', a:'<strong>PayPal:</strong> 200+ países, 2.9%+$0.30, alta confianza. <strong>Stripe:</strong> 40+ países, 2.9%+$0.30, API premium para developers. <strong>2Checkout:</strong> 200+ países, 3.5%+$0.30, manejo de impuestos globales. <strong>Adyen:</strong> global, Interchange++, solución enterprise con optimización de costos.' },
+  { cat:'pagos', q:'¿Cuáles son las pasarelas de pago disponibles específicamente en Panamá?', a:'<strong>PagueloFácil:</strong> certificada por bancos locales, soporte ACH, pagos recurrentes. <strong>Yappy:</strong> integración con Banco General, pagos por QR, amplia adopción. También: Multipagos (efectivo). A nivel LATAM: Mercado Pago y PayU. <span class="val">58%</span> de panameños prefieren tarjeta de crédito; <span class="val">22%</span> billeteras digitales.' },
+  { cat:'pagos', q:'¿Por qué es importante adaptar los métodos de pago al mercado latinoamericano?', a:'<span class="val">55%</span> de latinoamericanos no tiene cuenta bancaria. <span class="val">78%</span> prefieren métodos de pago locales. <span class="val">42%</span> pagan en cuotas cuando está disponible. Ofrecer pago en efectivo puede aumentar ventas hasta <span class="val">35%</span>. Cuotas sin interés incrementa el valor promedio de compra hasta <span class="val">65%</span>.' },
+  { cat:'pagos', q:'¿Cuáles son las tendencias en pagos digitales para 2024–2025?', a:'<span class="val">+37%</span> en pasarelas con BNPL (Buy Now, Pay Later) integrado. <span class="val">+42%</span> en pagos sin contacto (contactless). Crecimiento de "one-click checkout". <span class="val">~14%</span> aumento anual en adopción de criptomonedas. <span class="val">18%</span> de comercios en LATAM ya aceptan crypto. Comisiones crypto: <span class="val">0.5–1%</span> vs 2–5% de tarjetas.' },
+  { cat:'pagos', q:'¿Qué métodos de pago populares existen por país en LATAM?', a:'<strong>Panamá:</strong> Tarjetas, Yappy, ACH, Multipagos. <strong>Colombia:</strong> PSE (transferencias), Efecty, Baloto. <strong>México:</strong> OXXO, SPEI, MSI (meses sin intereses). <strong>Brasil:</strong> Boleto Bancário, PIX, tarjetas parcelas. <strong>Argentina:</strong> Rapipago, Pago Fácil, transferencias.' },
+  { cat:'pagos', q:'¿Cuáles son las ventajas y desafíos de aceptar criptomonedas como pago?', a:'<span class="good">✓ Ventajas:</span> pagos globales sin fronteras, bajas comisiones (0.5–1%), sin chargebacks fraudulentos, mayor privacidad. <span class="bad">✗ Desafíos:</span> volatilidad de precios, tiempos de confirmación, regulaciones en evolución, curva de aprendizaje UX. En Panamá: la Ley de Criptomonedas fue vetada en 2022; opera en marco limitado.' },
+
+  // ── SEGURIDAD (53–61) ────────────────────────────────────────────
+  { cat:'seguridad', q:'¿Cuáles son los 3 pilares de la Triada CIA en seguridad?', a:'<strong>Confidencialidad:</strong> solo usuarios autorizados acceden a datos sensibles → SSL/TLS en tránsito, tokenización de pagos, cifrado de datos almacenados. <strong>Integridad:</strong> datos no alterados sin autorización → validación, firmas digitales, hashing. <strong>Disponibilidad:</strong> sistemas siempre accesibles → redundancia, balanceo de carga, backups, protección DDoS.' },
+  { cat:'seguridad', q:'¿Qué es SQL Injection y cómo se defiende?', a:'Inyección de código SQL malicioso en consultas de base de datos para acceder, modificar o eliminar datos no autorizados. <strong>Defensa:</strong> parametrización de consultas (prepared statements), WAF (Web Application Firewall), uso de ORM, validación estricta de entradas del usuario.' },
+  { cat:'seguridad', q:'¿Qué es XSS (Cross-Site Scripting) y cómo se previene?', a:'Inyección de scripts maliciosos en páginas web que se ejecutan en el navegador de la víctima para robar cookies, sesiones o datos. <strong>Defensa:</strong> sanitización y escape de salidas, Content Security Policy (CSP), validación de entradas, uso de frameworks modernos con escape automático.' },
+  { cat:'seguridad', q:'¿Qué es CSRF y cómo se mitiga?', a:'<strong>Cross-Site Request Forgery</strong> — engaña al navegador del usuario para ejecutar acciones no autorizadas en un sitio donde está autenticado (ej: cambiar contraseña, realizar compra). <strong>Defensa:</strong> tokens anti-CSRF únicos por sesión, atributo SameSite en cookies, verificación de encabezado Origin/Referer.' },
+  { cat:'seguridad', q:'¿Qué es Credential Stuffing y Card Testing?', a:'<strong>Credential Stuffing:</strong> uso masivo de credenciales robadas de otras brechas para acceder a cuentas. Defensa: CAPTCHA, rate limiting, 2FA. <strong>Card Testing:</strong> prueba automatizada de tarjetas robadas haciendo compras pequeñas. Defensa: análisis de comportamiento, reglas antifraude, CAPTCHA en checkout.' },
+  { cat:'seguridad', q:'¿Cuáles son los tipos de certificados SSL/TLS y cuándo usar cada uno?', a:'<strong>DV (Dominio):</strong> $0–70/año — validación básica, sitios informativos/blogs. <strong>OV (Organización):</strong> $50–200/año — e-commerce mediano, valida existencia de empresa. <strong>EV (Extendido):</strong> $200–700/año — e-commerce de alto valor, máxima confianza. <strong>Wildcard:</strong> $100–700/año — múltiples subdominios. <strong>Gratuitos:</strong> Let\'s Encrypt, ZeroSSL, Cloudflare SSL.' },
+  { cat:'seguridad', q:'¿Cuáles son las 10 vulnerabilidades del OWASP Top 10 (2021)?', a:'A01: Broken Access Control. A02: Crypto Failures. A03: Injection. A04: Insecure Design. A05: Security Misconfiguration. A06: Vulnerable Components. A07: Auth Failures. A08: SW Integrity Failures. A09: Logging Failures. A10: SSRF. Las más críticas para e-commerce: <strong>A01, A02, A03, A05, A07</strong>.' },
+  { cat:'seguridad', q:'¿Qué significa "defensa en profundidad" en seguridad e-commerce?', a:'Estrategia de <strong>múltiples capas de seguridad</strong> que trabajan juntas — no confiar en una única medida de protección. Capas: WAF → Firewall → SSL/TLS → Autenticación → Autorización → Cifrado de datos → Monitorización → Backups. "La seguridad es un proceso, no un producto." Costo promedio brecha: <span class="val">$4.35M</span>.' },
+  { cat:'seguridad', q:'¿Qué es el SDLC seguro y cómo se integra en el desarrollo e-commerce?', a:'<strong>Secure Software Development Lifecycle</strong> — integrar seguridad en cada fase del desarrollo: Diseño → Codificación → Revisión de código → Testing → Pentesting → Análisis automatizado de vulnerabilidades → Despliegue → Monitorización continua. Principio: "Shift Left Security" — detectar vulnerabilidades lo antes posible, cuando son más baratas de corregir.' },
+
+  // ── BRANDING (62–65) ─────────────────────────────────────────────
+  { cat:'branding', q:'¿Qué es el Branding Digital y cómo se diferencia del tradicional?', a:'<strong>Branding Digital:</strong> conjunto de estrategias que construyen identidad de marca en el entorno digital, generando reconocimiento, confianza y lealtad. Diferencias clave: comunicación bidireccional (vs unidireccional), adaptación ágil y medible, cocreación con la comunidad, métricas precisas e inmediatas, micro-segmentación (vs audiencias masivas).' },
+  { cat:'branding', q:'¿Cuáles son los 3 elementos clave del Branding Digital?', a:'<strong>Nombre y Dominio:</strong> memorable, relevante, .com/.net, optimizado para SEO, sin números/guiones innecesarios. <strong>Identidad Visual:</strong> logo adaptable, paleta de colores (primarios/secundarios), tipografía web-safe, iconografía consistente. <strong>Tono y Personalidad:</strong> voz coherente, guía editorial documentada, refleja valores de marca.' },
+  { cat:'branding', q:'¿Cuáles son las 5 estrategias de posicionamiento de marca en e-commerce?', a:'<strong>Por calidad premium:</strong> Apple Store. <strong>Por precio competitivo:</strong> Amazon. <strong>Por nicho especializado:</strong> Thomann (instrumentos musicales). <strong>Por experiencia única:</strong> Nike By You (personalización). <strong>Por valores/propósito:</strong> Patagonia (sostenibilidad). La clave es elegir UNA estrategia y ejecutarla con consistencia.' },
+  { cat:'branding', q:'¿Cómo debe ser la consistencia de marca en los diferentes canales digitales?', a:'<strong>Sitio Web:</strong> diseño alineado con identidad visual, UX coherente con valores. <strong>Redes Sociales:</strong> perfiles visuales unificados, calendario editorial estratégico. <strong>Email Marketing:</strong> plantillas con identidad visual, CTAs consistentes. <strong>Packaging:</strong> materiales con branding, unboxing memorable, sostenibilidad alineada a valores.' },
+
+  // ── MARKETING (66–68) ────────────────────────────────────────────
+  { cat:'marketing', q:'¿Qué diferencia al marketing digital del tradicional en sus métricas y costos?', a:'<strong>Medición:</strong> ambigua vs ROI preciso en tiempo real. <strong>Segmentación:</strong> audiencias amplias vs micro-segmentación. <strong>Contenido:</strong> estático vs personalización dinámica. <strong>Ciclo:</strong> campañas largas vs testeo A/B continuo. <strong>CAC:</strong> tradicional $45–65 vs digital <span class="val">$25–30</span>. <strong>CPM:</strong> TV $20–30 vs digital <span class="val">$2–10</span>.' },
+  { cat:'marketing', q:'¿Cuáles son las 4 estrategias fundamentales del marketing digital para e-commerce?', a:'<strong>Inbound Marketing:</strong> atraer clientes con contenido de valor (blogs, SEO, redes sociales). <strong>Content Marketing:</strong> crear y distribuir contenido relevante para captar y retener audiencias. <strong>Funnel de Conversión:</strong> TOFU (Awareness) → MOFU (Consideration) → BOFU (Purchase y fidelización). <strong>Remarketing:</strong> reconectar con visitantes que no convirtieron; tasa de recuperación <span class="val">10–25%</span>.' },
+  { cat:'marketing', q:'¿Cuáles son las fuentes de tráfico en e-commerce y su distribución aproximada?', a:'<strong>SEO Orgánico:</strong> ~51% (mayor fuente a largo plazo, sin costo por clic). <strong>SEM/Pago:</strong> ~26% (Google Ads, resultados inmediatos). <strong>Email Marketing:</strong> ~16% (mayor ROI de todos los canales). <strong>Social Media:</strong> ~7% (varía por industria). Conversión folletos: 1–2% vs email: <span class="val">2.5–5%</span>.' },
+
+  // ── LEGAL (69–70) ────────────────────────────────────────────────
+  { cat:'legal', q:'¿Cuáles son las leyes de comercio electrónico vigentes en Panamá?', a:'<strong>Ley 81 de 2019:</strong> Protección de datos personales (similar al GDPR). <strong>Ley 51 de 2008:</strong> Documento y firma electrónica. <strong>Ley 14 de 2007:</strong> Delitos contra la seguridad informática. <strong>Ley 24 de 2002:</strong> Comercio electrónico (ley base). Adicionalmente: PCI DSS (obligatorio para tarjetas) y GDPR (si tiene clientes europeos).' },
+  { cat:'legal', q:'¿Cuáles son las normativas globales de cumplimiento que afectan al e-commerce?', a:'<strong>PCI DSS:</strong> global, obligatorio para procesar tarjetas de crédito, 12 requisitos. <strong>GDPR:</strong> UE/EEE + clientes europeos, consentimiento, portabilidad y borrado de datos; sanción media por incumplimiento: <span class="val">$2.5M</span>. <strong>CCPA/CPRA:</strong> California, opt-out y derecho al olvido. <strong>LGPD:</strong> Brasil, similar al GDPR. El <span class="val">82%</span> de consumidores valoran transparencia en privacidad.' },
+];
+
+let cards = [...ALL];
+let idx = 0;
+
+const LABELS = {
+  conceptos:'Conceptos', estadisticas:'Estadísticas', plataformas:'Plataformas',
+  seguridad:'Seguridad', pagos:'Pagos', hosting:'Hosting',
+  branding:'Branding', marketing:'Marketing', legal:'Legal/Normativo'
+};
+
+function render() {
+  const c = cards[idx];
+  const fc = document.getElementById('fc');
+  fc.classList.remove('flipped');
+  setTimeout(() => {
+    document.getElementById('cat').textContent = LABELS[c.cat] || c.cat;
+    document.getElementById('cat').className = 'fc-cat cat-' + c.cat;
+    document.getElementById('catBack').textContent = LABELS[c.cat] || c.cat;
+    document.getElementById('catBack').className = 'fc-cat cat-' + c.cat;
+    document.getElementById('q').textContent = c.q;
+    document.getElementById('a').innerHTML = c.a;
+    document.getElementById('front').dataset.num = idx + 1;
+    document.getElementById('cur').textContent = idx + 1;
+    document.getElementById('tot').textContent = cards.length;
+    const pct = ((idx + 1) / cards.length * 100).toFixed(1);
+    document.getElementById('pbar').style.width = pct + '%';
+    // Update front border color via CSS class
+    document.getElementById('front').className = 'fc-face fc-front cat-' + c.cat + '-border';
+    document.getElementById('front').style.setProperty('--accent-color', getAccent(c.cat));
+  }, fc.classList.contains('flipped') ? 300 : 0);
+}
+
+function getAccent(cat) {
+  const map = {
+    conceptos:'#58a6ff', estadisticas:'#d29922', plataformas:'#bc8cff',
+    seguridad:'#f85149', pagos:'#3fb950', hosting:'#39d353',
+    branding:'#ff7b72', marketing:'#ffa657', legal:'#a5d6ff'
+  };
+  return map[cat] || '#58a6ff';
+}
+
+function flip() { document.getElementById('fc').classList.toggle('flipped'); }
+function next() { idx = (idx + 1) % cards.length; render(); }
+function prev() { idx = (idx - 1 + cards.length) % cards.length; render(); }
+function shuffle() {
+  cards = cards.sort(() => Math.random() - 0.5);
+  idx = 0; render();
+}
+
+function setFilter(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  cards = cat === 'all' ? [...ALL] : ALL.filter(c => c.cat === cat);
+  idx = 0; render();
+}
+
+// keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next();
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prev();
+  else if (e.key === ' ') { e.preventDefault(); flip(); }
+});
+
+render();
+</script>
+</body>
+</html>
