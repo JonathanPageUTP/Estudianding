@@ -858,10 +858,10 @@
 
 <!-- ===================== QUIZ ===================== -->
 <section id="quiz" class="section">
-  <div class="section-title"><div class="dot"></div>Examen de Práctica — 20 Preguntas</div>
+  <div class="section-title"><div class="dot"></div>Examen de Práctica — 98 Preguntas</div>
 
   <div class="quiz-info">
-    <div class="quiz-score-box">Respondidas: <span id="qAnswered">0</span>/20 · Correctas: <span id="qCorrect">0</span></div>
+    <div class="quiz-score-box">Respondidas: <span id="qAnswered">0</span>/98 · Correctas: <span id="qCorrect">0</span></div>
     <button class="btn" onclick="resetQuiz()">🔄 Reiniciar</button>
   </div>
 
@@ -960,26 +960,433 @@ renderCard();
 
 // ============ QUIZ DATA ============
 const questions = [
-  { q: '¿Cuál es la diferencia principal entre E-Commerce y E-Business?', opts: ['Son sinónimos, significan lo mismo', 'E-Commerce se enfoca en transacciones; E-Business abarca todos los procesos de negocio digitales', 'E-Business solo aplica a grandes empresas', 'E-Commerce incluye procesos internos como CRM y ERP'], ans: 1, exp: 'El E-Commerce está enfocado en la transacción (compra/venta). El E-Business es el concepto más amplio que transforma todos los procesos: supply chain, CRM, ERP, comunicación interna.' },
-  { q: '¿En qué año y evento se produjo el mayor IPO de la historia del e-commerce?', opts: ['1995 — Amazon sale a bolsa', '2007 — Lanzamiento del iPhone', '2014 — IPO de Alibaba ($25B)', '2020 — Aceleración por COVID-19'], ans: 2, exp: 'En 2014, Alibaba realizó el mayor IPO de la historia con $25 billones recaudados, marcando un hito en la evolución del comercio electrónico.' },
-  { q: '¿Cuánto vale el mercado de e-commerce de Panamá (2023) y cuál es su tasa de crecimiento?', opts: ['$128M con 8.2% de crecimiento', '$628M con 15.8% de crecimiento', '$1.2B con 22.4% de crecimiento', '$328M con 10.5% de crecimiento'], ans: 1, exp: 'El mercado de e-commerce en Panamá alcanzó $628 millones en 2023, con un crecimiento del 15.8%, que está por encima de la media global.' },
-  { q: '¿Cuál es el factor crítico en el modelo B2G (Business to Government)?', opts: ['Experiencia de usuario (UX)', 'Sistemas de reputación', 'Cumplimiento normativo y documentación', 'Marketing digital agresivo'], ans: 2, exp: 'En B2G, los procesos son licitaciones formales con requisitos estrictos, ciclos de venta muy largos y extensa documentación regulatoria.' },
-  { q: '¿Qué porcentaje de marcas exitosas opera con estrategia híbrida (marketplace + tienda propia)?', opts: ['42%', '58%', '74%', '89%'], ans: 2, exp: 'El 74% de las marcas exitosas operan tanto en marketplace como en canal propio. Marketplaces aportan visibilidad y volumen; la tienda propia construye marca y mejores márgenes.' },
-  { q: 'Un cliente omnicanal gasta _____ comparado con un cliente monocanal:', opts: ['2 veces más', '3 veces más', '4 veces más', 'Lo mismo, solo cambia el canal'], ans: 2, exp: 'El cliente omnicanal gasta 4x más que el monocanal. La estrategia omnicanal también reduce un 10% los costos de inventario.' },
-  { q: '¿Cuál es el costo mensual promedio de una tienda online vs una física?', opts: ['$5,000 vs $12,000', '$2,800 vs $7,500', '$1,200 vs $4,500', '$4,000 vs $9,000'], ans: 1, exp: 'Tienda online: $2,800–3,000/mes. Tienda física: $7,500/mes. Esto representa aproximadamente un 63% de ahorro en costos operativos.' },
-  { q: '¿Qué porcentaje de usuarios abandona un sitio si tarda más de 3 segundos en cargar?', opts: ['27%', '38%', '53%', '71%'], ans: 2, exp: 'El 53% de los usuarios abandona si la carga supera 3 segundos. Además, cada segundo adicional reduce la conversión en 4.42%.' },
-  { q: '¿En cuánto tiempo se forma el usuario una primera impresión visual de un sitio web?', opts: ['500 milisegundos', '50 milisegundos', '2 segundos', '5 segundos'], ans: 1, exp: 'Los usuarios se forman una opinión visual sobre un sitio en solo 50 milisegundos. El diseño es la primera barrera de confianza.' },
-  { q: '¿Cuál plataforma de e-commerce tiene mayor cuota de mercado en 2024?', opts: ['Shopify con 32%', 'Magento con 32%', 'WooCommerce con 32%', 'PrestaShop con 32%'], ans: 2, exp: 'WooCommerce lidera con el 32% del mercado, seguido de Shopify (28%), Magento (20%), PrestaShop (8%) y OpenCart (7%).' },
-  { q: '¿Qué plataforma se recomienda para un negocio grande con más de 10,000 productos?', opts: ['Shopify Lite', 'WooCommerce estándar', 'PrestaShop básico', 'Magento Commerce o desarrollo personalizado'], ans: 3, exp: 'Para negocios grandes (+10,000 productos) se recomienda Magento Commerce, desarrollo personalizado o SAP, por su capacidad de escalabilidad y personalización.' },
-  { q: '¿Cuál es el ROI comparativo del Cloud Hosting vs On-Premises para e-commerce a 3 años?', opts: ['1.5x mayor para cloud', '2x mayor para cloud', '4.01x mayor para cloud', 'Son equivalentes'], ans: 2, exp: 'Las soluciones cloud tienen un ROI 4.01x mayor a 3 años que on-premises para e-commerce, debido a escalabilidad y reducción de tiempos de caída.' },
-  { q: '¿Qué beneficio tiene el CDN para una tienda en LATAM?', opts: ['Solo reduce costos del servidor', 'Reduce tiempo de carga en 50–70% y permite latencias <50ms en la región', 'Solo protege contra ataques DDoS', 'Solo mejora el SEO'], ans: 1, exp: 'Un CDN con nodos PoP en Panamá, Bogotá, Santiago y São Paulo reduce el tiempo de carga en 50–70% y logra latencias menores a 50ms para usuarios latinoamericanos.' },
-  { q: '¿Cuánto tiempo tarda en promedio el proceso completo de una transacción electrónica?', opts: ['30 segundos', '2–3 segundos', '10–15 segundos', '1 minuto'], ans: 1, exp: 'El flujo completo (desde que el cliente paga hasta la confirmación) tarda solo 2–3 segundos. La comisión típica es del 1–5% por transacción.' },
-  { q: '¿Cuál es la pasarela de pago con mayor cobertura geográfica según el material?', opts: ['Stripe (40+ países)', 'PayPal y 2Checkout (200+ países)', 'PagueloFácil (solo Panamá)', 'Adyen (solo Europa)'], ans: 1, exp: 'Tanto PayPal como 2Checkout tienen cobertura en 200+ países. Stripe cubre 40+ países. PayPal es conocida por su adopción global y confianza del consumidor.' },
-  { q: '¿Qué estándar de seguridad es OBLIGATORIO para comercios que procesan tarjetas de crédito?', opts: ['GDPR', 'OWASP Top 10', 'PCI DSS', 'ISO 27001'], ans: 2, exp: 'PCI DSS (Payment Card Industry Data Security Standard) es el estándar obligatorio con 12 requisitos sobre redes seguras, protección de datos, control de acceso y gestión de vulnerabilidades.' },
-  { q: '¿Qué pilares conforman la Triada CIA de seguridad?', opts: ['Confiabilidad, Integración, Autenticación', 'Confidencialidad, Integridad, Disponibilidad', 'Certificados, Identidad, Autorización', 'Cifrado, Integridad, Acceso'], ans: 1, exp: 'La Triada CIA: Confidencialidad (solo acceso autorizado), Integridad (datos no alterados) y Disponibilidad (sistemas siempre accesibles).' },
-  { q: '¿Qué ley panameña regula la protección de datos personales?', opts: ['Ley 24 de 2002', 'Ley 14 de 2007', 'Ley 51 de 2008', 'Ley 81 de 2019'], ans: 3, exp: 'La Ley 81 de 2019 regula la protección de datos personales en Panamá. La Ley 24/2002 regula el comercio electrónico, Ley 51/2008 la firma electrónica y Ley 14/2007 los delitos informáticos.' },
-  { q: '¿Cuál es la razón #1 de abandono en el proceso de checkout?', opts: ['Obligación de crear una cuenta (28%)', 'Checkout complicado (23%)', 'Costos adicionales inesperados (49%)', 'Sitio poco confiable (19%)'], ans: 2, exp: 'Los costos adicionales inesperados (shipping, impuestos, fees) al final del proceso causan el 49% de los abandonos. Le sigue la obligación de crear cuenta (28%).' },
-  { q: '¿Qué porcentaje de los latinoamericanos carece de cuenta bancaria, según el material?', opts: ['25%', '40%', '55%', '70%'], ans: 2, exp: 'El 55% de los latinoamericanos no tiene cuenta bancaria, lo que explica la importancia de ofrecer métodos alternativos como efectivo (+35% ventas) y billeteras digitales como Yappy.' },
+
+  // ─── SESIÓN 1: E-COMMERCE VS E-BUSINESS ───────────────────────────────────
+
+  { q: '¿Cuál es la diferencia principal entre E-Commerce y E-Business?',
+    opts: ['Son sinónimos, significan lo mismo', 'E-Commerce se enfoca en transacciones; E-Business abarca todos los procesos de negocio digitales', 'E-Business solo aplica a grandes empresas', 'E-Commerce incluye procesos internos como CRM y ERP'],
+    ans: 1, exp: 'E-Commerce está enfocado en la transacción (compra/venta). E-Business es el concepto más amplio que transforma TODOS los procesos: supply chain, CRM, ERP, comunicación interna. El e-commerce es solo un componente del e-business.' },
+
+  { q: 'Según la definición de IBM citada en el material, ¿qué es el E-Business?',
+    opts: ['La venta de productos y servicios a través de internet', 'La transformación de los procesos clave de negocio mediante el uso de tecnologías de Internet', 'El conjunto de transacciones electrónicas entre empresas', 'La digitalización del departamento de ventas de una empresa'],
+    ans: 1, exp: 'IBM definió el e-business como "la transformación de los procesos clave de negocio mediante el uso de tecnologías de Internet". La palabra clave es "procesos clave", no solo ventas.' },
+
+  { q: '¿Cuál de los siguientes es un ejemplo de E-Business pero NO de E-Commerce?',
+    opts: ['Una tienda de ropa que vende en su sitio web', 'Una empresa que digitaliza su sistema de RRHH y supply chain sin vender online', 'Mercado Libre como marketplace', 'Un cliente comprando en Amazon'],
+    ans: 1, exp: 'Una empresa que digitaliza sus procesos internos (RRHH, supply chain, CRM) sin vender directamente por internet es un caso de e-business sin e-commerce. El e-commerce requiere transacción de compra/venta.' },
+
+  { q: '¿Qué componentes forman parte del E-Business pero están más allá del E-Commerce?',
+    opts: ['Solo el carrito de compras y el checkout', 'Supply chain, CRM, ERP y comunicación interna', 'Solo el marketing digital', 'Solo las pasarelas de pago'],
+    ans: 1, exp: 'El e-business incluye supply chain (cadena de suministro), CRM (gestión de clientes), ERP (planificación de recursos empresariales) y comunicación interna — todo más allá de la simple transacción de venta.' },
+
+  // ─── SESIÓN 1: EVOLUCIÓN HISTÓRICA ────────────────────────────────────────
+
+  { q: '¿En qué año y evento se produjo el mayor IPO de la historia del e-commerce?',
+    opts: ['1995 — Amazon sale a bolsa', '2007 — Lanzamiento del iPhone', '2014 — IPO de Alibaba ($25B)', '2020 — Aceleración por COVID-19'],
+    ans: 2, exp: 'En 2014, Alibaba realizó el mayor IPO de la historia con $25 mil millones recaudados, marcando un hito en la evolución del comercio electrónico global.' },
+
+  { q: '¿Qué tecnología en 1998 fue fundamental para masificar los pagos digitales seguros?',
+    opts: ['El lanzamiento de Amazon', 'La creación del navegador Netscape', 'El inicio de operaciones de PayPal', 'El lanzamiento del iPhone'],
+    ans: 2, exp: 'PayPal inició operaciones en 1998 y fue fundamental para habilitar pagos digitales seguros y masivos, permitiendo que el e-commerce creciera con confianza entre los consumidores.' },
+
+  { q: '¿Qué evento de 2007 revolucionó el comercio móvil (m-commerce)?',
+    opts: ['El IPO de Alibaba', 'El lanzamiento del iPhone', 'La creación de PayPal', 'El nacimiento de eBay'],
+    ans: 1, exp: 'El lanzamiento del iPhone en 2007 revolucionó el comercio móvil, iniciando la era del m-commerce masivo donde los consumidores pueden comprar desde cualquier lugar con su teléfono.' },
+
+  { q: '¿En qué año nacieron Amazon y eBay, marcando el inicio del retail online moderno?',
+    opts: ['1990', '1993', '1995', '1998'],
+    ans: 2, exp: 'Amazon y eBay nacieron en 1995, marcando el inicio del retail online moderno. Ese mismo año con Netscape se realizaron las primeras compras online masivas.' },
+
+  { q: '¿Qué ocurrió con el e-commerce durante la pandemia de COVID-19 en 2020?',
+    opts: ['Cayó un 20% por cierre de almacenes', 'Creció un 44% — 5 años de adopción digital en 5 meses', 'Se mantuvo estable sin cambios significativos', 'Creció solo un 10% por problemas logísticos'],
+    ans: 1, exp: 'En 2020, el e-commerce global creció +44%. Según análisis de McKinsey, se comprimieron 5–7 años de adopción digital en solo 5 meses. Los compradores mayores de 65 años aumentaron un +160%.' },
+
+  { q: '¿Qué significó el estallido de la burbuja .com en el año 2000?',
+    opts: ['El fin definitivo del e-commerce', 'Las empresas sin modelo de negocio viable quebraron, saneando el sector', 'Amazon y eBay desaparecieron', 'Los gobiernos prohibieron el comercio electrónico'],
+    ans: 1, exp: 'El estallido de la burbuja .com en 2000 eliminó empresas sin modelo viable, pero saneó el sector. Las empresas con modelos sólidos como Amazon sobrevivieron y se fortalecieron.' },
+
+  // ─── SESIÓN 1: ESTADÍSTICAS GLOBALES Y PANAMÁ ─────────────────────────────
+
+  { q: '¿Cuánto vale el mercado global de e-commerce en 2023?',
+    opts: ['$2.1 billones USD', '$3.8 billones USD', '$5.8 billones USD', '$8.2 billones USD'],
+    ans: 2, exp: 'El mercado global de e-commerce alcanzó $5.8 billones (trillones) USD en 2023, con un crecimiento proyectado del 14.7% anual. Se proyecta superar los $8 billones antes de 2027.' },
+
+  { q: '¿Cuánto vale el mercado de e-commerce de Panamá (2023) y cuál es su tasa de crecimiento?',
+    opts: ['$128M con 8.2%', '$628M con 15.8%', '$1.2B con 22.4%', '$328M con 10.5%'],
+    ans: 1, exp: 'El mercado de e-commerce en Panamá alcanzó $628 millones en 2023, con un crecimiento del 15.8%, que está por encima de la media global de 14.7%.' },
+
+  { q: '¿Qué porcentaje del tráfico de e-commerce proviene de dispositivos móviles?',
+    opts: ['41%', '55%', '71%', '83%'],
+    ans: 2, exp: '71% del tráfico e-commerce proviene de dispositivos móviles. Además, 49% de los usuarios compran directamente usando apps móviles. Si tu sitio no está optimizado para móvil, pierdes la mayoría del tráfico.' },
+
+  { q: '¿Qué porcentaje de consumidores investiga online antes de comprar en tienda física (ROPO)?',
+    opts: ['45%', '62%', '81%', '93%'],
+    ans: 2, exp: 'El 81% investiga online antes de comprar en tienda física — fenómeno llamado ROPO (Research Online, Purchase Offline). Esto demuestra la importancia de tener presencia digital incluso para negocios físicos.' },
+
+  { q: '¿Cuál es la penetración de internet en Panamá según el material?',
+    opts: ['52.3%', '65.1%', '76.5%', '89.2%'],
+    ans: 2, exp: 'La penetración de internet en Panamá es del 76.5% de la población. Combinado con un 65% de compras desde móvil, esto muestra el potencial del mercado digital panameño.' },
+
+  { q: '¿Cuál es el método de pago preferido en Panamá para e-commerce?',
+    opts: ['Transferencias bancarias (58%)', 'Billeteras digitales (58%)', 'Tarjetas de crédito (58%)', 'Efectivo (58%)'],
+    ans: 2, exp: 'Las tarjetas de crédito son el método preferido con 58%, seguidas de billeteras digitales (22%) y transferencias bancarias (15%).' },
+
+  { q: '¿Cuál es el crecimiento anual proyectado del e-commerce global?',
+    opts: ['8.3%', '11.2%', '14.7%', '19.5%'],
+    ans: 2, exp: 'El crecimiento anual proyectado del e-commerce global es del 14.7% (CAGR). Se proyecta que el mercado supere los $8 billones antes de 2027.' },
+
+  // ─── SESIÓN 1: TIPOS DE NEGOCIOS ──────────────────────────────────────────
+
+  { q: '¿Cuál es el factor crítico en el modelo B2G (Business to Government)?',
+    opts: ['Experiencia de usuario (UX)', 'Sistemas de reputación', 'Cumplimiento normativo y documentación', 'Marketing digital agresivo'],
+    ans: 2, exp: 'En B2G los procesos son licitaciones formales con requisitos estrictos, ciclos de venta muy largos (meses a años) y extensa documentación regulatoria. El cumplimiento normativo es lo más importante.' },
+
+  { q: '¿Qué modelo de negocio electrónico usa plataformas como eBay y Encuentra24?',
+    opts: ['B2B', 'B2C', 'C2C', 'B2G'],
+    ans: 2, exp: 'eBay y Encuentra24 son plataformas C2C (Consumer to Consumer), donde personas venden a otras personas. El factor crítico en C2C es la reputación del vendedor.' },
+
+  { q: '¿Qué caracteriza al modelo B2B comparado con B2C?',
+    opts: ['Ciclos de venta más cortos y tickets más bajos', 'Ciclos de venta largos, tickets altos y relaciones formales con contratos', 'Mayor volumen de transacciones y menor ticket promedio', 'Enfoque en experiencia de usuario y marketing masivo'],
+    ans: 1, exp: 'B2B tiene ciclos de venta de semanas a meses, tickets altos a muy altos, menor volumen de transacciones y se basa en relaciones a largo plazo con contratos formales. Todo lo contrario a B2C.' },
+
+  { q: '¿Cuál es el ejemplo panameño de plataforma B2G mencionado en el material?',
+    opts: ['Encuentra24', 'Yappy', 'PanamaCompra', 'El Machetazo'],
+    ans: 2, exp: 'PanamaCompra es la plataforma B2G de Panamá, donde empresas pueden participar en licitaciones y contratos del gobierno panameño.' },
+
+  { q: '¿Cuál es el ciclo de venta típico en el modelo B2C?',
+    opts: ['Semanas a meses', 'Meses a años', 'Minutos a días', 'Años a décadas'],
+    ans: 2, exp: 'En B2C el ciclo de venta es de minutos a días — el consumidor decide rápido. Esto contrasta con B2B (semanas a meses) y B2G (meses a años).' },
+
+  // ─── SESIÓN 1: MARKETPLACES VS TIENDAS ────────────────────────────────────
+
+  { q: '¿Qué porcentaje de marcas exitosas opera con estrategia híbrida (marketplace + tienda propia)?',
+    opts: ['42%', '58%', '74%', '89%'],
+    ans: 2, exp: 'El 74% de las marcas exitosas operan tanto en marketplace como en canal propio. Los marketplaces generan visibilidad y volumen; la tienda propia construye marca y mejores márgenes.' },
+
+  { q: '¿Cuál es la principal desventaja de vender en marketplaces como Amazon o Mercado Libre?',
+    opts: ['No se pueden vender productos físicos', 'Comisiones del 15–40% por venta y acceso limitado a datos de clientes', 'Requieren mucha inversión técnica inicial', 'No tienen tráfico suficiente en LATAM'],
+    ans: 1, exp: 'Los marketplaces cobran comisiones del 15–40% por cada venta y restringen el acceso a datos de clientes. Además tienes competencia directa en el mismo canal y control limitado de la experiencia.' },
+
+  { q: '¿Cuál es la principal ventaja de tener una tienda propia sobre un marketplace?',
+    opts: ['Menor inversión inicial', 'Mayor tráfico desde el primer día', 'Control total de marca, datos completos de clientes y sin comisiones por venta', 'Menor responsabilidad técnica'],
+    ans: 2, exp: 'Con tienda propia tienes control total de marca y experiencia, acceso completo a datos de clientes para CRM, sin comisiones por venta, y puedes construir relación directa y fidelización.' },
+
+  { q: '¿Cuánto tiempo tarda en estar operativo un marketplace vs una tienda propia?',
+    opts: ['Marketplace: semanas; Tienda propia: días', 'Marketplace: días; Tienda propia: semanas o meses', 'Ambos tardan lo mismo: 2 semanas', 'Marketplace: meses; Tienda propia: días'],
+    ans: 1, exp: 'En un marketplace puedes empezar a vender en días (solo te registras y subes productos). Una tienda propia puede tomar semanas o meses en diseño, desarrollo e implementación.' },
+
+  // ─── SESIÓN 1: COSTOS Y ROI ────────────────────────────────────────────────
+
+  { q: '¿Cuál es el costo mensual promedio de una tienda online vs una física?',
+    opts: ['$5,000 vs $12,000', '$2,800 vs $7,500', '$1,200 vs $4,500', '$4,000 vs $9,000'],
+    ans: 1, exp: 'Tienda online: $2,800–3,000/mes (hosting, marketing, personal). Tienda física: $7,500/mes (alquiler, 3 empleados, servicios). Ahorro aproximado del 63% en costos operativos.' },
+
+  { q: '¿Cuánto tiempo promedio tarda un e-commerce en alcanzar la rentabilidad?',
+    opts: ['3–6 meses', '6–9 meses', '12–18 meses', '24–36 meses'],
+    ans: 2, exp: 'El promedio hasta rentabilidad en e-commerce es de 12–18 meses. También es el tiempo promedio de ROI diferido en estrategias omnicanal e inversiones en transformación digital.' },
+
+  { q: 'Una empresa con presencia digital tiene _____ más reconocimiento de marca vs un negocio tradicional:',
+    opts: ['1.5x', '2.1x', '2.8x', '4.2x'],
+    ans: 2, exp: 'Una empresa con presencia digital tiene 2.8x más reconocimiento de marca y alcanza el punto de equilibrio 3 veces más rápido que un negocio tradicional equivalente.' },
+
+  { q: '¿Cuál es el costo de inventario mínimo de una tienda física vs bajo demanda (online)?',
+    opts: ['$5,000 físico vs $1,000 online', '$15,000 físico vs $5,000 online bajo demanda', '$8,000 físico vs $3,000 online', '$20,000 físico vs $10,000 online'],
+    ans: 1, exp: 'Una tienda física requiere un inventario mínimo de $15,000, mientras que una tienda online puede operar con $5,000 bajo el modelo de inventario bajo demanda (o incluso dropshipping).' },
+
+  // ─── SESIÓN 1: OMNICANAL Y TRANSICIÓN ─────────────────────────────────────
+
+  { q: 'Un cliente omnicanal gasta _____ comparado con un cliente monocanal:',
+    opts: ['2 veces más', '3 veces más', '4 veces más', 'Lo mismo, solo cambia el canal'],
+    ans: 2, exp: 'El cliente omnicanal gasta 4x más que el monocanal. La estrategia omnicanal también reduce un 10% los costos de inventario y hace que el 73% de compradores utilicen múltiples canales.' },
+
+  { q: '¿Qué significa BOPIS en la estrategia omnicanal?',
+    opts: ['Business Online Platform Integration System', 'Buy Online, Pick-up In Store', 'Backend Optimization for Payment Integration Services', 'Brand Online Presence and Identity Strategy'],
+    ans: 1, exp: 'BOPIS significa Buy Online, Pick-up In Store — compras en línea y recoges en tienda física. Es uno de los componentes clave de la estrategia omnicanal junto con inventario unificado y CRM único.' },
+
+  { q: '¿Por qué fracasa el 46% de los negocios tradicionales en su digitalización?',
+    opts: ['Por falta de presupuesto tecnológico', 'Por ausencia de estrategia digital clara y gestión del cambio organizacional', 'Porque sus productos no son aptos para venta online', 'Por problemas de logística y envíos'],
+    ans: 1, exp: 'El 46% de fracasos no se debe a falta de tecnología, sino a ausencia de una estrategia digital clara y gestión del cambio organizacional. La tecnología es solo una parte de la transformación.' },
+
+  { q: '¿Cuántos compradores utilizan múltiples canales durante su proceso de compra?',
+    opts: ['41%', '58%', '73%', '85%'],
+    ans: 2, exp: '73% de compradores utilizan múltiples canales durante su proceso de compra (ven en Instagram, comparan en web, compran en la tienda). Por eso la estrategia omnicanal es crítica.' },
+
+  // ─── SESIÓN 1: MARKETING DIGITAL ──────────────────────────────────────────
+
+  { q: '¿Cuál es el CAC (Costo de Adquisición de Cliente) en marketing tradicional vs digital?',
+    opts: ['$20–30 tradicional vs $45–65 digital', '$45–65 tradicional vs $25–30 digital', '$100–150 tradicional vs $80–90 digital', 'Son iguales en ambos canales'],
+    ans: 1, exp: 'El CAC en marketing tradicional es de $45–65, mientras que en digital baja a $25–30. Casi la mitad del costo por cliente adquirido.' },
+
+  { q: '¿Cuál es la principal fuente de tráfico en e-commerce según el material?',
+    opts: ['SEM / Publicidad pagada con 51%', 'SEO Orgánico con 51%', 'Redes sociales con 51%', 'Email marketing con 51%'],
+    ans: 1, exp: 'SEO orgánico lidera con 51% del tráfico en e-commerce, seguido de SEM/pago (26%) y Email Marketing (16%). Invertir en SEO a largo plazo tiene el mejor ROI.' },
+
+  { q: '¿Qué significa el funnel TOFU → MOFU → BOFU en marketing digital?',
+    opts: ['Tres tipos de anuncios: texto, imagen y video', 'Top of Funnel (awareness) → Middle of Funnel (consideración) → Bottom of Funnel (compra)', 'Tres plataformas: Twitter, Meta, Facebook', 'Tres métricas: tráfico, tiempo en página, conversión'],
+    ans: 1, exp: 'TOFU (Top of Funnel) = el cliente te descubre. MOFU (Middle) = considera comprarte. BOFU (Bottom) = está listo para comprar. Cada etapa requiere contenido y estrategia diferente.' },
+
+  { q: '¿Cuál es la tasa de recuperación del remarketing según el material?',
+    opts: ['2–5%', '5–8%', '10–25%', '30–40%'],
+    ans: 2, exp: 'El remarketing (reconectar con visitantes que no compraron) tiene una tasa de recuperación del 10–25%. Es una de las estrategias con mejor ROI porque el usuario ya conoce tu marca.' },
+
+  { q: '¿Qué diferencia al Inbound Marketing del marketing tradicional?',
+    opts: ['Inbound usa solo redes sociales; tradicional usa TV', 'Inbound atrae con contenido de valor; tradicional interrumpe con anuncios', 'Inbound es más caro que el tradicional', 'No hay diferencia, son lo mismo con nombres distintos'],
+    ans: 1, exp: 'Inbound Marketing atrae clientes con contenido de valor (blogs, SEO, videos educativos). El tradicional interrumpe a la audiencia con anuncios. Inbound genera leads más calificados y con menor costo.' },
+
+  // ─── SESIÓN 2: POR QUÉ IMPORTAN LOS ELEMENTOS ────────────────────────────
+
+  { q: '¿Qué porcentaje de usuarios abandona un sitio si tarda más de 3 segundos en cargar?',
+    opts: ['27%', '38%', '53%', '71%'],
+    ans: 2, exp: 'El 53% de los usuarios abandona si la carga supera 3 segundos. Cada segundo adicional reduce la conversión en 4.42%. La velocidad es tan crítica como el diseño.' },
+
+  { q: '¿En cuánto tiempo se forma el usuario una primera impresión visual de un sitio?',
+    opts: ['500 milisegundos', '50 milisegundos', '2 segundos', '5 segundos'],
+    ans: 1, exp: 'Los usuarios se forman una opinión visual sobre un sitio en solo 50 milisegundos. El diseño es la primera barrera de confianza antes de que lean una sola palabra.' },
+
+  { q: '¿Qué porcentaje de usuarios abandona por problemas en el proceso de checkout?',
+    opts: ['38%', '55%', '70%', '85%'],
+    ans: 2, exp: '70% de los usuarios abandona por problemas en el checkout (pasos confusos, costos inesperados, obligación de crear cuenta). El checkout es la zona más crítica del e-commerce.' },
+
+  { q: '¿Qué porcentaje de usuarios no compra si no ve un certificado de seguridad en el sitio?',
+    opts: ['55%', '68%', '79%', '85%'],
+    ans: 3, exp: 'El 85% no compra sin ver un certificado de seguridad visible (HTTPS/SSL). Mostrar sellos de confianza incrementa las tasas de checkout hasta un 42% en comercios sin historial previo.' },
+
+  { q: '¿Cuánto mejora la conversión con un diseño profesional según el material?',
+    opts: ['45%', '60%', '75%', '90%'],
+    ans: 2, exp: 'El diseño profesional tiene una mejora potencial del 75% en la tasa de conversión. Es el factor con mayor impacto, seguido de velocidad de carga <2s (67%) y checkout simplificado (59%).' },
+
+  // ─── SESIÓN 2: BRANDING DIGITAL ───────────────────────────────────────────
+
+  { q: '¿Cuánto aumentan sus ingresos las marcas consistentes en todos sus canales digitales?',
+    opts: ['15%', '24%', '33%', '48%'],
+    ans: 2, exp: 'Las marcas consistentes en todos los canales digitales aumentan sus ingresos en un 33% en promedio. La consistencia genera reconocimiento, confianza y lealtad del cliente.' },
+
+  { q: '¿Cuánto mayor es el engagement con un branding coherente vs uno inconsistente?',
+    opts: ['1.8x', '2.5x', '3.2x', '4.5x'],
+    ans: 3, exp: '4.5x mayor engagement con branding coherente. Además, el color consistente aumenta el reconocimiento de marca un 80% y el tono de comunicación genera conexión emocional en el 65% de los casos.' },
+
+  { q: '¿Cuál es la fórmula de propuesta de valor mencionada en el material?',
+    opts: ['Calidad + Precio + Servicio = Valor', 'Para [cliente] que [necesidad], [marca] ofrece [beneficio] a diferencia de [competencia] porque [razón]', 'Producto + Distribución + Comunicación = Propuesta', 'Problema + Solución + Diferenciador = Posicionamiento'],
+    ans: 1, exp: 'La fórmula es: "Para [cliente] que [necesidad], [marca] ofrece [beneficio] a diferencia de [competencia] porque [razón]." Esta estructura obliga a definir el cliente, el problema, el beneficio y el diferenciador.' },
+
+  { q: '¿Qué empresa es ejemplo de estrategia de posicionamiento por valores/propósito?',
+    opts: ['Amazon (precio competitivo)', 'Apple Store (calidad premium)', 'Patagonia (valores/propósito)', 'Nike By You (experiencia única)'],
+    ans: 2, exp: 'Patagonia es el ejemplo de posicionamiento por valores/propósito (sostenibilidad ambiental). Apple es calidad premium, Amazon precio competitivo, Nike By You experiencia única.' },
+
+  { q: '¿Qué características debe tener un nombre de dominio para e-commerce según el material?',
+    opts: ['Largo y descriptivo para mejor SEO', 'Memorable, fácil de pronunciar, relevante, disponible como .com/.net, sin números ni guiones innecesarios', 'Debe incluir el país (.pa) para e-commerce local', 'Debe contener palabras clave del producto principal'],
+    ans: 1, exp: 'Un buen dominio debe ser memorable, fácil de pronunciar y deletrear, relevante para el negocio, disponible como .com o .net, optimizado para SEO, y sin números o guiones innecesarios.' },
+
+  // ─── SESIÓN 2: PLATAFORMAS ────────────────────────────────────────────────
+
+  { q: '¿Cuál plataforma de e-commerce tiene mayor cuota de mercado en 2024?',
+    opts: ['Shopify con 32%', 'Magento con 32%', 'WooCommerce con 32%', 'PrestaShop con 32%'],
+    ans: 2, exp: 'WooCommerce lidera con el 32% del mercado, seguido de Shopify (28%), Magento (20%), PrestaShop (8%) y OpenCart (7%).' },
+
+  { q: '¿Qué plataforma se recomienda para un negocio grande con más de 10,000 productos?',
+    opts: ['Shopify Lite', 'WooCommerce estándar', 'PrestaShop básico', 'Magento Commerce o desarrollo personalizado'],
+    ans: 3, exp: 'Para negocios grandes (+10,000 productos) se recomienda Magento Commerce, desarrollo personalizado o SAP por su capacidad de escalabilidad y personalización.' },
+
+  { q: '¿Cuál es el rango de costo de implementación de Magento?',
+    opts: ['$500–$3,000', '$1,000–$5,000', '$5,000–$50,000', '$50,000–$200,000'],
+    ans: 2, exp: 'Magento tiene un costo de implementación de $5,000 a $50,000 y un costo mensual de $200–$3,000. Es la plataforma más costosa pero con mayor escalabilidad (Excelente) y personalización (Muy alta).' },
+
+  { q: '¿Qué plataforma recomienda el material para un negocio micro con 1 a 100 productos?',
+    opts: ['Magento Commerce', 'Shopify Plus o BigCommerce', 'Shopify Lite, Wix o Facebook Shop', 'PrestaShop Enterprise'],
+    ans: 2, exp: 'Para negocios micro (1–100 productos) se recomienda Shopify Lite, Wix o Facebook Shop por su bajo costo, facilidad de uso y tiempo mínimo de implementación.' },
+
+  { q: '¿Qué es el Headless Commerce y cuál es su tendencia de adopción en 2024–2025?',
+    opts: ['Un tipo de marketplace sin cabecera visible; cayó un 10%', 'Arquitectura que separa el frontend del backend; creció un 27% en adopción', 'Una plataforma de e-commerce para móviles; creció un 15%', 'E-commerce sin interfaz gráfica; se mantiene estable'],
+    ans: 1, exp: 'Headless Commerce separa el frontend del backend, permitiendo mayor flexibilidad y experiencias omnicanal verdaderas. Tendencia 2024–2025: crecimiento del 27% en adopción.' },
+
+  { q: '¿Cuáles son los requisitos técnicos de WooCommerce?',
+    opts: ['PHP 5.6+ · MySQL 5.0 · 64MB RAM', 'PHP 7.4+ · MySQL 5.6+ · 128MB+ WordPress memory', 'PHP 8.0+ · PostgreSQL · 512MB RAM', 'PHP 7.1+ · MariaDB · Redis · Elasticsearch'],
+    ans: 1, exp: 'WooCommerce requiere PHP 7.4+, MySQL 5.6+ y al menos 128MB de memoria para WordPress. Magento es más exigente: PHP 7.4+, MariaDB, Redis y Elasticsearch.' },
+
+  { q: '¿Cuál plataforma es considerada la más fácil de usar según la comparativa?',
+    opts: ['Magento (complejidad baja)', 'WooCommerce (complejidad muy baja)', 'Shopify (complejidad baja)', 'OpenCart (complejidad muy baja)'],
+    ans: 2, exp: 'Shopify tiene la complejidad técnica más baja de todas las plataformas comparadas. Magento tiene la más alta. Shopify es ideal para quienes no tienen equipo técnico especializado.' },
+
+  { q: '¿Qué plataforma tiene el mejor SEO integrado según la comparativa?',
+    opts: ['OpenCart con SEO básico', 'Shopify y PrestaShop con SEO bueno', 'Magento y WooCommerce con SEO excelente', 'BigCommerce con SEO superior'],
+    ans: 2, exp: 'Magento y WooCommerce tienen SEO calificado como "Excelente" en la comparativa. Shopify y PrestaShop tienen SEO "Bueno", y OpenCart solo tiene SEO "Básico".' },
+
+  // ─── SESIÓN 2: HOSTING ────────────────────────────────────────────────────
+
+  { q: '¿Cuál es el ROI comparativo del Cloud Hosting vs On-Premises para e-commerce a 3 años?',
+    opts: ['1.5x mayor para cloud', '2x mayor para cloud', '4.01x mayor para cloud', 'Son equivalentes'],
+    ans: 2, exp: 'Las soluciones cloud tienen un ROI 4.01x mayor a 3 años que on-premises para e-commerce, debido a escalabilidad instantánea y reducción de tiempos de caída.' },
+
+  { q: '¿Para qué rango de visitas diarias está diseñado el hosting VPS?',
+    opts: ['Menos de 500 visitas/día', '500 a 5,000 visitas/día', '5,000 a 50,000 visitas/día', 'Más de 100,000 visitas/día'],
+    ans: 1, exp: 'El VPS (Servidor Privado Virtual) es ideal para 500 a 5,000 visitas/día, con un costo de $20–100/mes. Ofrece recursos garantizados y rendimiento predecible.' },
+
+  { q: '¿Cuál es la principal ventaja del Cloud Hosting sobre el On-Premises?',
+    opts: ['Menor costo en todos los escenarios', 'Escalabilidad instantánea según demanda y ROI 4.01x mayor a 3 años', 'Control total y responsabilidad interna', 'Tiempo de implementación de semanas o meses'],
+    ans: 1, exp: 'La escalabilidad instantánea es la gran ventaja del cloud — si tienes un pico de tráfico (Black Friday), el sistema se adapta solo. Además tiene ROI 4.01x mayor vs on-premises a 3 años.' },
+
+  { q: '¿Cuántas horas de caída al año equivale un SLA de 99.9%?',
+    opts: ['1.5 horas', '4.38 horas', '8.76 horas', '24 horas'],
+    ans: 2, exp: 'Un SLA de 99.9% equivale a un máximo de 8.76 horas de caída al año. Es el mínimo aceptable para e-commerce. Idealmente se busca 99.95% o 99.99% (este último = solo 52 minutos/año).' },
+
+  { q: '¿Cuántos GB de RAM se necesitan por cada 100 usuarios concurrentes?',
+    opts: ['0.5–1 GB RAM', '2–4 GB RAM', '6–8 GB RAM', '10–12 GB RAM'],
+    ans: 1, exp: 'Por cada 100 usuarios concurrentes se necesitan 2–4 GB RAM y 2–4 núcleos CPU y 15–20 Mbps de ancho de banda. Este cálculo ayuda a dimensionar el servidor correctamente.' },
+
+  { q: '¿Qué porcentaje de tiendas con más de 1,000 productos está migrando a cloud?',
+    opts: ['45%', '58%', '67%', '76%'],
+    ans: 3, exp: 'El 76% de las tiendas con más de 1,000 productos está migrando a cloud por la escalabilidad durante picos estacionales como Black Friday o Navidad.' },
+
+  // ─── SESIÓN 2: CDN ────────────────────────────────────────────────────────
+
+  { q: '¿Qué beneficio tiene el CDN para una tienda en LATAM?',
+    opts: ['Solo reduce costos del servidor', 'Reduce tiempo de carga en 50–70% y permite latencias <50ms en la región', 'Solo protege contra ataques DDoS', 'Solo mejora el SEO'],
+    ans: 1, exp: 'Un CDN con nodos PoP en Panamá, Bogotá, Santiago y São Paulo reduce tiempo de carga en 50–70% y logra latencias menores a 50ms para usuarios latinoamericanos.' },
+
+  { q: '¿Cuánto aumenta la conversión por cada 0.1 segundo menos de tiempo de carga?',
+    opts: ['+0.2%', '+0.5%', '+1%', '+2.5%'],
+    ans: 2, exp: 'Cada 0.1 segundo menos de carga genera +1% de conversión (ventas). Esto hace que la optimización de velocidad tenga uno de los mejores ROI en e-commerce.' },
+
+  { q: '¿Cuánto ahorra un CDN en ancho de banda del servidor origen?',
+    opts: ['5–10%', '15–25%', '30–60%', '70–90%'],
+    ans: 2, exp: 'Un CDN ahorra entre 30–60% del ancho de banda del servidor origen, ya que sirve el contenido desde nodos distribuidos sin consultar al servidor principal en cada solicitud.' },
+
+  { q: '¿Cuál proveedor CDN tiene plan gratuito y es más recomendado para comenzar?',
+    opts: ['Akamai', 'Fastly', 'Cloudflare ($0–200/mes con plan gratuito)', 'Amazon CloudFront'],
+    ans: 2, exp: 'Cloudflare tiene plan gratuito y especialidad en Seguridad + CDN + DDoS. Es la primera opción para e-commerce que comienza. Tiene nodos PoP en Ciudad de Panamá para latencias bajas en la región.' },
+
+  // ─── SESIÓN 2: PAGOS ──────────────────────────────────────────────────────
+
+  { q: '¿Cuánto tiempo tarda en promedio el proceso completo de una transacción electrónica?',
+    opts: ['30 segundos', '2–3 segundos', '10–15 segundos', '1 minuto'],
+    ans: 1, exp: 'El flujo completo (desde que el cliente paga hasta la confirmación) tarda solo 2–3 segundos. La comisión típica es del 1–5% por transacción.' },
+
+  { q: '¿Cuál es la pasarela de pago con mayor cobertura geográfica según el material?',
+    opts: ['Stripe (40+ países)', 'PayPal y 2Checkout (200+ países)', 'PagueloFácil (solo Panamá)', 'Adyen (solo Europa)'],
+    ans: 1, exp: 'Tanto PayPal como 2Checkout tienen cobertura en 200+ países. Stripe cubre 40+ países. PayPal es conocida por adopción global y confianza del consumidor.' },
+
+  { q: '¿Cuál es el actor del ecosistema de pagos que AUTORIZA la transacción?',
+    opts: ['La pasarela de pago', 'El procesador de pagos', 'El banco emisor (banco del cliente)', 'El banco adquirente (banco del comercio)'],
+    ans: 2, exp: 'El banco emisor es el banco del cliente que posee la tarjeta. Es el que tiene la última palabra: autoriza o rechaza la transacción según el saldo y límites del cliente.' },
+
+  { q: '¿Qué porcentaje de latinoamericanos NO tiene cuenta bancaria?',
+    opts: ['25%', '40%', '55%', '70%'],
+    ans: 2, exp: 'El 55% de los latinoamericanos no tiene cuenta bancaria. Por eso es crucial ofrecer métodos alternativos: efectivo puede aumentar ventas hasta un 35%, y cuotas sin interés aumenta el ticket promedio hasta 65%.' },
+
+  { q: '¿Cuál es la pasarela panameña que integra Banco General y tiene amplia adopción por QR?',
+    opts: ['PagueloFácil', 'Yappy', 'Mercado Pago', 'PayU'],
+    ans: 1, exp: 'Yappy es la billetera digital integrada con Banco General, con amplia adopción en Panamá y pagos por QR. PagueloFácil es la otra opción local, certificada con bancos panameños y con soporte para ACH y pagos recurrentes.' },
+
+  { q: '¿Qué es PCI DSS y cuántos requisitos tiene?',
+    opts: ['Un estándar opcional de diseño web con 5 requisitos', 'El estándar obligatorio para procesar tarjetas con 12 requisitos de seguridad', 'Una certificación de calidad con 20 criterios', 'Una ley panameña con 8 artículos'],
+    ans: 1, exp: 'PCI DSS (Payment Card Industry Data Security Standard) es el estándar OBLIGATORIO para comercios que procesan tarjetas. Tiene 12 requisitos sobre redes seguras, protección de datos, control de acceso y gestión de vulnerabilidades.' },
+
+  { q: '¿Cuál es la razón número 1 de abandono en el checkout?',
+    opts: ['Obligación de crear cuenta (28%)', 'Checkout complicado (23%)', 'Costos adicionales inesperados (49%)', 'Sitio poco confiable (19%)'],
+    ans: 2, exp: 'Los costos adicionales inesperados (shipping, impuestos, fees descubiertos al final) causan el 49% de abandonos. Seguido de obligación de crear cuenta (28%) y checkout complicado (23%).' },
+
+  { q: '¿En cuánto puede reducirse el abandono de checkout con optimización adecuada?',
+    opts: ['Del 95% al 80%', 'Del 73% al 52%', 'Del 60% al 40%', 'Del 50% al 20%'],
+    ans: 1, exp: 'Un checkout de una página + autorrelleno + progreso visible reduce el abandono del 73% al 52% — caso documentado de e-commerce panameño en el material.' },
+
+  { q: '¿Cuánto puede aumentar las ventas ofrecer pago en efectivo en LATAM?',
+    opts: ['Hasta un 10%', 'Hasta un 20%', 'Hasta un 35%', 'Hasta un 60%'],
+    ans: 2, exp: 'Ofrecer pago en efectivo puede aumentar las ventas hasta un 35%. El pago en cuotas sin interés puede incrementar el valor promedio de compra hasta un 65%.' },
+
+  { q: '¿Cuántos países prefieren métodos de pago locales sobre internacionales en LATAM?',
+    opts: ['42% de usuarios prefieren métodos locales', '64% de usuarios prefieren métodos locales', '78% de usuarios prefieren métodos locales', '91% de usuarios prefieren métodos locales'],
+    ans: 2, exp: 'El 78% de latinoamericanos prefieren métodos de pago locales sobre internacionales. Esto explica el éxito de Yappy y PagueloFácil en Panamá, o PIX en Brasil, sobre PayPal.' },
+
+  // ─── SESIÓN 2: SEGURIDAD ──────────────────────────────────────────────────
+
+  { q: '¿Qué estándar de seguridad es OBLIGATORIO para comercios que procesan tarjetas?',
+    opts: ['GDPR', 'OWASP Top 10', 'PCI DSS', 'ISO 27001'],
+    ans: 2, exp: 'PCI DSS es el estándar obligatorio con 12 requisitos sobre redes seguras, protección de datos, control de acceso y gestión de vulnerabilidades para cualquier comercio que procese tarjetas.' },
+
+  { q: '¿Qué pilares conforman la Triada CIA de seguridad?',
+    opts: ['Confiabilidad, Integración, Autenticación', 'Confidencialidad, Integridad, Disponibilidad', 'Certificados, Identidad, Autorización', 'Cifrado, Integridad, Acceso'],
+    ans: 1, exp: 'CIA: Confidencialidad (solo acceso autorizado, via SSL/TLS y tokenización), Integridad (datos no alterados, via hashing y firmas digitales) y Disponibilidad (sistemas siempre accesibles, via redundancia y backups).' },
+
+  { q: '¿Cuál es el costo promedio de una brecha de datos en e-commerce?',
+    opts: ['$450,000', '$1.2 millones', '$4.35 millones', '$12 millones'],
+    ans: 2, exp: 'El costo promedio de una brecha de datos es de $4.35 millones. Además, el 43% de ataques cibernéticos se dirigen al comercio online y el 32% de usuarios abandona al percibir falta de seguridad.' },
+
+  { q: '¿Cuál es la defensa principal contra ataques de SQL Injection?',
+    opts: ['Usar HTTPS y certificado SSL', 'Consultas parametrizadas, WAF y uso de ORM', 'Rate limiting y CAPTCHA', 'Tokens anti-CSRF y cookies SameSite'],
+    ans: 1, exp: 'SQL Injection inyecta código malicioso en consultas a la base de datos. La defensa es usar consultas parametrizadas (preparedStatements), WAF (Web Application Firewall) y ORM para abstraer las consultas.' },
+
+  { q: '¿Qué ataque prueba masivamente combinaciones de usuario/contraseña robadas de otras brechas?',
+    opts: ['SQL Injection', 'XSS (Cross-Site Scripting)', 'Credential Stuffing', 'Card Testing'],
+    ans: 2, exp: 'Credential Stuffing usa credenciales robadas de otras brechas de datos y las prueba masivamente en tu sitio. La defensa son CAPTCHA, rate limiting y 2FA obligatorio.' },
+
+  { q: '¿Qué tipo de certificado SSL se recomienda para e-commerce de alto valor?',
+    opts: ['DV (Domain Validated) — $0–70/año', 'OV (Organization Validated) — $50–200/año', 'EV (Extended Validation) — $200–700/año', 'Wildcard — $100–700/año'],
+    ans: 2, exp: 'EV (Extended Validation) con validación extendida y rigurosa es el recomendado para e-commerce de alto valor y bancos. OV es para e-commerce mediano. DV solo para blogs/sitios informativos.' },
+
+  { q: '¿Cuál de los siguientes es un certificado SSL GRATUITO mencionado en el material?',
+    opts: ['DigiCert', 'Comodo', 'Let\'s Encrypt', 'GeoTrust'],
+    ans: 2, exp: 'Let\'s Encrypt es gratuito y ampliamente usado. ZeroSSL y Cloudflare SSL también son gratuitos. DigiCert, Comodo, GeoTrust y Sectigo son comerciales de pago.' },
+
+  { q: '¿Qué vulnerabilidad OWASP A01 afecta directamente a los e-commerce?',
+    opts: ['Injection — código malicioso en consultas SQL', 'Broken Access Control — usuarios acceden a recursos no autorizados (ver pedidos ajenos)', 'Crypto Failures — contraseñas sin cifrar', 'SSRF — peticiones desde el servidor'],
+    ans: 1, exp: 'A01 Broken Access Control en e-commerce significa que un cliente podría ver los pedidos de otro cliente, acceder a paneles de admin, o modificar precios. Es la vulnerabilidad #1 en OWASP 2021.' },
+
+  { q: '¿Qué significa la vulnerabilidad OWASP A03 Injection y cómo se defiende?',
+    opts: ['Fallos de autenticación; se defiende con 2FA', 'Inyección de SQL, NoSQL, OS, LDAP; se defiende con parametrización y WAF', 'Dependencias desactualizadas; se defiende con parches', 'Fallos de cifrado; se defiende con HTTPS'],
+    ans: 1, exp: 'A03 Injection incluye SQL injection, NoSQL injection, OS injection y LDAP injection. Se defiende con consultas parametrizadas, validación de inputs y WAF.' },
+
+  // ─── SESIÓN 2: NORMATIVA ──────────────────────────────────────────────────
+
+  { q: '¿Qué ley panameña regula la protección de datos personales?',
+    opts: ['Ley 24 de 2002', 'Ley 14 de 2007', 'Ley 51 de 2008', 'Ley 81 de 2019'],
+    ans: 3, exp: 'Ley 81 de 2019 regula protección de datos personales. Ley 24/2002 = comercio electrónico. Ley 51/2008 = documento y firma electrónica. Ley 14/2007 = delitos informáticos.' },
+
+  { q: '¿Qué ley panameña da validez legal a los contratos y firmas digitales?',
+    opts: ['Ley 81 de 2019', 'Ley 51 de 2008', 'Ley 14 de 2007', 'Ley 24 de 2002'],
+    ans: 1, exp: 'La Ley 51 de 2008 sobre Documento y Firma Electrónica da validez legal a los documentos y contratos firmados digitalmente en Panamá. Fundamental para e-commerce B2B y contratos digitales.' },
+
+  { q: '¿Qué normativa internacional aplica a un e-commerce panameño que tiene clientes europeos?',
+    opts: ['Solo PCI DSS', 'GDPR (Reglamento General de Protección de Datos de la UE)', 'Solo la Ley 81 de Panamá', 'CCPA de California'],
+    ans: 1, exp: 'El GDPR aplica a cualquier empresa que procese datos de ciudadanos de la Unión Europea, sin importar dónde esté la empresa. Si tienes clientes europeos, debes cumplir GDPR además de las leyes panameñas.' },
+
+  { q: '¿Cuál es la sanción media por incumplimiento del GDPR?',
+    opts: ['$500,000', '$1.2 millones', '$2.5 millones', '$10 millones'],
+    ans: 2, exp: 'La sanción media por incumplimiento GDPR es de $2.5 millones. El GDPR puede multar hasta el 4% de la facturación anual global o €20 millones (lo que sea mayor).' },
+
+  { q: '¿Qué principio rector recomienda el material para la seguridad en e-commerce?',
+    opts: ['Security by Obscurity — ocultar la implementación', 'Privacy by Design — diseñar la privacidad desde el inicio', 'Security by Default — configuraciones más restrictivas siempre', 'Compliance First — cumplir la ley antes que la seguridad'],
+    ans: 1, exp: 'Privacy by Design significa integrar la privacidad desde el diseño inicial del sistema, no agregarla como parche al final. Es el enfoque recomendado junto con adoptar GDPR y PCI DSS como base.' },
+
+  { q: '¿Qué ley panameña tipifica los delitos contra la seguridad informática?',
+    opts: ['Ley 81 de 2019', 'Ley 51 de 2008', 'Ley 14 de 2007', 'Ley 24 de 2002'],
+    ans: 2, exp: 'La Ley 14 de 2007 tipifica como delitos el acceso no autorizado a sistemas, el fraude informático y el daño a datos. Protege tanto al comercio como a los consumidores.' },
+
+  // ─── PREGUNTAS INTEGRADORAS ────────────────────────────────────────────────
+
+  { q: '¿Cuál de los siguientes elementos tiene el mayor impacto en la tasa de conversión según el material?',
+    opts: ['Múltiples métodos de pago (44%)', 'Certificado SSL visible (42%)', 'Diseño profesional (75%)', 'Checkout simplificado (59%)'],
+    ans: 2, exp: 'El diseño profesional tiene la mayor mejora potencial con 75%, seguido de velocidad <2s (67%), checkout simplificado (59%), múltiples métodos de pago (44%) y SSL visible (42%).' },
+
+  { q: '¿Qué integración empresarial reduce los errores de inventario en un 95%?',
+    opts: ['CDN con el servidor', 'ERP integrado con e-commerce en tiempo real', 'CRM con redes sociales', 'WMS con pasarela de pago'],
+    ans: 1, exp: 'Una integración efectiva ERP ↔ e-commerce reduce los errores de inventario en un 95% y el tiempo de procesamiento de pedidos en un 65%, según el material.' },
+
+  { q: '¿Qué elemento de branding digital aumenta el reconocimiento de marca en un 80%?',
+    opts: ['Tono de comunicación coherente', 'Presencia en redes sociales', 'Color consistente en todos los canales', 'Nombre de dominio optimizado para SEO'],
+    ans: 2, exp: 'El color consistente en todos los canales aumenta el reconocimiento de marca en un 80%. El tono de comunicación genera conexión emocional en el 65% de los casos.' },
+
+  { q: '¿Cuál es la tendencia 2024–2025 más relevante en pasarelas de pago según el material?',
+    opts: ['Aumento del uso de cheques digitales', '+37% BNPL integrado · +42% pagos sin contacto · crecimiento del one-click checkout', 'Eliminación de tarjetas de crédito', 'Migración total a criptomonedas'],
+    ans: 1, exp: 'Las tendencias 2024–2025 en pagos son: +37% en pasarelas con BNPL (Buy Now Pay Later) integrado, +42% en pagos sin contacto, y crecimiento del "one-click checkout".' },
+
+  { q: '¿Qué porcentaje de compradores abandona si percibe falta de seguridad en el sitio?',
+    opts: ['15%', '22%', '32%', '48%'],
+    ans: 2, exp: 'El 32% de los usuarios abandona al percibir falta de seguridad. Esto se suma al 85% que no compra sin ver certificado SSL, haciendo de la seguridad visible un factor clave de conversión.' },
+
+  { q: 'Según el material, ¿cuál es el enfoque correcto al elegir estándares de seguridad?',
+    opts: ['Adoptar solo las leyes panameñas locales', 'Adoptar los estándares más exigentes (GDPR, PCI DSS) como base y adaptar a particularidades locales', 'Aplicar solo PCI DSS ya que es el único obligatorio globalmente', 'Esperar a tener problemas para implementar seguridad'],
+    ans: 1, exp: 'El material recomienda adoptar los estándares más exigentes (GDPR, PCI DSS) como base y adaptar a particularidades locales. Privacy by Design debe ser el principio rector desde el inicio.' },
+
 ];
 
 let answered = 0;
@@ -998,7 +1405,7 @@ function buildQuiz() {
     card.className = 'question-card';
     card.id = 'qcard' + i;
     card.innerHTML = `
-      <div class="q-num">PREGUNTA ${i+1} / 20</div>
+      <div class="q-num">PREGUNTA ${i+1} / 98</div>
       <div class="q-text">${q.q}</div>
       <div class="options" id="opts${i}">
         ${q.opts.map((o,j) => `
