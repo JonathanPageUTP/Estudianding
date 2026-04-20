@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vulnerabilidades — Caso Hasbro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #f4f1ea;
+    --ink:    #1a1714;
+    --ink2:   #4a4440;
+    --ink3:   #9a9088;
+    --v1:     #c0392b;
+    --v1l:    #fdf0ee;
+    --v2:     #b07d12;
+    --v2l:    #fdf8ec;
+    --v3:     #1a5a8a;
+    --v3l:    #edf4fb;
+    --rule:   rgba(26,23,20,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Epilogue', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding: 48px 0 28px;
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+  }
+
+  .masthead-kicker {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .masthead-kicker::before {
+    content: '';
+    display: inline-block;
+    width: 18px; height: 2px;
+    background: var(--ink);
+  }
+
+  .masthead h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(34px, 6vw, 58px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .masthead-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--ink3);
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 1px;
+    line-height: 1.9;
+  }
+
+  /* INTRO STRIP */
+  .intro-strip {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 24px 32px;
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+
+  .strip-item .label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.45;
+    margin-bottom: 4px;
+  }
+
+  .strip-item .value {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* CHAIN */
+  .chain-section { margin-bottom: 48px; }
+
+  .chain-row {
+    display: grid;
+    grid-template-columns: 1fr 32px 1fr 32px 1fr;
+    align-items: center;
+    border: 1.5px solid var(--ink);
+  }
+
+  .chain-cell {
+    padding: 18px 20px;
+  }
+
+  .chain-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--ink3);
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    height: 100%;
+  }
+
+  .cn {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .cn-1 { color: var(--v1); }
+  .cn-2 { color: var(--v2); }
+  .cn-3 { color: var(--v3); }
+
+  .chain-cell p { font-size: 13px; color: var(--ink2); line-height: 1.5; }
+
+  /* VULN CARDS */
+  .vulns { display: flex; flex-direction: column; gap: 40px; margin-bottom: 48px; }
+
+  .vcard {
+    border: 1.5px solid var(--ink);
+    opacity: 0;
+    transform: translateY(18px);
+    animation: rise 0.5s ease forwards;
+  }
+
+  .vcard:nth-child(1) { animation-delay: 0.08s; }
+  .vcard:nth-child(2) { animation-delay: 0.2s; }
+  .vcard:nth-child(3) { animation-delay: 0.32s; }
+
+  @keyframes rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .vcard-head {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .vcard-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    border-right: 1.5px solid var(--ink);
+    min-height: 72px;
+  }
+
+  .v1 .vcard-num { background: var(--v1); color: #fff; }
+  .v2 .vcard-num { background: var(--v2); color: #fff; }
+  .v3 .vcard-num { background: var(--v3); color: #fff; }
+
+  .vcard-title-block { padding: 16px 22px; }
+
+  .vcard-kicker {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .v1 .vcard-kicker { color: var(--v1); }
+  .v2 .vcard-kicker { color: var(--v2); }
+  .v3 .vcard-kicker { color: var(--v3); }
+
+  .vcard-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.2px;
+  }
+
+  .vcard-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vcard-col {
+    padding: 26px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .vcard-col:last-child { border-right: none; }
+
+  .col-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 12px;
+  }
+
+  .vcard-col p { font-size: 14px; color: var(--ink2); line-height: 1.7; }
+  .vcard-col p + p { margin-top: 10px; }
+
+  .highlight {
+    padding: 13px 15px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.6;
+    border-left: 3px solid;
+  }
+
+  .v1 .highlight { border-color: var(--v1); background: var(--v1l); }
+  .v2 .highlight { border-color: var(--v2); background: var(--v2l); }
+  .v3 .highlight { border-color: var(--v3); background: var(--v3l); }
+
+  /* ISO FOOTER */
+  .vcard-iso {
+    border-top: 1.5px solid var(--ink);
+    padding: 14px 26px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .iso-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink3);
+  }
+
+  .iso-pill {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 11px;
+    border: 1.5px solid;
+  }
+
+  .v1 .iso-pill { border-color: var(--v1); color: var(--v1); background: var(--v1l); }
+  .v2 .iso-pill { border-color: var(--v2); color: var(--v2); background: var(--v2l); }
+  .v3 .iso-pill { border-color: var(--v3); color: var(--v3); background: var(--v3l); }
+
+  .iso-desc { font-size: 12px; color: var(--ink3); font-style: italic; }
+
+  /* RESUMEN */
+  .summary {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 32px;
+  }
+
+  .summary .section-label {
+    color: rgba(244,241,234,0.38);
+    border-color: rgba(244,241,234,0.12);
+  }
+
+  .summary p { font-size: 14px; line-height: 1.8; color: rgba(244,241,234,0.82); }
+  .summary p + p { margin-top: 12px; }
+  .summary strong { color: #fff; font-weight: 500; }
+
+  /* FOOTER */
+  .foot {
+    margin-top: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--ink3);
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 0 20px 60px; }
+    .masthead { grid-template-columns: 1fr; }
+    .masthead-meta { text-align: left; }
+    .intro-strip { grid-template-columns: 1fr; }
+    .vcard-body { grid-template-columns: 1fr; }
+    .chain-row { grid-template-columns: 1fr; }
+    .chain-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div>
+      <div class="masthead-kicker">Seguridad en Sistemas de Información · UTP</div>
+      <h1>Vulnerabilidades<br>del Caso Hasbro</h1>
+    </div>
+    <div class="masthead-meta">
+      <p>Análisis bajo ISO 27001</p>
+      <p>28 marzo 2026</p>
+      <p>Jonathan Page · Josué Figueroa</p>
+    </div>
+  </div>
+
+  <div class="intro-strip">
+    <div class="strip-item">
+      <div class="label">Tipo de ataque</div>
+      <div class="value">Ransomware de doble extorsión</div>
+    </div>
+    <div class="strip-item">
+      <div class="label">Vector inicial</div>
+      <div class="value">Phishing generado con IA</div>
+    </div>
+    <div class="strip-item">
+      <div class="label">Vulnerabilidades identificadas</div>
+      <div class="value">3 — bajo marco ISO 27001</div>
+    </div>
+  </div>
+
+  <div class="chain-section">
+    <div class="section-label">Cómo se encadenan las tres vulnerabilidades</div>
+    <div class="chain-row">
+      <div class="chain-cell">
+        <div class="cn cn-1">Vuln. 1</div>
+        <p>Empleado engañado por phishing con IA — entrega sus credenciales</p>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-cell">
+        <div class="cn cn-2">Vuln. 2</div>
+        <p>Atacante entra con identidad robada sin disparar ninguna alarma</p>
+      </div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-cell">
+        <div class="cn cn-3">Vuln. 3</div>
+        <p>Ransomware cifra todo porque no hay redundancia ni plan de continuidad</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Análisis detallado por vulnerabilidad</div>
+  <div class="vulns">
+
+    <div class="vcard v1">
+      <div class="vcard-head">
+        <div class="vcard-num">1</div>
+        <div class="vcard-title-block">
+          <div class="vcard-kicker">Factor psicológico · Ingeniería social</div>
+          <div class="vcard-title">Vulnerabilidad humana ante phishing con IA</div>
+        </div>
+      </div>
+      <div class="vcard-body">
+        <div class="vcard-col">
+          <div class="col-label">¿Qué pasó en Hasbro?</div>
+          <p>Los atacantes enviaron correos electrónicos generados por IA que imitaban a la perfección el tono, vocabulario y urgencia de un directivo real de la empresa. Sin errores ortográficos. Sin dominios sospechosos. Sin ninguna de las señales de alerta que el personal aprendió a detectar.</p>
+          <p>El empleado objetivo fue incapaz de distinguirlos de una comunicación legítima y entregó sus credenciales de acceso. Fue el punto de entrada de todo el ataque.</p>
+          <div class="highlight">
+            "El mensaje estaba personalizado y redactado sin un solo error, rompiendo la primera barrera de seguridad: el juicio humano."
+          </div>
+        </div>
+        <div class="vcard-col">
+          <div class="col-label">¿Por qué es una vulnerabilidad crítica?</div>
+          <p>A diferencia del phishing tradicional (con errores gramaticales o remitentes sospechosos), el phishing generado por IA elimina exactamente las señales de alerta en que el personal fue entrenado a detectar.</p>
+          <p>Esto significa que la capacitación de concienciación existente en Hasbro estaba obsoleta — el personal no estaba preparado para enfrentarse a ingeniería social de esta generación.</p>
+          <p>La vulnerabilidad no es tecnológica: es la brecha entre el nivel de sofisticación del atacante y el nivel de preparación del empleado.</p>
+        </div>
+      </div>
+      <div class="vcard-iso">
+        <span class="iso-label">Control ISO 27001</span>
+        <span class="iso-pill">A.7.2</span>
+        <span class="iso-desc">Concienciación, educación y capacitación — exige que el personal pueda identificar amenazas actuales, incluyendo phishing generado por IA.</span>
+      </div>
+    </div>
+
+    <div class="vcard v2">
+      <div class="vcard-head">
+        <div class="vcard-num">2</div>
+        <div class="vcard-title-block">
+          <div class="vcard-kicker">Autenticación · Gestión de identidad</div>
+          <div class="vcard-title">Control de accesos insuficiente para detectar suplantación</div>
+        </div>
+      </div>
+      <div class="vcard-body">
+        <div class="vcard-col">
+          <div class="col-label">¿Qué pasó en Hasbro?</div>
+          <p>Con las credenciales robadas, el atacante accedió a los sistemas internos sin despertar ninguna alarma. Para los sistemas de monitoreo, el atacante se veía exactamente igual que el empleado legítimo cuyas credenciales había robado.</p>
+          <p>Navegó libremente por los servidores administrativos, moviéndose lateralmente hasta alcanzar los sistemas ERP e inventarios que luego cifraría con el ransomware.</p>
+          <div class="highlight">
+            "El atacante caminó por los pasillos digitales con la llave de un administrador — entró como un invitado legítimo, sin que ningún sistema lo detectara."
+          </div>
+        </div>
+        <div class="vcard-col">
+          <div class="col-label">¿Por qué es una vulnerabilidad crítica?</div>
+          <p>Un sistema de autenticación robusto no debería validar el acceso únicamente por usuario y contraseña. El MFA (autenticación multifactor) habría requerido una segunda verificación que el atacante no podría superar solo con credenciales robadas.</p>
+          <p>Adicionalmente, un sistema UEBA (monitoreo de comportamiento de identidad) podría haber detectado anomalías: accesos inusuales a servidores, horarios atípicos, o movimiento lateral entre sistemas que el empleado legítimo no frecuentaba.</p>
+          <p>La ausencia de ambas capas permitió que el intruso operara sin fricción durante el tiempo necesario para desplegar el ransomware.</p>
+        </div>
+      </div>
+      <div class="vcard-iso">
+        <span class="iso-label">Controles ISO 27001</span>
+        <span class="iso-pill">A.5.15</span>
+        <span class="iso-pill">A.5.17</span>
+        <span class="iso-desc">Control de acceso y gestión de autenticación — regulan quién accede a qué recursos y cómo se verifica la identidad en tiempo real.</span>
+      </div>
+    </div>
+
+    <div class="vcard v3">
+      <div class="vcard-head">
+        <div class="vcard-num">3</div>
+        <div class="vcard-title-block">
+          <div class="vcard-kicker">Disponibilidad · Arquitectura · Continuidad</div>
+          <div class="vcard-title">Dependencia crítica de sistemas centralizados sin redundancia</div>
+        </div>
+      </div>
+      <div class="vcard-body">
+        <div class="vcard-col">
+          <div class="col-label">¿Qué pasó en Hasbro?</div>
+          <p>Una vez dentro, el atacante desplegó el software de cifrado en los servidores de almacenamiento de datos administrativos. El resultado fue inmediato y total: los sistemas ERP e inventarios quedaron completamente paralizados.</p>
+          <p>La logística física global de distribución de juguetes se detuvo. La coordinación con distribuidores internacionales colapsó. Todo por un único punto de fallo: la centralización excesiva de los sistemas críticos.</p>
+          <div class="highlight">
+            "La falta de segregación permitió que el cifrado de datos tuviera un impacto directo y severo en toda la cadena de suministro física global."
+          </div>
+        </div>
+        <div class="vcard-col">
+          <div class="col-label">¿Por qué es una vulnerabilidad crítica?</div>
+          <p>Los sistemas ERP e inventarios de Hasbro no contaban con arquitectura de respaldo activo-activo ni segmentación suficiente entre módulos. Un ataque focalizado en un servidor se convirtió en una crisis operativa global.</p>
+          <p>Un plan de continuidad efectivo (BCP/DRP) habría permitido activar sistemas alternativos, mantener operaciones mínimas y contener el impacto del cifrado a un solo segmento. Hasbro no tenía ese plan probado ni esa redundancia implementada.</p>
+          <p>Esta vulnerabilidad transforma un incidente de seguridad grave en una crisis de negocio total — fue lo que obligó a reportar el incidente ante la SEC con riesgo financiero y de reputación.</p>
+        </div>
+      </div>
+      <div class="vcard-iso">
+        <span class="iso-label">Control ISO 27001</span>
+        <span class="iso-pill">A.5.30</span>
+        <span class="iso-desc">Preparación de las TIC para la continuidad del negocio — obliga a que los sistemas críticos tengan planes probados para operar ante un desastre o ataque.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="summary">
+    <div class="section-label">Conclusión del análisis</div>
+    <p>
+      El caso Hasbro ilustra cómo <strong>tres vulnerabilidades distintas se encadenan para producir un daño total</strong>. La primera es humana: un empleado que no podía distinguir un correo de IA de uno real. La segunda es de identidad: un sistema que no detectó que esas credenciales estaban siendo usadas por un intruso. La tercera es arquitectónica: sistemas tan centralizados que un solo cifrado paralizó operaciones globales.
+    </p>
+    <p>
+      Ninguna de las tres es suficiente por sí sola para causar el desastre. Las tres juntas, sí. Los controles ISO 27001 <strong>A.7.2, A.5.15, A.5.17 y A.5.30</strong> representan exactamente los puntos donde Hasbro debía haber intervenido antes del 28 de marzo de 2026.
+    </p>
+  </div>
+
+  <div class="foot">
+    <span>UTP · FISC · Licenciatura en Desarrollo de Software</span>
+    <span>Seguridad en los Sistemas de Información · Lizmayrem Marquez</span>
+    <span>15/04/2026</span>
+  </div>
+
+</div>
+</body>
+</html>

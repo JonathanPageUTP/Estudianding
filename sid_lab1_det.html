@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caso Hasbro — Incidente de Ciberseguridad 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #e63232;
+    --red-dim: #8b1a1a;
+    --amber: #f59e0b;
+    --green: #22c55e;
+    --bg: #080c10;
+    --bg2: #0e1318;
+    --bg3: #141b22;
+    --line: rgba(255,255,255,0.07);
+    --text: #d4dde8;
+    --muted: #5a6a7a;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'IBM Plex Sans', sans-serif;
+    --display: 'Bebas Neue', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 8vw;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(230,50,50,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(230,50,50,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridShift 20s linear infinite;
+  }
+
+  @keyframes gridShift {
+    from { background-position: 0 0; }
+    to   { background-position: 60px 60px; }
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(230,50,50,0.12) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  .threat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .threat-label::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(52px, 9vw, 110px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 80px rgba(230,50,50,0.3);
+  }
+
+  .hero h1 span { color: var(--red); }
+
+  .hero-sub {
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--muted);
+    font-family: var(--mono);
+    letter-spacing: 1px;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .meta-item {
+    border-left: 2px solid var(--red);
+    padding-left: 14px;
+  }
+
+  .meta-item .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .meta-item .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 2px;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 6vw;
+  }
+
+  section {
+    padding: 80px 6vw;
+    border-bottom: 1px solid var(--line);
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 36px;
+    letter-spacing: 1px;
+  }
+
+  .section-title span { color: var(--red); }
+
+  /* ── INCIDENT OVERVIEW ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 40px;
+  }
+
+  .overview-cell {
+    background: var(--bg2);
+    padding: 32px;
+    transition: background 0.2s;
+  }
+
+  .overview-cell:hover { background: var(--bg3); }
+
+  .overview-cell .cell-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .overview-cell p {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 36px;
+    margin-top: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .tl-item:nth-child(1) { animation-delay: 0.1s; }
+  .tl-item:nth-child(2) { animation-delay: 0.2s; }
+  .tl-item:nth-child(3) { animation-delay: 0.3s; }
+  .tl-item:nth-child(4) { animation-delay: 0.4s; }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -31px; top: 6px;
+    width: 10px; height: 10px;
+    background: var(--red);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--red);
+  }
+
+  .tl-item .tl-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tl-item h4 {
+    font-family: var(--display);
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .tl-item p { font-size: 14px; color: var(--text); }
+
+  /* ── VULNERABILITY CARDS ── */
+  .vuln-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .vuln-card {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--red);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+
+  .vuln-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--red);
+    background: var(--bg3);
+  }
+
+  .vuln-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -10px; right: 16px;
+    font-family: var(--display);
+    font-size: 80px;
+    color: rgba(230,50,50,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .vuln-card .v-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .vuln-card h3 {
+    font-family: var(--display);
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+
+  .vuln-card p {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .iso-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--amber);
+    border: 1px solid rgba(245,158,11,0.3);
+    padding: 4px 10px;
+    border-radius: 2px;
+    background: rgba(245,158,11,0.05);
+  }
+
+  /* ── THREAT CARDS ── */
+  .threat-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .threat-card {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .threat-card:hover { border-color: var(--red-dim); }
+
+  .threat-num {
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-size: 44px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .threat-body {
+    padding: 24px 28px;
+  }
+
+  .threat-body h3 {
+    font-family: var(--display);
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .threat-body p { font-size: 14px; color: var(--text); line-height: 1.7; }
+
+  .threat-tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+
+  /* ── ISO CONTROLS TABLE ── */
+  .iso-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-size: 13px;
+  }
+
+  .iso-table thead tr {
+    background: var(--red);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .iso-table th { padding: 14px 20px; text-align: left; }
+
+  .iso-table tbody tr {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg2);
+    transition: background 0.15s;
+  }
+
+  .iso-table tbody tr:hover { background: var(--bg3); }
+
+  .iso-table td { padding: 16px 20px; vertical-align: top; }
+
+  .iso-table .ctrl-id {
+    font-family: var(--mono);
+    color: var(--amber);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── SEC IMPACT ── */
+  .impact-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .impact-card {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    padding: 28px;
+    text-align: center;
+  }
+
+  .impact-card .impact-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+  .impact-card h4 {
+    font-family: var(--display);
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .impact-card p { font-size: 13px; color: var(--muted); }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box {
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--red);
+    padding: 40px;
+    margin-top: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .summary-box::after {
+    content: 'RESUMEN';
+    position: absolute;
+    right: 30px; bottom: -10px;
+    font-family: var(--display);
+    font-size: 90px;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+  }
+
+  .summary-box p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.8;
+    max-width: 800px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--red), transparent);
+    margin: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,12,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 6vw;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    overflow-x: auto;
+  }
+
+  nav .nav-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-right: 16px;
+  }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--red); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 768px) {
+    .overview-grid { grid-template-columns: 1fr; }
+    .vuln-grid { grid-template-columns: 1fr; }
+    .impact-cards { grid-template-columns: 1fr; }
+    .threat-card { grid-template-columns: 60px 1fr; }
+    .threat-num { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">⚠ HASBRO BREACH</span>
+  <a href="#overview">Incidente</a>
+  <a href="#timeline">Cronología</a>
+  <a href="#vulnerabilities">Vulnerabilidades</a>
+  <a href="#threats">Amenazas</a>
+  <a href="#iso">ISO 27001</a>
+  <a href="#sec">Impacto SEC</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="threat-label">Incidente activo confirmado — 28 marzo 2026</div>
+
+  <h1>HASBRO<br><span>CYBERATTACK</span><br>CASO DE ESTUDIO</h1>
+
+  <p class="hero-sub">
+    Ransomware de doble extorsión · Phishing con IA · Suplantación de identidad<br>
+    Análisis bajo marco ISO 27001 · UTP · Seguridad en Sistemas de Información
+  </p>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="label">Tipo de ataque</div>
+      <div class="value">Doble Extorsión</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Sistemas afectados</div>
+      <div class="value">ERP + Inventarios</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Vector inicial</div>
+      <div class="value">Phishing con IA</div>
+    </div>
+    <div class="meta-item">
+      <div class="label">Marco aplicado</div>
+      <div class="value">ISO 27001</div>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-tag">// 01 — Descripción del incidente</div>
+  <div class="section-title">¿QUÉ <span>PASÓ?</span></div>
+
+  <p style="max-width:800px; color:var(--text); font-size:15px; line-height:1.8;">
+    El 28 de marzo de 2026, Hasbro detectó una anomalía técnica en sus servidores internos que escaló a un <strong style="color:#fff">ataque de ransomware de doble extorsión</strong>. El incidente paralizó sistemas críticos de planificación de recursos (ERP) y gestión de inventarios, afectando la logística global de juguetes físicos, aunque sin impactar las plataformas de juego digital.
+  </p>
+
+  <div class="overview-grid">
+    <div class="overview-cell">
+      <div class="cell-label">¿Por qué ocurrió?</div>
+      <p>Los sistemas de monitoreo interno detectaron comportamiento inusual en el tráfico de datos y acceso no autorizado a ciertos archivos. Actores malintencionados vulneraron el perímetro de seguridad, comprometiendo sistemas operativos específicos no relacionados con los servicios al consumidor final.</p>
+    </div>
+    <div class="overview-cell">
+      <div class="cell-label">Causa raíz</div>
+      <p>El ataque se originó por una <strong style="color:#fff">brecha en los controles de acceso</strong>. Los atacantes utilizaron un vector de <em>Phishing Avanzado con IA</em> para obtener credenciales legítimas, lo que les permitió evadir las alarmas iniciales y desplegar software de cifrado en servidores de almacenamiento administrativo.</p>
+    </div>
+    <div class="overview-cell">
+      <div class="cell-label">Doble extorsión — definición</div>
+      <p>No se limitaron a cifrar los datos. Le dijeron a Hasbro: <em>"O pagas por la llave, o publicamos en internet los diseños de tus próximos juguetes y tus contratos privados."</em> Esto comprometió no solo la operatividad sino también la <strong style="color:#fff">ventaja competitiva</strong> de la empresa.</p>
+    </div>
+    <div class="overview-cell">
+      <div class="cell-label">¿Qué no fue afectado?</div>
+      <p>Las plataformas de juego digital continuaron operando con normalidad. En el reporte ante la SEC, Hasbro declaró que <strong style="color:#fff">no hubo evidencia inmediata</strong> de que los datos de pago de los consumidores finales (tiendas físicas o digitales) hayan sido comprometidos.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-tag">// 02 — Cronología</div>
+  <div class="section-title">LÍNEA DE <span>TIEMPO</span></div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-label">Fase 1 — Infiltración</div>
+      <h4>PHISHING CON IA</h4>
+      <p>Los atacantes envían correos electrónicos generados por IA que imitan a la perfección el tono, urgencia y estilo de un directivo de Hasbro. Sin errores ortográficos, perfectamente personalizados. El empleado objetivo no puede distinguir el engaño.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-label">Fase 2 — Credenciales comprometidas</div>
+      <h4>ROBO DE IDENTIDAD</h4>
+      <p>Un empleado cae en el engaño y entrega sus credenciales de acceso. El atacante ahora posee las llaves del sistema. Para los sistemas de monitoreo, el atacante parece ser un empleado más realizando tareas diarias normales.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-label">Fase 3 — Despliegue</div>
+      <h4>28 MARZO 2026 — RANSOMWARE ACTIVADO</h4>
+      <p>Hasbro detecta la anomalía técnica. Los atacantes despliegan el software de cifrado en servidores de almacenamiento de datos administrativos. Los sistemas ERP y de inventarios quedan paralizados. La logística global se detiene.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-label">Fase 4 — Extorsión y respuesta</div>
+      <h4>DOBLE EXTORSIÓN + REPORTE SEC</h4>
+      <p>Los atacantes exigen pago bajo amenaza de publicar diseños confidenciales. Hasbro activa su protocolo de respuesta a incidentes, contiene el daño y presenta el reporte obligatorio ante la SEC cumpliendo con las normativas de transparencia financiera.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VULNERABILITIES -->
+<section id="vulnerabilities">
+  <div class="section-tag">// 03 — Análisis ISO 27001</div>
+  <div class="section-title">TRES <span>VULNERABILIDADES</span></div>
+
+  <div class="vuln-grid">
+    <div class="vuln-card" data-num="1">
+      <span class="v-icon">🧠</span>
+      <h3>VULNERABILIDAD HUMANA</h3>
+      <p>Los empleados, incluso de alto nivel, eran susceptibles ante técnicas de phishing avanzado generadas por IA. La falta de capacidad para distinguir correos creados por modelos de lenguaje permitió el compromiso inicial de credenciales.</p>
+      <span class="iso-badge">ISO A.7.2 — Concienciación</span>
+    </div>
+    <div class="vuln-card" data-num="2">
+      <span class="v-icon">🔑</span>
+      <h3>CONTROL DE ACCESOS DÉBIL</h3>
+      <p>Los controles de autenticación (MFA, monitoreo de comportamiento) no fueron suficientes para detectar la suplantación de identidad en tiempo real. Los atacantes actuaron como "invitados legítimos" dentro del sistema.</p>
+      <span class="iso-badge">ISO A.5.15 / A.5.17 — Acceso</span>
+    </div>
+    <div class="vuln-card" data-num="3">
+      <span class="v-icon">🏗️</span>
+      <h3>SISTEMAS CENTRALIZADOS</h3>
+      <p>La falta de segregación o redundancia suficiente en los sistemas ERP e inventarios permitió que el cifrado de datos tuviera un impacto directo y severo en toda la cadena de suministro física global.</p>
+      <span class="iso-badge">ISO A.5.30 — Continuidad TIC</span>
+    </div>
+  </div>
+</section>
+
+<!-- THREATS -->
+<section id="threats">
+  <div class="section-tag">// 04 — Amenazas identificadas</div>
+  <div class="section-title">TRES <span>AMENAZAS</span></div>
+
+  <div class="threat-cards">
+    <div class="threat-card">
+      <div class="threat-num">01</div>
+      <div class="threat-body">
+        <span class="threat-tag">// Ingeniería social avanzada</span>
+        <h3>PHISHING CON IA GENERATIVA</h3>
+        <p>Lo que liquidó las defensas de Hasbro fue que el correo trampa <strong style="color:#fff">no parecía falso</strong>. En 2026, los atacantes usan IA generativa para imitar a la perfección el tono y urgencia de un directivo. El mensaje estaba personalizado y redactado sin un solo error, rompiendo la primera barrera de seguridad: el juicio humano. Esta amenaza rompe el activo humano como primera línea de defensa.</p>
+      </div>
+    </div>
+    <div class="threat-card">
+      <div class="threat-num">02</div>
+      <div class="threat-body">
+        <span class="threat-tag">// Ataque de cifrado + extorsión</span>
+        <h3>RANSOMWARE DE DOBLE EXTORSIÓN</h3>
+        <p>No se limitaron a bloquear los servidores. Aplicaron la táctica de <strong style="color:#fff">extorsión doble</strong>: "O nos pagas por la llave para recuperar tus archivos, o mañana publicamos en internet los diseños de tus próximos juguetes y los contratos privados." Esto colocó a Hasbro en una posición imposible: no solo perdía operatividad, sino su <strong style="color:#fff">ventaja competitiva</strong> y secretos industriales.</p>
+      </div>
+    </div>
+    <div class="threat-card">
+      <div class="threat-num">03</div>
+      <div class="threat-body">
+        <span class="threat-tag">// Movimiento lateral interno</span>
+        <h3>ACCESO MEDIANTE IDENTIDAD SUPLANTADA</h3>
+        <p>Más que un "hacker rompiendo códigos", fue un intruso <strong style="color:#fff">caminando por los pasillos digitales con la llave de un administrador</strong>. Al robar las credenciales mediante phishing, el atacante no tuvo que saltar firewalls; entró como un "invitado legítimo". Esta amenaza es la más difícil de detectar porque, para los sistemas de monitoreo, el atacante parecía ser un empleado más haciendo su trabajo diario.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ISO TABLE -->
+<section id="iso">
+  <div class="section-tag">// 05 — Controles ISO 27001</div>
+  <div class="section-title">MATRIZ DE <span>CONTROLES</span></div>
+
+  <table class="iso-table">
+    <thead>
+      <tr>
+        <th>Control ISO</th>
+        <th>Nombre</th>
+        <th>Vulnerabilidad que cubre</th>
+        <th>Acción recomendada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="ctrl-id">A.7.2</td>
+        <td>Concienciación, educación y capacitación en seguridad</td>
+        <td>Empleados incapaces de detectar phishing generado por IA</td>
+        <td>Entrenamientos periódicos con simulaciones de phishing, incluyendo ejemplos generados por IA</td>
+      </tr>
+      <tr>
+        <td class="ctrl-id">A.5.15</td>
+        <td>Control de acceso</td>
+        <td>Acceso no detectado mediante credenciales robadas</td>
+        <td>Políticas de acceso basado en mínimo privilegio + monitoreo de comportamiento de identidad (UEBA)</td>
+      </tr>
+      <tr>
+        <td class="ctrl-id">A.5.17</td>
+        <td>Información de autenticación</td>
+        <td>Ausencia de MFA suficiente para detectar suplantación en tiempo real</td>
+        <td>Implementar MFA resistente a phishing (FIDO2/llaves físicas), eliminar autenticación solo con contraseña</td>
+      </tr>
+      <tr>
+        <td class="ctrl-id">A.5.30</td>
+        <td>Preparación de TIC para la continuidad del negocio</td>
+        <td>Centralización excesiva de ERP e inventarios sin redundancia</td>
+        <td>Arquitectura de respaldo activo-activo, planes de continuidad probados, segmentación de sistemas críticos</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SEC IMPACT -->
+<section id="sec">
+  <div class="section-tag">// 06 — Impacto regulatorio y financiero</div>
+  <div class="section-title">REPORTE <span>SEC</span></div>
+
+  <p style="max-width:800px; color:var(--text); font-size:15px; margin-bottom:8px;">
+    Como empresa que cotiza en bolsa, Hasbro cumplió con la normativa de transparencia financiera presentando un informe ante la <strong style="color:#fff">U.S. Securities and Exchange Commission (SEC)</strong>. El reporte cubrió tres áreas críticas:
+  </p>
+
+  <div class="impact-cards">
+    <div class="impact-card">
+      <span class="impact-icon">💸</span>
+      <h4>RIESGO FINANCIERO</h4>
+      <p>El ataque podría materializarse en costos sustanciales: remediación técnica, honorarios legales y posibles multas regulatorias por el incidente.</p>
+    </div>
+    <div class="impact-card">
+      <span class="impact-icon">📉</span>
+      <h4>IMPACTO EN LA ACCIÓN</h4>
+      <p>La notificación pública alertó a inversores sobre posibles fluctuaciones en los resultados trimestrales debido a la pausa operativa forzada por el ransomware.</p>
+    </div>
+    <div class="impact-card">
+      <span class="impact-icon">🛡️</span>
+      <h4>DECLARACIÓN DE CONTENCIÓN</h4>
+      <p>No hubo evidencia inmediata de que los datos de pago de los consumidores finales fueran comprometidos. El impacto fue en la parte administrativa y logística.</p>
+    </div>
+  </div>
+
+  <div class="summary-box">
+    <div class="section-tag" style="margin-bottom:16px;">// Conclusión del caso</div>
+    <p>
+      El ataque a Hasbro demuestra cómo la <strong style="color:#fff">combinación de IA generativa con técnicas de ingeniería social clásicas</strong> puede eludir incluso perímetros de seguridad robustos. La primera brecha no fue técnica sino humana: un empleado engañado por un correo indistinguible. Una vez dentro, el atacante operó como un usuario legítimo hasta ejecutar el ransomware. La arquitectura centralizada amplificó el daño. Los controles ISO 27001 <strong style="color:#fff">A.7.2, A.5.15, A.5.17 y A.5.30</strong> representan las áreas de mejora más críticas para prevenir incidentes similares.
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>UTP · Seguridad en Sistemas de Información · Docente: Lizmayrem Marquez</p>
+  <p>Jonathan Page 8-976-1568 · Josué Figueroa 8-936-934 · 15/04/2026</p>
+</footer>
+
+</body>
+</html>
