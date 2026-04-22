@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cards — Pasarelas & Criptomonedas en E-Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --dark: #0d1b2a;
+    --accent: #2563eb;
+    --accent2: #059669;
+    --accent3: #d97706;
+    --warn: #dc2626;
+    --purple: #7c3aed;
+    --pink: #db2777;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --text: #1e293b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--dark);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(37,99,235,0.04) 0px,
+      rgba(37,99,235,0.04) 1px,
+      transparent 1px,
+      transparent 40px
+    );
+  }
+  header .tag {
+    display: inline-block;
+    background: rgba(37,99,235,0.2);
+    color: #93c5fd;
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    font-weight: 600; text-transform: uppercase;
+    padding: 0.3em 0.8em; border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800; color: #fff;
+    line-height: 1.1; margin-bottom: 0.5rem;
+    position: relative; z-index: 1;
+  }
+  header h1 span { color: #60a5fa; }
+  header p {
+    color: #94a3b8; font-size: 0.95rem;
+    position: relative; z-index: 1;
+  }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex; gap: 0.5rem;
+    flex-wrap: wrap; align-items: center;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .filter-label {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-right: 0.5rem;
+  }
+  .filter-btn {
+    padding: 0.35em 0.9em;
+    border-radius: 20px; border: 1.5px solid var(--border);
+    background: transparent; color: var(--muted);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent); color: white;
+    border-color: var(--accent);
+  }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 1400px; margin: 0 auto;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  .card-head {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .card-stripe {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 0.8rem;
+  }
+  .card-category {
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem; font-weight: 700;
+    color: var(--dark); line-height: 1.2;
+  }
+  .card-body {
+    padding: 1.2rem 1.5rem;
+    flex: 1;
+  }
+  .card-body p {
+    font-size: 0.88rem; color: var(--muted);
+    line-height: 1.6; margin-bottom: 1rem;
+  }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .tag {
+    display: inline-block; font-size: 0.65rem;
+    font-weight: 600; letter-spacing: 0.06em;
+    padding: 0.2em 0.6em; border-radius: 4px;
+  }
+  .tag-blue { background: #dbeafe; color: #1d4ed8; }
+  .tag-green { background: #d1fae5; color: #065f46; }
+  .tag-amber { background: #fef3c7; color: #92400e; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #ede9fe; color: #5b21b6; }
+  .tag-pink { background: #fce7f3; color: #9d174d; }
+  .tag-dark { background: #f1f5f9; color: #334155; }
+
+  /* METRIC CHIP */
+  .metric {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .metric-label { color: var(--muted); flex: 1; }
+  .metric-val { font-weight: 600; color: var(--dark); }
+
+  /* PROS/CONS */
+  .pc-list { list-style: none; margin: 0.5rem 0; }
+  .pc-list li {
+    font-size: 0.83rem; padding: 0.25rem 0 0.25rem 1.3rem;
+    position: relative; color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .pc-list li:last-child { border-bottom: none; }
+  .pc-list.pros li::before { content: '✓'; position: absolute; left: 0; color: var(--accent2); font-weight: 700; }
+  .pc-list.cons li::before { content: '✗'; position: absolute; left: 0; color: var(--warn); font-weight: 700; }
+
+  /* CARD FOOTER */
+  .card-foot {
+    padding: 1rem 1.5rem;
+    background: #f8faff;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem; color: var(--muted);
+    font-style: italic;
+  }
+
+  /* COLOR VARIANTS */
+  .c-blue .card-stripe { background: var(--accent); }
+  .c-blue .card-category { color: var(--accent); }
+  .c-blue .card-icon { background: #dbeafe; }
+  .c-green .card-stripe { background: var(--accent2); }
+  .c-green .card-category { color: var(--accent2); }
+  .c-green .card-icon { background: #d1fae5; }
+  .c-amber .card-stripe { background: var(--accent3); }
+  .c-amber .card-category { color: var(--accent3); }
+  .c-amber .card-icon { background: #fef3c7; }
+  .c-red .card-stripe { background: var(--warn); }
+  .c-red .card-category { color: var(--warn); }
+  .c-red .card-icon { background: #fee2e2; }
+  .c-purple .card-stripe { background: var(--purple); }
+  .c-purple .card-category { color: var(--purple); }
+  .c-purple .card-icon { background: #ede9fe; }
+  .c-pink .card-stripe { background: var(--pink); }
+  .c-pink .card-category { color: var(--pink); }
+  .c-pink .card-icon { background: #fce7f3; }
+  .c-dark .card-stripe { background: var(--dark); }
+  .c-dark .card-category { color: var(--dark); }
+  .c-dark .card-icon { background: #f1f5f9; }
+
+  /* BIG CARD - span 2 cols */
+  .card-wide {
+    grid-column: span 2;
+  }
+  @media (max-width: 700px) { .card-wide { grid-column: span 1; } }
+
+  /* TABLE INSIDE CARD */
+  .mini-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-top: 0.5rem; }
+  .mini-table th {
+    background: #f1f5f9; font-weight: 600;
+    padding: 0.4rem 0.6rem; text-align: left;
+    color: var(--muted); font-size: 0.68rem;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .mini-table td { padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); color: var(--text); }
+  .mini-table tr:last-child td { border-bottom: none; }
+  .ok { color: var(--accent2); font-weight: 700; }
+  .no { color: var(--warn); font-weight: 700; }
+  .mid { color: var(--accent3); font-weight: 600; }
+
+  /* SECTION LABEL */
+  .section-label {
+    grid-column: 1 / -1;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted);
+    padding: 1.5rem 0 0.5rem;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  /* hidden */
+  .card[data-cat].hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Desarrollo de Software IX · UTP</div>
+  <h1>Pasarelas de Pago &<br><span>Criptomonedas</span> en E-Commerce</h1>
+  <p>Cards de referencia rápida — Semanas 3 y 4</p>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">Filtrar:</span>
+  <button class="filter-btn active" onclick="filter('all')">Todos</button>
+  <button class="filter-btn" onclick="filter('blockchain')">Blockchain</button>
+  <button class="filter-btn" onclick="filter('cripto')">Criptomonedas</button>
+  <button class="filter-btn" onclick="filter('pasarela')">Pasarelas</button>
+  <button class="filter-btn" onclick="filter('plataforma')">Plataformas</button>
+  <button class="filter-btn" onclick="filter('tecnico')">Técnico</button>
+  <button class="filter-btn" onclick="filter('legal')">Legal</button>
+</div>
+
+<div class="grid">
+
+  <!-- ===== BLOCKCHAIN ===== -->
+  <div class="section-label">🔗 Blockchain & Fundamentos</div>
+
+  <div class="card c-blue" data-cat="blockchain">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">⛓️</div>
+      <div class="card-category">Blockchain</div>
+      <div class="card-title">¿Qué es Blockchain?</div>
+    </div>
+    <div class="card-body">
+      <p>Registro distribuido e inmutable de transacciones. Sistema de bloques enlazados criptográficamente que almacena información de forma descentralizada.</p>
+      <div class="tags">
+        <span class="tag tag-blue">Descentralizado</span>
+        <span class="tag tag-blue">Inmutable</span>
+        <span class="tag tag-blue">P2P</span>
+        <span class="tag tag-dark">Sin autoridad central</span>
+      </div>
+      <div class="metric"><span class="metric-label">Componentes clave</span><span class="metric-val">Bloques · Cadena · Consenso</span></div>
+      <div class="metric"><span class="metric-label">Mecanismos</span><span class="metric-val">PoW · PoS</span></div>
+    </div>
+    <div class="card-foot">Cada bloque contiene transacciones verificadas por la red P2P, creando un registro permanente.</div>
+  </div>
+
+  <div class="card c-purple" data-cat="blockchain">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🔄</div>
+      <div class="card-category">Proceso</div>
+      <div class="card-title">Flujo de una Transacción Blockchain</div>
+    </div>
+    <div class="card-body">
+      <p>El proceso completo desde que el usuario inicia el pago hasta que queda permanentemente registrado en la cadena.</p>
+      <div style="margin-top:0.5rem;">
+        <div class="metric"><span class="metric-label">1. Inicio</span><span class="metric-val">Usuario firma con clave privada</span></div>
+        <div class="metric"><span class="metric-label">2. Difusión</span><span class="metric-val">Tx → red P2P</span></div>
+        <div class="metric"><span class="metric-label">3. Validación</span><span class="metric-label">Nodos verifican firma y saldo</span></div>
+        <div class="metric"><span class="metric-label">4. Bloque</span><span class="metric-val">Minero agrupa transacciones</span></div>
+        <div class="metric"><span class="metric-label">5. Consenso</span><span class="metric-val">Red acuerda validez</span></div>
+        <div class="metric"><span class="metric-label">6. Confirmación</span><span class="metric-val">Bloque permanente en cadena</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CRIPTOMONEDAS ===== -->
+  <div class="section-label">₿ Criptomonedas</div>
+
+  <div class="card c-amber" data-cat="cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">₿</div>
+      <div class="card-category">Criptomoneda</div>
+      <div class="card-title">Bitcoin (BTC)</div>
+    </div>
+    <div class="card-body">
+      <p>Primera y más conocida criptomoneda. Mayor confianza del mercado. Capitalización ~$1.3 billones USD.</p>
+      <div class="tags"><span class="tag tag-amber">Alta volatilidad</span><span class="tag tag-blue">Adopción muy alta</span></div>
+      <div class="metric"><span class="metric-label">Comisiones</span><span class="metric-val">$0.50 – $15 USD</span></div>
+      <div class="metric"><span class="metric-label">Confirmación</span><span class="metric-val">10 – 60 minutos</span></div>
+      <div class="metric"><span class="metric-label">Ideal para</span><span class="metric-val">Compras de alto valor</span></div>
+    </div>
+  </div>
+
+  <div class="card c-blue" data-cat="cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">⚡</div>
+      <div class="card-category">Criptomoneda</div>
+      <div class="card-title">Lightning Network (BTC)</div>
+    </div>
+    <div class="card-body">
+      <p>Capa 2 sobre Bitcoin para pagos instantáneos. Crecimiento acelerado en adopción. Ideal para micropagos y comercio diario.</p>
+      <div class="tags"><span class="tag tag-green">Casi instantáneo</span><span class="tag tag-green">Mínima comisión</span></div>
+      <div class="metric"><span class="metric-label">Comisiones</span><span class="metric-val">$0.01 USD o menos</span></div>
+      <div class="metric"><span class="metric-label">Confirmación</span><span class="metric-val">&lt; 5 segundos</span></div>
+      <div class="metric"><span class="metric-label">Ideal para</span><span class="metric-val">Micropagos · Retail</span></div>
+    </div>
+  </div>
+
+  <div class="card c-purple" data-cat="cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">Ξ</div>
+      <div class="card-category">Criptomoneda</div>
+      <div class="card-title">Ethereum (ETH)</div>
+    </div>
+    <div class="card-body">
+      <p>Plataforma de contratos inteligentes. Capitalización ~$430 mil millones. Ecosistema DeFi y NFTs.</p>
+      <div class="tags"><span class="tag tag-purple">Contratos inteligentes</span><span class="tag tag-blue">DeFi · NFTs</span></div>
+      <div class="metric"><span class="metric-label">Comisiones</span><span class="metric-val">$0.20 – $10 USD</span></div>
+      <div class="metric"><span class="metric-label">Confirmación</span><span class="metric-val">15 seg – 2 min</span></div>
+      <div class="metric"><span class="metric-label">Ideal para</span><span class="metric-val">Contratos · B2B</span></div>
+    </div>
+  </div>
+
+  <div class="card c-green" data-cat="cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">≈</div>
+      <div class="card-category">Criptomoneda</div>
+      <div class="card-title">Stablecoins (USDT · USDC · DAI)</div>
+    </div>
+    <div class="card-body">
+      <p>Valor anclado 1:1 a monedas fiat. Eliminan el riesgo de volatilidad. En 2024 representan el <strong>38%</strong> de pagos cripto en e-commerce.</p>
+      <div class="tags"><span class="tag tag-green">Sin volatilidad</span><span class="tag tag-green">Comercio general</span><span class="tag tag-blue">38% del mercado</span></div>
+      <div class="metric"><span class="metric-label">Comisiones</span><span class="metric-val">$0.10 – $5 USD</span></div>
+      <div class="metric"><span class="metric-label">Tendencia 2024</span><span class="metric-val">Superan a BTC en bajo valor</span></div>
+    </div>
+    <div class="card-foot">La solución más adoptada por comercios que aceptan cripto minimizando el riesgo de volatilidad.</div>
+  </div>
+
+  <!-- ===== PASARELAS ===== -->
+  <div class="section-label">🔌 Pasarelas de Pago</div>
+
+  <div class="card c-blue" data-cat="pasarela">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🌐</div>
+      <div class="card-category">Pasarela Internacional</div>
+      <div class="card-title">PayPal</div>
+    </div>
+    <div class="card-body">
+      <p>La más reconocida globalmente. Alta confianza del usuario y fácil implementación.</p>
+      <div class="tags"><span class="tag tag-blue">200+ países</span><span class="tag tag-amber">2.9% + $0.30</span></div>
+      <ul class="pc-list pros">
+        <li>Alta confianza · Fácil implementación</li>
+        <li>Amplio reconocimiento global</li>
+        <li>Express Checkout · Pro · Braintree</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>Comisiones elevadas</li>
+        <li>Control de disputas limitado</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card c-dark" data-cat="pasarela">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">💳</div>
+      <div class="card-category">Pasarela Internacional</div>
+      <div class="card-title">Stripe</div>
+    </div>
+    <div class="card-body">
+      <p>La mejor API del mercado. Documentación superior y experiencia de desarrollador premium.</p>
+      <div class="tags"><span class="tag tag-dark">43 países</span><span class="tag tag-amber">2.9% + $0.30</span><span class="tag tag-red">Sin presencia en Panamá</span></div>
+      <ul class="pc-list pros">
+        <li>API excelente · Documentación superior</li>
+        <li>DX premium · Payments · Billing · Connect</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>Menor cobertura en Latinoamérica</li>
+        <li>Sin presencia directa en Panamá</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card c-green" data-cat="pasarela">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🇵🇦</div>
+      <div class="card-category">Pasarela Regional — Panamá ★</div>
+      <div class="card-title">PagueloFácil</div>
+    </div>
+    <div class="card-body">
+      <p>La opción más adaptada al mercado panameño. Acepta tarjetas y transferencias bancarias locales.</p>
+      <div class="tags"><span class="tag tag-green">Panamá (principal)</span><span class="tag tag-amber">2.5–4.0%</span><span class="tag tag-green">Negociable</span></div>
+      <ul class="pc-list pros">
+        <li>Adaptada al mercado panameño</li>
+        <li>Soporte local · Integración sencilla</li>
+        <li>Módulo para PrestaShop y WooCommerce</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>Menor capacidad internacional</li>
+        <li>Cobertura geográfica limitada</li>
+      </ul>
+    </div>
+    <div class="card-foot">Recomendada como primera opción para comercios panameños nuevos.</div>
+  </div>
+
+  <div class="card c-amber" data-cat="pasarela">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🌎</div>
+      <div class="card-category">Pasarela Regional</div>
+      <div class="card-title">Mercado Pago</div>
+    </div>
+    <div class="card-body">
+      <p>Amplia adopción en toda Latinoamérica. Acepta tarjetas, transferencias, efectivo y QR.</p>
+      <div class="tags"><span class="tag tag-amber">Toda LATAM</span><span class="tag tag-amber">3.5–5.0%</span><span class="tag tag-blue">SDK maduro</span></div>
+      <ul class="pc-list pros">
+        <li>Amplia adopción · Métodos locales</li>
+        <li>SDK maduro · Efectivo y QR disponibles</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>Procesos de aprobación variables</li>
+        <li>Soporte al comercio inconsistente</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PASARELAS CRIPTO -->
+  <div class="card c-blue" data-cat="pasarela cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">₿</div>
+      <div class="card-category">Pasarela Cripto</div>
+      <div class="card-title">BitPay</div>
+    </div>
+    <div class="card-body">
+      <p>Fundada en 2011. Pionera del sector. Disponible en 200+ países. Proceso de integración con KYC empresarial.</p>
+      <div class="tags"><span class="tag tag-blue">200+ países</span><span class="tag tag-green">1% comisión</span><span class="tag tag-green">Liquidación en fiat</span></div>
+      <ul class="pc-list pros">
+        <li>BTC · BCH · ETH · XRP · DOGE</li>
+        <li>Conversión automática a fiat (USD)</li>
+        <li>Plugins: WooCommerce · Magento · Opencart</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>KYC empresarial requerido</li>
+        <li>Control de fondos limitado</li>
+      </ul>
+    </div>
+    <div class="card-foot">Mejor opción para comercios nuevos sin experiencia técnica en Panamá.</div>
+  </div>
+
+  <div class="card c-purple" data-cat="pasarela cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🔵</div>
+      <div class="card-category">Pasarela Cripto</div>
+      <div class="card-title">Coinbase Commerce</div>
+    </div>
+    <div class="card-body">
+      <p>Respaldada por el exchange líder mundial. Pagos directos al wallet personal del comercio sin intermediarios.</p>
+      <div class="tags"><span class="tag tag-purple">1% (conversiones)</span><span class="tag tag-amber">Sin fiat automático</span><span class="tag tag-green">Sin KYC pequeños</span></div>
+      <ul class="pc-list pros">
+        <li>BTC · ETH · USDC · DAI · LTC</li>
+        <li>Sin KYC para comercios pequeños</li>
+        <li>Interfaz sencilla e intuitiva</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>Sin conversión automática a fiat</li>
+        <li>Menor presencia en LATAM</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card c-green" data-cat="pasarela cripto">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🔓</div>
+      <div class="card-category">Pasarela Cripto · Open Source</div>
+      <div class="card-title">BTCPay Server</div>
+    </div>
+    <div class="card-body">
+      <p>100% código abierto y auto-hospedado. Control total sobre fondos y datos. Sin intermediarios ni KYC.</p>
+      <div class="tags"><span class="tag tag-green">0% comisión</span><span class="tag tag-green">Open Source</span><span class="tag tag-green">Control total</span><span class="tag tag-dark">Auto-hospedado</span></div>
+      <ul class="pc-list pros">
+        <li>Sin comisiones de plataforma</li>
+        <li>Soporte nativo Lightning Network</li>
+        <li>Privacidad total · Sin KYC/AML</li>
+      </ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;">
+        <li>Requiere conocimientos técnicos</li>
+        <li>Sin liquidación automática a fiat</li>
+        <li>Mantenimiento de servidor propio</li>
+      </ul>
+    </div>
+    <div class="card-foot">Opción óptima para comercios técnicos que priorizan costos cero y privacidad.</div>
+  </div>
+
+  <!-- MODELOS DE INTEGRACIÓN -->
+  <div class="section-label">🔧 Modelos de Integración</div>
+
+  <div class="card c-green" data-cat="tecnico">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">↗️</div>
+      <div class="card-category">Modelo de Integración</div>
+      <div class="card-title">Redirección</div>
+    </div>
+    <div class="card-body">
+      <p>El usuario es redirigido al sitio de la pasarela para completar el pago fuera del comercio.</p>
+      <div class="tags"><span class="tag tag-green">Fácil implementación</span><span class="tag tag-dark">Menor responsabilidad</span></div>
+      <ul class="pc-list pros"><li>Fácil implementación · Menor responsabilidad</li><li>Confianza del usuario en sitio conocido</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Experiencia fragmentada · Mayor abandono</li></ul>
+      <div class="metric"><span class="metric-label">Ejemplos</span><span class="metric-val">PayPal Standard · PagueloFácil</span></div>
+    </div>
+  </div>
+
+  <div class="card c-amber" data-cat="tecnico">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🖼️</div>
+      <div class="card-category">Modelo de Integración</div>
+      <div class="card-title">Iframe / Incrustado</div>
+    </div>
+    <div class="card-body">
+      <p>Formulario de pago incrustado dentro de la página del comercio. El cliente no abandona el sitio visualmente.</p>
+      <div class="tags"><span class="tag tag-amber">Complejidad media</span><span class="tag tag-green">Mejor conversión</span></div>
+      <ul class="pc-list pros"><li>Experiencia integrada · Cliente permanece en sitio</li><li>Mejor conversión que redirección</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Posibles conflictos CSS · Configuración compleja</li></ul>
+      <div class="metric"><span class="metric-label">Ejemplos</span><span class="metric-val">Stripe Checkout · Mercado Pago</span></div>
+    </div>
+  </div>
+
+  <div class="card c-red" data-cat="tecnico">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">⚙️</div>
+      <div class="card-category">Modelo de Integración</div>
+      <div class="card-title">API Directa</div>
+    </div>
+    <div class="card-body">
+      <p>Integración completa vía API desde el servidor del comercio. Experiencia 100% personalizable.</p>
+      <div class="tags"><span class="tag tag-red">Alta complejidad</span><span class="tag tag-blue">Control total</span><span class="tag tag-red">PCI DSS completo</span></div>
+      <ul class="pc-list pros"><li>Control total · Flujo optimizado</li><li>Integración perfecta con el diseño</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Alta complejidad técnica · PCI DSS obligatorio</li></ul>
+      <div class="metric"><span class="metric-label">Ejemplos</span><span class="metric-val">Stripe API · PayPal REST</span></div>
+    </div>
+  </div>
+
+  <!-- PLATAFORMAS -->
+  <div class="section-label">🛒 Plataformas de E-Commerce</div>
+
+  <div class="card c-red" data-cat="plataforma">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🏭</div>
+      <div class="card-category">Plataforma · Alta Complejidad</div>
+      <div class="card-title">Magento (Adobe Commerce)</div>
+    </div>
+    <div class="card-body">
+      <div class="tags"><span class="tag tag-red">Alta complejidad</span><span class="tag tag-dark">$10k–$100k</span><span class="tag tag-blue">Cuota: 9.3%</span></div>
+      <div class="metric"><span class="metric-label">Mantenimiento</span><span class="metric-val">$1k–$5k/mes</span></div>
+      <div class="metric"><span class="metric-label">Implementación</span><span class="metric-val">3–6 meses</span></div>
+      <div class="metric"><span class="metric-label">Tamaño ideal</span><span class="metric-val">Medio – Grande</span></div>
+      <ul class="pc-list pros" style="margin-top:0.7rem;"><li>Escalabilidad extrema · Multitienda nativa</li><li>B2B avanzado · Ecosistema robusto</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Costo total muy elevado · Hosting dedicado</li><li>Curva de aprendizaje pronunciada</li></ul>
+    </div>
+    <div class="card-foot">Ideal: Empresas medianas-grandes con catálogos complejos y requerimientos B2B.</div>
+  </div>
+
+  <div class="card c-amber" data-cat="plataforma">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🏪</div>
+      <div class="card-category">Plataforma · Complejidad Media</div>
+      <div class="card-title">PrestaShop</div>
+    </div>
+    <div class="card-body">
+      <div class="tags"><span class="tag tag-amber">Complejidad media</span><span class="tag tag-dark">$2k–$15k</span><span class="tag tag-blue">Cuota: 4.8%</span></div>
+      <div class="metric"><span class="metric-label">Mantenimiento</span><span class="metric-val">$200–$1k/mes</span></div>
+      <div class="metric"><span class="metric-label">Implementación</span><span class="metric-val">1–3 meses</span></div>
+      <div class="metric"><span class="metric-label">Tamaño ideal</span><span class="metric-val">Pequeño – Medio</span></div>
+      <ul class="pc-list pros" style="margin-top:0.7rem;"><li>Balance funcionalidad / facilidad</li><li>Fuerte presencia en LATAM · Código abierto</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Rendimiento limitado con catálogos grandes</li><li>Módulos premium elevan costos</li></ul>
+    </div>
+    <div class="card-foot">Ideal: PYMEs con presupuesto moderado que buscan equilibrio entre personalización y gestión.</div>
+  </div>
+
+  <div class="card c-dark" data-cat="plataforma">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🛍️</div>
+      <div class="card-category">Plataforma · Baja Complejidad</div>
+      <div class="card-title">OpenCart</div>
+    </div>
+    <div class="card-body">
+      <div class="tags"><span class="tag tag-green">Baja complejidad</span><span class="tag tag-dark">$1k–$8k</span><span class="tag tag-blue">Cuota: 4.1%</span></div>
+      <div class="metric"><span class="metric-label">Mantenimiento</span><span class="metric-val">$100–$500/mes</span></div>
+      <div class="metric"><span class="metric-label">Implementación</span><span class="metric-val">2–6 semanas</span></div>
+      <div class="metric"><span class="metric-label">Tamaño ideal</span><span class="metric-val">Pequeño</span></div>
+      <ul class="pc-list pros" style="margin-top:0.7rem;"><li>Muy ligero y rápido · Fácil configuración</li><li>Bajo consumo de recursos · Multitienda nativa</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Limitado para catálogos grandes</li><li>Comunidad más pequeña</li></ul>
+    </div>
+    <div class="card-foot">Ideal: Pequeñas empresas con requerimientos simples y presupuesto mínimo.</div>
+  </div>
+
+  <div class="card c-green" data-cat="plataforma">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🏆</div>
+      <div class="card-category">Plataforma · Líder Global</div>
+      <div class="card-title">WooCommerce</div>
+    </div>
+    <div class="card-body">
+      <div class="tags"><span class="tag tag-green">Baja–Media</span><span class="tag tag-dark">$1.5k–$10k</span><span class="tag tag-blue">28.2% del mercado</span></div>
+      <div class="metric"><span class="metric-label">Mantenimiento</span><span class="metric-val">$150–$800/mes</span></div>
+      <div class="metric"><span class="metric-label">Implementación</span><span class="metric-val">2–8 semanas</span></div>
+      <div class="metric"><span class="metric-label">Plugins</span><span class="metric-val">55,000+ disponibles</span></div>
+      <ul class="pc-list pros" style="margin-top:0.7rem;"><li>Integración perfecta con WordPress</li><li>Ecosistema enorme · Comunidad activa</li><li>Curva de aprendizaje suave</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Rendimiento limitado a gran escala</li><li>No optimizado nativamente para B2B</li></ul>
+    </div>
+    <div class="card-foot">Mejor punto de entrada para la mayoría de PYMEs. Líder absoluto con 28.2% del mercado global.</div>
+  </div>
+
+  <div class="card c-pink" data-cat="plataforma">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">💻</div>
+      <div class="card-category">Plataforma · Muy Alta Complejidad</div>
+      <div class="card-title">Node.js — Desarrollo Personalizado</div>
+    </div>
+    <div class="card-body">
+      <div class="tags"><span class="tag tag-red">Muy alta complejidad</span><span class="tag tag-red">$15k–$150k</span><span class="tag tag-pink">MERN / MEAN</span></div>
+      <div class="metric"><span class="metric-label">Mantenimiento</span><span class="metric-val">$1k–$8k/mes</span></div>
+      <div class="metric"><span class="metric-label">Implementación</span><span class="metric-val">4–12 meses</span></div>
+      <div class="metric"><span class="metric-label">Tamaño ideal</span><span class="metric-val">Cualquiera</span></div>
+      <ul class="pc-list pros" style="margin-top:0.7rem;"><li>Personalización completa · Control total</li><li>Rendimiento máximo · Sin restricciones</li></ul>
+      <ul class="pc-list cons" style="margin-top:0.5rem;"><li>Mayor inversión inicial y tiempo</li><li>Requiere equipo especializado</li></ul>
+    </div>
+    <div class="card-foot">Ideal cuando los requerimientos son únicos y no existe plataforma que se ajuste.</div>
+  </div>
+
+  <!-- TÉCNICO -->
+  <div class="section-label">⚙️ Consideraciones Técnicas</div>
+
+  <div class="card c-red" data-cat="tecnico">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">📉</div>
+      <div class="card-category">Técnico · Riesgo</div>
+      <div class="card-title">Volatilidad y Estrategias de Mitigación</div>
+    </div>
+    <div class="card-body">
+      <p>Bitcoin puede fluctuar 5–20% en un mismo día, generando riesgo financiero directo para el comercio.</p>
+      <div class="tags"><span class="tag tag-red">5–20% diario</span><span class="tag tag-amber">Riesgo contable</span></div>
+      <div class="metric"><span class="metric-label">Conversión inmediata</span><span class="metric-val">BitPay · CryptoPay</span></div>
+      <div class="metric"><span class="metric-label">Ventana de pago</span><span class="metric-val">15–30 min precio fijo</span></div>
+      <div class="metric"><span class="metric-label">Margen adicional</span><span class="metric-val">1–3% en precio</span></div>
+      <div class="metric"><span class="metric-label">Mejor solución</span><span class="metric-val">Priorizar stablecoins</span></div>
+    </div>
+  </div>
+
+  <div class="card c-blue" data-cat="tecnico">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">⏱️</div>
+      <div class="card-category">Técnico · Tiempos</div>
+      <div class="card-title">Confirmaciones por Red</div>
+    </div>
+    <div class="card-body">
+      <table class="mini-table">
+        <thead><tr><th>Red</th><th>Tiempo</th><th>Tipo</th></tr></thead>
+        <tbody>
+          <tr><td>Lightning Network</td><td class="ok">1–5 seg</td><td class="ok">Instantáneo</td></tr>
+          <tr><td>Solana</td><td class="ok">0.4 seg</td><td class="ok">Instantáneo</td></tr>
+          <tr><td>Ethereum</td><td class="mid">15s–2 min</td><td>12–30 bloques</td></tr>
+          <tr><td>Litecoin</td><td class="mid">2.5–10 min</td><td>1–6 bloques</td></tr>
+          <tr><td>Bitcoin</td><td class="no">10–60 min</td><td>1–6 bloques</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-foot">Balance clave: seguridad (más confirmaciones) vs UX (menor espera), según valor de la tx.</div>
+  </div>
+
+  <div class="card c-amber" data-cat="tecnico">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🔐</div>
+      <div class="card-category">Técnico · Seguridad</div>
+      <div class="card-title">Modelos de Custodia</div>
+    </div>
+    <div class="card-body">
+      <table class="mini-table">
+        <thead><tr><th>Modelo</th><th>Riesgo</th></tr></thead>
+        <tbody>
+          <tr><td>Pasarela con conversión</td><td class="ok">Bajo</td></tr>
+          <tr><td>Wallet propio (hot)</td><td class="no">Alto</td></tr>
+          <tr><td>Wallet propio (cold)</td><td class="mid">Medio</td></tr>
+          <tr><td>Custodia institucional</td><td class="mid">Medio-Bajo</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.8rem;">Combinar wallets hot (operaciones diarias) con cold (reservas principales).</p>
+    </div>
+  </div>
+
+  <!-- LEGAL -->
+  <div class="section-label">⚖️ Legal y Adopción</div>
+
+  <div class="card c-green" data-cat="legal">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">🇵🇦</div>
+      <div class="card-category">Legal · Panamá</div>
+      <div class="card-title">Ley 697 de 2023 — Marco Cripto</div>
+    </div>
+    <div class="card-body">
+      <p>Marco regulatorio oficial de Panamá para criptoactivos. Los comercios pueden aceptar pagos sin licencia especial.</p>
+      <div class="tags"><span class="tag tag-green">Sin licencia para comercios</span><span class="tag tag-green">ITBMS en ventas</span></div>
+      <div class="metric"><span class="metric-label">Exchanges y pasarelas</span><span class="metric-val">Licencia requerida</span></div>
+      <div class="metric"><span class="metric-label">KYC/AML</span><span class="metric-val">Obligatorio (servicios financieros)</span></div>
+      <div class="metric"><span class="metric-label">Ganancias de capital</span><span class="metric-val">Exentas de impuesto</span></div>
+    </div>
+  </div>
+
+  <div class="card c-blue" data-cat="legal">
+    <div class="card-head">
+      <div class="card-stripe"></div>
+      <div class="card-icon">📊</div>
+      <div class="card-category">Adopción Global</div>
+      <div class="card-title">Estadísticas de E-Commerce Cripto</div>
+    </div>
+    <div class="card-body">
+      <div class="metric"><span class="metric-label">Volumen diario</span><span class="metric-val">$4.3B USD</span></div>
+      <div class="metric"><span class="metric-label">Comercios activos</span><span class="metric-val">15,000+</span></div>
+      <div class="metric"><span class="metric-label">Crecimiento mensual</span><span class="metric-val">2.8%</span></div>
+      <div class="metric"><span class="metric-label">Usuarios globales</span><span class="metric-val">420 millones</span></div>
+      <div class="metric"><span class="metric-label">Stablecoins en e-commerce</span><span class="metric-val">38% del total</span></div>
+    </div>
+    <div class="card-foot">2º uso más común de cripto después de inversión/especulación. Crecimiento sostenido desde 2020.</div>
+  </div>
+
+</div>
+
+<script>
+function filter(cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card[data-cat]').forEach(card => {
+    if (cat === 'all') {
+      card.classList.remove('hidden');
+    } else {
+      if (card.dataset.cat.includes(cat)) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

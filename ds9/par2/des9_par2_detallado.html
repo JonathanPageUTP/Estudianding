@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Estudio — Pasarelas de Pago & Criptomonedas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --surface: #111827;
+    --card: #1a2235;
+    --border: #2a3a55;
+    --accent: #3b82f6;
+    --accent2: #10b981;
+    --accent3: #f59e0b;
+    --warn: #ef4444;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --dim: #475569;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.8;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,15,26,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 2rem;
+    height: 56px; overflow-x: auto;
+  }
+  nav a {
+    color: var(--muted); text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.08em;
+    text-transform: uppercase; white-space: nowrap;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent); }
+  .nav-logo {
+    color: var(--accent); font-weight: 700;
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    border-right: 1px solid var(--border);
+    padding-right: 2rem; white-space: nowrap;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 340px;
+    background: linear-gradient(135deg, #0b0f1a 0%, #0f1e3a 50%, #0b1a2e 100%);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 4rem 4rem 3rem;
+    position: relative; overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    color: var(--accent); text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .hero-tag::before { content: '//'; opacity: 0.5; }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900; line-height: 1.1;
+    color: #fff; margin-bottom: 1rem;
+  }
+  h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted);
+    max-width: 600px;
+  }
+  .hero-meta {
+    margin-top: 2rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+  }
+  .hero-meta span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem; color: var(--dim);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .hero-meta b { color: var(--muted); }
+
+  /* MAIN */
+  main { max-width: 900px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 5rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-header {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; color: var(--accent);
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.3);
+    padding: 0.2em 0.6em;
+    border-radius: 3px; letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem; font-weight: 700;
+    color: #fff;
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; color: var(--accent);
+    margin: 1.5rem 0 0.75rem;
+  }
+  p { color: var(--text); margin-bottom: 1rem; }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--card);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .callout.green { border-color: var(--accent2); }
+  .callout.amber { border-color: var(--accent3); }
+  .callout.red { border-color: var(--warn); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 1.5rem 0; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  thead { background: var(--card); }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 0.8rem 1rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(42,58,85,0.5); color: var(--text); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(59,130,246,0.04); }
+  .tag-green { color: var(--accent2); font-weight: 600; }
+  .tag-amber { color: var(--accent3); }
+  .tag-red { color: var(--warn); }
+
+  /* LIST */
+  .info-list { list-style: none; margin: 1rem 0 1.5rem; }
+  .info-list li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative; color: var(--text);
+    border-bottom: 1px solid rgba(42,58,85,0.3);
+  }
+  .info-list li:last-child { border-bottom: none; }
+  .info-list li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--accent); font-size: 0.8rem;
+  }
+  .info-list.green li::before { color: var(--accent2); }
+  .info-list.red li::before { color: var(--warn); content: '✗'; }
+  .info-list.check li::before { color: var(--accent2); content: '✓'; }
+
+  /* STEP FLOW */
+  .flow {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  .flow::before {
+    content: '';
+    position: absolute; left: 20px; top: 24px; bottom: 24px;
+    width: 1px; background: var(--border);
+  }
+  .flow-step {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 0.6rem 0;
+    position: relative; z-index: 1;
+  }
+  .flow-num {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--card); border: 2px solid var(--accent);
+    border-radius: 50%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem; font-weight: 600;
+    color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .flow-body { padding: 0.4rem 0; }
+  .flow-body strong { color: var(--accent); display: block; margin-bottom: 0.2rem; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; letter-spacing: 0.05em; }
+  .flow-body span { color: var(--muted); font-size: 0.95rem; }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+  .col-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem;
+  }
+  .col-box h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 0.8rem;
+  }
+  .col-box.green h4 { color: var(--accent2); }
+  .col-box.red h4 { color: var(--warn); }
+  .col-box.blue h4 { color: var(--accent); }
+
+  /* STAT GRID */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .stat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem;
+    text-align: center;
+  }
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900;
+    color: var(--accent); display: block;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.08em;
+    padding: 0.15em 0.5em; border-radius: 3px;
+    margin-right: 0.3rem; font-weight: 500;
+  }
+  .badge-blue { background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid rgba(59,130,246,0.3); }
+  .badge-green { background: rgba(16,185,129,0.12); color: var(--accent2); border: 1px solid rgba(16,185,129,0.3); }
+  .badge-amber { background: rgba(245,158,11,0.12); color: var(--accent3); border: 1px solid rgba(245,158,11,0.3); }
+  .badge-red { background: rgba(239,68,68,0.12); color: var(--warn); border: 1px solid rgba(239,68,68,0.3); }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* PASARELA CARD */
+  .gateway-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .gateway-card h3 { margin-top: 0; }
+  .gw-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0 1rem; }
+
+  /* MODELO CARD */
+  .modelo {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .modelo:nth-child(1) { border-color: var(--accent); }
+  .modelo:nth-child(2) { border-color: var(--accent2); }
+  .modelo:nth-child(3) { border-color: var(--accent3); }
+  .modelo-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem; font-weight: 600;
+    color: #fff; margin-bottom: 0.4rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .modelo-title small {
+    font-size: 0.65rem; color: var(--muted);
+    font-weight: 400; letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">DSW IX · UTP</span>
+  <a href="#blockchain">Blockchain</a>
+  <a href="#criptos">Criptomonedas</a>
+  <a href="#adopcion">Adopción</a>
+  <a href="#pasarelas">Pasarelas</a>
+  <a href="#modelos">Modelos</a>
+  <a href="#plataformas">Plataformas</a>
+  <a href="#tecnico">Técnico</a>
+  <a href="#legal">Legal</a>
+  <a href="#tendencias">Tendencias</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Semanas 3 & 4 — Sesión Teórica</div>
+  <h1>Pasarelas de Pago &<br><span>Criptomonedas</span> en E-Commerce</h1>
+  <p class="hero-sub">Guía de estudio completa basada en los materiales del curso. Incluye todos los conceptos, comparativas y casos de uso.</p>
+  <div class="hero-meta">
+    <span><b>Universidad:</b> Tecnológica de Panamá</span>
+    <span><b>Facultad:</b> Ingeniería de Sistemas</span>
+    <span><b>Curso:</b> Desarrollo de Software IX</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- ====== SECCIÓN 1 ====== -->
+  <div class="section" id="blockchain">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Fundamentos de Blockchain y Criptomonedas</h2>
+    </div>
+
+    <h3>¿Qué es Blockchain?</h3>
+    <p>Blockchain es un <strong>registro distribuido e inmutable de transacciones</strong>. Se trata de un sistema de bloques enlazados criptográficamente que almacena información de manera descentralizada. Cada bloque contiene transacciones verificadas por la red P2P, creando un registro permanente e inalterable sin necesidad de una autoridad central.</p>
+
+    <div class="callout">
+      "Las criptomonedas representan una infraestructura de pagos abierta, transparente y global que opera 24/7 sin intermediarios centralizados."
+    </div>
+
+    <h3>¿Qué son las Criptomonedas?</h3>
+    <p>Son <strong>activos digitales basados en criptografía</strong>. Representaciones digitales de valor que utilizan criptografía para asegurar transacciones y verificar la transferencia de activos. Funcionan de manera descentralizada en redes blockchain, sin intermediarios financieros tradicionales.</p>
+
+    <h3>Componentes Principales del Blockchain</h3>
+    <ul class="info-list">
+      <li><strong>Bloques:</strong> Paquetes de transacciones verificadas con hash criptográfico</li>
+      <li><strong>Cadena:</strong> Bloques enlazados criptográficamente (hash del bloque anterior)</li>
+      <li><strong>Red P2P:</strong> Nodos distribuidos que mantienen copias completas del ledger</li>
+      <li><strong>Criptografía:</strong> Firmas digitales que garantizan autenticidad e integridad</li>
+      <li><strong>Consenso:</strong> Mecanismos (PoW, PoS) para validar y acordar el estado</li>
+    </ul>
+
+    <h3>Flujo de una Transacción Blockchain</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body"><strong>Inicio</strong><span>El usuario inicia la transacción con su clave privada</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body"><strong>Difusión</strong><span>La transacción se transmite a toda la red P2P</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body"><strong>Validación</strong><span>Los nodos verifican la firma digital y el saldo</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-body"><strong>Bloque</strong><span>El minero/validador agrupa transacciones en un bloque</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-body"><strong>Consenso</strong><span>La red acuerda la validez del bloque</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-body"><strong>Confirmación</strong><span>El bloque se añade permanentemente a la cadena</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 2 ====== -->
+  <div class="section" id="criptos">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Tipos de Criptomonedas en Comercio</h2>
+    </div>
+
+    <h3>₿ Bitcoin (BTC)</h3>
+    <p>Primera y más conocida criptomoneda. Capitalización aproximada de <strong>$1.3 billones USD</strong>. Es la de mayor confianza del mercado.</p>
+    <ul class="info-list">
+      <li>Comisiones: $0.50 – $15 USD por transacción</li>
+      <li>Confirmación: ~10 a 60 minutos</li>
+      <li>Ideal para compras de alto valor</li>
+    </ul>
+
+    <h3>⚡ Lightning Network (Bitcoin)</h3>
+    <p>Capa 2 sobre Bitcoin para pagos instantáneos. Crecimiento acelerado en adopción comercial.</p>
+    <ul class="info-list">
+      <li>Comisiones: $0.01 USD o menos</li>
+      <li>Confirmación: Casi instantánea (&lt;5 segundos)</li>
+      <li>Ideal para micropagos y comercio diario</li>
+    </ul>
+
+    <h3>Ξ Ethereum (ETH)</h3>
+    <p>Plataforma de contratos inteligentes. Capitalización ~$430 mil millones USD.</p>
+    <ul class="info-list">
+      <li>Comisiones: $0.20 – $10 USD</li>
+      <li>Confirmación: ~15 segundos a 2 minutos</li>
+      <li>Ecosistema DeFi / NFTs — ideal para contratos y B2B</li>
+    </ul>
+
+    <h3>≈ Stablecoins (USDT, USDC, DAI)</h3>
+    <p>Valor anclado 1:1 a monedas fiat. <strong>Eliminan el riesgo de volatilidad</strong>, siendo la opción más segura para comercio general.</p>
+    <ul class="info-list">
+      <li>Comisiones: $0.10 – $5 USD</li>
+      <li>Confirmación: Varía según la red subyacente</li>
+      <li>En 2024 representan el 38% de los pagos cripto en e-commerce</li>
+    </ul>
+
+    <h3>Comparativa Completa</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Criptomoneda</th><th>Velocidad</th><th>Costo Tx</th><th>Volatilidad</th><th>Adopción</th><th>Ideal para</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Bitcoin (BTC)</td><td class="tag-amber">Lenta</td><td>Media-Alta</td><td class="tag-red">Alta</td><td>Muy alta</td><td>Compras de alto valor</td></tr>
+          <tr><td>Bitcoin Lightning</td><td class="tag-green">Instantánea</td><td>Mínima</td><td class="tag-red">Alta</td><td>Media</td><td>Micropagos, retail</td></tr>
+          <tr><td>Ethereum (ETH)</td><td class="tag-amber">Media</td><td>Media</td><td class="tag-red">Alta</td><td>Alta</td><td>Contratos, B2B</td></tr>
+          <tr><td>Stablecoins</td><td class="tag-green">Rápida</td><td>Baja</td><td class="tag-green">Ninguna</td><td>Alta y creciente</td><td>Comercio general</td></tr>
+          <tr><td>Solana (SOL)</td><td class="tag-green">Muy rápida</td><td>Muy baja</td><td class="tag-red">Alta</td><td>Baja</td><td>Plataformas técnicas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 3 ====== -->
+  <div class="section" id="adopcion">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Estadísticas de Adopción en E-Commerce</h2>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-val">$4.3B</span><div class="stat-label">Volumen diario de pagos en cripto</div></div>
+      <div class="stat"><span class="stat-val">15K+</span><div class="stat-label">Comercios globales activos</div></div>
+      <div class="stat"><span class="stat-val">2.8%</span><div class="stat-label">Crecimiento mensual sostenido</div></div>
+      <div class="stat"><span class="stat-val">420M</span><div class="stat-label">Usuarios de criptomonedas en el mundo</div></div>
+    </div>
+
+    <p>El comercio electrónico representa el <strong>segundo uso más común</strong> de criptomonedas después de la inversión/especulación, con crecimiento sostenido desde 2020. Las stablecoins ya representan el <strong>38%</strong> de los pagos cripto en e-commerce en 2024, superando a Bitcoin como método preferido en transacciones de bajo valor.</p>
+
+    <div class="callout amber">
+      Tendencia clave: El crecimiento pasó de 4,200 comercios y $0.9B diarios en 2019 a más de 18,400 comercios y $5.2B diarios en 2024.
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 4 ====== -->
+  <div class="section" id="pasarelas">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Pasarelas de Pago: Fundamentos y Tipos</h2>
+    </div>
+
+    <h3>¿Qué es una Pasarela de Pago?</h3>
+    <p>Es un <strong>intermediario tecnológico</strong> que procesa pagos en línea. Autoriza y asegura transacciones financieras, conectando la tienda con el banco del cliente y el banco del comercio. Debe cumplir con el estándar <strong>PCI DSS</strong> (Payment Card Industry Data Security Standard).</p>
+
+    <h3>Flujo de una Transacción Tradicional</h3>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><strong>Comprador</strong><span>Envía datos de pago al comercio</span></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><strong>Pasarela</strong><span>Encripta y verifica los datos con seguridad PCI DSS</span></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><strong>Banco emisor</strong><span>Autoriza la transacción del cliente</span></div></div>
+      <div class="flow-step"><div class="flow-num">4</div><div class="flow-body"><strong>Pasarela</strong><span>Confirma al comercio el resultado</span></div></div>
+      <div class="flow-step"><div class="flow-num">5</div><div class="flow-body"><strong>Liquidación</strong><span>Los fondos se transfieren al banco del comercio</span></div></div>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Pasarelas Internacionales</h3>
+
+    <div class="gateway-card">
+      <h3>PayPal</h3>
+      <div class="gw-meta">
+        <span class="badge badge-blue">200+ países</span>
+        <span class="badge badge-amber">2.9% + $0.30</span>
+        <span class="badge badge-green">Alta confianza</span>
+      </div>
+      <p>La más reconocida globalmente. Ofrece Express Checkout, Pro y Braintree. Su principal ventaja es la confianza del usuario y la facilidad de implementación. <strong>Desventaja:</strong> comisiones elevadas y control limitado en disputas.</p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>Stripe</h3>
+      <div class="gw-meta">
+        <span class="badge badge-blue">43 países</span>
+        <span class="badge badge-amber">2.9% + $0.30</span>
+        <span class="badge badge-green">API premium</span>
+        <span class="badge badge-red">Sin presencia directa en Panamá</span>
+      </div>
+      <p>Considerada la mejor API del mercado con documentación superior. Ofrece Payments, Billing, Connect y Terminal. <strong>Limitada en LATAM</strong>, sin presencia directa en Panamá.</p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>2Checkout</h3>
+      <div class="gw-meta">
+        <span class="badge badge-blue">200+ países · 100+ monedas</span>
+        <span class="badge badge-amber">3.5% + $0.30</span>
+      </div>
+      <p>Optimización fiscal global y soporte multimoneda nativo. Productos: 2Sell, 2Subscribe, 2Monetize. <strong>Desventaja:</strong> interfaz menos intuitiva y comisiones más altas.</p>
+    </div>
+
+    <h3>Pasarelas Regionales LATAM</h3>
+
+    <div class="gateway-card">
+      <h3>PagueloFácil <span style="font-size:0.7rem; color:var(--accent2); margin-left:0.5rem; font-family:'IBM Plex Mono',monospace;">★ Recomendada para Panamá</span></h3>
+      <div class="gw-meta">
+        <span class="badge badge-blue">Panamá (principal)</span>
+        <span class="badge badge-amber">2.5 – 4.0% (negociable)</span>
+      </div>
+      <p>Adaptada al mercado panameño, acepta tarjetas y transferencias bancarias locales. Soporte local e integración sencilla. <strong>Desventaja:</strong> menor capacidad internacional y cobertura limitada.</p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>Mercado Pago</h3>
+      <div class="gw-meta">
+        <span class="badge badge-blue">Toda Latinoamérica</span>
+        <span class="badge badge-amber">3.5 – 5.0%</span>
+      </div>
+      <p>Amplia adopción regional. Acepta tarjetas, transferencias, efectivo y QR. SDK maduro. <strong>Desventaja:</strong> procesos de aprobación variables y soporte inconsistente al comercio.</p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>Wompi</h3>
+      <div class="gw-meta">
+        <span class="badge badge-blue">Colombia · En expansión</span>
+        <span class="badge badge-amber">2.5 – 4.0% + tarifa fija</span>
+        <span class="badge badge-red">No disponible en Panamá</span>
+      </div>
+      <p>API bien documentada con opciones innovadoras (Nequi, transferencias). No disponible fuera de Colombia actualmente.</p>
+    </div>
+
+    <hr class="divider">
+
+    <h3>Pasarelas de Criptomonedas</h3>
+
+    <div class="gateway-card">
+      <h3>BitPay</h3>
+      <div class="gw-meta">
+        <span class="badge badge-amber">1% comisión</span>
+        <span class="badge badge-blue">BTC · BCH · ETH · XRP · DOGE</span>
+        <span class="badge badge-green">Liquidación en fiat disponible</span>
+      </div>
+      <p>Fundada en 2011. Pionera del sector. Disponible en 200+ países. Proceso de integración: registro, verificación KYC empresarial, configuración bancaria, instalación de plugin/API, pruebas en sandbox. <strong>Recomendada para nuevos comercios sin experiencia técnica.</strong></p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>Coinbase Commerce</h3>
+      <div class="gw-meta">
+        <span class="badge badge-amber">1% (solo conversiones)</span>
+        <span class="badge badge-blue">BTC · ETH · USDC · DAI · LTC</span>
+        <span class="badge badge-red">Sin conversión automática a fiat</span>
+      </div>
+      <p>Respaldada por el exchange líder mundial. Pagos directos al wallet del comercio. Sin KYC para comercios pequeños. Interfaz más sencilla e intuitiva que BitPay. API robusta con SDKs para múltiples lenguajes.</p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>CryptoPay</h3>
+      <div class="gw-meta">
+        <span class="badge badge-amber">0.8 – 1.5%</span>
+        <span class="badge badge-blue">BTC · ETH · LTC · XRP</span>
+        <span class="badge badge-red">Presencia muy limitada en LATAM</span>
+      </div>
+      <p>Fundada en 2013, enfocada en el mercado europeo. Conversión instantánea a EUR, USD, GBP. Tarjetas de débito cripto disponibles. Solo presencia parcial en Brasil, Colombia y México. <strong>Sin servicios en Panamá actualmente.</strong></p>
+    </div>
+
+    <div class="gateway-card">
+      <h3>BTCPay Server <span style="font-size:0.7rem; color:var(--accent2); margin-left:0.5rem; font-family:'IBM Plex Mono',monospace;">Open Source</span></h3>
+      <div class="gw-meta">
+        <span class="badge badge-green">0% comisión</span>
+        <span class="badge badge-blue">Bitcoin nativo + altcoins</span>
+        <span class="badge badge-green">Control total</span>
+      </div>
+      <p>100% código abierto y auto-hospedado. Sin intermediarios, sin KYC/AML, privacidad total. Soporte nativo para Lightning Network. Plugins para WooCommerce, PrestaShop, Magento. <strong>Requiere conocimientos técnicos y mantenimiento de servidor propio. Sin liquidación a fiat.</strong></p>
+    </div>
+
+    <h3>Comparativa Completa de Pasarelas Cripto</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Característica</th><th>BitPay</th><th>Coinbase Commerce</th><th>CryptoPay</th><th>BTCPay Server</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Comisiones</td><td>1%</td><td>1%</td><td>0.8–1.5%</td><td class="tag-green">0%</td></tr>
+          <tr><td>Liquidación fiat automática</td><td class="tag-green">Sí</td><td class="tag-red">No</td><td class="tag-green">Sí</td><td class="tag-red">No</td></tr>
+          <tr><td>Facilidad de integración</td><td class="tag-green">Alta</td><td class="tag-green">Alta</td><td class="tag-amber">Media</td><td class="tag-red">Baja</td></tr>
+          <tr><td>Soporte Latinoamérica</td><td>Bueno</td><td>Limitado</td><td>Muy limitado</td><td>Global (self-hosted)</td></tr>
+          <tr><td>Tiempo de configuración</td><td>1–2 días</td><td>Horas</td><td>2–5 días</td><td>1–7 días</td></tr>
+          <tr><td>Control de fondos</td><td>Limitado</td><td>Alto</td><td>Limitado</td><td class="tag-green">Total</td></tr>
+          <tr><td>KYC requerido</td><td class="tag-red">Sí</td><td>Parcial</td><td class="tag-red">Sí</td><td class="tag-green">No</td></tr>
+          <tr><td>WooCommerce</td><td class="tag-green">✓</td><td class="tag-green">✓</td><td class="tag-green">✓</td><td class="tag-green">✓</td></tr>
+          <tr><td>Magento</td><td class="tag-green">✓</td><td class="tag-amber">Custom</td><td class="tag-green">✓</td><td class="tag-green">✓</td></tr>
+          <tr><td>PrestaShop</td><td class="tag-green">✓</td><td class="tag-amber">Custom</td><td class="tag-red">✗</td><td class="tag-green">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout green">
+      <strong>Recomendación para Panamá:</strong> Para comercios nuevos sin experiencia técnica, BitPay ofrece el mejor balance entre facilidad de uso y soporte regional. Para comercios con capacidad técnica que priorizan costos cero, BTCPay Server es la solución óptima.
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 5 ====== -->
+  <div class="section" id="modelos">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Modelos de Integración de Pasarelas</h2>
+    </div>
+
+    <div class="modelo">
+      <div class="modelo-title">Redirección <small>FÁCIL IMPLEMENTACIÓN</small></div>
+      <p>El usuario es <strong>redirigido al sitio de la pasarela</strong> para completar el pago fuera del sitio del comercio.</p>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Ventajas</h4>
+          <ul class="info-list check">
+            <li>Fácil implementación</li>
+            <li>Menor responsabilidad de seguridad</li>
+            <li>Confianza del usuario en sitio conocido</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Desventajas</h4>
+          <ul class="info-list red">
+            <li>Experiencia fragmentada</li>
+            <li>Menos control de marca</li>
+            <li>Mayor abandono en el proceso</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--dim);">Ejemplos: PayPal Standard · PagueloFácil Redirect</p>
+    </div>
+
+    <div class="modelo">
+      <div class="modelo-title">Iframe / Incrustado <small>COMPLEJIDAD MEDIA</small></div>
+      <p>El formulario de pago se incrusta como <strong>iframe dentro de la página del comercio</strong>. El cliente no abandona el sitio visualmente.</p>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Ventajas</h4>
+          <ul class="info-list check">
+            <li>Experiencia más integrada</li>
+            <li>Cliente permanece en el sitio</li>
+            <li>Mejor conversión que redirección</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Desventajas</h4>
+          <ul class="info-list red">
+            <li>Configuración más compleja</li>
+            <li>Posibles conflictos CSS</li>
+            <li>Algunas limitaciones de seguridad</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--dim);">Ejemplos: Stripe Checkout · Mercado Pago Checkout Pro</p>
+    </div>
+
+    <div class="modelo">
+      <div class="modelo-title">API Directa <small>ALTA COMPLEJIDAD</small></div>
+      <p>Integración completa vía API. Los datos de pago se procesan desde el <strong>servidor del comercio</strong>. Experiencia 100% personalizable.</p>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Ventajas</h4>
+          <ul class="info-list check">
+            <li>Control total de la experiencia</li>
+            <li>Flujo optimizado</li>
+            <li>Integración perfecta con el diseño</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Desventajas</h4>
+          <ul class="info-list red">
+            <li>Mayor complejidad técnica</li>
+            <li>Requisitos de seguridad más altos</li>
+            <li>Cumplimiento PCI DSS completo</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:0.85rem; color:var(--dim);">Ejemplos: Stripe API · PayPal REST API · PagueloFácil API</p>
+    </div>
+
+    <div class="callout amber">
+      <strong>¿Cuándo elegir cada modelo?</strong><br>
+      Redirección → Proyectos con poco tiempo y recursos<br>
+      Iframe → Balance entre UX y simplicidad<br>
+      API Directa → Proyectos que exigen máxima personalización y escala
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 6 ====== -->
+  <div class="section" id="plataformas">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Plataformas de E-Commerce</h2>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-val">59.2%</span><div class="stat-label">Cuota de mercado de las 5 principales plataformas</div></div>
+      <div class="stat"><span class="stat-val">28.2%</span><div class="stat-label">WooCommerce — líder global</div></div>
+      <div class="stat"><span class="stat-val">23%</span><div class="stat-label">Tasa anual de cambio de plataforma</div></div>
+    </div>
+
+    <div class="gateway-card">
+      <h3>Magento (Adobe Commerce) — Alta Complejidad</h3>
+      <div class="gw-meta">
+        <span class="badge badge-red">Alta complejidad</span>
+        <span class="badge badge-amber">$10k–$100k inicial</span>
+        <span class="badge badge-amber">$1k–$5k/mes mantenimiento</span>
+        <span class="badge badge-blue">Cuota: 9.3%</span>
+        <span class="badge badge-blue">3–6 meses implementación</span>
+      </div>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Fortalezas</h4>
+          <ul class="info-list check">
+            <li>Escalabilidad extrema para catálogos grandes</li>
+            <li>Multitienda nativa y personalización profunda</li>
+            <li>Ecosistema robusto de extensiones</li>
+            <li>Capacidades B2B avanzadas nativas</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Debilidades</h4>
+          <ul class="info-list red">
+            <li>Requiere hosting dedicado y equipo especializado</li>
+            <li>Costo total de propiedad muy elevado</li>
+            <li>Curva de aprendizaje pronunciada</li>
+            <li>Actualizaciones complejas y costosas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Casos de uso ideal: Empresas medianas y grandes con catálogos complejos, operaciones multitienda o requerimientos B2B avanzados.</div>
+    </div>
+
+    <div class="gateway-card">
+      <h3>PrestaShop — Complejidad Media</h3>
+      <div class="gw-meta">
+        <span class="badge badge-amber">Media complejidad</span>
+        <span class="badge badge-amber">$2k–$15k inicial</span>
+        <span class="badge badge-amber">$200–$1k/mes</span>
+        <span class="badge badge-blue">Cuota: 4.8%</span>
+        <span class="badge badge-blue">1–3 meses implementación</span>
+      </div>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Fortalezas</h4>
+          <ul class="info-list check">
+            <li>Balance entre funcionalidad y facilidad de uso</li>
+            <li>Fuerte presencia en Europa y Latinoamérica</li>
+            <li>Módulos especializados para mercados locales</li>
+            <li>Código abierto con control total</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Debilidades</h4>
+          <ul class="info-list red">
+            <li>Rendimiento limitado con catálogos muy grandes</li>
+            <li>Actualizaciones de seguridad frecuentes requeridas</li>
+            <li>Módulos premium elevan costos notablemente</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Casos de uso ideal: PYMEs con presupuesto moderado que necesitan equilibrio entre personalización y facilidad de gestión.</div>
+    </div>
+
+    <div class="gateway-card">
+      <h3>OpenCart — Baja Complejidad</h3>
+      <div class="gw-meta">
+        <span class="badge badge-green">Baja complejidad</span>
+        <span class="badge badge-amber">$1k–$8k inicial</span>
+        <span class="badge badge-amber">$100–$500/mes</span>
+        <span class="badge badge-blue">Cuota: 4.1%</span>
+        <span class="badge badge-blue">2–6 semanas implementación</span>
+      </div>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Fortalezas</h4>
+          <ul class="info-list check">
+            <li>Muy ligero y rápido en entornos modestos</li>
+            <li>Fácil configuración y administración</li>
+            <li>Multitienda nativa · Bajo consumo de recursos</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Debilidades</h4>
+          <ul class="info-list red">
+            <li>Limitado para catálogos muy grandes</li>
+            <li>Menos extensiones que otros sistemas</li>
+            <li>Comunidad más pequeña · Funcionalidades básicas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Ideal para: Pequeñas empresas con requerimientos simples, catálogos reducidos y presupuesto mínimo.</div>
+    </div>
+
+    <div class="gateway-card">
+      <h3>WooCommerce — Baja/Media Complejidad</h3>
+      <div class="gw-meta">
+        <span class="badge badge-green">Baja–Media complejidad</span>
+        <span class="badge badge-amber">$1.5k–$10k inicial</span>
+        <span class="badge badge-amber">$150–$800/mes</span>
+        <span class="badge badge-blue">Cuota: 28.2% ★ LÍDER</span>
+        <span class="badge badge-blue">2–8 semanas implementación</span>
+      </div>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Fortalezas</h4>
+          <ul class="info-list check">
+            <li>Integración perfecta con WordPress</li>
+            <li>Enorme ecosistema: 55,000+ plugins</li>
+            <li>Curva de aprendizaje suave · Comunidad activa</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Debilidades</h4>
+          <ul class="info-list red">
+            <li>Rendimiento limitado con catálogos grandes</li>
+            <li>Seguridad dependiente de actualizaciones constantes</li>
+            <li>No optimizado nativamente para B2B</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout green">Ideal para: Negocios con presencia en WordPress que priorizan marketing de contenidos. Mejor punto de entrada para la mayoría de PYMEs.</div>
+    </div>
+
+    <div class="gateway-card">
+      <h3>Node.js (Desarrollo Personalizado) — Muy Alta Complejidad</h3>
+      <div class="gw-meta">
+        <span class="badge badge-red">Muy alta complejidad</span>
+        <span class="badge badge-red">$15k–$150k inicial</span>
+        <span class="badge badge-red">$1k–$8k/mes</span>
+        <span class="badge badge-blue">Stack MERN/MEAN</span>
+        <span class="badge badge-blue">4–12 meses implementación</span>
+      </div>
+      <div class="two-col">
+        <div class="col-box green"><h4>✓ Fortalezas</h4>
+          <ul class="info-list check">
+            <li>Personalización completa según requerimientos únicos</li>
+            <li>Optimización máxima de rendimiento</li>
+            <li>Control total del código e integración perfecta</li>
+          </ul>
+        </div>
+        <div class="col-box red"><h4>✗ Debilidades</h4>
+          <ul class="info-list red">
+            <li>Mayor inversión inicial y tiempo de desarrollo</li>
+            <li>Responsabilidad total de mantenimiento</li>
+            <li>Requiere equipo especializado y experimentado</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Ideal para: Startups con necesidades únicas, proyectos con altos volúmenes de tráfico o integración compleja con sistemas existentes.</div>
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 7 ====== -->
+  <div class="section" id="tecnico">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Consideraciones Técnicas</h2>
+    </div>
+
+    <h3>Volatilidad y Estrategias de Mitigación</h3>
+    <p>El principal desafío del comercio con criptomonedas es la volatilidad. Bitcoin puede fluctuar un <strong>5–20% en un mismo día</strong>, generando riesgo financiero directo para el comercio receptor.</p>
+    <ul class="info-list">
+      <li><strong>Conversión inmediata:</strong> Liquidar cripto a fiat automáticamente (BitPay, CryptoPay)</li>
+      <li><strong>Ventanas de tiempo:</strong> 15–30 minutos para completar el pago a precio fijo</li>
+      <li><strong>Stablecoins:</strong> Priorizar USDT, USDC, DAI como métodos de pago</li>
+      <li><strong>Margen de volatilidad:</strong> Añadir 1–3% al precio para cubrir fluctuaciones</li>
+      <li><strong>Market makers:</strong> Contratos con proveedores de liquidez</li>
+    </ul>
+
+    <h3>Tiempos de Confirmación por Red</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Red</th><th>Tiempo promedio</th><th>Confirmaciones típicas</th></tr></thead>
+        <tbody>
+          <tr><td>Lightning Network</td><td class="tag-green">1–5 segundos</td><td class="tag-green">Instantáneo</td></tr>
+          <tr><td>Solana</td><td class="tag-green">0.4 segundos</td><td class="tag-green">Instantáneo</td></tr>
+          <tr><td>Ethereum</td><td class="tag-amber">15 seg – 2 min</td><td>12–30 bloques</td></tr>
+          <tr><td>Litecoin</td><td class="tag-amber">2.5–10 minutos</td><td>1–6 bloques</td></tr>
+          <tr><td>Bitcoin</td><td class="tag-red">10–60 minutos</td><td>1–6 bloques</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Estrategia de Confirmaciones según Tipo de Producto</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tipo de Entrega</th><th>Confirmaciones Recomendadas</th></tr></thead>
+        <tbody>
+          <tr><td>Digital inmediato (software, acceso)</td><td class="tag-green">0–1 confirmaciones</td></tr>
+          <tr><td>Digital no sensible (contenido)</td><td class="tag-green">1 confirmación</td></tr>
+          <tr><td>Físico de bajo valor (&lt;$100)</td><td class="tag-amber">1–2 confirmaciones</td></tr>
+          <tr><td>Físico de alto valor (&gt;$500)</td><td class="tag-red">3+ confirmaciones</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Seguridad y Custodia</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Modelo</th><th>Características</th><th>Riesgo</th></tr></thead>
+        <tbody>
+          <tr><td>Pasarela con conversión</td><td>Comercio no custodia cripto</td><td class="tag-green">Bajo</td></tr>
+          <tr><td>Wallet propio (hot)</td><td>Almacenamiento online</td><td class="tag-red">Alto</td></tr>
+          <tr><td>Wallet propio (cold)</td><td>Almacenamiento offline</td><td class="tag-amber">Medio</td></tr>
+          <tr><td>Custodia institucional</td><td>Servicio profesional</td><td class="tag-amber">Medio-Bajo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Buenas Prácticas de Seguridad</h3>
+    <ul class="info-list check">
+      <li>Separar wallets de recepción y de reserva</li>
+      <li>Implementar multifirma (multisig 2-of-3)</li>
+      <li>Establecer límites de transferencia automáticos</li>
+      <li>Auditorías periódicas de seguridad</li>
+      <li>Backups cifrados de claves privadas offline</li>
+      <li>Autenticación de dos factores (2FA) en todas las cuentas</li>
+      <li>Monitoreo continuo de actividad anómala</li>
+    </ul>
+
+    <h3>Compatibilidad Pasarelas / Plataformas</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pasarela</th><th>Magento</th><th>PrestaShop</th><th>OpenCart</th><th>WooCommerce</th><th>Node.js</th></tr></thead>
+        <tbody>
+          <tr><td>PayPal</td><td class="tag-green">Nativo ✓</td><td class="tag-green">Nativo ✓</td><td class="tag-green">Nativo ✓</td><td class="tag-green">Nativo ✓</td><td class="tag-green">API Fácil ✓</td></tr>
+          <tr><td>Stripe</td><td class="tag-green">Extensión ✓</td><td class="tag-green">Módulo ✓</td><td class="tag-green">Extensión ✓</td><td class="tag-green">Plugin ✓</td><td class="tag-green">API Fácil ✓</td></tr>
+          <tr><td>PagueloFácil</td><td class="tag-amber">Custom ⚠</td><td class="tag-green">Módulo ✓</td><td class="tag-green">Extensión ✓</td><td class="tag-green">Plugin ✓</td><td class="tag-amber">API Media ✓</td></tr>
+          <tr><td>Mercado Pago</td><td class="tag-green">Extensión ✓</td><td class="tag-green">Módulo ✓</td><td class="tag-green">Extensión ✓</td><td class="tag-green">Plugin ✓</td><td class="tag-amber">API Media ✓</td></tr>
+          <tr><td>Coinbase Commerce</td><td class="tag-amber">Custom ⚠</td><td class="tag-amber">Custom ⚠</td><td class="tag-amber">Custom ⚠</td><td class="tag-green">Plugin ✓</td><td class="tag-amber">API Media ✓</td></tr>
+          <tr><td>BitPay</td><td class="tag-green">Extensión ✓</td><td class="tag-amber">Custom ⚠</td><td class="tag-amber">Custom ⚠</td><td class="tag-green">Plugin ✓</td><td class="tag-amber">API Media ✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 8 ====== -->
+  <div class="section" id="legal">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Aspectos Legales y Fiscales</h2>
+    </div>
+
+    <h3>Marco Regulatorio en Panamá — Ley 697 de 2023</h3>
+    <ul class="info-list">
+      <li><strong>Ley 697 de 2023:</strong> Marco regulatorio oficial para criptoactivos en Panamá</li>
+      <li><strong>Licencia de Servicios:</strong> Requerida para exchanges y pasarelas de pago</li>
+      <li><strong>KYC/AML:</strong> Obligatorio para servicios financieros con cripto</li>
+      <li><strong>Comercios:</strong> Pueden aceptar pagos cripto <em>sin licencia especial</em></li>
+      <li><strong>Impuestos:</strong> Ganancias de capital exentas; ventas regulares aplican ITBMS</li>
+    </ul>
+
+    <h3>Panorama Regional LATAM</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>País</th><th>Marco Regulatorio</th></tr></thead>
+        <tbody>
+          <tr><td>El Salvador</td><td class="tag-green">Bitcoin es moneda de curso legal (desde 2021)</td></tr>
+          <tr><td>Brasil</td><td>Marco completo, regulado por el Banco Central</td></tr>
+          <tr><td>Argentina</td><td class="tag-amber">Impuesto a ganancias de cripto; alto uso P2P</td></tr>
+          <tr><td>México</td><td class="tag-amber">Ley Fintech regula; prohíbe stablecoins en bancos</td></tr>
+          <tr><td>Colombia</td><td>Sandbox regulatorio, marco en desarrollo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== SECCIÓN 9 ====== -->
+  <div class="section" id="tendencias">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2>Tendencias Futuras y Criterios de Selección</h2>
+    </div>
+
+    <h3>Tendencias Tecnológicas</h3>
+    <div class="two-col">
+      <div class="col-box blue"><h4>⚡ Lightning Network</h4><p style="margin:0; font-size:0.95rem;">Adopción masiva para pagos instantáneos y microtransacciones. Confirmaciones en menos de 5 segundos con comisiones mínimas.</p></div>
+      <div class="col-box blue"><h4>🏦 CBDCs</h4><p style="margin:0; font-size:0.95rem;">Monedas digitales de bancos centrales integradas con infraestructura cripto. Regulación y adopción masiva esperada 2025–2027.</p></div>
+    </div>
+    <div class="col-box blue" style="margin-top:1rem;"><h4>🌐 Web3 Commerce</h4><p style="margin:0; font-size:0.95rem;">Integración de NFTs, tokens de lealtad y experiencias descentralizadas. Tokenización de productos físicos y pagos con contratos inteligentes.</p></div>
+
+    <h3 style="margin-top:2rem;">Tendencias en Plataformas E-Commerce</h3>
+    <ul class="info-list">
+      <li><strong>Arquitecturas headless:</strong> Separación frontend/backend para mayor flexibilidad</li>
+      <li><strong>Enfoque serverless:</strong> Escalabilidad dinámica, pago por uso, reducción de costos operativos</li>
+      <li><strong>Microservicios vs. monolitos:</strong> Transición hacia modularidad en operaciones medianas/grandes</li>
+      <li><strong>Mobile-first:</strong> Experiencias omnicanal integradas (web, app, punto físico)</li>
+      <li><strong>Composable commerce:</strong> Combinar los mejores componentes de distintos proveedores</li>
+    </ul>
+
+    <h3>Criterios de Selección por Tipo de Negocio</h3>
+    <div class="two-col">
+      <div class="col-box blue"><h4>🚀 Startup con presupuesto limitado</h4><p style="margin:0; font-size:0.9rem;"><strong>Plataforma:</strong> WooCommerce o PrestaShop<br><strong>Pasarela:</strong> PayPal + PagueloFácil</p></div>
+      <div class="col-box blue"><h4>🏪 Retailer migrando a digital</h4><p style="margin:0; font-size:0.9rem;"><strong>Plataforma:</strong> Magento o PrestaShop<br><strong>Pasarela:</strong> Múltiples opciones regionales</p></div>
+    </div>
+    <div class="two-col" style="margin-top:1rem;">
+      <div class="col-box blue"><h4>🏭 Empresa B2B con catálogo técnico</h4><p style="margin:0; font-size:0.9rem;"><strong>Plataforma:</strong> Magento o Node.js<br><strong>Pasarela:</strong> Stripe o pasarela bancaria directa</p></div>
+      <div class="col-box blue"><h4>👥 Marketplace multivendedor</h4><p style="margin:0; font-size:0.9rem;"><strong>Plataforma:</strong> Node.js o Magento + extensiones<br><strong>Pasarela:</strong> Stripe Connect o PayPal</p></div>
+    </div>
+
+    <h3>Errores Frecuentes a Evitar</h3>
+    <ul class="info-list red">
+      <li>Elegir la plataforma más popular sin analizar las necesidades reales</li>
+      <li>Subestimar el costo de mantenimiento y actualizaciones</li>
+      <li>No contemplar costos de integración con sistemas existentes</li>
+      <li>Ignorar la curva de aprendizaje del equipo operativo</li>
+    </ul>
+
+    <div class="callout green">
+      <strong>Principio clave:</strong> Considerar siempre el costo total de propiedad (TCO) a 3 años, no solo el costo inicial de implementación. No existe una plataforma perfecta universal — la elección depende del contexto específico de cada negocio.
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
