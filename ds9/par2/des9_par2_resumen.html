@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen — Pasarelas & Criptomonedas en E-Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090b;
+    --surface: #111113;
+    --card: #18181b;
+    --border: #27272a;
+    --accent: #4f46e5;
+    --accent-glow: rgba(79,70,229,0.25);
+    --green: #16a34a;
+    --green-glow: rgba(22,163,74,0.2);
+    --amber: #d97706;
+    --amber-glow: rgba(217,119,6,0.2);
+    --red: #dc2626;
+    --text: #fafafa;
+    --muted: #a1a1aa;
+    --dim: #52525b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #0f0f14 0%, #13111e 50%, #0d1317 100%);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(79,70,229,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(79,70,229,0.15);
+    border: 1px solid rgba(79,70,229,0.4);
+    padding: 0.3em 0.9em; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #a5b4fc; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: #fff; line-height: 1.15;
+    margin-bottom: 0.8rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 em { font-style: italic; color: #818cf8; }
+  .hero-sub {
+    color: var(--muted); font-size: 1rem;
+    max-width: 500px; margin: 0 auto;
+  }
+
+  /* LAYOUT */
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+  /* SECTION HEADER */
+  .sh {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 3rem 0 1.5rem;
+  }
+  .sh-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .sh-text h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem; color: #fff;
+    line-height: 1.2;
+  }
+  .sh-text p { font-size: 0.82rem; color: var(--muted); margin-top: 0.15rem; }
+
+  /* BIG STATS ROW */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem; margin-bottom: 2rem;
+  }
+  .stat-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .stat-box::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+  }
+  .stat-box.blue::before { background: var(--accent); }
+  .stat-box.green::before { background: var(--green); }
+  .stat-box.amber::before { background: var(--amber); }
+  .stat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; color: #fff;
+    display: block; line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
+
+  /* GRID 2 */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  @media (max-width: 800px) { .g3, .g4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+
+  /* BLOCK */
+  .block {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.3rem;
+  }
+  .block h3 {
+    font-size: 0.95rem; font-weight: 600;
+    color: #fff; margin-bottom: 0.7rem;
+  }
+  .block p { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+
+  /* LABEL */
+  .lbl {
+    display: inline-block;
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.15em 0.5em; border-radius: 4px;
+    margin-bottom: 0.6rem;
+  }
+  .lbl-blue { background: rgba(79,70,229,0.2); color: #a5b4fc; }
+  .lbl-green { background: rgba(22,163,74,0.2); color: #86efac; }
+  .lbl-amber { background: rgba(217,119,6,0.2); color: #fcd34d; }
+  .lbl-red { background: rgba(220,38,38,0.2); color: #fca5a5; }
+  .lbl-purple { background: rgba(147,51,234,0.2); color: #d8b4fe; }
+
+  /* PILL TAGS */
+  .pills { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.6rem; }
+  .pill {
+    font-size: 0.68rem; padding: 0.2em 0.55em;
+    border-radius: 20px; border: 1px solid;
+    font-weight: 500;
+  }
+  .pill-blue { border-color: rgba(79,70,229,0.4); color: #a5b4fc; background: rgba(79,70,229,0.08); }
+  .pill-green { border-color: rgba(22,163,74,0.4); color: #86efac; background: rgba(22,163,74,0.08); }
+  .pill-amber { border-color: rgba(217,119,6,0.4); color: #fcd34d; background: rgba(217,119,6,0.08); }
+  .pill-red { border-color: rgba(220,38,38,0.4); color: #fca5a5; background: rgba(220,38,38,0.08); }
+  .pill-muted { border-color: var(--border); color: var(--muted); }
+
+  /* KV LIST */
+  .kv { margin-top: 0.6rem; }
+  .kv-row {
+    display: flex; justify-content: space-between;
+    padding: 0.35rem 0; border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+  .kv-row:last-child { border-bottom: none; }
+  .kv-key { color: var(--muted); }
+  .kv-val { color: #fff; font-weight: 500; text-align: right; }
+  .kv-val.g { color: #86efac; }
+  .kv-val.a { color: #fcd34d; }
+  .kv-val.r { color: #fca5a5; }
+
+  /* TABLE */
+  .t-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  thead { background: rgba(255,255,255,0.03); }
+  th {
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); padding: 0.7rem 0.9rem;
+    text-align: left; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.6rem 0.9rem; border-bottom: 1px solid rgba(39,39,42,0.5); color: var(--text); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .ok { color: #86efac; font-weight: 600; }
+  .no { color: #fca5a5; font-weight: 600; }
+  .mid { color: #fcd34d; font-weight: 600; }
+
+  /* FLOW HORIZONTAL */
+  .flow-h {
+    display: flex; align-items: flex-start;
+    gap: 0; margin: 1rem 0; overflow-x: auto;
+  }
+  .flow-h-step {
+    flex: 1; min-width: 100px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; position: relative;
+    padding: 0 0.3rem;
+  }
+  .flow-h-step::after {
+    content: '→';
+    position: absolute; right: -0.6rem; top: 0.6rem;
+    color: var(--dim); font-size: 1rem;
+  }
+  .flow-h-step:last-child::after { display: none; }
+  .flow-h-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--card); border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; color: #a5b4fc;
+    margin-bottom: 0.5rem; flex-shrink: 0;
+  }
+  .flow-h-label { font-size: 0.7rem; color: var(--muted); line-height: 1.3; }
+  .flow-h-label strong { display: block; color: #fff; font-size: 0.75rem; }
+
+  /* VERDICT BOX */
+  .verdict {
+    background: linear-gradient(135deg, rgba(79,70,229,0.12) 0%, rgba(16,163,127,0.08) 100%);
+    border: 1px solid rgba(79,70,229,0.3);
+    border-radius: 12px; padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .verdict h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem; color: #fff; margin-bottom: 0.8rem;
+  }
+  .verdict p { font-size: 0.85rem; color: var(--muted); margin-bottom: 0; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* HIGHLIGHT */
+  strong.hl { color: #a5b4fc; }
+
+  /* 3-STEP */
+  .model-row { display: flex; gap: 0.8rem; flex-direction: column; }
+  .model-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 0.8rem; border-radius: 8px;
+    border-left: 3px solid transparent;
+    background: rgba(255,255,255,0.02);
+  }
+  .model-item.blue { border-color: var(--accent); }
+  .model-item.green { border-color: var(--green); }
+  .model-item.amber { border-color: var(--amber); }
+  .model-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .model-body { font-size: 0.82rem; }
+  .model-body strong { color: #fff; display: block; margin-bottom: 0.15rem; }
+  .model-body span { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-pill">📋 Resumen ejecutivo · Semanas 3 & 4</div>
+  <h1>Pasarelas de Pago &<br><em>Criptomonedas</em> en E-Commerce</h1>
+  <p class="hero-sub">Desarrollo de Software IX · Universidad Tecnológica de Panamá</p>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. BLOCKCHAIN -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(79,70,229,0.15)">⛓️</div>
+    <div class="sh-text">
+      <h2>Fundamentos de Blockchain</h2>
+      <p>Qué es, cómo funciona y por qué importa</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="block">
+      <span class="lbl lbl-blue">Definición</span>
+      <h3>Blockchain</h3>
+      <p>Registro distribuido e <strong>inmutable</strong> de transacciones. Bloques enlazados criptográficamente sin autoridad central. Opera mediante redes P2P con consenso distribuido (PoW / PoS).</p>
+      <div class="pills">
+        <span class="pill pill-blue">Descentralizado</span>
+        <span class="pill pill-blue">Inmutable</span>
+        <span class="pill pill-blue">Transparente</span>
+        <span class="pill pill-muted">24/7 Sin intermediarios</span>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-purple">Flujo</span>
+      <h3>Ciclo de una Transacción</h3>
+      <div class="flow-h">
+        <div class="flow-h-step"><div class="flow-h-dot">1</div><div class="flow-h-label"><strong>Inicio</strong>Clave privada</div></div>
+        <div class="flow-h-step"><div class="flow-h-dot">2</div><div class="flow-h-label"><strong>Difusión</strong>Red P2P</div></div>
+        <div class="flow-h-step"><div class="flow-h-dot">3</div><div class="flow-h-label"><strong>Validación</strong>Nodos</div></div>
+        <div class="flow-h-step"><div class="flow-h-dot">4</div><div class="flow-h-label"><strong>Bloque</strong>Minero</div></div>
+        <div class="flow-h-step"><div class="flow-h-dot">5</div><div class="flow-h-label"><strong>Consenso</strong>Red</div></div>
+        <div class="flow-h-step"><div class="flow-h-dot">6</div><div class="flow-h-label"><strong>Confirmado</strong>Permanente</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CRIPTOS -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(217,119,6,0.15)">₿</div>
+    <div class="sh-text">
+      <h2>Criptomonedas para Comercio</h2>
+      <p>Las principales opciones y cuándo usar cada una</p>
+    </div>
+  </div>
+
+  <div class="g4">
+    <div class="block">
+      <span class="lbl lbl-amber">Bitcoin BTC</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Comisión</span><span class="kv-val">$0.5–$15</span></div>
+        <div class="kv-row"><span class="kv-key">Velocidad</span><span class="kv-val r">10–60 min</span></div>
+        <div class="kv-row"><span class="kv-key">Volatilidad</span><span class="kv-val r">Alta</span></div>
+        <div class="kv-row"><span class="kv-key">Ideal</span><span class="kv-val">Alto valor</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-blue">Lightning ⚡</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Comisión</span><span class="kv-val g">&lt; $0.01</span></div>
+        <div class="kv-row"><span class="kv-key">Velocidad</span><span class="kv-val g">&lt; 5 seg</span></div>
+        <div class="kv-row"><span class="kv-key">Volatilidad</span><span class="kv-val r">Alta</span></div>
+        <div class="kv-row"><span class="kv-key">Ideal</span><span class="kv-val">Micropagos</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-purple">Ethereum ETH</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Comisión</span><span class="kv-val">$0.2–$10</span></div>
+        <div class="kv-row"><span class="kv-key">Velocidad</span><span class="kv-val a">15s–2 min</span></div>
+        <div class="kv-row"><span class="kv-key">Volatilidad</span><span class="kv-val r">Alta</span></div>
+        <div class="kv-row"><span class="kv-key">Ideal</span><span class="kv-val">B2B · DeFi</span></div>
+      </div>
+    </div>
+    <div class="block" style="border: 1px solid rgba(22,163,74,0.4);">
+      <span class="lbl lbl-green">Stablecoins ★</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Comisión</span><span class="kv-val">$0.1–$5</span></div>
+        <div class="kv-row"><span class="kv-key">Velocidad</span><span class="kv-val g">Rápida</span></div>
+        <div class="kv-row"><span class="kv-key">Volatilidad</span><span class="kv-val g">Ninguna</span></div>
+        <div class="kv-row"><span class="kv-key">Ideal</span><span class="kv-val g">Comercio general</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <h3>📊 Estadísticas de Adopción 2024</h3>
+    <div class="stats-row" style="margin-top:0.8rem; margin-bottom:0;">
+      <div class="stat-box blue"><span class="stat-val">$4.3B</span><div class="stat-label">Volumen diario en cripto</div></div>
+      <div class="stat-box blue"><span class="stat-val">15K+</span><div class="stat-label">Comercios globales activos</div></div>
+      <div class="stat-box green"><span class="stat-val">38%</span><div class="stat-label">Pagos en stablecoins</div></div>
+      <div class="stat-box amber"><span class="stat-val">420M</span><div class="stat-label">Usuarios de criptomonedas</div></div>
+    </div>
+  </div>
+
+  <!-- 3. PASARELAS -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(22,163,74,0.15)">🔌</div>
+    <div class="sh-text">
+      <h2>Pasarelas de Pago — Comparativa</h2>
+      <p>Internacionales, regionales y de criptomonedas</p>
+    </div>
+  </div>
+
+  <div class="t-wrap">
+    <table>
+      <thead>
+        <tr><th>Pasarela</th><th>Tipo</th><th>Comisión</th><th>Cobertura</th><th>Fiat auto</th><th>Panamá</th><th>KYC</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>PayPal</strong></td><td>Internacional</td><td>2.9% + $0.30</td><td>200+ países</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+        <tr><td><strong>Stripe</strong></td><td>Internacional</td><td>2.9% + $0.30</td><td>43 países</td><td class="ok">✓</td><td class="no">✗</td><td class="ok">✓</td></tr>
+        <tr><td><strong>2Checkout</strong></td><td>Internacional</td><td>3.5% + $0.30</td><td>200+ países</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+        <tr style="background:rgba(22,163,74,0.04)"><td><strong>PagueloFácil ★</strong></td><td>Regional</td><td>2.5–4.0%</td><td>Panamá</td><td class="ok">✓</td><td class="ok">✓ Principal</td><td class="ok">✓</td></tr>
+        <tr><td><strong>Mercado Pago</strong></td><td>Regional</td><td>3.5–5.0%</td><td>LATAM</td><td class="ok">✓</td><td class="mid">Parcial</td><td class="ok">✓</td></tr>
+        <tr><td><strong>BitPay</strong></td><td>Cripto</td><td>1%</td><td>200+ países</td><td class="ok">✓</td><td class="ok">✓</td><td class="ok">✓</td></tr>
+        <tr><td><strong>Coinbase Commerce</strong></td><td>Cripto</td><td>1%</td><td>Global</td><td class="no">✗</td><td class="mid">Limitado</td><td class="mid">Parcial</td></tr>
+        <tr><td><strong>BTCPay Server</strong></td><td>Cripto · OSS</td><td class="ok">0%</td><td>Global</td><td class="no">✗</td><td class="ok">✓ Self-hosted</td><td class="ok">No requerido</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MODELOS -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(79,70,229,0.15)">🔧</div>
+    <div class="sh-text">
+      <h2>Modelos de Integración</h2>
+      <p>Elige según recursos técnicos y experiencia de usuario requerida</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="model-row">
+      <div class="model-item blue">
+        <div class="model-icon">↗️</div>
+        <div class="model-body">
+          <strong>Redirección — Fácil</strong>
+          <span>Usuario abandona el sitio para pagar. Menor responsabilidad de seguridad pero más abandono. Ejemplos: PayPal Standard, PagueloFácil.</span>
+        </div>
+      </div>
+      <div class="model-item green">
+        <div class="model-icon">🖼️</div>
+        <div class="model-body">
+          <strong>Iframe / Incrustado — Complejidad Media</strong>
+          <span>Formulario de pago dentro del sitio. Mejor experiencia que redirección, sin que el cliente salga. Ejemplos: Stripe Checkout, Mercado Pago.</span>
+        </div>
+      </div>
+      <div class="model-item amber">
+        <div class="model-icon">⚙️</div>
+        <div class="model-body">
+          <strong>API Directa — Alta Complejidad · Requiere PCI DSS</strong>
+          <span>Control total desde el servidor del comercio. Experiencia 100% personalizable. Requiere cumplimiento PCI DSS completo. Ejemplos: Stripe API, PayPal REST.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLATAFORMAS -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(217,119,6,0.15)">🛒</div>
+    <div class="sh-text">
+      <h2>Plataformas de E-Commerce</h2>
+      <p>Comparativa según complejidad, costo y tamaño de negocio</p>
+    </div>
+  </div>
+
+  <div class="t-wrap">
+    <table>
+      <thead>
+        <tr><th>Plataforma</th><th>Complejidad</th><th>Costo inicial</th><th>Mantenimiento/mes</th><th>Tamaño ideal</th><th>Implementación</th><th>Cuota</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Magento</strong></td><td class="no">Alta</td><td>$10k–$100k</td><td>$1k–$5k</td><td>Medio–Grande</td><td>3–6 meses</td><td>9.3%</td></tr>
+        <tr><td><strong>PrestaShop</strong></td><td class="mid">Media</td><td>$2k–$15k</td><td>$200–$1k</td><td>Pequeño–Medio</td><td>1–3 meses</td><td>4.8%</td></tr>
+        <tr><td><strong>OpenCart</strong></td><td class="ok">Baja</td><td>$1k–$8k</td><td>$100–$500</td><td>Pequeño</td><td>2–6 semanas</td><td>4.1%</td></tr>
+        <tr style="background:rgba(22,163,74,0.04)"><td><strong>WooCommerce ★</strong></td><td class="ok">Baja–Media</td><td>$1.5k–$10k</td><td>$150–$800</td><td>Pequeño–Medio</td><td>2–8 semanas</td><td class="ok">28.2%</td></tr>
+        <tr><td><strong>Node.js custom</strong></td><td class="no">Muy Alta</td><td>$15k–$150k</td><td>$1k–$8k</td><td>Cualquiera</td><td>4–12 meses</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="g3">
+    <div class="block">
+      <span class="lbl lbl-blue">Escalabilidad</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Magento</span><span class="kv-val g">★★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">Node.js</span><span class="kv-val g">★★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">PrestaShop</span><span class="kv-val a">★★★</span></div>
+        <div class="kv-row"><span class="kv-key">WooCommerce</span><span class="kv-val a">★★★</span></div>
+        <div class="kv-row"><span class="kv-key">OpenCart</span><span class="kv-val r">★★</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-green">Facilidad de Uso</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">OpenCart</span><span class="kv-val g">★★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">WooCommerce</span><span class="kv-val g">★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">PrestaShop</span><span class="kv-val g">★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">Magento</span><span class="kv-val r">★★</span></div>
+        <div class="kv-row"><span class="kv-key">Node.js</span><span class="kv-val r">★</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-amber">Costo (inverso = más barato)</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">OpenCart</span><span class="kv-val g">★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">WooCommerce</span><span class="kv-val g">★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">PrestaShop</span><span class="kv-val g">★★★★</span></div>
+        <div class="kv-row"><span class="kv-key">Magento</span><span class="kv-val r">★</span></div>
+        <div class="kv-row"><span class="kv-key">Node.js</span><span class="kv-val r">★</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECNICO -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(220,38,38,0.15)">⚙️</div>
+    <div class="sh-text">
+      <h2>Técnico: Volatilidad, Confirmaciones y Seguridad</h2>
+      <p>Lo que todo desarrollador debe saber al implementar pagos cripto</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="block">
+      <span class="lbl lbl-red">Volatilidad</span>
+      <h3>Estrategias de Mitigación</h3>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Conversión inmediata</span><span class="kv-val g">Mejor opción</span></div>
+        <div class="kv-row"><span class="kv-key">Stablecoins</span><span class="kv-val g">USDT · USDC · DAI</span></div>
+        <div class="kv-row"><span class="kv-key">Ventana de tiempo</span><span class="kv-val">15–30 min precio fijo</span></div>
+        <div class="kv-row"><span class="kv-key">Margen adicional</span><span class="kv-val">1–3% en precio</span></div>
+        <div class="kv-row"><span class="kv-key">BTC fluctúa</span><span class="kv-val r">5–20% en 1 día</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-blue">Confirmaciones por Red</span>
+      <h3>Tiempos de Transacción</h3>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Lightning Network</span><span class="kv-val g">1–5 segundos</span></div>
+        <div class="kv-row"><span class="kv-key">Solana</span><span class="kv-val g">0.4 segundos</span></div>
+        <div class="kv-row"><span class="kv-key">Ethereum</span><span class="kv-val a">15 seg – 2 min</span></div>
+        <div class="kv-row"><span class="kv-key">Litecoin</span><span class="kv-val a">2.5–10 min</span></div>
+        <div class="kv-row"><span class="kv-key">Bitcoin</span><span class="kv-val r">10–60 minutos</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block" style="margin-top:1rem;">
+    <span class="lbl lbl-amber">Confirmaciones según tipo de producto</span>
+    <div class="g4" style="margin-top:0.6rem;">
+      <div style="text-align:center; padding:0.8rem; background:rgba(22,163,74,0.08); border-radius:8px; border:1px solid rgba(22,163,74,0.2);">
+        <div style="font-size:1.5rem; margin-bottom:0.3rem;">💻</div>
+        <div style="font-size:0.7rem; color:#86efac; font-weight:700;">0–1 confirmaciones</div>
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:0.2rem;">Digital inmediato<br>(software, acceso)</div>
+      </div>
+      <div style="text-align:center; padding:0.8rem; background:rgba(22,163,74,0.05); border-radius:8px; border:1px solid rgba(22,163,74,0.15);">
+        <div style="font-size:1.5rem; margin-bottom:0.3rem;">📄</div>
+        <div style="font-size:0.7rem; color:#86efac; font-weight:700;">1 confirmación</div>
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:0.2rem;">Digital no sensible<br>(contenido)</div>
+      </div>
+      <div style="text-align:center; padding:0.8rem; background:rgba(217,119,6,0.08); border-radius:8px; border:1px solid rgba(217,119,6,0.2);">
+        <div style="font-size:1.5rem; margin-bottom:0.3rem;">📦</div>
+        <div style="font-size:0.7rem; color:#fcd34d; font-weight:700;">1–2 confirmaciones</div>
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:0.2rem;">Físico bajo valor<br>(&lt;$100)</div>
+      </div>
+      <div style="text-align:center; padding:0.8rem; background:rgba(220,38,38,0.08); border-radius:8px; border:1px solid rgba(220,38,38,0.2);">
+        <div style="font-size:1.5rem; margin-bottom:0.3rem;">💎</div>
+        <div style="font-size:0.7rem; color:#fca5a5; font-weight:700;">3+ confirmaciones</div>
+        <div style="font-size:0.75rem; color:var(--muted); margin-top:0.2rem;">Físico alto valor<br>(&gt;$500)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGAL -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(22,163,74,0.15)">⚖️</div>
+    <div class="sh-text">
+      <h2>Marco Legal — Panamá</h2>
+      <p>Ley 697 de 2023 y panorama regional LATAM</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="block">
+      <span class="lbl lbl-green">🇵🇦 Panamá — Ley 697 de 2023</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Comercios (aceptar pagos)</span><span class="kv-val g">Sin licencia especial</span></div>
+        <div class="kv-row"><span class="kv-key">Exchanges y pasarelas</span><span class="kv-val a">Licencia requerida</span></div>
+        <div class="kv-row"><span class="kv-key">KYC / AML</span><span class="kv-val">Obligatorio (servicios fin.)</span></div>
+        <div class="kv-row"><span class="kv-key">Ganancias de capital</span><span class="kv-val g">Exentas</span></div>
+        <div class="kv-row"><span class="kv-key">Ventas regulares</span><span class="kv-val">Aplica ITBMS</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-blue">Panorama LATAM</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">El Salvador</span><span class="kv-val g">Bitcoin: moneda legal</span></div>
+        <div class="kv-row"><span class="kv-key">Brasil</span><span class="kv-val">Marco completo · Banco Central</span></div>
+        <div class="kv-row"><span class="kv-key">Argentina</span><span class="kv-val a">Impuesto a ganancias cripto</span></div>
+        <div class="kv-row"><span class="kv-key">México</span><span class="kv-val a">Ley Fintech · Prohíbe stables en bancos</span></div>
+        <div class="kv-row"><span class="kv-key">Colombia</span><span class="kv-val">Sandbox regulatorio</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECISION GUIDE -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(79,70,229,0.15)">🎯</div>
+    <div class="sh-text">
+      <h2>Guía de Decisión por Tipo de Negocio</h2>
+      <p>Qué plataforma y pasarela elegir según el contexto</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="block">
+      <span class="lbl lbl-blue">🚀 Startup / Presupuesto limitado</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Plataforma</span><span class="kv-val">WooCommerce o PrestaShop</span></div>
+        <div class="kv-row"><span class="kv-key">Pasarela principal</span><span class="kv-val">PayPal + PagueloFácil</span></div>
+        <div class="kv-row"><span class="kv-key">Cripto (opcional)</span><span class="kv-val">BitPay o Coinbase Commerce</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-amber">🏪 Retailer migrando a digital</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Plataforma</span><span class="kv-val">Magento o PrestaShop</span></div>
+        <div class="kv-row"><span class="kv-key">Pasarela principal</span><span class="kv-val">Múltiples opciones regionales</span></div>
+        <div class="kv-row"><span class="kv-key">Prioridad</span><span class="kv-val">Integración con inventario</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-purple">🏭 Empresa B2B con catálogo técnico</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Plataforma</span><span class="kv-val">Magento o Node.js</span></div>
+        <div class="kv-row"><span class="kv-key">Pasarela</span><span class="kv-val">Stripe o bancaria directa</span></div>
+        <div class="kv-row"><span class="kv-key">Prioridad</span><span class="kv-val">Precios por volumen · Órdenes</span></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-green">👥 Marketplace Multivendedor</span>
+      <div class="kv">
+        <div class="kv-row"><span class="kv-key">Plataforma</span><span class="kv-val">Node.js o Magento + extensiones</span></div>
+        <div class="kv-row"><span class="kv-key">Pasarela</span><span class="kv-val">Stripe Connect o PayPal</span></div>
+        <div class="kv-row"><span class="kv-key">Prioridad</span><span class="kv-val">Gestión de comisiones · Split</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENDENCIAS -->
+  <div class="sh">
+    <div class="sh-icon" style="background:rgba(79,70,229,0.15)">🚀</div>
+    <div class="sh-text">
+      <h2>Tendencias Futuras</h2>
+      <p>Lo que viene en pagos digitales y comercio electrónico</p>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="block">
+      <span class="lbl lbl-blue">⚡ Lightning Network</span>
+      <p>Adopción masiva para pagos instantáneos y microtransacciones. Confirmaciones en &lt;5 segundos con comisiones mínimas.</p>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-green">🏦 CBDCs</span>
+      <p>Monedas digitales de bancos centrales integradas con infraestructura cripto. Regulación y adopción masiva esperada 2025–2027.</p>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-purple">🌐 Web3 Commerce</span>
+      <p>NFTs como tokens de lealtad, contratos inteligentes para pagos. Tokenización de productos físicos y experiencias descentralizadas.</p>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-amber">🧩 Composable Commerce</span>
+      <p>Combinar los mejores componentes de distintos proveedores. Arquitecturas headless con separación frontend/backend.</p>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-blue">📱 Mobile-First</span>
+      <p>Experiencias omnicanal integradas: web, app y punto físico. El enfoque serverless reduce costos operativos y mejora escalabilidad.</p>
+    </div>
+    <div class="block">
+      <span class="lbl lbl-green">⚙️ Microservicios</span>
+      <p>Transición desde monolitos hacia modularidad en operaciones medianas y grandes. Mayor flexibilidad y mantenibilidad.</p>
+    </div>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="verdict" style="margin-top:2.5rem;">
+    <h3>🎓 Conclusiones Clave del Curso</h3>
+    <div class="g2" style="margin-top:1rem;">
+      <div>
+        <div class="kv">
+          <div class="kv-row"><span class="kv-key">Plataforma universal perfecta</span><span class="kv-val r">No existe</span></div>
+          <div class="kv-row"><span class="kv-key">Mejor entrada para PYMEs</span><span class="kv-val g">WooCommerce</span></div>
+          <div class="kv-row"><span class="kv-key">Pasarela recomendada en Panamá</span><span class="kv-val g">BitPay + PagueloFácil</span></div>
+          <div class="kv-row"><span class="kv-key">Criptos sin volatilidad</span><span class="kv-val g">Stablecoins (USDC, DAI)</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="kv">
+          <div class="kv-row"><span class="kv-key">Evaluar siempre el TCO</span><span class="kv-val">A 3 años, no solo inicio</span></div>
+          <div class="kv-row"><span class="kv-key">Criptomonedas como 2º uso</span><span class="kv-val">Después de inversión/especulación</span></div>
+          <div class="kv-row"><span class="kv-key">Magento se justifica cuando</span><span class="kv-val">Escala media-grande + B2B</span></div>
+          <div class="kv-row"><span class="kv-key">Node.js es correcto cuando</span><span class="kv-val">Requerimientos únicos e irrepetibles</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
