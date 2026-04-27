@@ -90,9 +90,37 @@ main { max-width:1000px; margin:0 auto; padding:40px 20px; }
 
 /* PROCESS STRIP */
 .proc-strip {
-  display:flex; gap:0; overflow-x:auto;
-  padding-bottom:8px;
-  border-radius:12px; overflow:hidden;
+  display: flex;
+  gap: 0;
+  overflow-x: auto; /* Permite el scroll horizontal */
+  padding-bottom: 8px;
+  border-radius: 12px;
+  
+  /* Evita que los elementos se amontonen y los obliga a mantener su tamaño */
+  flex-wrap: nowrap; 
+  
+  /* Mejora la experiencia en móviles (scroll suave) */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Opcional: Estilizado de la barra de scroll para que no se vea tosca */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+/* Estilo para Chrome, Edge y Safari */
+.proc-strip::-webkit-scrollbar {
+  height: 6px;
+}
+
+.proc-strip::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+/* IMPORTANTE: Los elementos hijos deben tener un tamaño mínimo 
+   o evitar que se encojan */
+.proc-strip > div {
+  flex: 0 0 auto; 
 }
 .proc-item {
   flex:1; min-width:140px;
