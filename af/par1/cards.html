@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Administración General</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --teal: #0d9488;
+    --teal-light: #14b8a6;
+    --gold: #f59e0b;
+    --cream: #fafaf7;
+    --white: #ffffff;
+    --gray: #64748b;
+    --light: #f1f5f9;
+    --border: #e2e8f0;
+    --card-h: 320px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(15,31,61,.35);
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    letter-spacing: .5px;
+  }
+  header h1 span { color: var(--teal-light); }
+  .header-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .stat-chip {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: .8rem;
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+  .stat-chip strong { color: var(--teal-light); }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: var(--navy);
+    padding: 0 32px 16px;
+  }
+  .progress-track {
+    background: rgba(255,255,255,.12);
+    border-radius: 999px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    border-radius: 999px;
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* CATEGORIES */
+  .categories {
+    padding: 24px 32px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cat-btn {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 2px solid var(--border);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--gray);
+    cursor: pointer;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cat-btn .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .cat-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .cat-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .cat-btn.active .dot { background: var(--teal-light) !important; }
+
+  /* CARD AREA */
+  .card-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px;
+    gap: 24px;
+  }
+  .card-counter {
+    font-size: .85rem;
+    color: var(--gray);
+    font-weight: 500;
+  }
+
+  /* FLIP CARD */
+  .flip-container {
+    width: 100%;
+    max-width: 680px;
+    height: var(--card-h);
+    perspective: 1200px;
+    cursor: pointer;
+  }
+  .flip-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .55s cubic-bezier(.4,0,.2,1);
+  }
+  .flip-container.flipped .flip-inner { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(15,31,61,.12);
+  }
+  .card-front {
+    background: var(--white);
+    border: 2px solid var(--border);
+  }
+  .card-front .category-tag {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+    color: var(--white);
+  }
+  .card-front .hint {
+    position: absolute;
+    bottom: 18px;
+    color: #94a3b8;
+    font-size: .75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-front .hint svg { width:14px; height:14px; }
+  .card-question {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+  .card-back {
+    background: var(--navy);
+    transform: rotateY(180deg);
+  }
+  .card-back .card-answer {
+    font-size: 1rem;
+    color: #e2e8f0;
+    line-height: 1.7;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  .card-back .card-answer::-webkit-scrollbar { width: 4px; }
+  .card-back .card-answer::-webkit-scrollbar-track { background: transparent; }
+  .card-back .card-answer::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 4px; }
+  .card-back .know-label {
+    position: absolute;
+    top: 18px;
+    color: var(--teal-light);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-prev, .btn-next {
+    background: var(--white);
+    border: 2px solid var(--border);
+    color: var(--navy);
+  }
+  .btn-prev:hover, .btn-next:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  .btn-know {
+    background: var(--teal);
+    color: var(--white);
+  }
+  .btn-know:hover { background: #0b8278; }
+  .btn-shuffle {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  .btn-shuffle:hover { opacity: .88; }
+
+  /* KNOWN TRACKER */
+  .known-strip {
+    width: 100%;
+    max-width: 680px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .known-strip .label { font-size: .82rem; color: var(--gray); font-weight: 500; }
+  .known-strip .bars { flex: 1; display: flex; gap: 3px; flex-wrap: wrap; }
+  .known-dot {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    background: var(--border);
+    transition: background .3s;
+  }
+  .known-dot.known { background: var(--teal); }
+  .known-pct { font-weight: 700; color: var(--teal); font-size: .9rem; }
+
+  svg.icon { display:inline-block; vertical-align:middle; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Flash<span>cards</span> — Administración</h1>
+  <div class="header-stats">
+    <div class="stat-chip">Total: <strong id="hd-total">0</strong></div>
+    <div class="stat-chip">Aprendidas: <strong id="hd-known">0</strong></div>
+  </div>
+</header>
+<div class="progress-bar-wrap">
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="categories" id="catArea"></div>
+
+<div class="card-area">
+  <div class="card-counter" id="counter">Tarjeta 1 de 1</div>
+
+  <div class="flip-container" id="flipCard">
+    <div class="flip-inner" id="flipInner">
+      <div class="card-face card-front" id="cardFront">
+        <span class="category-tag" id="catTag"></span>
+        <p class="card-question" id="cardQ">Cargando...</p>
+        <span class="hint">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+          Haz clic para ver la respuesta
+        </span>
+      </div>
+      <div class="card-face card-back">
+        <span class="know-label">✦ Respuesta</span>
+        <p class="card-answer" id="cardA"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-prev" onclick="navigate(-1)">← Anterior</button>
+    <button class="btn btn-know" onclick="markKnown()">✓ La sé</button>
+    <button class="btn btn-next" onclick="navigate(1)">Siguiente →</button>
+    <button class="btn btn-shuffle" onclick="shuffleCards()">⇄ Mezclar</button>
+  </div>
+
+  <div class="known-strip">
+    <span class="label">Progreso</span>
+    <div class="bars" id="dotBars"></div>
+    <span class="known-pct" id="knownPct">0%</span>
+  </div>
+</div>
+
+<script>
+const CAT_COLORS = {
+  'Administración General': '#0d9488',
+  'La Empresa': '#7c3aed',
+  'Finanzas': '#d97706',
+  'Proceso Administrativo': '#0369a1',
+  'Recursos': '#be185d',
+  'Habilidades Gerenciales': '#065f46'
+};
+
+const ALL_CARDS = [
+  // ─── ADMINISTRACIÓN GENERAL ───
+  { cat:'Administración General', q:'¿Qué es la Administración?', a:'Proceso para lograr la ejecución de planes y proyectos, con efectividad y eficiencia, a través de otras personas y junto con ellas.' },
+  { cat:'Administración General', q:'¿Qué es la Eficiencia en administración?', a:'Hacer las cosas correctamente; se refiere a la relación entre insumos y productos. Se busca reducir al mínimo el costo de los recursos.' },
+  { cat:'Administración General', q:'¿Qué es la Eficacia en administración?', a:'Hacer las cosas correctas; alcanzar las metas establecidas.' },
+  { cat:'Administración General', q:'¿Cuáles son las 5 actividades del proceso administrativo?', a:'Planear, Organizar, Integrar, Dirigir y Controlar.' },
+  { cat:'Administración General', q:'¿Qué es una Organización?', a:'Un grupo de personas ordenadas de forma sistemática, reunidas para un propósito específico. Es donde trabajan los gerentes.' },
+  { cat:'Administración General', q:'¿Cuáles son las 3 características comunes de las organizaciones?', a:'1) Propósitos o metas. 2) Personas. 3) Estructura sistemática.' },
+  { cat:'Administración General', q:'¿Quiénes son los trabajadores Operativos?', a:'Personas que desempeñan directamente un trabajo o tarea y NO son responsables de supervisar el trabajo de otros.' },
+  { cat:'Administración General', q:'¿Quiénes son los Gerentes?', a:'Individuos que dirigen las actividades de otros individuos en la organización.' },
+  { cat:'Administración General', q:'¿Qué son las Competencias Gerenciales?', a:'Conjunto de conocimientos, habilidades y actitudes afines que se relacionan con el buen desempeño del gerente.' },
+  { cat:'Administración General', q:'¿Cuáles son las 6 normas del esquema de competencias gerenciales?', a:'1) Obtener resultados. 2) Proporcionar instrucciones. 3) Facilitar el cambio. 4) Trabajar con empleados. 5) Utilizar recursos. 6) Gestionar las competencias propias.' },
+
+  // ─── PROCESO ADMINISTRATIVO ───
+  { cat:'Proceso Administrativo', q:'¿En qué consiste PLANEAR?', a:'Incluye definir metas, establecer estrategias y elaborar planes para coordinar actividades.' },
+  { cat:'Proceso Administrativo', q:'¿En qué consiste ORGANIZAR?', a:'Determinar qué tareas se llevarán a cabo, quién las hará, cómo estarán agrupadas, quién depende de quién y dónde se tomarán las decisiones.' },
+  { cat:'Proceso Administrativo', q:'¿En qué consiste DIRIGIR?', a:'Motivar a empleados, orientar actividades de otros, elegir el canal más eficaz de comunicación y resolver conflictos.' },
+  { cat:'Proceso Administrativo', q:'¿En qué consiste CONTROLAR?', a:'Proceso de monitorear el desempeño, compararlo con las metas y corregir cualquier desviación significativa.' },
+
+  // ─── HABILIDADES GERENCIALES ───
+  { cat:'Habilidades Gerenciales', q:'¿Cuáles son las 4 habilidades generales del gerente exitoso?', a:'1) Habilidades conceptuales. 2) Habilidades interpersonales. 3) Habilidades técnicas. 4) Habilidades políticas.' },
+  { cat:'Habilidades Gerenciales', q:'¿Cuáles son los 3 tipos de gerentes por clasificación?', a:'1) Gerentes de primera línea (supervisores diarios). 2) Gerentes de nivel medio. 3) Gerentes de nivel alto (toman decisiones directivas).' },
+  { cat:'Habilidades Gerenciales', q:'¿Qué hacen los Gerentes de Primera Línea?', a:'Son supervisores encargados de dirigir las actividades diarias de los empleados operativos.' },
+  { cat:'Habilidades Gerenciales', q:'¿Qué hacen los Gerentes de Nivel Alto?', a:'Se encargan de tomar decisiones directivas en cuanto al rumbo de la organización y establecer políticas que afectan a todos los miembros.' },
+  { cat:'Habilidades Gerenciales', q:'¿Cuáles son los 6 comportamientos de efectividad gerencial?', a:'1) Controlar el entorno y sus recursos. 2) Organizar y coordinar. 3) Manejar información. 4) Propiciar el crecimiento. 5) Motivar y manejar conflictos. 6) Resolver problemas estratégicos.' },
+
+  // ─── LA EMPRESA ───
+  { cat:'La Empresa', q:'¿De dónde proviene la palabra "Empresa" y qué significa?', a:'Proviene del latín "Emprendere", que significa iniciar alguna actividad.' },
+  { cat:'La Empresa', q:'¿Qué es una Empresa?', a:'Unidad económico-social en la cual, a través del capital, el trabajo y la coordinación de recursos, se producen bienes y servicios para satisfacer necesidades de la sociedad.' },
+  { cat:'La Empresa', q:'¿Cuándo surgió y se desarrolló la empresa moderna?', a:'Surgió y se desarrolló durante la Revolución Industrial, aunque desde siempre, con la división del trabajo, existieron formas de organización similares.' },
+  { cat:'La Empresa', q:'¿Qué son los Recursos de la Empresa?', a:'Son los elementos indispensables para el funcionamiento de la empresa. El éxito depende de su adecuada elección, combinación, armonización y distribución.' },
+  { cat:'La Empresa', q:'¿Qué son los Recursos Financieros?', a:'Son los elementos monetarios de que dispone la empresa. Provienen de aportaciones de socios, utilidades, ventas, préstamos, créditos y emisión de valores.' },
+  { cat:'La Empresa', q:'¿Qué son los Recursos Tecnológicos?', a:'Conjunto de conocimientos, técnicas, procedimientos y métodos de trabajo. Se clasifican en: equipo, operación, producto, sistemas informáticos, fórmulas, patentes y marcas.' },
+  { cat:'La Empresa', q:'¿Cuáles son las categorías de clasificación de empresas?', a:'Se clasifican por: tamaño, finalidad, actividad económica, filosofía y valores, tecnología y régimen jurídico.' },
+
+  // ─── RECURSOS ───
+  { cat:'Recursos', q:'¿Por qué es importante la correcta gestión de recursos?', a:'Porque el éxito de cualquier organización depende de la adecuada elección, combinación y armonización de los recursos, así como de su mejor empleo y distribución.' },
+  { cat:'Recursos', q:'¿De qué depende el logro de los objetivos organizacionales según los Recursos Financieros?', a:'Depende de la adecuada asignación, planeación y control de los recursos financieros.' },
+  { cat:'Recursos', q:'¿Para qué es básico el análisis de la tecnología en la empresa?', a:'Para optimizar todos los recursos y producir artículos y servicios competitivos.' },
+
+  // ─── FINANZAS ───
+  { cat:'Finanzas', q:'¿Cómo se definen las Finanzas?', a:'Como el arte y la ciencia de administrar el dinero. Se ocupan del proceso, instituciones, mercados e instrumentos que participan en la transferencia de dinero entre individuos, empresas y gobiernos.' },
+  { cat:'Finanzas', q:'¿Cuáles son las 2 grandes áreas de las Finanzas?', a:'1) Servicios financieros. 2) Finanzas administrativas.' },
+  { cat:'Finanzas', q:'¿Cuál es la diferencia entre Invertir y Ahorrar?', a:'La diferencia está en el riesgo. Invertir implica correr riesgo con el capital inicial para hacerlo crecer. Ahorrar es apartar ingresos sin disponer de ellos, con menor riesgo.' },
+  { cat:'Finanzas', q:'¿Qué son las Decisiones de Financiamiento?', a:'Se refiere a las fuentes de financiamiento que generan deudas: bancos, préstamos y compañías comerciales. Los productos incluyen Capital de Riesgo, Créditos Comerciales, Leasing, entre otros.' },
+  { cat:'Finanzas', q:'¿Qué determina el tamaño de la función financiera en una empresa?', a:'Las dimensiones de la empresa. En pequeñas empresas lo asume contabilidad; conforme crece, se convierte en un departamento independiente.' },
+  { cat:'Finanzas', q:'¿Qué es el análisis de costos y beneficios marginales?', a:'Principio económico que establece que deben tomarse decisiones financieras y llevarse a cabo acciones solo cuando los beneficios adicionales excedan los costos adicionales.' },
+  { cat:'Finanzas', q:'¿Cómo se relacionan las Finanzas con la Economía?', a:'Los gerentes financieros deben comprender la estructura económica, estar atentos a los niveles de actividad económica, cambios en política económica y usar teorías económicas como guías.' },
+  { cat:'Finanzas', q:'¿Cuál es la diferencia entre el enfoque contable y financiero en la toma de decisiones?', a:'Los contadores usan base devengada y recopilan datos. Los gerentes financieros usan base de efectivo (flujos de efectivo), evalúan estados contables y toman decisiones según rendimientos y riesgos.' },
+  { cat:'Finanzas', q:'¿Qué es la Cartera de Inversión o Portafolio?', a:'Es un conjunto de instrumentos de inversión. La inversión implica correr riesgo con el capital inicial, que puede incrementar o disminuir dependiendo de los instrumentos utilizados.' },
+  { cat:'Finanzas', q:'¿Cómo se relacionan Finanzas y Contabilidad?', a:'Están estrechamente relacionadas. En empresas pequeñas el contador realiza funciones financieras; en grandes, los analistas financieros ayudan a recopilar información contable.' },
+];
+
+// STATE
+let filtered = [...ALL_CARDS];
+let currentIdx = 0;
+let known = new Set();
+let activeCategories = new Set(['Todas']);
+const cats = ['Todas', ...Object.keys(CAT_COLORS)];
+
+function buildCatButtons() {
+  const area = document.getElementById('catArea');
+  area.innerHTML = '';
+  cats.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (activeCategories.has(c) ? ' active' : '');
+    const color = c === 'Todas' ? '#0d9488' : (CAT_COLORS[c] || '#888');
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = c === 'Todas' ? '#14b8a6' : color;
+    btn.appendChild(dot);
+    btn.appendChild(document.createTextNode(c));
+    btn.onclick = () => toggleCat(c);
+    area.appendChild(btn);
+  });
+}
+
+function toggleCat(c) {
+  if (c === 'Todas') {
+    activeCategories = new Set(['Todas']);
+  } else {
+    activeCategories.delete('Todas');
+    if (activeCategories.has(c)) activeCategories.delete(c);
+    else activeCategories.add(c);
+    if (activeCategories.size === 0) activeCategories.add('Todas');
+  }
+  buildCatButtons();
+  applyFilter();
+}
+
+function applyFilter() {
+  if (activeCategories.has('Todas')) {
+    filtered = [...ALL_CARDS];
+  } else {
+    filtered = ALL_CARDS.filter(c => activeCategories.has(c.cat));
+  }
+  currentIdx = 0;
+  renderCard();
+}
+
+function renderCard() {
+  if (filtered.length === 0) return;
+  const card = filtered[currentIdx];
+  document.getElementById('cardQ').textContent = card.q;
+  document.getElementById('cardA').textContent = card.a;
+  const tag = document.getElementById('catTag');
+  tag.textContent = card.cat;
+  tag.style.background = CAT_COLORS[card.cat] || '#888';
+  document.getElementById('counter').textContent = `Tarjeta ${currentIdx+1} de ${filtered.length}`;
+  document.getElementById('flipCard').classList.remove('flipped');
+  updateStats();
+  buildDots();
+}
+
+function navigate(dir) {
+  document.getElementById('flipCard').classList.remove('flipped');
+  setTimeout(() => {
+    currentIdx = (currentIdx + dir + filtered.length) % filtered.length;
+    renderCard();
+  }, 150);
+}
+
+function markKnown() {
+  const card = filtered[currentIdx];
+  const key = card.q;
+  if (known.has(key)) known.delete(key);
+  else known.add(key);
+  updateStats();
+  buildDots();
+  navigate(1);
+}
+
+function shuffleCards() {
+  for (let i = filtered.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+  }
+  currentIdx = 0;
+  renderCard();
+}
+
+function updateStats() {
+  const total = filtered.length;
+  const k = filtered.filter(c => known.has(c.q)).length;
+  document.getElementById('hd-total').textContent = total;
+  document.getElementById('hd-known').textContent = k;
+  document.getElementById('knownPct').textContent = total ? Math.round(k/total*100)+'%' : '0%';
+  document.getElementById('prog-fill').style.width = total ? (k/total*100)+'%' : '0%';
+}
+
+function buildDots() {
+  const container = document.getElementById('dotBars');
+  container.innerHTML = '';
+  filtered.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className = 'known-dot' + (known.has(c.q) ? ' known' : '');
+    d.title = c.q;
+    d.style.cursor = 'pointer';
+    d.onclick = () => { currentIdx = i; renderCard(); };
+    container.appendChild(d);
+  });
+}
+
+// FLIP
+document.getElementById('flipCard').addEventListener('click', () => {
+  document.getElementById('flipCard').classList.toggle('flipped');
+});
+
+// KEYBOARD
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+  if (e.key === ' ') { e.preventDefault(); document.getElementById('flipCard').classList.toggle('flipped'); }
+  if (e.key === 'Enter') markKnown();
+});
+
+// INIT
+buildCatButtons();
+applyFilter();
+</script>
+</body>
+</html>

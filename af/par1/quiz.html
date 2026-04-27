@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Administración General (100 preguntas)</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120;
+    --surface: #111827;
+    --surface2: #1f2937;
+    --border: #2d3748;
+    --accent: #6366f1;
+    --accent2: #a78bfa;
+    --green: #10b981;
+    --red: #ef4444;
+    --gold: #f59e0b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ─── INTRO SCREEN ─── */
+  #screen-intro {
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 10%, rgba(167,139,250,.12) 0%, transparent 50%),
+                var(--bg);
+  }
+  .intro-box {
+    max-width: 580px;
+    width: 100%;
+    text-align: center;
+  }
+  .intro-badge {
+    display: inline-block;
+    background: rgba(99,102,241,.2);
+    border: 1px solid rgba(99,102,241,.4);
+    color: var(--accent2);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .intro-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--white), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .intro-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+  .intro-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .istat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 12px;
+  }
+  .istat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent2); }
+  .istat-lbl { font-size: .75rem; color: var(--muted); margin-top: 4px; }
+  .start-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s;
+    letter-spacing: .5px;
+  }
+  .start-btn:hover { opacity: .88; transform: translateY(-1px); }
+
+  /* ─── QUIZ SCREEN ─── */
+  #screen-quiz {
+    min-height: 100vh;
+    padding: 0;
+  }
+  .quiz-topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .q-progress-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .q-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 999px;
+    transition: width .4s ease;
+  }
+  .q-nums { color: var(--muted); font-size: .85rem; white-space: nowrap; }
+  .score-live {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .score-live .correct { color: var(--green); font-weight: 700; font-size: .85rem; }
+  .score-live .wrong { color: var(--red); font-weight: 700; font-size: .85rem; }
+
+  .quiz-body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+  .question-cat {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .question-text {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 300;
+    line-height: 1.5;
+    margin-bottom: 32px;
+    color: var(--white);
+  }
+  .options-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .option-btn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: left;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: .95rem;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: border-color .15s, background .15s;
+    line-height: 1.5;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(99,102,241,.08);
+  }
+  .option-btn .letter {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .8rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: rgba(16,185,129,.1);
+  }
+  .option-btn.correct .letter { background: var(--green); color: var(--white); }
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: rgba(239,68,68,.1);
+  }
+  .option-btn.wrong .letter { background: var(--red); color: var(--white); }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    margin-top: 24px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    font-size: .9rem;
+    line-height: 1.6;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.ok { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3); color: #6ee7b7; }
+  .feedback-box.fail { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25); color: #fca5a5; }
+  .feedback-box strong { color: var(--white); }
+
+  .next-btn {
+    margin-top: 28px;
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: none;
+    transition: opacity .2s;
+  }
+  .next-btn:hover { opacity: .88; }
+  .next-btn.show { display: block; }
+
+  /* ─── RESULT SCREEN ─── */
+  #screen-result {
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(99,102,241,.2), transparent 60%), var(--bg);
+  }
+  .result-box {
+    max-width: 580px;
+    width: 100%;
+    text-align: center;
+  }
+  .result-emoji { font-size: 4rem; margin-bottom: 16px; display: block; }
+  .result-title {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+    color: var(--white);
+  }
+  .result-score-big {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 24px 0;
+    background: linear-gradient(135deg, var(--accent2), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0 36px;
+  }
+  .rstat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 10px;
+  }
+  .rstat-num { font-size: 1.8rem; font-weight: 700; }
+  .rstat-num.g { color: var(--green); }
+  .rstat-num.r { color: var(--red); }
+  .rstat-num.b { color: var(--accent2); }
+  .rstat-lbl { font-size: .75rem; color: var(--muted); margin-top: 4px; }
+  .result-msg { color: var(--muted); margin-bottom: 32px; font-size: .95rem; line-height: 1.6; }
+  .retry-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: opacity .2s;
+  }
+  .retry-btn:hover { opacity: .88; }
+
+  /* CAT BREAKDOWN */
+  .cat-breakdown {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 24px;
+    text-align: left;
+  }
+  .cat-breakdown h3 {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .cat-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .cat-row-name { font-size: .82rem; color: var(--text); min-width: 180px; }
+  .cat-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 999px; background: var(--accent); }
+  .cat-row-pct { font-size: .8rem; color: var(--muted); min-width: 38px; text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-box">
+    <div class="intro-badge">🎓 Administración General</div>
+    <h1 class="intro-title">Quiz de<br>100 Preguntas</h1>
+    <p class="intro-sub">Pon a prueba tus conocimientos sobre Administración, la Empresa y Finanzas. Cada pregunta tiene 4 opciones y feedback inmediato.</p>
+    <div class="intro-stats">
+      <div class="istat"><div class="istat-num">100</div><div class="istat-lbl">Preguntas</div></div>
+      <div class="istat"><div class="istat-num">5</div><div class="istat-lbl">Categorías</div></div>
+      <div class="istat"><div class="istat-num">4</div><div class="istat-lbl">Opciones c/u</div></div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">Comenzar Quiz →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-topbar">
+    <div class="q-nums" id="qNums">1 / 100</div>
+    <div class="q-progress-track"><div class="q-progress-fill" id="qProg" style="width:1%"></div></div>
+    <div class="score-live">
+      <span class="correct" id="liveCorrect">✓ 0</span>
+      <span class="wrong" id="liveWrong">✗ 0</span>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div class="question-cat" id="qCat"></div>
+    <div class="question-text" id="qText"></div>
+    <div class="options-grid" id="optGrid"></div>
+    <div class="feedback-box" id="feedback"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Siguiente pregunta →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-result">
+  <div class="result-box">
+    <span class="result-emoji" id="resEmoji">🏆</span>
+    <h2 class="result-title" id="resTitle">¡Excelente!</h2>
+    <div class="result-score-big" id="resBig">0%</div>
+    <div class="result-grid">
+      <div class="rstat"><div class="rstat-num g" id="resCorrect">0</div><div class="rstat-lbl">Correctas</div></div>
+      <div class="rstat"><div class="rstat-num r" id="resWrong">0</div><div class="rstat-lbl">Incorrectas</div></div>
+      <div class="rstat"><div class="rstat-num b" id="resPct">0%</div><div class="rstat-lbl">Puntaje</div></div>
+    </div>
+    <p class="result-msg" id="resMsg"></p>
+    <button class="retry-btn" onclick="startQuiz()">🔄 Intentar de nuevo</button>
+    <div class="cat-breakdown" id="catBreakdown"></div>
+  </div>
+</div>
+
+<script>
+const BANK = [
+  // ─── ADMINISTRACIÓN GENERAL (22 preguntas) ───
+  { cat:'Administración General', q:'¿Qué es la Administración?', correct:'Proceso para lograr la ejecución de planes y proyectos, con efectividad y eficiencia, a través de otras personas.', wrong:['Sistema de control financiero de una empresa','Técnica exclusiva de resolución de conflictos laborales','Método de producción industrial masivo'] },
+  { cat:'Administración General', q:'¿Qué significa Eficiencia en administración?', correct:'Hacer las cosas correctamente; relación entre insumos y productos buscando reducir costos al mínimo.', wrong:['Alcanzar las metas sin importar el costo','Supervisar a los empleados constantemente','Maximizar las ganancias de la empresa'] },
+  { cat:'Administración General', q:'¿Qué significa Eficacia en administración?', correct:'Hacer las cosas correctas; alcanzar las metas establecidas.', wrong:['Reducir al mínimo los costos de producción','Controlar los recursos financieros disponibles','Organizar las actividades del personal operativo'] },
+  { cat:'Administración General', q:'¿Cuáles son las actividades del proceso administrativo?', correct:'Planear, Organizar, Integrar, Dirigir y Controlar.', wrong:['Producir, Vender, Distribuir, Facturar y Cobrar','Contratar, Capacitar, Supervisar, Despedir y Evaluar','Invertir, Financiar, Auditar, Reportar y Pagar'] },
+  { cat:'Administración General', q:'¿Qué es una Organización?', correct:'Un grupo de personas ordenadas de forma sistemática, reunidas para un propósito específico.', wrong:['Un documento legal que regula las empresas','Una jerarquía de cargos dentro de una empresa','Un sistema de pagos y beneficios para empleados'] },
+  { cat:'Administración General', q:'¿Cuáles son las características comunes de las organizaciones?', correct:'Propósitos o metas, Personas y Estructura sistemática.', wrong:['Capital, Tecnología y Mercado','Productos, Servicios y Clientes','Gerentes, Operativos y Accionistas'] },
+  { cat:'Administración General', q:'¿Quiénes son los trabajadores Operativos?', correct:'Personas que desempeñan directamente un trabajo o tarea, sin responsabilidad de supervisar a otros.', wrong:['Individuos que toman decisiones estratégicas en la empresa','Personas encargadas de la planificación financiera','Trabajadores que coordinan diferentes departamentos'] },
+  { cat:'Administración General', q:'¿Quiénes son los Gerentes?', correct:'Individuos que dirigen las actividades de otros individuos en la organización.', wrong:['Personas especializadas en tareas técnicas específicas','Trabajadores que realizan tareas operativas directas','Empleados encargados exclusivamente de recursos humanos'] },
+  { cat:'Administración General', q:'¿Qué son las Competencias Gerenciales?', correct:'Conjunto de conocimientos, habilidades y actitudes afines que se relacionan con el buen desempeño del gerente.', wrong:['Certificaciones académicas requeridas para ser gerente','Los títulos universitarios que un gerente debe poseer','Las metas anuales asignadas a los departamentos'] },
+  { cat:'Administración General', q:'¿Cuántas normas tiene el esquema de competencias gerenciales?', correct:'6 normas: obtener resultados, dar instrucciones, facilitar cambio, trabajar con empleados, utilizar recursos y gestionar competencias propias.', wrong:['4 normas relacionadas con planificación y control','8 normas que cubren todos los aspectos de gestión','3 normas básicas de liderazgo empresarial'] },
+  { cat:'Administración General', q:'¿Cuál es el objetivo de las Competencias Gerenciales?', correct:'Relacionarse con el buen desempeño del gerente en su labor directiva.', wrong:['Evaluar el desempeño de los empleados operativos','Establecer las políticas salariales de la empresa','Regular los procesos de producción de la organización'] },
+  { cat:'Administración General', q:'¿Qué busca la Administración en términos de recursos?', correct:'Lograr la ejecución de planes con efectividad y eficiencia, reduciendo al mínimo el costo de los recursos.', wrong:['Maximizar el uso de todos los recursos disponibles sin límite','Eliminar la necesidad de supervisión en la empresa','Concentrar los recursos en el área de producción únicamente'] },
+  { cat:'Administración General', q:'¿Qué diferencia hay entre un operativo y un gerente?', correct:'El operativo ejecuta tareas directas sin supervisar; el gerente dirige las actividades de otros.', wrong:['No hay diferencia, ambos realizan las mismas funciones','El operativo tiene mayor responsabilidad que el gerente','El gerente realiza tareas técnicas mientras el operativo supervisa'] },
+  { cat:'Administración General', q:'¿Cuál de estas NO es una actividad del proceso administrativo?', correct:'Producir', wrong:['Planear','Controlar','Dirigir'] },
+
+  // ─── PROCESO ADMINISTRATIVO (15 preguntas) ───
+  { cat:'Proceso Administrativo', q:'¿Qué incluye la función de PLANEAR?', correct:'Definir metas, establecer estrategias y elaborar planes para coordinar actividades.', wrong:['Supervisar el trabajo diario de los operativos','Medir el rendimiento de los empleados','Asignar tareas específicas a los departamentos'] },
+  { cat:'Proceso Administrativo', q:'¿Qué incluye la función de ORGANIZAR?', correct:'Determinar qué tareas se llevarán a cabo, quién las hará, cómo se agruparán y dónde se tomarán las decisiones.', wrong:['Establecer metas a largo plazo de la empresa','Monitorear el desempeño y compararlo con metas','Motivar a los empleados para alcanzar objetivos'] },
+  { cat:'Proceso Administrativo', q:'¿Qué incluye la función de DIRIGIR?', correct:'Motivar empleados, orientar actividades, elegir el canal más eficaz de comunicación y resolver conflictos.', wrong:['Definir estrategias y elaborar planes de acción','Determinar quién realizará cada tarea operativa','Monitorear el desempeño y corregir desviaciones'] },
+  { cat:'Proceso Administrativo', q:'¿En qué consiste CONTROLAR en administración?', correct:'Proceso de monitorear el desempeño, compararlo con las metas y corregir cualquier desviación significativa.', wrong:['Definir las metas y estrategias organizacionales','Motivar a los empleados y resolver conflictos','Determinar quién realiza cada tarea y cómo se agrupan'] },
+  { cat:'Proceso Administrativo', q:'¿Cuál es el propósito principal de la etapa de PLANEAR?', correct:'Coordinar actividades mediante la definición de metas y estrategias.', wrong:['Supervisar que los empleados cumplan sus tareas','Medir los resultados obtenidos por la organización','Asignar recursos financieros a los departamentos'] },
+  { cat:'Proceso Administrativo', q:'¿Qué pregunta responde principalmente la función de ORGANIZAR?', correct:'¿Quién hará qué tarea, cómo se agruparán y dónde se tomarán las decisiones?', wrong:['¿Cuáles son las metas y estrategias de la empresa?','¿El desempeño cumple con las metas establecidas?','¿Cómo motivar a los empleados para trabajar mejor?'] },
+  { cat:'Proceso Administrativo', q:'¿Cuál etapa del proceso administrativo identifica desviaciones de las metas?', correct:'Controlar', wrong:['Planear','Organizar','Dirigir'] },
+  { cat:'Proceso Administrativo', q:'¿En qué etapa se elige el canal más eficaz de comunicación?', correct:'Dirigir', wrong:['Planear','Organizar','Controlar'] },
+  { cat:'Proceso Administrativo', q:'¿Cuál es la relación entre Eficiencia y el proceso administrativo?', correct:'La Administración busca la eficiencia al reducir al mínimo el costo de recursos en la ejecución de planes.', wrong:['La eficiencia es exclusiva de la etapa de Controlar','La eficiencia no se relaciona con el proceso administrativo','La eficiencia solo aplica a procesos de producción'] },
+  { cat:'Proceso Administrativo', q:'¿Qué actividad implica establecer estrategias en el proceso administrativo?', correct:'Planear', wrong:['Organizar','Dirigir','Controlar'] },
+
+  // ─── HABILIDADES GERENCIALES (15 preguntas) ───
+  { cat:'Habilidades Gerenciales', q:'¿Cuáles son las 4 habilidades generales del gerente exitoso?', correct:'Habilidades conceptuales, interpersonales, técnicas y políticas.', wrong:['Financieras, operativas, legales y comunicativas','Productivas, creativas, analíticas y sociales','Tecnológicas, económicas, jurídicas y administrativas'] },
+  { cat:'Habilidades Gerenciales', q:'¿Qué hacen los Gerentes de Primera Línea?', correct:'Son supervisores encargados de dirigir las actividades diarias de los empleados operativos.', wrong:['Toman decisiones estratégicas sobre el rumbo de la empresa','Se ubican entre los supervisores y los gerentes de nivel alto','Establecen políticas que afectan a todos los miembros'] },
+  { cat:'Habilidades Gerenciales', q:'¿Qué función tienen los Gerentes de Nivel Alto?', correct:'Toman decisiones directivas sobre el rumbo de la organización y establecen políticas que afectan a todos.', wrong:['Supervisan las actividades diarias de los operativos','Se ubican entre la primera línea y el nivel superior','Realizan tareas técnicas especializadas en la empresa'] },
+  { cat:'Habilidades Gerenciales', q:'¿Dónde se ubican los Gerentes de Nivel Medio?', correct:'Entre los gerentes de primera línea (supervisores) y los gerentes de nivel alto.', wrong:['Por encima de los gerentes de nivel alto','Al mismo nivel que los trabajadores operativos','En el nivel más bajo de la jerarquía organizacional'] },
+  { cat:'Habilidades Gerenciales', q:'¿Cuántos comportamientos de efectividad gerencial existen según el tema?', correct:'6: controlar entorno, organizar/coordinar, manejar información, propiciar crecimiento, motivar/manejar conflictos y resolver problemas estratégicos.', wrong:['4 comportamientos básicos de liderazgo','8 comportamientos relacionados con resultados','3 comportamientos fundamentales de gestión'] },
+  { cat:'Habilidades Gerenciales', q:'¿Cuál habilidad gerencial se refiere a las relaciones con las personas?', correct:'Habilidades interpersonales', wrong:['Habilidades técnicas','Habilidades conceptuales','Habilidades políticas'] },
+  { cat:'Habilidades Gerenciales', q:'¿Qué tipo de habilidad implica el conocimiento técnico del trabajo?', correct:'Habilidades técnicas', wrong:['Habilidades interpersonales','Habilidades conceptuales','Habilidades políticas'] },
+  { cat:'Habilidades Gerenciales', q:'¿Cuántos niveles de gerentes existen en la clasificación estudiada?', correct:'3 niveles: primera línea, nivel medio y nivel alto.', wrong:['2 niveles: directivos y supervisores','4 niveles: operativo, supervisión, media y alta dirección','5 niveles según la estructura organizacional'] },
+  { cat:'Habilidades Gerenciales', q:'¿Cuál comportamiento gerencial se relaciona con la gestión del conocimiento interno?', correct:'Manejar información', wrong:['Controlar el entorno y sus recursos','Organizar y coordinar actividades','Resolver problemas estratégicos'] },
+  { cat:'Habilidades Gerenciales', q:'¿Qué tipo de gerente establece las políticas de la organización?', correct:'Gerentes de nivel alto', wrong:['Gerentes de primera línea','Gerentes de nivel medio','Trabajadores operativos'] },
+
+  // ─── LA EMPRESA (24 preguntas) ───
+  { cat:'La Empresa', q:'¿De dónde viene la palabra "Empresa"?', correct:'Del latín "Emprendere", que significa iniciar alguna actividad.', wrong:['Del griego "Empresion", que significa comercio','Del francés "Entreprise", que significa acuerdo','Del inglés "Enterprise", que significa avanzar'] },
+  { cat:'La Empresa', q:'¿Cuál es la definición correcta de Empresa?', correct:'Unidad económico-social donde, mediante capital, trabajo y coordinación de recursos, se producen bienes y servicios para satisfacer necesidades de la sociedad.', wrong:['Organización cuyo único fin es generar ganancias para sus dueños','Grupo de personas reunidas para realizar actividades recreativas','Sistema de control de calidad para productos industriales'] },
+  { cat:'La Empresa', q:'¿En qué período histórico surgió y se desarrolló la empresa moderna?', correct:'Durante la Revolución Industrial.', wrong:['Durante la Edad Media con el comercio feudal','En la Antigua Grecia con el comercio marítimo','En el Renacimiento europeo del siglo XV'] },
+  { cat:'La Empresa', q:'¿Qué existió antes de la Revolución Industrial que se asemejaba a la empresa?', correct:'Formas de organización similares derivadas de la división del trabajo.', wrong:['Sistemas bancarios modernos de crédito','Mercados de valores bursátiles','Corporaciones multinacionales de comercio'] },
+  { cat:'La Empresa', q:'¿Qué son los Recursos de la Empresa?', correct:'Elementos indispensables para el funcionamiento de la empresa; su correcta gestión determina el éxito.', wrong:['Únicamente el capital financiero disponible','Solo el personal que trabaja en la organización','Los productos y servicios que la empresa ofrece'] },
+  { cat:'La Empresa', q:'¿De dónde provienen los Recursos Financieros de una empresa?', correct:'De aportaciones de socios, utilidades, ventas, préstamos, créditos y emisión de valores.', wrong:['Exclusivamente de préstamos bancarios a largo plazo','Solo de las ventas y la producción de la empresa','Únicamente de subsidios gubernamentales'] },
+  { cat:'La Empresa', q:'¿Qué incluye la clasificación de Recursos Tecnológicos?', correct:'Equipo, operación, producto, sistemas informáticos, fórmulas, patentes y marcas.', wrong:['Solo los equipos de cómputo y software','Únicamente las patentes y marcas registradas','El personal técnico y sus certificaciones'] },
+  { cat:'La Empresa', q:'¿Para qué sirven los Recursos Tecnológicos en la empresa?', correct:'Para optimizar todos los recursos y producir artículos y servicios competitivos.', wrong:['Solo para la automatización de procesos de producción','Exclusivamente para la gestión de recursos humanos','Para controlar los gastos financieros de la empresa'] },
+  { cat:'La Empresa', q:'¿Qué determina la clasificación de una empresa por TAMAÑO?', correct:'Las dimensiones de la empresa, como número de empleados, ventas o activos.', wrong:['El tipo de productos que la empresa elabora','El régimen legal bajo el que opera la empresa','Los valores éticos que guían a la organización'] },
+  { cat:'La Empresa', q:'¿Cómo se clasifican las empresas por su RÉGIMEN JURÍDICO?', correct:'Según la forma legal bajo la que están constituidas: S.A., S.R.L., empresas individuales, etc.', wrong:['Según el tamaño de su capital inicial','Según los valores éticos que promueven','Según la tecnología que utilizan en producción'] },
+  { cat:'La Empresa', q:'¿Qué factores determinan el éxito en la gestión de recursos de una empresa?', correct:'La adecuada elección, combinación, armonización, mejor empleo y distribución de los recursos.', wrong:['Tener la mayor cantidad posible de recursos financieros','Contratar al mayor número de empleados posible','Invertir exclusivamente en tecnología de punta'] },
+  { cat:'La Empresa', q:'¿Por qué difiere la cantidad y calidad de recursos entre organizaciones?', correct:'Porque difieren de acuerdo con las actividades específicas de cada organización.', wrong:['Porque todas las empresas tienen los mismos recursos','Porque el gobierno asigna recursos a cada empresa','Porque los recursos dependen solo del tamaño del mercado'] },
+  { cat:'La Empresa', q:'¿Qué son los Recursos Materiales de la empresa?', correct:'Los bienes tangibles que la empresa utiliza para su funcionamiento, como instalaciones, maquinaria y equipo.', wrong:['El dinero y los activos financieros de la empresa','Los conocimientos técnicos del personal','Los sistemas de información empresarial'] },
+  { cat:'La Empresa', q:'¿Qué abarca la Ética Empresarial?', correct:'Los valores y principios morales que guían el comportamiento de la empresa y sus miembros.', wrong:['Las normas técnicas de producción y calidad','Los procedimientos contables y financieros','Las estrategias de marketing y ventas'] },
+  { cat:'La Empresa', q:'¿Cuáles son los 3 elementos fundamentales que combinan las empresas?', correct:'Capital, trabajo y coordinación de recursos.', wrong:['Producción, distribución y consumo','Inversión, ganancia y reinversión','Planificación, ejecución y control'] },
+  { cat:'La Empresa', q:'¿Cuál es el objetivo social de la empresa?', correct:'Satisfacer las necesidades de la sociedad mediante la producción de bienes y servicios.', wrong:['Generar máximas ganancias para los accionistas','Crear empleos para reducir el desempleo nacional','Controlar el mercado y eliminar la competencia'] },
+
+  // ─── FINANZAS (24 preguntas) ───
+  { cat:'Finanzas', q:'¿Cómo se definen las Finanzas?', correct:'Como el arte y la ciencia de administrar el dinero, ocupándose de los procesos, instituciones, mercados e instrumentos de transferencia monetaria.', wrong:['Como la técnica de llevar los libros contables de una empresa','Como el sistema de control de gastos operativos','Como el método de cálculo de impuestos empresariales'] },
+  { cat:'Finanzas', q:'¿Cuáles son las 2 grandes áreas de las Finanzas?', correct:'Servicios financieros y Finanzas administrativas.', wrong:['Finanzas públicas y Finanzas privadas','Inversión y Ahorro','Crédito y Débito'] },
+  { cat:'Finanzas', q:'¿Qué implica la Inversión en finanzas?', correct:'Correr riesgo con el capital inicial, que puede incrementar o disminuir dependiendo de los instrumentos utilizados.', wrong:['Guardar dinero en una cuenta bancaria sin riesgo','Prestar dinero a terceros a una tasa de interés fija','Comprar bienes inmuebles como única estrategia'] },
+  { cat:'Finanzas', q:'¿Cuál es la diferencia entre Invertir y Ahorrar?', correct:'La diferencia está en el riesgo que se acepta para hacer crecer el dinero: invertir implica más riesgo que ahorrar.', wrong:['No hay diferencia, son el mismo concepto financiero','El ahorro siempre genera más rendimiento que la inversión','Invertir es exclusivo de grandes empresas, el ahorro es personal'] },
+  { cat:'Finanzas', q:'¿Qué es Ahorrar?', correct:'Apartar una porción de los ingresos sin gastarla; puede aumentar o no según los instrumentos de ahorro utilizados.', wrong:['Invertir en instrumentos financieros de alto riesgo','Prestar dinero a una institución bancaria','Adquirir activos que generan rendimientos garantizados'] },
+  { cat:'Finanzas', q:'¿Cuáles son algunas fuentes de financiamiento que generan deudas?', correct:'Bancos, préstamos y compañías comerciales de financiamiento.', wrong:['Solo los ahorros personales de los socios','Únicamente la emisión de acciones en bolsa','Solo las utilidades generadas por la empresa'] },
+  { cat:'Finanzas', q:'¿Qué es el Capital de Riesgo?', correct:'Una fuente de financiamiento disponible para las empresas, también llamado Capital Semilla para nuevos emprendimientos.', wrong:['Un fondo gubernamental de apoyo a desastres','Un tipo de seguro empresarial contra pérdidas','Una cuenta bancaria de alto rendimiento garantizado'] },
+  { cat:'Finanzas', q:'¿Cómo crece la función financiera en una empresa según su tamaño?', correct:'En pequeñas empresas la asume contabilidad; al crecer, se convierte en departamento independiente ligado al director general.', wrong:['Siempre es un departamento independiente desde el inicio','En grandes empresas la asume el área de ventas','No cambia; siempre mantiene la misma estructura'] },
+  { cat:'Finanzas', q:'¿Qué es el análisis de costos y beneficios marginales?', correct:'Principio económico que establece actuar solo cuando los beneficios adicionales excedan los costos adicionales.', wrong:['El cálculo total de todos los costos fijos de la empresa','La diferencia entre ingresos y gastos anuales','El método de depreciación de activos fijos'] },
+  { cat:'Finanzas', q:'¿Por qué los gerentes financieros deben comprender la economía?', correct:'Para entender la estructura económica, los niveles de actividad económica y los cambios en política económica que afectan sus decisiones.', wrong:['Para calcular los impuestos que debe pagar la empresa','Para llevar los libros contables con precisión','Para contratar y gestionar el personal de la empresa'] },
+  { cat:'Finanzas', q:'¿Cuál es la diferencia entre el enfoque contable y financiero?', correct:'Los contadores usan base devengada; en finanzas el enfoque está en los flujos de efectivo.', wrong:['Los contadores usan flujos de efectivo; finanzas usa base devengada','Ambos usan exactamente los mismos criterios y enfoques','Finanzas solo maneja datos históricos, contabilidad el futuro'] },
+  { cat:'Finanzas', q:'¿Qué hacen los contadores principalmente?', correct:'Recopilan y presentan datos financieros utilizando el método de base devengada.', wrong:['Evalúan rendimientos y riesgos para tomar decisiones','Establecen las estrategias financieras de la empresa','Analizan las inversiones en mercados de capital'] },
+  { cat:'Finanzas', q:'¿Qué hacen los gerentes financieros principalmente?', correct:'Evalúan estados contables, generan datos adicionales y toman decisiones según rendimientos y riesgos relacionados.', wrong:['Registran todas las transacciones en los libros contables','Elaboran declaraciones de impuestos de la empresa','Supervisan las actividades diarias del personal operativo'] },
+  { cat:'Finanzas', q:'¿Qué es el Leasing como instrumento de financiamiento?', correct:'Un tipo de arrendamiento financiero que permite a las empresas obtener el uso de activos sin comprarlos directamente.', wrong:['Un préstamo bancario a corto plazo sin garantías','Un bono corporativo emitido en el mercado de valores','Una modalidad de seguro empresarial contra riesgos'] },
+  { cat:'Finanzas', q:'¿Cómo se relacionan las Finanzas con la Economía según lo estudiado?', correct:'El campo financiero se relaciona con la economía; los gerentes deben usar teorías económicas como guías para una operación eficiente.', wrong:['Las finanzas son totalmente independientes de la economía','Solo macroeconomía afecta las decisiones financieras','Las finanzas solo se relacionan con la contabilidad, no la economía'] },
+  { cat:'Finanzas', q:'¿Qué incluyen las Decisiones de Financiamiento a Largo Plazo?', correct:'Decisiones sobre estructuras de capital permanente como emisión de acciones y bonos a largo plazo.', wrong:['Solo decisiones de crédito comercial a 90 días','Únicamente préstamos bancarios para nómina','Decisiones de compra de materias primas'] },
+  { cat:'Finanzas', q:'¿Cómo se relacionan contabilidad y finanzas en empresas pequeñas?', correct:'El contador realiza frecuentemente la función de finanzas, ya que ambas funciones están estrechamente relacionadas.', wrong:['Son departamentos completamente separados desde el inicio','El gerente financiero siempre supervisa al contador','La función financiera la realiza el área de ventas'] },
+  { cat:'Finanzas', q:'¿Qué estudia la Administración Financiera?', correct:'El proceso, instituciones, mercados e instrumentos que participan en la transferencia de dinero entre individuos, empresas y gobiernos.', wrong:['Solo la gestión del efectivo diario de la empresa','Únicamente los estados de resultados contables','Solo las inversiones en mercados bursátiles'] },
+  { cat:'Finanzas', q:'¿Cuándo se deben tomar decisiones financieras según el principio marginal?', correct:'Solo cuando los beneficios adicionales excedan los costos adicionales de la acción.', wrong:['Siempre que exista disponibilidad de fondos','Solo cuando la empresa tenga pérdidas acumuladas','Cuando el mercado esté en condiciones favorables'] },
+  { cat:'Finanzas', q:'¿Qué son los Sistemas de Garantías en el financiamiento?', correct:'Mecanismos que respaldan los créditos otorgados a empresas, reduciendo el riesgo para los prestamistas.', wrong:['Seguros de vida para los empleados de la empresa','Fondos de reserva para dividendos de accionistas','Contratos de arrendamiento de equipos industriales'] },
+];
+
+// STATE
+let questions = [];
+let currentQ = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let catStats = {};
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function startQuiz() {
+  // Build 100 question list: use all BANK questions, then duplicate/shuffle to reach 100
+  let pool = shuffle([...BANK]);
+  questions = [];
+  while (questions.length < 100) {
+    questions = questions.concat(shuffle([...BANK]));
+  }
+  questions = questions.slice(0, 100);
+
+  currentQ = 0; correctCount = 0; wrongCount = 0; catStats = {};
+
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('qCat').textContent = '✦ ' + q.cat;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qNums').textContent = `${currentQ+1} / 100`;
+  document.getElementById('qProg').style.width = ((currentQ+1)/100*100) + '%';
+  document.getElementById('liveCorrect').textContent = '✓ ' + correctCount;
+  document.getElementById('liveWrong').textContent = '✗ ' + wrongCount;
+
+  const opts = shuffle([q.correct, ...q.wrong]);
+  const letters = ['A','B','C','D'];
+  const grid = document.getElementById('optGrid');
+  grid.innerHTML = '';
+  opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="letter">${letters[i]}</span><span>${o}</span>`;
+    btn.onclick = () => selectOption(btn, o === q.correct, q);
+    grid.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback-box';
+  fb.textContent = '';
+  document.getElementById('nextBtn').classList.remove('show');
+}
+
+function selectOption(btn, isCorrect, q) {
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const txt = b.querySelector('span:last-child').textContent;
+    if (txt === q.correct) b.classList.add('correct');
+  });
+
+  const fb = document.getElementById('feedback');
+  if (isCorrect) {
+    correctCount++;
+    btn.classList.add('correct');
+    fb.className = 'feedback-box ok show';
+    fb.innerHTML = '<strong>✓ ¡Correcto!</strong> ' + q.correct;
+  } else {
+    wrongCount++;
+    btn.classList.add('wrong');
+    fb.className = 'feedback-box fail show';
+    fb.innerHTML = '<strong>✗ Incorrecto.</strong> La respuesta correcta es: ' + q.correct;
+  }
+
+  // cat stats
+  if (!catStats[q.cat]) catStats[q.cat] = { c:0, t:0 };
+  catStats[q.cat].t++;
+  if (isCorrect) catStats[q.cat].c++;
+
+  document.getElementById('liveCorrect').textContent = '✓ ' + correctCount;
+  document.getElementById('liveWrong').textContent = '✗ ' + wrongCount;
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= 100) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('quiz-body') && document.getElementById('quiz-body').scrollTo(0,0);
+    window.scrollTo(0,0);
+  }
+}
+
+function showResults() {
+  const pct = Math.round(correctCount/100*100);
+  let emoji = '😬', title = 'Sigue practicando', msg = 'Repasa los conceptos básicos y vuelve a intentarlo. ¡Tú puedes!';
+  if (pct >= 90) { emoji='🏆'; title='¡Extraordinario!'; msg='Dominas el tema de Administración General a la perfección.'; }
+  else if (pct >= 75) { emoji='🎉'; title='¡Excelente resultado!'; msg='Tienes un sólido dominio del tema. Repasa los errores para llegar al 100%.'; }
+  else if (pct >= 60) { emoji='👍'; title='¡Buen trabajo!'; msg='Vas por buen camino. Refuerza las categorías donde fallaste más.'; }
+  else if (pct >= 40) { emoji='📚'; title='En progreso'; msg='Tienes las bases. Dedica más tiempo a estudiar las flashcards y vuelve a intentarlo.'; }
+
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resTitle').textContent = title;
+  document.getElementById('resBig').textContent = pct + '%';
+  document.getElementById('resCorrect').textContent = correctCount;
+  document.getElementById('resWrong').textContent = wrongCount;
+  document.getElementById('resPct').textContent = pct + '%';
+  document.getElementById('resMsg').textContent = msg;
+
+  const breakdown = document.getElementById('catBreakdown');
+  let html = '<h3>Resultado por categoría</h3>';
+  Object.entries(catStats).forEach(([cat, stat]) => {
+    const p = stat.t ? Math.round(stat.c/stat.t*100) : 0;
+    html += `<div class="cat-row">
+      <span class="cat-row-name">${cat}</span>
+      <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${p}%;background:${p>=75?'#10b981':p>=50?'#6366f1':'#ef4444'}"></div></div>
+      <span class="cat-row-pct">${p}%</span>
+    </div>`;
+  });
+  breakdown.innerHTML = html;
+
+  showScreen('screen-result');
+}
+
+// KEYBOARD: Enter = siguiente
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const nb = document.getElementById('nextBtn');
+    if (nb && nb.classList.contains('show')) nextQuestion();
+  }
+});
+</script>
+</body>
+</html>

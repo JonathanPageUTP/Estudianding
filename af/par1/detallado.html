@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administración General & Finanzas — Guía Completa</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b2a;
+  --blue: #1b4f72;
+  --teal: #1abc9c;
+  --gold: #f0a500;
+  --light: #f4f6f9;
+  --white: #ffffff;
+  --text: #2c3e50;
+  --muted: #7f8c9a;
+  --card-bg: #ffffff;
+  --border: #e0e7ef;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Source Sans 3', sans-serif; background:var(--light); color:var(--text); }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+  padding: 60px 40px 50px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content:'';
+  position:absolute; top:-60px; right:-60px;
+  width:300px; height:300px;
+  border-radius:50%;
+  background: rgba(26,188,156,0.12);
+}
+header::after {
+  content:'';
+  position:absolute; bottom:-80px; left:-40px;
+  width:220px; height:220px;
+  border-radius:50%;
+  background: rgba(240,165,0,0.1);
+}
+header h1 {
+  font-family:'Playfair Display', serif;
+  font-size:2.8rem; font-weight:900;
+  color:#fff; letter-spacing:-0.5px;
+  position:relative; z-index:1;
+}
+header p {
+  color:rgba(255,255,255,0.7);
+  font-size:1rem; margin-top:10px;
+  position:relative; z-index:1;
+}
+
+/* NAV */
+nav {
+  background:#fff;
+  border-bottom: 1px solid var(--border);
+  display:flex; flex-wrap:wrap; gap:0;
+  position:sticky; top:0; z-index:100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+nav a {
+  padding:14px 22px;
+  font-size:0.85rem; font-weight:600;
+  color:var(--blue); text-decoration:none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space:nowrap;
+}
+nav a:hover, nav a.active { border-bottom-color:var(--teal); color:var(--navy); }
+
+/* MAIN */
+main { max-width:1100px; margin:0 auto; padding:40px 20px; }
+
+/* SECTIONS */
+.module {
+  margin-bottom:50px;
+  animation: fadeUp 0.5s ease both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.module-header {
+  display:flex; align-items:center; gap:16px;
+  padding: 22px 28px;
+  border-radius:14px 14px 0 0;
+  color:#fff;
+}
+.module-header.admin { background: linear-gradient(135deg, #1b4f72, #2980b9); }
+.module-header.empresa { background: linear-gradient(135deg, #1e8449, #27ae60); }
+.module-header.finanzas { background: linear-gradient(135deg, #7d3c98, #9b59b6); }
+
+.module-icon {
+  width:48px; height:48px; border-radius:12px;
+  background:rgba(255,255,255,0.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; flex-shrink:0;
+}
+.module-title { font-family:'Playfair Display', serif; font-size:1.5rem; }
+.module-sub { font-size:0.85rem; opacity:0.8; margin-top:2px; }
+
+.module-body {
+  background:var(--white);
+  border: 1px solid var(--border);
+  border-top:0;
+  border-radius:0 0 14px 14px;
+  padding:30px;
+}
+
+/* CONCEPT CARDS */
+.concept-grid {
+  display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap:20px; margin-top:20px;
+}
+.concept-card {
+  border-radius:12px;
+  border: 1px solid var(--border);
+  overflow:hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.concept-card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.1);
+}
+.concept-card-head {
+  padding:14px 18px;
+  font-weight:700; font-size:0.92rem;
+  letter-spacing:0.3px;
+}
+.concept-card-head.blue { background:#e8f4fd; color:#1b4f72; }
+.concept-card-head.green { background:#e9f7ef; color:#1e8449; }
+.concept-card-head.purple { background:#f3e8fd; color:#7d3c98; }
+.concept-card-head.gold { background:#fef9e7; color:#d4a017; }
+.concept-card-head.teal { background:#e8faf5; color:#1a7a65; }
+.concept-card-body { padding:16px 18px; font-size:0.92rem; line-height:1.65; color:var(--text); }
+
+/* PROCESS STEPS */
+.process-row {
+  display:flex; flex-wrap:wrap; gap:14px; margin-top:20px;
+}
+.process-step {
+  flex:1; min-width:150px;
+  border-radius:12px; padding:18px;
+  text-align:center;
+  background: linear-gradient(135deg, #e8f4fd, #d0eaf8);
+  border: 1px solid #b3d7f0;
+}
+.step-num {
+  width:36px; height:36px; border-radius:50%;
+  background: var(--blue); color:#fff;
+  font-weight:700; font-size:0.85rem;
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 10px;
+}
+.step-name { font-weight:700; font-size:0.9rem; color:var(--blue); margin-bottom:6px; }
+.step-desc { font-size:0.82rem; color:var(--muted); line-height:1.5; }
+
+/* TABLE */
+.info-table { width:100%; border-collapse:collapse; margin-top:18px; font-size:0.9rem; }
+.info-table th {
+  background: var(--navy); color:#fff;
+  padding:12px 16px; text-align:left; font-weight:600;
+}
+.info-table td { padding:11px 16px; border-bottom:1px solid var(--border); }
+.info-table tr:hover td { background:#f8fbff; }
+.info-table tr:last-child td { border-bottom:0; }
+
+/* BADGE */
+.badge {
+  display:inline-block;
+  padding:3px 10px; border-radius:20px;
+  font-size:0.75rem; font-weight:700;
+  background:var(--teal); color:#fff;
+  margin-right:6px; margin-bottom:4px;
+}
+.badge.gold { background:var(--gold); }
+.badge.purple { background:#9b59b6; }
+.badge.red { background:#e74c3c; }
+
+/* SECTION TITLE */
+.section-title {
+  font-family:'Playfair Display', serif;
+  font-size:1.1rem; font-weight:700;
+  color:var(--navy); margin:24px 0 12px;
+  padding-bottom:6px;
+  border-bottom: 2px solid var(--border);
+}
+
+/* LIST ITEMS */
+ul.styled { list-style:none; padding:0; margin:10px 0; }
+ul.styled li {
+  padding:8px 0 8px 22px;
+  position:relative; font-size:0.92rem;
+  border-bottom:1px solid #f0f3f7;
+  line-height:1.55;
+}
+ul.styled li:last-child { border-bottom:0; }
+ul.styled li::before {
+  content:'▸'; position:absolute; left:0;
+  color:var(--teal); font-size:0.8rem; top:10px;
+}
+
+/* DEFINITION BOX */
+.def-box {
+  background: linear-gradient(135deg, #0d1b2a 0%, #1b4f72 100%);
+  color:#fff; border-radius:14px;
+  padding:24px 28px; margin:20px 0;
+  position:relative; overflow:hidden;
+}
+.def-box::after {
+  content:'"';
+  position:absolute; right:20px; top:-10px;
+  font-size:100px; opacity:0.07;
+  font-family:'Playfair Display', serif;
+}
+.def-box p { font-size:1rem; line-height:1.7; }
+.def-box .def-label {
+  font-size:0.72rem; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--teal); margin-bottom:8px;
+}
+
+/* TWO COL */
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+@media(max-width:640px) { .two-col { grid-template-columns:1fr; } }
+
+/* HIGHLIGHT */
+.highlight-box {
+  background:#fef9e7; border-left:4px solid var(--gold);
+  border-radius:0 8px 8px 0; padding:14px 18px;
+  margin:16px 0; font-size:0.92rem; line-height:1.6;
+}
+
+footer {
+  text-align:center; padding:30px;
+  color:var(--muted); font-size:0.82rem;
+  border-top:1px solid var(--border);
+  margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 Administración General & Finanzas</h1>
+  <p>Guía Completa de Estudio — Prof. Anna P. Batista Q.</p>
+</header>
+
+<nav>
+  <a href="#admin">🏛️ Administración</a>
+  <a href="#proceso">⚙️ Proceso Adm.</a>
+  <a href="#gerentes">👔 Gerentes</a>
+  <a href="#empresa">🏢 La Empresa</a>
+  <a href="#recursos">💼 Recursos</a>
+  <a href="#finanzas">💰 Finanzas</a>
+  <a href="#decision">📊 Decisiones</a>
+</nav>
+
+<main>
+
+<!-- ========== MÓDULO 1: ADMINISTRACIÓN ========== -->
+<div class="module" id="admin">
+  <div class="module-header admin">
+    <div class="module-icon">🏛️</div>
+    <div>
+      <div class="module-title">Administración General</div>
+      <div class="module-sub">Conceptos fundamentales y definiciones clave</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="def-box">
+      <div class="def-label">Definición Central</div>
+      <p><strong>Administración</strong> es el proceso para lograr la ejecución de planes y proyectos, con <em>efectividad y eficiencia</em>, a través de otras personas y junto con ellas.</p>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-head blue">⚡ Eficiencia</div>
+        <div class="concept-card-body">
+          <strong>Hacer las cosas correctamente.</strong><br><br>
+          Se refiere a la relación entre los <em>insumos y los productos</em>. El objetivo es <strong>reducir al mínimo el costo de los recursos</strong> utilizados para alcanzar los resultados.
+          <br><br>
+          <span class="badge">Costo mínimo</span><span class="badge">Relación insumo-producto</span>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head green">🎯 Eficacia</div>
+        <div class="concept-card-body">
+          <strong>Hacer las cosas correctas.</strong><br><br>
+          Se centra en <em>alcanzar las metas</em> establecidas. No se trata de cómo se usan los recursos, sino de si se lograron los objetivos propuestos.
+          <br><br>
+          <span class="badge gold">Alcanzar metas</span><span class="badge gold">Resultados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      💡 <strong>Diferencia clave:</strong> La <em>eficiencia</em> se enfoca en el proceso (usar bien los recursos), mientras que la <em>eficacia</em> se enfoca en el resultado (lograr las metas). Un administrador ideal debe ser ambos.
+    </div>
+
+    <div class="section-title">La Organización</div>
+    <div class="def-box" style="background:linear-gradient(135deg,#1e8449,#27ae60);">
+      <div class="def-label">Definición</div>
+      <p>Una <strong>organización</strong> es un grupo de personas ordenadas de forma sistemática, reunidas para un <em>propósito específico</em>. Esta definición aplica para todas las organizaciones.</p>
+    </div>
+
+    <p class="section-title">Características Comunes de las Organizaciones</p>
+    <div class="process-row">
+      <div class="process-step">
+        <div class="step-num">1</div>
+        <div class="step-name">Propósitos o Metas</div>
+        <div class="step-desc">Toda organización existe para lograr algo específico</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">2</div>
+        <div class="step-name">Personas</div>
+        <div class="step-desc">La organización la forman individuos que trabajan juntos</div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">3</div>
+        <div class="step-name">Estructura Sistemática</div>
+        <div class="step-desc">Los miembros están organizados de forma ordenada y sistemática</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MÓDULO 2: PROCESO ADMINISTRATIVO ========== -->
+<div class="module" id="proceso">
+  <div class="module-header admin">
+    <div class="module-icon">⚙️</div>
+    <div>
+      <div class="module-title">Proceso Administrativo</div>
+      <div class="module-sub">Las 5 actividades fundamentales de la administración</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="process-row">
+      <div class="process-step">
+        <div class="step-num" style="background:#2980b9">1</div>
+        <div class="step-name" style="color:#2980b9">Planear</div>
+        <div class="step-desc">Definir metas, establecer estrategias y elaborar planes para coordinar actividades.</div>
+      </div>
+      <div class="process-step" style="background:linear-gradient(135deg,#e9f7ef,#d5f0e1); border-color:#a9dbbe;">
+        <div class="step-num" style="background:#1e8449">2</div>
+        <div class="step-name" style="color:#1e8449">Organizar</div>
+        <div class="step-desc">Determinar qué tareas se harán, quién las realizará, cómo se agruparán y dónde se tomarán decisiones.</div>
+      </div>
+      <div class="process-step" style="background:linear-gradient(135deg,#fef9e7,#fdebd0); border-color:#f5cba7;">
+        <div class="step-num" style="background:#d4a017">3</div>
+        <div class="step-name" style="color:#d4a017">Integrar</div>
+        <div class="step-desc">Incorporar los recursos humanos y materiales necesarios para ejecutar los planes.</div>
+      </div>
+      <div class="process-step" style="background:linear-gradient(135deg,#f9ebea,#fadbd8); border-color:#f1948a;">
+        <div class="step-num" style="background:#c0392b">4</div>
+        <div class="step-name" style="color:#c0392b">Dirigir</div>
+        <div class="step-desc">Motivar empleados, orientar actividades, elegir canales de comunicación y resolver conflictos.</div>
+      </div>
+      <div class="process-step" style="background:linear-gradient(135deg,#f3e8fd,#e8d5f5); border-color:#c39bd3;">
+        <div class="step-num" style="background:#7d3c98">5</div>
+        <div class="step-name" style="color:#7d3c98">Controlar</div>
+        <div class="step-desc">Monitorear el desempeño, compararlo con las metas y corregir desviaciones significativas.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Detalle de Cada Función</div>
+    <table class="info-table">
+      <thead><tr><th>Función</th><th>Descripción Detallada</th><th>Palabras Clave</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Planear</strong></td>
+          <td>Incluye definir metas, establecer estrategias y elaborar planes para coordinar actividades.</td>
+          <td><span class="badge">Metas</span><span class="badge">Estrategias</span><span class="badge">Planes</span></td>
+        </tr>
+        <tr>
+          <td><strong>Organizar</strong></td>
+          <td>Determinar qué tareas se llevarán a cabo, quién las hará, cómo estarán agrupadas, quién depende de quién y dónde se tomarán las decisiones.</td>
+          <td><span class="badge gold">Tareas</span><span class="badge gold">Jerarquía</span><span class="badge gold">Decisiones</span></td>
+        </tr>
+        <tr>
+          <td><strong>Dirigir</strong></td>
+          <td>Motivar a los empleados, orientar actividades, elegir el canal más eficaz de comunicación y resolver conflictos.</td>
+          <td><span class="badge" style="background:#c0392b">Motivación</span><span class="badge" style="background:#c0392b">Comunicación</span></td>
+        </tr>
+        <tr>
+          <td><strong>Controlar</strong></td>
+          <td>Proceso de monitorear el desempeño, compararlo con las metas y corregir cualquier desviación significativa.</td>
+          <td><span class="badge purple">Monitoreo</span><span class="badge purple">Corrección</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== MÓDULO 3: GERENTES ========== -->
+<div class="module" id="gerentes">
+  <div class="module-header admin">
+    <div class="module-icon">👔</div>
+    <div>
+      <div class="module-title">Los Gerentes</div>
+      <div class="module-sub">Tipos, habilidades y competencias gerenciales</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="section-title">Diferencias entre Trabajadores</div>
+    <div class="two-col">
+      <div class="concept-card">
+        <div class="concept-card-head teal">🔧 Trabajadores Operativos</div>
+        <div class="concept-card-body">
+          Personas que desempeñan de manera directa un trabajo o una tarea. <strong>No son responsables de supervisar el trabajo de otros.</strong>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head blue">👔 Gerentes</div>
+        <div class="concept-card-body">
+          Individuos que <strong>dirigen las actividades de otros individuos</strong> en la organización. Son responsables del desempeño del equipo.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Clasificación de los Gerentes</div>
+    <table class="info-table">
+      <thead><tr><th>Nivel</th><th>Descripción</th><th>Función Principal</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge">Primera Línea</span></td>
+          <td>Supervisores encargados de dirigir las actividades diarias de los empleados operativos.</td>
+          <td>Supervisión diaria directa</td>
+        </tr>
+        <tr>
+          <td><span class="badge gold">Nivel Medio</span></td>
+          <td>Individuos que se ubican entre los de primera línea (el supervisor) y los de los niveles altos.</td>
+          <td>Coordinación e intermediación</td>
+        </tr>
+        <tr>
+          <td><span class="badge purple">Nivel Alto</span></td>
+          <td>Encargados de tomar decisiones directivas en cuanto al rumbo de la organización y establecer políticas que afectarán a todos los miembros.</td>
+          <td>Dirección estratégica</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Habilidades Generales de los Gerentes Exitosos</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-head blue">🧠 Habilidades Conceptuales</div>
+        <div class="concept-card-body">Capacidad de pensar de forma abstracta, analizar situaciones complejas y ver la organización como un todo.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head green">🤝 Habilidades Interpersonales</div>
+        <div class="concept-card-body">Capacidad de trabajar bien con otras personas, comunicarse eficazmente y construir relaciones de trabajo productivas.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head gold">🔨 Habilidades Técnicas</div>
+        <div class="concept-card-body">Conocimiento y dominio de procedimientos, técnicas y herramientas específicas del área de trabajo.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head teal">🎭 Habilidades Políticas</div>
+        <div class="concept-card-body">Capacidad de construir una base de poder y establecer conexiones correctas para influir en las decisiones.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Comportamientos Relacionados con la Efectividad Gerencial</div>
+    <ul class="styled">
+      <li>Controlar el entorno de la organización y sus recursos</li>
+      <li>Organizar y coordinar actividades y personas</li>
+      <li>Manejar información de manera eficiente</li>
+      <li>Propiciar el crecimiento y el desarrollo del equipo</li>
+      <li>Motivar a los empleados y manejar conflictos</li>
+      <li>Resolver problemas estratégicos de la organización</li>
+    </ul>
+
+    <div class="section-title">Competencias Gerenciales</div>
+    <div class="def-box">
+      <div class="def-label">Definición</div>
+      <p><strong>Competencias gerenciales:</strong> Conjunto de conocimientos, habilidades y actitudes afines, que se relacionan con el buen desempeño del gerente.</p>
+    </div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-head blue">📋 Normas Gerenciales</div>
+        <div class="concept-card-body">
+          <ul class="styled">
+            <li>Obtener resultados</li>
+            <li>Proporcionar instrucciones</li>
+            <li>Facilitar el cambio</li>
+            <li>Trabajar con los empleados</li>
+            <li>Utilizar los recursos</li>
+            <li>Gestionar las competencias propias</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MÓDULO 4: LA EMPRESA ========== -->
+<div class="module" id="empresa">
+  <div class="module-header empresa">
+    <div class="module-icon">🏢</div>
+    <div>
+      <div class="module-title">La Empresa</div>
+      <div class="module-sub">Concepto, evolución histórica, clasificación e importancia</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="def-box" style="background:linear-gradient(135deg,#1e8449,#27ae60);">
+      <div class="def-label">Definición</div>
+      <p>La <strong>empresa</strong> es una unidad económico-social en la cual, a través del <em>capital, el trabajo y la coordinación de recursos</em>, se producen bienes y servicios para satisfacer las necesidades de la sociedad.</p>
+    </div>
+
+    <div class="section-title">Evolución Histórica</div>
+    <ul class="styled">
+      <li>La palabra <strong>"Empresa"</strong> proviene del latín <em>Emprendere</em>, que significa iniciar alguna actividad.</li>
+      <li>Surgió y se desarrolló durante la <strong>Revolución Industrial</strong>.</li>
+      <li>Desde siempre, con la <strong>división del trabajo</strong>, existieron formas de organización parecidas a las empresas.</li>
+    </ul>
+
+    <div class="section-title">Clasificación de la Empresa</div>
+    <table class="info-table">
+      <thead><tr><th>Criterio</th><th>Tipos / Descripción</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Por Tamaño</strong></td><td>Micro, Pequeña, Mediana, Grande (según número de empleados y capital)</td></tr>
+        <tr><td><strong>Por Finalidad</strong></td><td>Con fines de lucro (privadas) / Sin fines de lucro (públicas, ONG)</td></tr>
+        <tr><td><strong>Por Actividad Económica</strong></td><td>Industrial, Comercial, de Servicios, Agropecuaria</td></tr>
+        <tr><td><strong>Por Filosofía y Valores</strong></td><td>Según su misión, visión y valores corporativos</td></tr>
+        <tr><td><strong>Por Tecnología</strong></td><td>Alta tecnología, tecnología media, tecnología tradicional</td></tr>
+        <tr><td><strong>Por Régimen Jurídico</strong></td><td>Sociedad Anónima, Limitada, Colectiva, Cooperativa, etc.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== MÓDULO 5: RECURSOS DE LA EMPRESA ========== -->
+<div class="module" id="recursos">
+  <div class="module-header empresa">
+    <div class="module-icon">💼</div>
+    <div>
+      <div class="module-title">Recursos de la Empresa</div>
+      <div class="module-sub">Elementos indispensables para el funcionamiento organizacional</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="highlight-box">
+      📌 Los recursos son los <strong>elementos indispensables</strong> para el funcionamiento de la empresa. El éxito de cualquier organización depende de la adecuada <em>elección, combinación y armonización</em> de los recursos.
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-head blue">💰 Recursos Financieros</div>
+        <div class="concept-card-body">
+          Son los <strong>elementos monetarios</strong> de que dispone la empresa. Provienen de:
+          <ul class="styled" style="margin-top:8px;">
+            <li>Aportaciones de los socios</li>
+            <li>Utilidades y ventas</li>
+            <li>Préstamos, créditos y emisión de valores</li>
+          </ul>
+          De su adecuada <em>asignación, planeación y control</em> depende el logro de los objetivos.
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head green">🏭 Recursos Materiales</div>
+        <div class="concept-card-body">
+          Son los bienes tangibles con que cuenta la empresa. Incluyen instalaciones, maquinaria, equipos, herramientas, materias primas e insumos necesarios para la producción.
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head purple">💻 Recursos Tecnológicos</div>
+        <div class="concept-card-body">
+          Conjunto de conocimientos, técnicas, procedimientos y métodos de trabajo. Se clasifican en:
+          <ul class="styled" style="margin-top:8px;">
+            <li>Equipo y operación</li>
+            <li>Producto</li>
+            <li>Sistemas informáticos</li>
+            <li>Fórmulas, patentes y marcas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head gold">👥 Recursos Humanos</div>
+        <div class="concept-card-body">
+          El personal de la empresa en todos sus niveles. La <strong>cantidad y calidad</strong> de los recursos difieren de acuerdo con las actividades específicas de cada organización.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Ética Empresarial y Valores</div>
+    <div class="def-box" style="background:linear-gradient(135deg,#1e8449,#1a7a50);">
+      <div class="def-label">Principio Fundamental</div>
+      <p>La <strong>ética empresarial</strong> implica el compromiso de la organización con valores morales que guían la conducta de sus miembros. Los valores definen la cultura organizacional y la forma en que la empresa interactúa con sus grupos de interés.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MÓDULO 6: FINANZAS ========== -->
+<div class="module" id="finanzas">
+  <div class="module-header finanzas">
+    <div class="module-icon">💰</div>
+    <div>
+      <div class="module-title">Introducción a la Administración Financiera</div>
+      <div class="module-sub">Concepto, áreas, función y relaciones de las finanzas</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="def-box" style="background:linear-gradient(135deg,#7d3c98,#9b59b6);">
+      <div class="def-label">Definición de Finanzas</div>
+      <p>Las finanzas se definen como el <strong>arte y la ciencia de administrar el dinero</strong>. Se ocupan del proceso, de las instituciones, de los mercados y de los instrumentos que participan en la <em>transferencia de dinero entre individuos, empresas y gobiernos</em>.</p>
+    </div>
+
+    <div class="section-title">Principales Áreas de las Finanzas</div>
+    <div class="two-col">
+      <div class="concept-card">
+        <div class="concept-card-head purple">🏦 Servicios Financieros</div>
+        <div class="concept-card-body">
+          Área dedicada al diseño y prestación de asesoría y productos financieros a individuos, empresas y gobiernos. Incluye banca, inversiones y seguros.
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head gold">⚙️ Finanzas Administrativas</div>
+        <div class="concept-card-body">
+          Se preocupan de las tareas del gerente financiero en la empresa: gestión de activos, inversiones y financiamiento para maximizar el valor de la organización.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Clasificación de la Inversión</div>
+    <table class="info-table">
+      <thead><tr><th>Tipo</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Inversión Directa</strong></td><td>Adquisición de activos físicos (maquinaria, inmuebles, equipos)</td></tr>
+        <tr><td><strong>Inversión en Valores</strong></td><td>Adquisición de instrumentos financieros (acciones, bonos)</td></tr>
+        <tr><td><strong>Inversión en Capital Humano</strong></td><td>Formación y desarrollo del personal</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-title">Cartera de Inversión — Invertir vs. Ahorrar</div>
+    <div class="two-col">
+      <div class="concept-card">
+        <div class="concept-card-head purple">📈 Invertir</div>
+        <div class="concept-card-body">
+          La inversión implica correr <strong>riesgo con el capital inicial</strong>. Dependiendo de los instrumentos utilizados, el capital podrá <em>incrementar o disminuir</em>.
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head teal">🏦 Ahorrar</div>
+        <div class="concept-card-body">
+          Es el hecho de apartar una porción de los ingresos <strong>sin disponer de ella</strong>, sin gastarla. Puede aumentar o no, dependiendo de los instrumentos de ahorro utilizados.
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      💡 <strong>Diferencia clave:</strong> La diferencia entre invertir y ahorrar está en la <em>cantidad de riesgo</em> que estás dispuesto a aceptar para hacer crecer tu dinero.
+    </div>
+  </div>
+</div>
+
+<!-- ========== MÓDULO 7: DECISIONES FINANCIERAS ========== -->
+<div class="module" id="decision">
+  <div class="module-header finanzas">
+    <div class="module-icon">📊</div>
+    <div>
+      <div class="module-title">Decisiones de Financiamiento y Función Financiera</div>
+      <div class="module-sub">Fuentes de financiamiento, relación con economía y contabilidad</div>
+    </div>
+  </div>
+  <div class="module-body">
+
+    <div class="section-title">Decisiones de Financiamiento</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-card-head blue">⏱️ Corto Plazo</div>
+        <div class="concept-card-body">
+          Fuentes: bancos, préstamos y compañías comerciales de financiamiento. Incluye crédito comercial, líneas de crédito, factoring.
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-card-head purple">📅 Largo Plazo</div>
+        <div class="concept-card-body">
+          Incluye: <strong>Capital de Riesgo</strong>, Capital Semilla, Créditos Comerciales, <strong>Leasing</strong>, Sistemas de garantías, emisión de bonos y acciones.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">La Función de la Administración Financiera</div>
+    <ul class="styled">
+      <li>En <strong>compañías pequeñas</strong>, el departamento de contabilidad realiza la función de finanzas.</li>
+      <li>Conforme la empresa crece, la función de finanzas se convierte en un <strong>departamento independiente</strong>.</li>
+      <li>Este departamento se relaciona directamente con el <em>presidente o director general</em> a través del director de finanzas.</li>
+    </ul>
+
+    <div class="section-title">Relación con la Economía</div>
+    <div class="def-box" style="background:linear-gradient(135deg,#7d3c98,#6c3483);">
+      <div class="def-label">Principio Clave</div>
+      <p><strong>Análisis de costos y beneficios marginales:</strong> Principio económico que establece que deben tomarse decisiones financieras <em>solo cuando los beneficios adicionales excedan los costos adicionales</em>.</p>
+    </div>
+    <ul class="styled">
+      <li>Los gerentes financieros deben comprender la <strong>estructura económica</strong> del entorno.</li>
+      <li>Deben estar atentos a los <em>cambios en la política económica</em>.</li>
+      <li>Deben usar las <strong>teorías económicas</strong> como directrices para una operación eficiente.</li>
+    </ul>
+
+    <div class="section-title">Relación con la Contabilidad</div>
+    <table class="info-table">
+      <thead><tr><th>Aspecto</th><th>Contabilidad</th><th>Finanzas</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Método</strong></td>
+          <td>Base devengada (registra cuando se genera)</td>
+          <td>Flujos de efectivo (cuando se recibe/paga)</td>
+        </tr>
+        <tr>
+          <td><strong>Enfoque</strong></td>
+          <td>Recolección y presentación de datos financieros</td>
+          <td>Evaluación de rendimientos y riesgos</td>
+        </tr>
+        <tr>
+          <td><strong>Toma de decisiones</strong></td>
+          <td>Proporciona información histórica</td>
+          <td>Genera datos adicionales y toma decisiones</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-box">
+      📌 <strong>Ejemplo Nassau Corp.:</strong> Si se vende un yate por $100,000 (aún por cobrar) y los costos son $80,000 (pagados): la <em>contabilidad</em> reporta una utilidad de $20,000, pero las <em>finanzas</em> reportan un flujo de caja negativo de -$80,000 (porque el dinero no ha ingresado).
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>📚 Material de estudio basado en las presentaciones de Prof. Anna P. Batista Q. — Administración General e Introducción a las Finanzas</p>
+</footer>
+
+<script>
+// Highlight active nav on scroll
+const sections = document.querySelectorAll('.module');
+const navLinks = document.querySelectorAll('nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>

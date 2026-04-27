@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen — Administración & Finanzas</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f13;
+  --card: #1a1a22;
+  --card2: #22222e;
+  --border: #2e2e3e;
+  --text: #e8e8f0;
+  --muted: #8888a0;
+  --teal: #00d4aa;
+  --gold: #ffc145;
+  --blue: #4d9fff;
+  --purple: #b87fff;
+  --red: #ff6b6b;
+  --green: #5dde8a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'DM Sans', sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh;
+}
+
+header {
+  padding:50px 30px 40px;
+  text-align:center;
+  background:linear-gradient(180deg, #16161f 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border);
+}
+header h1 {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:3.5rem; letter-spacing:3px;
+  background:linear-gradient(90deg,var(--teal),var(--blue),var(--purple));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+header p { color:var(--muted); margin-top:8px; font-size:0.92rem; }
+
+main { max-width:1000px; margin:0 auto; padding:40px 20px; }
+
+/* BIG TOPICS */
+.topic-label {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:1.4rem; letter-spacing:2px;
+  color:var(--muted);
+  margin:40px 0 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.topic-label::after {
+  content:'';
+  flex:1; height:1px;
+  background:var(--border);
+}
+.topic-label span { color:var(--teal); margin-right:4px; }
+
+/* SUMMARY CARDS */
+.sum-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;
+}
+.sum-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:20px;
+  transition:border-color 0.2s, transform 0.2s;
+}
+.sum-card:hover { border-color:var(--teal); transform:translateY(-2px); }
+.sum-card-title {
+  font-size:0.72rem; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:10px;
+}
+.sum-card-title.t { color:var(--teal); }
+.sum-card-title.g { color:var(--gold); }
+.sum-card-title.b { color:var(--blue); }
+.sum-card-title.p { color:var(--purple); }
+.sum-card-title.r { color:var(--red); }
+.sum-card-title.gr { color:var(--green); }
+
+.sum-card h3 {
+  font-size:1.05rem; font-weight:700;
+  color:#fff; margin-bottom:8px;
+}
+.sum-card p { font-size:0.88rem; line-height:1.65; color:var(--text); }
+
+/* PROCESS STRIP */
+.proc-strip {
+  display:flex; gap:0; overflow-x:auto;
+  padding-bottom:8px;
+  border-radius:12px; overflow:hidden;
+}
+.proc-item {
+  flex:1; min-width:140px;
+  padding:18px 14px;
+  text-align:center;
+  position:relative;
+}
+.proc-item:nth-child(1) { background:#1b3a4b; }
+.proc-item:nth-child(2) { background:#1b3a2e; }
+.proc-item:nth-child(3) { background:#3a341b; }
+.proc-item:nth-child(4) { background:#3a1b1b; }
+.proc-item:nth-child(5) { background:#2e1b3a; }
+.proc-icon { font-size:1.4rem; margin-bottom:6px; }
+.proc-name { font-weight:700; font-size:0.9rem; color:#fff; }
+.proc-kw { font-size:0.75rem; color:rgba(255,255,255,0.55); margin-top:4px; line-height:1.4; }
+
+/* COMPARE TABLE */
+.cmp-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+.cmp-table th {
+  padding:10px 14px; text-align:left;
+  background:var(--card2); color:var(--muted);
+  font-size:0.72rem; letter-spacing:1px; text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+.cmp-table td {
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.cmp-table tr:last-child td { border-bottom:0; }
+.cmp-table td:first-child { color:#fff; font-weight:600; white-space:nowrap; }
+
+/* BIG STAT */
+.stat-row { display:flex; flex-wrap:wrap; gap:14px; margin:16px 0; }
+.stat-box {
+  flex:1; min-width:160px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; padding:16px;
+  text-align:center;
+}
+.stat-num {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:2.4rem; line-height:1;
+}
+.stat-label { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+
+/* PILL LIST */
+.pill-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.pill {
+  padding:5px 14px; border-radius:20px;
+  font-size:0.78rem; font-weight:600;
+  background:rgba(0,212,170,0.12); color:var(--teal);
+  border:1px solid rgba(0,212,170,0.25);
+}
+.pill.g { background:rgba(255,193,69,0.12); color:var(--gold); border-color:rgba(255,193,69,0.25); }
+.pill.b { background:rgba(77,159,255,0.12); color:var(--blue); border-color:rgba(77,159,255,0.25); }
+.pill.p { background:rgba(184,127,255,0.12); color:var(--purple); border-color:rgba(184,127,255,0.25); }
+
+/* HIGHLIGHT */
+.alert {
+  background:rgba(255,193,69,0.08); border:1px solid rgba(255,193,69,0.25);
+  border-radius:10px; padding:14px 16px;
+  font-size:0.88rem; line-height:1.6;
+  color:var(--text); margin:14px 0;
+}
+.alert strong { color:var(--gold); }
+
+/* BIG DEF */
+.big-def {
+  background:var(--card2); border-left:4px solid var(--teal);
+  border-radius:0 10px 10px 0; padding:16px 20px;
+  margin:14px 0; font-size:0.95rem; line-height:1.7;
+}
+.big-def em { color:var(--teal); font-style:normal; font-weight:600; }
+
+footer {
+  text-align:center; padding:24px;
+  color:var(--muted); font-size:0.8rem;
+  border-top:1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>RESUMEN EJECUTIVO</h1>
+  <p>Administración General · La Empresa · Administración Financiera</p>
+</header>
+
+<main>
+
+<!-- ===== ADMIN GENERAL ===== -->
+<div class="topic-label"><span>01</span> ADMINISTRACIÓN GENERAL</div>
+
+<div class="big-def">
+  <em>Administración</em> = proceso para lograr la ejecución de planes y proyectos con <em>efectividad y eficiencia</em>, a través de otras personas y junto con ellas.
+</div>
+
+<div class="stat-row">
+  <div class="stat-box">
+    <div class="stat-num" style="color:var(--teal)">5</div>
+    <div class="stat-label">Actividades del Proceso Administrativo</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num" style="color:var(--gold)">3</div>
+    <div class="stat-label">Niveles de Gerentes</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num" style="color:var(--blue)">4</div>
+    <div class="stat-label">Habilidades Gerenciales</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num" style="color:var(--purple)">6</div>
+    <div class="stat-label">Competencias (Normas)</div>
+  </div>
+</div>
+
+<div class="topic-label" style="margin-top:24px;"><span>→</span> PROCESO ADMINISTRATIVO</div>
+<div class="proc-strip">
+  <div class="proc-item">
+    <div class="proc-icon">📋</div>
+    <div class="proc-name">PLANEAR</div>
+    <div class="proc-kw">Metas · Estrategias · Planes</div>
+  </div>
+  <div class="proc-item">
+    <div class="proc-icon">🗂️</div>
+    <div class="proc-name">ORGANIZAR</div>
+    <div class="proc-kw">Tareas · Jerarquía · Decisiones</div>
+  </div>
+  <div class="proc-item">
+    <div class="proc-icon">🔗</div>
+    <div class="proc-name">INTEGRAR</div>
+    <div class="proc-kw">Recursos · Personal</div>
+  </div>
+  <div class="proc-item">
+    <div class="proc-icon">🎯</div>
+    <div class="proc-name">DIRIGIR</div>
+    <div class="proc-kw">Motivar · Comunicar · Conflictos</div>
+  </div>
+  <div class="proc-item">
+    <div class="proc-icon">📊</div>
+    <div class="proc-name">CONTROLAR</div>
+    <div class="proc-kw">Monitorear · Comparar · Corregir</div>
+  </div>
+</div>
+
+<div class="topic-label" style="margin-top:28px;"><span>→</span> GERENTES Y HABILIDADES</div>
+<div class="sum-grid">
+  <div class="sum-card">
+    <div class="sum-card-title t">Niveles Gerenciales</div>
+    <h3>3 Niveles de Gestión</h3>
+    <p><strong style="color:#fff">1ª Línea:</strong> Supervisan operativos diarios.<br>
+    <strong style="color:#fff">Nivel Medio:</strong> Entre supervisores y alta dirección.<br>
+    <strong style="color:#fff">Nivel Alto:</strong> Decisiones estratégicas y políticas de la organización.</p>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title g">Habilidades Generales</div>
+    <h3>4 Tipos de Habilidades</h3>
+    <div class="pill-list">
+      <span class="pill">🧠 Conceptuales</span>
+      <span class="pill g">🤝 Interpersonales</span>
+      <span class="pill b">🔨 Técnicas</span>
+      <span class="pill p">🎭 Políticas</span>
+    </div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title b">Competencias Gerenciales</div>
+    <h3>6 Normas de Desempeño</h3>
+    <p style="color:var(--muted); font-size:0.82rem; line-height:1.8;">
+      Obtener resultados · Dar instrucciones · Facilitar el cambio · Trabajar con empleados · Utilizar recursos · Gestionar competencias propias
+    </p>
+  </div>
+</div>
+
+<div class="alert">
+  <strong>⚡ Clave:</strong> Eficiencia = hacer las cosas <em>correctamente</em> (mínimo costo). Eficacia = hacer las cosas <em>correctas</em> (alcanzar metas). Un buen gerente necesita ambas.
+</div>
+
+<!-- ===== LA EMPRESA ===== -->
+<div class="topic-label"><span>02</span> LA EMPRESA</div>
+
+<div class="big-def">
+  <em>Empresa</em> = unidad económico-social que mediante <em>capital, trabajo y coordinación de recursos</em> produce bienes y servicios para satisfacer necesidades de la sociedad. Del latín <em>Emprendere</em>: iniciar actividad.
+</div>
+
+<div class="sum-grid">
+  <div class="sum-card">
+    <div class="sum-card-title gr">Por Tamaño</div>
+    <h3>Micro → Pequeña → Mediana → Grande</h3>
+    <p>Se clasifica según número de empleados, capital y volumen de ventas.</p>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title t">Por Actividad</div>
+    <h3>4 Sectores Económicos</h3>
+    <div class="pill-list">
+      <span class="pill">Industrial</span>
+      <span class="pill">Comercial</span>
+      <span class="pill">Servicios</span>
+      <span class="pill">Agropecuaria</span>
+    </div>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title g">Por Finalidad</div>
+    <h3>Lucro vs. Sin Lucro</h3>
+    <p>Privadas (buscan ganancias) vs. Públicas y ONGs (servicio social).</p>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title p">Por Régimen Jurídico</div>
+    <h3>Forma Legal</h3>
+    <p>S.A., Limitada, Colectiva, Cooperativa, etc. Define responsabilidades y estructura.</p>
+  </div>
+</div>
+
+<div class="topic-label" style="margin-top:28px;"><span>→</span> RECURSOS DE LA EMPRESA</div>
+<div class="sum-grid">
+  <div class="sum-card"><div class="sum-card-title b">💰 Financieros</div><h3>Capital Monetario</h3><p>Socios, utilidades, préstamos, créditos y emisión de valores.</p></div>
+  <div class="sum-card"><div class="sum-card-title gr">🏭 Materiales</div><h3>Bienes Tangibles</h3><p>Instalaciones, maquinaria, equipos, materias primas.</p></div>
+  <div class="sum-card"><div class="sum-card-title p">💻 Tecnológicos</div><h3>Conocimiento Técnico</h3><p>Equipos, sistemas informáticos, patentes, fórmulas y marcas.</p></div>
+  <div class="sum-card"><div class="sum-card-title g">👥 Humanos</div><h3>Personal</h3><p>La calidad y cantidad varía según la actividad de cada empresa.</p></div>
+</div>
+
+<!-- ===== FINANZAS ===== -->
+<div class="topic-label"><span>03</span> ADMINISTRACIÓN FINANCIERA</div>
+
+<div class="big-def">
+  <em>Finanzas</em> = el arte y la ciencia de <em>administrar el dinero</em>. Proceso, instituciones, mercados e instrumentos que participan en la transferencia de dinero entre individuos, empresas y gobiernos.
+</div>
+
+<div class="sum-grid">
+  <div class="sum-card">
+    <div class="sum-card-title p">Dos Grandes Áreas</div>
+    <h3>Servicios vs. Administrativas</h3>
+    <p><strong style="color:#fff">Servicios Financieros:</strong> Diseño y prestación de productos (banca, inversiones).<br><br>
+    <strong style="color:#fff">Finanzas Administrativas:</strong> Gestión interna del gerente financiero.</p>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title t">Invertir vs. Ahorrar</div>
+    <h3>La Diferencia Clave: El Riesgo</h3>
+    <p><strong style="color:#fff">Invertir:</strong> Capital en riesgo, puede incrementar o disminuir.<br><br>
+    <strong style="color:#fff">Ahorrar:</strong> Apartar ingresos sin gastarlos, riesgo mínimo.</p>
+  </div>
+  <div class="sum-card">
+    <div class="sum-card-title g">Financiamiento</div>
+    <h3>Corto y Largo Plazo</h3>
+    <p><strong style="color:#fff">CP:</strong> Bancos, préstamos, factoring.<br><br>
+    <strong style="color:#fff">LP:</strong> Capital Riesgo, Leasing, Bonos, Capital Semilla, garantías.</p>
+  </div>
+</div>
+
+<div class="topic-label" style="margin-top:28px;"><span>→</span> FINANZAS vs. CONTABILIDAD</div>
+<table class="cmp-table">
+  <thead>
+    <tr><th>Aspecto</th><th>Contabilidad</th><th>Finanzas</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Método</td>
+      <td>Base devengada (cuando se genera)</td>
+      <td>Flujos de efectivo (cuando se mueve el dinero)</td>
+    </tr>
+    <tr>
+      <td>Enfoque</td>
+      <td>Recolectar y presentar datos</td>
+      <td>Evaluar rendimientos y riesgos</td>
+    </tr>
+    <tr>
+      <td>Decisiones</td>
+      <td>Información histórica</td>
+      <td>Genera datos + toma decisiones</td>
+    </tr>
+    <tr>
+      <td>Relación con Economía</td>
+      <td>Registra la realidad</td>
+      <td>Usa teoría económica como guía de gestión</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert" style="background:rgba(184,127,255,0.08); border-color:rgba(184,127,255,0.3);">
+  <strong style="color:var(--purple)">📌 Principio Marginal:</strong> Solo se deben tomar decisiones financieras cuando los <em>beneficios adicionales excedan los costos adicionales</em>. Ejemplo: reemplazar equipo solo si el ahorro > costo del reemplazo.
+</div>
+
+<div class="topic-label"><span>→</span> MAPA CONCEPTUAL RÁPIDO</div>
+<div class="sum-card" style="background:var(--card2);">
+  <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start;">
+    <div>
+      <div class="sum-card-title t">ADMINISTRACIÓN</div>
+      <p style="font-size:0.82rem; color:var(--muted); line-height:2;">
+        → Eficiencia + Eficacia<br>
+        → Proceso: Planear → Organizar → Integrar → Dirigir → Controlar<br>
+        → Organización: Metas + Personas + Estructura<br>
+        → Gerentes: 1ª línea / Medio / Alto<br>
+        → Habilidades: Conceptual / Interpersonal / Técnica / Política
+      </p>
+    </div>
+    <div>
+      <div class="sum-card-title gr">EMPRESA</div>
+      <p style="font-size:0.82rem; color:var(--muted); line-height:2;">
+        → Del latín: Emprendere<br>
+        → Capital + Trabajo + Coordinación<br>
+        → Clasificación: Tamaño / Actividad / Finalidad / Tecnología / Jurídica<br>
+        → Recursos: Financieros / Materiales / Tecnológicos / Humanos
+      </p>
+    </div>
+    <div>
+      <div class="sum-card-title p">FINANZAS</div>
+      <p style="font-size:0.82rem; color:var(--muted); line-height:2;">
+        → Arte y ciencia de administrar dinero<br>
+        → Áreas: Servicios / Administrativas<br>
+        → Inversión vs. Ahorro = Riesgo<br>
+        → Financiamiento: CP y LP<br>
+        → vs. Contabilidad: Efectivo vs. Devengado
+      </p>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  📚 Resumen ejecutivo — Prof. Anna P. Batista Q.
+</footer>
+
+</body>
+</html>
