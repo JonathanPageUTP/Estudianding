@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Estudio — Administración y Finanzas</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1916;
+    --card: #222118;
+    --border: #2e2c26;
+    --gold: #d4a84b;
+    --gold-light: #f0c96b;
+    --cream: #f5f0e8;
+    --muted: #8a8575;
+    --accent-blue: #4a8fa8;
+    --accent-green: #5a9e72;
+    --accent-red: #b85c4a;
+    --accent-purple: #7a6aaa;
+    --text: #e8e2d6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+
+  .header-sub {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); border-color: var(--border); }
+  .tab.active { color: var(--gold); border-color: var(--gold); background: rgba(212,168,75,0.07); }
+
+  /* Sections */
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 14px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .badge {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .b-gold { background: rgba(212,168,75,0.15); color: var(--gold); }
+  .b-blue { background: rgba(74,143,168,0.15); color: var(--accent-blue); }
+  .b-green { background: rgba(90,158,114,0.15); color: var(--accent-green); }
+  .b-red { background: rgba(184,92,74,0.15); color: var(--accent-red); }
+  .b-purple { background: rgba(122,106,170,0.15); color: var(--accent-purple); }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  .card-body {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .mnemonic {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(212,168,75,0.06);
+    border-left: 2px solid var(--gold);
+    font-size: 13px;
+    color: var(--gold-light);
+    border-radius: 0 4px 4px 0;
+  }
+  .mnemonic strong { font-weight: 500; }
+
+  /* Grid layouts */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+
+  .mini-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+  }
+  .mini-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+  .mini-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Steps */
+  .steps { margin-top: 10px; }
+  .step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .step-icon {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 500; color: var(--cream); }
+  .step-desc { font-size: 12px; color: var(--muted); }
+
+  /* Compare */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .compare-col { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; }
+  .compare-head { font-size: 12px; letter-spacing: 0.07em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+  .compare-val { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+  /* Pills */
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .pill {
+    padding: 4px 12px; border-radius: 20px;
+    border: 1px solid var(--border);
+    font-size: 12px; color: var(--muted);
+  }
+
+  /* Flashcards */
+  .flash-hint { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 1rem; letter-spacing: 0.03em; }
+  .flash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .flashcard { height: 130px; perspective: 700px; cursor: pointer; }
+  .fc-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+  }
+  .flashcard.flipped .fc-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 1rem;
+    border: 1px solid var(--border);
+  }
+  .fc-front { background: var(--card); font-size: 14px; font-weight: 500; color: var(--cream); }
+  .fc-back { background: var(--surface); transform: rotateY(180deg); font-size: 12px; color: var(--text); }
+  .fc-front::after {
+    content: '↺';
+    position: absolute; bottom: 8px; right: 10px;
+    font-size: 12px; color: var(--muted);
+  }
+
+  /* Section title */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Table for empresa sizes */
+  .size-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+  .size-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  .size-table td:first-child { color: var(--cream); font-weight: 500; }
+  .size-table tr:last-child td { border-bottom: none; }
+
+  /* Horizontal process */
+  .process {
+    display: flex; gap: 0; margin-top: 12px;
+    overflow-x: auto;
+  }
+  .process-step {
+    flex: 1; min-width: 90px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text);
+    position: relative;
+  }
+  .process-step:first-child { border-radius: 6px 0 0 6px; }
+  .process-step:last-child { border-radius: 0 6px 6px 0; }
+  .process-step + .process-step { border-left: none; }
+  .process-num { font-size: 18px; color: var(--gold); font-family: 'Playfair Display', serif; display: block; margin-bottom: 4px; }
+
+  /* divider */
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  @media(max-width: 550px) {
+    .grid2, .grid3, .compare, .flash-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="header-label">Prof. Anna P. Batista Q. — Material de estudio</div>
+    <h1>Administración<br>& Finanzas</h1>
+    <p class="header-sub">Guía interactiva con trucos mnemotécnicos para retener todo el contenido</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="show('finanzas',this)">Introducción a Finanzas</button>
+    <button class="tab" onclick="show('empresa',this)">La Empresa</button>
+    <button class="tab" onclick="show('admin',this)">Administración General</button>
+    <button class="tab" onclick="show('repaso',this)">Tarjetas de repaso</button>
+  </div>
+
+  <!-- ══════════ FINANZAS ══════════ -->
+  <div id="finanzas" class="section active">
+    <div class="section-label">Módulo 1 — Introducción a la Administración Financiera</div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-gold">Definición</span><span class="card-title">¿Qué son las finanzas?</span></div>
+      <div class="card-body">Arte y ciencia de administrar el dinero. Abarcan el proceso, las instituciones, los mercados y los instrumentos en la transferencia de dinero entre individuos, empresas y gobiernos.</div>
+      <div class="mnemonic">🎯 <strong>Truco "IEG":</strong> Las finanzas conectan a <strong>I</strong>ndividuos, <strong>E</strong>mpresas y <strong>G</strong>obiernos — imagina un triángulo con dinero fluyendo entre los tres vértices.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-blue">Áreas</span><span class="card-title">Servicios financieros vs. Finanzas administrativas</span></div>
+      <div class="compare">
+        <div class="compare-col">
+          <div class="compare-head">🏦 Servicios financieros</div>
+          <div class="compare-val">Diseñan y proporcionan asesoría y productos financieros a individuos, empresas y gobiernos. <em>Para afuera.</em></div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head">⚙️ Finanzas administrativas</div>
+          <div class="compare-val">El administrador financiero gestiona activamente los asuntos financieros dentro de cualquier empresa. <em>Para adentro.</em></div>
+        </div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "SER-ADM":</strong> SERvicios = hacia afuera (clientes). ADMinistrativas = hacia adentro (la empresa).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-green">Ámbito</span><span class="card-title">Las 3 grandes decisiones financieras — "IFA"</span></div>
+      <div class="pills">
+        <span class="pill">💰 Inversión</span>
+        <span class="pill">🏦 Financiamiento</span>
+        <span class="pill">⚙️ Administración de activos</span>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "IFA":</strong> Como una Institución Financiera Autorizada — Inversión, Financiamiento, Activos.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-blue">Inversión</span><span class="card-title">3 tipos — "CPE" (Capital, Pequeño, Estratégico)</span></div>
+      <div class="steps">
+        <div class="step"><div class="step-icon">C</div><div class="step-body"><div class="step-title">Capital propio</div><div class="step-desc">Relacionado con las clases y montos de recursos utilizados.</div></div></div>
+        <div class="step"><div class="step-icon">T</div><div class="step-body"><div class="step-title">Táctica</div><div class="step-desc">Implica fondos pequeños; cambios menores sin alejarse del rumbo.</div></div></div>
+        <div class="step"><div class="step-icon">E</div><div class="step-body"><div class="step-title">Estratégica</div><div class="step-desc">Grandes cantidades de dinero; alejamiento significativo del pasado.</div></div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> "Táctico = pequeño ajuste del timón; Estratégico = cambias de barco".</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-purple">Financiamiento CP</span><span class="card-title">Decisiones de financiamiento a corto plazo — "CTG"</span></div>
+      <div class="steps">
+        <div class="step"><div class="step-icon">C</div><div class="step-body"><div class="step-title">Capital de trabajo</div><div class="step-desc">Proporciones entre activos y pasivos corrientes.</div></div></div>
+        <div class="step"><div class="step-icon">F</div><div class="step-body"><div class="step-title">Financiamiento corriente</div><div class="step-desc">Fuentes sin costo financiero explícito para no recurrir a fuentes caras.</div></div></div>
+        <div class="step"><div class="step-icon">E</div><div class="step-body"><div class="step-title">Gestión de efectivos</div><div class="step-desc">Resultante de la estrategia sobre capital de trabajo.</div></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-red">Financiamiento LP</span><span class="card-title">Decisiones a largo plazo — "IOC"</span></div>
+      <div class="grid3">
+        <div class="mini-card"><div class="mini-title">Intereses de la empresa</div><div class="mini-body">Lo que sostiene a la corporación a largo plazo.</div></div>
+        <div class="mini-card"><div class="mini-title">Objetivos de la empresa</div><div class="mini-body">Propósitos económicos y fines sociales.</div></div>
+        <div class="mini-card"><div class="mini-title">Moldes corporativos</div><div class="mini-body">Políticas y principios racionales y éticos.</div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "IOC":</strong> Intereses → Objetivos → Corporación (de lo general a lo específico).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-gold">Economía</span><span class="card-title">Costos y beneficios marginales — Caso PulyFer</span></div>
+      <div class="card-body">Solo se debe actuar cuando los <strong style="color:var(--accent-green)">beneficios adicionales</strong> superan los <strong style="color:var(--accent-red)">costos adicionales</strong>.</div>
+      <div class="compare" style="margin-top:10px">
+        <div class="compare-col">
+          <div class="compare-head" style="color:var(--accent-green)">Beneficios marginales</div>
+          <div class="compare-val">Nueva PC: $10,000 — Vieja PC: $3,000 = <strong style="color:var(--accent-green)">$7,000</strong></div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head" style="color:var(--accent-red)">Costos marginales</div>
+          <div class="compare-val">Nueva PC: $8,000 — Venta vieja: $2,000 = <strong style="color:var(--accent-red)">$6,000</strong></div>
+        </div>
+      </div>
+      <div class="card-body" style="margin-top:10px">Beneficio neto = $7,000 − $6,000 = <strong style="color:var(--gold)">$1,000 → SÍ conviene comprarla.</strong></div>
+      <div class="mnemonic">🎯 <strong>Regla de oro:</strong> Si Ben. Marginal > Costo Marginal → ¡Hazlo!</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-blue">Contabilidad</span><span class="card-title">Finanzas vs. Contabilidad — 2 diferencias clave</span></div>
+      <div class="compare">
+        <div class="compare-col">
+          <div class="compare-head">📒 Contabilidad</div>
+          <div class="compare-val"><strong style="color:var(--cream)">Base devengada.</strong> Registra ingresos cuando se generan, aunque no se cobren. Se enfoca en recolectar y presentar datos.</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head">💵 Finanzas</div>
+          <div class="compare-val"><strong style="color:var(--cream)">Base de efectivo.</strong> Importa cuándo entra y sale el dinero. Se enfoca en tomar decisiones evaluando rendimiento y riesgo.</div>
+        </div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> Contabilidad = "¿Qué dice el papel?" Finanzas = "¿Qué hay en la caja?"<br>Nassau Corp. vendió $100K pero no cobró nada → Contabilidad muestra +$20K de utilidad; Finanzas muestra −$80K de flujo.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ EMPRESA ══════════ -->
+  <div id="empresa" class="section">
+    <div class="section-label">Módulo 2 — La Empresa</div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-gold">Origen</span><span class="card-title">¿Qué es una empresa?</span></div>
+      <div class="card-body">Del latín <em>Emprendere</em> (iniciar algo). Unidad económico-social que, a través del capital, el trabajo y la coordinación de recursos, produce bienes y servicios para satisfacer las necesidades de la sociedad. Surgió en la Revolución Industrial.</div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> Empresa = <strong>E</strong>mprendere = <strong>E</strong>mpezar. Siempre arranca con una acción.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-green">Importancia</span><span class="card-title">¿Por qué importan las empresas? — "TRIP"</span></div>
+      <div class="pills">
+        <span class="pill">👷 Trabajo (fuentes de empleo)</span>
+        <span class="pill">🛒 Recursos (satisfacen necesidades)</span>
+        <span class="pill">💡 Investigación y tecnología</span>
+        <span class="pill">📈 Ingresos al Estado (impuestos)</span>
+        <span class="pill">📊 Rendimiento a inversionistas</span>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "TRIII":</strong> <strong>T</strong>rabajo + <strong>R</strong>ecursos + <strong>I</strong>mpuestos + <strong>I</strong>nvestigación + <strong>I</strong>nversionistas.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-blue">Clasificación</span><span class="card-title">Tamaño de la empresa — "MPG"</span></div>
+      <table class="size-table">
+        <tr><td>Microempresa</td><td>Menos de 10 colaboradores</td></tr>
+        <tr><td>Pequeña empresa</td><td>11 – 50 colaboradores</td></tr>
+        <tr><td>Mediana empresa</td><td>51 – 250 colaboradores</td></tr>
+      </table>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> "Micro = mis 10 dedos; Pequeña = mi salón de clase; Mediana = mi edificio".</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-purple">Tipo</span><span class="card-title">Por su finalidad — Privadas y Públicas</span></div>
+      <div class="compare">
+        <div class="compare-col">
+          <div class="compare-head">🏢 Privadas</div>
+          <div class="compare-val">Nacionales · Extranjeras · Multinacionales · Globalizadas · Franquicias · Familiares</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head">🏛️ Públicas</div>
+          <div class="compare-val">Centralizadas · Descentralizadas · Mixtas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-red">Actividad</span><span class="card-title">Por actividad económica — "ICS"</span></div>
+      <div class="grid3">
+        <div class="mini-card"><div class="mini-title">🏭 Industriales</div><div class="mini-body">Transforman materia prima en productos.</div></div>
+        <div class="mini-card"><div class="mini-title">🛒 Comerciales</div><div class="mini-body">Compran y venden bienes.</div></div>
+        <div class="mini-card"><div class="mini-title">🤝 Servicios</div><div class="mini-body">Ofrecen experiencias o soluciones intangibles.</div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "ICS":</strong> <strong>I</strong>ndustria hace, <strong>C</strong>omercio vende, <strong>S</strong>ervicios atiende.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-gold">Tecnología</span><span class="card-title">Por su tecnología — "ATA"</span></div>
+      <div class="steps">
+        <div class="step"><div class="step-icon">A</div><div class="step-body"><div class="step-title">Alta tecnología</div><div class="step-desc">Procesos automatizados, sistemas flexibles e integrados de manufactura.</div></div></div>
+        <div class="step"><div class="step-icon">T</div><div class="step-body"><div class="step-title">Tradicionales</div><div class="step-desc">Mecanizados solo en algunas etapas.</div></div></div>
+        <div class="step"><div class="step-icon">A</div><div class="step-body"><div class="step-title">Artesanales</div><div class="step-desc">Producción manual a cargo de personas.</div></div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "ATA":</strong> Alta, Tradicional, Artesanal — de más máquinas a más manos.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-blue">Recursos</span><span class="card-title">Recursos de la empresa — "FMHTA"</span></div>
+      <div class="grid2">
+        <div class="mini-card"><div class="mini-title">💰 Financieros</div><div class="mini-body">Capital monetario: aportaciones, utilidades, préstamos.</div></div>
+        <div class="mini-card"><div class="mini-title">🔧 Materiales</div><div class="mini-body">Materia prima, planta y equipo.</div></div>
+        <div class="mini-card"><div class="mini-title">👥 Humanos</div><div class="mini-body">Las personas: el recurso más valioso.</div></div>
+        <div class="mini-card"><div class="mini-title">💻 Tecnológicos</div><div class="mini-body">Técnicas, software, patentes, fórmulas.</div></div>
+        <div class="mini-card" style="grid-column:1/-1"><div class="mini-title">📋 Administrativos</div><div class="mini-body">Procesos y métodos de gestión.</div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "FMHTA":</strong> <strong>F</strong>inanciero, <strong>M</strong>aterial, <strong>H</strong>umano, <strong>T</strong>ecnológico, <strong>A</strong>dministrativo — "Falta Mano para Hacer Todo esto Ahora".</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-green">Valores</span><span class="card-title">Ética empresarial — "CREQH"</span></div>
+      <div class="pills">
+        <span class="pill">🤝 Compromiso</span>
+        <span class="pill">🙏 Respeto</span>
+        <span class="pill">⚖️ Equidad y justicia</span>
+        <span class="pill">⭐ Calidad</span>
+        <span class="pill">🌍 Responsabilidad</span>
+        <span class="pill">✅ Honestidad</span>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> "Con Respeto y Equidad, la Calidad es Responsabilidad Honesta" — CRECRH.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ ADMIN ══════════ -->
+  <div id="admin" class="section">
+    <div class="section-label">Módulo 3 — Administración General</div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-gold">Concepto</span><span class="card-title">¿Qué es administrar? — Eficiencia vs. Eficacia</span></div>
+      <div class="card-body" style="margin-bottom:10px">Proceso para lograr la ejecución de planes y proyectos con <em>efectividad y eficiencia</em>, a través de otras personas y junto con ellas.</div>
+      <div class="compare">
+        <div class="compare-col">
+          <div class="compare-head">⚡ Eficiencia</div>
+          <div class="compare-val">Hacer las cosas <strong style="color:var(--cream)">correctamente</strong> — reducir al mínimo el costo de los recursos. Relación insumos / productos.</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head">🎯 Eficacia</div>
+          <div class="compare-val">Hacer las cosas <strong style="color:var(--cream)">correctas</strong> — alcanzar las metas.</div>
+        </div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> EficiEncia = Economía (menos recursos). EficAcia = Alcanzar metas.<br>Un arquero eficiente dispara pocas flechas; eficaz es el que da en el blanco.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-blue">Proceso</span><span class="card-title">El proceso administrativo — "POICD" / "POI-DC"</span></div>
+      <div class="process">
+        <div class="process-step"><span class="process-num">P</span>Planear</div>
+        <div class="process-step"><span class="process-num">O</span>Organizar</div>
+        <div class="process-step"><span class="process-num">I</span>Integrar</div>
+        <div class="process-step"><span class="process-num">D</span>Dirigir</div>
+        <div class="process-step"><span class="process-num">C</span>Controlar</div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> "Pancho Organiza Intensamente Decisiones Con cuidado" — P-O-I-D-C.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-purple">Detalle</span><span class="card-title">Cada etapa del proceso</span></div>
+      <div class="steps">
+        <div class="step"><div class="step-icon">P</div><div class="step-body"><div class="step-title">Planear</div><div class="step-desc">Definir metas, establecer estrategias y elaborar planes para coordinar actividades.</div></div></div>
+        <div class="step"><div class="step-icon">O</div><div class="step-body"><div class="step-title">Organizar</div><div class="step-desc">Determinar qué tareas, quién las hace, cómo se agrupan y dónde se toman las decisiones.</div></div></div>
+        <div class="step"><div class="step-icon">I</div><div class="step-body"><div class="step-title">Integrar</div><div class="step-desc">Incorporar los recursos humanos y materiales necesarios.</div></div></div>
+        <div class="step"><div class="step-icon">D</div><div class="step-body"><div class="step-title">Dirigir</div><div class="step-desc">Motivar empleados, orientar actividades, elegir canales de comunicación y resolver conflictos.</div></div></div>
+        <div class="step"><div class="step-icon">C</div><div class="step-body"><div class="step-title">Controlar</div><div class="step-desc">Monitorear desempeño, compararlo con las metas y corregir desviaciones significativas.</div></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-green">Gerentes</span><span class="card-title">3 niveles gerenciales — "AMP"</span></div>
+      <div class="steps">
+        <div class="step"><div class="step-icon">↑</div><div class="step-body"><div class="step-title">Nivel alto</div><div class="step-desc">Toman decisiones directivas sobre el rumbo de la organización y establecen políticas generales.</div></div></div>
+        <div class="step"><div class="step-icon">→</div><div class="step-body"><div class="step-title">Nivel medio</div><div class="step-desc">Se ubican entre el supervisor de primera línea y los altos mandos. Puente de comunicación.</div></div></div>
+        <div class="step"><div class="step-icon">↓</div><div class="step-body"><div class="step-title">Primera línea</div><div class="step-desc">Supervisan las actividades diarias de los empleados operativos.</div></div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> Alto = decide el destino. Medio = traza la ruta. Primera línea = conduce el vehículo.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-red">Trabajadores</span><span class="card-title">Operativos vs. Gerentes</span></div>
+      <div class="compare">
+        <div class="compare-col">
+          <div class="compare-head">🔨 Operativos</div>
+          <div class="compare-val">Desempeñan directamente el trabajo. No son responsables de supervisar a otros.</div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-head">🧭 Gerentes</div>
+          <div class="compare-val">Dirigen las actividades de otros individuos dentro de la organización.</div>
+        </div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> Operativo = hace. Gerente = hace que otros hagan.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-gold">Habilidades</span><span class="card-title">4 habilidades del gerente exitoso — "CITP"</span></div>
+      <div class="grid2">
+        <div class="mini-card"><div class="mini-title">🧠 Conceptuales</div><div class="mini-body">Pensar y ver la organización como un todo.</div></div>
+        <div class="mini-card"><div class="mini-title">🤝 Interpersonales</div><div class="mini-body">Relacionarse y motivar a las personas.</div></div>
+        <div class="mini-card"><div class="mini-title">🔧 Técnicas</div><div class="mini-body">Conocimiento del trabajo específico a supervisar.</div></div>
+        <div class="mini-card"><div class="mini-title">🏛️ Políticas</div><div class="mini-body">Construir redes de poder e influencia dentro de la organización.</div></div>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco "CITP":</strong> <strong>C</strong>erebro, <strong>I</strong>nterrelación, <strong>T</strong>écnica, <strong>P</strong>olítica — "Con Ideas Técnicas y Política se llega arriba".</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="badge b-purple">Competencias</span><span class="card-title">6 competencias gerenciales — "OPFUGG"</span></div>
+      <div class="pills">
+        <span class="pill">📊 Obtener resultados</span>
+        <span class="pill">📣 Proporcionar instrucciones</span>
+        <span class="pill">🔄 Facilitar el cambio</span>
+        <span class="pill">👥 Trabajar con empleados</span>
+        <span class="pill">🗂️ Utilizar los recursos</span>
+        <span class="pill">🪞 Gestionar competencias propias</span>
+      </div>
+      <div class="mnemonic">🎯 <strong>Truco:</strong> "Obtengo Resultados Porque Facilito, con mi equipo Utilizamos todo y me auto-Gestiono" — ORPFUG.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ REPASO ══════════ -->
+  <div id="repaso" class="section">
+    <div class="section-label">Tarjetas de repaso — toca para voltear</div>
+    <div class="flash-hint">Haz clic en cada tarjeta para ver la respuesta</div>
+    <div class="flash-grid">
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">¿Definición de finanzas?</div>
+          <div class="fc-back">Arte y ciencia de administrar el dinero — procesos, mercados, instrumentos entre IEG (Individuos, Empresas y Gobiernos).</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">Diferencia base devengada vs. base efectivo</div>
+          <div class="fc-back">Devengada = registra cuando ocurre aunque no haya cobro. Efectivo = registra cuando el dinero entra o sale de caja.</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">¿Cuándo aplica el principio de costos y beneficios marginales?</div>
+          <div class="fc-back">Solo cuando los beneficios adicionales SUPERAN los costos adicionales. Si Ben. Marginal > Costo Marginal → ¡Hazlo!</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">Las 5 etapas del proceso administrativo</div>
+          <div class="fc-back">Planear → Organizar → Integrar → Dirigir → Controlar. Truco: "POIDC"</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">Eficiencia vs. Eficacia</div>
+          <div class="fc-back">EficiEncia = Economizar recursos (hacer bien las cosas). EficAcia = Alcanzar la meta (hacer las cosas correctas).</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">¿Qué son los recursos FMHTA?</div>
+          <div class="fc-back">Financieros, Materiales, Humanos, Tecnológicos, Administrativos. "Falta Mano para Hacer Todo Ahora".</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">3 niveles gerenciales</div>
+          <div class="fc-back">Alto (decide destino) → Medio (traza la ruta) → Primera línea (conduce). Alto decide, Medio conecta, Primera línea ejecuta.</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">4 habilidades del gerente — "CITP"</div>
+          <div class="fc-back">Conceptuales, Interpersonales, Técnicas, Políticas. "Con Ideas Técnicas y Política se llega arriba".</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">Empresa: tamaños MPG</div>
+          <div class="fc-back">Micro (≤10) · Pequeña (11–50) · Mediana (51–250). "Mis dedos, mi salón, mi edificio".</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">Tipos de empresa por actividad económica</div>
+          <div class="fc-back">ICS: Industriales (hacen) · Comerciales (venden) · Servicios (atienden).</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">¿Qué hace un gerente vs. un operativo?</div>
+          <div class="fc-back">Operativo = hace el trabajo directamente. Gerente = dirige las actividades de otros. "Hace vs. hace que otros hagan".</div>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front">Ámbito de la Administración Financiera (3 áreas)</div>
+          <div class="fc-back">IFA: Inversión · Financiamiento · Administración de activos.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
