@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hasbro — Briefing Ejecutivo | Ciberataque 28 Mar 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #D63031;
+    --red-soft: #fff0f0;
+    --amber: #E17055;
+    --green: #00B894;
+    --blue: #0984E3;
+    --dark: #1a1a2e;
+    --mid: #2d2d44;
+    --text: #1a1a2e;
+    --muted: #636e72;
+    --border: #e0e0e0;
+    --bg: #f7f7f9;
+    --white: #ffffff;
+    --yellow-soft: #fff8ee;
+    --green-soft: #eefaf7;
+    --blue-soft: #eef6ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Epilogue',sans-serif; background:var(--bg); color:var(--text); font-size:14px; line-height:1.6; }
+
+  /* NAV */
+  nav { background:var(--dark); padding:14px 48px; display:flex; justify-content:space-between; align-items:center; }
+  nav .brand { font-family:'Syne',sans-serif; font-size:16px; color:#fff; font-weight:700; letter-spacing:0.5px; }
+  nav .nav-pills { display:flex; gap:8px; }
+  nav .pill { font-size:11px; padding:4px 12px; border-radius:20px; color:rgba(255,255,255,0.6); background:rgba(255,255,255,0.08); }
+  nav .pill.active { background:var(--red); color:#fff; }
+
+  /* HERO */
+  .hero { background:var(--dark); padding:60px 48px 48px; position:relative; overflow:hidden; }
+  .hero::after { content:''; position:absolute; top:-60px; right:-60px; width:300px; height:300px; border-radius:50%; background:rgba(214,48,49,0.08); pointer-events:none; }
+  .hero::before { content:''; position:absolute; bottom:-80px; left:30%; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.03); pointer-events:none; }
+  .hero-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(214,48,49,0.15); border:1px solid rgba(214,48,49,0.4); color:#ff7675; font-size:11px; padding:4px 12px; border-radius:20px; margin-bottom:20px; }
+  .hero-dot { width:7px; height:7px; border-radius:50%; background:#ff7675; animation:pulse 1.4s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:40px; font-weight:800; color:#fff; line-height:1.1; margin-bottom:12px; }
+  .hero h1 span { color:var(--red); }
+  .hero p { color:rgba(255,255,255,0.55); font-size:14px; max-width:600px; line-height:1.7; }
+  .hero-meta { display:flex; gap:32px; margin-top:32px; flex-wrap:wrap; }
+  .hero-meta-item label { display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:3px; }
+  .hero-meta-item span { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:#fff; }
+
+  /* STAT STRIP */
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); border-bottom:2px solid var(--red); }
+  .stat { background:var(--white); padding:24px 28px; border-right:1px solid var(--border); }
+  .stat:last-child { border-right:none; }
+  .stat-val { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:var(--red); line-height:1; display:block; }
+  .stat-label { font-size:11px; color:var(--muted); margin-top:4px; display:block; line-height:1.4; }
+
+  /* LAYOUT */
+  .body-wrap { max-width:1160px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 340px; gap:32px; }
+
+  /* SECTION */
+  .section { margin-bottom:36px; }
+  .section-head { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .section-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .icon-red { background:var(--red-soft); }
+  .icon-amber { background:var(--yellow-soft); }
+  .icon-green { background:var(--green-soft); }
+  .icon-blue { background:var(--blue-soft); }
+  .section-head h2 { font-family:'Syne',sans-serif; font-size:16px; font-weight:700; color:var(--text); }
+
+  /* CARDS */
+  .card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:12px; }
+  .card-accent { border-left:3px solid var(--red); border-radius:0 12px 12px 0; }
+  .card-title { font-weight:600; font-size:13px; color:var(--text); margin-bottom:6px; }
+  .card-body { font-size:13px; color:var(--muted); line-height:1.65; }
+  .card-body strong { color:var(--text); font-weight:600; }
+
+  /* PHASES */
+  .phases { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
+  .phase { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:14px; position:relative; }
+  .phase::after { content:attr(data-arrow); position:absolute; right:-14px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--muted); z-index:1; }
+  .phase:last-child::after { display:none; }
+  .phase-num { font-size:10px; font-weight:600; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+  .phase-title { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; }
+  .phase-desc { font-size:11px; color:var(--muted); line-height:1.5; }
+  .phase-1 { border-top:2px solid var(--red); }
+  .phase-2 { border-top:2px solid var(--amber); }
+  .phase-3 { border-top:2px solid #6c5ce7; }
+  .phase-4 { border-top:2px solid var(--green); }
+
+  /* TIMELINE */
+  .timeline { position:relative; padding-left:22px; }
+  .tl-line { position:absolute; left:7px; top:8px; bottom:8px; width:1.5px; background:var(--border); }
+  .tl-item { position:relative; margin-bottom:18px; }
+  .tl-dot { position:absolute; left:-22px; top:4px; width:12px; height:12px; border-radius:50%; border:2px solid var(--white); }
+  .dot-red { background:var(--red); box-shadow:0 0 0 2px rgba(214,48,49,0.2); }
+  .dot-amber { background:var(--amber); }
+  .dot-green { background:var(--green); }
+  .dot-blue { background:var(--blue); }
+  .dot-gray { background:var(--muted); }
+  .tl-date { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:2px; }
+  .tl-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
+  .tl-body { font-size:12px; color:var(--muted); line-height:1.55; }
+
+  /* ATTACKER CARDS */
+  .attacker-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .attacker { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .attacker-icon { font-size:22px; margin-bottom:8px; }
+  .attacker-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+  .attacker-body { font-size:11.5px; color:var(--muted); line-height:1.55; }
+  .attacker-prob { display:inline-block; margin-top:8px; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:600; }
+  .prob-high { background:#fff0f0; color:var(--red); }
+  .prob-med { background:var(--yellow-soft); color:var(--amber); }
+  .prob-low { background:#f0f0ff; color:#6c5ce7; }
+
+  /* 3+3 GRID */
+  .trio { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .trio-card { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .trio-num { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; line-height:1; margin-bottom:6px; }
+  .num-red { color:rgba(214,48,49,0.15); }
+  .num-amber { color:rgba(225,112,85,0.15); }
+  .trio-tag { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; margin-bottom:6px; }
+  .tag-red { background:var(--red-soft); color:var(--red); }
+  .tag-amber { background:var(--yellow-soft); color:var(--amber); }
+  .trio-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; line-height:1.3; }
+  .trio-body { font-size:11.5px; color:var(--muted); line-height:1.55; }
+
+  /* SIDEBAR */
+  .sidebar { }
+  .side-card { background:var(--white); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .side-title { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:var(--text); margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+
+  /* RESPONSE LIST */
+  .resp-list { list-style:none; }
+  .resp-list li { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px solid var(--border); font-size:12.5px; color:var(--muted); line-height:1.5; }
+  .resp-list li:last-child { border-bottom:none; padding-bottom:0; }
+  .resp-list li strong { color:var(--text); }
+  .resp-dot { width:8px; height:8px; border-radius:50%; background:var(--green); margin-top:4px; flex-shrink:0; }
+
+  /* DATA EXPOSED */
+  .data-tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .dtag { font-size:11px; padding:4px 10px; border-radius:6px; background:var(--red-soft); color:var(--red); font-weight:500; }
+
+  /* LAWSUIT */
+  .lawsuit-box { background:var(--yellow-soft); border:1px solid #ffd7a8; border-radius:10px; padding:14px; }
+  .lawsuit-box p { font-size:12.5px; color:#7d4e0a; line-height:1.6; }
+  .lawsuit-box strong { color:#5a3006; }
+
+  /* FINANCIAL */
+  .fin-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--border); font-size:12.5px; }
+  .fin-row:last-child { border-bottom:none; }
+  .fin-label { color:var(--muted); }
+  .fin-val { font-weight:600; color:var(--text); }
+  .fin-val.up { color:var(--green); }
+  .fin-val.warn { color:var(--amber); }
+  .fin-val.danger { color:var(--red); }
+
+  /* QUOTE */
+  .quote-box { background:var(--dark); border-radius:12px; padding:20px; margin-bottom:12px; }
+  .quote-text { font-size:13px; color:rgba(255,255,255,0.75); line-height:1.7; font-style:italic; margin-bottom:8px; }
+  .quote-src { font-size:11px; color:rgba(255,255,255,0.35); }
+
+  /* BADGES */
+  .badge { display:inline-block; font-size:10px; padding:3px 9px; border-radius:20px; font-weight:600; margin-right:4px; }
+  .badge-red { background:var(--red-soft); color:var(--red); }
+  .badge-green { background:var(--green-soft); color:#00695c; }
+  .badge-gray { background:#f0f0f0; color:var(--muted); }
+  .badge-blue { background:var(--blue-soft); color:var(--blue); }
+
+  /* FOOTER */
+  footer { background:var(--dark); padding:28px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer p { font-size:11.5px; color:rgba(255,255,255,0.4); }
+  footer span { font-family:'Syne',sans-serif; font-size:13px; color:rgba(255,255,255,0.6); font-weight:700; }
+
+  @media(max-width:900px){
+    .body-wrap{grid-template-columns:1fr;padding:24px;}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .phases,.attacker-grid,.trio{grid-template-columns:1fr;}
+    .phase::after{display:none;}
+    nav{padding:14px 24px;}
+    .hero{padding:40px 24px 36px;}
+    footer{padding:24px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">🔒 CiberBriefing · ISO 27001</div>
+  <div class="nav-pills">
+    <span class="pill active">Incidente activo</span>
+    <span class="pill">Hasbro, Inc.</span>
+    <span class="pill">Q2 2026</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag"><div class="hero-dot"></div> Acceso no autorizado confirmado — SEC Form 8-K</div>
+  <h1>Ciberataque a <span>Hasbro</span><br>28 de Marzo, 2026</h1>
+  <p>La empresa fabricante de Transformers, Monopoly, Nerf, Play-Doh, Peppa Pig y Dungeons &amp; Dragons sufrió una brecha en su red corporativa. Datos de empleados comprometidos. Demandas colectivas en marcha. Investigación aún en curso.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><label>Detectado</label><span>28 Mar 2026</span></div>
+    <div class="hero-meta-item"><label>Declarado ante SEC</label><span>01 Abr 2026</span></div>
+    <div class="hero-meta-item"><label>Aviso público</label><span>04 Abr 2026</span></div>
+    <div class="hero-meta-item"><label>Estado</label><span>🔴 En investigación</span></div>
+    <div class="hero-meta-item"><label>Marco análisis</label><span>ISO/IEC 27001</span></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <span class="stat-val">5,000+</span>
+    <span class="stat-label">Empleados con datos potencialmente expuestos</span>
+  </div>
+  <div class="stat">
+    <span class="stat-val">2+</span>
+    <span class="stat-label">Demandas colectivas activas (class action lawsuits)</span>
+  </div>
+  <div class="stat">
+    <span class="stat-val">$985M</span>
+    <span class="stat-label">Ingresos Q1 (superó expectativas pese al ataque)</span>
+  </div>
+  <div class="stat">
+    <span class="stat-val">Semanas</span>
+    <span class="stat-label">Tiempo de recuperación proyectado por la compañía</span>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body-wrap">
+<div class="main-col">
+
+  <!-- ¿QUÉ PASÓ? -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-icon icon-red">⚠️</div>
+      <h2>¿Qué ocurrió exactamente?</h2>
+    </div>
+    <div class="card card-accent">
+      <div class="card-body">
+        El sábado <strong>28 de marzo de 2026</strong>, Hasbro detectó que un actor externo había obtenido acceso no autorizado a su red corporativa. Al identificar la intrusión, la compañía activó de inmediato sus protocolos de respuesta a incidentes, tomó ciertos sistemas fuera de línea como medida de contención y contrató expertos externos en ciberseguridad forense para investigar el alcance. El incidente fue revelado formalmente ante la <strong>Securities and Exchange Commission (SEC)</strong> el 1 de abril mediante un formulario 8-K. El 4 de abril se publicó un comunicado oficial en el sitio de Hasbro. Los sistemas fueron siendo restaurados de forma secuencial en las semanas siguientes. Se confirmó que los sistemas de pedidos y envíos continuaron operando bajo planes de contingencia, aunque con posibles retrasos.
+      </div>
+    </div>
+    <div class="card" style="background:#fff8ee; border-color:#ffd7a8;">
+      <div class="card-body">
+        <strong>¿Por qué ocurrió?</strong> Según las demandas colectivas presentadas y análisis de expertos, Hasbro <strong>no contaba con medios efectivos para prevenir, detectar, detener o mitigar</strong> la intrusión. La compañía falló en capacitar adecuadamente a su personal en ciberseguridad y en mantener salvaguardas razonables para proteger la información personal de sus empleados (PII). Los atacantes habrían podido operar dentro de la red durante un período desconocido <strong>antes de ser descubiertos</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ¿QUIÉNES FUERON? -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-icon icon-red">🕵️</div>
+      <h2>¿Quiénes fueron los atacantes?</h2>
+    </div>
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-body" style="margin-bottom:12px;">
+        <strong>Identidad no confirmada.</strong> A la fecha, ningún grupo extorsionador ha reclamado públicamente la responsabilidad del ataque. Esto es inusual pero no extraño: los grupos de ransomware suelen esperar semanas — a veces hasta que fracasan las negociaciones — para publicar a la víctima en sus sitios de filtración. Los expertos en ciberseguridad apuntan a tres hipótesis según los patrones del ataque:
+      </div>
+      <div class="attacker-grid">
+        <div class="attacker">
+          <div class="attacker-icon">💰</div>
+          <div class="attacker-title">Grupo de ransomware financiero</div>
+          <div class="attacker-body">Cifrado de sistemas + exfiltración de datos para extorsión doble. El patrón de toma de sistemas offline y semanas de recuperación es su firma característica.</div>
+          <span class="attacker-prob prob-high">Hipótesis principal</span>
+        </div>
+        <div class="attacker">
+          <div class="attacker-icon">🕵️</div>
+          <div class="attacker-title">Actor APT (espionaje industrial)</div>
+          <div class="attacker-body">Acceso silencioso y prolongado orientado a robar propiedad intelectual de franquicias globales de alto valor (IP de Transformers, D&amp;D, Magic: The Gathering).</div>
+          <span class="attacker-prob prob-med">Posible</span>
+        </div>
+        <div class="attacker">
+          <div class="attacker-icon">🔑</div>
+          <div class="attacker-title">Initial Access Broker (IAB)</div>
+          <div class="attacker-body">Atacante que obtiene el acceso inicial y lo vende a un tercero. Modelo en rápido crecimiento en el ecosistema del cibercrimen corporativo moderno.</div>
+          <span class="attacker-prob prob-low">Alternativa</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ¿CÓMO LO LOGRARON? -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-icon icon-amber">⚙️</div>
+      <h2>¿Cómo lograron acceder? — Fases del ataque</h2>
+    </div>
+    <div class="phases">
+      <div class="phase phase-1" data-arrow="→">
+        <div class="phase-num">Fase 01</div>
+        <div class="phase-title">Acceso inicial</div>
+        <div class="phase-desc">Phishing dirigido, credenciales comprometidas, VPN sin MFA, o acceso a través de un proveedor tercero con permisos insuficientemente restringidos.</div>
+      </div>
+      <div class="phase phase-2" data-arrow="→">
+        <div class="phase-num">Fase 02</div>
+        <div class="phase-title">Movimiento lateral</div>
+        <div class="phase-desc">Exploración de la red interna, escalada de privilegios, mapeo de activos de alto valor. Invisible para herramientas de seguridad tradicionales.</div>
+      </div>
+      <div class="phase phase-3" data-arrow="→">
+        <div class="phase-num">Fase 03</div>
+        <div class="phase-title">Exfiltración</div>
+        <div class="phase-desc">Robo de archivos con PII de empleados (nombres, SSN, cuentas bancarias, beneficios laborales). Posible cifrado simultáneo de sistemas.</div>
+      </div>
+      <div class="phase phase-4" data-arrow="">
+        <div class="phase-num">Fase 04</div>
+        <div class="phase-title">Detección</div>
+        <div class="phase-desc">Hasbro detecta la intrusión el 28 mar. Se desconoce cuánto tiempo antes estuvieron los atacantes operando sin ser vistos.</div>
+      </div>
+    </div>
+    <div class="quote-box">
+      <div class="quote-text">"[Hasbro] had no effective means to prevent, detect, stop, or mitigate breaches of its systems — thereby allowing cybercriminals unrestricted access to its employees' Private Information."</div>
+      <div class="quote-src">— Demanda colectiva presentada ante el Tribunal Federal de Providence, abril 2026</div>
+    </div>
+  </div>
+
+  <!-- 3 VULNERABILIDADES + 3 AMENAZAS -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-icon icon-red">🔓</div>
+      <h2>3 Vulnerabilidades clave — ISO 27001</h2>
+    </div>
+    <div class="trio">
+      <div class="trio-card">
+        <div class="trio-num num-red">01</div>
+        <span class="trio-tag tag-red">Personas</span>
+        <div class="trio-title">Falta de formación y conciencia sobre seguridad</div>
+        <div class="trio-body">Hasbro no capacitó adecuadamente a su personal en ciberseguridad. Las demandas legales lo señalan como causa directa de la brecha, facilitando el éxito de técnicas como phishing.</div>
+      </div>
+      <div class="trio-card">
+        <div class="trio-num num-red">02</div>
+        <span class="trio-tag tag-red">Tecnología</span>
+        <div class="trio-title">Ausencia de sistemas de identificación y autenticación robustos</div>
+        <div class="trio-body">Controles de acceso insuficientes: posible falta de MFA, contraseñas débiles o reutilizadas, y segmentación de red inadecuada que facilitó el movimiento lateral.</div>
+      </div>
+      <div class="trio-card">
+        <div class="trio-num num-red">03</div>
+        <span class="trio-tag tag-red">Organización</span>
+        <div class="trio-title">Insuficiente supervisión de empleados, vendedores y gestión de red</div>
+        <div class="trio-body">Monitoreo deficiente que permitió a los atacantes operar sin detección durante un período indeterminado. Ausencia de alertas efectivas de comportamiento anómalo en la red.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-icon icon-amber">⚡</div>
+      <h2>3 Amenazas materializadas — ISO 27001</h2>
+    </div>
+    <div class="trio">
+      <div class="trio-card">
+        <div class="trio-num num-amber">01</div>
+        <span class="trio-tag tag-amber">Confirmada</span>
+        <div class="trio-title">Acceso a la red por personas no autorizadas</div>
+        <div class="trio-body">Amenaza central del incidente, confirmada en el Form 8-K ante la SEC. Un actor externo obtuvo acceso completo a la red corporativa de Hasbro el 28 de marzo de 2026.</div>
+      </div>
+      <div class="trio-card">
+        <div class="trio-num num-amber">02</div>
+        <span class="trio-tag tag-amber">Confirmada</span>
+        <div class="trio-title">Fuga de información / Comprometer datos confidenciales</div>
+        <div class="trio-body">PII de miles de empleados actuales y pasados fue sustraída. Las demandas advierten que los datos podrían estar ya disponibles en la dark web para venta y explotación.</div>
+      </div>
+      <div class="trio-card">
+        <div class="trio-num num-amber">03</div>
+        <span class="trio-tag tag-amber">Muy probable</span>
+        <div class="trio-title">Código malicioso / Interrupción de procesos de negocio</div>
+        <div class="trio-body">El patrón es consistente con ransomware: sistemas cifrados, offline forzado, semanas de recuperación. Impacto directo en operaciones de pedidos, envíos y reportes financieros.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRONOLOGÍA -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-icon icon-blue">📅</div>
+      <h2>Cronología completa del incidente</h2>
+    </div>
+    <div class="card">
+      <div class="timeline">
+        <div class="tl-line"></div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-red"></div>
+          <div class="tl-date">28 Mar 2026 — Sábado</div>
+          <div class="tl-title">Detección de la intrusión</div>
+          <div class="tl-body">Hasbro identifica acceso no autorizado a su red corporativa. Se activan protocolos de respuesta y se toman ciertos sistemas offline. Se contratan expertos en ciberseguridad forense externos.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-amber"></div>
+          <div class="tl-date">01 Abr 2026</div>
+          <div class="tl-title">Declaración obligatoria ante la SEC — Form 8-K</div>
+          <div class="tl-body">Hasbro confirma el incidente públicamente ante la Securities and Exchange Commission. Advierte posibles retrasos en operaciones durante "varias semanas". El sitio web de Hasbro muestra secciones en "mantenimiento".</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-amber"></div>
+          <div class="tl-date">04 Abr 2026</div>
+          <div class="tl-title">Comunicado público de Hasbro</div>
+          <div class="tl-body">La compañía publica en su newsroom una actualización. Confirma medidas de contención. No revela el tipo de ataque ni si hay demanda de rescate. Reitera que está "abierta para negocios".</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-red"></div>
+          <div class="tl-date">16 Abr 2026</div>
+          <div class="tl-title">Primera demanda colectiva — Tribunal Federal de Providence</div>
+          <div class="tl-body">Liderada por Sheila Standing, exempleada de 37 años, en nombre de cientos de afectados actuales y pasados. Alega negligencia, falta de transparencia y pide daños monetarios, monitoreo de crédito de por vida y medidas de seguridad reforzadas.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-blue"></div>
+          <div class="tl-date">22–23 Abr 2026</div>
+          <div class="tl-title">Actualización SEC + Resultados preliminares Q1</div>
+          <div class="tl-body">Hasbro confirma que el acceso no autorizado ha sido contenido. Reporta ingresos Q1 de $970–985M, superando estimaciones de $909M. Las acciones (HAS) suben 8.2%. Se advierte impacto en Q2 por costos de investigación y retrasos de envío.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-amber"></div>
+          <div class="tl-date">Semana 20 Abr 2026</div>
+          <div class="tl-title">Segunda demanda colectiva</div>
+          <div class="tl-body">Un segundo grupo de empleados y exempleados presenta una demanda adicional. Se estima que "miles" de personas en múltiples estados de EE.UU. han sido afectadas. Los datos podrían estar circulando en la dark web.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot dot-gray"></div>
+          <div class="tl-date">27 Abr 2026 — Hoy</div>
+          <div class="tl-title">Investigación en curso</div>
+          <div class="tl-body">Los sistemas se restauran secuencialmente. La investigación forense continúa. Se espera notificación formal a víctimas conforme avance el análisis de archivos comprometidos. Q1 10-Q aún pendiente de presentación.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-col -->
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+  <!-- RESPUESTA DE HASBRO -->
+  <div class="side-card">
+    <div class="side-title">✅ ¿Qué hizo Hasbro?</div>
+    <ul class="resp-list">
+      <li><div class="resp-dot"></div><div><strong>Activó protocolos de respuesta</strong> al detectar la intrusión el mismo día 28 de marzo.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Tomó sistemas offline</strong> proactivamente como medida de contención para limitar el alcance.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Contrató expertos externos</strong> en ciberseguridad forense para investigar el alcance y remediar.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Planes de continuidad:</strong> mantuvo pedidos, envíos y operaciones clave bajo medidas de contingencia.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Declaró ante la SEC</strong> (Form 8-K) dentro del plazo legal requerido.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Restauración secuencial</strong> de sistemas, coordinando con equipos internos y externos 24/7.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Revisión de archivos</strong> potencialmente comprometidos para emitir notificaciones legales.</div></li>
+      <li><div class="resp-dot"></div><div><strong>Reiteró guía financiera</strong> 2026 sin modificar, mostrando resiliencia operativa.</div></li>
+    </ul>
+  </div>
+
+  <!-- DATOS EXPUESTOS -->
+  <div class="side-card">
+    <div class="side-title">🗂️ Datos potencialmente robados</div>
+    <div class="data-tags">
+      <span class="dtag">Nombres completos</span>
+      <span class="dtag">Núm. de Seguro Social</span>
+      <span class="dtag">Direcciones físicas</span>
+      <span class="dtag">Datos bancarios</span>
+      <span class="dtag">Info. médica</span>
+      <span class="dtag">Beneficios laborales</span>
+      <span class="dtag">Historial de empleo</span>
+      <span class="dtag">Datos de exempleados</span>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.55;">Hasbro no ha divulgado el número exacto de registros ni el valor económico de los datos. Las demandas estiman <strong style="color:var(--text);">miles de afectados</strong> en múltiples estados de EE.UU.</p>
+  </div>
+
+  <!-- IMPACTO FINANCIERO -->
+  <div class="side-card">
+    <div class="side-title">💹 Impacto financiero</div>
+    <div class="fin-row"><span class="fin-label">Ingresos Q1 2026</span><span class="fin-val up">$970–985M ↑</span></div>
+    <div class="fin-row"><span class="fin-label">Estimación analistas</span><span class="fin-val">$908.6M</span></div>
+    <div class="fin-row"><span class="fin-label">Var. acción (HAS)</span><span class="fin-val up">+8.2% ↑</span></div>
+    <div class="fin-row"><span class="fin-label">Impacto Q1</span><span class="fin-val">Ninguno (confirmado)</span></div>
+    <div class="fin-row"><span class="fin-label">Impacto Q2</span><span class="fin-val warn">Retrasos + costos ⚠</span></div>
+    <div class="fin-row"><span class="fin-label">Costo promedio brecha EE.UU.</span><span class="fin-val danger">$4.88M USD</span></div>
+    <div class="fin-row"><span class="fin-label">Impacto legal estimado</span><span class="fin-val danger">Por determinar</span></div>
+  </div>
+
+  <!-- DEMANDA LEGAL -->
+  <div class="side-card">
+    <div class="side-title">⚖️ Situación legal</div>
+    <div class="lawsuit-box">
+      <p><strong>Demandante principal:</strong> Sheila Standing, ex-empleada de 37 años. Presentó demanda colectiva el 16 de abril en el Tribunal Federal de Providence junto a cientos de afectados.<br><br>
+      <strong>Alegaciones clave:</strong> negligencia en protección de PII, falta de notificación oportuna, sistemas de seguridad insuficientes y falta de capacitación al personal.<br><br>
+      <strong>Lo que piden:</strong> Daños monetarios, restitución, monitoreo de crédito de por vida, medidas de seguridad reforzadas y honorarios legales.</p>
+    </div>
+  </div>
+
+  <!-- ESTADO ACTUAL -->
+  <div class="side-card">
+    <div class="side-title">📡 Estado actual (27 Abr 2026)</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Contención del acceso</span>
+        <span class="badge badge-green">Confirmada</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Restauración de sistemas</span>
+        <span class="badge badge-blue">En progreso</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Investigación forense</span>
+        <span class="badge badge-blue">En curso</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Grupo atacante identificado</span>
+        <span class="badge badge-gray">Sin confirmar</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Notificación a víctimas</span>
+        <span class="badge badge-gray">Pendiente</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Q1 Form 10-Q</span>
+        <span class="badge badge-gray">Retrasado</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Demandas activas</span>
+        <span class="badge badge-red">2+ activas</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:12.5px;">
+        <span style="color:var(--muted);">Guía financiera 2026</span>
+        <span class="badge badge-green">Sin cambios</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LECCIÓN CLAVE -->
+  <div class="side-card" style="background:var(--dark);border-color:transparent;">
+    <div class="side-title" style="color:rgba(255,255,255,0.8);">💡 Lección clave</div>
+    <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.65;">"La mayoría de las brechas modernas no ocurren por vulnerabilidades técnicas. Ocurren por <strong style="color:rgba(255,255,255,0.85);">acceso mal gestionado</strong>. Un empleado sin capacitación, una contraseña reutilizada o un proveedor con permisos excesivos puede ser la puerta de entrada."</p>
+    <p style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px;">— Análisis de expertos, Zeron / SecurityWeek, abril 2026</p>
+  </div>
+
+</div><!-- /sidebar -->
+
+</div><!-- /body-wrap -->
+
+<footer>
+  <span>Hasbro, Inc. · Incidente de Ciberseguridad 2026</span>
+  <p>Fuentes: SEC Form 8-K (01/04 y 23/04/2026) · Hasbro Newsroom · TechCrunch · SecurityWeek · Rhode Island Current · BankInfoSecurity · PYMNTS · Análisis ISO/IEC 27001:2022 · Elaborado: 27 Abr 2026</p>
+</footer>
+
+</body>
+</html>
