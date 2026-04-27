@@ -334,64 +334,153 @@
 <script>
 const CAT_COLORS = {
   'Administración General': '#0d9488',
-  'La Empresa': '#7c3aed',
-  'Finanzas': '#d97706',
+  'La Empresa':             '#7c3aed',
+  'Finanzas':               '#d97706',
   'Proceso Administrativo': '#0369a1',
-  'Recursos': '#be185d',
-  'Habilidades Gerenciales': '#065f46'
+  'Recursos':               '#be185d',
+  'Habilidades Gerenciales':'#065f46',
+  'Ética Empresarial':      '#9f1239',
+  'Inversión y Financiamiento': '#0e7490'
 };
 
 const ALL_CARDS = [
-  // ─── ADMINISTRACIÓN GENERAL ───
+
+  // ══════════════════════════════════════════════
+  // ADMINISTRACIÓN GENERAL (13 tarjetas)
+  // ══════════════════════════════════════════════
   { cat:'Administración General', q:'¿Qué es la Administración?', a:'Proceso para lograr la ejecución de planes y proyectos, con efectividad y eficiencia, a través de otras personas y junto con ellas.' },
-  { cat:'Administración General', q:'¿Qué es la Eficiencia en administración?', a:'Hacer las cosas correctamente; se refiere a la relación entre insumos y productos. Se busca reducir al mínimo el costo de los recursos.' },
-  { cat:'Administración General', q:'¿Qué es la Eficacia en administración?', a:'Hacer las cosas correctas; alcanzar las metas establecidas.' },
+  { cat:'Administración General', q:'¿Qué es la Eficiencia?', a:'Hacer las cosas correctamente; se refiere a la relación entre insumos y productos. Se busca reducir al mínimo el costo de los recursos.' },
+  { cat:'Administración General', q:'¿Qué es la Eficacia?', a:'Hacer las cosas correctas; alcanzar las metas establecidas.' },
+  { cat:'Administración General', q:'¿Cuál es la diferencia entre eficiencia y eficacia?', a:'Eficiencia es hacer las cosas correctamente (minimizar recursos). Eficacia es hacer las cosas correctas (alcanzar metas). Se puede ser eficiente sin ser eficaz y viceversa.' },
   { cat:'Administración General', q:'¿Cuáles son las 5 actividades del proceso administrativo?', a:'Planear, Organizar, Integrar, Dirigir y Controlar.' },
-  { cat:'Administración General', q:'¿Qué es una Organización?', a:'Un grupo de personas ordenadas de forma sistemática, reunidas para un propósito específico. Es donde trabajan los gerentes.' },
-  { cat:'Administración General', q:'¿Cuáles son las 3 características comunes de las organizaciones?', a:'1) Propósitos o metas. 2) Personas. 3) Estructura sistemática.' },
+  { cat:'Administración General', q:'¿Qué es una Organización?', a:'Un grupo de personas ordenadas de forma sistemática, reunidas para un propósito específico. Es donde trabajan y administran los gerentes.' },
+  { cat:'Administración General', q:'¿Cuáles son las 3 características comunes de las organizaciones?', a:'1) Propósitos o metas definidos. 2) Personas. 3) Estructura sistemática.' },
   { cat:'Administración General', q:'¿Quiénes son los trabajadores Operativos?', a:'Personas que desempeñan directamente un trabajo o tarea y NO son responsables de supervisar el trabajo de otros.' },
   { cat:'Administración General', q:'¿Quiénes son los Gerentes?', a:'Individuos que dirigen las actividades de otros individuos en la organización.' },
+  { cat:'Administración General', q:'¿Qué distingue a un gerente de un trabajador operativo?', a:'El gerente dirige y supervisa las actividades de otros, mientras que el operativo ejecuta directamente las tareas sin responsabilidad de supervisión.' },
   { cat:'Administración General', q:'¿Qué son las Competencias Gerenciales?', a:'Conjunto de conocimientos, habilidades y actitudes afines que se relacionan con el buen desempeño del gerente.' },
   { cat:'Administración General', q:'¿Cuáles son las 6 normas del esquema de competencias gerenciales?', a:'1) Obtener resultados. 2) Proporcionar instrucciones. 3) Facilitar el cambio. 4) Trabajar con empleados. 5) Utilizar recursos. 6) Gestionar las competencias propias.' },
+  { cat:'Administración General', q:'¿Dónde trabajan los gerentes?', a:'En organizaciones: grupos de personas ordenadas sistemáticamente con un propósito específico. Aplica a todo tipo de organización.' },
 
-  // ─── PROCESO ADMINISTRATIVO ───
+  // ══════════════════════════════════════════════
+  // PROCESO ADMINISTRATIVO (10 tarjetas)
+  // ══════════════════════════════════════════════
   { cat:'Proceso Administrativo', q:'¿En qué consiste PLANEAR?', a:'Incluye definir metas, establecer estrategias y elaborar planes para coordinar actividades.' },
   { cat:'Proceso Administrativo', q:'¿En qué consiste ORGANIZAR?', a:'Determinar qué tareas se llevarán a cabo, quién las hará, cómo estarán agrupadas, quién depende de quién y dónde se tomarán las decisiones.' },
-  { cat:'Proceso Administrativo', q:'¿En qué consiste DIRIGIR?', a:'Motivar a empleados, orientar actividades de otros, elegir el canal más eficaz de comunicación y resolver conflictos.' },
+  { cat:'Proceso Administrativo', q:'¿En qué consiste DIRIGIR?', a:'Motivar a empleados, orientar actividades de otros, elegir el canal más eficaz de comunicación y resolver conflictos que se presenten.' },
   { cat:'Proceso Administrativo', q:'¿En qué consiste CONTROLAR?', a:'Proceso de monitorear el desempeño, compararlo con las metas y corregir cualquier desviación significativa.' },
+  { cat:'Proceso Administrativo', q:'¿En qué consiste INTEGRAR en el proceso administrativo?', a:'Es la función que une los elementos humanos, materiales y técnicos necesarios para que la organización funcione de manera coordinada.' },
+  { cat:'Proceso Administrativo', q:'¿Qué actividades incluye la función de PLANEAR?', a:'Definir metas claras, establecer estrategias para alcanzarlas y elaborar planes que coordinen todas las actividades de la organización.' },
+  { cat:'Proceso Administrativo', q:'¿Qué preguntas responde la función de ORGANIZAR?', a:'¿Qué tareas se harán? ¿Quién las hará? ¿Cómo se agruparán? ¿Quién depende de quién? ¿Dónde se tomarán las decisiones?' },
+  { cat:'Proceso Administrativo', q:'¿Por qué es importante la función de CONTROLAR?', a:'Porque permite detectar desviaciones entre el desempeño real y las metas, y tomar acciones correctivas a tiempo para mantener el rumbo organizacional.' },
+  { cat:'Proceso Administrativo', q:'¿Cuál es el primer paso del proceso administrativo y por qué?', a:'PLANEAR, porque sin definir metas y estrategias primero, las demás funciones (organizar, dirigir, controlar) no tendrían un norte claro hacia dónde orientarse.' },
+  { cat:'Proceso Administrativo', q:'¿Qué relación existe entre CONTROLAR y PLANEAR?', a:'Son complementarios: planear fija las metas y controlar verifica si se están cumpliendo, cerrando el ciclo administrativo al detectar y corregir desviaciones.' },
 
-  // ─── HABILIDADES GERENCIALES ───
+  // ══════════════════════════════════════════════
+  // HABILIDADES GERENCIALES (10 tarjetas)
+  // ══════════════════════════════════════════════
   { cat:'Habilidades Gerenciales', q:'¿Cuáles son las 4 habilidades generales del gerente exitoso?', a:'1) Habilidades conceptuales. 2) Habilidades interpersonales. 3) Habilidades técnicas. 4) Habilidades políticas.' },
-  { cat:'Habilidades Gerenciales', q:'¿Cuáles son los 3 tipos de gerentes por clasificación?', a:'1) Gerentes de primera línea (supervisores diarios). 2) Gerentes de nivel medio. 3) Gerentes de nivel alto (toman decisiones directivas).' },
+  { cat:'Habilidades Gerenciales', q:'¿Cuáles son los 3 tipos de gerentes según su clasificación?', a:'1) Gerentes de primera línea (supervisores diarios). 2) Gerentes de nivel medio. 3) Gerentes de nivel alto (toman decisiones directivas).' },
   { cat:'Habilidades Gerenciales', q:'¿Qué hacen los Gerentes de Primera Línea?', a:'Son supervisores encargados de dirigir las actividades diarias de los empleados operativos.' },
+  { cat:'Habilidades Gerenciales', q:'¿Qué hacen los Gerentes de Nivel Medio?', a:'Se ubican entre los gerentes de primera línea (supervisores) y los de los niveles altos, actuando como enlace entre ambos niveles.' },
   { cat:'Habilidades Gerenciales', q:'¿Qué hacen los Gerentes de Nivel Alto?', a:'Se encargan de tomar decisiones directivas en cuanto al rumbo de la organización y establecer políticas que afectan a todos los miembros.' },
   { cat:'Habilidades Gerenciales', q:'¿Cuáles son los 6 comportamientos de efectividad gerencial?', a:'1) Controlar el entorno y sus recursos. 2) Organizar y coordinar. 3) Manejar información. 4) Propiciar el crecimiento. 5) Motivar y manejar conflictos. 6) Resolver problemas estratégicos.' },
+  { cat:'Habilidades Gerenciales', q:'¿En qué consisten las habilidades conceptuales del gerente?', a:'Capacidad de pensar y conceptualizar situaciones abstractas, ver la organización como un todo y entender las relaciones entre sus partes para tomar mejores decisiones.' },
+  { cat:'Habilidades Gerenciales', q:'¿En qué consisten las habilidades interpersonales del gerente?', a:'Capacidad de trabajar bien con otras personas, tanto individualmente como en grupo: comunicarse, motivar, liderar y transmitir entusiasmo y confianza.' },
+  { cat:'Habilidades Gerenciales', q:'¿En qué consisten las habilidades técnicas del gerente?', a:'Conocimiento y dominio de una actividad específica: comprenden métodos, procesos y procedimientos de un campo especializado.' },
+  { cat:'Habilidades Gerenciales', q:'¿En qué consisten las habilidades políticas del gerente?', a:'Capacidad de construir una base de poder, establecer los contactos correctos y manejar situaciones de conflicto de manera constructiva dentro de la organización.' },
 
-  // ─── LA EMPRESA ───
+  // ══════════════════════════════════════════════
+  // LA EMPRESA (14 tarjetas)
+  // ══════════════════════════════════════════════
   { cat:'La Empresa', q:'¿De dónde proviene la palabra "Empresa" y qué significa?', a:'Proviene del latín "Emprendere", que significa iniciar alguna actividad.' },
   { cat:'La Empresa', q:'¿Qué es una Empresa?', a:'Unidad económico-social en la cual, a través del capital, el trabajo y la coordinación de recursos, se producen bienes y servicios para satisfacer necesidades de la sociedad.' },
   { cat:'La Empresa', q:'¿Cuándo surgió y se desarrolló la empresa moderna?', a:'Surgió y se desarrolló durante la Revolución Industrial, aunque desde siempre, con la división del trabajo, existieron formas de organización similares.' },
-  { cat:'La Empresa', q:'¿Qué son los Recursos de la Empresa?', a:'Son los elementos indispensables para el funcionamiento de la empresa. El éxito depende de su adecuada elección, combinación, armonización y distribución.' },
-  { cat:'La Empresa', q:'¿Qué son los Recursos Financieros?', a:'Son los elementos monetarios de que dispone la empresa. Provienen de aportaciones de socios, utilidades, ventas, préstamos, créditos y emisión de valores.' },
-  { cat:'La Empresa', q:'¿Qué son los Recursos Tecnológicos?', a:'Conjunto de conocimientos, técnicas, procedimientos y métodos de trabajo. Se clasifican en: equipo, operación, producto, sistemas informáticos, fórmulas, patentes y marcas.' },
-  { cat:'La Empresa', q:'¿Cuáles son las categorías de clasificación de empresas?', a:'Se clasifican por: tamaño, finalidad, actividad económica, filosofía y valores, tecnología y régimen jurídico.' },
+  { cat:'La Empresa', q:'¿Cuáles son las 5 importancias principales de la empresa?', a:'1) Crean fuentes de trabajo. 2) Satisfacen necesidades de la comunidad. 3) Son fuente de ingresos para el sector público (impuestos). 4) Propician la investigación y desarrollo tecnológico. 5) Proporcionan rendimiento a los inversionistas.' },
+  { cat:'La Empresa', q:'¿Cuáles son las 6 formas de clasificar una empresa?', a:'Por: 1) Tamaño. 2) Finalidad. 3) Actividad económica. 4) Tecnología. 5) Filosofía y valores. 6) Régimen jurídico.' },
+  { cat:'La Empresa', q:'¿Cómo se clasifica la empresa por TAMAÑO?', a:'Microempresa: menos de 10 colaboradores. Pequeña empresa: 11 a 50 colaboradores. Mediana empresa: 51 a 250 colaboradores.' },
+  { cat:'La Empresa', q:'¿Cómo se clasifica la empresa por FINALIDAD?', a:'Privadas (nacionales, extranjeras, multinacionales, globalizadas, franquicias, familiares) y Públicas (centralizadas, descentralizadas, mixtas).' },
+  { cat:'La Empresa', q:'¿Cómo se clasifica la empresa por ACTIVIDAD ECONÓMICA?', a:'Industriales, Comerciales y de Servicios.' },
+  { cat:'La Empresa', q:'¿Cómo se clasifica la empresa por FILOSOFÍA Y VALORES?', a:'Lucrativas: su fin es obtener rendimiento financiero. No lucrativas: su fin es el bienestar social y no persiguen lucro.' },
+  { cat:'La Empresa', q:'¿Cómo se clasifica la empresa por TECNOLOGÍA?', a:'Alta tecnología (procesos automatizados/integrados), Tradicionales (parcialmente mecanizadas) y Artesanales (producción manual).' },
+  { cat:'La Empresa', q:'¿Cómo se clasifica la empresa por RÉGIMEN JURÍDICO?', a:'Sociedad, Asociación, Patronato y Fundación.' },
+  { cat:'La Empresa', q:'¿Qué es una empresa Multinacional?', a:'Empresa privada que opera en varios países, con capital y gestión de origen extranjero, y cuyas actividades se desarrollan a escala internacional.' },
+  { cat:'La Empresa', q:'¿Qué diferencia a una empresa lucrativa de una no lucrativa?', a:'La lucrativa busca obtener rendimiento financiero para sus socios/dueños. La no lucrativa persigue el bienestar social sin buscar ganancias económicas.' },
+  { cat:'La Empresa', q:'¿Qué es una empresa de Alta Tecnología?', a:'Aquella cuyos procesos están automatizados mediante sistemas flexibles o sistemas integrados de manufactura.' },
 
-  // ─── RECURSOS ───
-  { cat:'Recursos', q:'¿Por qué es importante la correcta gestión de recursos?', a:'Porque el éxito de cualquier organización depende de la adecuada elección, combinación y armonización de los recursos, así como de su mejor empleo y distribución.' },
-  { cat:'Recursos', q:'¿De qué depende el logro de los objetivos organizacionales según los Recursos Financieros?', a:'Depende de la adecuada asignación, planeación y control de los recursos financieros.' },
-  { cat:'Recursos', q:'¿Para qué es básico el análisis de la tecnología en la empresa?', a:'Para optimizar todos los recursos y producir artículos y servicios competitivos.' },
+  // ══════════════════════════════════════════════
+  // RECURSOS DE LA EMPRESA (12 tarjetas)
+  // ══════════════════════════════════════════════
+  { cat:'Recursos', q:'¿Qué son los Recursos de la Empresa?', a:'Son los elementos indispensables para el funcionamiento de la empresa. El éxito depende de su adecuada elección, combinación, armonización y distribución.' },
+  { cat:'Recursos', q:'¿Cuáles son los 5 tipos de recursos de la empresa?', a:'1) Financieros. 2) Materiales. 3) Humanos. 4) Tecnológicos. 5) Administrativos.' },
+  { cat:'Recursos', q:'¿Qué son los Recursos Financieros?', a:'Son los elementos monetarios de que dispone la empresa. Provienen de aportaciones de socios, utilidades, ventas, préstamos, créditos y emisión de valores.' },
+  { cat:'Recursos', q:'¿De qué depende el logro de los objetivos organizacionales?', a:'De la adecuada asignación, planeación y control de los recursos financieros.' },
+  { cat:'Recursos', q:'¿Cuáles son los 2 componentes de los Recursos Materiales?', a:'1) Materia prima: insumos y materiales para producción, que deben reunir calidad y características garantizadas. 2) Planta y equipo: herramientas, maquinaria, materia prima y colaboradores.' },
+  { cat:'Recursos', q:'¿Qué son los Recursos Tecnológicos?', a:'Conjunto de conocimientos, técnicas, procedimientos y métodos de trabajo utilizados en las organizaciones.' },
+  { cat:'Recursos', q:'¿Cuáles son las 7 categorías de los Recursos Tecnológicos?', a:'Equipo, operación, producto, sistemas informáticos, fórmulas, patentes y marcas.' },
+  { cat:'Recursos', q:'¿Para qué sirve el análisis de la tecnología en la empresa?', a:'Para optimizar todos los recursos y producir artículos y servicios competitivos en el mercado.' },
+  { cat:'Recursos', q:'¿Qué son los Recursos Humanos?', a:'Son las personas que trabajan en la empresa, cuyo talento, conocimiento y trabajo son fundamentales para el funcionamiento y éxito de la organización.' },
+  { cat:'Recursos', q:'¿Qué son los Recursos Administrativos?', a:'Son los métodos, sistemas y procedimientos de gestión que permiten coordinar y aprovechar eficientemente los demás recursos de la empresa.' },
+  { cat:'Recursos', q:'¿Por qué la cantidad y calidad de recursos varía entre organizaciones?', a:'Porque difieren de acuerdo con las actividades específicas de cada organización; no todas tienen las mismas necesidades ni el mismo tipo de operaciones.' },
+  { cat:'Recursos', q:'¿Cuál es la fuente principal de los Recursos Financieros?', a:'Las aportaciones de los socios, las utilidades generadas, las ventas realizadas, y externamente mediante préstamos, créditos y emisión de valores.' },
 
-  // ─── FINANZAS ───
+  // ══════════════════════════════════════════════
+  // ÉTICA EMPRESARIAL (8 tarjetas)
+  // ══════════════════════════════════════════════
+  { cat:'Ética Empresarial', q:'¿Cuáles son los 6 valores principales de la ética empresarial?', a:'1) Compromiso. 2) Respeto. 3) Equidad y justicia. 4) Calidad. 5) Responsabilidad. 6) Honestidad.' },
+  { cat:'Ética Empresarial', q:'¿Qué implica el valor de COMPROMISO en la empresa?', a:'La satisfacción del bien común, la protección del medio ambiente y el respeto a sus colaboradores y a la sociedad en general.' },
+  { cat:'Ética Empresarial', q:'¿Qué implica el valor de RESPETO en la empresa?', a:'La protección del medio ambiente y el respeto hacia los colaboradores y la sociedad en general.' },
+  { cat:'Ética Empresarial', q:'¿Qué implica el valor de EQUIDAD Y JUSTICIA?', a:'La creación de fuentes de trabajo dignas y el pago de un salario justo a los colaboradores.' },
+  { cat:'Ética Empresarial', q:'¿Qué implica el valor de CALIDAD en la empresa?', a:'Satisfacer las necesidades de los clientes y promover su bienestar a través de productos y servicios de calidad.' },
+  { cat:'Ética Empresarial', q:'¿Qué implica el valor de RESPONSABILIDAD empresarial?', a:'La mejora de la economía del país a través de las operaciones y contribuciones de la empresa.' },
+  { cat:'Ética Empresarial', q:'¿Qué implica el valor de HONESTIDAD en la empresa?', a:'Honradez e integridad en las relaciones con los clientes, proveedores y colaboradores.' },
+  { cat:'Ética Empresarial', q:'¿Por qué es importante la ética empresarial?', a:'Porque guía el comportamiento de la empresa hacia el bien común, garantiza relaciones íntegras con todos los stakeholders y contribuye a la sostenibilidad de la organización.' },
+
+  // ══════════════════════════════════════════════
+  // FINANZAS — CONCEPTOS GENERALES (10 tarjetas)
+  // ══════════════════════════════════════════════
   { cat:'Finanzas', q:'¿Cómo se definen las Finanzas?', a:'Como el arte y la ciencia de administrar el dinero. Se ocupan del proceso, instituciones, mercados e instrumentos que participan en la transferencia de dinero entre individuos, empresas y gobiernos.' },
-  { cat:'Finanzas', q:'¿Cuáles son las 2 grandes áreas de las Finanzas?', a:'1) Servicios financieros. 2) Finanzas administrativas.' },
-  { cat:'Finanzas', q:'¿Cuál es la diferencia entre Invertir y Ahorrar?', a:'La diferencia está en el riesgo. Invertir implica correr riesgo con el capital inicial para hacerlo crecer. Ahorrar es apartar ingresos sin disponer de ellos, con menor riesgo.' },
-  { cat:'Finanzas', q:'¿Qué son las Decisiones de Financiamiento?', a:'Se refiere a las fuentes de financiamiento que generan deudas: bancos, préstamos y compañías comerciales. Los productos incluyen Capital de Riesgo, Créditos Comerciales, Leasing, entre otros.' },
+  { cat:'Finanzas', q:'¿Cuáles son las 2 grandes áreas de las Finanzas?', a:'1) Servicios financieros: diseño y asesoría de productos financieros. 2) Finanzas administrativas: gestión financiera activa dentro de las empresas.' },
+  { cat:'Finanzas', q:'¿Qué son los Servicios Financieros?', a:'La parte de las finanzas que se dedica a diseñar y proporcionar asesoría y productos financieros a los individuos, empresas y gobiernos.' },
+  { cat:'Finanzas', q:'¿Qué son las Finanzas Administrativas?', a:'Se ocupan de las tareas del administrador financiero en la empresa. Los administradores gestionan activamente los asuntos financieros de cualquier tipo de empresa.' },
+  { cat:'Finanzas', q:'¿Cuáles son los 3 ámbitos de la Administración Financiera?', a:'1) La Inversión. 2) El Financiamiento. 3) La Administración de Activos.' },
   { cat:'Finanzas', q:'¿Qué determina el tamaño de la función financiera en una empresa?', a:'Las dimensiones de la empresa. En pequeñas empresas lo asume contabilidad; conforme crece, se convierte en un departamento independiente.' },
+  { cat:'Finanzas', q:'¿Cómo se relacionan Finanzas y Contabilidad?', a:'Están estrechamente relacionadas. En pequeñas empresas el contador hace funciones financieras; en grandes, los analistas financieros ayudan a recopilar información contable.' },
+  { cat:'Finanzas', q:'¿Cuál es la diferencia entre el enfoque contable y el financiero?', a:'Contabilidad usa base devengada y se centra en recopilar/presentar datos. Finanzas usa base de efectivo (flujos), evalúa estados contables y toma decisiones según rendimientos y riesgos.' },
+  { cat:'Finanzas', q:'¿Cómo se relacionan las Finanzas con la Economía?', a:'Los gerentes financieros deben comprender la estructura económica, los niveles de actividad económica, los cambios en política económica y usar teorías económicas como guías de gestión.' },
   { cat:'Finanzas', q:'¿Qué es el análisis de costos y beneficios marginales?', a:'Principio económico que establece que deben tomarse decisiones financieras y llevarse a cabo acciones solo cuando los beneficios adicionales excedan los costos adicionales.' },
-  { cat:'Finanzas', q:'¿Cómo se relacionan las Finanzas con la Economía?', a:'Los gerentes financieros deben comprender la estructura económica, estar atentos a los niveles de actividad económica, cambios en política económica y usar teorías económicas como guías.' },
-  { cat:'Finanzas', q:'¿Cuál es la diferencia entre el enfoque contable y financiero en la toma de decisiones?', a:'Los contadores usan base devengada y recopilan datos. Los gerentes financieros usan base de efectivo (flujos de efectivo), evalúan estados contables y toman decisiones según rendimientos y riesgos.' },
-  { cat:'Finanzas', q:'¿Qué es la Cartera de Inversión o Portafolio?', a:'Es un conjunto de instrumentos de inversión. La inversión implica correr riesgo con el capital inicial, que puede incrementar o disminuir dependiendo de los instrumentos utilizados.' },
-  { cat:'Finanzas', q:'¿Cómo se relacionan Finanzas y Contabilidad?', a:'Están estrechamente relacionadas. En empresas pequeñas el contador realiza funciones financieras; en grandes, los analistas financieros ayudan a recopilar información contable.' },
+
+  // ══════════════════════════════════════════════
+  // INVERSIÓN Y FINANCIAMIENTO (13 tarjetas)
+  // ══════════════════════════════════════════════
+  { cat:'Inversión y Financiamiento', q:'¿Cuáles son los 3 tipos de inversión?', a:'1) Capital Propio: relacionado con las clases y montos de recursos utilizados. 2) Inversión Táctica: implica fondos relativamente pequeños. 3) Inversión Estratégica: provoca alejamiento significativo del pasado, con grandes montos.' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué es la Inversión Táctica?', a:'Aquella que implica una cantidad de fondos relativamente pequeña y no representa un cambio mayor en la dirección de la empresa.' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué es la Inversión Estratégica?', a:'Aquella que provoca un alejamiento significativo de lo que la compañía ha hecho en el pasado y puede implicar grandes cantidades de dinero.' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué es una Cartera o Portafolio de Inversión?', a:'Es un conjunto de instrumentos de inversión. La inversión implica correr riesgo con el capital inicial, que puede incrementar o disminuir dependiendo de los instrumentos utilizados.' },
+  { cat:'Inversión y Financiamiento', q:'¿Cuál es la diferencia entre Invertir y Ahorrar?', a:'La diferencia está en el riesgo. Invertir implica correr riesgo con el capital para hacerlo crecer. Ahorrar es apartar ingresos sin gastarlos, con menor o ningún riesgo.' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué fuentes de financiamiento generan deuda?', a:'Bancos, préstamos y compañías comerciales de financiamiento.' },
+  { cat:'Inversión y Financiamiento', q:'¿Cuáles son los productos de financiamiento disponibles para las empresas?', a:'Capital de Riesgo, Capital Semilla, Créditos Comerciales, Leasing y Sistemas de garantías, entre otros.' },
+  { cat:'Inversión y Financiamiento', q:'¿Cuáles son las 3 decisiones de financiamiento a CORTO PLAZO?', a:'1) Sobre el Capital de Trabajo (proporciones de activos y pasivos corrientes). 2) Sobre el financiamiento corriente. 3) Sobre la gestión de efectivos.' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué implica la decisión sobre el Capital de Trabajo?', a:'Establece las proporciones que deberá tener la empresa con respecto a sus activos y pasivos corrientes en general.' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué implica la decisión sobre el financiamiento corriente?', a:'Su utilización proporciona financiamiento que, de no explotarse, obligaría a la empresa a acudir a fuentes con costo financiero explícito.' },
+  { cat:'Inversión y Financiamiento', q:'¿Cuáles son los 3 factores de las decisiones de financiamiento a LARGO PLAZO?', a:'1) Los intereses de la empresa (sostenimiento a largo plazo). 2) Los objetivos de la empresa (propósitos económicos y fines sociales). 3) Los moldes corporativos (políticas y principios éticos).' },
+  { cat:'Inversión y Financiamiento', q:'¿Qué son los "moldes corporativos" en el financiamiento a largo plazo?', a:'Las políticas y principios que suministran guías racionales y éticas para la acción, a fin de lograr los objetivos de la empresa.' },
+  { cat:'Inversión y Financiamiento', q:'¿Cómo se aplica el análisis de costos y beneficios marginales? (Caso PulyFer)', a:'Beneficios nueva computadora $10,000 - Beneficios vieja $3,000 = Beneficio marginal $7,000. Costo nueva $8,000 - Venta vieja $2,000 = Costo marginal $6,000. Beneficio neto: $1,000. Como beneficio > costo, SÍ conviene.' },
+
+  // ══════════════════════════════════════════════
+  // REPASO Y COMPARACIONES (10 tarjetas)
+  // ══════════════════════════════════════════════
+  { cat:'Finanzas', q:'¿Cuál es la segunda diferencia entre Finanzas y Contabilidad?', a:'La toma de decisiones: los contadores recopilan y presentan datos. Los gerentes financieros evalúan estados contables, generan datos adicionales y deciden según rendimientos y riesgos.' },
+  { cat:'Finanzas', q:'¿Qué muestra el caso Nassau Corp. sobre base devengada vs base de efectivo?', a:'Base devengada muestra utilidad neta de $20,000 (ingresos $100,000 - costos $80,000). Base de efectivo muestra flujo negativo de -$80,000 porque las ventas no se han cobrado. Son enfoques muy distintos.' },
+  { cat:'Finanzas', q:'¿Por qué las finanzas se consideran "arte y ciencia"?', a:'Arte porque requiere criterio, experiencia y juicio al tomar decisiones. Ciencia porque aplica principios, métodos y teorías económicas y matemáticas para analizar y gestionar el dinero.' },
+  { cat:'La Empresa', q:'¿Qué diferencia a una empresa Pública de una Privada?', a:'Las privadas son de propiedad particular (nacionales, multinacionales, franquicias, etc.). Las públicas son propiedad del Estado y pueden ser centralizadas, descentralizadas o mixtas.' },
+  { cat:'Administración General', q:'¿Por qué la administración es un proceso?', a:'Porque involucra una serie de funciones continuas e interrelacionadas (planear, organizar, integrar, dirigir y controlar) que se ejecutan de manera sistemática para lograr objetivos.' },
+  { cat:'La Empresa', q:'¿Qué relación tiene la empresa con la Revolución Industrial?', a:'La empresa moderna surgió y se desarrolló durante la Revolución Industrial, aunque desde siempre existieron formas organizativas similares gracias a la división del trabajo.' },
+  { cat:'Recursos', q:'¿Cuál es la diferencia entre Materia Prima y Planta y Equipo?', a:'Materia prima son los insumos y materiales para producir un artículo. Planta y equipo son los factores básicos del proceso productivo: herramientas, maquinaria y colaboradores.' },
+  { cat:'Inversión y Financiamiento', q:'¿Cuándo una empresa DEBE tomar una decisión financiera según el análisis marginal?', a:'Solo cuando los beneficios adicionales (marginales) excedan los costos adicionales (marginales). Si el beneficio neto es positivo, la decisión es viable.' },
+  { cat:'Habilidades Gerenciales', q:'¿Qué nivel gerencial tiene mayor impacto en la cultura organizacional?', a:'Los Gerentes de Nivel Alto, ya que establecen las políticas que afectan a todos los miembros y determinan el rumbo estratégico de la organización.' },
+  { cat:'Proceso Administrativo', q:'¿Cómo contribuye la función DIRIGIR al logro de metas?', a:'Motivando a los empleados, orientando sus actividades, eligiendo canales eficaces de comunicación y resolviendo conflictos, lo que impulsa a las personas hacia los objetivos organizacionales.' },
+
 ];
 
 // STATE
