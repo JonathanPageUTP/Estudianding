@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hasbro — Resumen Ejecutivo de Incidente de Seguridad | ISO 27001</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8102E;
+    --red-dark: #8B0A1F;
+    --red-light: #FF2D4A;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --mid: #333333;
+    --gray: #888888;
+    --light-gray: #BBBBBB;
+    --off-white: #F0EDE8;
+    --white: #FFFFFF;
+    --yellow: #FFD600;
+    --orange: #FF6B00;
+    --green: #00C46A;
+    --border: rgba(200,16,46,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ——— NOISE OVERLAY ——— */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* ——— HEADER ——— */
+  .site-header {
+    position: relative;
+    padding: 0;
+    background: var(--dark);
+    border-bottom: 3px solid var(--red);
+    overflow: hidden;
+  }
+
+  .header-stripe {
+    background: var(--red);
+    padding: 8px 48px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .header-stripe span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: white;
+    text-transform: uppercase;
+  }
+  .blink {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .header-main {
+    padding: 56px 48px 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+  }
+
+  .incident-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1.report-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--white);
+  }
+  h1.report-title em {
+    color: var(--red);
+    font-style: normal;
+  }
+
+  .header-meta {
+    text-align: right;
+  }
+  .meta-box {
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 2px;
+  }
+  .meta-row {
+    display: flex; gap: 20px; justify-content: flex-end;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--light-gray);
+    margin-bottom: 6px;
+  }
+  .meta-row:last-child { margin-bottom: 0; }
+  .meta-row strong { color: var(--off-white); }
+
+  /* ——— LAYOUT ——— */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* ——— STAT BAR ——— */
+  .stat-bar {
+    background: var(--red);
+    padding: 20px 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    padding: 8px 24px;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+  }
+  .stat-item:first-child { padding-left: 0; text-align: left; }
+  .stat-item:last-child { border-right: none; }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.75);
+    text-transform: uppercase;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ——— SECTIONS ——— */
+  section {
+    padding: 64px 48px;
+    border-bottom: 1px solid var(--dark3);
+    position: relative;
+    z-index: 1;
+  }
+  section:nth-child(odd) { background: var(--dark); }
+  section:nth-child(even) { background: var(--dark2); }
+
+  .section-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h2.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 32px;
+    line-height: 1.2;
+  }
+  h2.section-title span {
+    color: var(--red);
+  }
+
+  /* ——— INCIDENT SUMMARY ——— */
+  .incident-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+
+  .incident-card {
+    background: var(--dark3);
+    border: 1px solid var(--dark3);
+    border-left: 3px solid var(--red);
+    padding: 28px;
+    border-radius: 2px;
+  }
+  .incident-card h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .incident-card p {
+    font-size: 14px;
+    color: var(--light-gray);
+    line-height: 1.7;
+  }
+  .incident-card p strong {
+    color: var(--off-white);
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    border-left: 2px solid var(--red);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -34px;
+    top: 5px;
+    width: 10px; height: 10px;
+    background: var(--red);
+    border-radius: 50%;
+    border: 2px solid var(--dark);
+  }
+  .timeline-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .timeline-text {
+    font-size: 13.5px;
+    color: var(--light-gray);
+    line-height: 1.6;
+  }
+  .timeline-text strong { color: var(--off-white); }
+
+  /* ——— THREATS & VULNERABILITIES TABLES ——— */
+  .tv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .tv-column h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--red);
+  }
+
+  .iso-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .iso-table thead tr {
+    background: var(--red);
+  }
+  .iso-table thead th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  .iso-table tbody tr {
+    border-bottom: 1px solid var(--dark3);
+    transition: background 0.15s;
+  }
+  .iso-table tbody tr:hover {
+    background: rgba(200,16,46,0.07);
+  }
+  .iso-table tbody tr.highlighted {
+    background: rgba(200,16,46,0.12);
+    border-left: 3px solid var(--red);
+  }
+  .iso-table tbody td {
+    padding: 10px 14px;
+    color: var(--light-gray);
+    vertical-align: top;
+  }
+  .iso-table tbody td:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--gray);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .iso-table tbody tr.highlighted td {
+    color: var(--off-white);
+  }
+  .iso-table tbody tr.highlighted td:first-child {
+    color: var(--red-light);
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .badge-orange { background: var(--orange); }
+  .badge-yellow { background: #9A8000; color: var(--yellow); }
+
+  /* ——— HIGHLIGHTED 3 ——— */
+  .three-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .highlight-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--red);
+    padding: 28px 24px;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .highlight-card::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 80px; height: 80px;
+    background: rgba(200,16,46,0.06);
+    border-radius: 50%;
+  }
+
+  .hcard-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(200,16,46,0.15);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .hcard-title {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .hcard-body {
+    font-size: 13px;
+    color: var(--light-gray);
+    line-height: 1.65;
+  }
+  .hcard-iso {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 1px;
+  }
+
+  /* ——— IMPACT ——— */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .impact-card {
+    background: var(--dark3);
+    padding: 28px;
+    border-radius: 2px;
+    border: 1px solid var(--dark3);
+    text-align: center;
+  }
+  .impact-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .impact-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--red);
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .impact-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--gray);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .impact-desc {
+    font-size: 12.5px;
+    color: var(--light-gray);
+    line-height: 1.5;
+  }
+
+  /* ——— MEJORAS ——— */
+  .mejoras-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .mejora-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--dark3);
+    padding: 20px;
+    border-radius: 2px;
+    border: 1px solid var(--dark3);
+  }
+  .mejora-icon {
+    width: 40px; height: 40px;
+    background: rgba(200,16,46,0.12);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .mejora-content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .mejora-content p {
+    font-size: 13px;
+    color: var(--light-gray);
+    line-height: 1.6;
+  }
+
+  /* ——— LEGAL BOX ——— */
+  .legal-box {
+    background: rgba(200,16,46,0.06);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    padding: 28px 32px;
+    border-radius: 2px;
+    margin-top: 32px;
+  }
+  .legal-box h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .legal-box p {
+    font-size: 13.5px;
+    color: var(--light-gray);
+    line-height: 1.7;
+  }
+  .legal-box p + p { margin-top: 10px; }
+  .legal-box strong { color: var(--off-white); }
+
+  /* ——— FOOTER ——— */
+  footer {
+    background: var(--red-dark);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+  }
+  .footer-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 1px;
+  }
+
+  /* ——— DIVIDER ——— */
+  .red-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--red), transparent);
+    margin: 32px 0;
+  }
+
+  /* ——— SEVERITY PILLS ——— */
+  .severity {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+  .sev-critical { background: rgba(200,16,46,0.2); color: var(--red-light); border: 1px solid rgba(200,16,46,0.4); }
+  .sev-high { background: rgba(255,107,0,0.15); color: var(--orange); border: 1px solid rgba(255,107,0,0.3); }
+  .sev-medium { background: rgba(255,214,0,0.1); color: var(--yellow); border: 1px solid rgba(255,214,0,0.25); }
+
+  /* — Animation — */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate { animation: fadeUp 0.6s ease both; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+
+  @media (max-width: 900px) {
+    .header-main, .incident-grid, .tv-grid, .three-grid,
+    .impact-grid, .mejoras-grid { grid-template-columns: 1fr; }
+    .stat-bar { grid-template-columns: repeat(2,1fr); }
+    .stat-item:nth-child(2) { border-right: none; }
+    section { padding: 40px 24px; }
+    .header-main { padding: 36px 24px 32px; }
+    .stat-bar { padding: 20px 24px; }
+    footer { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-stripe">
+    <div class="blink"></div>
+    <span>Clasificación: Confidencial — Incidente Activo en Investigación</span>
+    <span style="margin-left:auto;">ISO/IEC 27001:2022 — Gestión de Riesgos de Seguridad de la Información</span>
+  </div>
+  <div class="header-main">
+    <div>
+      <p class="incident-label">Resumen Ejecutivo · Incidente de Ciberseguridad</p>
+      <h1 class="report-title">
+        <em>Hasbro, Inc.</em><br>
+        Ataque a la Red<br>Corporativa
+      </h1>
+    </div>
+    <div class="header-meta">
+      <div class="meta-box">
+        <div class="meta-row"><span>Fecha del incidente:</span> <strong>28 MAR 2026</strong></div>
+        <div class="meta-row"><span>Divulgación SEC:</span> <strong>01 ABR 2026</strong></div>
+        <div class="meta-row"><span>Aviso público:</span> <strong>04 ABR 2026</strong></div>
+        <div class="meta-row"><span>Marco aplicado:</span> <strong>ISO 27001</strong></div>
+        <div class="meta-row"><span>Estado:</span> <strong style="color:var(--red);">● EN INVESTIGACIÓN</strong></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STAT BAR -->
+<div class="stat-bar">
+  <div class="stat-item">
+    <span class="stat-value">28 MAR</span>
+    <span class="stat-label">Detección del incidente (2026)</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">5,000+</span>
+    <span class="stat-label">Empleados potencialmente afectados</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">Miles</span>
+    <span class="stat-label">Registros PII comprometidos</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">Semanas</span>
+    <span class="stat-label">Tiempo estimado de recuperación</span>
+  </div>
+</div>
+
+
+<!-- SECTION 1: RESUMEN DEL INCIDENTE -->
+<section>
+  <div class="container">
+    <p class="section-eyebrow">01 — Resumen del Incidente</p>
+    <h2 class="section-title">¿Qué ocurrió y <span>por qué?</span></h2>
+
+    <div class="incident-grid">
+      <div>
+        <div class="incident-card">
+          <h3>Descripción del Incidente</h3>
+          <p>El <strong>28 de marzo de 2026</strong>, Hasbro, Inc. — fabricante estadounidense de juguetes con más de 5,000 empleados y propietaria de marcas como Transformers, Monopoly, Nerf, Play-Doh, Peppa Pig y Dungeons &amp; Dragons — detectó acceso no autorizado a su red corporativa. La compañía activó de inmediato sus protocolos de respuesta a incidentes, tomó ciertos sistemas fuera de línea y contrató expertos externos en ciberseguridad forense para investigar el alcance del ataque. El incidente fue revelado formalmente ante la SEC mediante un formulario 8-K el <strong>1 de abril de 2026</strong>, y Hasbro publicó una actualización pública el <strong>4 de abril de 2026</strong>.</p>
+        </div>
+
+        <div class="incident-card" style="margin-top:24px;">
+          <h3>Causa del Incidente — ¿Por qué ocurrió?</h3>
+          <p>Según las demandas colectivas presentadas y el análisis de expertos en ciberseguridad, el ataque fue posible por <strong>múltiples fallos de seguridad estructurales</strong>: ausencia de medidas de seguridad adecuadas para proteger la información personal identificable (PII) de empleados y exempleados; falta de capacitación efectiva en ciberseguridad al personal; y sistemas de detección y prevención de intrusiones insuficientes. Los atacantes —posiblemente un grupo de ransomware— lograron infiltrarse en la red corporativa de Hasbro y mantuvieron acceso durante un período indeterminado <strong>antes</strong> de ser detectados, exfiltrando datos confidenciales de empleados actuales y pasados.</p>
+        </div>
+      </div>
+
+      <div>
+        <p class="section-eyebrow" style="margin-bottom:16px;">Cronología del Incidente</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">28 MARZO 2026 — Sábado</div>
+            <div class="timeline-text"><strong>Detección del ataque.</strong> Hasbro identifica acceso no autorizado a su red corporativa. Se activan protocolos de respuesta a incidentes y se toman sistemas offline como medida de contención.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">1 ABRIL 2026</div>
+            <div class="timeline-text"><strong>Divulgación a la SEC.</strong> Hasbro presenta formulario 8-K ante la Securities and Exchange Commission confirmando el incidente. Se advierte de posibles retrasos operativos por "varias semanas".</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">4 ABRIL 2026</div>
+            <div class="timeline-text"><strong>Comunicado público.</strong> Hasbro publica en su sitio de noticias una actualización sobre el incidente. Se confirman medidas de contención pero no se revelan detalles sobre datos robados.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">ABRIL 2026 (segunda quincena)</div>
+            <div class="timeline-text"><strong>Demandas colectivas.</strong> Se presentan múltiples class action lawsuits alegando negligencia en protección de PII de miles de empleados. Datos podrían estar circulando en la dark web.</div>
+          </div>
+          <div class="timeline-item" style="margin-bottom:0">
+            <div class="timeline-date">ESTADO ACTUAL</div>
+            <div class="timeline-text"><strong>Investigación en curso</strong> con apoyo de terceros expertos en ciberseguridad. Alcance total del impacto aún por determinar.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 2: 3 VULNERABILIDADES -->
+<section>
+  <div class="container">
+    <p class="section-eyebrow">02 — Análisis ISO 27001</p>
+    <h2 class="section-title">Las Tres <span>Vulnerabilidades</span> Identificadas</h2>
+    <p style="font-size:14px;color:var(--light-gray);margin-bottom:32px;max-width:700px;">Según el listado de vulnerabilidades del marco ISO/IEC 27001, las siguientes tres son las más directamente relacionadas con el incidente de Hasbro, basadas en los hallazgos de las investigaciones y demandas legales.</p>
+
+    <div class="three-grid">
+      <div class="highlight-card">
+        <div class="hcard-num">01</div>
+        <div class="hcard-title">Falta de formación y conciencia sobre seguridad</div>
+        <div class="hcard-body">Las demandas colectivas y el análisis de expertos señalaron explícitamente que Hasbro <strong style="color:var(--off-white);">falló al capacitar adecuadamente a sus empleados</strong> en ciberseguridad. Esta ausencia facilitó que los atacantes pudieran infiltrarse sin ser detectados a tiempo, posiblemente mediante phishing u otras técnicas de ingeniería social dirigidas al personal interno.</div>
+        <span class="hcard-iso">ISO 27001 — Vulnerabilidad de Personas</span><br>
+        <span class="severity sev-critical" style="margin-top:10px;">● Crítica</span>
+      </div>
+
+      <div class="highlight-card">
+        <div class="hcard-num">02</div>
+        <div class="hcard-title">Ausencia de sistemas de identificación y autenticación robustos</div>
+        <div class="hcard-body">Hasbro no contaba con medios efectivos para <strong style="color:var(--off-white);">prevenir, detectar, detener o mitigar</strong> brechas en sus sistemas, según las demandas. Esto apunta a controles de acceso insuficientes: autenticación débil, ausencia de MFA (autenticación multifactor) o segmentación de red inadecuada que permitió movimiento lateral de los atacantes.</div>
+        <span class="hcard-iso">ISO 27001 — Vulnerabilidad de Tecnología</span><br>
+        <span class="severity sev-critical" style="margin-top:10px;">● Crítica</span>
+      </div>
+
+      <div class="highlight-card">
+        <div class="hcard-num">03</div>
+        <div class="hcard-title">Insuficiente supervisión de empleados y vendedores / Inadecuada gestión de red</div>
+        <div class="hcard-body">Se desconoce por cuánto tiempo los cibercriminales tuvieron acceso a la red <strong style="color:var(--off-white);">antes de ser descubiertos</strong>, lo que evidencia monitoreo y supervisión deficientes. La falta de herramientas de detección de intrusiones (IDS/IPS) y de registros de auditoría efectivos permitió que los atacantes operaran sin activar alarmas durante un período extendido.</div>
+        <span class="hcard-iso">ISO 27001 — Vulnerabilidad Organizacional</span><br>
+        <span class="severity sev-high" style="margin-top:10px;">● Alta</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 3: 3 AMENAZAS -->
+<section>
+  <div class="container">
+    <p class="section-eyebrow">03 — Análisis ISO 27001</p>
+    <h2 class="section-title">Las Tres <span>Amenazas</span> Identificadas</h2>
+    <p style="font-size:14px;color:var(--light-gray);margin-bottom:32px;max-width:700px;">Del catálogo oficial de amenazas ISO/IEC 27001, las siguientes tres son las que se materializaron o tuvieron alta probabilidad de materializarse en el incidente de Hasbro.</p>
+
+    <div class="three-grid">
+      <div class="highlight-card">
+        <div class="hcard-num">01</div>
+        <div class="hcard-title">Acceso a la red o al sistema de información por personas no autorizadas</div>
+        <div class="hcard-body">Esta es la amenaza principal y directa del incidente: <strong style="color:var(--off-white);">un actor externo no autorizado logró acceder a la red corporativa</strong> de Hasbro. El formulario 8-K presentado ante la SEC confirma explícitamente "acceso no autorizado" a la red de la compañía el 28 de marzo de 2026. Esta amenaza es el vector de ataque central que desencadenó todas las consecuencias subsiguientes.</div>
+        <span class="hcard-iso">ISO 27001 — Amenaza Deliberada Externa</span><br>
+        <span class="severity sev-critical" style="margin-top:10px;">● Crítica · Confirmada</span>
+      </div>
+
+      <div class="highlight-card">
+        <div class="hcard-num">02</div>
+        <div class="hcard-title">Fuga de información / Comprometer información confidencial</div>
+        <div class="hcard-body">Los datos robados incluyen <strong style="color:var(--off-white);">información personal identificable (PII)</strong> de miles de empleados actuales y pasados: nombres, direcciones, información financiera y otros datos sensibles. Las demandas colectivas advierten que esta información ya podría estar disponible en la dark web para su venta, exponiendo a las víctimas a fraude e robo de identidad.</div>
+        <span class="hcard-iso">ISO 27001 — Amenaza Deliberada Externa</span><br>
+        <span class="severity sev-critical" style="margin-top:10px;">● Crítica · Confirmada</span>
+      </div>
+
+      <div class="highlight-card">
+        <div class="hcard-num">03</div>
+        <div class="hcard-title">Código malicioso / Interrupción de procesos de negocio</div>
+        <div class="hcard-body">Los expertos en seguridad señalan que el patrón del ataque —toma de sistemas offline, cifrado de archivos, robo de datos— es consistente con un ataque de <strong style="color:var(--off-white);">ransomware</strong>. Esto causó interrupción de operaciones: procesamiento de órdenes, logística y envíos se vieron afectados, con posibles retrasos durante "varias semanas" según la propia declaración de Hasbro ante la SEC.</div>
+        <span class="hcard-iso">ISO 27001 — Amenaza Deliberada / Técnica</span><br>
+        <span class="severity sev-high" style="margin-top:10px;">● Alta · Probable</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 4: IMPACTO -->
+<section>
+  <div class="container">
+    <p class="section-eyebrow">04 — Cuantificación del Impacto</p>
+    <h2 class="section-title">Información <span>Sustraída</span> e Impacto Económico</h2>
+
+    <div class="impact-grid">
+      <div class="impact-card">
+        <span class="impact-icon">👤</span>
+        <span class="impact-number">Miles</span>
+        <span class="impact-label">Registros de PII comprometidos</span>
+        <p class="impact-desc">Información de empleados y exempleados de Hasbro en múltiples estados de EE.UU. La demanda menciona "cientos" de afectados directos con potencial de escalar a "miles" según avance la investigación.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon">💰</span>
+        <span class="impact-number">N/D*</span>
+        <span class="impact-label">Valor estimado en dólares</span>
+        <p class="impact-desc">Hasbro no ha divulgado el valor monetario de los datos sustraídos. Sin embargo, el costo promedio de una brecha de datos en EE.UU. en 2025 fue de <strong>$4.88 millones USD</strong> (IBM Cost of a Data Breach Report). Impacto operativo, legal y reputacional podría superar los <strong>$10–50M USD</strong>.</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon">⚠️</span>
+        <span class="impact-number">2+</span>
+        <span class="impact-label">Demandas colectivas activas</span>
+        <p class="impact-desc">Al menos dos class action lawsuits han sido presentadas en nombre de empleados y exempleados afectados, alegando negligencia en la protección de datos y fallo en notificar oportunamente a las víctimas.</p>
+      </div>
+    </div>
+
+    <div class="legal-box">
+      <h3>⚖ Tipos de Datos Comprometidos (según demandas legales)</h3>
+      <p>Las demandas colectivas detallan que Hasbro almacenaba una variedad de información personal identificable (PII) de empleados, incluyendo: <strong>nombres completos, direcciones físicas, números de seguro social, información bancaria y financiera, datos de beneficios laborales, e información médica</strong> asociada a seguros de salud corporativos.</p>
+      <p>*La cantidad exacta de dólares o registros formalmente comprometidos no ha sido divulgada públicamente por Hasbro hasta la fecha de elaboración de este informe (abril 2026), pues la investigación sigue en curso. El valor estimado se basa en promedios de la industria y el número de empleados expuestos.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 5: TABLA COMPLETA AMENAZAS Y VULNERABILIDADES ISO -->
+<section>
+  <div class="container">
+    <p class="section-eyebrow">05 — Marco ISO/IEC 27001</p>
+    <h2 class="section-title">Listado Completo: <span>Amenazas y Vulnerabilidades</span></h2>
+    <p style="font-size:14px;color:var(--light-gray);margin-bottom:36px;max-width:800px;">Las filas resaltadas en rojo corresponden a las amenazas y vulnerabilidades directamente identificadas en el incidente de Hasbro del 28 de marzo de 2026.</p>
+
+    <div class="tv-grid">
+      <!-- AMENAZAS -->
+      <div class="tv-column">
+        <h3>🔴 Amenazas — ISO 27001</h3>
+        <table class="iso-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Amenaza</th>
+              <th>Relevancia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlighted">
+              <td>A-01</td>
+              <td>Acceso a la red por personas no autorizadas <span class="badge">Hasbro</span></td>
+              <td><span class="severity sev-critical">Crítica</span></td>
+            </tr>
+            <tr><td>A-02</td><td>Amenaza o ataque con bomba</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>A-03</td><td>Incumplimiento de relaciones contractuales</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-04</td><td>Infracción legal</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr class="highlighted">
+              <td>A-05</td>
+              <td>Comprometer información confidencial <span class="badge">Hasbro</span></td>
+              <td><span class="severity sev-critical">Crítica</span></td>
+            </tr>
+            <tr><td>A-06</td><td>Ocultar la identidad de un usuario</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-07</td><td>Daño causado por un tercero</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-08</td><td>Daños por pruebas de penetración</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-09</td><td>Destrucción de registros</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-10</td><td>Desastre generado por causas humanas</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-11</td><td>Desastre natural (incendio, inundación, rayo)</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr class="highlighted">
+              <td>A-12</td>
+              <td>Fuga de información <span class="badge">Hasbro</span></td>
+              <td><span class="severity sev-critical">Crítica</span></td>
+            </tr>
+            <tr><td>A-13</td><td>Divulgación de contraseñas</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-14</td><td>Malversación y fraude</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-15</td><td>Errores en mantenimiento</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-16</td><td>Fallo de los enlaces de comunicación</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-17</td><td>Falsificación de registros</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-18</td><td>Espionaje industrial</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-19</td><td>Interrupción de procesos de negocio</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-20</td><td>Pérdida de electricidad</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>A-21</td><td>Pérdida de servicios de apoyo</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-22</td><td>Mal funcionamiento del equipo</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-23</td><td>Código malicioso (ransomware/malware)</td><td><span class="severity sev-critical">Crítica</span></td></tr>
+            <tr><td>A-24</td><td>Uso indebido de los sistemas de información</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-25</td><td>Uso indebido de herramientas de auditoría</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-26</td><td>Contaminación</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>A-27</td><td>Errores de software</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-28</td><td>Huelgas o paros</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>A-29</td><td>Ataques terroristas</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>A-30</td><td>Hurtos o vandalismo</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-31</td><td>Cambio involuntario de datos en un sistema</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-32</td><td>Cambios no autorizados de registros</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-33</td><td>Instalación no autorizada de software</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>A-34</td><td>Acceso físico no autorizado</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-35</td><td>Uso no autorizado de material con copyright</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>A-36</td><td>Uso no autorizado de software</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>A-37</td><td>Error de usuario</td><td><span class="severity sev-high">Alta</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- VULNERABILIDADES -->
+      <div class="tv-column">
+        <h3>🟠 Vulnerabilidades — ISO 27001</h3>
+        <table class="iso-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Vulnerabilidad</th>
+              <th>Relevancia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>V-01</td><td>Interfaz de usuario complicada</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-02</td><td>Contraseñas predeterminadas no modificadas</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-03</td><td>Eliminación de medios sin eliminar datos</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-04</td><td>Sensibilidad del equipo a voltaje</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-05</td><td>Sensibilidad a humedad, temperatura o contaminantes</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-06</td><td>Inadecuada seguridad del cableado</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-07</td><td>Inadecuada gestión de capacidad del sistema</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-08</td><td>Gestión inadecuada del cambio</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-09</td><td>Clasificación inadecuada de la información</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-10</td><td>Control inadecuado del acceso físico</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-11</td><td>Mantenimiento inadecuado</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-12</td><td>Inadecuada gestión de red</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-13</td><td>Respaldo inapropiado o irregular</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-14</td><td>Inadecuada gestión y protección de contraseñas</td><td><span class="severity sev-critical">Crítica</span></td></tr>
+            <tr><td>V-15</td><td>Protección física no apropiada</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-16</td><td>Reemplazo inadecuado de equipos viejos</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr class="highlighted">
+              <td>V-17</td>
+              <td>Falta de formación y conciencia sobre seguridad <span class="badge">Hasbro</span></td>
+              <td><span class="severity sev-critical">Crítica</span></td>
+            </tr>
+            <tr><td>V-18</td><td>Inadecuada segregación de funciones</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-19</td><td>Mala segregación de instalaciones operativas y de prueba</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr class="highlighted">
+              <td>V-20</td>
+              <td>Insuficiente supervisión de empleados y vendedores <span class="badge">Hasbro</span></td>
+              <td><span class="severity sev-critical">Crítica</span></td>
+            </tr>
+            <tr><td>V-21</td><td>Especificación incompleta para desarrollo de software</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-22</td><td>Pruebas de software insuficientes</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-23</td><td>Falta de política de acceso remoto</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-24</td><td>Ausencia de política de escritorio limpio</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-25</td><td>Falta de control sobre datos de entrada y salida</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-26</td><td>Falta de documentación interna</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-27</td><td>Carencia de auditoría interna</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-28</td><td>Falta de políticas para uso de criptografía</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-29</td><td>Falta de procedimientos para eliminar derechos de acceso al terminar empleo</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-30</td><td>Desprotección en equipos móviles</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-31</td><td>Falta de redundancia, copia única</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr class="highlighted">
+              <td>V-32</td>
+              <td>Ausencia de sistemas de identificación y autenticación <span class="badge">Hasbro</span></td>
+              <td><span class="severity sev-critical">Crítica</span></td>
+            </tr>
+            <tr><td>V-33</td><td>No validación de los datos procesados</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-34</td><td>Ubicación vulnerable a inundaciones</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-35</td><td>Mala selección de datos de prueba</td><td><span class="severity sev-medium">Baja</span></td></tr>
+            <tr><td>V-36</td><td>Copia no controlada de datos</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-37</td><td>Descarga no controlada de Internet</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-38</td><td>Uso incontrolado de sistemas de información</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-39</td><td>Software no documentado</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-40</td><td>Empleados desmotivados</td><td><span class="severity sev-medium">Media</span></td></tr>
+            <tr><td>V-41</td><td>Conexiones a red pública desprotegidas</td><td><span class="severity sev-high">Alta</span></td></tr>
+            <tr><td>V-42</td><td>Los derechos del usuario no se revisan regularmente</td><td><span class="severity sev-high">Alta</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 6: MEJORAS -->
+<section>
+  <div class="container">
+    <p class="section-eyebrow">06 — Plan de Remediación</p>
+    <h2 class="section-title">Mejoras Implementadas para <span>Prevenir la Recurrencia</span></h2>
+    <p style="font-size:14px;color:var(--light-gray);margin-bottom:36px;max-width:800px;">Basadas en las declaraciones oficiales de Hasbro, el formulario 8-K ante la SEC y las mejores prácticas de ISO 27001, se identifican las siguientes medidas correctivas implementadas o en proceso de implementación.</p>
+
+    <div class="mejoras-grid">
+      <div class="mejora-item">
+        <div class="mejora-icon">🔒</div>
+        <div class="mejora-content">
+          <h4>Contención y Aislamiento de Sistemas</h4>
+          <p>Hasbro tomó proactivamente ciertos sistemas offline como medida de contención para evitar la propagación del ataque. Se establecieron planes de continuidad del negocio para mantener operaciones esenciales (pedidos, envíos) mientras se remedian los sistemas comprometidos.</p>
+        </div>
+      </div>
+
+      <div class="mejora-item">
+        <div class="mejora-icon">🔎</div>
+        <div class="mejora-content">
+          <h4>Investigación Forense con Expertos Externos</h4>
+          <p>Contratación de empresas especializadas en ciberseguridad forense (terceros) para determinar el alcance total del incidente, identificar el vector de ataque, analizar los archivos potencialmente comprometidos y asegurar la cadena de evidencia digital para los procesos legales.</p>
+        </div>
+      </div>
+
+      <div class="mejora-item">
+        <div class="mejora-icon">🛡️</div>
+        <div class="mejora-content">
+          <h4>Refuerzo de Controles de Seguridad de Red</h4>
+          <p>Implementación de medidas adicionales para asegurar las operaciones comerciales, incluyendo revisión y fortalecimiento de firewalls, sistemas de detección de intrusiones (IDS/IPS), segmentación de red y controles de acceso basados en el principio de mínimo privilegio.</p>
+        </div>
+      </div>
+
+      <div class="mejora-item">
+        <div class="mejora-icon">📋</div>
+        <div class="mejora-content">
+          <h4>Revisión y Notificación de Datos Afectados</h4>
+          <p>Hasbro inició la identificación y revisión de archivos potencialmente impactados para emitir notificaciones requeridas por ley a personas afectadas, en cumplimiento con regulaciones estatales y federales de privacidad de datos de EE.UU. (CCPA, HIPAA donde aplique).</p>
+        </div>
+      </div>
+
+      <div class="mejora-item">
+        <div class="mejora-icon">🎓</div>
+        <div class="mejora-content">
+          <h4>Programa de Capacitación en Ciberseguridad</h4>
+          <p>Como respuesta directa a las críticas de las demandas legales sobre falta de entrenamiento, se espera que Hasbro implemente o refuerce programas obligatorios de concientización en ciberseguridad para todos los empleados, incluyendo simulaciones de phishing, gestión de contraseñas y manejo de datos sensibles.</p>
+        </div>
+      </div>
+
+      <div class="mejora-item">
+        <div class="mejora-icon">📡</div>
+        <div class="mejora-content">
+          <h4>Monitoreo Continuo y Gestión de Incidentes 24/7</h4>
+          <p>Establecimiento o mejora de un Centro de Operaciones de Seguridad (SOC) con capacidad de monitoreo continuo, alertas en tiempo real y respuesta a incidentes disponible las 24 horas del día, los 7 días de la semana, para detectar actividades sospechosas antes de que se conviertan en brechas mayores.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-box" style="margin-top:40px;">
+      <h3>📌 Nota sobre el Proceso de Mejora Continua ISO 27001</h3>
+      <p>Según el marco ISO/IEC 27001, Hasbro debe realizar un análisis de riesgo formal post-incidente que incluya la actualización de su <strong>Declaración de Aplicabilidad (SoA)</strong>, la revisión de su <strong>Plan de Tratamiento de Riesgos</strong> y la implementación de los controles del Anexo A relevantes (especialmente A.6 Personas, A.8 Gestión de Activos, A.9 Control de Acceso, A.12 Seguridad de Operaciones y A.16 Gestión de Incidentes de Seguridad).</p>
+      <p>El incumplimiento de las notificaciones obligatorias bajo leyes estatales de privacidad podría resultar en sanciones regulatorias adicionales a las ya existentes demandas colectivas. La investigación en curso determinará si se aplican requisitos de reporte adicionales bajo la normativa de la SEC para incidentes materiales.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">Hasbro, Inc. — Incidente de Seguridad 2026</div>
+    <div class="footer-meta" style="margin-top:6px;">Análisis basado en ISO/IEC 27001:2022 · Fuentes: SEC Form 8-K, Hasbro Newsroom, TechCrunch, SecurityWeek, Rhode Island Current</div>
+  </div>
+  <div style="text-align:right;">
+    <div class="footer-meta">Fecha de elaboración: Abril 2026</div>
+    <div class="footer-meta">Clasificación: Académico / Referencia</div>
+    <div class="footer-meta" style="margin-top:8px;color:rgba(255,255,255,0.4);">Este documento es de carácter analítico e informativo.</div>
+  </div>
+</footer>
+
+</body>
+</html>
