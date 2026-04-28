@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Mnemotécnica — Cripto & E-Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --ink: #1a1209;
+    --soft: #f0ebe0;
+    --border: #d4c9b0;
+    --muted: #8b7d65;
+    --c1: #c2410c;   /* orange-red */
+    --c2: #7c3aed;   /* violet */
+    --c3: #047857;   /* emerald */
+    --c4: #b45309;   /* amber */
+    --c5: #be185d;   /* pink */
+    --c6: #1d4ed8;   /* blue */
+    --c7: #374151;   /* slate */
+    --highlight: #fef08a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 40px;
+    background: var(--bg);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--highlight);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    font-style: italic;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--highlight);
+  }
+  .hero p {
+    margin-top: 1rem;
+    color: rgba(250,247,242,.6);
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 2px solid var(--ink);
+    padding: 0 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .nav-tabs {
+    display: inline-flex;
+    gap: 0;
+  }
+  .nav-tab {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .9rem 1.2rem;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 700; }
+
+  /* ── SECTIONS ── */
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 2rem;
+    display: none;
+  }
+  .section.active { display: block; }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+  .section-header h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .section-intro {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-weight: 300;
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+
+  /* ── MNEMONIC CARD ── */
+  .mnemo-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .mnemo-header {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: background .15s;
+  }
+  .mnemo-header:hover { background: var(--soft); }
+  .mnemo-header.open { border-bottom-color: var(--border); }
+  .mnemo-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .mnemo-title {
+    font-weight: 700;
+    font-size: 1rem;
+    flex: 1;
+  }
+  .mnemo-type {
+    font-family: 'DM Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .2rem .6rem;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .mnemo-toggle {
+    font-family: 'DM Mono', monospace;
+    font-size: .8rem;
+    color: var(--muted);
+    transition: transform .2s;
+  }
+  .mnemo-header.open .mnemo-toggle { transform: rotate(180deg); }
+
+  .mnemo-body {
+    display: none;
+    padding: 1.2rem;
+  }
+  .mnemo-body.open { display: block; }
+
+  /* ── TRICK TYPES ── */
+  .trick-acrostic {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .trick-story {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .trick-visual {
+    background: #fdf4ff;
+    border: 1px solid #e9d5ff;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .trick-number {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .trick-rhyme {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .trick-chunking {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .trick-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .5rem;
+  }
+  .trick-main {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: .5rem;
+  }
+  .trick-explain {
+    font-size: .9rem;
+    color: var(--muted);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  hl { background: var(--highlight); padding: 0 .15em; font-style: normal; }
+
+  /* ── KEY FACTS TABLE ── */
+  .fact-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+    margin-top: 1rem;
+  }
+  .fact-table th {
+    background: var(--ink);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .6rem .8rem;
+    text-align: left;
+  }
+  .fact-table td {
+    padding: .55rem .8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .fact-table tr:last-child td { border-bottom: none; }
+  .fact-table tr:nth-child(even) td { background: var(--soft); }
+
+  /* ── VISUAL MAP ── */
+  .visual-map {
+    background: var(--soft);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .8rem;
+    line-height: 2;
+    white-space: pre-wrap;
+    color: var(--ink);
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight-box {
+    background: var(--highlight);
+    border-radius: 3px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-weight: 700;
+    font-size: .95rem;
+    border-left: 4px solid var(--c4);
+  }
+
+  /* ── NUMBERED LIST ── */
+  .num-list {
+    list-style: none;
+    margin: .5rem 0;
+  }
+  .num-list li {
+    display: flex;
+    gap: .8rem;
+    padding: .4rem 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: .9rem;
+    align-items: baseline;
+  }
+  .num-list li:last-child { border-bottom: none; }
+  .num-list .num {
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem;
+    color: white;
+    background: var(--ink);
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  /* ── COMPARE PILLS ── */
+  .compare-row {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin: .5rem 0;
+  }
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    padding: .3rem .7rem;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: white;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+
+  @media (max-width: 600px) {
+    .nav-tab { padding: .7rem .8rem; font-size: .6rem; }
+    .section { padding: 2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">Desarrollo de Software IX · UTP · Semana 4</div>
+  <h1>Guía <em>Mnemotécnica</em></h1>
+  <p>Criptomonedas &amp; Pasarelas de Pago — Trucos para retener todo el contenido</p>
+</div>
+
+<div class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('s1',this)">🔗 Blockchain</button>
+    <button class="nav-tab" onclick="showSection('s2',this)">🪙 Criptos</button>
+    <button class="nav-tab" onclick="showSection('s3',this)">🏦 Pasarelas Cripto</button>
+    <button class="nav-tab" onclick="showSection('s4',this)">🌐 Internacionales</button>
+    <button class="nav-tab" onclick="showSection('s5',this)">🇵🇦 LATAM &amp; Panamá</button>
+    <button class="nav-tab" onclick="showSection('s6',this)">🛒 Plataformas</button>
+    <button class="nav-tab" onclick="showSection('s7',this)">⚙️ Técnico &amp; Legal</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 1: BLOCKCHAIN -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section active" id="s1">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c1)">Tema 01 / 07</div>
+    <h2>Fundamentos de Blockchain</h2>
+    <p class="section-intro">Los bloques que no se pueden romper, ni cambiar, ni olvidar.</p>
+  </div>
+
+  <!-- Mnemónico 1 -->
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🧠</span>
+      <span class="mnemo-title">Los 5 componentes del Blockchain</span>
+      <span class="mnemo-type">Acróstico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-acrostic">
+        <div class="trick-label">Acróstico · recuerda la inicial de cada componente</div>
+        <div class="trick-main">"<hl>B</hl>loques <hl>C</hl>onsecutivos <hl>R</hl>esistentes <hl>C</hl>omo <hl>C</hl>emento"</div>
+        <div class="trick-explain">B = Bloques · C = Cadena · R = Red P2P · C = Criptografía · C = Consenso</div>
+      </div>
+      <table class="fact-table">
+        <tr><th>Inicial</th><th>Componente</th><th>¿Qué hace?</th></tr>
+        <tr><td><b>B</b></td><td>Bloques</td><td>Paquetes de transacciones verificadas con hash</td></tr>
+        <tr><td><b>C</b></td><td>Cadena</td><td>Bloques enlazados por el hash del anterior</td></tr>
+        <tr><td><b>R</b></td><td>Red P2P</td><td>Nodos distribuidos con copia completa del ledger</td></tr>
+        <tr><td><b>C</b></td><td>Criptografía</td><td>Firmas digitales que garantizan autenticidad</td></tr>
+        <tr><td><b>C</b></td><td>Consenso</td><td>PoW/PoS para validar el estado de la cadena</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mnemónico 2 -->
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🎬</span>
+      <span class="mnemo-title">Los 6 pasos de una transacción</span>
+      <span class="mnemo-type">Historia</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-story">
+        <div class="trick-label">Historia visual · imagina esto sucediendo</div>
+        <div class="trick-main">"Yo Difundo, Validan, Bloqueamos, Consensuamos, ¡Confirmado!"</div>
+        <div class="trick-explain">Inicio → Difusión → Validación → Bloque → Consenso → Confirmación</div>
+      </div>
+      <ul class="num-list">
+        <li><span class="num">1</span> <span><b>Inicio:</b> Usuario firma con su clave privada</span></li>
+        <li><span class="num">2</span> <span><b>Difusión:</b> TX se transmite a la red P2P</span></li>
+        <li><span class="num">3</span> <span><b>Validación:</b> Nodos verifican firma y saldo</span></li>
+        <li><span class="num">4</span> <span><b>Bloque:</b> Minero/validador agrupa las TX</span></li>
+        <li><span class="num">5</span> <span><b>Consenso:</b> Red acuerda la validez del bloque</span></li>
+        <li><span class="num">6</span> <span><b>Confirmación:</b> Bloque añadido permanentemente</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mnemónico 3 -->
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🏰</span>
+      <span class="mnemo-title">¿Por qué el blockchain es inmutable?</span>
+      <span class="mnemo-type">Analogía visual</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-visual">
+        <div class="trick-label">Imagen mental · grábala en tu mente</div>
+        <div class="trick-main">🧱 Imagina un muro de ladrillos donde cada ladrillo lleva grabado el nombre del ladrillo anterior. Si cambias uno, TODOS los del techo caen.</div>
+        <div class="trick-explain">El "nombre grabado" = hash del bloque anterior. Cambiar un bloque rompe la cadena completa.</div>
+      </div>
+      <div class="highlight-box">💡 Clave: hash del bloque anterior está dentro de cada bloque nuevo → cadena imposible de alterar sin rehacer todo.</div>
+    </div>
+  </div>
+
+  <!-- Mnemónico 4 -->
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🔑</span>
+      <span class="mnemo-title">Clave pública vs Clave privada</span>
+      <span class="mnemo-type">Analogía</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-visual">
+        <div class="trick-label">Analogía del buzón de correos</div>
+        <div class="trick-main">📪 Clave pública = dirección de tu buzón (todos pueden depositar)  🗝️ Clave privada = llave del buzón (solo tú puedes abrir)</div>
+        <div class="trick-explain">Cualquiera puede enviarte cripto con tu clave pública, pero solo tú la mueves con tu clave privada.</div>
+      </div>
+      <div class="highlight-box">⚠️ Perder la clave privada = perder tus fondos para siempre. ¡NUNCA la compartas!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 2: CRIPTOMONEDAS -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c2)">Tema 02 / 07</div>
+    <h2>Tipos de Criptomonedas</h2>
+    <p class="section-intro">Cada moneda tiene su personalidad. Aprende a distinguirlas con imágenes.</p>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🏆</span>
+      <span class="mnemo-title">Las 4 cripto principales — sus "personalidades"</span>
+      <span class="mnemo-type">Analogía de personajes</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-visual">
+        <div class="trick-label">Imagina que son personas en una tienda</div>
+        <div class="trick-main">₿ BTC = El abuelo rico: lento, confiable, todos lo conocen.<br>Ξ ETH = El ingeniero: trabaja con contratos, un poco más rápido.<br>⚡ Lightning = El mensajero: llega en segundos, casi gratis.<br>💵 Stablecoin = El billete verde: no sube, no baja, siempre vale $1.</div>
+      </div>
+      <table class="fact-table">
+        <tr><th>Cripto</th><th>Velocidad</th><th>Volatilidad</th><th>Ideal para</th></tr>
+        <tr><td>Bitcoin (BTC)</td><td>Lenta 10–60 min</td><td>Alta</td><td>Compras alto valor</td></tr>
+        <tr><td>Lightning BTC</td><td>Instantánea &lt;5s</td><td>Alta (base)</td><td>Micropagos, retail</td></tr>
+        <tr><td>Ethereum (ETH)</td><td>Media 15s–2min</td><td>Alta</td><td>Contratos, B2B</td></tr>
+        <tr><td>Stablecoins</td><td>Rápida</td><td>Ninguna</td><td>Comercio general</td></tr>
+        <tr><td>Solana (SOL)</td><td>Muy rápida 0.4s</td><td>Alta</td><td>Plataformas técnicas</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">📊</span>
+      <span class="mnemo-title">Estadísticas de adopción — los "4 grandes números"</span>
+      <span class="mnemo-type">Chunking numérico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-number">
+        <div class="trick-label">Asocia cada número con una imagen</div>
+        <div class="trick-main">4️⃣ · 1️⃣5️⃣ · 2️⃣.8️⃣ · 4️⃣2️⃣0️⃣</div>
+        <div class="trick-explain">$4.3B = 4 pilas de billones diarios · 15K+ = 15 mil comercios (una ciudad pequeña) · 2.8% = casi 3% crece cada mes · 420M = casi medio billón de usuarios</div>
+      </div>
+      <div class="highlight-box">🎯 Truco: "4 – 15 – 3 – 420" → dinero, comercios, crecimiento, usuarios. Como el marcador de un partido.</div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">📉</span>
+      <span class="mnemo-title">¿Por qué stablecoins dominan pagos pequeños?</span>
+      <span class="mnemo-type">Historia</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-story">
+        <div class="trick-label">Historia de la pizza olvidada</div>
+        <div class="trick-main">🍕 Pediste una pizza con BTC. Cuando llegó, BTC bajó 10% y la pizzería perdió dinero. Con USDC, la pizza siempre cuesta lo mismo. Por eso las stablecoins representan el <hl>38%</hl> de pagos cripto en e-commerce en 2024.</div>
+      </div>
+      <div class="highlight-box">💡 Stablecoins = 1:1 con dólar. USDT, USDC, DAI, BUSD. Crecimiento de 2019 ($0.9B) a 2024 ($5.2B volumen diario).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 3: PASARELAS CRIPTO -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c3)">Tema 03 / 07</div>
+    <h2>Pasarelas de Pago Cripto</h2>
+    <p class="section-intro">BitPay, Coinbase, CryptoPay, BTCPay. Cuatro hermanos muy distintos.</p>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">👨‍👩‍👧‍👦</span>
+      <span class="mnemo-title">Las 4 pasarelas como 4 hermanos</span>
+      <span class="mnemo-type">Analogía de personajes</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-visual">
+        <div class="trick-label">Recuerda su "personalidad"</div>
+        <div class="trick-main">
+          💼 <b>BitPay</b> = El ejecutivo: profesional, KYC estricto, convierte a dólares, opera en 200 países.<br><br>
+          🏄 <b>Coinbase Commerce</b> = El surfista: informal, sin KYC para pequeños, no convierte a fiat, guarda en tu wallet.<br><br>
+          🇪🇺 <b>CryptoPay</b> = El europeo: fundado en 2013, opera en Europa, convierte a EUR/GBP/USD, no llega a Panamá.<br><br>
+          🧑‍💻 <b>BTCPay Server</b> = El hacker libertario: gratis, open source, sin intermediarios, pero necesitas saber programar.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">💰</span>
+      <span class="mnemo-title">Comisiones en orden — "1 – 1 – 1.5 – 0"</span>
+      <span class="mnemo-type">Chunking numérico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-number">
+        <div class="trick-label">Ordénalas de mayor a menor comisión... o la trampa: BTCPay es 0%</div>
+        <div class="trick-main">BitPay: 1% · Coinbase: 1% · CryptoPay: 0.8–1.5% · BTCPay: 0%</div>
+        <div class="trick-explain">Recuerda: "Los dos B (BitPay y Coinbase) empatan en 1%. El europeo cobra más. El hacker cobra nada."</div>
+      </div>
+      <div class="highlight-box">🎯 Mnemónico: "<hl>BB</hl> = 1-1, Cripto = max, B-Server = cero". Las dos B cuestan igual, la C cobra más, la S libre.</div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">📋</span>
+      <span class="mnemo-title">KYC, Fiat y Control — tabla rápida</span>
+      <span class="mnemo-type">Tabla comparativa</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="highlight-box">🧠 Truco: "KYC = el nivel de burocracia". Si necesitas anotar a tus clientes, mucho KYC. BTCPay no te pide nada.</div>
+      <table class="fact-table">
+        <tr><th>Pasarela</th><th>KYC</th><th>Liquidación Fiat</th><th>Control fondos</th></tr>
+        <tr><td>BitPay</td><td>✅ Completo</td><td>✅ Automático</td><td>Limitado</td></tr>
+        <tr><td>Coinbase Commerce</td><td>⚠️ Parcial</td><td>❌ No</td><td>Alto</td></tr>
+        <tr><td>CryptoPay</td><td>✅ Completo</td><td>✅ Automático</td><td>Limitado</td></tr>
+        <tr><td>BTCPay Server</td><td>❌ No</td><td>❌ No</td><td>Total</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🔢</span>
+      <span class="mnemo-title">Los 6 pasos de integración de BitPay</span>
+      <span class="mnemo-type">Acróstico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-acrostic">
+        <div class="trick-label">Acróstico con las iniciales</div>
+        <div class="trick-main">"<hl>R</hl>egistro, <hl>V</hl>erifica, <hl>C</hl>uenta, <hl>I</hl>nstala, <hl>C</hl>onfigura, <hl>P</hl>rueba"</div>
+        <div class="trick-explain">R=Registro · V=Verificación KYC · C=Cuenta bancaria · I=Instalación plugin/API · C=Configuración · P=Pruebas sandbox</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 4: PASARELAS INTERNACIONALES -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c4)">Tema 04 / 07</div>
+    <h2>Pasarelas Internacionales &amp; Modelos de Integración</h2>
+    <p class="section-intro">PayPal, Stripe, 2Checkout — y cómo conectarlos a tu tienda.</p>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🌍</span>
+      <span class="mnemo-title">PayPal vs Stripe vs 2Checkout — "El clásico, el dev y el global"</span>
+      <span class="mnemo-type">Analogía</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-visual">
+        <div class="trick-label">Asocia cada uno con un tipo de persona</div>
+        <div class="trick-main">
+          🏅 <b>PayPal</b> = El veterano de 200 países. Todos confían en él, pero cobra caro y pelea poco cuando hay disputas.<br><br>
+          👨‍💻 <b>Stripe</b> = El rockstar de los devs. API perfecta, documentación superior. Problema: no llega a Panamá directamente.<br><br>
+          🌐 <b>2Checkout</b> = El nómada digital. Opera en 200+ países, 100+ monedas. Comisión más alta (3.5%) y configuración compleja.
+        </div>
+      </div>
+      <table class="fact-table">
+        <tr><th>Pasarela</th><th>Países</th><th>Comisión</th><th>Diferenciador</th></tr>
+        <tr><td>PayPal</td><td>200+</td><td>2.9% + $0.30</td><td>Confianza masiva</td></tr>
+        <tr><td>Stripe</td><td>43 (limitado LATAM)</td><td>2.9% + $0.30</td><td>Mejor API del mercado</td></tr>
+        <tr><td>2Checkout</td><td>200+, 100+ monedas</td><td>3.5% + $0.30</td><td>Multi-moneda nativo</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🔌</span>
+      <span class="mnemo-title">3 modelos de integración — "Salir, Quedar, Controlar"</span>
+      <span class="mnemo-type">Rima conceptual</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-rhyme">
+        <div class="trick-label">Rima para recordar los tres modelos</div>
+        <div class="trick-main">"Si el usuario <hl>sale</hl> a pagar, es Redirección fácil de usar. Si en un <hl>marco</hl> queda atrapado, es iframe incrustado. Si tu <hl>servidor</hl> controla el flujo, es API con todo el orgullo."</div>
+      </div>
+      <table class="fact-table">
+        <tr><th>Modelo</th><th>Complejidad</th><th>Experiencia UX</th><th>Ejemplo</th></tr>
+        <tr><td>Redirección</td><td>Baja</td><td>Fragmentada</td><td>PayPal Standard</td></tr>
+        <tr><td>Iframe/Incrustado</td><td>Media</td><td>Integrada</td><td>Stripe Checkout</td></tr>
+        <tr><td>API Directa</td><td>Alta</td><td>100% personalizada</td><td>Stripe API</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🏦</span>
+      <span class="mnemo-title">Los 5 actores del ecosistema de pagos</span>
+      <span class="mnemo-type">Historia de la pizza 2.0</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-story">
+        <div class="trick-label">Historia para recordar los 5 roles</div>
+        <div class="trick-main">🍕 Tú (<b>Comercio</b>) recibes el pago online. La <b>Pasarela</b> encripta y envía los datos. El <b>Procesador</b> habla con los bancos. El <b>Banco Emisor</b> (del cliente) aprueba. El <b>Banco Adquirente</b> (tuyo) recibe el dinero.</div>
+        <div class="trick-explain">Comercio → Pasarela → Procesador → Banco Emisor → Banco Adquirente</div>
+      </div>
+      <div class="highlight-box">📌 PCI DSS: la norma de seguridad que todos deben cumplir cuando tocan datos de tarjetas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 5: LATAM & PANAMÁ -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c5)">Tema 05 / 07</div>
+    <h2>Pasarelas LATAM &amp; Marco de Panamá</h2>
+    <p class="section-intro">Lo que funciona en la región y lo que dice la Ley 697.</p>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🗺️</span>
+      <span class="mnemo-title">Las 3 pasarelas LATAM — "El local, el gigante, el colombiano"</span>
+      <span class="mnemo-type">Asociación geográfica</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-visual">
+        <div class="trick-label">Ubícalas en el mapa mentalmente</div>
+        <div class="trick-main">
+          🇵🇦 <b>PagueloFácil</b> = Casa: Panamá. Tu pasarela local. 2.5–4.0%, tarjetas + transferencias locales.<br><br>
+          🌎 <b>Mercado Pago</b> = El gigante: toda Latinoamérica. 3.5–5.0%, acepta todo (tarjetas, efectivo, QR).<br><br>
+          🇨🇴 <b>Wompi</b> = El colombiano en expansión. 2.5–4.0%, API innovadora, todavía NO disponible en Panamá.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">⚖️</span>
+      <span class="mnemo-title">Ley 697 de Panamá — Las 5 reglas del juego</span>
+      <span class="mnemo-type">Acróstico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-acrostic">
+        <div class="trick-label">Recuerda las 5 disposiciones con "LKKCI"</div>
+        <div class="trick-main">"<hl>L</hl>ey que <hl>K</hl>YC <hl>K</hl>ontrola, <hl>C</hl>omercio libre, <hl>I</hl>TBM aplica"</div>
+        <div class="trick-explain">L=Marco legal (Ley 697/2023) · K=KYC/AML obligatorio para exchanges · K=Comercios no necesitan licencia especial · C=Capital exento de ganancias · I=ITBMS aplica en ventas regulares</div>
+      </div>
+      <ul class="num-list">
+        <li><span class="num">1</span><span>Marco legal: Ley 697 de 2023 para criptoactivos</span></li>
+        <li><span class="num">2</span><span>Licencia requerida para exchanges y pasarelas cripto</span></li>
+        <li><span class="num">3</span><span>KYC/AML obligatorio para servicios financieros con cripto</span></li>
+        <li><span class="num">4</span><span>Comercios pueden aceptar pagos <b>sin licencia especial</b></span></li>
+        <li><span class="num">5</span><span>Ganancias de capital exentas; ventas regulares aplican ITBMS</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🇸🇻</span>
+      <span class="mnemo-title">Panorama regional cripto — "El mapa de leyes"</span>
+      <span class="mnemo-type">Chunking por país</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="highlight-box">🧠 Mnemónico: "El Salvador LEGALIZA, Brasil REGULA, Argentina COBRA, México PROHÍBE stables, Colombia PRUEBA"</div>
+      <table class="fact-table">
+        <tr><th>País</th><th>Situación</th></tr>
+        <tr><td>El Salvador</td><td>Bitcoin = moneda de curso legal (desde 2021)</td></tr>
+        <tr><td>Brasil</td><td>Marco completo, regulado por Banco Central</td></tr>
+        <tr><td>Argentina</td><td>Impuesto a ganancias de cripto; alto uso P2P</td></tr>
+        <tr><td>México</td><td>Ley Fintech regula; prohíbe stablecoins en bancos</td></tr>
+        <tr><td>Colombia</td><td>Sandbox regulatorio, marco en desarrollo</td></tr>
+        <tr><td>Panamá</td><td>Ley 697/2023, comercios libres sin licencia</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 6: PLATAFORMAS -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c6)">Tema 06 / 07</div>
+    <h2>Plataformas E-Commerce</h2>
+    <p class="section-intro">5 plataformas, 5 perfiles. ¿Cuál eres tú?</p>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🎭</span>
+      <span class="mnemo-title">5 plataformas como 5 vehículos</span>
+      <span class="mnemo-type">Analogía visual</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-visual">
+        <div class="trick-label">Imagen mental para cada plataforma</div>
+        <div class="trick-main">
+          🛵 <b>OpenCart</b> = Scooter: barato, liviano, para distancias cortas. $1k–$8k.<br><br>
+          🚗 <b>WooCommerce</b> = Auto familiar: lo usa todo el mundo (28.2%), fácil, va con WordPress. $1.5k–$10k.<br><br>
+          🚙 <b>PrestaShop</b> = SUV mediano: balance perfecto para PYMEs europeas y LATAM. $2k–$15k.<br><br>
+          🚛 <b>Magento</b> = Camión de carga: para empresas grandes con catálogos enormes. $10k–$100k.<br><br>
+          🏎️ <b>Node.js</b> = Fórmula 1: máxima potencia, máximo costo, necesitas piloto experto. $15k–$150k.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">📅</span>
+      <span class="mnemo-title">Tiempos de implementación — de semanas a meses</span>
+      <span class="mnemo-type">Progresión visual</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-number">
+        <div class="trick-label">Ordénalas de más rápida a más lenta</div>
+        <div class="trick-main">OpenCart 2–6sem → WooCommerce 2–8sem → PrestaShop 1–3 meses → Magento 3–6 meses → Node.js 4–12 meses</div>
+        <div class="trick-explain">Regla: cuanto más caro el vehículo, más tiempo tarda en llegar.</div>
+      </div>
+      <div class="visual-map">  OpenCart   ████ 2–6 sem
+WooCommerce ██████ 2–8 sem
+PrestaShop  ██████████ 1–3 meses
+Magento     ████████████████ 3–6 meses
+Node.js     ████████████████████████ 4–12 meses</div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">⭐</span>
+      <span class="mnemo-title">Escalabilidad vs Facilidad — la regla inversa</span>
+      <span class="mnemo-type">Patrón de contraste</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-visual">
+        <div class="trick-label">Regla de oro para recordar sin tabla</div>
+        <div class="trick-main">📈 <b>Más escalable = Menos fácil</b><br>Magento/Node.js = ⭐⭐⭐⭐⭐ escala / ⭐ facilidad<br>OpenCart = ⭐⭐ escala / ⭐⭐⭐⭐⭐ facilidad<br>WooCommerce = equilibrio perfecto para PYMEs</div>
+      </div>
+      <div class="highlight-box">💡 Conclusión clave: "No existe la plataforma perfecta universal. Evalúa el TCO (costo total) a 3 años, no solo el precio inicial."</div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🎯</span>
+      <span class="mnemo-title">¿Qué plataforma para qué negocio? — Las 4 recetas</span>
+      <span class="mnemo-type">Tabla de decisión</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <table class="fact-table">
+        <tr><th>Tipo de negocio</th><th>Plataforma</th><th>Pasarela</th></tr>
+        <tr><td>🚀 Startup con poco presupuesto</td><td>WooCommerce / PrestaShop</td><td>PayPal + PagueloFácil</td></tr>
+        <tr><td>🏪 Retailer migrando a digital</td><td>Magento / PrestaShop</td><td>Múltiples regionales</td></tr>
+        <tr><td>🏭 Empresa B2B técnica</td><td>Magento / Node.js</td><td>Stripe o bancaria directa</td></tr>
+        <tr><td>👥 Marketplace multivendedor</td><td>Node.js / Magento+ext.</td><td>Stripe Connect / PayPal</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 7: TÉCNICO & LEGAL -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num" style="color:var(--c7)">Tema 07 / 07</div>
+    <h2>Aspectos Técnicos, Seguridad &amp; Estrategia</h2>
+    <p class="section-intro">Volatilidad, confirmaciones, custodia y cómo implementarlo todo.</p>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header open" onclick="toggleCard(this)">
+      <span class="mnemo-icon">⚡</span>
+      <span class="mnemo-title">Velocidades de red — "Rayo, Sol, Ether, Lite, Bit"</span>
+      <span class="mnemo-type">Acróstico + imagen</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body open">
+      <div class="trick-acrostic">
+        <div class="trick-label">Acróstico de velocidad descendente</div>
+        <div class="trick-main">"<hl>R</hl>áfaga <hl>S</hl>olar <hl>E</hl>n <hl>L</hl>atam <hl>B</hl>rilla"</div>
+        <div class="trick-explain">R=Lightning (rayo) · S=Solana · E=Ethereum · L=Litecoin · B=Bitcoin</div>
+      </div>
+      <table class="fact-table">
+        <tr><th>Red</th><th>Tiempo</th><th>Imagen mental</th></tr>
+        <tr><td>⚡ Lightning</td><td>1–5 segundos</td><td>Un relámpago</td></tr>
+        <tr><td>☀️ Solana</td><td>0.4 segundos</td><td>La velocidad de la luz</td></tr>
+        <tr><td>Ξ Ethereum</td><td>15s – 2min</td><td>Un semáforo</td></tr>
+        <tr><td>Ł Litecoin</td><td>2.5–10 min</td><td>Un taxi</td></tr>
+        <tr><td>₿ Bitcoin</td><td>10–60 min</td><td>El correo postal</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">✅</span>
+      <span class="mnemo-title">Confirmaciones por tipo de producto — "0-1-2-3+"</span>
+      <span class="mnemo-type">Progresión numérica</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-number">
+        <div class="trick-label">Regla simple: cuanto más vale, más confirmaciones</div>
+        <div class="trick-main">0–1 conf. = Digital inmediato (software) → 1 conf. = Contenido digital → 1–2 conf. = Físico &lt;$100 → 3+ conf. = Físico &gt;$500</div>
+        <div class="trick-explain">Imagina que cada confirmación es un guardia de seguridad. Un $5 video no necesita muchos guardias. Un $1,000 equipo necesita 3+ guardias.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🛡️</span>
+      <span class="mnemo-title">Las 7 buenas prácticas de seguridad — "SMLAABM"</span>
+      <span class="mnemo-type">Acróstico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-acrostic">
+        <div class="trick-label">Acróstico: "Separo Mis Llaves, Audito, Autorizo, Backups, Monitoreo"</div>
+        <div class="trick-main">"<hl>S</hl>e <hl>M</hl>ultifirma, <hl>L</hl>imita, <hl>A</hl>udita, <hl>A</hl>utentica, <hl>B</hl>ackup, <hl>M</hl>onitora"</div>
+      </div>
+      <ul class="num-list">
+        <li><span class="num">S</span><span>Separar wallets de recepción y reserva</span></li>
+        <li><span class="num">M</span><span>Multifirma (multisig 2-of-3)</span></li>
+        <li><span class="num">L</span><span>Límites de transferencia automáticos</span></li>
+        <li><span class="num">A</span><span>Auditorías periódicas de seguridad</span></li>
+        <li><span class="num">A</span><span>Autenticación 2FA en todas las cuentas</span></li>
+        <li><span class="num">B</span><span>Backups cifrados offline de claves privadas</span></li>
+        <li><span class="num">M</span><span>Monitoreo continuo de actividad anómala</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">📉</span>
+      <span class="mnemo-title">5 estrategias anti-volatilidad — "Conversión Ventana Stable Margen Market"</span>
+      <span class="mnemo-type">Chunking</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-chunking">
+        <div class="trick-label">5 palabras clave · una por estrategia</div>
+        <div class="trick-main">"<hl>C</hl>onversión → <hl>V</hl>entana → <hl>S</hl>tables → <hl>M</hl>argen → <hl>M</hl>arket"</div>
+        <div class="trick-explain">C=Conversión inmediata a fiat · V=Ventana de 15–30 min a precio fijo · S=Priorizar stablecoins · M=Margen 1–3% · M=Market makers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🚀</span>
+      <span class="mnemo-title">Los 5 pasos de implementación cripto — "EPIPE"</span>
+      <span class="mnemo-type">Acróstico</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-acrostic">
+        <div class="trick-label">Acróstico "EPIPE" — como una tubería de dinero</div>
+        <div class="trick-main">"<hl>E</hl>valúa, <hl>P</hl>ilota, <hl>I</hl>ntegra, <hl>P</hl>romociona, <hl>E</hl>xpande"</div>
+      </div>
+      <ul class="num-list">
+        <li><span class="num">1</span><span><b>Evaluación</b>: Análisis de mercado objetivo</span></li>
+        <li><span class="num">2</span><span><b>Piloto</b>: Empieza con 1–2 criptomonedas</span></li>
+        <li><span class="num">3</span><span><b>Integración</b>: Con liquidación fiat automática</span></li>
+        <li><span class="num">4</span><span><b>Promoción</b>: Marketing focalizado (descuentos, privacidad)</span></li>
+        <li><span class="num">5</span><span><b>Expansión</b>: Más monedas, programas de retención</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🔮</span>
+      <span class="mnemo-title">3 tendencias futuras — "LCW"</span>
+      <span class="mnemo-type">Chunking</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-chunking">
+        <div class="trick-label">3 letras, 3 futuros</div>
+        <div class="trick-main">"<hl>L</hl>ightning · <hl>C</hl>BDCs · <hl>W</hl>eb3"</div>
+        <div class="trick-explain">L = Micropagos instantáneos masivos · C = Monedas digitales de bancos centrales (2025–2027) · W = NFTs, tokens de lealtad, contratos inteligentes en comercio</div>
+      </div>
+      <div class="highlight-box">🔮 Recuerda: "LCW = Luz, Control, Web3". El futuro del pago cripto llega por tres frentes.</div>
+    </div>
+  </div>
+
+  <div class="mnemo-card">
+    <div class="mnemo-header" onclick="toggleCard(this)">
+      <span class="mnemo-icon">🏆</span>
+      <span class="mnemo-title">Casos de éxito — el patrón que siempre se repite</span>
+      <span class="mnemo-type">Regla de 3</span>
+      <span class="mnemo-toggle">▾</span>
+    </div>
+    <div class="mnemo-body">
+      <div class="trick-visual">
+        <div class="trick-label">El patrón de éxito tiene siempre 3 ingredientes</div>
+        <div class="trick-main">1️⃣ <b>Conversión inmediata</b> a fiat (eliminar volatilidad)<br>2️⃣ <b>Comunicar el beneficio</b> al cliente (descuentos, privacidad, alcance global)<br>3️⃣ <b>Integración técnica sólida</b> con pasarela de confianza</div>
+      </div>
+      <table class="fact-table">
+        <tr><th>Empresa</th><th>Estrategia clave</th></tr>
+        <tr><td>Overstock.com</td><td>50% BTC retenido, 50% liquidado. +10% ticket promedio.</td></tr>
+        <tr><td>Destinia.com</td><td>Evita comisiones de cambio 3–5% para viajeros internacionales.</td></tr>
+        <tr><td>NordVPN</td><td>15–25% pagos en cripto, descuentos 5–10% con BTC.</td></tr>
+        <tr><td>Pizza Hut Panamá</td><td>Piloto con Coinbase Commerce.</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Guía Mnemotécnica · Criptomonedas &amp; Pasarelas de Pago · Desarrollo de Software IX · UTP<br>
+  Haz clic en cada tarjeta para expandir los trucos mnemotécnicos
+</footer>
+
+<script>
+function toggleCard(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Cripto & E-Commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090f;
+    --surface: #0d1117;
+    --card-back: #111827;
+    --border: #1e2a3a;
+    --accent1: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --accent5: #ef4444;
+    --accent6: #ec4899;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --tag-bg: rgba(0,212,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    border: 1px solid rgba(0,212,255,.3);
+    padding: .3rem .8rem;
+    border-radius: 2px;
+    margin-bottom: 1.2rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #e2e8f0 30%, var(--accent1));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { color: var(--muted); margin-top: .8rem; font-size: .95rem; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 2rem auto;
+    padding: 0 2rem;
+  }
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: .8rem;
+    color: var(--muted);
+  }
+  .stat span { color: var(--accent1); font-weight: 700; font-size: 1rem; }
+
+  /* ── FILTERS ── */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    justify-content: center;
+    padding: 0 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .filter-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .45rem 1rem;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent1);
+    color: var(--bg);
+    border-color: var(--accent1);
+    color: #000;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    padding: 0 2rem;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    color: var(--muted);
+    margin-bottom: .5rem;
+  }
+  .progress-track {
+    background: var(--border);
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    height: 100%;
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  /* ── FLASHCARD ── */
+  .card-wrap {
+    perspective: 1000px;
+    height: 220px;
+    cursor: pointer;
+  }
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform .55s cubic-bezier(.4,0,.2,1);
+  }
+  .card-wrap.flipped .card-inner { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-front {
+    background: var(--surface);
+  }
+  .card-back {
+    background: var(--card-back);
+    transform: rotateY(180deg);
+  }
+
+  /* Accent line per topic */
+  .card-face::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 8px 8px 0 0;
+  }
+  .t1 .card-face::before { background: var(--accent1); }
+  .t2 .card-face::before { background: var(--accent2); }
+  .t3 .card-face::before { background: var(--accent3); }
+  .t4 .card-face::before { background: var(--accent4); }
+  .t5 .card-face::before { background: var(--accent5); }
+  .t6 .card-face::before { background: var(--accent6); }
+  .t7 .card-face::before { background: linear-gradient(90deg,var(--accent1),var(--accent3)); }
+
+  .card-topic {
+    font-family: 'Space Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .8rem;
+  }
+  .t1 .card-topic { color: var(--accent1); }
+  .t2 .card-topic { color: var(--accent2); }
+  .t3 .card-topic { color: var(--accent3); }
+  .t4 .card-topic { color: var(--accent4); }
+  .t5 .card-topic { color: var(--accent5); }
+  .t6 .card-topic { color: var(--accent6); }
+  .t7 .card-topic { color: var(--accent1); }
+
+  .card-q {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .card-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: .65rem;
+    color: var(--muted);
+    margin-top: auto;
+    text-align: right;
+  }
+  .card-a {
+    font-size: .9rem;
+    line-height: 1.55;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .card-a::-webkit-scrollbar { width: 3px; }
+  .card-a::-webkit-scrollbar-thumb { background: var(--border); }
+  .card-num {
+    font-family: 'Space Mono', monospace;
+    font-size: .65rem;
+    color: var(--border);
+    position: absolute;
+    bottom: 1rem;
+    right: 1.2rem;
+  }
+
+  /* ── SECTION DIVIDERS ── */
+  .section-title {
+    max-width: 1200px;
+    margin: 2rem auto .8rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-title h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .section-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: .65rem;
+    color: var(--muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem;
+    color: var(--border);
+    border-top: 1px solid var(--border);
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-tag">Desarrollo de Software IX · UTP</div>
+  <h1>100 Flashcards</h1>
+  <p class="subtitle">Criptomonedas &amp; Pasarelas de Pago en E-Commerce</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat"><span id="total-count">100</span> tarjetas</div>
+  <div class="stat"><span id="seen-count">0</span> vistas</div>
+  <div class="stat"><span id="left-count">100</span> restantes</div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-info">
+    <span>Progreso</span>
+    <span id="pct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filterCards('all')">Todas (100)</button>
+  <button class="filter-btn" onclick="filterCards('t1')">🔗 Blockchain</button>
+  <button class="filter-btn" onclick="filterCards('t2')">🪙 Criptomonedas</button>
+  <button class="filter-btn" onclick="filterCards('t3')">🏦 Pasarelas Cripto</button>
+  <button class="filter-btn" onclick="filterCards('t4')">🌐 Pasarelas Internac.</button>
+  <button class="filter-btn" onclick="filterCards('t5')">🇵🇦 Pasarelas LATAM</button>
+  <button class="filter-btn" onclick="filterCards('t6')">🛒 Plataformas</button>
+  <button class="filter-btn" onclick="filterCards('t7')">⚙️ Técnico &amp; Legal</button>
+</div>
+
+<div id="main-container"></div>
+
+<footer>Haz clic en cada tarjeta para ver la respuesta · Desarrollo de Software IX · UTP</footer>
+
+<script>
+const CARDS = [
+  // ── T1: BLOCKCHAIN (15 cards) ──────────────────────────────────────────
+  {id:1,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es un blockchain?',a:'Registro distribuido e inmutable de transacciones. Sistema de bloques enlazados criptográficamente que almacena información de forma descentralizada sin autoridad central.'},
+  {id:2,topic:'t1',label:'🔗 Blockchain',q:'¿Qué contiene cada bloque en un blockchain?',a:'Transacciones verificadas por la red P2P, un hash criptográfico propio y el hash del bloque anterior, formando la cadena.'},
+  {id:3,topic:'t1',label:'🔗 Blockchain',q:'¿Cuáles son los 5 componentes principales de un blockchain?',a:'1) Bloques (paquetes de transacciones), 2) Cadena (bloques enlazados por hash), 3) Red P2P (nodos distribuidos), 4) Criptografía (firmas digitales), 5) Consenso (PoW, PoS).'},
+  {id:4,topic:'t1',label:'🔗 Blockchain',q:'Enumera los 6 pasos del flujo de una transacción blockchain.',a:'1) Usuario inicia con clave privada, 2) Transmisión a red P2P, 3) Nodos verifican firma y saldo, 4) Minero/validador agrupa en bloque, 5) Red alcanza consenso, 6) Bloque se añade permanentemente.'},
+  {id:5,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es PoW y PoS?',a:'Mecanismos de consenso. PoW (Proof of Work) = mineros compiten resolviendo problemas matemáticos. PoS (Proof of Stake) = validadores son elegidos según su participación económica.'},
+  {id:6,topic:'t1',label:'🔗 Blockchain',q:'¿Qué significa que el blockchain es inmutable?',a:'Una vez añadido un bloque, no puede alterarse sin cambiar todos los bloques posteriores, lo que requeriría el consenso de la mayoría de la red — prácticamente imposible.'},
+  {id:7,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es un nodo en la red P2P del blockchain?',a:'Computadora que mantiene una copia completa del ledger (registro) y participa en la validación de transacciones.'},
+  {id:8,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es una firma digital en blockchain?',a:'Mecanismo criptográfico que garantiza la autenticidad e integridad de una transacción usando la clave privada del emisor.'},
+  {id:9,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es un hash criptográfico?',a:'Función que convierte datos de cualquier tamaño en una cadena fija única. Si cambia 1 bit del input, el hash cambia completamente. Usado para enlazar bloques.'},
+  {id:10,topic:'t1',label:'🔗 Blockchain',q:'¿Por qué blockchain no necesita autoridad central?',a:'Porque la confianza es distribuida: todos los nodos validan y guardan el mismo historial. El consenso entre nodos reemplaza al intermediario central.'},
+  {id:11,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es un ledger distribuido?',a:'Registro de transacciones replicado en múltiples nodos de la red. Ningún nodo único controla el historial completo.'},
+  {id:12,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es una clave privada y para qué sirve?',a:'Código secreto único del usuario para firmar transacciones. El que posee la clave privada controla los fondos. No se debe compartir nunca.'},
+  {id:13,topic:'t1',label:'🔗 Blockchain',q:'¿Cuál es la diferencia entre blockchain público y privado?',a:'Público: abierto a cualquier nodo (Bitcoin, Ethereum). Privado/permisionado: solo entidades autorizadas participan (uso empresarial).'},
+  {id:14,topic:'t1',label:'🔗 Blockchain',q:'¿Qué es un contrato inteligente (smart contract)?',a:'Programa autoejecutable almacenado en blockchain que se ejecuta automáticamente cuando se cumplen condiciones predefinidas, sin intermediarios.'},
+  {id:15,topic:'t1',label:'🔗 Blockchain',q:'¿Cómo se enlaza un bloque con el anterior?',a:'Cada bloque contiene el hash criptográfico del bloque anterior. Si se modifica un bloque, su hash cambia y rompe la cadena desde ese punto.'},
+
+  // ── T2: CRIPTOMONEDAS (15 cards) ─────────────────────────────────────
+  {id:16,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué es una criptomoneda?',a:'Representación digital de valor que usa criptografía para asegurar transacciones y verificar transferencias. Funciona de forma descentralizada en redes blockchain, sin intermediarios financieros.'},
+  {id:17,topic:'t2',label:'🪙 Criptomonedas',q:'¿Cuáles son las características de Bitcoin (BTC)?',a:'Primera cripto, capitalización ~$1.3 billones USD, comisiones $0.50–$15, confirmación 10–60 min, alta confianza del mercado, ideal para compras de alto valor.'},
+  {id:18,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué es Lightning Network?',a:'Capa 2 sobre Bitcoin para pagos instantáneos. Comisiones <$0.01, confirmación <5 segundos, ideal para micropagos y comercio diario.'},
+  {id:19,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué es Ethereum (ETH) y para qué se usa en comercio?',a:'Plataforma de contratos inteligentes. Cap. ~$430 mil millones. Comisiones $0.20–$10, confirmación 15 seg–2 min. Ecosistema DeFi/NFTs. Ideal para contratos y B2B.'},
+  {id:20,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué son las stablecoins y cuáles existen?',a:'Criptomonedas con valor anclado 1:1 a monedas fiat. Ejemplos: USDT, USDC, BUSD, DAI. Eliminan el riesgo de volatilidad. Representan el 38% de pagos cripto en e-commerce (2024).'},
+  {id:21,topic:'t2',label:'🪙 Criptomonedas',q:'¿Cuál criptomoneda es más rápida para comercio?',a:'Solana (SOL): 65,000 TPS, confirmación casi instantánea (0.4 seg), comisiones muy bajas. Pero menor adopción comercial que BTC/ETH.'},
+  {id:22,topic:'t2',label:'🪙 Criptomonedas',q:'Compara Bitcoin vs Stablecoins para e-commerce.',a:'BTC: lento (10–60 min), comisiones medias-altas, alta volatilidad, muy adoptado. Stablecoins: rápidas, bajas comisiones, sin volatilidad, adopción creciente (38% en 2024).'},
+  {id:23,topic:'t2',label:'🪙 Criptomonedas',q:'¿Por qué la volatilidad es un desafío en cripto?',a:'BTC puede fluctuar 5–20% en un solo día. Genera riesgo financiero para el comercio receptor, precios inconsistentes para el cliente y complejidad contable.'},
+  {id:24,topic:'t2',label:'🪙 Criptomonedas',q:'¿Cuáles son las estadísticas de adopción cripto en e-commerce (2024)?',a:'$4.3B volumen diario de pagos, 15K+ comercios globales activos, 2.8% crecimiento mensual, 420M usuarios de criptomonedas.'},
+  {id:25,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué posición ocupa e-commerce en el uso de criptomonedas?',a:'Segundo uso más común, después de inversión/especulación. Crecimiento sostenido desde 2020.'},
+  {id:26,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué es Litecoin (LTC) y su ventaja en comercio?',a:'Altcoin con transacciones más rápidas y baratas que Bitcoin. Confirmación 2.5–10 min, 1–6 bloques. Menor adopción que BTC/ETH.'},
+  {id:27,topic:'t2',label:'🪙 Criptomonedas',q:'¿Qué es DeFi?',a:'Finanzas Descentralizadas (Decentralized Finance). Ecosistema de servicios financieros (préstamos, trading, etc.) construidos sobre blockchain, principalmente Ethereum, sin intermediarios.'},
+  {id:28,topic:'t2',label:'🪙 Criptomonedas',q:'¿Por qué las stablecoins superaron a Bitcoin en transacciones de bajo valor?',a:'Porque eliminan el riesgo de volatilidad. Para el comercio diario, el precio estable es más importante que la descentralización absoluta.'},
+  {id:29,topic:'t2',label:'🪙 Criptomonedas',q:'¿Cuál fue el crecimiento en comercios aceptando cripto de 2019 a 2024?',a:'De 4,200 comercios (2019) a 18,400 (2024). El volumen diario pasó de $0.9B a $5.2B en el mismo período.'},
+  {id:30,topic:'t2',label:'🪙 Criptomonedas',q:'¿Cuál es la tendencia futura principal en criptomonedas para e-commerce?',a:'Lightning Network para micropagos instantáneos, CBDCs (monedas digitales de bancos centrales esperadas 2025–2027) y Web3 Commerce con NFTs y contratos inteligentes.'},
+
+  // ── T3: PASARELAS CRIPTO (18 cards) ───────────────────────────────────
+  {id:31,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son las 4 principales pasarelas de pago cripto?',a:'BitPay, Coinbase Commerce, CryptoPay y BTCPay Server.'},
+  {id:32,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son las características clave de BitPay?',a:'Fundada 2011. Soporta BTC, ETH, DOGE, LTC, BCH y stablecoins. Conversión automática a fiat. Disponible en 200+ países. Comisión: 1%. Plugins para WooCommerce, Magento, PrestaShop, OpenCart.'},
+  {id:33,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son los 6 pasos para integrar BitPay?',a:'1) Registro en BitPay.com, 2) Verificación KYC empresarial, 3) Configurar cuenta bancaria, 4) Instalar plugin o API, 5) Configurar monedas y liquidación, 6) Pruebas en sandbox.'},
+  {id:34,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué es Coinbase Commerce y en qué se diferencia de BitPay?',a:'Respaldada por Coinbase. Pagos directos a wallet personal del comercio. Sin KYC para comercios pequeños. Interfaz más intuitiva. Sin conversión automática a fiat (desventaja). Comisión: 1%.'},
+  {id:35,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué criptomonedas soporta Coinbase Commerce?',a:'BTC, ETH, LTC, BCH, USDC, DAI.'},
+  {id:36,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son las ventajas de Coinbase Commerce vs BitPay?',a:'Sin KYC para pequeños comercios, interfaz más sencilla e intuitiva, herramientas de suscripción/recurrencia, checkout hosted simplificado.'},
+  {id:37,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son las desventajas de Coinbase Commerce vs BitPay?',a:'Sin conversión automática a fiat, menos opciones de monedas, menor presencia en LATAM.'},
+  {id:38,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué es CryptoPay y dónde opera?',a:'Fundada 2013, enfocada en mercado europeo. Soporta BTC, ETH, LTC, XRP. Conversión instantánea a EUR/USD/GBP. Comisión: 0.8–1.5%. Presencia limitada: Brasil y parcialmente Colombia/México. Sin servicios en Panamá.'},
+  {id:39,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué es BTCPay Server?',a:'Pasarela 100% código abierto y auto-hospedada. Bitcoin nativo + altcoins. Comisión 0% (solo comisiones de red). Control total sobre fondos. Soporte Lightning Network. Sin KYC/AML.'},
+  {id:40,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son las ventajas de BTCPay Server?',a:'Sin intermediarios, sin KYC/AML, privacidad total, personalización ilimitada, comunidad activa, comisión 0%, control total de fondos y datos.'},
+  {id:41,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuáles son las desventajas de BTCPay Server?',a:'Requiere conocimientos técnicos, mantenimiento de servidor propio, sin liquidación a fiat, responsabilidad total por seguridad.'},
+  {id:42,topic:'t3',label:'🏦 Pasarelas Cripto',q:'Compara las comisiones de las 4 pasarelas cripto.',a:'BitPay: 1% | Coinbase Commerce: 1% | CryptoPay: 0.8–1.5% | BTCPay Server: 0% (solo fees de red).'},
+  {id:43,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuál pasarela cripto tiene liquidación fiat automática?',a:'BitPay (sí) y CryptoPay (sí). Coinbase Commerce (no). BTCPay Server (no).'},
+  {id:44,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué pasarela cripto requiere KYC?',a:'BitPay (sí, KYC completo). CryptoPay (sí). Coinbase Commerce (parcial, sin KYC para pequeños). BTCPay Server (no requiere KYC).'},
+  {id:45,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuál es la recomendación para comercios en Panamá?',a:'Sin experiencia técnica → BitPay (mejor balance facilidad/soporte regional). Con capacidad técnica y prioridad en costo → BTCPay Server (costo cero).'},
+  {id:46,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué plataformas e-commerce soportan BTCPay Server?',a:'WooCommerce ✓, Magento ✓, PrestaShop ✓. No soporta OpenCart.'},
+  {id:47,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Cuánto tiempo toma configurar cada pasarela cripto?',a:'Coinbase Commerce: horas | BitPay: 1–2 días | CryptoPay: 2–5 días | BTCPay Server: 1–7 días (según conocimientos técnicos).'},
+  {id:48,topic:'t3',label:'🏦 Pasarelas Cripto',q:'¿Qué alternativa regional a CryptoPay existe en LATAM?',a:'CryptoPayment.io como alternativa regional para mercados latinoamericanos donde CryptoPay no tiene presencia.'},
+
+  // ── T4: PASARELAS INTERNACIONALES (12 cards) ──────────────────────────
+  {id:49,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son las 3 principales pasarelas internacionales?',a:'PayPal, Stripe y 2Checkout (Verifone).'},
+  {id:50,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son las características de PayPal?',a:'Presencia en 200+ países. Comisión: 2.9% + $0.30. Productos: Express Checkout, Pro, Braintree. Ventajas: alta confianza, fácil implementación, amplio reconocimiento. Desventajas: comisiones elevadas, disputas limitadas.'},
+  {id:51,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son las características de Stripe?',a:'Disponible en 43 países (limitado en LATAM). Comisión: 2.9% + $0.30. API excelente, documentación superior, DX premium. Sin presencia directa en Panamá.'},
+  {id:52,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Qué es 2Checkout y sus características?',a:'Presencia en 200+ países, 100+ monedas. Comisión: 3.5% + $0.30. Ventaja: optimización fiscal global y soporte multimoneda nativo. Desventaja: interfaz menos intuitiva, comisiones más altas.'},
+  {id:53,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son los 6 factores clave al elegir pasarela internacional?',a:'1) Presencia en mercado objetivo, 2) Monedas soportadas, 3) Métodos de pago locales, 4) Comisión efectiva según volumen, 5) Calidad de documentación/SDK, 6) Soporte ante disputas y chargebacks.'},
+  {id:54,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Qué es PCI DSS?',a:'Payment Card Industry Data Security Standard. Conjunto de normas de seguridad obligatorias para toda organización que almacene, procese o transmita datos de tarjetas de pago.'},
+  {id:55,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son los 3 modelos de integración de pasarelas?',a:'1) Redirección (usuario va al sitio de la pasarela), 2) Iframe/Incrustado (formulario dentro del sitio), 3) API Directa (control total, procesamiento desde servidor propio).'},
+  {id:56,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuándo usar integración por redirección?',a:'Proyectos con poco tiempo y recursos. Ventaja: fácil implementación, menor responsabilidad de seguridad. Desventaja: experiencia fragmentada, mayor abandono.'},
+  {id:57,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuándo usar integración por API directa?',a:'Proyectos que exigen máxima personalización y escala. Requiere mayor complejidad técnica y cumplimiento PCI DSS completo. Ejemplo: Stripe API, PayPal REST API.'},
+  {id:58,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son los 5 roles en el ecosistema de pagos?',a:'1) Comercio (merchant), 2) Pasarela de pago (intermediario tecnológico), 3) Procesador de pagos, 4) Banco emisor (del cliente), 5) Banco adquirente (del comercio).'},
+  {id:59,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Qué es un chargeback?',a:'Reversión de cargo iniciada por el banco emisor a petición del cliente. Es un riesgo para el comercio; las criptomonedas eliminan este riesgo (transacciones irreversibles).'},
+  {id:60,topic:'t4',label:'🌐 Pasarelas Internac.',q:'¿Cuáles son las ventajas de integración iframe/incrustado?',a:'Experiencia más integrada, el cliente permanece en el sitio, mejor conversión que redirección. Desventajas: más complejo, posibles conflictos CSS.'},
+
+  // ── T5: PASARELAS LATAM / PANAMÁ (10 cards) ───────────────────────────
+  {id:61,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cuáles son las principales pasarelas regionales de LATAM?',a:'PagueloFácil (Panamá), Mercado Pago (toda LATAM) y Wompi (Colombia, en expansión).'},
+  {id:62,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cuáles son las características de PagueloFácil?',a:'Principal pasarela de Panamá y región. Comisión: 2.5–4.0% (negociable). Acepta tarjetas y transferencias bancarias locales. Ventaja: adaptado al mercado panameño, soporte local.'},
+  {id:63,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cuáles son las características de Mercado Pago?',a:'Cobertura toda Latinoamérica. Comisión 3.5–5.0% (varía por país). Acepta tarjetas, transferencias, efectivo y QR. SDK maduro. Desventaja: procesos de aprobación variables.'},
+  {id:64,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cuáles son las consideraciones para el mercado panameño?',a:'Predominan tarjetas Visa/MC de bancos locales. Banca en línea creciente. Efectivo relevante en zonas rurales. PagueloFácil es la opción local más adaptada. PayPal tiene buena adopción en compras internacionales.'},
+  {id:65,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Qué representa el efectivo y métodos alternativos en LATAM?',a:'Los métodos alternativos (efectivo, transferencias, QR, monederos digitales) representan hasta el 40% de las transacciones en la región.'},
+  {id:66,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cuál es el marco legal de criptomonedas en Panamá?',a:'Ley 697 de 2023: marco regulatorio para criptoactivos. Licencia de servicios requerida para exchanges/pasarelas. KYC/AML obligatorio para servicios financieros. Comercios pueden aceptar pagos sin licencia especial. Ganancias de capital exentas; ventas regulares aplican ITBMS.'},
+  {id:67,topic:'t5',label:'🇵🇦 Pasarelas Cripto',q:'¿Qué casos de uso de cripto existen en Panamá?',a:'Hub Cripto Panamá (marketplace de comercios que aceptan BTC), Pizza Hut Panamá (piloto con Coinbase Commerce), McFly Surfschool (servicios turísticos con BitPay).'},
+  {id:68,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Qué es El Salvador y Bitcoin?',a:'El Salvador adoptó Bitcoin como moneda de curso legal desde 2021, siendo el primer país en hacerlo.'},
+  {id:69,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cuál es el marco regulatorio de cripto en México?',a:'Ley Fintech regula las criptomonedas; prohíbe stablecoins en bancos. Los exchanges pueden operar con licencia.'},
+  {id:70,topic:'t5',label:'🇵🇦 Pasarelas LATAM',q:'¿Cómo varía la distribución de métodos de pago en Latinoamérica?',a:'Tarjetas crédito/débito: ~45%, Transferencias: ~20%, Efectivo: ~18%, Monederos digitales: ~12%, Otros: ~5%.'},
+
+  // ── T6: PLATAFORMAS E-COMMERCE (15 cards) ──────────────────────────────
+  {id:71,topic:'t6',label:'🛒 Plataformas',q:'¿Cuál es la cuota de mercado de WooCommerce?',a:'28.2% de los sitios e-commerce del mundo. Es la plataforma con mayor cuota global.'},
+  {id:72,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las 5 plataformas e-commerce del documento?',a:'WooCommerce (28.2%), Magento (9.3%), PrestaShop (4.8%), OpenCart (4.1%) y Node.js custom. Las 5 principales controlan el 59.2% del mercado global.'},
+  {id:73,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las características de Magento (Adobe Commerce)?',a:'Alta complejidad. Costo inicial $10k–$100k. Mantenimiento $1k–$5k/mes. Implementación 3–6 meses. Ideal para empresas medianas-grandes con catálogos complejos y operaciones B2B.'},
+  {id:74,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las fortalezas de Magento?',a:'Escalabilidad extrema, multitienda nativa, personalización profunda, ecosistema robusto de extensiones, capacidades B2B avanzadas nativas.'},
+  {id:75,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las debilidades de Magento?',a:'Requiere hosting dedicado y equipo especializado, costo total de propiedad muy elevado, curva de aprendizaje pronunciada, actualizaciones complejas y costosas.'},
+  {id:76,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las características de PrestaShop?',a:'Complejidad media. Costo $2k–$15k. Mantenimiento $200–$1k/mes. Implementación 1–3 meses. Fuerte en Europa y LATAM. Ideal para PYMEs con presupuesto moderado.'},
+  {id:77,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las características de OpenCart?',a:'Baja complejidad. Costo $1k–$8k. Mantenimiento $100–$500/mes. Implementación 2–6 semanas. Muy ligero y rápido. Ideal para pequeñas empresas con catálogos reducidos.'},
+  {id:78,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las características de WooCommerce?',a:'Baja-media complejidad. Costo $1.5k–$10k. Mantenimiento $150–$800/mes. Implementación 2–8 semanas. 55,000+ plugins. Integración perfecta con WordPress.'},
+  {id:79,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las características de Node.js custom?',a:'Muy alta complejidad. Costo $15k–$150k. Mantenimiento $1k–$8k/mes. Implementación 4–12 meses. Personalización completa. Ideal para startups con necesidades únicas o alto tráfico.'},
+  {id:80,topic:'t6',label:'🛒 Plataformas',q:'¿Qué plataforma recomiendas para una startup con presupuesto limitado?',a:'WooCommerce o PrestaShop + pasarela PayPal + opción local (PagueloFácil).'},
+  {id:81,topic:'t6',label:'🛒 Plataformas',q:'¿Qué plataforma recomiendas para empresa B2B con catálogo técnico?',a:'Magento o Node.js + pasarela Stripe o pasarela bancaria directa.'},
+  {id:82,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son las 5 tendencias emergentes en e-commerce?',a:'1) Arquitecturas headless, 2) Enfoque serverless, 3) Microservicios vs monolitos, 4) Mobile-first/omnicanal, 5) Composable commerce.'},
+  {id:83,topic:'t6',label:'🛒 Plataformas',q:'¿Cuál es la conclusión clave sobre selección de plataforma?',a:'No existe plataforma perfecta universal. Siempre evaluar el costo total de propiedad (TCO) a 3 años. La elección depende del contexto específico de cada negocio.'},
+  {id:84,topic:'t6',label:'🛒 Plataformas',q:'¿Cuál plataforma tiene mayor escalabilidad? ¿Y menor?',a:'Mayor escalabilidad: Magento y Node.js (5/5). Menor: OpenCart (2/5).'},
+  {id:85,topic:'t6',label:'🛒 Plataformas',q:'¿Cuáles son los 4 errores frecuentes al elegir plataforma?',a:'1) Elegir la más popular sin analizar necesidades reales, 2) Subestimar costos de mantenimiento, 3) No contemplar costos de integración, 4) Ignorar la curva de aprendizaje del equipo.'},
+
+  // ── T7: TÉCNICO & LEGAL (15 cards) ─────────────────────────────────────
+  {id:86,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son las 5 estrategias para mitigar la volatilidad cripto?',a:'1) Conversión inmediata a fiat (BitPay, CryptoPay), 2) Ventanas de tiempo (15–30 min), 3) Stablecoins (USDT, USDC, DAI), 4) Margen de volatilidad (añadir 1–3%), 5) Market makers (contratos con proveedores de liquidez).'},
+  {id:87,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuántas confirmaciones necesita una transacción según el tipo de producto?',a:'Digital inmediato (software): 0–1 conf. | Digital no sensible: 1 conf. | Físico bajo valor (<$100): 1–2 conf. | Físico alto valor (>$500): 3+ conf.'},
+  {id:88,topic:'t7',label:'⚙️ Técnico & Legal',q:'Compara los tiempos de confirmación por red.',a:'Solana: 0.4 seg (instantáneo) | Lightning: 1–5 seg | Ethereum: 15 seg–2 min | Litecoin: 2.5–10 min | Bitcoin: 10–60 min.'},
+  {id:89,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son los 3 modelos de custodia de criptomonedas?',a:'1) Pasarela con conversión (bajo riesgo, comercio no custodia), 2) Wallet propio hot (almacenamiento online, alto riesgo), 3) Wallet propio cold (offline, riesgo medio), 4) Custodia institucional (servicio profesional, riesgo medio-bajo).'},
+  {id:90,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son las 7 buenas prácticas de seguridad cripto para comercios?',a:'1) Separar wallets de recepción y reserva, 2) Multifirma (multisig 2-of-3), 3) Límites de transferencia automáticos, 4) Auditorías periódicas, 5) Backups cifrados offline, 6) 2FA en todas las cuentas, 7) Monitoreo continuo de actividad.'},
+  {id:91,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Qué es multisig (multifirma)?',a:'Sistema donde se requieren múltiples firmas (claves privadas) para autorizar una transacción. Ejemplo: 2-of-3 significa que 2 de 3 posibles firmantes deben aprobar.'},
+  {id:92,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Qué es hot wallet vs cold wallet?',a:'Hot wallet: almacenamiento online, conectado a internet, mayor riesgo pero más práctico para operaciones diarias. Cold wallet: almacenamiento offline (hardware), más seguro para reservas principales.'},
+  {id:93,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son los 5 beneficios clave de aceptar cripto en e-commerce?',a:'1) Mercado global sin restricciones, 2) Comisiones reducidas (1–2% vs 3–6%), 3) Sin chargebacks, 4) Nuevos segmentos (early adopters), 5) Diferenciación como marca innovadora, sin almacenar datos sensibles de tarjeta.'},
+  {id:94,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son los 6 riesgos de aceptar cripto en e-commerce?',a:'1) Volatilidad, 2) UX (tiempos de confirmación), 3) Complejidad contable, 4) Marco regulatorio cambiante, 5) Conocimiento técnico necesario, 6) Responsabilidad total en custodia propia.'},
+  {id:95,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son los pasos de la estrategia de implementación cripto recomendada?',a:'1) Evaluación (análisis de mercado objetivo), 2) Piloto (1–2 criptomonedas), 3) Integración (con liquidación fiat), 4) Promoción (marketing focalizado), 5) Expansión (más monedas, retención).'},
+  {id:96,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuál es el costo promedio de integrar un plugin de pasarela?',a:'Plugins/módulos oficiales: $0–$50 | Plugins premium de terceros: $100–$300 | Desarrollo personalizado: $500–$2,000 | Integración compleja con API: $1,000–$5,000.'},
+  {id:97,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Qué es KYC y AML?',a:'KYC (Know Your Customer): proceso de verificación de identidad del cliente. AML (Anti-Money Laundering): normativa para prevenir lavado de dinero. Obligatorios para exchanges y pasarelas en Panamá según Ley 697.'},
+  {id:98,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuál es el patrón común de éxito en casos de cripto en comercio?',a:'Combinar: 1) Conversión inmediata a fiat (eliminar riesgo), 2) Comunicación activa del beneficio al cliente (descuentos, privacidad), 3) Integración técnica sólida con pasarela de confianza.'},
+  {id:99,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Qué es la compatibilidad de pasarelas con plataformas? Da un ejemplo.',a:'El grado de integración disponible: Nativo (incluido por defecto), Plugin/Módulo (extensión disponible), Custom (desarrollo específico requerido). Ejemplo: Coinbase Commerce es Custom en Magento pero tiene Plugin en WooCommerce.'},
+  {id:100,topic:'t7',label:'⚙️ Técnico & Legal',q:'¿Cuáles son las 3 tendencias futuras del pago cripto en e-commerce?',a:'1) Pagos Lightning (micropagos <5 seg, adopción masiva), 2) CBDCs (monedas de bancos centrales, esperadas 2025–2027), 3) Web3 Commerce (NFTs, tokens de lealtad, tokenización de productos físicos).'},
+];
+
+const SECTIONS = [
+  { key:'t1', label:'🔗 Blockchain Fundamentos', color:'var(--accent1)' },
+  { key:'t2', label:'🪙 Criptomonedas', color:'var(--accent2)' },
+  { key:'t3', label:'🏦 Pasarelas de Pago Cripto', color:'var(--accent3)' },
+  { key:'t4', label:'🌐 Pasarelas Internacionales', color:'var(--accent4)' },
+  { key:'t5', label:'🇵🇦 Pasarelas LATAM & Panamá', color:'var(--accent5)' },
+  { key:'t6', label:'🛒 Plataformas E-Commerce', color:'var(--accent6)' },
+  { key:'t7', label:'⚙️ Técnico, Legal & Estrategia', color:'var(--accent1)' },
+];
+
+const seen = new Set();
+
+function updateProgress() {
+  const visible = document.querySelectorAll('.card-wrap:not(.hidden)');
+  const total = visible.length;
+  const seenCount = [...visible].filter(c => seen.has(+c.dataset.id)).length;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('seen-count').textContent = seenCount;
+  document.getElementById('left-count').textContent = total - seenCount;
+  const pct = total ? Math.round(seenCount/total*100) : 0;
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+function filterCards(topic) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card-wrap').forEach(c => {
+    c.classList.toggle('hidden', topic !== 'all' && c.dataset.topic !== topic);
+  });
+  document.querySelectorAll('.section-title').forEach(s => {
+    const sec = s.dataset.section;
+    s.classList.toggle('hidden', topic !== 'all' && sec !== topic);
+  });
+  updateProgress();
+}
+
+function buildUI() {
+  const container = document.getElementById('main-container');
+  SECTIONS.forEach(sec => {
+    const cards = CARDS.filter(c => c.topic === sec.key);
+    // section header
+    const div = document.createElement('div');
+    div.className = 'section-title';
+    div.dataset.section = sec.key;
+    div.innerHTML = `
+      <h2 style="color:${sec.color}">${sec.label}</h2>
+      <div class="section-line"></div>
+      <span class="section-badge">${cards.length} cards</span>
+    `;
+    container.appendChild(div);
+
+    // grid
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    grid.dataset.section = sec.key;
+    cards.forEach(card => {
+      const wrap = document.createElement('div');
+      wrap.className = `card-wrap ${card.topic}`;
+      wrap.dataset.id = card.id;
+      wrap.dataset.topic = card.topic;
+      wrap.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topic">${card.label}</div>
+            <div class="card-q">${card.q}</div>
+            <div class="card-hint">toca para ver respuesta →</div>
+            <span class="card-num">#${String(card.id).padStart(3,'0')}</span>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-topic">${card.label}</div>
+            <div class="card-a">${card.a}</div>
+            <span class="card-num">#${String(card.id).padStart(3,'0')}</span>
+          </div>
+        </div>
+      `;
+      wrap.addEventListener('click', () => {
+        wrap.classList.toggle('flipped');
+        seen.add(card.id);
+        updateProgress();
+      });
+      grid.appendChild(wrap);
+    });
+    container.appendChild(grid);
+  });
+  updateProgress();
+}
+
+buildUI();
+</script>
+</body>
+</html>
