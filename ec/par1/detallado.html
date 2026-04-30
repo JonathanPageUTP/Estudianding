@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Demanda del Consumidor — Guía Visual</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300&family=DM+Mono:wght@400;500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --card: #1c2330;
+    --border: #30363d;
+    --accent1: #f7c948;
+    --accent2: #58d6b8;
+    --accent3: #f77f7f;
+    --accent4: #9b8cff;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a0533 50%, #0d1117 100%);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #f7c94822 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent1);
+    color: #000;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 18px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 24px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: var(--accent1); border-color: var(--accent1); }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  section {
+    padding: 70px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  .section-intro {
+    font-size: 1.05rem;
+    color: #c9d1d9;
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  /* CARDS */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 30px 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .card.y1 { border-top: 3px solid var(--accent1); }
+  .card.y2 { border-top: 3px solid var(--accent2); }
+  .card.y3 { border-top: 3px solid var(--accent3); }
+  .card.y4 { border-top: 3px solid var(--accent4); }
+  .card-icon { font-size: 2rem; margin-bottom: 12px; }
+  .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 0.92rem; color: var(--muted); }
+
+  /* MNEMONIC BOX */
+  .mnemonic {
+    background: linear-gradient(135deg, #1a1040, #0f2030);
+    border: 1px solid var(--accent4);
+    border-radius: 14px;
+    padding: 32px;
+    margin: 30px 0;
+    position: relative;
+  }
+  .mnemonic::before {
+    content: '🧠';
+    position: absolute;
+    top: -18px; left: 30px;
+    font-size: 2rem;
+    background: var(--bg);
+    padding: 0 8px;
+  }
+  .mnemonic h3 {
+    color: var(--accent4);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .mnemonic .mnemonic-word {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--accent1);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .mnemonic ul { list-style: none; }
+  .mnemonic ul li {
+    padding: 6px 0;
+    font-size: 0.95rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .mnemonic ul li .letter {
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+    color: var(--accent1);
+    font-size: 1.1rem;
+    min-width: 20px;
+  }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95rem;
+    font-family: 'DM Mono', monospace;
+  }
+  .data-table thead th {
+    background: var(--accent1);
+    color: #000;
+    padding: 12px 18px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:hover { background: var(--card); }
+  .data-table tbody td {
+    padding: 11px 18px;
+    text-align: center;
+    color: var(--text);
+  }
+  .data-table tbody td:first-child { color: var(--accent3); font-weight: 700; }
+  .data-table tfoot td {
+    background: var(--card);
+    padding: 10px 18px;
+    text-align: center;
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  /* CHART AREA */
+  .chart-wrapper {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 30px;
+    margin: 30px 0;
+  }
+  .chart-wrapper h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: var(--accent1);
+  }
+
+  canvas { width: 100% !important; }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: var(--card);
+    border-left: 4px solid var(--accent2);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 0.97rem;
+  }
+  .highlight strong { color: var(--accent2); }
+
+  /* LAW BOX */
+  .law-box {
+    background: linear-gradient(135deg, #0f2820, #0f1820);
+    border: 2px solid var(--accent2);
+    border-radius: 14px;
+    padding: 36px;
+    text-align: center;
+    margin: 30px 0;
+  }
+  .law-box .law-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+  .law-box p {
+    font-family: 'Fraunces', serif;
+    font-size: 1.45rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* STEP LIST */
+  .steps { list-style: none; counter-reset: step; margin: 24px 0; }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .steps li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--accent1);
+    color: #000;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    min-width: 40px;
+    text-align: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .steps li strong { display: block; font-size: 1rem; margin-bottom: 4px; }
+  .steps li span { color: var(--muted); font-size: 0.92rem; }
+
+  /* SHIFT vs MOVEMENT */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .shift-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .shift-box h4 { font-size: 1rem; margin-bottom: 10px; }
+  .shift-box ul { list-style: none; }
+  .shift-box ul li { font-size: 0.9rem; color: var(--muted); padding: 4px 0; padding-left: 16px; position: relative; }
+  .shift-box ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent3); }
+
+  /* QUIZ */
+  .quiz-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    margin: 30px 0;
+  }
+  .quiz-box h3 { font-family: 'Fraunces', serif; font-size: 1.3rem; margin-bottom: 20px; color: var(--accent4); }
+  .quiz-q { margin-bottom: 22px; }
+  .quiz-q p { font-size: 0.97rem; margin-bottom: 12px; font-weight: 600; }
+  .quiz-q .options { display: flex; flex-wrap: wrap; gap: 10px; }
+  .quiz-q .options button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-q .options button:hover { border-color: var(--accent4); color: var(--accent4); }
+  .quiz-q .options button.correct { background: #0f3020; border-color: var(--accent2); color: var(--accent2); }
+  .quiz-q .options button.wrong { background: #300f0f; border-color: var(--accent3); color: var(--accent3); }
+  .quiz-feedback { font-size: 0.85rem; margin-top: 10px; color: var(--muted); display: none; }
+  .quiz-feedback.visible { display: block; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 50px 20px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-family: 'DM Mono', monospace;
+  }
+  footer span { color: var(--accent1); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  section { animation: fadeUp 0.6s ease both; }
+  section:nth-child(2) { animation-delay: 0.1s; }
+  section:nth-child(3) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Economía · Grupo 1LS-241</div>
+  <h1>La Demanda<br>del Consumidor</h1>
+  <p>Guía visual completa con ejemplos reales, técnicas mnemotécnicas y ejercicios interactivos</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#concepto">Concepto</a>
+  <a href="#ley">Ley</a>
+  <a href="#tabla">Tabla</a>
+  <a href="#curva">Curva</a>
+  <a href="#mercado">Demanda Mercado</a>
+  <a href="#desplazamiento">Desplazamiento</a>
+  <a href="#ingreso">Ingreso</a>
+  <a href="#quiz">Quiz</a>
+</nav>
+
+<div class="container">
+
+  <!-- SECCIÓN 1: CONCEPTO -->
+  <section id="concepto">
+    <div class="section-label">Sección 01</div>
+    <div class="section-title">¿Qué es la Demanda?</div>
+    <p class="section-intro">La demanda es la <strong>cantidad de un bien o servicio</strong> que los consumidores están dispuestos y pueden comprar, a distintos precios, en un período determinado.</p>
+
+    <div class="cards">
+      <div class="card y1">
+        <div class="card-icon">💰</div>
+        <h3>Precio</h3>
+        <p>El principal factor. A mayor precio, menos gente quiere comprar el producto.</p>
+      </div>
+      <div class="card y2">
+        <div class="card-icon">📦</div>
+        <h3>Cantidad Demandada</h3>
+        <p>Cuántas unidades quiere comprar el consumidor a un precio específico.</p>
+      </div>
+      <div class="card y3">
+        <div class="card-icon">📅</div>
+        <h3>Período de tiempo</h3>
+        <p>La demanda siempre se mide en un período: por semana, por mes, por año.</p>
+      </div>
+      <div class="card y4">
+        <div class="card-icon">🤑</div>
+        <h3>Disposición a pagar</h3>
+        <p>El consumidor debe querer Y poder pagar. Si solo quiere pero no puede, no es demanda efectiva.</p>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <h3>Técnica Mnemotécnica</h3>
+      <div class="mnemonic-word">C·P·T·D</div>
+      <ul>
+        <li><span class="letter">C</span><span><strong>Consumidor</strong> — ¿quién quiere el bien?</span></li>
+        <li><span class="letter">P</span><span><strong>Precio</strong> — ¿cuánto cuesta?</span></li>
+        <li><span class="letter">T</span><span><strong>Tiempo</strong> — ¿en qué período?</span></li>
+        <li><span class="letter">D</span><span><strong>Disposición y capacidad</strong> — ¿puede pagarlo?</span></li>
+      </ul>
+      <p style="margin-top:14px; font-size:0.88rem; color:var(--muted)">Frase clave: <em>"Con Precio, Tiempo y Dinero se mide la Demanda"</em></p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: LEY DE LA DEMANDA -->
+  <section id="ley">
+    <div class="section-label">Sección 02</div>
+    <div class="section-title">La Ley de la Demanda</div>
+    <p class="section-intro">Es el principio fundamental que explica la relación entre precio y cantidad demandada.</p>
+
+    <div class="law-box">
+      <div class="law-title">⚖️ Ley de la Demanda</div>
+      <p>"Cuando el precio de un bien sube, la cantidad demandada baja.<br>Cuando el precio baja, la cantidad demandada sube.<br><em>Ceteris Paribus</em> (todo lo demás constante)."</p>
+    </div>
+
+    <div class="highlight">
+      <strong>Ejemplo concreto:</strong> Si el precio de las hamburguesas sube de B/.2 a B/.6, menos personas las van a comprar. Si bajan a B/.1, muchas más personas las comprarán.
+    </div>
+
+    <div class="mnemonic">
+      <h3>Truco para recordarlo</h3>
+      <div class="mnemonic-word" style="font-size:1.5rem;">📈 Precio ↑ → Cantidad ↓<br>📉 Precio ↓ → Cantidad ↑</div>
+      <p style="margin-top:14px; color:var(--muted); font-size:0.92rem">Piénsalo como una balanza: cuando un lado sube, el otro baja. <strong>Relación inversa.</strong></p>
+      <p style="margin-top:10px; font-size:0.88rem; color:var(--accent4)">Frase mnemotécnica: <em>"Si el precio PA'RIBA, la cantidad PA'BAJO"</em> 🇵🇦</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: TABLA DE DEMANDA -->
+  <section id="tabla">
+    <div class="section-label">Sección 03</div>
+    <div class="section-title">La Tabla de Demanda</div>
+    <p class="section-intro">Una tabla de demanda muestra cuánto compraría un consumidor a cada nivel de precio. Viene de tu ejercicio #1 de la práctica.</p>
+
+    <div class="chart-wrapper">
+      <h3>Tabla de Demanda Individual — Bien X</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Precio (B/.)</th>
+            <th>Cantidad demandada (Qx)</th>
+            <th>¿Qué pasa?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>6</td><td>0</td><td style="color:var(--muted);font-family:Nunito">Precio muy alto → nadie compra</td></tr>
+          <tr><td>5</td><td>2</td><td style="color:var(--muted);font-family:Nunito">Empieza a bajar → poca demanda</td></tr>
+          <tr><td>4</td><td>4</td><td style="color:var(--muted);font-family:Nunito">Precio moderado</td></tr>
+          <tr><td>3</td><td>6</td><td style="color:var(--muted);font-family:Nunito">Más asequible, más demanda</td></tr>
+          <tr><td>2</td><td>8</td><td style="color:var(--muted);font-family:Nunito">Precio bajo → muchos compran</td></tr>
+          <tr><td>1</td><td>10</td><td style="color:var(--muted);font-family:Nunito">Muy barato → alta demanda</td></tr>
+          <tr><td>0</td><td>12</td><td style="color:var(--muted);font-family:Nunito">Gratis → demanda máxima</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight">
+      <strong>Cómo leer la tabla:</strong> Busca el precio en la columna izquierda (Px) y la cantidad correspondiente en la derecha (Qx). A precio 4, se demandan 4 unidades. A precio 1, se demandan 10 unidades.
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: CURVA DE DEMANDA -->
+  <section id="curva">
+    <div class="section-label">Sección 04</div>
+    <div class="section-title">La Curva de Demanda</div>
+    <p class="section-intro">Cuando graficamos la tabla de demanda, obtenemos una <strong>curva con pendiente negativa</strong> — va de arriba-izquierda hacia abajo-derecha. Esto refleja la ley de la demanda.</p>
+
+    <div class="chart-wrapper">
+      <h3>📊 Curva de Demanda Individual — Ejercicio 1 de tu práctica</h3>
+      <canvas id="chart1" height="320"></canvas>
+    </div>
+
+    <div class="cards">
+      <div class="card y1">
+        <div class="card-icon">📍</div>
+        <h3>Eje Y (vertical)</h3>
+        <p>Siempre representa el <strong>Precio</strong>. Va de menor a mayor de abajo hacia arriba.</p>
+      </div>
+      <div class="card y2">
+        <div class="card-icon">📍</div>
+        <h3>Eje X (horizontal)</h3>
+        <p>Siempre representa la <strong>Cantidad demandada</strong>. Va de menor a mayor de izquierda a derecha.</p>
+      </div>
+      <div class="card y3">
+        <div class="card-icon">📉</div>
+        <h3>Pendiente negativa</h3>
+        <p>La curva siempre baja hacia la derecha — confirmando la relación inversa precio-cantidad.</p>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <h3>Truco para graficar</h3>
+      <div class="mnemonic-word" style="font-size:1.3rem;">Y = Precio &nbsp;|&nbsp; X = Cantidad</div>
+      <ul>
+        <li><span class="letter">1</span><span>Dibuja los dos ejes (cruz)</span></li>
+        <li><span class="letter">2</span><span>Escribe los números del precio en el eje Y</span></li>
+        <li><span class="letter">3</span><span>Escribe las cantidades en el eje X</span></li>
+        <li><span class="letter">4</span><span>Marca cada punto (precio, cantidad) de la tabla</span></li>
+        <li><span class="letter">5</span><span>Conecta los puntos con una línea suave hacia abajo</span></li>
+      </ul>
+      <p style="margin-top:14px; color:var(--accent4); font-size:0.88rem">Mnemotécnica: <em>"Y va al cielo (precio alto) y X va al infinito (muchas unidades)"</em></p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5: DEMANDA DE MERCADO -->
+  <section id="mercado">
+    <div class="section-label">Sección 05</div>
+    <div class="section-title">Demanda de Mercado</div>
+    <p class="section-intro">La demanda de mercado es la <strong>suma de todas las demandas individuales</strong>. Si hay dos consumidores (Qx1 y Qx2), sumamos sus cantidades a cada precio para obtener la demanda total del mercado (Qx3).</p>
+
+    <div class="chart-wrapper">
+      <h3>Tabla de Demanda de Mercado — Ejercicio 2 de tu práctica</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Precio (B/.)</th>
+            <th>Consumidor 1 (Qx1)</th>
+            <th>Consumidor 2 (Qx2)</th>
+            <th>Mercado (Qx1+Qx2)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>6</td><td>18</td><td>38</td><td style="color:var(--accent1);font-weight:700">56</td></tr>
+          <tr><td>5</td><td>20</td><td>40</td><td style="color:var(--accent1);font-weight:700">60</td></tr>
+          <tr><td>4</td><td>24</td><td>46</td><td style="color:var(--accent1);font-weight:700">70</td></tr>
+          <tr><td>3</td><td>30</td><td>55</td><td style="color:var(--accent1);font-weight:700">85</td></tr>
+          <tr><td>2</td><td>40</td><td>70</td><td style="color:var(--accent1);font-weight:700">110</td></tr>
+          <tr><td>1</td><td>60</td><td>100</td><td style="color:var(--accent1);font-weight:700">160</td></tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4">Qx_mercado = Qx1 + Qx2 &nbsp;(suma horizontal a cada precio)</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="chart-wrapper">
+      <h3>📊 Curva de Demanda de Mercado</h3>
+      <canvas id="chart2" height="320"></canvas>
+    </div>
+
+    <div class="mnemonic">
+      <h3>Regla de oro para la demanda de mercado</h3>
+      <div class="mnemonic-word" style="font-size:1.4rem;">SUMA HORIZONTAL</div>
+      <ul>
+        <li><span class="letter">→</span><span>A cada precio, suma las cantidades de TODOS los consumidores</span></li>
+        <li><span class="letter">→</span><span>La curva de mercado siempre está MÁS A LA DERECHA que las individuales</span></li>
+        <li><span class="letter">→</span><span>Más consumidores = mayor demanda de mercado</span></li>
+      </ul>
+      <p style="margin-top:14px; color:var(--accent4); font-size:0.88rem">Mnemotécnica: <em>"En el mercado todos SUMAN, la curva se va a la derecha como un mago que jala el mantel"</em> 🪄</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 6: DESPLAZAMIENTO vs MOVIMIENTO -->
+  <section id="desplazamiento">
+    <div class="section-label">Sección 06</div>
+    <div class="section-title">Desplazamiento vs. Movimiento</div>
+    <p class="section-intro">Este es uno de los conceptos más importantes (y confusos) del tema. Viene del ejercicio 3 de tu práctica con las hamburguesas.</p>
+
+    <div class="two-col">
+      <div class="shift-box" style="border-top:3px solid var(--accent2)">
+        <h4 style="color:var(--accent2)">🔄 Movimiento a lo largo de la curva</h4>
+        <p style="font-size:0.88rem; color:var(--muted); margin-bottom:14px">Ocurre cuando <strong>solo cambia el precio</strong> del bien. El consumidor sube o baja por la misma curva.</p>
+        <ul>
+          <li>Precio sube → menos cantidad (subir la curva)</li>
+          <li>Precio baja → más cantidad (bajar la curva)</li>
+          <li>La curva <strong>NO se mueve</strong></li>
+          <li>Solo cambia la posición del punto sobre ella</li>
+        </ul>
+      </div>
+      <div class="shift-box" style="border-top:3px solid var(--accent3)">
+        <h4 style="color:var(--accent3)">↔️ Desplazamiento de la curva</h4>
+        <p style="font-size:0.88rem; color:var(--muted); margin-bottom:14px">Ocurre cuando cambia algo <strong>distinto al precio</strong>. Toda la curva se mueve.</p>
+        <ul>
+          <li>Ingreso sube → curva va a la derecha (más demanda)</li>
+          <li>Ingreso baja → curva va a la izquierda (menos demanda)</li>
+          <li>Nueva moda, salud, gustos → desplazan la curva</li>
+          <li>La curva <strong>SÍ se mueve</strong> completa</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-wrapper">
+      <h3>📊 Hamburguesas: desplazamiento por nueva salsa (+20 millones)</h3>
+      <canvas id="chart3" height="320"></canvas>
+    </div>
+
+    <div class="highlight">
+      <strong>Respuesta al ejercicio 3b:</strong> Cuando la nueva salsa salió al mercado, la demanda de hamburguesas aumentó en 20 millones de bolsas a <em>cada precio</em>. Esto provocó un <strong>desplazamiento de la curva hacia la derecha</strong>. No fue un movimiento a lo largo de la curva porque el precio no cambió — cambió el gusto del consumidor (hay una nueva salsa que hace las hamburguesas más atractivas).
+    </div>
+
+    <div class="mnemonic">
+      <h3>Cómo diferenciarlos — Truco del PRECIO</h3>
+      <div class="mnemonic-word" style="font-size:1.3rem;">¿Cambió el PRECIO?</div>
+      <ul>
+        <li><span class="letter">✅</span><span><strong>SÍ cambió el precio</strong> → MOVIMIENTO sobre la misma curva</span></li>
+        <li><span class="letter">❌</span><span><strong>NO cambió el precio</strong> → DESPLAZAMIENTO (cambia otra cosa)</span></li>
+      </ul>
+      <p style="margin-top:14px; color:var(--accent4); font-size:0.88rem">Frase: <em>"Si el precio mueve, te quedas en la curva. Si otra cosa mueve, la curva se desplaza."</em></p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 7: EFECTO DEL INGRESO -->
+  <section id="ingreso">
+    <div class="section-label">Sección 07</div>
+    <div class="section-title">El Ingreso y la Demanda</div>
+    <p class="section-intro">Del ejercicio 4 de tu práctica: el ingreso de la persona afecta la demanda. Cuando el ingreso sube, la persona puede comprar más a cualquier precio.</p>
+
+    <div class="chart-wrapper">
+      <h3>📊 Dos curvas de demanda individual — Bien X (antes y después del aumento de ingreso)</h3>
+      <canvas id="chart4" height="340"></canvas>
+    </div>
+
+    <div class="highlight">
+      <strong>Respuesta 4b:</strong> Si el precio baja de B/.5 a B/.3 (antes del aumento de ingreso), el consumidor pasa de comprar 20 a comprar 30 unidades. Esto es un <strong>movimiento a lo largo de Qdx</strong> (la curva original).
+    </div>
+    <div class="highlight" style="border-left-color: var(--accent1)">
+      <strong>Respuesta 4c:</strong> Con precio fijo en B/.5, cuando el ingreso sube, el consumidor pasa de demandar 20 unidades (Qdx) a 40 unidades (Qdx1). La curva se <strong>desplaza hacia la derecha</strong>.
+    </div>
+
+    <div class="cards">
+      <div class="card y1">
+        <div class="card-icon">📈</div>
+        <h3>Bien Normal</h3>
+        <p>Si sube el ingreso, la demanda sube. Ejemplo: carne, ropa de marca, viajes.</p>
+      </div>
+      <div class="card y3">
+        <div class="card-icon">📉</div>
+        <h3>Bien Inferior</h3>
+        <p>Si sube el ingreso, la demanda baja (la gente prefiere algo mejor). Ejemplo: transporte público (si ganas más, compras carro).</p>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <h3>Los determinantes de la demanda — Acrónimo PRICE</h3>
+      <div class="mnemonic-word">P·R·I·C·E</div>
+      <ul>
+        <li><span class="letter">P</span><span><strong>Preferences / Gustos</strong> — Lo que le gusta al consumidor</span></li>
+        <li><span class="letter">R</span><span><strong>Related goods prices</strong> — Precio de bienes sustitutos y complementarios</span></li>
+        <li><span class="letter">I</span><span><strong>Income / Ingreso</strong> — Cuánto dinero gana el consumidor</span></li>
+        <li><span class="letter">C</span><span><strong>Consumers / Número de consumidores</strong> — Más personas = más demanda</span></li>
+        <li><span class="letter">E</span><span><strong>Expectations / Expectativas</strong> — Si creen que el precio subirá, compran ahora</span></li>
+      </ul>
+      <p style="margin-top:14px; color:var(--muted); font-size:0.88rem">Todos estos factores desplazan la curva (son distintos al precio del bien).</p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 8: QUIZ -->
+  <section id="quiz">
+    <div class="section-label">Sección 08 — Practica</div>
+    <div class="section-title">Quiz Rápido</div>
+    <p class="section-intro">Pon a prueba lo que aprendiste. Haz clic en la respuesta correcta.</p>
+
+    <div class="quiz-box">
+      <h3>🎯 Preguntas de Repaso</h3>
+
+      <div class="quiz-q" id="q1">
+        <p>1. Si el precio de las hamburguesas sube de B/.2 a B/.5, ¿qué ocurre con la demanda?</p>
+        <div class="options">
+          <button onclick="answer('q1',this,false,'Incorrecto. Al subir el precio, la cantidad demandada BAJA.')">La demanda sube</button>
+          <button onclick="answer('q1',this,true,'¡Correcto! La cantidad demandada baja. Es un movimiento a lo largo de la curva.')">La cantidad demandada baja</button>
+          <button onclick="answer('q1',this,false,'Incorrecto. La curva no se desplaza porque cambió el precio del mismo bien.')">La curva se desplaza a la derecha</button>
+        </div>
+        <div class="quiz-feedback" id="q1-fb"></div>
+      </div>
+
+      <div class="quiz-q" id="q2">
+        <p>2. Una nueva salsa hace que la gente quiera más hamburguesas. ¿Qué ocurre con la curva de demanda?</p>
+        <div class="options">
+          <button onclick="answer('q2',this,false,'No. El precio no cambió, cambió el gusto del consumidor.')">Movimiento sobre la curva</button>
+          <button onclick="answer('q2',this,true,'¡Correcto! Un cambio en los gustos desplaza toda la curva hacia la derecha.')">Desplazamiento a la derecha</button>
+          <button onclick="answer('q2',this,false,'No. La demanda aumentó, no disminuyó.')">Desplazamiento a la izquierda</button>
+        </div>
+        <div class="quiz-feedback" id="q2-fb"></div>
+      </div>
+
+      <div class="quiz-q" id="q3">
+        <p>3. ¿Cómo se calcula la demanda de mercado?</p>
+        <div class="options">
+          <button onclick="answer('q3',this,false,'No. Eso sería la demanda de un solo consumidor.')">Solo la demanda del consumidor más grande</button>
+          <button onclick="answer('q3',this,false,'No. Se suman, no se promedian.')">El promedio de las demandas individuales</button>
+          <button onclick="answer('q3',this,true,'¡Correcto! Se suman las cantidades de todos los consumidores a cada precio.')">La suma de todas las demandas individuales</button>
+        </div>
+        <div class="quiz-feedback" id="q3-fb"></div>
+      </div>
+
+      <div class="quiz-q" id="q4">
+        <p>4. Si el ingreso de una persona sube y el bien X es un bien normal, ¿qué le pasa a la demanda de X?</p>
+        <div class="options">
+          <button onclick="answer('q4',this,true,'¡Correcto! Para bienes normales, más ingreso = más demanda. La curva se desplaza a la derecha.')">Aumenta (curva a la derecha)</button>
+          <button onclick="answer('q4',this,false,'Eso ocurre con bienes inferiores, no normales.')">Disminuye (curva a la izquierda)</button>
+          <button onclick="answer('q4',this,false,'Incorrecto. Un cambio en el ingreso sí afecta la demanda de bienes normales.')">No cambia</button>
+        </div>
+        <div class="quiz-feedback" id="q4-fb"></div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Guía creada para <span>Práctica sobre la Demanda del Consumidor</span> · Economía · Grupo 1LS-241 · Prof. Diana Agames
+</footer>
+
+<!-- CHART.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const chartDefaults = {
+  responsive: true,
+  plugins: {
+    legend: {
+      labels: { color: '#e6edf3', font: { family: 'DM Mono', size: 12 } }
+    },
+    tooltip: {
+      backgroundColor: '#1c2330',
+      borderColor: '#30363d',
+      borderWidth: 1,
+      titleColor: '#f7c948',
+      bodyColor: '#e6edf3',
+    }
+  },
+  scales: {
+    x: {
+      grid: { color: '#21262d' },
+      ticks: { color: '#8b949e', font: { family: 'DM Mono' } },
+      title: { display: true, color: '#58d6b8', font: { family: 'DM Mono', size: 12 } }
+    },
+    y: {
+      grid: { color: '#21262d' },
+      ticks: { color: '#8b949e', font: { family: 'DM Mono' } },
+      title: { display: true, color: '#58d6b8', font: { family: 'DM Mono', size: 12 } }
+    }
+  }
+};
+
+// Chart 1 — Demanda individual ejercicio 1
+new Chart(document.getElementById('chart1'), {
+  type: 'line',
+  data: {
+    labels: [0,2,4,6,8,10,12],
+    datasets: [{
+      label: 'Curva de Demanda (Qx)',
+      data: [{x:0,y:6},{x:2,y:5},{x:4,y:4},{x:6,y:3},{x:8,y:2},{x:10,y:1},{x:12,y:0}],
+      borderColor: '#f7c948',
+      backgroundColor: '#f7c94820',
+      pointBackgroundColor: '#f7c948',
+      pointRadius: 6,
+      tension: 0.4,
+      fill: false
+    }]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      x: { ...chartDefaults.scales.x, title: { ...chartDefaults.scales.x.title, text: 'Cantidad (Qx)' }, min: 0, max: 14 },
+      y: { ...chartDefaults.scales.y, title: { ...chartDefaults.scales.y.title, text: 'Precio (Px)' }, min: 0, max: 7 }
+    }
+  }
+});
+
+// Chart 2 — Demanda de mercado ejercicio 2
+new Chart(document.getElementById('chart2'), {
+  type: 'line',
+  data: {
+    labels: [56,60,70,85,110,160],
+    datasets: [
+      {
+        label: 'Consumidor 1 (Qx1)',
+        data: [{x:18,y:6},{x:20,y:5},{x:24,y:4},{x:30,y:3},{x:40,y:2},{x:60,y:1}],
+        borderColor: '#58d6b8',
+        pointBackgroundColor: '#58d6b8',
+        pointRadius: 5,
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: 'Consumidor 2 (Qx2)',
+        data: [{x:38,y:6},{x:40,y:5},{x:46,y:4},{x:55,y:3},{x:70,y:2},{x:100,y:1}],
+        borderColor: '#9b8cff',
+        pointBackgroundColor: '#9b8cff',
+        pointRadius: 5,
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: 'Demanda de Mercado (Qx1+Qx2)',
+        data: [{x:56,y:6},{x:60,y:5},{x:70,y:4},{x:85,y:3},{x:110,y:2},{x:160,y:1}],
+        borderColor: '#f7c948',
+        backgroundColor: '#f7c94810',
+        pointBackgroundColor: '#f7c948',
+        pointRadius: 7,
+        borderWidth: 3,
+        tension: 0.4,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      x: { ...chartDefaults.scales.x, title: { ...chartDefaults.scales.x.title, text: 'Cantidad (Q)' }, min: 0, max: 175 },
+      y: { ...chartDefaults.scales.y, title: { ...chartDefaults.scales.y.title, text: 'Precio (Px)' }, min: 0, max: 7 }
+    }
+  }
+});
+
+// Chart 3 — Hamburguesas + desplazamiento
+new Chart(document.getElementById('chart3'), {
+  type: 'line',
+  data: {
+    datasets: [
+      {
+        label: 'Demanda Original',
+        data: [{x:160,y:60},{x:150,y:70},{x:140,y:80},{x:130,y:90},{x:120,y:100}],
+        borderColor: '#58d6b8',
+        pointBackgroundColor: '#58d6b8',
+        pointRadius: 6,
+        tension: 0.3,
+        fill: false
+      },
+      {
+        label: 'Demanda Nueva (+20 millones)',
+        data: [{x:180,y:60},{x:170,y:70},{x:160,y:80},{x:150,y:90},{x:140,y:100}],
+        borderColor: '#f77f7f',
+        backgroundColor: '#f77f7f10',
+        pointBackgroundColor: '#f77f7f',
+        pointRadius: 6,
+        tension: 0.3,
+        borderDash: [6,3],
+        fill: false
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      x: { ...chartDefaults.scales.x, title: { ...chartDefaults.scales.x.title, text: 'Cantidad (millones de bolsas/semana)' }, min: 100, max: 210 },
+      y: { ...chartDefaults.scales.y, title: { ...chartDefaults.scales.y.title, text: 'Precio (B/.)' }, min: 50, max: 110 }
+    }
+  }
+});
+
+// Chart 4 — Efecto del ingreso, bien X
+new Chart(document.getElementById('chart4'), {
+  type: 'line',
+  data: {
+    datasets: [
+      {
+        label: 'Qdx (antes del aumento de ingreso)',
+        data: [{x:60,y:1},{x:18,y:2},{x:24,y:3},{x:20,y:4},{x:20,y:5},{x:18,y:6}],
+        borderColor: '#58d6b8',
+        pointBackgroundColor: '#58d6b8',
+        pointRadius: 6,
+        tension: 0.4,
+        fill: false
+      },
+      {
+        label: 'Qdx1 (después del aumento de ingreso)',
+        data: [{x:100,y:1},{x:38,y:2},{x:46,y:3},{x:40,y:4},{x:40,y:5},{x:38,y:6}],
+        borderColor: '#f7c948',
+        backgroundColor: '#f7c94810',
+        pointBackgroundColor: '#f7c948',
+        pointRadius: 6,
+        tension: 0.4,
+        fill: false,
+        borderDash: [6,3]
+      }
+    ]
+  },
+  options: {
+    ...chartDefaults,
+    scales: {
+      x: { ...chartDefaults.scales.x, title: { ...chartDefaults.scales.x.title, text: 'Cantidad (Qx)' }, min: 0, max: 110 },
+      y: { ...chartDefaults.scales.y, title: { ...chartDefaults.scales.y.title, text: 'Precio (Px)' }, min: 0, max: 7 }
+    }
+  }
+});
+
+// QUIZ LOGIC
+function answer(qId, btn, correct, feedback) {
+  const q = document.getElementById(qId);
+  const buttons = q.querySelectorAll('button');
+  buttons.forEach(b => b.disabled = true);
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  const fb = document.getElementById(qId + '-fb');
+  fb.textContent = (correct ? '✅ ' : '❌ ') + feedback;
+  fb.classList.add('visible');
+  fb.style.color = correct ? 'var(--accent2)' : 'var(--accent3)';
+}
+</script>
+</body>
+</html>
