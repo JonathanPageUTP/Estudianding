@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Flashcards - Seguridad Informática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        header {
+            background: white;
+            border-radius: 10px 10px 0 0;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .progress-item {
+            text-align: center;
+        }
+        
+        .progress-item span {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .progress-item label {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .card-container {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            perspective: 1000px;
+        }
+        
+        .flashcard {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .flashcard-front {
+            color: #667eea;
+        }
+        
+        .flashcard-back {
+            color: #764ba2;
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard h2 {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        
+        .flashcard p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .hint {
+            font-size: 0.9em;
+            color: #999;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-prev {
+            background: #f8a5a5;
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            background: #e88a8a;
+            transform: translateY(-2px);
+        }
+        
+        .btn-next {
+            background: #a5c9f8;
+            color: white;
+        }
+        
+        .btn-next:hover {
+            background: #8ab0e8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-correct {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-correct:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-incorrect {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-incorrect:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-shuffle {
+            background: #ffc107;
+            color: black;
+            font-weight: bold;
+        }
+        
+        .btn-shuffle:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reset {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .stats {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .easy { background: #d4edda; color: #155724; }
+        .medium { background: #fff3cd; color: #856404; }
+        .hard { background: #f8d7da; color: #721c24; }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            background: #e7f3ff;
+            color: #004085;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 100 Flashcards - Seguridad Informática</h1>
+            <p>Haz clic en las tarjetas para ver las respuestas</p>
+            <div class="progress-info">
+                <div class="progress-item">
+                    <span id="current">1</span>
+                    <label>Tarjeta Actual</label>
+                </div>
+                <div class="progress-item">
+                    <span id="total">100</span>
+                    <label>Total</label>
+                </div>
+                <div class="progress-item">
+                    <span id="correct-count">0</span>
+                    <label>Correctas</label>
+                </div>
+            </div>
+        </header>
+        
+        <div class="card-container">
+            <div class="flashcard" id="flashcard" onclick="toggleFlip()">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front" id="front">
+                        <h2>Cargando tarjeta...</h2>
+                    </div>
+                    <div class="flashcard-back" id="back">
+                        <p>Cargando respuesta...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn-prev" onclick="previousCard()">← Anterior</button>
+                <button class="btn-next" onclick="nextCard()">Siguiente →</button>
+                <button class="btn-correct" onclick="markCorrect()">✓ Correcta</button>
+                <button class="btn-incorrect" onclick="markIncorrect()">✗ Incorrecta</button>
+                <button class="btn-shuffle" onclick="shuffleCards()">🔀 Mezclar</button>
+                <button class="btn-reset" onclick="resetProgress()">↺ Reiniciar</button>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Tasa de Acierto</div>
+                <div class="stat-value" id="accuracy">0%</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Estudiadas</div>
+                <div class="stat-value" id="studied">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Pendientes</div>
+                <div class="stat-value" id="pending">100</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const flashcards = [
+            // CONCEPTOS BÁSICOS (1-15)
+            { front: "¿Qué es Seguridad de Información?", back: "Se orienta a proteger los activos de información sin importar su forma o estado, valiéndose de metodologías, normas, técnicas, herramientas y gestión de medidas de seguridad.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es Seguridad Informática?", back: "Abarca la protección de sistemas de información, incluyendo hardware, software, redes y datos digitales, enfocándose en integridad, disponibilidad y confidencialidad.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es Ciberseguridad?", back: "Es la protección de activos de información a través del tratamiento de amenazas que ponen en riesgo la información procesada, almacenada y transportada por sistemas interconectados.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Cuáles son los 5 tipos de seguridad informática?", back: "Hardware, Software, Red, Física y Lógica.", category: "Conceptos", difficulty: "medium" },
+            { front: "¿Qué es Seguridad Activa?", back: "Son medidas preventivas que previenen incidentes antes de que ocurran. Ejemplo: Contraseñas fuertes.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es Seguridad Pasiva?", back: "Son medidas correctivas que minimizan consecuencias después del incidente. Ejemplo: Copias de seguridad.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué significa ISO 27001?", back: "Es un estándar internacional para la Gestión de Seguridad de la Información.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es GDPR?", back: "Es la regulación de Protección de Datos en la Unión Europea que garantiza derechos de privacidad.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es PCI DSS?", back: "Payment Card Industry Data Security Standard - estándar para proteger datos de tarjetas de crédito.", category: "Conceptos", difficulty: "medium" },
+            { front: "¿Qué es SOX?", back: "Ley Sarbanes-Oxley para la transparencia financiera y auditoría de empresas.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es la Ley 81?", back: "Es la ley de Protección de Datos Personales de Panamá.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Cuál es el objetivo principal de la Seguridad Informática?", back: "Proteger la confidencialidad, integridad y disponibilidad de la información y sistemas.", category: "Conceptos", difficulty: "easy" },
+            { front: "¿Qué es un Activo de Información?", back: "Cualquier información o sistema relacionado con su tratamiento que tenga valor para la organización (datos, aplicaciones, equipos, personal, redes).", category: "Conceptos", difficulty: "medium" },
+            { front: "¿Qué es el Análisis de Riesgos?", back: "Proceso de identificación de activos, vulnerabilidades y amenazas, así como la probabilidad de ocurrencia e impacto.", category: "Conceptos", difficulty: "medium" },
+            { front: "¿Qué es una Brecha de Seguridad?", back: "Un incidente que permite acceso no autorizado a datos, aplicaciones, redes o dispositivos.", category: "Conceptos", difficulty: "easy" },
+            
+            // SERVICIOS DE SEGURIDAD (16-30)
+            { front: "¿Qué es Confidencialidad?", back: "La información está accesible únicamente a personal autorizado. Se logra mediante cifrado y control de acceso.", category: "Servicios", difficulty: "easy" },
+            { front: "¿Qué es Integridad?", back: "Se garantiza la exactitud de los datos, asegurando que no hayan sido alterados, perdidos o destruidos de forma accidental o intencionada.", category: "Servicios", difficulty: "easy" },
+            { front: "¿Qué es Disponibilidad?", back: "La capacidad de un servicio, sistema o información de ser accesible y utilizable por usuarios autorizados cuando lo requieran (24/7).", category: "Servicios", difficulty: "easy" },
+            { front: "¿Qué es Autenticación?", back: "Es el proceso de verificar la identidad de un usuario, aplicación o servicio antes de que acceda a un sistema digital.", category: "Servicios", difficulty: "easy" },
+            { front: "¿Qué es No Repudio?", back: "Servicio que permite probar la participación de las partes en una comunicación, evitando que nieguen haber realizado una acción.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cuál es la relación entre los 3 pilares de seguridad (CIA)?", back: "Confidencialidad (acceso restringido), Integridad (sin cambios no autorizados) y Disponibilidad (acceso cuando se necesita).", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cómo se implementa Confidencialidad?", back: "Mediante cifrado, control de acceso y autenticación de usuarios.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cómo se implementa Integridad?", back: "Mediante firmas digitales, hash criptográfico y checksums.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cómo se implementa Disponibilidad?", back: "Mediante redundancia de sistemas, backups, sistemas de respaldo y balanceo de carga.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cuáles son las dos formas de No Repudio?", back: "No repudio en origen (emisor no puede negar envío) y No repudio en destino (receptor no puede negar recepción).", category: "Servicios", difficulty: "hard" },
+            { front: "¿Cuál es el impacto de perder Confidencialidad?", back: "La información sensible está expuesta a personas no autorizadas, riesgo de robo de datos.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cuál es el impacto de perder Integridad?", back: "Los datos pueden ser modificados sin autorización, causando decisiones incorrectas basadas en datos falsos.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Cuál es el impacto de perder Disponibilidad?", back: "Los servicios están caídos o inoperables, impactando operaciones del negocio.", category: "Servicios", difficulty: "medium" },
+            { front: "¿Por qué es importante Autenticación?", back: "Garantiza que solo usuarios autorizados accedan a sistemas y recursos.", category: "Servicios", difficulty: "easy" },
+            { front: "¿Por qué es importante No Repudio?", back: "Proporciona evidencia y responsabilidad de acciones, importante para cumplimiento legal.", category: "Servicios", difficulty: "hard" },
+            
+            // MÉTODOS DE AUTENTICACIÓN (31-60)
+            { front: "¿Cuáles son los 7 métodos de autenticación más utilizados?", back: "1. Contraseña, 2. OTP, 3. Token PKI, 4. Llave Confidencial, 5. Tarjeta inteligente, 6. Biometría, 7. RFID Activo.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Qué es SFA (Single Factor Authentication)?", back: "Autenticación con un único factor: usuario + contraseña. Es el método más básico.", category: "Autenticación", difficulty: "easy" },
+            { front: "¿Cuáles son las vulnerabilidades principales del SFA?", back: "Contraseñas débiles, phishing, ataques Man-in-the-Middle, reutilización de contraseñas.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es OTP (One-Time Password)?", back: "Contraseña de un solo uso válida por tiempo limitado, generada por calculador especializado.", category: "Autenticación", difficulty: "easy" },
+            { front: "¿Cuál es el uso principal de OTP?", back: "Protección de accesos sobre IP/VPN desde equipos fuera de la oficina.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Cómo funciona OTP?", back: "Usuario ingresa contraseña en calculador → genera OTP de un solo uso → usuario proporciona OTP al módulo → servidor valida.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es PKI?", back: "Public Key Infrastructure - infraestructura de certificados digitales para autenticación criptográfica.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es un Token USB PKI?", back: "Dispositivo USB que contiene certificado digital X.509 para autenticación sin necesidad de lector.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es una Tarjeta Inteligente?", back: "Tarjeta que requiere lector, permite integrar certificado PKI y otras tecnologías (RFID, banda magnética).", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es CMS en autenticación?", back: "Card Management System - sistema que gestiona creación, distribución, bloqueo y desbloqueo de tarjetas inteligentes.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Cuáles son las 4 funciones principales del CMS?", back: "1. Crear tarjeta, 2. Préstamo temporal, 3. Puesta en lista negra, 4. Desbloqueo de PIN.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Qué es la 'Llave Confidencial Defensa'?", back: "Llave multifunciones con certificado X.509, almacenamiento de datos, recursos criptográficos. El PIN se compone en la llave misma.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Cuál es la ventaja de que el PIN se compose en la llave?", back: "Elimina riesgos de 'key loggers' (malware que captura teclado).", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Qué es autenticación biométrica?", back: "Verificación de identidad basada en características físicas únicas del usuario (huella, cara, iris).", category: "Autenticación", difficulty: "easy" },
+            { front: "¿Cuáles son los tipos de biometría más comunes?", back: "Huella dactilar, reconocimiento facial, reconocimiento de iris, reconocimiento de voz.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Cuáles son las 3 arquitecturas de almacenamiento biométrico?", back: "1. Servidor centralizado, 2. Puesto de trabajo local, 3. Tarjeta criptográfica.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Cuál es la ventaja de biometría en tarjeta vs. servidor?", back: "Permite movilidad sin base de datos centralizada y cumple mejor con regulaciones de privacidad.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Qué es RFID Activo?", back: "Tecnología que identifica usuario sin contacto físico a varios metros de distancia, con tarjeta que tiene alimentación propia.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Cuáles son los parámetros configurables de RFID Activo?", back: "Distancia de detección, acción en llegada/salida (cierre sesión, bloqueo, etc.), manejo de múltiples usuarios.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Cuáles son los casos de uso de RFID Activo?", back: "Cambio rápido de usuario en Urgencias hospitalarias, protección de puestos en zona pública bancaria.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Qué es MFA (Multi-Factor Authentication)?", back: "Autenticación con 2 o más factores diferentes (algo que sabes + tienes + eres).", category: "Autenticación", difficulty: "easy" },
+            { front: "¿Cuáles son los 3 factores de autenticación?", back: "Algo que CONOCES (contraseña, PIN), algo que TIENES (smartphone, USB), algo que ERES (huella, cara).", category: "Autenticación", difficulty: "easy" },
+            { front: "¿Cuál es la diferencia entre 2FA y 3FA?", back: "2FA: dos factores diferentes. 3FA: tres factores diferentes. 3FA es más seguro pero menos cómodo.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es un Token en autenticación?", back: "Conjunto de datos que contienen elementos que verifican la identidad del usuario, presentados a la aplicación.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Cuáles son los tipos de Token principales?", back: "Kerberos (Windows) y SAML (SOA/J2EE/Servicios Web).", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Qué es SSO (Single Sign-On)?", back: "Sistema que permite un único login para acceder a múltiples aplicaciones sin necesidad de reautenticarse.", category: "Autenticación", difficulty: "easy" },
+            { front: "¿Cuál es la ventaja del SSO de Empresa?", back: "Interfaz directa con aplicaciones sin necesidad de modificarlas, aplicando política de seguridad centralizada.", category: "Autenticación", difficulty: "medium" },
+            { front: "¿Cuáles son las vulnerabilidades de 2FA basada en SMS?", back: "Los atacantes pueden clonar tarjeta SIM y redirigir mensajes de texto a su dispositivo.", category: "Autenticación", difficulty: "hard" },
+            { front: "¿Cuál es el problema de 2FA con aplicaciones de autenticación?", back: "Si el dispositivo se compromete con malware, el atacante puede acceder a códigos de seguridad.", category: "Autenticación", difficulty: "hard" },
+            
+            // AMENAZAS Y VULNERABILIDADES (61-75)
+            { front: "¿Qué es una Vulnerabilidad?", back: "Es una debilidad propia de un sistema que permite ser atacado y recibir daño.", category: "Amenazas", difficulty: "easy" },
+            { front: "¿Qué es una Amenaza?", back: "Es toda acción que aprovecha una vulnerabilidad para atentar contra la seguridad.", category: "Amenazas", difficulty: "easy" },
+            { front: "¿Cuál es la relación entre Vulnerabilidad y Amenaza?", back: "Vulnerabilidad es la debilidad, Amenaza es la acción malintencionada. Ambas combinadas = Incidente de seguridad.", category: "Amenazas", difficulty: "medium" },
+            { front: "¿Cuáles son los 4 tipos principales de Amenazas?", back: "1. Intencionadas, 2. Errores y fallos no intencionados, 3. Origen industrial, 4. Desastres naturales.", category: "Amenazas", difficulty: "medium" },
+            { front: "¿Qué es un Ataque Intencionado?", back: "Acción maliciosa deliberada para comprometer seguridad (suplantación, robo, sabotaje, etc.).", category: "Amenazas", difficulty: "easy" },
+            { front: "Nombra 5 amenazas intencionadas", back: "Suplantación de identidad, abuso de privilegios, software dañino, acceso no autorizado, denegación de servicio.", category: "Amenazas", difficulty: "medium" },
+            { front: "¿Cuáles son errores no intencionados comunes?", back: "Error de usuario, del administrador, de configuración, alteración accidental, fuga de información.", category: "Amenazas", difficulty: "medium" },
+            { front: "¿Qué son amenazas de origen industrial?", back: "Fuego, daño por agua, avería física/lógica, corte eléctrico, fallo de comunicaciones, degradación de almacenamiento.", category: "Amenazas", difficulty: "medium" },
+            { front: "¿Cuáles son ejemplos de desastres naturales?", back: "Incendios, inundaciones, terremotos, huracanes, tornados.", category: "Amenazas", difficulty: "easy" },
+            { front: "¿Qué es Buffer Overflow?", back: "Vulnerabilidad donde no se controla cantidad de datos copiados en buffer, modificando memoria contigua.", category: "Amenazas", difficulty: "hard" },
+            { front: "¿Qué es Código de Carrera?", back: "Vulnerabilidad donde no hay exclusión mutua en acceso a recursos compartidos, causando valores inesperados.", category: "Amenazas", difficulty: "hard" },
+            { front: "¿Qué es Error de Formato en Cadenas?", back: "Vulnerabilidad donde no se validan datos de entrada, permitiendo ejecución de comandos maliciosos.", category: "Amenazas", difficulty: "hard" },
+            { front: "¿Qué es XSS (Cross Site Scripting)?", back: "Vulnerabilidad donde scripts maliciosos se incrustan en páginas web legítimas para robar credenciales.", category: "Amenazas", difficulty: "hard" },
+            { front: "¿Qué es SQL Injection?", back: "Vulnerabilidad donde código SQL malicioso se ejecuta en base de datos para obtener acceso no autorizado.", category: "Amenazas", difficulty: "hard" },
+            { front: "¿Cuál es la importancia de descubrir vulnerabilidades temprano?", back: "Permite corregirlas antes de que los atacantes las exploten, evitando brechas de seguridad.", category: "Amenazas", difficulty: "medium" },
+            
+            // TIPOS DE ATAQUES (76-100)
+            { front: "¿Cuáles son los 5 tipos principales de Ataques Informáticos?", back: "1. Malware, 2. Ingeniería Social, 3. Redes y Sistemas, 4. Contraseñas, 5. Dispositivos.", category: "Ataques", difficulty: "hard" },
+            { front: "¿Qué es un Virus?", back: "Malware que infecta archivos ejecutables o sectores de arranque, se propaga al ejecutar archivo infectado.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es un Troyano?", back: "Malware con múltiples utilidades, comúnmente crea puerta trasera para descargar actualizaciones maliciosas.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es un Gusano?", back: "Malware con alto grado de dispersabilidad, se propaga sin necesidad de host infectado.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es Ransomware?", back: "Malware que cifra archivos y exige rescate para recuperarlos. Modelo de ataque financiero.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es Spyware?", back: "Malware que espía actividad del usuario e ingresa información sin consentimiento.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es Phishing?", back: "Ataque de ingeniería social donde se envían correos falsos haciéndose pasar por empresas conocidas.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Cuál es la diferencia entre Phishing y Spear Phishing?", back: "Phishing es masivo y genérico. Spear Phishing es dirigido a individuos/empresas específicas con información personalizada.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es Vishing?", back: "Ataque de ingeniería social mediante llamadas telefónicas falsas para obtener información.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es Scareware?", back: "Táctica que usa mensajes alarmistas falsos (pop-ups) para asustar usuario a comprar software inútil.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es Man-in-the-Middle (MITM)?", back: "Ataque donde el atacante intercepta comunicación entre dos partes para espiar o modificar datos.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es Denegación de Servicio (DDoS)?", back: "Ataque que sobrecarga sistema con peticiones para agotarrecursos e interrumpir servicios.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es Sniffing?", back: "Programa que monitoriza información en red capturando paquetes (packet sniffing).", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es un ataque Zero-Day?", back: "Exploit de vulnerabilidad desconocida (el vendedor tiene 'cero días' para parchear).", category: "Ataques", difficulty: "hard" },
+            { front: "¿Qué es Ataque de Fuerza Bruta?", back: "Procedimiento de probar todas las combinaciones posibles de contraseña hasta encontrar la correcta.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Cuánto tiempo toma un ataque de Fuerza Bruta?", back: "Según el método de prueba y error, tardan miles de años sin optimizaciones.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Cómo se optimiza un Ataque de Fuerza Bruta?", back: "Se combina con Ataque de Diccionario, usando palabras comunes para acelerar el proceso.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es Ataque de Diccionario?", back: "Usa lista de palabras comunes para descifrar contraseñas, más rápido que Fuerza Bruta pura.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Qué es Robo de Dispositivo?", back: "Ataque donde se toma físicamente computadora, teléfono u otro dispositivo.", category: "Ataques", difficulty: "easy" },
+            { front: "¿Qué es USB Malicioso?", back: "Ataque donde se conecta USB con malware para infectar el sistema cuando se conecta.", category: "Ataques", difficulty: "medium" },
+            { front: "¿Cuáles son las vulnerabilidades principales de SFA ante ataques?", back: "Susceptible a phishing, fuerza bruta, Man-in-the-Middle, reutilización de contraseñas.", category: "Ataques", difficulty: "hard" },
+            { front: "¿Cuáles son las vulnerabilidades de 2FA basada en SMS?", back: "Clonación de tarjeta SIM, intercepción de mensajes, vulnerabilidad de la app de autenticación.", category: "Ataques", difficulty: "hard" },
+            { front: "¿Qué es Ingeniería Social?", back: "Conjunto de técnicas para engañar usuarios y obtener datos que aporten valor (credenciales, información de sistemas).", category: "Ataques", difficulty: "medium" },
+            { front: "¿Cuáles son las tácticas principales de Ingeniería Social?", back: "Phishing, Spear Phishing, Vishing, Scareware, pretexting, baiting.", category: "Ataques", difficulty: "hard" },
+            { front: "¿Cuál es el objetivo principal de los ataques de Ingeniería Social?", back: "Obtener información sensible (credenciales, datos de tarjeta, información de sistemas) mediante manipulación.", category: "Ataques", difficulty: "medium" }
+        ];
+        
+        let currentIndex = 0;
+        let studied = new Set();
+        let correct = new Set();
+        let shuffled = false;
+        
+        function initializeFlashcards() {
+            displayCard(0);
+            updateStats();
+        }
+        
+        function displayCard(index) {
+            const card = flashcards[index];
+            document.getElementById('front').innerHTML = `
+                <h2>${card.front}</h2>
+                <span class="category-badge">${card.category}</span>
+                <div class="difficulty-badge ${card.difficulty}">Dificultad: ${card.difficulty.toUpperCase()}</div>
+            `;
+            document.getElementById('back').innerHTML = `
+                <p>${card.back}</p>
+            `;
+            document.getElementById('current').textContent = index + 1;
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+        
+        function toggleFlip() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+        
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % flashcards.length;
+            displayCard(currentIndex);
+        }
+        
+        function previousCard() {
+            currentIndex = (currentIndex - 1 + flashcards.length) % flashcards.length;
+            displayCard(currentIndex);
+        }
+        
+        function markCorrect() {
+            studied.add(currentIndex);
+            correct.add(currentIndex);
+            updateStats();
+            nextCard();
+        }
+        
+        function markIncorrect() {
+            studied.add(currentIndex);
+            updateStats();
+            nextCard();
+        }
+        
+        function shuffleCards() {
+            for (let i = flashcards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+            }
+            currentIndex = 0;
+            shuffled = true;
+            displayCard(0);
+            updateStats();
+        }
+        
+        function resetProgress() {
+            studied.clear();
+            correct.clear();
+            currentIndex = 0;
+            displayCard(0);
+            updateStats();
+        }
+        
+        function updateStats() {
+            const total = flashcards.length;
+            const studiedCount = studied.size;
+            const correctCount = correct.size;
+            const pendingCount = total - studiedCount;
+            const accuracy = studiedCount > 0 ? Math.round((correctCount / studiedCount) * 100) : 0;
+            
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('studied').textContent = studiedCount;
+            document.getElementById('pending').textContent = pendingCount;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+        
+        // Inicializar
+        initializeFlashcards();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Estudio Detallada - Seguridad Informática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        nav button {
+            padding: 10px 20px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        nav button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+        
+        nav button.active {
+            background: #764ba2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .definition {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .definition strong {
+            color: #667eea;
+        }
+        
+        .example {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-item {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .vs {
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 2px solid #667eea;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Guía de Estudio Detallada</h1>
+            <p>Seguridad Informática, Autenticación y Protección de Datos</p>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="showSection('conceptos')">1. Conceptos Básicos</button>
+            <button class="nav-btn" onclick="showSection('servicios')">2. Servicios de Seguridad</button>
+            <button class="nav-btn" onclick="showSection('autenticacion')">3. Autenticación</button>
+            <button class="nav-btn" onclick="showSection('amenazas')">4. Amenazas y Vulnerabilidades</button>
+            <button class="nav-btn" onclick="showSection('ataques')">5. Tipos de Ataques</button>
+            <button class="nav-btn" onclick="showSection('mitigacion')">6. Estrategias de Mitigación</button>
+        </nav>
+        
+        <div class="content">
+            <!-- SECCIÓN 1: CONCEPTOS BÁSICOS -->
+            <div id="conceptos" class="section active">
+                <h2>1. Conceptos Generales de Seguridad Informática</h2>
+                
+                <h3>📌 Definiciones Clave</h3>
+                
+                <div class="definition">
+                    <strong>Seguridad de Información:</strong> Se orienta a proteger los activos de información sin importar su forma o estado, valiéndose de metodologías, normas, técnicas, herramientas, estructuras organizacionales, tecnología y gestión de medidas de seguridad.
+                </div>
+                
+                <div class="definition">
+                    <strong>Seguridad Informática:</strong> Abarca la protección de sistemas de información, incluyendo hardware, software, redes y datos digitales, enfocándose en la integridad, disponibilidad y confidencialidad.
+                </div>
+                
+                <div class="definition">
+                    <strong>Ciberseguridad:</strong> Es la protección de activos de información a través del tratamiento de amenazas que ponen en riesgo la información procesada, almacenada y transportada por sistemas interconectados.
+                </div>
+                
+                <h3>🔒 Tipos de Seguridad Informática</h3>
+                
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Ejemplos</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Hardware</strong></td>
+                        <td>Protección de dispositivos físicos contra ataques y daños</td>
+                        <td>Computadoras, tablets, smartphones, dispositivos inteligentes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Software</strong></td>
+                        <td>Protección de programas y aplicaciones contra ciberataques</td>
+                        <td>Antivirus, firewalls, desarrollo seguro</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Red</strong></td>
+                        <td>Protección de la infraestructura de redes e información en tránsito</td>
+                        <td>VPN, IPS, análisis de tráfico, detección de intrusos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Física</strong></td>
+                        <td>Protección contra amenazas físicas al sistema</td>
+                        <td>Control de acceso, protección contra incendios, inundaciones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lógica</strong></td>
+                        <td>Mecanismos que protegen la parte lógica del sistema</td>
+                        <td>Datos, aplicaciones, sistemas operativos</td>
+                    </tr>
+                </table>
+                
+                <h3>⏱️ Seguridad por Momento de Protección</h3>
+                
+                <div class="comparison">
+                    <div class="comparison-item" style="background: #d4edda; border-left: 4px solid #28a745;">
+                        <h4>🛡️ Seguridad Activa</h4>
+                        <p><strong>Medidas Preventivas</strong></p>
+                        <ul>
+                            <li>Previene incidentes</li>
+                            <li>Detecta amenazas</li>
+                            <li>Evita eventos antes de ocurran</li>
+                            <li>Ejemplo: Contraseñas fuertes</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item" style="background: #f8d7da; border-left: 4px solid #dc3545;">
+                        <h4>🔧 Seguridad Pasiva</h4>
+                        <p><strong>Medidas Correctivas</strong></p>
+                        <ul>
+                            <li>Minimiza consecuencias</li>
+                            <li>Recupera de incidentes</li>
+                            <li>Actúa después del evento</li>
+                            <li>Ejemplo: Copias de seguridad</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>📋 Normativas y Cumplimiento</h3>
+                
+                <ul>
+                    <li><span class="highlight">ISO 27001</span> - Gestión de Seguridad de la Información</li>
+                    <li><span class="highlight">ISO 27002</span> - Controles de Seguridad</li>
+                    <li><span class="highlight">NIST</span> - Instituto Nacional de Estándares y Tecnología de EE.UU.</li>
+                    <li><span class="highlight">PCI DSS</span> - Payment Card Industry Data Security Standard</li>
+                    <li><span class="highlight">GDPR</span> - Protección de Datos en la UE</li>
+                    <li><span class="highlight">SOX</span> - Sarbanes-Oxley (Transparencia Financiera)</li>
+                    <li><span class="highlight">Ley 81</span> - Protección de Datos Personales de Panamá</li>
+                </ul>
+            </div>
+            
+            <!-- SECCIÓN 2: SERVICIOS DE SEGURIDAD -->
+            <div id="servicios" class="section">
+                <h2>2. Servicios de Seguridad (La Tríada CIA + 2)</h2>
+                
+                <h3>🔐 Los Cinco Pilares de la Seguridad</h3>
+                
+                <div class="card">
+                    <h4>1️⃣ CONFIDENCIALIDAD</h4>
+                    <div class="definition">
+                        <strong>Definición:</strong> Es la propiedad de la información por la que se garantiza que está accesible únicamente a personal autorizado a acceder a dicha información.
+                    </div>
+                    <p><strong>Objetivo:</strong> Evitar que información sensible sea vista por personas no autorizadas.</p>
+                    <p><strong>Implementación:</strong> Cifrado, control de acceso, autenticación</p>
+                </div>
+                
+                <div class="card">
+                    <h4>2️⃣ INTEGRIDAD</h4>
+                    <div class="definition">
+                        <strong>Definición:</strong> Se garantiza la exactitud de los datos transportados o almacenados, asegurando que no se ha producido su alteración, pérdida o destrucción, ya sea de forma accidental o intencionada.
+                    </div>
+                    <p><strong>Objetivo:</strong> Garantizar que los datos no han sido modificados sin autorización.</p>
+                    <p><strong>Implementación:</strong> Firmas digitales, hash criptográfico, checksums</p>
+                </div>
+                
+                <div class="card">
+                    <h4>3️⃣ DISPONIBILIDAD</h4>
+                    <div class="definition">
+                        <strong>Definición:</strong> La capacidad de un servicio, sistema o información de ser accesible y utilizable por los usuarios o procesos autorizados cuando éstos lo requieran.
+                    </div>
+                    <p><strong>Objetivo:</strong> Garantizar que los servicios estén disponibles siempre (24/7).</p>
+                    <p><strong>Implementación:</strong> Redundancia, backups, sistemas de respaldo</p>
+                </div>
+                
+                <div class="card">
+                    <h4>4️⃣ AUTENTICACIÓN</h4>
+                    <div class="definition">
+                        <strong>Definición:</strong> Es el proceso de verificar la identidad de un usuario, aplicación o servicio antes de que pueda acceder a un sistema digital.
+                    </div>
+                    <p><strong>Objetivo:</strong> Confirmar que la persona es quien dice ser.</p>
+                    <p><strong>Implementación:</strong> Contraseñas, biometría, tokens, certificados</p>
+                </div>
+                
+                <div class="card">
+                    <h4>5️⃣ NO REPUDIO</h4>
+                    <div class="definition">
+                        <strong>Definición:</strong> Es un servicio de seguridad que permite probar la participación de las partes en una comunicación. Evita que alguien niegue haber realizado una acción.
+                    </div>
+                    <p><strong>Objetivo:</strong> Garantizar evidencia de que algo ocurrió.</p>
+                    <p><strong>Tipos:</strong>
+                        <ul>
+                            <li><strong>No repudio en origen:</strong> El emisor no puede negar que envió (el receptor tiene pruebas)</li>
+                            <li><strong>No repudio en destino:</strong> El receptor no puede negar que recibió</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 3: AUTENTICACIÓN -->
+            <div id="autenticacion" class="section">
+                <h2>3. Métodos de Autenticación</h2>
+                
+                <h3>🔑 Los 7 Métodos de Autenticación Más Utilizados</h3>
+                
+                <h4>1. Identificador y Contraseña (Single Factor Authentication - SFA)</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> El método más básico y conocido. Utiliza usuario + contraseña.</p>
+                    <p><strong>Ventajas:</strong></p>
+                    <ul>
+                        <li>Simple y fácil de usar</li>
+                        <li>Bajo costo</li>
+                        <li>Universalmente conocido</li>
+                    </ul>
+                    <p><strong>Desventajas:</strong></p>
+                    <ul>
+                        <li>Vulnerable a ataques de fuerza bruta</li>
+                        <li>Contraseñas débiles son comunes</li>
+                        <li>Susceptible a phishing</li>
+                    </ul>
+                    <p><strong>Implementación:</strong> No requiere modificación de infraestructura existente. Solo instalar módulo SSO.</p>
+                </div>
+                
+                <h4>2. Identificador y OTP (One-Time Password)</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> El usuario posee un calculador que proporciona contraseñas válidas por tiempo limitado.</p>
+                    <p><strong>Cómo funciona:</strong></p>
+                    <ol>
+                        <li>Usuario ingresa contraseña en el calculador</li>
+                        <li>Calculador genera contraseña de un solo uso</li>
+                        <li>Usuario proporciona el OTP al módulo de autenticación</li>
+                        <li>Servidor OTP valida la información</li>
+                    </ol>
+                    <p><strong>Uso principal:</strong> Protección de accesos sobre IP/VPN desde fuera de la oficina</p>
+                    <p><strong>Requisitos:</strong> Servidores de autenticación accesibles 24x7</p>
+                </div>
+                
+                <h4>3. Token USB o Tarjeta Inteligente PKI</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> Utiliza certificados digitales X.509 en tarjeta inteligente o USB.</p>
+                    <p><strong>Componentes requeridos:</strong></p>
+                    <ul>
+                        <li>Tarjeta inteligente criptográfica o Token USB con chip</li>
+                        <li>Infraestructura PKI (Autoridad de Certificación)</li>
+                        <li>Card Management System (CMS)</li>
+                        <li>Módulo de autenticación Windows</li>
+                        <li>Servidor de autenticación</li>
+                    </ul>
+                    <p><strong>Funciones del CMS:</strong></p>
+                    <ul>
+                        <li>Crear tarjeta para nuevo empleado</li>
+                        <li>Préstamo temporal de tarjeta</li>
+                        <li>Puesta en lista negra (blacklist)</li>
+                        <li>Desbloqueo de código PIN</li>
+                    </ul>
+                </div>
+                
+                <h4>4. Llave "Confidencial Defensa"</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> Declinación particular de la tarjeta inteligente. Llave multifunciones.</p>
+                    <p><strong>Características:</strong></p>
+                    <ul>
+                        <li>Almacenamiento de certificado X.509</li>
+                        <li>Almacenamiento de datos</li>
+                        <li>Recurso criptográfico</li>
+                        <li>Código PIN se compone en la propia llave (no en teclado)</li>
+                    </ul>
+                    <p><strong>Ventaja:</strong> Elimina riesgos de "key loggers"</p>
+                    <p><strong>Portabilidad:</strong> Solución portable, integrada y asegurada</p>
+                </div>
+                
+                <h4>5. Tarjeta Inteligente con Identificador y Contraseña</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> Solución más ligera que almacena identificador y contraseña en tarjeta.</p>
+                    <p><strong>Ventajas:</strong></p>
+                    <ul>
+                        <li>Protege datos de seguridad (contraseñas SSO)</li>
+                        <li>La contraseña puede ser muy compleja</li>
+                        <li>Cambios automáticos y aleatorios</li>
+                        <li>Sin tarjeta, no se puede acceder a contraseña</li>
+                    </ul>
+                    <p><strong>Infraestructura:</strong> No requiere PKI completa, solo CMS y SSO</p>
+                </div>
+                
+                <h4>6. Soluciones Biométricas</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> Utiliza características físicas únicas del usuario.</p>
+                    <p><strong>Tipos de biometría:</strong></p>
+                    <ul>
+                        <li>Huella dactilar</li>
+                        <li>Reconocimiento facial</li>
+                        <li>Reconocimiento de iris</li>
+                        <li>Reconocimiento de voz</li>
+                    </ul>
+                    <p><strong>Arquitecturas de almacenamiento:</strong></p>
+                    <table>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Almacenamiento</th>
+                            <th>Verificación</th>
+                        </tr>
+                        <tr>
+                            <td>Servidor</td>
+                            <td>En servidor centralizado</td>
+                            <td>Por servidor</td>
+                        </tr>
+                        <tr>
+                            <td>Puesto de trabajo</td>
+                            <td>En el puesto del usuario</td>
+                            <td>Por puesto de trabajo</td>
+                        </tr>
+                        <tr>
+                            <td>Tarjeta criptográfica</td>
+                            <td>En tarjeta inteligente</td>
+                            <td>Por tarjeta o puesto</td>
+                        </tr>
+                    </table>
+                    <p><strong>Ventaja sobre servidor:</strong> Almacenamiento local permite movilidad sin base de datos centralizada</p>
+                </div>
+                
+                <h4>7. RFID Activo</h4>
+                <div class="card">
+                    <p><strong>Descripción:</strong> Identifica usuario sin contacto físico a varios metros de distancia.</p>
+                    <p><strong>Características:</strong></p>
+                    <ul>
+                        <li>Tarjeta con alimentación propia</li>
+                        <li>Diálogo con antena conectada al PC</li>
+                        <li>Detección automática de llegada/salida del usuario</li>
+                    </ul>
+                    <p><strong>Parámetros configurables:</strong></p>
+                    <ul>
+                        <li>Distancia de detección de llegada/salida</li>
+                        <li>Acción en salida (cierre sesión, bloqueo, dejar igual)</li>
+                        <li>Acción en llegada (solicitar contraseña, liberar pantalla)</li>
+                        <li>Acción con múltiples usuarios simultáneos</li>
+                    </ul>
+                    <p><strong>Casos de uso:</strong></p>
+                    <ul>
+                        <li>Cambio rápido de usuario en Urgencias del hospital</li>
+                        <li>Protección de puestos en zona pública de agencia bancaria</li>
+                    </ul>
+                </div>
+                
+                <h3>🔄 Autenticación Multi-Factor (MFA)</h3>
+                
+                <div class="definition">
+                    <strong>Concepto:</strong> Un factor de autenticación es algo que:
+                    <ul>
+                        <li><strong>Conoces:</strong> Contraseña, PIN memorizado</li>
+                        <li><strong>Tienes:</strong> Smartphone, clave USB segura</li>
+                        <li><strong>Eres:</strong> Huella digital, reconocimiento facial</li>
+                    </ul>
+                </div>
+                
+                <table>
+                    <tr>
+                        <th>Nivel</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                        <th>Seguridad</th>
+                    </tr>
+                    <tr>
+                        <td><strong>1 Factor</strong></td>
+                        <td>Un único elemento de autenticación</td>
+                        <td>Usuario + Contraseña</td>
+                        <td>Básica</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2 Factores</strong></td>
+                        <td>Dos elementos diferentes</td>
+                        <td>Tarjeta + PIN + Biometría</td>
+                        <td>Fuerte</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3 Factores</strong></td>
+                        <td>Tres elementos diferentes</td>
+                        <td>Tarjeta + PIN + Biometría</td>
+                        <td>Muy Fuerte</td>
+                    </tr>
+                </table>
+                
+                <h3>🎫 Token y SSO (Single Sign-On)</h3>
+                
+                <div class="definition">
+                    <strong>Token:</strong> Conjunto de datos que contienen elementos que verifican la identidad del usuario y se presentan a la aplicación.
+                </div>
+                
+                <p><strong>Tipos de Token:</strong></p>
+                <ul>
+                    <li><strong>Kerberos:</strong> Se aplica en entorno Windows</li>
+                    <li><strong>SAML:</strong> Se aplica en arquitecturas SOA/J2EE/Servicios Web</li>
+                </ul>
+                
+                <p><strong>Función del SSO de Empresa:</strong> Interfaz directa con ventana de demanda de identificador/contraseña sin necesidad de modificar aplicaciones.</p>
+            </div>
+            
+            <!-- SECCIÓN 4: AMENAZAS Y VULNERABILIDADES -->
+            <div id="amenazas" class="section">
+                <h2>4. Amenazas, Vulnerabilidades y Diferencias</h2>
+                
+                <h3>🔍 Diferencias Clave</h3>
+                
+                <div class="comparison">
+                    <div class="comparison-item" style="background: #d4edda; border-left: 4px solid #28a745;">
+                        <h4>Vulnerabilidad</h4>
+                        <div class="definition">
+                            <strong>Definición:</strong> Es una debilidad propia de un sistema que permite ser atacado y recibir un daño.
+                        </div>
+                        <p><strong>Causas:</strong></p>
+                        <ul>
+                            <li>Baja protección contra ataques</li>
+                            <li>Falta de actualizaciones</li>
+                            <li>Fallos de programación</li>
+                        </ul>
+                        <p><strong>Se conocen como:</strong> Agujeros de seguridad</p>
+                        <p><strong>Ventaja:</strong> Se pueden solventar una vez descubiertas</p>
+                    </div>
+                    <div class="comparison-item" style="background: #fff3cd; border-left: 4px solid #ffc107;">
+                        <h4>Amenaza</h4>
+                        <div class="definition">
+                            <strong>Definición:</strong> Es toda acción que aprovecha una vulnerabilidad para atentar contra la seguridad.
+                        </div>
+                        <p><strong>Características:</strong></p>
+                        <ul>
+                            <li>Circunstancia desfavorable que puede ocurrir</li>
+                            <li>Tiene consecuencias negativas</li>
+                            <li>Puede ser natural, accidental o intencionada</li>
+                        </ul>
+                        <p><strong>Relación:</strong> Amenaza + Vulnerabilidad = Incidente de seguridad</p>
+                    </div>
+                </div>
+                
+                <h3>📊 Tipos de Amenazas</h3>
+                
+                <h4>1. AMENAZAS INTENCIONADAS</h4>
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Suplantación de identidad</strong></td>
+                        <td>Hacerse pasar por otra persona para obtener acceso</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abuso de privilegios</strong></td>
+                        <td>Usar privilegios de acceso de forma no autorizada</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Software dañino</strong></td>
+                        <td>Distribución de malware y código malicioso</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Acceso no autorizado</strong></td>
+                        <td>Entrar a sistemas sin permiso</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Análisis de tráfico</strong></td>
+                        <td>Inspeccionar comunicaciones entre sistemas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Destrucción de información</strong></td>
+                        <td>Borrar o dañar datos críticos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Manipulación de equipos</strong></td>
+                        <td>Alterar funcionamiento de dispositivos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Denegación de servicio</strong></td>
+                        <td>Dejar servicios inoperables mediante sobrecarga</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Robo</strong></td>
+                        <td>Tomar información sin autorización</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ingeniería social</strong></td>
+                        <td>Engañar personas para obtener información</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ataque destructivo</strong></td>
+                        <td>Sabotaje de infraestructura</td>
+                    </tr>
+                </table>
+                
+                <h4>2. ERRORES Y FALLOS NO INTENCIONADOS</h4>
+                <ul>
+                    <li>Error de los usuarios</li>
+                    <li>Error del administrador</li>
+                    <li>Error de configuración</li>
+                    <li>Alteración accidental de información</li>
+                    <li>Fuga de información</li>
+                    <li>Errores de mantenimiento de hardware/Software</li>
+                    <li>Caída del sistema por agotamiento de recursos</li>
+                    <li>Pérdida de equipo</li>
+                </ul>
+                
+                <h4>3. ORIGEN INDUSTRIAL</h4>
+                <ul>
+                    <li>Fuego</li>
+                    <li>Daño por agua</li>
+                    <li>Avería de origen físico o lógico</li>
+                    <li>Corte de suministro eléctrico</li>
+                    <li>Fallo de servicios de comunicaciones</li>
+                    <li>Degradación del soporte de almacenamiento</li>
+                </ul>
+                
+                <h4>4. DESASTRES NATURALES</h4>
+                <ul>
+                    <li>Fuego</li>
+                    <li>Daño por agua (inundaciones, lluvia)</li>
+                    <li>Terremotos, huracanes, tornados</li>
+                </ul>
+                
+                <h3>🐛 Tipos de Vulnerabilidades Técnicas</h3>
+                
+                <table>
+                    <tr>
+                        <th>Vulnerabilidad</th>
+                        <th>Descripción</th>
+                        <th>Impacto</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Buffer Overflow</strong></td>
+                        <td>No se controla cantidad de datos que se copian en buffer</td>
+                        <td>Modifica memoria contigua, afecta otros datos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Código de Carrera</strong></td>
+                        <td>No hay exclusiones mutuas en recursos compartidos</td>
+                        <td>Valores inesperados en variables</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error de Formato</strong></td>
+                        <td>No valida datos de entrada del usuario</td>
+                        <td>Ejecución de comandos maliciosos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>XSS (Cross Site Scripting)</strong></td>
+                        <td>Scripts incrustos en páginas web legítimas</td>
+                        <td>Robo de credenciales del usuario</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SQL Injection</strong></td>
+                        <td>No valida datos en formularios conectados a BD</td>
+                        <td>Obtener datos confidenciales o corromper tablas</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- SECCIÓN 5: TIPOS DE ATAQUES -->
+            <div id="ataques" class="section">
+                <h2>5. Tipos de Ataques Informáticos</h2>
+                
+                <h3>🎯 Categorías Principales de Ataques</h3>
+                
+                <h4>1. ATAQUES DE MALWARE</h4>
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Virus</strong></td>
+                        <td>Malware que infecta archivos ejecutables o sectores de arranque. Se propaga cuando se ejecuta el archivo infectado.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Troyanos</strong></td>
+                        <td>Malware con múltiples utilidades. La más común es crear puerta trasera para descargar actualizaciones y nuevas funcionalidades.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gusanos</strong></td>
+                        <td>Malware con alto grado de "dispersabilidad" (se propaga rápidamente sin necesidad de host).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ransomware</strong></td>
+                        <td>Cifra archivos y exige rescate para recuperarlos. Modelo de ataque financiero.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Spyware</strong></td>
+                        <td>Espía actividad del usuario e ingresa información sin consentimiento.</td>
+                    </tr>
+                </table>
+                
+                <h4>2. ATAQUES DE INGENIERÍA SOCIAL</h4>
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Defensa</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Phishing</strong></td>
+                        <td>Envían correos falsos haciéndose pasar por empresas conocidas para robar credenciales</td>
+                        <td>Educación de usuarios, filtros de correo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Spear Phishing</strong></td>
+                        <td>Ataques dirigidos a individuos/empresas específicas con información personalizada</td>
+                        <td>Verificación de remitente, capacitación</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vishing</strong></td>
+                        <td>Llamadas telefónicas falsas para engañar a obtener información</td>
+                        <td>Verificación de llamadas, protocolos internos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ingeniería Social General</strong></td>
+                        <td>Técnicas para engañar usuarios y obtener datos de valor</td>
+                        <td>Conciencia y capacitación de seguridad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scareware</strong></td>
+                        <td>Mensajes alarmistas falsos para asustar al usuario (pop-ups)</td>
+                        <td>Educación sobre estafas digitales</td>
+                    </tr>
+                </table>
+                
+                <h4>3. ATAQUES A REDES Y SISTEMAS</h4>
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Man-in-the-Middle (MITM)</strong></td>
+                        <td>El atacante intercepta comunicación entre dos partes para espiar o modificar datos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Denegación de Servicio (DDoS)</strong></td>
+                        <td>Sobrecarga sistema con peticiones para agotarrecursos e interrumpir servicios</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sniffing</strong></td>
+                        <td>Programa que monitoriza información en la red para capturarla (packet sniffing)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zero-Day</strong></td>
+                        <td>Exploit de vulnerabilidad desconocida (vendedor tiene "cero días" para parchear)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SQL Injection</strong></td>
+                        <td>Inserción de código malicioso en base de datos para obtener acceso no autorizado</td>
+                    </tr>
+                </table>
+                
+                <h4>4. ATAQUES A CONTRASEÑAS</h4>
+                <table>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Tiempo</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Fuerza Bruta</strong></td>
+                        <td>Probar todas las combinaciones posibles hasta encontrar la correcta</td>
+                        <td>Miles de años (por eso se combina con diccionario)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ataque de Diccionario</strong></td>
+                        <td>Usa lista de palabras comunes para descifrar contraseñas</td>
+                        <td>Más rápido que fuerza bruta pura</td>
+                    </tr>
+                </table>
+                
+                <h4>5. ATAQUES A DISPOSITIVOS</h4>
+                <ul>
+                    <li><strong>Robo de dispositivo:</strong> Tomar físicamente computadora, teléfono, etc.</li>
+                    <li><strong>USB Malicioso:</strong> Conectar USB con malware para infectar sistema</li>
+                </ul>
+            </div>
+            
+            <!-- SECCIÓN 6: ESTRATEGIAS DE MITIGACIÓN -->
+            <div id="mitigacion" class="section">
+                <h2>6. Estrategias de Mitigación y Defensa</h2>
+                
+                <h3>🛡️ Medidas de Protección</h3>
+                
+                <h4>1. Contraseñas Seguras</h4>
+                <div class="success">
+                    <p><strong>Requisitos:</strong></p>
+                    <ul>
+                        <li>Mínimo 10 caracteres (o más)</li>
+                        <li>Incluir mayúsculas y minúsculas</li>
+                        <li>Incluir números</li>
+                        <li>Incluir caracteres especiales</li>
+                        <li>Cambiar regularmente (ej: cada mes)</li>
+                    </ul>
+                </div>
+                
+                <h4>2. Autenticación Multifactor (MFA)</h4>
+                <div class="success">
+                    <p><strong>Implementación:</strong></p>
+                    <ul>
+                        <li>Contraseña + Código de autenticación (SMS, app)</li>
+                        <li>Contraseña + Biometría</li>
+                        <li>Tarjeta + PIN + Biometría (3 factores)</li>
+                    </ul>
+                    <p><strong>Efectividad:</strong> Aumenta significativamente la seguridad</p>
+                </div>
+                
+                <h4>3. Autenticación Biométrica</h4>
+                <div class="success">
+                    <p><strong>Ventajas:</strong></p>
+                    <ul>
+                        <li>Difícil de falsificar</li>
+                        <li>Más rápida que contraseñas</li>
+                        <li>Cómoda para usuarios</li>
+                        <li>No necesita memorizar datos</li>
+                    </ul>
+                    <p><strong>Tipos:</strong> Huella dactilar, reconocimiento facial, iris, voz</p>
+                </div>
+                
+                <h4>4. Formación de Usuarios</h4>
+                <div class="success">
+                    <p><strong>Temas clave:</strong></p>
+                    <ul>
+                        <li>Peligros de phishing y ingeniería social</li>
+                        <li>No revelar información de autenticación</li>
+                        <li>Reconocer intentos de fraude</li>
+                        <li>Importancia de contraseñas fuertes</li>
+                        <li>Reportar actividades sospechosas</li>
+                    </ul>
+                </div>
+                
+                <h4>5. Autenticadores de Hardware</h4>
+                <div class="success">
+                    <p><strong>Características:</strong></p>
+                    <ul>
+                        <li>Dispositivos físicos que generan códigos de seguridad</li>
+                        <li>No pueden ser interceptados por atacantes</li>
+                        <li>Algunos incluyen biometría (huella, reconocimiento facial)</li>
+                    </ul>
+                </div>
+                
+                <h4>6. Supervisión Continua de Seguridad</h4>
+                <div class="success">
+                    <p><strong>Actividades:</strong></p>
+                    <ul>
+                        <li>Monitorear seguridad de sistemas y redes</li>
+                        <li>Detectar y responder a amenazas</li>
+                        <li>Realizar pruebas de penetración periódicamente</li>
+                        <li>Identificar y corregir vulnerabilidades</li>
+                    </ul>
+                </div>
+                
+                <h4>7. Verificación de Identidad en Múltiples Fases</h4>
+                <div class="success">
+                    <p><strong>Proceso:</strong></p>
+                    <ul>
+                        <li>Verificar dirección IP del usuario</li>
+                        <li>Verificar ubicación geográfica</li>
+                        <li>Analizar patrones de comportamiento</li>
+                        <li>Confirmar desde dispositivo conocido</li>
+                    </ul>
+                </div>
+                
+                <h4>8. Políticas de Acceso Seguro</h4>
+                <div class="success">
+                    <p><strong>Implementación:</strong></p>
+                    <ul>
+                        <li>Contraseñas complejas obligatorias</li>
+                        <li>Autenticación multifactor requerida</li>
+                        <li>Gestión de identidades y accesos (IAM)</li>
+                        <li>Principio de menor privilegio</li>
+                    </ul>
+                </div>
+                
+                <h4>9. Actualizaciones Periódicas</h4>
+                <div class="warning">
+                    <p><strong>Por qué son críticas:</strong></p>
+                    <ul>
+                        <li>Se descubren nuevas vulnerabilidades constantemente</li>
+                        <li>Atacantes explotan vulnerabilidades conocidas</li>
+                        <li>Parches corrigen fallos de seguridad</li>
+                    </ul>
+                    <p><strong>Recomendación:</strong> Aplicar actualizaciones inmediatamente cuando estén disponibles</p>
+                </div>
+                
+                <h3>🔧 Herramientas de Seguridad</h3>
+                
+                <ul>
+                    <li><strong>Firewall:</strong> Controla tráfico entre redes</li>
+                    <li><strong>Antivirus:</strong> Detecta y elimina malware</li>
+                    <li><strong>IDS/IPS:</strong> Detecta e impide intrusiones</li>
+                    <li><strong>VPN:</strong> Red privada virtual para conexiones seguras</li>
+                    <li><strong>DLP:</strong> Prevención de pérdida de datos</li>
+                    <li><strong>SIEM:</strong> Gestión de información y eventos de seguridad</li>
+                    <li><strong>SOC:</strong> Centro de operaciones de seguridad</li>
+                </ul>
+            </div>
+        </div>
+        
+        <footer>
+            <p>📚 Guía de Estudio Completa - Seguridad Informática | Última actualización: 2024</p>
+            <p>Basado en: Métodos de Autenticación, Seguridad en Sistemas, Conceptos Generales y Glosario</p>
+        </footer>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

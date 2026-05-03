@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Mnemotécnica - Seguridad Informática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .mnemonic {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .mnemonic:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        
+        .mnemonic-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: -30px -30px 20px -30px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .mnemonic-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .mnemonic-key {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .mnemonic-key h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .mnemonic-key p {
+            color: #333;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+        
+        .mnemonic-explanation {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .mnemonic-explanation h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .letter-item {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+        }
+        
+        .letter-symbol {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+        
+        .letter-meaning {
+            color: #333;
+        }
+        
+        .tip {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin-top: 15px;
+        }
+        
+        .tip strong {
+            color: #155724;
+        }
+        
+        @media (max-width: 768px) {
+            .mnemonic-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section-divider {
+            text-align: center;
+            margin: 40px 0 20px 0;
+            font-size: 2em;
+            color: white;
+        }
+        
+        .section-title {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 1.8em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        footer {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .memory-palace {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .palace-floor {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .palace-floor h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .quick-ref-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-top: 3px solid #667eea;
+        }
+        
+        .quick-ref-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Guía Mnemotécnica</h1>
+            <p>Técnicas para Memorizar Conceptos de Seguridad Informática</p>
+        </header>
+        
+        <!-- SECCIÓN 1: CIA Y SEGURIDAD -->
+        <div class="section-title">🔐 Triada CIA + 2 (Pilares de Seguridad)</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 CIA Security Triad</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: CIA</h3>
+                    <p><strong>C-I-A</strong><br>Piensa en: "CIA - The Secret Service" <br>para recordar los 3 pilares principales</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">C</span>
+                        <span class="letter-meaning"><strong>CONFIDENTIALITY</strong> - Acceso restringido (Cifrado, Control de Acceso)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">I</span>
+                        <span class="letter-meaning"><strong>INTEGRITY</strong> - Sin cambios no autorizados (Firmas Digitales, Hash)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">A</span>
+                        <span class="letter-meaning"><strong>AVAILABILITY</strong> - 24/7 Disponible (Redundancia, Backups)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Truquito de Memoria:</strong> "Confidencia, Integridad y Accesibilidad" (C-I-A = See Eye Aye = ¡Verlo!)
+            </div>
+        </div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">➕ Los 5 Servicios de Seguridad</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: CIANN</h3>
+                    <p><strong>CIA + NN</strong><br>Triada CIA más<br>Non-repudio y Autenticación</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">C</span>
+                        <span class="letter-meaning">Confidentialidad</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">I</span>
+                        <span class="letter-meaning">Integridad</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">A</span>
+                        <span class="letter-meaning">Disponibilidad</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">Au</span>
+                        <span class="letter-meaning">**Au**thenticación - Verificar identidad</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">NR</span>
+                        <span class="letter-meaning">**NR**-Non Repudio - Evidencia de acciones</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Recuerda:</strong> "En una buena seguridad, Confirma, Integra, Avanza, Autentica y No arrepientas!"
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 2: FACTORES DE AUTENTICACIÓN -->
+        <div class="section-title">🔑 3 Factores de Autenticación</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 Los 3 Factores - KOT</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: KOT</h3>
+                    <p><strong>K-O-T</strong><br>(Knowledge-Ownership-Type)</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">K</span>
+                        <span class="letter-meaning"><strong>KNOWLEDGE</strong> - Algo que SABES (Contraseña, PIN)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">O</span>
+                        <span class="letter-meaning"><strong>OWNERSHIP</strong> - Algo que TIENES (Smartphone, USB)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">T</span>
+                        <span class="letter-meaning"><strong>TYPE/TRAIT</strong> - Algo que ERES (Huella, Cara)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Visualiza:</strong> Una persona con "Knowledge" en la cabeza 🧠, "Ownership" en la mano ✋, "Type" en el cuerpo 👤
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 3: 7 MÉTODOS DE AUTENTICACIÓN -->
+        <div class="section-title">🔐 7 Métodos de Autenticación</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 POTLBRT (Los 7 Métodos)</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: POTLBRT</h3>
+                    <p><strong>P-O-T-L-B-R-T</strong><br>Piensa en: "POT L BRT" <br>(Pot El Brat)</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">P</span>
+                        <span class="letter-meaning"><strong>PASSWORD</strong> - Contraseña/Identificador (SFA)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">O</span>
+                        <span class="letter-meaning"><strong>OTP</strong> - One-Time Password (Calculador)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">T</span>
+                        <span class="letter-meaning"><strong>TOKEN</strong> - USB/Tarjeta PKI</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">L</span>
+                        <span class="letter-meaning"><strong>LLAVE Confidencial</strong> - Multi-funciones</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">B</span>
+                        <span class="letter-meaning"><strong>BIOMETRIC</strong> - Huella, Cara, Iris</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">R</span>
+                        <span class="letter-meaning"><strong>RFID</strong> - Identificación sin contacto</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">T</span>
+                        <span class="letter-meaning"><strong>Tarjeta inteligente</strong> - Con identificador/contraseña</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Historia Mnemotécnica:</strong> "Una Persona con una Contraseña obtiene un OTP y toma un Token (una Llave especial). Busca Biometría, RFID y una Tarjeta inteligente."
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 4: TIPOS DE AMENAZAS -->
+        <div class="section-title">⚠️ 4 Tipos de Amenazas</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 IEID (4 Tipos de Amenazas)</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: IEID</h3>
+                    <p><strong>I-E-I-D</strong><br>Piensa en: "ICED" <br>(Helado)</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">I</span>
+                        <span class="letter-meaning"><strong>INTENCIONADAS</strong> - Acciones malintencionadas deliberadas</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">E</span>
+                        <span class="letter-meaning"><strong>ERRORES</strong> - No intencionados, accidentales</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">I</span>
+                        <span class="letter-meaning"><strong>INDUSTRIAL</strong> - Origen industrial (fuego, agua, electricidad)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">D</span>
+                        <span class="letter-meaning"><strong>DESASTRES</strong> - Naturales (terremotos, huracanes)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Visualiza:</strong> Un helado 🍦 amenazado por 4 peligros diferentes
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 5: AMENAZAS INTENCIONADAS -->
+        <div class="section-title">🚨 11 Amenazas Intencionadas</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 SADAMDIERMA (11 Amenazas Intencionadas)</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: SADAMDIERMA</h3>
+                    <p><strong>S-A-D-A-M-D-I-E-R-M-A</strong><br>Piensa en una palabra loca</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item"><span class="letter-symbol">S</span><span class="letter-meaning">**S**uplantación de identidad</span></div>
+                    <div class="letter-item"><span class="letter-symbol">A</span><span class="letter-meaning">**A**buso de privilegios</span></div>
+                    <div class="letter-item"><span class="letter-symbol">D</span><span class="letter-meaning">**D**ifusión de software dañino</span></div>
+                    <div class="letter-item"><span class="letter-symbol">A</span><span class="letter-meaning">**A**cceso no autorizado</span></div>
+                    <div class="letter-item"><span class="letter-symbol">M</span><span class="letter-meaning">**M**anipulación de equipos</span></div>
+                    <div class="letter-item"><span class="letter-symbol">D</span><span class="letter-meaning">**D**enegación de servicio</span></div>
+                    <div class="letter-item"><span class="letter-symbol">D</span><span class="letter-meaning">**D**estrucción de información</span></div>
+                    <div class="letter-item"><span class="letter-symbol">I</span><span class="letter-meaning">**I**ngeniería social</span></div>
+                    <div class="letter-item"><span class="letter-symbol">R</span><span class="letter-meaning">**R**obo de datos</span></div>
+                    <div class="letter-item"><span class="letter-symbol">A</span><span class="letter-meaning">**A**nálisis de tráfico</span></div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Historia:</strong> "Una Suplantadora Abusa, Difunde Software Dañino, Accede sin autorización, Manipula, Deniega servicios, Destruye información, Ingeniería, Roba y Analiza"
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 6: ATAQUES DE MALWARE -->
+        <div class="section-title">🦠 5 Tipos de Malware</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 VTGSR (5 Tipos de Malware)</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: VTGSR</h3>
+                    <p><strong>V-T-G-S-R</strong><br>Piensa en: "VT GSR" <br>(Virus, Troyanos...)</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">V</span>
+                        <span class="letter-meaning"><strong>VIRUS</strong> - Infecta archivos ejecutables</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">T</span>
+                        <span class="letter-meaning"><strong>TROYANOS</strong> - Puerta trasera</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">G</span>
+                        <span class="letter-meaning"><strong>GUSANOS</strong> - Alta dispersabilidad</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">S</span>
+                        <span class="letter-meaning"><strong>SPYWARE</strong> - Espía actividad</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">R</span>
+                        <span class="letter-meaning"><strong>RANSOMWARE</strong> - Secuestro de archivos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Imagen Mental:</strong> Piensa en 5 enemigos digitales invadiendo tu computadora como plagas
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 7: INGENIERÍA SOCIAL -->
+        <div class="section-title">🎣 5 Técnicas de Ingeniería Social</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 PSVSE (5 Técnicas de Ingeniería Social)</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: PSVSE</h3>
+                    <p><strong>P-S-V-S-E</strong><br>Piensa en: "Phishing SVS" <br>(Pescando)</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">P</span>
+                        <span class="letter-meaning"><strong>PHISHING</strong> - Correos falsos masivos</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">S</span>
+                        <span class="letter-meaning"><strong>SPEAR PHISHING</strong> - Ataques dirigidos personalizados</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">V</span>
+                        <span class="letter-meaning"><strong>VISHING</strong> - Llamadas telefónicas falsas</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">S</span>
+                        <span class="letter-meaning"><strong>SCAREWARE</strong> - Mensajes alarmistas falsos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Recuerda:</strong> Todas son técnicas de "pesca" (Phishing) para atrapar usuarios desprevenidos
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 8: ATAQUES A REDES -->
+        <div class="section-title">🌐 5 Ataques a Redes y Sistemas</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎯 MDSZI (5 Ataques a Redes)</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Acronym: MDSZI</h3>
+                    <p><strong>M-D-S-Z-I</strong><br>"MDSZI" suena como "Missile"</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <div class="letter-item">
+                        <span class="letter-symbol">M</span>
+                        <span class="letter-meaning"><strong>MAN-IN-THE-MIDDLE</strong> - Intercepta comunicación</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">D</span>
+                        <span class="letter-meaning"><strong>DDOS</strong> - Denegación de servicio (sobrecarga)</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">S</span>
+                        <span class="letter-meaning"><strong>SNIFFING</strong> - Captura de paquetes</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">Z</span>
+                        <span class="letter-meaning"><strong>ZERO-DAY</strong> - Vulnerabilidad desconocida</span>
+                    </div>
+                    <div class="letter-item">
+                        <span class="letter-symbol">I</span>
+                        <span class="letter-meaning"><strong>SQL INJECTION</strong> - Código en base de datos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Visualiza:</strong> Un misil atacando desde 5 ángulos diferentes
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 9: PALACE OF MEMORY -->
+        <div class="section-title">🏰 Palacio de la Memoria (Memory Palace)</div>
+        
+        <div class="memory-palace">
+            <div class="palace-floor">
+                <h4>🚪 ENTRADA: Los 5 Servicios de Seguridad</h4>
+                <p>Imagina que entras por una puerta donde un guardia (Autenticación) te verifica. Adentro hay cajas cerradas (Confidencialidad), registros intactos (Integridad), vigilancia 24/7 (Disponibilidad), y documentos firmados (No Repudio).</p>
+            </div>
+            <div class="palace-floor">
+                <h4>🎯 SALA 1: Los 3 Factores de Autenticación</h4>
+                <p>En la sala principal, ves 3 estatuas: Una con la cabeza llena de conocimiento (Knowledge - Contraseña), una sosteniendo un teléfono (Ownership - Dispositivo), y una reflejando en un espejo (Type - Biometría).</p>
+            </div>
+            <div class="palace-floor">
+                <h4>🔐 SALA 2: Los 7 Métodos de Autenticación</h4>
+                <p>Pasas a una sala con 7 puertas seguras: Puerta de Contraseña, Puerta OTP, Puerta Token, Puerta de Llave Especial, Puerta Biométrica, Puerta RFID, y Puerta de Tarjeta Inteligente.</p>
+            </div>
+            <div class="palace-floor">
+                <h4>⚠️ SALA 3: Los 4 Tipos de Amenazas</h4>
+                <p>Una sala con 4 zonas de peligro: Zona de Delincuentes (Intencionadas), Zona de Accidentes (Errores), Zona Industrial (Fuego/Agua), Zona de Desastres (Terremotos).</p>
+            </div>
+            <div class="palace-floor">
+                <h4>🦠 SALA 4: Los 5 Tipos de Malware</h4>
+                <p>Una galería de 5 villanos: Virus (infecta archivos), Troyano (puerta trasera), Gusano (se propaga), Spyware (espía), Ransomware (secuestro).</p>
+            </div>
+            <div class="palace-floor">
+                <h4>🎣 SALA 5: Técnicas de Ingeniería Social</h4>
+                <p>Varias trampas de pesca: Phishing (red masiva), Spear Phishing (arpón dirigido), Vishing (anzuelo telefónico), Scareware (anzuelo asustador).</p>
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 10: RESUMEN RÁPIDO -->
+        <div class="section-title">⚡ Resumen Rápido - Quick Reference</div>
+        
+        <div class="quick-ref">
+            <div class="quick-ref-item">
+                <strong>CIA</strong>
+                <p>Confidencialidad, Integridad, Accesibilidad</p>
+            </div>
+            <div class="quick-ref-item">
+                <strong>KOT</strong>
+                <p>Knowledge, Ownership, Type</p>
+            </div>
+            <div class="quick-ref-item">
+                <strong>POTLBRT</strong>
+                <p>7 Métodos de Autenticación</p>
+            </div>
+            <div class="quick-ref-item">
+                <strong>IEID</strong>
+                <p>4 Tipos de Amenazas</p>
+            </div>
+            <div class="quick-ref-item">
+                <strong>VTGSR</strong>
+                <p>5 Tipos de Malware</p>
+            </div>
+            <div class="quick-ref-item">
+                <strong>PSVSE</strong>
+                <p>5 Técnicas de Ingeniería Social</p>
+            </div>
+        </div>
+        
+        <!-- SECCIÓN 11: TÉCNICAS AVANZADAS -->
+        <div class="section-title">🧠 Técnicas Avanzadas de Memorización</div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">📖 Método de Historias Encadenadas</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Técnica: Storytelling</h3>
+                    <p>Crea una historia conectada con todos los elementos</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <p><strong>Historia Ejemplo:</strong></p>
+                    <p>"Una Persona (SFA) recibe una Contraseña, obtiene un OTP de un Calculador, toma un Token USB, recibe una Llave Especial, se autentica con Biometría, utiliza RFID, y finalmente accede con una Tarjeta Inteligente. Pero cuidado, hay 4 tipos de Amenazas: Hackers Intencionados, Errores Accidentales, Desastres Industriales y Catástrofes Naturales. El Virus, Troyano, Gusano, Spyware y Ransomware están esperando para atacar con Phishing, Spear Phishing, Vishing y Scareware."</p>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Tip:</strong> Cuanto más loca y vívida sea la historia, más fácil será recordarla
+            </div>
+        </div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎨 Método de Asociación Visual</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Técnica: Mind Mapping</h3>
+                    <p>Crea mapas mentales visuales</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <p><strong>Ejemplo de Mind Map:</strong></p>
+                    <p>Centro: SEGURIDAD INFORMÁTICA</p>
+                    <p>→ Rama 1: CIA (3 pilares)</p>
+                    <p>→ Rama 2: 7 Métodos de Autenticación</p>
+                    <p>→ Rama 3: Amenazas (4 tipos)</p>
+                    <p>→ Rama 4: Ataques (Malware, Ingeniería Social, Redes)</p>
+                    <p>→ Rama 5: Defensa (Mitigación, Herramientas)</p>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Herramienta:</strong> Usa MindMeister, XMind o papel para crear mapas mentales
+            </div>
+        </div>
+        
+        <div class="mnemonic">
+            <div class="mnemonic-title">🎵 Método de Ritmo y Rima</div>
+            <div class="mnemonic-content">
+                <div class="mnemonic-key">
+                    <h3>Técnica: Rhyming</h3>
+                    <p>Convierte conceptos en rimas</p>
+                </div>
+                <div class="mnemonic-explanation">
+                    <p><strong>Ejemplo de Rima:</strong></p>
+                    <p>"CIA es seguridad de día y noche,<br>
+                    KOT son factores que broches,<br>
+                    POTLBRT son 7 soluciones en coche,<br>
+                    IEID de amenazas en un derroche."</p>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>💡 Tip:</strong> Crea canciones o poemas para memorizar listas
+            </div>
+        </div>
+        
+        <footer>
+            <h3>📚 Resumen de Técnicas Mnemotécnicas</h3>
+            <p>✅ Acrónimos (CIA, KOT, POTLBRT)</p>
+            <p>✅ Historias Encadenadas (Storytelling)</p>
+            <p>✅ Palacio de la Memoria (Memory Palace)</p>
+            <p>✅ Mapas Mentales (Mind Mapping)</p>
+            <p>✅ Rimas y Ritmo (Rhyming)</p>
+            <p>✅ Asociaciones Visuales (Mental Images)</p>
+            <p style="margin-top: 20px; font-style: italic;">Combina varias técnicas para máxima retención. Practica regularmente y crea tus propias mnemonias basadas en lo que mejor funcione para ti.</p>
+        </footer>
+    </div>
+</body>
+</html>
