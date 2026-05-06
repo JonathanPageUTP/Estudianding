@@ -1,700 +1,2148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Mnemotécnica - Seguridad Informática</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 Guía Mnemotécnica · Seguridad Informática</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 Guía Mnemotécnica · Seguridad Informática</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-    :root {
-        --bg-color: #0f172a;
-        --card-bg: #1e293b;
-        --header-bg: #1e293b;
-        --accent-primary: #818cf8;
-        --accent-secondary: #a78bfa;
-        --text-main: #f1f5f9;
-        --text-muted: #94a3b8;
-        --success: #22c55e;
-        --warning: #fbbf24;
-        --danger: #ef4444;
-        --border-color: #334155;
-    }
+:root {
+  --bg: #06080f;
+  --surface: #0d1117;
+  --card: #111827;
+  --border: #1f2937;
+  --border-glow: #2563eb40;
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    body {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        background-color: var(--bg-color);
-        background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                          radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
-        color: var(--text-main);
-        line-height: 1.6;
-        padding: 20px;
-        min-height: 100vh;
-    }
-    
-    .container {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-    
-    header {
-        background: var(--header-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 40px 20px;
-        text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        margin-bottom: 40px;
-    }
-    
-    header h1 {
-        background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: clamp(1.8em, 5vw, 2.8em);
-        margin-bottom: 10px;
-    }
-    
-    header p {
-        color: var(--text-muted);
-        font-size: 1.1em;
-    }
-    
-    .section-title {
-        background: rgba(255, 255, 255, 0.03);
-        border-left: 4px solid var(--accent-primary);
-        padding: 15px 25px;
-        border-radius: 8px;
-        margin: 40px 0 20px 0;
-        color: var(--accent-primary);
-        font-size: 1.5em;
-        font-weight: bold;
-        backdrop-filter: blur(10px);
-    }
-    
-    .mnemonic {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        padding: 25px;
-        margin-bottom: 25px;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    
-    .mnemonic:hover {
-        transform: translateY(-3px);
-        border-color: var(--accent-primary);
-    }
-    
-    .mnemonic-title {
-        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        color: #ffffff;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin: -25px -25px 20px -25px;
-        font-size: 1.25em;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-    }
-    
-    .mnemonic-content {
-        display: grid;
-        grid-template-columns: 1fr 1.5fr;
-        gap: 20px;
-    }
-    
-    .mnemonic-key {
-        background: rgba(129, 140, 248, 0.1);
-        padding: 20px;
-        border-radius: 10px;
-        border: 1px solid rgba(129, 140, 248, 0.2);
-    }
-    
-    .mnemonic-key h3 {
-        color: var(--accent-primary);
-        margin-bottom: 10px;
-        font-size: 1.1em;
-        text-transform: uppercase;
-    }
-    
-    .mnemonic-explanation {
-        background: rgba(255, 255, 255, 0.02);
-        padding: 10px 20px;
-        border-radius: 10px;
-    }
-    
-    .letter-item {
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border-color);
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .letter-item:last-child { border-bottom: none; }
-    
-    .letter-symbol {
-        background: var(--accent-primary);
-        color: var(--bg-color);
-        min-width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        font-weight: 800;
-    }
-    
-    .letter-meaning {
-        color: var(--text-main);
-        font-size: 0.95em;
-    }
+  --blue: #3b82f6;
+  --cyan: #22d3ee;
+  --green: #10b981;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --orange: #f97316;
+  --pink: #ec4899;
 
-    .letter-meaning strong {
-        color: var(--accent-secondary);
-    }
-    
-    .tip {
-        background: rgba(34, 197, 94, 0.1);
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 4px solid var(--success);
-        margin-top: 20px;
-        font-size: 0.9em;
-        color: #d1fae5;
-    }
-    
-    .tip strong { color: var(--success); }
+  --text: #f0f4ff;
+  --muted: #6b7280;
+  --subtle: #374151;
 
-    /* Memory Palace Section */
-    .memory-palace {
-        display: grid;
-        gap: 15px;
-    }
-    
-    .palace-floor {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        padding: 20px;
-        border-radius: 12px;
-        border-right: 4px solid var(--accent-secondary);
-    }
-    
-    .palace-floor h4 {
-        color: var(--accent-secondary);
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
 
-    /* Quick Ref Grid */
-    .quick-ref {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-    }
-    
-    .quick-ref-item {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--border-color);
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-    }
-    
-    .quick-ref-item strong {
-        color: var(--accent-primary);
-        font-size: 1.2em;
-        display: block;
-        margin-bottom: 5px;
-    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    footer {
-        margin-top: 60px;
-        padding: 40px 20px;
-        text-align: center;
-        border-top: 1px solid var(--border-color);
-        color: var(--text-muted);
-    }
+html { scroll-behavior: smooth; }
 
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-        .mnemonic-content {
-            grid-template-columns: 1fr;
-        }
-        
-        body {
-            padding: 10px;
-        }
-        
-        .mnemonic {
-            padding: 15px;
-        }
-        
-        .mnemonic-title {
-            margin: -15px -15px 15px -15px;
-            font-size: 1.1em;
-        }
-    }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* ─── GRID NOISE BACKGROUND ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(ellipse at 15% 20%, #1d4ed820 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, #7c3aed18 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, #06477010 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── LAYOUT ─── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; position: relative; z-index: 1; }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 72px 0 48px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #1e3a5f40; border: 1px solid #2563eb50;
+  color: var(--cyan); font-family: var(--font-mono); font-size: .75rem;
+  padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
+  letter-spacing: .08em;
+}
+.hero h1 {
+  font-family: var(--font-head);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #e0f2fe 0%, #38bdf8 40%, #6366f1 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+}
+.hero p { color: var(--muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto 36px; }
+
+/* ─── TOC PILLS ─── */
+.toc {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  margin-bottom: 60px;
+}
+.toc a {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--muted); text-decoration: none; font-size: .82rem;
+  padding: 7px 16px; border-radius: 100px;
+  transition: all .2s;
+}
+.toc a:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ─── CHAPTER HEADER ─── */
+.chapter {
+  margin: 64px 0 28px;
+  display: flex; align-items: center; gap: 16px;
+}
+.chapter-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.chapter h2 {
+  font-family: var(--font-head); font-size: 1.35rem; font-weight: 700;
+  color: var(--text);
+}
+.chapter span.sub { font-size: .85rem; color: var(--muted); font-family: var(--font-mono); }
+
+/* ─── CARD BASE ─── */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  margin-bottom: 20px;
+  transition: border-color .2s, transform .2s;
+}
+.card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+
+.card-head {
+  padding: 16px 24px; font-family: var(--font-head); font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.card-body { padding: 24px; }
+
+/* ─── ACRONYM DISPLAY ─── */
+.acronym-grid {
+  display: grid; grid-template-columns: 220px 1fr; gap: 0;
+}
+.acronym-left {
+  padding: 20px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
+}
+.acronym-word {
+  font-family: var(--font-head); font-size: 2.5rem; font-weight: 800;
+  letter-spacing: .1em; line-height: 1;
+}
+.acronym-hint {
+  font-size: .78rem; color: var(--muted); font-style: italic; text-align: center; margin-top: 8px;
+}
+.acronym-phrase {
+  font-size: .9rem; font-weight: 600; text-align: center; margin-top: 6px;
+}
+.acronym-right { padding: 16px 24px; }
+.letter-row {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.letter-row:last-child { border-bottom: none; }
+.letter-badge {
+  width: 30px; height: 30px; border-radius: 7px;
+  font-family: var(--font-head); font-weight: 800; font-size: .95rem;
+  display: grid; place-items: center; flex-shrink: 0; color: var(--bg);
+}
+.letter-content strong { display: block; font-size: .9rem; color: var(--text); }
+.letter-content small { color: var(--muted); font-size: .8rem; }
+
+/* ─── STORY BOX ─── */
+.story {
+  background: #0d1a2d; border: 1px solid #1e3a5f;
+  border-radius: 12px; padding: 20px 24px;
+  font-size: .88rem; color: #93c5fd; line-height: 1.8;
+  margin-top: 16px; font-style: italic;
+}
+.story strong { color: var(--cyan); font-style: normal; }
+
+/* ─── TIP BOX ─── */
+.tip {
+  background: #0a2218; border-left: 3px solid var(--green);
+  border-radius: 0 10px 10px 0; padding: 12px 18px;
+  font-size: .85rem; color: #6ee7b7; margin-top: 14px;
+}
+.tip b { color: var(--green); }
+
+.warn {
+  background: #1c1206; border-left: 3px solid var(--yellow);
+  border-radius: 0 10px 10px 0; padding: 12px 18px;
+  font-size: .85rem; color: #fcd34d; margin-top: 14px;
+}
+.warn b { color: var(--yellow); }
+
+.danger-tip {
+  background: #1c0a0a; border-left: 3px solid var(--red);
+  border-radius: 0 10px 10px 0; padding: 12px 18px;
+  font-size: .85rem; color: #fca5a5; margin-top: 14px;
+}
+.danger-tip b { color: var(--red); }
+
+/* ─── TABLE ─── */
+.table-wrap { overflow-x: auto; margin-top: 16px; }
+table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+th {
+  background: #151f2e; color: var(--cyan); font-family: var(--font-mono);
+  font-size: .75rem; text-transform: uppercase; letter-spacing: .08em;
+  padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border);
+}
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #ffffff05; }
+td:first-child { font-weight: 600; }
+
+/* ─── GRID 2/3 COL ─── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* ─── MINI CARD ─── */
+.mini-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+}
+.mini-card h4 { font-family: var(--font-head); font-size: .9rem; margin-bottom: 8px; }
+.mini-card p { font-size: .82rem; color: var(--muted); }
+
+/* ─── PALACE ─── */
+.palace {
+  counter-reset: room;
+  display: grid; gap: 12px;
+}
+.room {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 20px;
+  display: flex; gap: 16px; align-items: flex-start;
+  transition: border-color .2s;
+}
+.room:hover { border-color: #7c3aed60; }
+.room-num {
+  background: #4c1d95; color: var(--purple);
+  width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center;
+  font-family: var(--font-head); font-weight: 800; font-size: .9rem;
+  flex-shrink: 0;
+}
+.room-content h4 { font-size: .92rem; font-weight: 700; margin-bottom: 4px; }
+.room-content p { font-size: .82rem; color: var(--muted); }
+
+/* ─── FLASH CARD ─── */
+.flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.flash {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+  cursor: pointer; position: relative; min-height: 100px;
+  transition: border-color .2s;
+}
+.flash:hover { border-color: #6366f1; }
+.flash-q { font-family: var(--font-head); font-size: .88rem; font-weight: 700; }
+.flash-a {
+  font-size: .8rem; color: var(--muted); margin-top: 8px;
+  font-family: var(--font-mono);
+}
+.flash-badge {
+  position: absolute; top: 12px; right: 12px;
+  font-size: .65rem; padding: 3px 8px; border-radius: 100px;
+  font-family: var(--font-mono); font-weight: 500;
+}
+
+/* ─── COLOR ACCENTS ─── */
+.c-blue  { color: var(--blue); }
+.c-cyan  { color: var(--cyan); }
+.c-green { color: var(--green); }
+.c-yellow{ color: var(--yellow); }
+.c-red   { color: var(--red); }
+.c-purple{ color: var(--purple); }
+.c-orange{ color: var(--orange); }
+.c-pink  { color: var(--pink); }
+
+.bg-blue   { background: #1e3a8a; }
+.bg-cyan   { background: #164e63; }
+.bg-green  { background: #064e3b; }
+.bg-yellow { background: #451a03; }
+.bg-red    { background: #450a0a; }
+.bg-purple { background: #3b0764; }
+.bg-orange { background: #431407; }
+.bg-pink   { background: #500724; }
+
+.icon-blue   { background: #1e40af22; color: var(--blue); }
+.icon-cyan   { background: #0e7490; color: #a5f3fc; }
+.icon-green  { background: #065f46; color: #6ee7b7; }
+.icon-yellow { background: #78350f; color: #fde68a; }
+.icon-red    { background: #7f1d1d; color: #fca5a5; }
+.icon-purple { background: #4c1d95; color: #c4b5fd; }
+.icon-orange { background: #7c2d12; color: #fed7aa; }
+
+/* ─── DIVIDER ─── */
+.divider {
+  height: 1px; background: linear-gradient(to right, transparent, var(--border), transparent);
+  margin: 48px 0;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center; padding: 48px 0 24px;
+  color: var(--muted); font-size: .82rem;
+  border-top: 1px solid var(--border);
+}
+footer strong { color: var(--text); }
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(to right, var(--blue), var(--purple));
+  z-index: 999; transition: width .1s;
+  width: 0%;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width: 680px){
+  .acronym-grid { grid-template-columns: 1fr; }
+  .acronym-left { border-right: none; border-bottom: 1px solid var(--border); }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card, .room, .flash { animation: fadeUp .4s ease both; }
+
+/* Stagger for letter rows */
+.letter-row:nth-child(1){animation-delay:.05s}
+.letter-row:nth-child(2){animation-delay:.1s}
+.letter-row:nth-child(3){animation-delay:.15s}
+.letter-row:nth-child(4){animation-delay:.2s}
+.letter-row:nth-child(5){animation-delay:.25s}
+.letter-row:nth-child(6){animation-delay:.3s}
+.letter-row:nth-child(7){animation-delay:.35s}
 </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🧠 Guía Mnemotécnica</h1>
-            <p>Técnicas para Memorizar Conceptos de Seguridad Informática</p>
-        </header>
-        
-        <!-- SECCIÓN 1: CIA Y SEGURIDAD -->
-        <div class="section-title">🔐 Triada CIA + 2 (Pilares de Seguridad)</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 CIA Security Triad</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: CIA</h3>
-                    <p><strong>C-I-A</strong><br>Piensa en: "CIA - The Secret Service" <br>para recordar los 3 pilares principales</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">C</span>
-                        <span class="letter-meaning"><strong>CONFIDENTIALITY</strong> - Acceso restringido (Cifrado, Control de Acceso)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">I</span>
-                        <span class="letter-meaning"><strong>INTEGRITY</strong> - Sin cambios no autorizados (Firmas Digitales, Hash)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">A</span>
-                        <span class="letter-meaning"><strong>AVAILABILITY</strong> - 24/7 Disponible (Redundancia, Backups)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Truquito de Memoria:</strong> "Confidencia, Integridad y Accesibilidad" (C-I-A = See Eye Aye = ¡Verlo!)
-            </div>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="wrap">
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="hero-badge">🔐 SEGURIDAD INFORMÁTICA · GUÍA MNEMOTÉCNICA COMPLETA</div>
+  <h1>Aprende Más,<br>Olvida Menos</h1>
+  <p>Toda la información de tus documentos condensada en acrónimos, historias y palacio de memoria para máxima retención.</p>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<div class="toc">
+  <a href="#s1">CIA Tríada</a>
+  <a href="#s2">Autenticación</a>
+  <a href="#s3">7 Métodos Auth</a>
+  <a href="#s4">SFA vs 2FA</a>
+  <a href="#s5">Cert. Digitales</a>
+  <a href="#s6">Amenazas</a>
+  <a href="#s7">Ataques</a>
+  <a href="#s8">Malware</a>
+  <a href="#s9">Glosario</a>
+  <a href="#s10">Palacio</a>
+  <a href="#s11">Flash Cards</a>
+</div>
+
+
+<!-- ══════════════ 1. CIA TRÍADA ══════════════ -->
+<div id="s1"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-blue">🔺</div>
+  <div>
+    <h2>La Tríada CIA + extras</h2>
+    <span class="sub">5 Servicios de Seguridad</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-blue">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">C · I · D · N · A</span>
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-blue">CIDNA</div>
+        <div class="acronym-phrase c-cyan">"Como Ingenieros Debemos<br>No Abandonar"</div>
+        <div class="acronym-hint">Piensa en un ingeniero responsable que jamás abandona su trabajo</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">C</div>
+          <div class="letter-content">
+            <strong>CONFIDENCIALIDAD</strong>
+            <small>Solo personal autorizado accede a la información</small>
+          </div>
         </div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">➕ Los 5 Servicios de Seguridad</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: CIANN</h3>
-                    <p><strong>CIA + NN</strong><br>Triada CIA más<br>Non-repudio y Autenticación</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">C</span>
-                        <span class="letter-meaning">Confidentialidad</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">I</span>
-                        <span class="letter-meaning">Integridad</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">A</span>
-                        <span class="letter-meaning">Disponibilidad</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">Au</span>
-                        <span class="letter-meaning">**Au**thenticación - Verificar identidad</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">NR</span>
-                        <span class="letter-meaning">**NR**-Non Repudio - Evidencia de acciones</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Recuerda:</strong> "En una buena seguridad, Confirma, Integra, Avanza, Autentica y No arrepientas!"
-            </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">I</div>
+          <div class="letter-content">
+            <strong>INTEGRIDAD</strong>
+            <small>Datos exactos, sin alteración, pérdida o destrucción</small>
+          </div>
         </div>
-        
-        <!-- SECCIÓN 2: FACTORES DE AUTENTICACIÓN -->
-        <div class="section-title">🔑 3 Factores de Autenticación</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 Los 3 Factores - KOT</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: KOT</h3>
-                    <p><strong>K-O-T</strong><br>(Knowledge-Ownership-Type)</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">K</span>
-                        <span class="letter-meaning"><strong>KNOWLEDGE</strong> - Algo que SABES (Contraseña, PIN)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">O</span>
-                        <span class="letter-meaning"><strong>OWNERSHIP</strong> - Algo que TIENES (Smartphone, USB)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">T</span>
-                        <span class="letter-meaning"><strong>TYPE/TRAIT</strong> - Algo que ERES (Huella, Cara)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Visualiza:</strong> Una persona con "Knowledge" en la cabeza 🧠, "Ownership" en la mano ✋, "Type" en el cuerpo 👤
-            </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">D</div>
+          <div class="letter-content">
+            <strong>DISPONIBILIDAD</strong>
+            <small>Servicio accesible 24/7 para usuarios autorizados</small>
+          </div>
         </div>
-        
-        <!-- SECCIÓN 3: 7 MÉTODOS DE AUTENTICACIÓN -->
-        <div class="section-title">🔐 7 Métodos de Autenticación</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 POTLBRT (Los 7 Métodos)</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: POTLBRT</h3>
-                    <p><strong>P-O-T-L-B-R-T</strong><br>Piensa en: "POT L BRT" <br>(Pot El Brat)</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">P</span>
-                        <span class="letter-meaning"><strong>PASSWORD</strong> - Contraseña/Identificador (SFA)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">O</span>
-                        <span class="letter-meaning"><strong>OTP</strong> - One-Time Password (Calculador)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">T</span>
-                        <span class="letter-meaning"><strong>TOKEN</strong> - USB/Tarjeta PKI</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">L</span>
-                        <span class="letter-meaning"><strong>LLAVE Confidencial</strong> - Multi-funciones</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">B</span>
-                        <span class="letter-meaning"><strong>BIOMETRIC</strong> - Huella, Cara, Iris</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">R</span>
-                        <span class="letter-meaning"><strong>RFID</strong> - Identificación sin contacto</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">T</span>
-                        <span class="letter-meaning"><strong>Tarjeta inteligente</strong> - Con identificador/contraseña</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Historia Mnemotécnica:</strong> "Una Persona con una Contraseña obtiene un OTP y toma un Token (una Llave especial). Busca Biometría, RFID y una Tarjeta inteligente."
-            </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">N</div>
+          <div class="letter-content">
+            <strong>NO REPUDIO</strong>
+            <small>Prueba que el emisor envió el mensaje (no puede negarlo)</small>
+          </div>
         </div>
-        
-        <!-- SECCIÓN 4: TIPOS DE AMENAZAS -->
-        <div class="section-title">⚠️ 4 Tipos de Amenazas</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 IEID (4 Tipos de Amenazas)</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: IEID</h3>
-                    <p><strong>I-E-I-D</strong><br>Piensa en: "ICED" <br>(Helado)</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">I</span>
-                        <span class="letter-meaning"><strong>INTENCIONADAS</strong> - Acciones malintencionadas deliberadas</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">E</span>
-                        <span class="letter-meaning"><strong>ERRORES</strong> - No intencionados, accidentales</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">I</span>
-                        <span class="letter-meaning"><strong>INDUSTRIAL</strong> - Origen industrial (fuego, agua, electricidad)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">D</span>
-                        <span class="letter-meaning"><strong>DESASTRES</strong> - Naturales (terremotos, huracanes)</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Visualiza:</strong> Un helado 🍦 amenazado por 4 peligros diferentes
-            </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">A</div>
+          <div class="letter-content">
+            <strong>AUTENTICACIÓN</strong>
+            <small>Verificación de identidad antes de acceder al sistema</small>
+          </div>
         </div>
-        
-        <!-- SECCIÓN 5: AMENAZAS INTENCIONADAS -->
-        <div class="section-title">🚨 11 Amenazas Intencionadas</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 SADAMDIERMA (11 Amenazas Intencionadas)</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: SADAMDIERMA</h3>
-                    <p><strong>S-A-D-A-M-D-I-E-R-M-A</strong><br>Piensa en una palabra loca</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item"><span class="letter-symbol">S</span><span class="letter-meaning">**S**uplantación de identidad</span></div>
-                    <div class="letter-item"><span class="letter-symbol">A</span><span class="letter-meaning">**A**buso de privilegios</span></div>
-                    <div class="letter-item"><span class="letter-symbol">D</span><span class="letter-meaning">**D**ifusión de software dañino</span></div>
-                    <div class="letter-item"><span class="letter-symbol">A</span><span class="letter-meaning">**A**cceso no autorizado</span></div>
-                    <div class="letter-item"><span class="letter-symbol">M</span><span class="letter-meaning">**M**anipulación de equipos</span></div>
-                    <div class="letter-item"><span class="letter-symbol">D</span><span class="letter-meaning">**D**enegación de servicio</span></div>
-                    <div class="letter-item"><span class="letter-symbol">D</span><span class="letter-meaning">**D**estrucción de información</span></div>
-                    <div class="letter-item"><span class="letter-symbol">I</span><span class="letter-meaning">**I**ngeniería social</span></div>
-                    <div class="letter-item"><span class="letter-symbol">R</span><span class="letter-meaning">**R**obo de datos</span></div>
-                    <div class="letter-item"><span class="letter-symbol">A</span><span class="letter-meaning">**A**nálisis de tráfico</span></div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Historia:</strong> "Una Suplantadora Abusa, Difunde Software Dañino, Accede sin autorización, Manipula, Deniega servicios, Destruye información, Ingeniería, Roba y Analiza"
-            </div>
-        </div>
-        
-        <!-- SECCIÓN 6: ATAQUES DE MALWARE -->
-        <div class="section-title">🦠 5 Tipos de Malware</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 VTGSR (5 Tipos de Malware)</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: VTGSR</h3>
-                    <p><strong>V-T-G-S-R</strong><br>Piensa en: "VT GSR" <br>(Virus, Troyanos...)</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">V</span>
-                        <span class="letter-meaning"><strong>VIRUS</strong> - Infecta archivos ejecutables</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">T</span>
-                        <span class="letter-meaning"><strong>TROYANOS</strong> - Puerta trasera</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">G</span>
-                        <span class="letter-meaning"><strong>GUSANOS</strong> - Alta dispersabilidad</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">S</span>
-                        <span class="letter-meaning"><strong>SPYWARE</strong> - Espía actividad</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">R</span>
-                        <span class="letter-meaning"><strong>RANSOMWARE</strong> - Secuestro de archivos</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Imagen Mental:</strong> Piensa en 5 enemigos digitales invadiendo tu computadora como plagas
-            </div>
-        </div>
-        
-        <!-- SECCIÓN 7: INGENIERÍA SOCIAL -->
-        <div class="section-title">🎣 5 Técnicas de Ingeniería Social</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 PSVSE (5 Técnicas de Ingeniería Social)</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: PSVSE</h3>
-                    <p><strong>P-S-V-S-E</strong><br>Piensa en: "Phishing SVS" <br>(Pescando)</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">P</span>
-                        <span class="letter-meaning"><strong>PHISHING</strong> - Correos falsos masivos</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">S</span>
-                        <span class="letter-meaning"><strong>SPEAR PHISHING</strong> - Ataques dirigidos personalizados</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">V</span>
-                        <span class="letter-meaning"><strong>VISHING</strong> - Llamadas telefónicas falsas</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">S</span>
-                        <span class="letter-meaning"><strong>SCAREWARE</strong> - Mensajes alarmistas falsos</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Recuerda:</strong> Todas son técnicas de "pesca" (Phishing) para atrapar usuarios desprevenidos
-            </div>
-        </div>
-        
-        <!-- SECCIÓN 8: ATAQUES A REDES -->
-        <div class="section-title">🌐 5 Ataques a Redes y Sistemas</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎯 MDSZI (5 Ataques a Redes)</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Acronym: MDSZI</h3>
-                    <p><strong>M-D-S-Z-I</strong><br>"MDSZI" suena como "Missile"</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <div class="letter-item">
-                        <span class="letter-symbol">M</span>
-                        <span class="letter-meaning"><strong>MAN-IN-THE-MIDDLE</strong> - Intercepta comunicación</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">D</span>
-                        <span class="letter-meaning"><strong>DDOS</strong> - Denegación de servicio (sobrecarga)</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">S</span>
-                        <span class="letter-meaning"><strong>SNIFFING</strong> - Captura de paquetes</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">Z</span>
-                        <span class="letter-meaning"><strong>ZERO-DAY</strong> - Vulnerabilidad desconocida</span>
-                    </div>
-                    <div class="letter-item">
-                        <span class="letter-symbol">I</span>
-                        <span class="letter-meaning"><strong>SQL INJECTION</strong> - Código en base de datos</span>
-                    </div>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Visualiza:</strong> Un misil atacando desde 5 ángulos diferentes
-            </div>
-        </div>
-        
-        <!-- SECCIÓN 9: PALACE OF MEMORY -->
-        <div class="section-title">🏰 Palacio de la Memoria (Memory Palace)</div>
-        
-        <div class="memory-palace">
-            <div class="palace-floor">
-                <h4>🚪 ENTRADA: Los 5 Servicios de Seguridad</h4>
-                <p>Imagina que entras por una puerta donde un guardia (Autenticación) te verifica. Adentro hay cajas cerradas (Confidencialidad), registros intactos (Integridad), vigilancia 24/7 (Disponibilidad), y documentos firmados (No Repudio).</p>
-            </div>
-            <div class="palace-floor">
-                <h4>🎯 SALA 1: Los 3 Factores de Autenticación</h4>
-                <p>En la sala principal, ves 3 estatuas: Una con la cabeza llena de conocimiento (Knowledge - Contraseña), una sosteniendo un teléfono (Ownership - Dispositivo), y una reflejando en un espejo (Type - Biometría).</p>
-            </div>
-            <div class="palace-floor">
-                <h4>🔐 SALA 2: Los 7 Métodos de Autenticación</h4>
-                <p>Pasas a una sala con 7 puertas seguras: Puerta de Contraseña, Puerta OTP, Puerta Token, Puerta de Llave Especial, Puerta Biométrica, Puerta RFID, y Puerta de Tarjeta Inteligente.</p>
-            </div>
-            <div class="palace-floor">
-                <h4>⚠️ SALA 3: Los 4 Tipos de Amenazas</h4>
-                <p>Una sala con 4 zonas de peligro: Zona de Delincuentes (Intencionadas), Zona de Accidentes (Errores), Zona Industrial (Fuego/Agua), Zona de Desastres (Terremotos).</p>
-            </div>
-            <div class="palace-floor">
-                <h4>🦠 SALA 4: Los 5 Tipos de Malware</h4>
-                <p>Una galería de 5 villanos: Virus (infecta archivos), Troyano (puerta trasera), Gusano (se propaga), Spyware (espía), Ransomware (secuestro).</p>
-            </div>
-            <div class="palace-floor">
-                <h4>🎣 SALA 5: Técnicas de Ingeniería Social</h4>
-                <p>Varias trampas de pesca: Phishing (red masiva), Spear Phishing (arpón dirigido), Vishing (anzuelo telefónico), Scareware (anzuelo asustador).</p>
-            </div>
-        </div>
-        
-        <!-- SECCIÓN 10: RESUMEN RÁPIDO -->
-        <div class="section-title">⚡ Resumen Rápido - Quick Reference</div>
-        
-        <div class="quick-ref">
-            <div class="quick-ref-item">
-                <strong>CIA</strong>
-                <p>Confidencialidad, Integridad, Accesibilidad</p>
-            </div>
-            <div class="quick-ref-item">
-                <strong>KOT</strong>
-                <p>Knowledge, Ownership, Type</p>
-            </div>
-            <div class="quick-ref-item">
-                <strong>POTLBRT</strong>
-                <p>7 Métodos de Autenticación</p>
-            </div>
-            <div class="quick-ref-item">
-                <strong>IEID</strong>
-                <p>4 Tipos de Amenazas</p>
-            </div>
-            <div class="quick-ref-item">
-                <strong>VTGSR</strong>
-                <p>5 Tipos de Malware</p>
-            </div>
-            <div class="quick-ref-item">
-                <strong>PSVSE</strong>
-                <p>5 Técnicas de Ingeniería Social</p>
-            </div>
-        </div>
-        
-        <!-- SECCIÓN 11: TÉCNICAS AVANZADAS -->
-        <div class="section-title">🧠 Técnicas Avanzadas de Memorización</div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">📖 Método de Historias Encadenadas</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Técnica: Storytelling</h3>
-                    <p>Crea una historia conectada con todos los elementos</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <p><strong>Historia Ejemplo:</strong></p>
-                    <p>"Una Persona (SFA) recibe una Contraseña, obtiene un OTP de un Calculador, toma un Token USB, recibe una Llave Especial, se autentica con Biometría, utiliza RFID, y finalmente accede con una Tarjeta Inteligente. Pero cuidado, hay 4 tipos de Amenazas: Hackers Intencionados, Errores Accidentales, Desastres Industriales y Catástrofes Naturales. El Virus, Troyano, Gusano, Spyware y Ransomware están esperando para atacar con Phishing, Spear Phishing, Vishing y Scareware."</p>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Tip:</strong> Cuanto más loca y vívida sea la historia, más fácil será recordarla
-            </div>
-        </div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎨 Método de Asociación Visual</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Técnica: Mind Mapping</h3>
-                    <p>Crea mapas mentales visuales</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <p><strong>Ejemplo de Mind Map:</strong></p>
-                    <p>Centro: SEGURIDAD INFORMÁTICA</p>
-                    <p>→ Rama 1: CIA (3 pilares)</p>
-                    <p>→ Rama 2: 7 Métodos de Autenticación</p>
-                    <p>→ Rama 3: Amenazas (4 tipos)</p>
-                    <p>→ Rama 4: Ataques (Malware, Ingeniería Social, Redes)</p>
-                    <p>→ Rama 5: Defensa (Mitigación, Herramientas)</p>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Herramienta:</strong> Usa MindMeister, XMind o papel para crear mapas mentales
-            </div>
-        </div>
-        
-        <div class="mnemonic">
-            <div class="mnemonic-title">🎵 Método de Ritmo y Rima</div>
-            <div class="mnemonic-content">
-                <div class="mnemonic-key">
-                    <h3>Técnica: Rhyming</h3>
-                    <p>Convierte conceptos en rimas</p>
-                </div>
-                <div class="mnemonic-explanation">
-                    <p><strong>Ejemplo de Rima:</strong></p>
-                    <p>"CIA es seguridad de día y noche,<br>
-                    KOT son factores que broches,<br>
-                    POTLBRT son 7 soluciones en coche,<br>
-                    IEID de amenazas en un derroche."</p>
-                </div>
-            </div>
-            <div class="tip">
-                <strong>💡 Tip:</strong> Crea canciones o poemas para memorizar listas
-            </div>
-        </div>
-        
-        <footer>
-            <h3>📚 Resumen de Técnicas Mnemotécnicas</h3>
-            <p>✅ Acrónimos (CIA, KOT, POTLBRT)</p>
-            <p>✅ Historias Encadenadas (Storytelling)</p>
-            <p>✅ Palacio de la Memoria (Memory Palace)</p>
-            <p>✅ Mapas Mentales (Mind Mapping)</p>
-            <p>✅ Rimas y Ritmo (Rhyming)</p>
-            <p>✅ Asociaciones Visuales (Mental Images)</p>
-            <p style="margin-top: 20px; font-style: italic;">Combina varias técnicas para máxima retención. Practica regularmente y crea tus propias mnemonias basadas en lo que mejor funcione para ti.</p>
-        </footer>
+      </div>
     </div>
+    <div class="story">
+      🏗️ <strong>Historia:</strong> "El <strong>C</strong>andado de la empresa es <strong>C</strong>onfidencial, la <strong>I</strong>nformación permanece <strong>I</strong>ntacta, el sistema está <strong>D</strong>isponible todo el día, <strong>N</strong>adie puede <strong>N</strong>egar su firma digital, y cada <strong>A</strong>cceso requiere <strong>A</strong>utenticación."
+    </div>
+    <div class="tip"><b>💡 Alternativo:</b> También se conoce como la "Tríada CIA" = Confidencialidad + Integridad + Availability (Disponibilidad)</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 2. FACTORES DE AUTENTICACIÓN ══════════════ -->
+<div id="s2"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-cyan">🔓</div>
+  <div>
+    <h2>Factores de Autenticación</h2>
+    <span class="sub">Los 3 pilares del "¿Quién eres?"</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-cyan">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">S · T · E</span> — "Lo que <u>S</u>abes, <u>T</u>ienes y <u>E</u>res"
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-cyan">STE</div>
+        <div class="acronym-phrase" style="color:#a5f3fc">"Saber, Tener, Existir"</div>
+        <div class="acronym-hint">Tu conocimiento, tu objeto físico, y tu cuerpo</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#0e7490">S</div>
+          <div class="letter-content">
+            <strong>SABES (Knowledge)</strong>
+            <small>Contraseña, PIN, pregunta secreta — algo memorizado</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#0e7490">T</div>
+          <div class="letter-content">
+            <strong>TIENES (Ownership / Possession)</strong>
+            <small>Smartphone, token USB, tarjeta inteligente, calculadora OTP</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#0e7490">E</div>
+          <div class="letter-content">
+            <strong>ERES (Inherence / Biometría)</strong>
+            <small>Huella dactilar, reconocimiento facial, iris, voz</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 MFA:</b> Autenticación Multi-Factor = combinar ≥2 de estos. 2FA = dos factores. 3FA = tres factores (máxima seguridad pero costoso)</div>
+
+    <div class="table-wrap" style="margin-top:20px">
+      <table>
+        <tr><th>Factores</th><th>Ejemplo</th><th>Seguridad</th></tr>
+        <tr><td class="c-yellow">1 Factor (SFA)</td><td>Solo contraseña</td><td>🔴 Baja — fácilmente vulnerada</td></tr>
+        <tr><td class="c-cyan">2 Factores (2FA)</td><td>Contraseña + SMS/App</td><td>🟡 Media — vulnerable a SIM cloning</td></tr>
+        <tr><td class="c-green">3 Factores (3FA)</td><td>Tarjeta + PIN + Huella</td><td>🟢 Alta — costosa de implementar</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 3. LOS 7 MÉTODOS ══════════════ -->
+<div id="s3"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-purple">🛡️</div>
+  <div>
+    <h2>Los 7 Métodos de Autenticación</h2>
+    <span class="sub">Evidian IAM · Clasificación completa</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-purple">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">C · O · P · L · T · B · R</span> — "COPLTR·B" = "Con OTP, Passwords Listos Traen Biometría Real"
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-purple" style="font-size:1.8rem">COPLTR·B</div>
+        <div class="acronym-phrase" style="color:#c4b5fd;font-size:.82rem">"Con OTP, Passwords<br>Listos Traen Biometría Real"</div>
+        <div class="acronym-hint">El sistema moderno de una empresa completa</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">C</div>
+          <div class="letter-content">
+            <strong>1. CONTRASEÑA (ID + Password)</strong>
+            <small>Método básico. Débil si la contraseña es simple. Sin modificar infraestructura Windows.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">O</div>
+          <div class="letter-content">
+            <strong>2. OTP (One-Time Password)</strong>
+            <small>Calculadora que genera código válido por tiempo limitado. Usado en VPN/acceso externo.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">P</div>
+          <div class="letter-content">
+            <strong>3. PKI / TOKEN USB (Certificado X.509)</strong>
+            <small>Criptografía avanzada. Requiere código PIN. Autoridad de Certificación (CA).</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">L</div>
+          <div class="letter-content">
+            <strong>4. LLAVE "CONFIDENCIAL DEFENSA"</strong>
+            <small>Multi-función: certificado X.509 + almacenamiento + cifrado. PIN directo en la llave.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">T</div>
+          <div class="letter-content">
+            <strong>5. TARJETA INTELIGENTE (ID + Password)</strong>
+            <small>Almacena credenciales en tarjeta. Contraseña muy compleja gestionada automáticamente.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">B</div>
+          <div class="letter-content">
+            <strong>6. BIOMÉTRICA</strong>
+            <small>Huella, facial, voz, iris. 3 arquitecturas: Servidor central / Puesto de trabajo / Tarjeta</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">R</div>
+          <div class="letter-content">
+            <strong>7. RFID ACTIVO</strong>
+            <small>Identifica al usuario a metros de distancia. Bloquea/desbloquea PC automáticamente. Sin acción del usuario.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="story">
+      🏢 <strong>Historia:</strong> "En el banco, entrás con tu <strong>C</strong>ontraseña. Si accedés remoto, usás <strong>O</strong>TP. La sala de servidores exige <strong>P</strong>KI. El laboratorio secreto usa la <strong>L</strong>lave especial. Recursos Humanos tiene <strong>T</strong>arjetas inteligentes. El sótano de I+D requiere <strong>B</strong>iometría. Y el lobby ejecutivo te detecta con <strong>R</strong>FID antes de que llegues."
+    </div>
+    <div class="tip"><b>💡 SSO (Single Sign-On):</b> Permite autenticarse una sola vez y acceder a todas las aplicaciones. Tokens: Kerberos (Windows) y SAML (arquitecturas SOA/J2EE).</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 4. SFA vs 2FA ══════════════ -->
+<div id="s4"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-yellow">⚔️</div>
+  <div>
+    <h2>SFA vs 2FA: Vulnerabilidades</h2>
+    <span class="sub">Análisis completo de debilidades</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-yellow">
+    🔑 Para SFA: <span style="font-family:var(--font-mono);margin-left:6px">"CFAR" = Contraseñas, Fishing, Atacante-medio, Reutilización</span>
+  </div>
+  <div class="card-body">
+    <div class="grid-2">
+      <div>
+        <h4 class="c-yellow" style="margin-bottom:12px;font-family:var(--font-head)">🔓 SFA — 4 Vulnerabilidades</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">C</div>
+          <div class="letter-content">
+            <strong>CONTRASEÑAS DÉBILES</strong>
+            <small>Ataques de fuerza bruta automatizados</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">F</div>
+          <div class="letter-content">
+            <strong>PHISHING</strong>
+            <small>Correos/mensajes falsos que roban credenciales</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">A</div>
+          <div class="letter-content">
+            <strong>ATAQUE DE INTERMEDIARIO (MitM)</strong>
+            <small>Wi-Fi público inseguro, malware intercepta login</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">R</div>
+          <div class="letter-content">
+            <strong>REUTILIZACIÓN DE CONTRASEÑAS</strong>
+            <small>Una clave comprometida = múltiples cuentas expuestas</small>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 class="c-orange" style="margin-bottom:12px;font-family:var(--font-head)">🔐 2FA — 3 Vulnerabilidades</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">I</div>
+          <div class="letter-content">
+            <strong>INGENIERÍA SOCIAL</strong>
+            <small>Engañan al usuario para que revele el segundo factor</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">S</div>
+          <div class="letter-content">
+            <strong>SIM CLONING / INTERCEPTACIÓN SMS</strong>
+            <small>Clonan la SIM y redirigen los mensajes de texto</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">M</div>
+          <div class="letter-content">
+            <strong>MALWARE EN DISPOSITIVO</strong>
+            <small>Compromete la app de autenticación en el teléfono</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn"><b>⚠️ Recuerda:</b> Aunque 2FA es más seguro que SFA, ninguno es 100% infalible. La solución: autenticación MULTI-factor con hardware token + biometría.</div>
+
+    <h4 style="margin:20px 0 12px;color:var(--green);font-family:var(--font-head)">✅ Estrategias de Mitigación — "USAVE·A"</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Letra</th><th>Estrategia</th><th>Descripción</th></tr>
+        <tr><td class="c-green">U</td><td>Uso de hardware token</td><td>Dispositivos físicos que generan códigos — no interceptables</td></tr>
+        <tr><td class="c-green">S</td><td>Supervisión continua</td><td>IDS/IPS, pruebas de penetración periódicas</td></tr>
+        <tr><td class="c-green">A</td><td>Autenticación multifactor</td><td>Combinar ≥2 factores</td></tr>
+        <tr><td class="c-green">V</td><td>Verificación en varias fases</td><td>IP, geolocalización, comportamiento del usuario</td></tr>
+        <tr><td class="c-green">E</td><td>Educación de usuarios</td><td>Capacitación sobre phishing y manejo de credenciales</td></tr>
+        <tr><td class="c-green">A</td><td>Actualizaciones periódicas</td><td>Parches de seguridad, nuevas tecnologías, compliance</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 5. CERTIFICADOS DIGITALES ══════════════ -->
+<div id="s5"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-green">🏅</div>
+  <div>
+    <h2>Certificados Digitales</h2>
+    <span class="sub">PKI · X.509 · Impacto en seguridad</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-green" style="color:#ecfdf5">
+    🔑 Impacto: <span style="font-family:var(--font-mono);margin-left:6px">"PAFC" = Privacidad, Autenticidad, Fraude-prevención, Cumplimiento</span>
+  </div>
+  <div class="card-body">
+    <div class="grid-2">
+      <div>
+        <h4 class="c-green" style="margin-bottom:12px;font-family:var(--font-head)">¿Qué es un Certificado Digital?</h4>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:12px">Documento electrónico basado en criptografía que verifica la identidad de personas u organizaciones en Internet. Emitido por una <strong style="color:var(--text)">Autoridad de Certificación (CA)</strong>.</p>
+        <p style="font-size:.85rem;color:var(--muted)">Permite: <span class="c-cyan">cifrar datos</span>, <span class="c-cyan">firmar documentos</span>, <span class="c-cyan">verificar identidades</span>. Tiene fecha de caducidad y debe renovarse.</p>
+      </div>
+      <div>
+        <h4 class="c-green" style="margin-bottom:12px;font-family:var(--font-head)">Impacto PAFC</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">P</div>
+          <div class="letter-content"><strong>PRIVACIDAD</strong><small> Solo quien tiene la clave privada descifra los datos</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">A</div>
+          <div class="letter-content"><strong>AUTENTICIDAD</strong><small> Verifica quién realmente está del otro lado</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">F</div>
+          <div class="letter-content"><strong>FRAUDE</strong><small> Sites falsos no tienen certificado válido → detección inmediata</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">C</div>
+          <div class="letter-content"><strong>CUMPLIMIENTO</strong><small> Leyes como GDPR, SOX, PCI-DSS, Ley 81 (Panamá)</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="tip"><b>💡 CMS (Card Management System):</b> Sistema que gestiona la creación, asignación, préstamo temporal, blacklisting y desbloqueo de tarjetas inteligentes con certificados.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 6. TIPOS DE AMENAZAS ══════════════ -->
+<div id="s6"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-orange">⚠️</div>
+  <div>
+    <h2>Tipos de Amenazas</h2>
+    <span class="sub">Las 4 categorías · Vulnerabilidades · Ataques</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-orange" style="color:#fff7ed">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">"IEID" = Intencionadas, Errores, Industriales, Desastres</span>
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-orange">IEID</div>
+        <div class="acronym-phrase" style="color:#fed7aa">"Intrusos, Errores,<br>Industria, Desastres"</div>
+        <div class="acronym-hint">4 fuentes de todo lo que puede salir mal</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">I</div>
+          <div class="letter-content">
+            <strong>INTENCIONADAS (Hackers, cibercrimen)</strong>
+            <small>Suplantación, phishing, DDoS, robo, malware, ingeniería social, ransomware</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">E</div>
+          <div class="letter-content">
+            <strong>ERRORES NO INTENCIONADOS</strong>
+            <small>Error de usuario/admin, configuración incorrecta, fuga accidental, pérdida de equipo</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">I</div>
+          <div class="letter-content">
+            <strong>INDUSTRIALES (Fallos técnicos)</strong>
+            <small>Fuego, daño por agua, corte eléctrico, avería hardware, fallo de comunicaciones</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">D</div>
+          <div class="letter-content">
+            <strong>DESASTRES NATURALES</strong>
+            <small>Terremotos, inundaciones, huracanes, erupciones volcánicas</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head" style="background:#1c1406;border-color:#92400e;color:#fde68a">
+    ⚡ Tipos de Vulnerabilidades — "Buffer, Carrera, Formato, XSS, SQL"
+  </div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table>
+        <tr><th>Vulnerabilidad</th><th>¿Qué hace el atacante?</th><th>Mnemónico</th></tr>
+        <tr>
+          <td class="c-red">Buffer Overflow</td>
+          <td>Desborda la memoria para modificar zonas contiguas y ejecutar código</td>
+          <td>🪣 "El cubo se desborda y moja lo de al lado"</td>
+        </tr>
+        <tr>
+          <td class="c-yellow">Race Condition</td>
+          <td>Dos procesos acceden al mismo recurso simultáneamente → valores inesperados</td>
+          <td>🏁 "Dos corredores llegan al mismo tiempo"</td>
+        </tr>
+        <tr>
+          <td class="c-orange">Format String</td>
+          <td>Entradas no validadas permiten ejecutar comandos o robar datos</td>
+          <td>📝 "El formulario acepta cualquier cosa"</td>
+        </tr>
+        <tr>
+          <td class="c-purple">XSS (Cross-Site Scripting)</td>
+          <td>Inyectan scripts en páginas legítimas para robar credenciales</td>
+          <td>🎭 "Te hacen escribir en la web del atacante"</td>
+        </tr>
+        <tr>
+          <td class="c-cyan">SQL Injection</td>
+          <td>Código SQL malicioso en formularios para extraer/corromper la BD</td>
+          <td>💉 "Inyectan veneno en la base de datos"</td>
+        </tr>
+      </table>
+    </div>
+    <div class="tip"><b>💡 Defensa de memoria:</b> DEP (Prevención de Ejecución de Datos) marca zonas de memoria no ejecutables. ASLR randomiza la ubicación del código en memoria para que el atacante no pueda predecirla.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 7. TIPOS DE ATAQUES ══════════════ -->
+<div id="s7"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-red">💥</div>
+  <div>
+    <h2>Tipos y Categorías de Ataques</h2>
+    <span class="sub">Ingeniería Social · Redes · Contraseñas</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-red">
+    🔑 Ingeniería Social: <span style="font-family:var(--font-mono);margin-left:6px">"PSVS" = Phishing, Spear, Vishing, Scareware</span>
+  </div>
+  <div class="card-body">
+    <div class="grid-2">
+      <div>
+        <h4 class="c-red" style="margin-bottom:12px;font-family:var(--font-head)">🎣 PSVS — Ingeniería Social</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">P</div>
+          <div class="letter-content"><strong>PHISHING</strong><small> Red masiva: correos falsos suplantando empresas/bancos</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">S</div>
+          <div class="letter-content"><strong>SPEAR PHISHING</strong><small> Arpón dirigido: ataque personalizado con info del objetivo</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">V</div>
+          <div class="letter-content"><strong>VISHING</strong><small> Llamada telefónica falsa (Voice + Phishing)</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">S</div>
+          <div class="letter-content"><strong>SCAREWARE</strong><small> Pop-ups falsos que alarman al usuario para instalar malware</small></div>
+        </div>
+        <div class="story" style="margin-top:12px">🎣 <strong>Imagen:</strong> "Phishing lanza una red al mar, Spear Phishing apunta a un pez específico con arpón, Vishing es el anzuelo por teléfono, Scareware es el cebo trampa."</div>
+      </div>
+      <div>
+        <h4 class="c-cyan" style="margin-bottom:12px;font-family:var(--font-head)">🌐 MDSZI — Ataques a Redes</h4>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">M</div>
+          <div class="letter-content"><strong>MAN-IN-THE-MIDDLE</strong><small> Intercepta comunicación entre dos partes</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">D</div>
+          <div class="letter-content"><strong>DDoS</strong><small> Denegación de servicio — satura con tráfico falso</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">S</div>
+          <div class="letter-content"><strong>SNIFFING</strong><small> Captura paquetes de red — lee tráfico no cifrado</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">Z</div>
+          <div class="letter-content"><strong>ZERO-DAY</strong><small> Explota falla desconocida ("0 días" para parchear)</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">I</div>
+          <div class="letter-content"><strong>SQL INJECTION</strong><small> Inyecta código malicioso en bases de datos</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" style="margin:20px 0"></div>
+
+    <h4 class="c-purple" style="margin-bottom:12px;font-family:var(--font-head)">⚔️ Tipos de Atacantes — "Black, White, Grey"</h4>
+    <div class="grid-3">
+      <div class="mini-card" style="border-color:#450a0a">
+        <h4 class="c-red">⛔ Black Hat</h4>
+        <p>Objetivo: lucrarse o dañar. Actividades ilegales. El "villano" clásico.</p>
+      </div>
+      <div class="mini-card" style="border-color:#064e3b">
+        <h4 class="c-green">✅ White Hat</h4>
+        <p>Busca vulnerabilidades para reportarlas. Trabaja freelance o para empresas. Ethical hacker.</p>
+      </div>
+      <div class="mini-card" style="border-color:#374151">
+        <h4 style="color:#9ca3af">⚪ Grey Hat</h4>
+        <p>Busca mejorar la seguridad pero con métodos cuestionables. Legalidad ambigua.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 8. MALWARE ══════════════ -->
+<div id="s8"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-red">🦠</div>
+  <div>
+    <h2>Tipos de Malware</h2>
+    <span class="sub">5 villanos del mundo digital</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-red">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">"VTGSR" = Virus, Troyano, Gusano, Spyware, Ransomware</span>
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-red">VTGSR</div>
+        <div class="acronym-phrase" style="color:#fca5a5">"Virus Teje Gusanos<br>Silenciosos y Rehenes"</div>
+        <div class="acronym-hint">Una historia de infección en cadena</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-red">V</div>
+          <div class="letter-content">
+            <strong>VIRUS</strong>
+            <small>Infecta archivos ejecutables y sectores de arranque. Necesita acción del usuario para propagarse.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">T</div>
+          <div class="letter-content">
+            <strong>TROYANO</strong>
+            <small>Se disfraza de software legítimo. Crea puertas traseras. Descarga actualizaciones maliciosas.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">G</div>
+          <div class="letter-content">
+            <strong>GUSANO (Worm)</strong>
+            <small>Se autopropaga a alta velocidad sin intervención del usuario. Colapsa redes.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">S</div>
+          <div class="letter-content">
+            <strong>SPYWARE</strong>
+            <small>Espía silenciosamente: keyloggers, capturas de pantalla, robo de credenciales bancarias.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">R</div>
+          <div class="letter-content">
+            <strong>RANSOMWARE</strong>
+            <small>Cifra todos tus archivos y exige rescate en criptomonedas para liberar el acceso.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="story">
+      🎬 <strong>Película:</strong> "Un <strong>V</strong>irus entra en un USB. Deja un <strong>T</strong>royano que abre la puerta. El <strong>G</strong>usano se copia a toda la red. El <strong>S</strong>pyware espía cada tecla. El <strong>R</strong>ansomware secuestra todo y pide rescate."
+    </div>
+    <div class="danger-tip"><b>🔴 Defensa:</b> Sandboxing (prueba código en ambiente aislado), especialmente contra Zero-Day. Herramientas: IDS (detecta), IPS (previene + bloquea), SIEM (centraliza logs), SOC (centro de operaciones).</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 9. GLOSARIO CLAVE ══════════════ -->
+<div id="s9"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-cyan">📖</div>
+  <div>
+    <h2>Glosario de Términos Clave</h2>
+    <span class="sub">30 términos esenciales · Con imagen mental</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head" style="background:#0c1a2e;border-color:#1e40af;color:#93c5fd">
+    📚 Términos organizados por categoría con imagen mnemotécnica
+  </div>
+  <div class="card-body">
+    <h4 class="c-cyan" style="margin-bottom:12px;font-family:var(--font-head)">🏗️ Herramientas de Defensa</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Término</th><th>¿Qué es?</th><th>🧠 Imagen Mental</th></tr>
+        <tr><td class="c-green">IDS</td><td>Sistema que monitorea y <u>alerta</u> sobre tráfico sospechoso</td><td>👁️ "El vigilante que avisa pero no actúa"</td></tr>
+        <tr><td class="c-green">IPS</td><td>Como el IDS pero además <u>bloquea</u> automáticamente</td><td>🛡️ "El guardia que avisa Y detiene"</td></tr>
+        <tr><td class="c-green">SIEM</td><td>Centraliza logs, detecta amenazas en tiempo real con IA</td><td>🎛️ "La torre de control del aeropuerto"</td></tr>
+        <tr><td class="c-green">SOC</td><td>Centro de operaciones de seguridad — monitorea todo el SI</td><td>🏢 "El cuartel general de ciberseguridad"</td></tr>
+        <tr><td class="c-green">DLP</td><td>Previene filtraciones de datos sensibles</td><td>🚧 "El portero que no deja salir secretos"</td></tr>
+        <tr><td class="c-green">DMZ</td><td>Red aislada donde están los servidores públicos (web/correo)</td><td>🏝️ "La isla entre Internet y la red interna"</td></tr>
+        <tr><td class="c-green">Sandboxing</td><td>Ejecuta código sospechoso en ambiente aislado/seguro</td><td>🏖️ "La caja de arena donde los niños no rompen nada"</td></tr>
+        <tr><td class="c-green">Web Proxy</td><td>Intermediario entre usuario e Internet — filtra tráfico</td><td>🪞 "El espejo que oculta tu identidad"</td></tr>
+      </table>
+    </div>
+
+    <h4 class="c-yellow" style="margin:20px 0 12px;font-family:var(--font-head)">⚡ Conceptos de Ataque</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Término</th><th>¿Qué es?</th><th>🧠 Imagen Mental</th></tr>
+        <tr><td class="c-red">CVE</td><td>Base de datos pública de vulnerabilidades conocidas con ID único</td><td>📋 "El registro civil de los bugs"</td></tr>
+        <tr><td class="c-red">CVSS</td><td>Puntaje 0-10 de gravedad de una vulnerabilidad (Base+Temporal+Ambiental)</td><td>📊 "El termómetro del peligro"</td></tr>
+        <tr><td class="c-red">Zero-Day</td><td>Falla desconocida — 0 días para parchearla antes del ataque</td><td>💣 "La bomba sin seguro"</td></tr>
+        <tr><td class="c-red">Sniffer</td><td>Captura paquetes de red — pone la tarjeta en modo promiscuo</td><td>🐕 "El perro que huele todos los paquetes"</td></tr>
+        <tr><td class="c-red">XSRF/CSRF</td><td>Engaña al usuario autenticado para ejecutar acciones no deseadas</td><td>🪆 "La marioneta que actúa sin saberlo"</td></tr>
+        <tr><td class="c-red">Web Tracking</td><td>Recopila datos del comportamiento online del usuario</td><td>👣 "Las huellas digitales que dejas en la web"</td></tr>
+        <tr><td class="c-red">Brecha de seguridad</td><td>Acceso no autorizado logrado cuando se saltean los mecanismos</td><td>🏚️ "La ventana rota por donde entró el ladrón"</td></tr>
+      </table>
+    </div>
+
+    <h4 class="c-purple" style="margin:20px 0 12px;font-family:var(--font-head)">🔒 Protección de Memoria y Sistema</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Término</th><th>¿Qué es?</th><th>🧠 Imagen Mental</th></tr>
+        <tr><td class="c-purple">DEP</td><td>Marca zonas de memoria como NO ejecutables para impedir inyección de código</td><td>🚫 "Zona prohibida para ejecutar"</td></tr>
+        <tr><td class="c-purple">ASLR</td><td>Randomiza la ubicación del código en memoria — imposible predecir</td><td>🎲 "Los muebles cambian de lugar cada vez"</td></tr>
+        <tr><td class="c-purple">Token</td><td>Dispositivo físico/digital que actúa como credencial de acceso</td><td>🎟️ "El boleto electrónico de entrada"</td></tr>
+        <tr><td class="c-purple">DNS</td><td>Traduce nombres de dominio (google.com) a direcciones IP</td><td>📖 "La guía telefónica de Internet"</td></tr>
+        <tr><td class="c-purple">IPSec</td><td>Protocolo que añade cifrado y autenticación al protocolo IP</td><td>🔐 "El sobre sellado dentro del sobre"</td></tr>
+        <tr><td class="c-purple">Borrado Seguro</td><td>Eliminación permanente e irrecuperable de datos sensibles</td><td>🔥 "Quemar el papel en lugar de tirarlo"</td></tr>
+      </table>
+    </div>
+
+    <h4 class="c-orange" style="margin:20px 0 12px;font-family:var(--font-head)">📋 Normativas y Estándares</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Norma</th><th>¿Qué regula?</th></tr>
+        <tr><td class="c-orange">ISO 27001</td><td>Sistema de Gestión de Seguridad de la Información (SGSI)</td></tr>
+        <tr><td class="c-orange">ISO 27002</td><td>Controles y buenas prácticas de seguridad</td></tr>
+        <tr><td class="c-orange">NIST</td><td>Marco de ciberseguridad del Instituto Nacional de EE.UU.</td></tr>
+        <tr><td class="c-orange">PCI DSS</td><td>Seguridad para tarjetas de pago (bancos, comercios)</td></tr>
+        <tr><td class="c-orange">GDPR</td><td>Protección de datos personales en la Unión Europea</td></tr>
+        <tr><td class="c-orange">SOX</td><td>Transparencia financiera y auditoría (Sarbanes-Oxley)</td></tr>
+        <tr><td class="c-orange">Ley 81 Panamá</td><td>Protección de datos personales en Panamá</td></tr>
+      </table>
+    </div>
+    <div class="warn"><b>⚠️ Truco normativas:</b> "NIPGSL" — NIST, ISO, PCI, GDPR, SOX, Ley81</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 10. PALACIO DE MEMORIA ══════════════ -->
+<div id="s10"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-purple">🏰</div>
+  <div>
+    <h2>Palacio de la Memoria</h2>
+    <span class="sub">Recorre las salas para recordar todo</span>
+  </div>
+</div>
+
+<div class="palace">
+  <div class="room">
+    <div class="room-num">🚪</div>
+    <div class="room-content">
+      <h4>ENTRADA: La Tríada + Autenticación (CIDNA)</h4>
+      <p>Llegas a una fortaleza digital. El guardia (Autenticación) te pide identificación. Dentro hay 4 habitaciones: la caja fuerte sellada (Confidencialidad), los registros sin tachaduras (Integridad), la sala siempre iluminada 24/7 (Disponibilidad), y el escribano que certifica todo (No Repudio).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">1</div>
+    <div class="room-content">
+      <h4>SALA 1: Factores de Autenticación (STE)</h4>
+      <p>3 estatuas te bloquean el paso: La primera tiene la cabeza llena de conocimiento y te pregunta la contraseña (Sabes). La segunda sostiene un teléfono dorado (Tienes). La tercera te pone un escáner en la cara (Eres). Solo con las 3 puedes pasar = 3FA.</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">2</div>
+    <div class="room-content">
+      <h4>SALA 2: Los 7 Métodos (COPLTR·B)</h4>
+      <p>7 puertas de colores: Azul (Contraseña), Plateada (OTP con calculadora), Dorada (PKI/Token USB con certificado), Negra blindada (Llave Confidencial Defensa), Verde (Tarjeta inteligente), Esmeralda (Biometría con lector de huellas), Invisible (RFID te detecta desde la entrada).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">3</div>
+    <div class="room-content">
+      <h4>SALA 3: Las 4 Amenazas (IEID)</h4>
+      <p>4 zonas de alerta: Zona Roja con criminales con capucha (Intencionadas), Zona Amarilla con empleados distraídos tirando papeles (Errores), Zona Naranja con llamas y tuberías rotas (Industrial), Zona Gris con terremotos y tornados (Desastres Naturales).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">4</div>
+    <div class="room-content">
+      <h4>SALA 4: Los 5 Malwares (VTGSR)</h4>
+      <p>5 monstruos en vitrinas: El Virus rojo que contagia tocando (archivos), el Troyano disfrazado de regalo (puerta trasera), el Gusano que se duplica infinito (se propaga solo), el Spyware transparente que te observa (espía silencioso), el Ransomware con una enorme cadena y candado (cifra y pide rescate).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">5</div>
+    <div class="room-content">
+      <h4>SALA 5: Ingeniería Social (PSVS)</h4>
+      <p>Una sala llena de trampas de pesca: Una red enorme en el techo (Phishing masivo), un arpón con nombre en la punta (Spear Phishing personalizado), un teléfono rojo que suena (Vishing), una pantalla con alarma falsa y texto "¡TU PC ESTÁ INFECTADO!" (Scareware).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">6</div>
+    <div class="room-content">
+      <h4>SALA 6: Ataques a Redes (MDSZI)</h4>
+      <p>5 pantallas con ataques en vivo: Pantalla M → espía entre dos personas (MitM), Pantalla D → miles de bots atacando un servidor (DDoS), Pantalla S → un perro olfateando paquetes (Sniffing), Pantalla Z → bomba sin seguro (Zero-Day), Pantalla I → jeringa inyectando código en base de datos (SQL Injection).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">7</div>
+    <div class="room-content">
+      <h4>SALA 7: Herramientas de Defensa</h4>
+      <p>El cuartel general: IDS (guardia con binoculares que avisa), IPS (guardia con rifle que bloquea), SIEM (torre de control con pantallas de todo el sistema), SOC (sala de crisis con analistas), DMZ (isla entre dos muros), Sandbox (caja de arena donde probar malware sin peligro).</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 11. FLASH CARDS ══════════════ -->
+<div id="s11"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-green">⚡</div>
+  <div>
+    <h2>Flash Cards de Repaso</h2>
+    <span class="sub">Prueba tu memoria · Responde antes de leer</span>
+  </div>
+</div>
+
+<div class="flash-grid">
+  <div class="flash">
+    <span class="flash-badge bg-blue c-cyan" style="font-size:.6rem">TRÍADA</span>
+    <div class="flash-q">¿Qué es la Confidencialidad?</div>
+    <div class="flash-a">Solo personal autorizado accede a la info. Caja sellada 🔒</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-blue c-cyan" style="font-size:.6rem">TRÍADA</span>
+    <div class="flash-q">¿Diferencia entre IDS e IPS?</div>
+    <div class="flash-a">IDS solo detecta y alerta. IPS detecta Y bloquea automáticamente.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿Qué es OTP?</div>
+    <div class="flash-a">One-Time Password. Contraseña válida por tiempo limitado y un solo uso. Calculadora especial.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿3 factores de autenticación?</div>
+    <div class="flash-a">STE: Sabes (contraseña), Tienes (token/phone), Eres (biometría)</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">ATAQUE</span>
+    <div class="flash-q">¿Diferencia Phishing vs Spear Phishing?</div>
+    <div class="flash-a">Phishing = red masiva. Spear = arpón personalizado con info del objetivo específico.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">MALWARE</span>
+    <div class="flash-q">¿Qué hace el Ransomware?</div>
+    <div class="flash-a">Cifra todos tus archivos y exige rescate (generalmente en crypto) para darte la clave.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-orange c-orange" style="font-size:.6rem">AMENAZA</span>
+    <div class="flash-q">¿Qué es un Zero-Day?</div>
+    <div class="flash-a">Vulnerabilidad desconocida por el fabricante. 0 días para parchearla antes del ataque. 💣</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-cyan c-cyan" style="font-size:.6rem">GLOSARIO</span>
+    <div class="flash-q">¿Qué es la DMZ?</div>
+    <div class="flash-a">Red aislada donde están los servidores públicos (web, correo). Isla entre Internet y la red interna.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-green c-green" style="font-size:.6rem">DEFENSA</span>
+    <div class="flash-q">¿Qué hace el Sandboxing?</div>
+    <div class="flash-a">Ejecuta código sospechoso en ambiente aislado para analizarlo sin riesgo. Ideal contra Zero-Day.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿Qué es el SSO?</div>
+    <div class="flash-a">Single Sign-On: autenticarse una sola vez para acceder a todas las aplicaciones de la empresa.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">VULNER.</span>
+    <div class="flash-q">¿Qué es un Buffer Overflow?</div>
+    <div class="flash-a">La app no controla datos en el buffer — al desbordarse, modifica zonas de memoria contiguas. 🪣</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-yellow c-yellow" style="font-size:.6rem">NORMAS</span>
+    <div class="flash-q">¿Qué regula la Ley 81 en Panamá?</div>
+    <div class="flash-a">Protección de datos personales de los ciudadanos panameños. Equivalente al GDPR europeo.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-cyan c-cyan" style="font-size:.6rem">GLOSARIO</span>
+    <div class="flash-q">¿Diferencia CVE vs CVSS?</div>
+    <div class="flash-a">CVE = base de datos de vulnerabilidades conocidas. CVSS = puntaje 0-10 de gravedad de cada CVE.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">ATAQUE</span>
+    <div class="flash-q">¿Qué hace el Sniffing?</div>
+    <div class="flash-a">Captura paquetes de red en modo promiscuo. Lee tráfico no cifrado. El "perro" de la red. 🐕</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">SISTEMA</span>
+    <div class="flash-q">¿Qué hace el ASLR?</div>
+    <div class="flash-a">Randomiza la ubicación del código en memoria cada vez. Dificulta ataques de buffer overflow. 🎲</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-orange c-orange" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿4 vulnerabilidades del SFA?</div>
+    <div class="flash-a">CFAR: Contraseñas débiles, Fishing (phishing), Atacante-Medio (MitM), Reutilización de contraseñas</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ RESUMEN FINAL ══════════════ -->
+<div class="divider"></div>
+
+<div class="card" style="border-color:#2563eb40">
+  <div class="card-head" style="background:linear-gradient(135deg,#1e3a8a,#4c1d95);color:#e0f2fe;font-family:var(--font-head);font-size:1.1rem">
+    🧠 Tabla Maestra de Acrónimos
+  </div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table>
+        <tr><th>Acrónimo</th><th>Significado</th><th>Frase mnemónica</th></tr>
+        <tr><td class="c-blue">CIDNA</td><td>Confidencialidad, Integridad, Disponibilidad, No repudio, Autenticación</td><td>"Como Ingenieros Debemos No Abandonar"</td></tr>
+        <tr><td class="c-cyan">STE</td><td>Sabes, Tienes, Eres (3 factores auth)</td><td>"¿STE seguro de quién eres?"</td></tr>
+        <tr><td class="c-purple">COPLTR·B</td><td>7 Métodos de Autenticación</td><td>"Con OTP, Passwords Listos Traen Biometría"</td></tr>
+        <tr><td class="c-yellow">CFAR</td><td>4 vulnerabilidades del SFA</td><td>"Las CFAR de los hackers"</td></tr>
+        <tr><td class="c-green">USAVEA</td><td>6 Estrategias de mitigación</td><td>"USA VEA la seguridad"</td></tr>
+        <tr><td class="c-green">PAFC</td><td>Impacto certificados digitales</td><td>"El PAFC de los certificados"</td></tr>
+        <tr><td class="c-orange">IEID</td><td>4 tipos de amenazas</td><td>"IEID de dónde viene el peligro"</td></tr>
+        <tr><td class="c-red">VTGSR</td><td>5 tipos de malware</td><td>"Virus Teje Gusanos Silenciosos y Rehenes"</td></tr>
+        <tr><td class="c-red">PSVS</td><td>4 técnicas de ingeniería social</td><td>"Pescando Sin Ver al Sospechoso"</td></tr>
+        <tr><td class="c-cyan">MDSZI</td><td>5 ataques a redes</td><td>"Misiles Destruyen Sistemas Zona-día Infectando"</td></tr>
+        <tr><td class="c-orange">NIPGSL</td><td>6 normativas de seguridad</td><td>"NIPGSL: Normas Importantes Para la Gestión Segura Legal"</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <strong>🧠 Guía Mnemotécnica · Seguridad Informática</strong><br><br>
+  Basada en: Marmolejo et al. (XIKUA 2023) · Evidian IAM · Conceptos Generales Ing. Márquez · Glosario de Ciberseguridad<br><br>
+  <span style="color:#374151">Combina acrónimos + palacio de memoria + flash cards para máxima retención. Repasa cada semana.</span>
+</footer>
+
+</div><!-- end wrap -->
+
+<script>
+// Progress bar on scroll
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (scrolled / total * 100) + '%';
+});
+</script>
+</body>
+</html>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="wrap">
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <div class="hero-badge">🔐 SEGURIDAD INFORMÁTICA · GUÍA MNEMOTÉCNICA COMPLETA</div>
+  <h1>Aprende Más,<br>Olvida Menos</h1>
+  <p>Toda la información de tus documentos condensada en acrónimos, historias y palacio de memoria para máxima retención.</p>
+</div>
+
+<!-- ═══════════════════ TOC ═══════════════════ -->
+<div class="toc">
+  <a href="#s1">CIA Tríada</a>
+  <a href="#s2">Autenticación</a>
+  <a href="#s3">7 Métodos Auth</a>
+  <a href="#s4">SFA vs 2FA</a>
+  <a href="#s5">Cert. Digitales</a>
+  <a href="#s6">Amenazas</a>
+  <a href="#s7">Ataques</a>
+  <a href="#s8">Malware</a>
+  <a href="#s9">Glosario</a>
+  <a href="#s10">Palacio</a>
+  <a href="#s11">Flash Cards</a>
+</div>
+
+
+<!-- ══════════════ 1. CIA TRÍADA ══════════════ -->
+<div id="s1"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-blue">🔺</div>
+  <div>
+    <h2>La Tríada CIA + extras</h2>
+    <span class="sub">5 Servicios de Seguridad</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-blue">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">C · I · D · N · A</span>
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-blue">CIDNA</div>
+        <div class="acronym-phrase c-cyan">"Como Ingenieros Debemos<br>No Abandonar"</div>
+        <div class="acronym-hint">Piensa en un ingeniero responsable que jamás abandona su trabajo</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">C</div>
+          <div class="letter-content">
+            <strong>CONFIDENCIALIDAD</strong>
+            <small>Solo personal autorizado accede a la información</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">I</div>
+          <div class="letter-content">
+            <strong>INTEGRIDAD</strong>
+            <small>Datos exactos, sin alteración, pérdida o destrucción</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">D</div>
+          <div class="letter-content">
+            <strong>DISPONIBILIDAD</strong>
+            <small>Servicio accesible 24/7 para usuarios autorizados</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">N</div>
+          <div class="letter-content">
+            <strong>NO REPUDIO</strong>
+            <small>Prueba que el emisor envió el mensaje (no puede negarlo)</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-blue">A</div>
+          <div class="letter-content">
+            <strong>AUTENTICACIÓN</strong>
+            <small>Verificación de identidad antes de acceder al sistema</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="story">
+      🏗️ <strong>Historia:</strong> "El <strong>C</strong>andado de la empresa es <strong>C</strong>onfidencial, la <strong>I</strong>nformación permanece <strong>I</strong>ntacta, el sistema está <strong>D</strong>isponible todo el día, <strong>N</strong>adie puede <strong>N</strong>egar su firma digital, y cada <strong>A</strong>cceso requiere <strong>A</strong>utenticación."
+    </div>
+    <div class="tip"><b>💡 Alternativo:</b> También se conoce como la "Tríada CIA" = Confidencialidad + Integridad + Availability (Disponibilidad)</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 2. FACTORES DE AUTENTICACIÓN ══════════════ -->
+<div id="s2"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-cyan">🔓</div>
+  <div>
+    <h2>Factores de Autenticación</h2>
+    <span class="sub">Los 3 pilares del "¿Quién eres?"</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-cyan">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">S · T · E</span> — "Lo que <u>S</u>abes, <u>T</u>ienes y <u>E</u>res"
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-cyan">STE</div>
+        <div class="acronym-phrase" style="color:#a5f3fc">"Saber, Tener, Existir"</div>
+        <div class="acronym-hint">Tu conocimiento, tu objeto físico, y tu cuerpo</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#0e7490">S</div>
+          <div class="letter-content">
+            <strong>SABES (Knowledge)</strong>
+            <small>Contraseña, PIN, pregunta secreta — algo memorizado</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#0e7490">T</div>
+          <div class="letter-content">
+            <strong>TIENES (Ownership / Possession)</strong>
+            <small>Smartphone, token USB, tarjeta inteligente, calculadora OTP</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#0e7490">E</div>
+          <div class="letter-content">
+            <strong>ERES (Inherence / Biometría)</strong>
+            <small>Huella dactilar, reconocimiento facial, iris, voz</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 MFA:</b> Autenticación Multi-Factor = combinar ≥2 de estos. 2FA = dos factores. 3FA = tres factores (máxima seguridad pero costoso)</div>
+
+    <div class="table-wrap" style="margin-top:20px">
+      <table>
+        <tr><th>Factores</th><th>Ejemplo</th><th>Seguridad</th></tr>
+        <tr><td class="c-yellow">1 Factor (SFA)</td><td>Solo contraseña</td><td>🔴 Baja — fácilmente vulnerada</td></tr>
+        <tr><td class="c-cyan">2 Factores (2FA)</td><td>Contraseña + SMS/App</td><td>🟡 Media — vulnerable a SIM cloning</td></tr>
+        <tr><td class="c-green">3 Factores (3FA)</td><td>Tarjeta + PIN + Huella</td><td>🟢 Alta — costosa de implementar</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 3. LOS 7 MÉTODOS ══════════════ -->
+<div id="s3"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-purple">🛡️</div>
+  <div>
+    <h2>Los 7 Métodos de Autenticación</h2>
+    <span class="sub">Evidian IAM · Clasificación completa</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-purple">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">C · O · P · L · T · B · R</span> — "COPLTR·B" = "Con OTP, Passwords Listos Traen Biometría Real"
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-purple" style="font-size:1.8rem">COPLTR·B</div>
+        <div class="acronym-phrase" style="color:#c4b5fd;font-size:.82rem">"Con OTP, Passwords<br>Listos Traen Biometría Real"</div>
+        <div class="acronym-hint">El sistema moderno de una empresa completa</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">C</div>
+          <div class="letter-content">
+            <strong>1. CONTRASEÑA (ID + Password)</strong>
+            <small>Método básico. Débil si la contraseña es simple. Sin modificar infraestructura Windows.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">O</div>
+          <div class="letter-content">
+            <strong>2. OTP (One-Time Password)</strong>
+            <small>Calculadora que genera código válido por tiempo limitado. Usado en VPN/acceso externo.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">P</div>
+          <div class="letter-content">
+            <strong>3. PKI / TOKEN USB (Certificado X.509)</strong>
+            <small>Criptografía avanzada. Requiere código PIN. Autoridad de Certificación (CA).</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">L</div>
+          <div class="letter-content">
+            <strong>4. LLAVE "CONFIDENCIAL DEFENSA"</strong>
+            <small>Multi-función: certificado X.509 + almacenamiento + cifrado. PIN directo en la llave.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">T</div>
+          <div class="letter-content">
+            <strong>5. TARJETA INTELIGENTE (ID + Password)</strong>
+            <small>Almacena credenciales en tarjeta. Contraseña muy compleja gestionada automáticamente.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">B</div>
+          <div class="letter-content">
+            <strong>6. BIOMÉTRICA</strong>
+            <small>Huella, facial, voz, iris. 3 arquitecturas: Servidor central / Puesto de trabajo / Tarjeta</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-purple">R</div>
+          <div class="letter-content">
+            <strong>7. RFID ACTIVO</strong>
+            <small>Identifica al usuario a metros de distancia. Bloquea/desbloquea PC automáticamente. Sin acción del usuario.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="story">
+      🏢 <strong>Historia:</strong> "En el banco, entrás con tu <strong>C</strong>ontraseña. Si accedés remoto, usás <strong>O</strong>TP. La sala de servidores exige <strong>P</strong>KI. El laboratorio secreto usa la <strong>L</strong>lave especial. Recursos Humanos tiene <strong>T</strong>arjetas inteligentes. El sótano de I+D requiere <strong>B</strong>iometría. Y el lobby ejecutivo te detecta con <strong>R</strong>FID antes de que llegues."
+    </div>
+    <div class="tip"><b>💡 SSO (Single Sign-On):</b> Permite autenticarse una sola vez y acceder a todas las aplicaciones. Tokens: Kerberos (Windows) y SAML (arquitecturas SOA/J2EE).</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 4. SFA vs 2FA ══════════════ -->
+<div id="s4"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-yellow">⚔️</div>
+  <div>
+    <h2>SFA vs 2FA: Vulnerabilidades</h2>
+    <span class="sub">Análisis completo de debilidades</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-yellow">
+    🔑 Para SFA: <span style="font-family:var(--font-mono);margin-left:6px">"CFAR" = Contraseñas, Fishing, Atacante-medio, Reutilización</span>
+  </div>
+  <div class="card-body">
+    <div class="grid-2">
+      <div>
+        <h4 class="c-yellow" style="margin-bottom:12px;font-family:var(--font-head)">🔓 SFA — 4 Vulnerabilidades</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">C</div>
+          <div class="letter-content">
+            <strong>CONTRASEÑAS DÉBILES</strong>
+            <small>Ataques de fuerza bruta automatizados</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">F</div>
+          <div class="letter-content">
+            <strong>PHISHING</strong>
+            <small>Correos/mensajes falsos que roban credenciales</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">A</div>
+          <div class="letter-content">
+            <strong>ATAQUE DE INTERMEDIARIO (MitM)</strong>
+            <small>Wi-Fi público inseguro, malware intercepta login</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-yellow" style="color:#451a03">R</div>
+          <div class="letter-content">
+            <strong>REUTILIZACIÓN DE CONTRASEÑAS</strong>
+            <small>Una clave comprometida = múltiples cuentas expuestas</small>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h4 class="c-orange" style="margin-bottom:12px;font-family:var(--font-head)">🔐 2FA — 3 Vulnerabilidades</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">I</div>
+          <div class="letter-content">
+            <strong>INGENIERÍA SOCIAL</strong>
+            <small>Engañan al usuario para que revele el segundo factor</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">S</div>
+          <div class="letter-content">
+            <strong>SIM CLONING / INTERCEPTACIÓN SMS</strong>
+            <small>Clonan la SIM y redirigen los mensajes de texto</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">M</div>
+          <div class="letter-content">
+            <strong>MALWARE EN DISPOSITIVO</strong>
+            <small>Compromete la app de autenticación en el teléfono</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn"><b>⚠️ Recuerda:</b> Aunque 2FA es más seguro que SFA, ninguno es 100% infalible. La solución: autenticación MULTI-factor con hardware token + biometría.</div>
+
+    <h4 style="margin:20px 0 12px;color:var(--green);font-family:var(--font-head)">✅ Estrategias de Mitigación — "USAVE·A"</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Letra</th><th>Estrategia</th><th>Descripción</th></tr>
+        <tr><td class="c-green">U</td><td>Uso de hardware token</td><td>Dispositivos físicos que generan códigos — no interceptables</td></tr>
+        <tr><td class="c-green">S</td><td>Supervisión continua</td><td>IDS/IPS, pruebas de penetración periódicas</td></tr>
+        <tr><td class="c-green">A</td><td>Autenticación multifactor</td><td>Combinar ≥2 factores</td></tr>
+        <tr><td class="c-green">V</td><td>Verificación en varias fases</td><td>IP, geolocalización, comportamiento del usuario</td></tr>
+        <tr><td class="c-green">E</td><td>Educación de usuarios</td><td>Capacitación sobre phishing y manejo de credenciales</td></tr>
+        <tr><td class="c-green">A</td><td>Actualizaciones periódicas</td><td>Parches de seguridad, nuevas tecnologías, compliance</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 5. CERTIFICADOS DIGITALES ══════════════ -->
+<div id="s5"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-green">🏅</div>
+  <div>
+    <h2>Certificados Digitales</h2>
+    <span class="sub">PKI · X.509 · Impacto en seguridad</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-green" style="color:#ecfdf5">
+    🔑 Impacto: <span style="font-family:var(--font-mono);margin-left:6px">"PAFC" = Privacidad, Autenticidad, Fraude-prevención, Cumplimiento</span>
+  </div>
+  <div class="card-body">
+    <div class="grid-2">
+      <div>
+        <h4 class="c-green" style="margin-bottom:12px;font-family:var(--font-head)">¿Qué es un Certificado Digital?</h4>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:12px">Documento electrónico basado en criptografía que verifica la identidad de personas u organizaciones en Internet. Emitido por una <strong style="color:var(--text)">Autoridad de Certificación (CA)</strong>.</p>
+        <p style="font-size:.85rem;color:var(--muted)">Permite: <span class="c-cyan">cifrar datos</span>, <span class="c-cyan">firmar documentos</span>, <span class="c-cyan">verificar identidades</span>. Tiene fecha de caducidad y debe renovarse.</p>
+      </div>
+      <div>
+        <h4 class="c-green" style="margin-bottom:12px;font-family:var(--font-head)">Impacto PAFC</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">P</div>
+          <div class="letter-content"><strong>PRIVACIDAD</strong><small> Solo quien tiene la clave privada descifra los datos</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">A</div>
+          <div class="letter-content"><strong>AUTENTICIDAD</strong><small> Verifica quién realmente está del otro lado</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">F</div>
+          <div class="letter-content"><strong>FRAUDE</strong><small> Sites falsos no tienen certificado válido → detección inmediata</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-green" style="color:#022c22">C</div>
+          <div class="letter-content"><strong>CUMPLIMIENTO</strong><small> Leyes como GDPR, SOX, PCI-DSS, Ley 81 (Panamá)</small></div>
+        </div>
+      </div>
+    </div>
+    <div class="tip"><b>💡 CMS (Card Management System):</b> Sistema que gestiona la creación, asignación, préstamo temporal, blacklisting y desbloqueo de tarjetas inteligentes con certificados.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 6. TIPOS DE AMENAZAS ══════════════ -->
+<div id="s6"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-orange">⚠️</div>
+  <div>
+    <h2>Tipos de Amenazas</h2>
+    <span class="sub">Las 4 categorías · Vulnerabilidades · Ataques</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-orange" style="color:#fff7ed">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">"IEID" = Intencionadas, Errores, Industriales, Desastres</span>
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-orange">IEID</div>
+        <div class="acronym-phrase" style="color:#fed7aa">"Intrusos, Errores,<br>Industria, Desastres"</div>
+        <div class="acronym-hint">4 fuentes de todo lo que puede salir mal</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">I</div>
+          <div class="letter-content">
+            <strong>INTENCIONADAS (Hackers, cibercrimen)</strong>
+            <small>Suplantación, phishing, DDoS, robo, malware, ingeniería social, ransomware</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">E</div>
+          <div class="letter-content">
+            <strong>ERRORES NO INTENCIONADOS</strong>
+            <small>Error de usuario/admin, configuración incorrecta, fuga accidental, pérdida de equipo</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">I</div>
+          <div class="letter-content">
+            <strong>INDUSTRIALES (Fallos técnicos)</strong>
+            <small>Fuego, daño por agua, corte eléctrico, avería hardware, fallo de comunicaciones</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-orange" style="color:#431407">D</div>
+          <div class="letter-content">
+            <strong>DESASTRES NATURALES</strong>
+            <small>Terremotos, inundaciones, huracanes, erupciones volcánicas</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head" style="background:#1c1406;border-color:#92400e;color:#fde68a">
+    ⚡ Tipos de Vulnerabilidades — "Buffer, Carrera, Formato, XSS, SQL"
+  </div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table>
+        <tr><th>Vulnerabilidad</th><th>¿Qué hace el atacante?</th><th>Mnemónico</th></tr>
+        <tr>
+          <td class="c-red">Buffer Overflow</td>
+          <td>Desborda la memoria para modificar zonas contiguas y ejecutar código</td>
+          <td>🪣 "El cubo se desborda y moja lo de al lado"</td>
+        </tr>
+        <tr>
+          <td class="c-yellow">Race Condition</td>
+          <td>Dos procesos acceden al mismo recurso simultáneamente → valores inesperados</td>
+          <td>🏁 "Dos corredores llegan al mismo tiempo"</td>
+        </tr>
+        <tr>
+          <td class="c-orange">Format String</td>
+          <td>Entradas no validadas permiten ejecutar comandos o robar datos</td>
+          <td>📝 "El formulario acepta cualquier cosa"</td>
+        </tr>
+        <tr>
+          <td class="c-purple">XSS (Cross-Site Scripting)</td>
+          <td>Inyectan scripts en páginas legítimas para robar credenciales</td>
+          <td>🎭 "Te hacen escribir en la web del atacante"</td>
+        </tr>
+        <tr>
+          <td class="c-cyan">SQL Injection</td>
+          <td>Código SQL malicioso en formularios para extraer/corromper la BD</td>
+          <td>💉 "Inyectan veneno en la base de datos"</td>
+        </tr>
+      </table>
+    </div>
+    <div class="tip"><b>💡 Defensa de memoria:</b> DEP (Prevención de Ejecución de Datos) marca zonas de memoria no ejecutables. ASLR randomiza la ubicación del código en memoria para que el atacante no pueda predecirla.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 7. TIPOS DE ATAQUES ══════════════ -->
+<div id="s7"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-red">💥</div>
+  <div>
+    <h2>Tipos y Categorías de Ataques</h2>
+    <span class="sub">Ingeniería Social · Redes · Contraseñas</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-red">
+    🔑 Ingeniería Social: <span style="font-family:var(--font-mono);margin-left:6px">"PSVS" = Phishing, Spear, Vishing, Scareware</span>
+  </div>
+  <div class="card-body">
+    <div class="grid-2">
+      <div>
+        <h4 class="c-red" style="margin-bottom:12px;font-family:var(--font-head)">🎣 PSVS — Ingeniería Social</h4>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">P</div>
+          <div class="letter-content"><strong>PHISHING</strong><small> Red masiva: correos falsos suplantando empresas/bancos</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">S</div>
+          <div class="letter-content"><strong>SPEAR PHISHING</strong><small> Arpón dirigido: ataque personalizado con info del objetivo</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">V</div>
+          <div class="letter-content"><strong>VISHING</strong><small> Llamada telefónica falsa (Voice + Phishing)</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">S</div>
+          <div class="letter-content"><strong>SCAREWARE</strong><small> Pop-ups falsos que alarman al usuario para instalar malware</small></div>
+        </div>
+        <div class="story" style="margin-top:12px">🎣 <strong>Imagen:</strong> "Phishing lanza una red al mar, Spear Phishing apunta a un pez específico con arpón, Vishing es el anzuelo por teléfono, Scareware es el cebo trampa."</div>
+      </div>
+      <div>
+        <h4 class="c-cyan" style="margin-bottom:12px;font-family:var(--font-head)">🌐 MDSZI — Ataques a Redes</h4>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">M</div>
+          <div class="letter-content"><strong>MAN-IN-THE-MIDDLE</strong><small> Intercepta comunicación entre dos partes</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">D</div>
+          <div class="letter-content"><strong>DDoS</strong><small> Denegación de servicio — satura con tráfico falso</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">S</div>
+          <div class="letter-content"><strong>SNIFFING</strong><small> Captura paquetes de red — lee tráfico no cifrado</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">Z</div>
+          <div class="letter-content"><strong>ZERO-DAY</strong><small> Explota falla desconocida ("0 días" para parchear)</small></div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge" style="background:#164e63">I</div>
+          <div class="letter-content"><strong>SQL INJECTION</strong><small> Inyecta código malicioso en bases de datos</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" style="margin:20px 0"></div>
+
+    <h4 class="c-purple" style="margin-bottom:12px;font-family:var(--font-head)">⚔️ Tipos de Atacantes — "Black, White, Grey"</h4>
+    <div class="grid-3">
+      <div class="mini-card" style="border-color:#450a0a">
+        <h4 class="c-red">⛔ Black Hat</h4>
+        <p>Objetivo: lucrarse o dañar. Actividades ilegales. El "villano" clásico.</p>
+      </div>
+      <div class="mini-card" style="border-color:#064e3b">
+        <h4 class="c-green">✅ White Hat</h4>
+        <p>Busca vulnerabilidades para reportarlas. Trabaja freelance o para empresas. Ethical hacker.</p>
+      </div>
+      <div class="mini-card" style="border-color:#374151">
+        <h4 style="color:#9ca3af">⚪ Grey Hat</h4>
+        <p>Busca mejorar la seguridad pero con métodos cuestionables. Legalidad ambigua.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 8. MALWARE ══════════════ -->
+<div id="s8"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-red">🦠</div>
+  <div>
+    <h2>Tipos de Malware</h2>
+    <span class="sub">5 villanos del mundo digital</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head bg-red">
+    🔑 Acrónimo: <span style="font-family:var(--font-mono);margin-left:6px">"VTGSR" = Virus, Troyano, Gusano, Spyware, Ransomware</span>
+  </div>
+  <div class="card-body">
+    <div class="acronym-grid">
+      <div class="acronym-left">
+        <div class="acronym-word c-red">VTGSR</div>
+        <div class="acronym-phrase" style="color:#fca5a5">"Virus Teje Gusanos<br>Silenciosos y Rehenes"</div>
+        <div class="acronym-hint">Una historia de infección en cadena</div>
+      </div>
+      <div class="acronym-right">
+        <div class="letter-row">
+          <div class="letter-badge bg-red">V</div>
+          <div class="letter-content">
+            <strong>VIRUS</strong>
+            <small>Infecta archivos ejecutables y sectores de arranque. Necesita acción del usuario para propagarse.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">T</div>
+          <div class="letter-content">
+            <strong>TROYANO</strong>
+            <small>Se disfraza de software legítimo. Crea puertas traseras. Descarga actualizaciones maliciosas.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">G</div>
+          <div class="letter-content">
+            <strong>GUSANO (Worm)</strong>
+            <small>Se autopropaga a alta velocidad sin intervención del usuario. Colapsa redes.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">S</div>
+          <div class="letter-content">
+            <strong>SPYWARE</strong>
+            <small>Espía silenciosamente: keyloggers, capturas de pantalla, robo de credenciales bancarias.</small>
+          </div>
+        </div>
+        <div class="letter-row">
+          <div class="letter-badge bg-red">R</div>
+          <div class="letter-content">
+            <strong>RANSOMWARE</strong>
+            <small>Cifra todos tus archivos y exige rescate en criptomonedas para liberar el acceso.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="story">
+      🎬 <strong>Película:</strong> "Un <strong>V</strong>irus entra en un USB. Deja un <strong>T</strong>royano que abre la puerta. El <strong>G</strong>usano se copia a toda la red. El <strong>S</strong>pyware espía cada tecla. El <strong>R</strong>ansomware secuestra todo y pide rescate."
+    </div>
+    <div class="danger-tip"><b>🔴 Defensa:</b> Sandboxing (prueba código en ambiente aislado), especialmente contra Zero-Day. Herramientas: IDS (detecta), IPS (previene + bloquea), SIEM (centraliza logs), SOC (centro de operaciones).</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 9. GLOSARIO CLAVE ══════════════ -->
+<div id="s9"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-cyan">📖</div>
+  <div>
+    <h2>Glosario de Términos Clave</h2>
+    <span class="sub">30 términos esenciales · Con imagen mental</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head" style="background:#0c1a2e;border-color:#1e40af;color:#93c5fd">
+    📚 Términos organizados por categoría con imagen mnemotécnica
+  </div>
+  <div class="card-body">
+    <h4 class="c-cyan" style="margin-bottom:12px;font-family:var(--font-head)">🏗️ Herramientas de Defensa</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Término</th><th>¿Qué es?</th><th>🧠 Imagen Mental</th></tr>
+        <tr><td class="c-green">IDS</td><td>Sistema que monitorea y <u>alerta</u> sobre tráfico sospechoso</td><td>👁️ "El vigilante que avisa pero no actúa"</td></tr>
+        <tr><td class="c-green">IPS</td><td>Como el IDS pero además <u>bloquea</u> automáticamente</td><td>🛡️ "El guardia que avisa Y detiene"</td></tr>
+        <tr><td class="c-green">SIEM</td><td>Centraliza logs, detecta amenazas en tiempo real con IA</td><td>🎛️ "La torre de control del aeropuerto"</td></tr>
+        <tr><td class="c-green">SOC</td><td>Centro de operaciones de seguridad — monitorea todo el SI</td><td>🏢 "El cuartel general de ciberseguridad"</td></tr>
+        <tr><td class="c-green">DLP</td><td>Previene filtraciones de datos sensibles</td><td>🚧 "El portero que no deja salir secretos"</td></tr>
+        <tr><td class="c-green">DMZ</td><td>Red aislada donde están los servidores públicos (web/correo)</td><td>🏝️ "La isla entre Internet y la red interna"</td></tr>
+        <tr><td class="c-green">Sandboxing</td><td>Ejecuta código sospechoso en ambiente aislado/seguro</td><td>🏖️ "La caja de arena donde los niños no rompen nada"</td></tr>
+        <tr><td class="c-green">Web Proxy</td><td>Intermediario entre usuario e Internet — filtra tráfico</td><td>🪞 "El espejo que oculta tu identidad"</td></tr>
+      </table>
+    </div>
+
+    <h4 class="c-yellow" style="margin:20px 0 12px;font-family:var(--font-head)">⚡ Conceptos de Ataque</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Término</th><th>¿Qué es?</th><th>🧠 Imagen Mental</th></tr>
+        <tr><td class="c-red">CVE</td><td>Base de datos pública de vulnerabilidades conocidas con ID único</td><td>📋 "El registro civil de los bugs"</td></tr>
+        <tr><td class="c-red">CVSS</td><td>Puntaje 0-10 de gravedad de una vulnerabilidad (Base+Temporal+Ambiental)</td><td>📊 "El termómetro del peligro"</td></tr>
+        <tr><td class="c-red">Zero-Day</td><td>Falla desconocida — 0 días para parchearla antes del ataque</td><td>💣 "La bomba sin seguro"</td></tr>
+        <tr><td class="c-red">Sniffer</td><td>Captura paquetes de red — pone la tarjeta en modo promiscuo</td><td>🐕 "El perro que huele todos los paquetes"</td></tr>
+        <tr><td class="c-red">XSRF/CSRF</td><td>Engaña al usuario autenticado para ejecutar acciones no deseadas</td><td>🪆 "La marioneta que actúa sin saberlo"</td></tr>
+        <tr><td class="c-red">Web Tracking</td><td>Recopila datos del comportamiento online del usuario</td><td>👣 "Las huellas digitales que dejas en la web"</td></tr>
+        <tr><td class="c-red">Brecha de seguridad</td><td>Acceso no autorizado logrado cuando se saltean los mecanismos</td><td>🏚️ "La ventana rota por donde entró el ladrón"</td></tr>
+      </table>
+    </div>
+
+    <h4 class="c-purple" style="margin:20px 0 12px;font-family:var(--font-head)">🔒 Protección de Memoria y Sistema</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Término</th><th>¿Qué es?</th><th>🧠 Imagen Mental</th></tr>
+        <tr><td class="c-purple">DEP</td><td>Marca zonas de memoria como NO ejecutables para impedir inyección de código</td><td>🚫 "Zona prohibida para ejecutar"</td></tr>
+        <tr><td class="c-purple">ASLR</td><td>Randomiza la ubicación del código en memoria — imposible predecir</td><td>🎲 "Los muebles cambian de lugar cada vez"</td></tr>
+        <tr><td class="c-purple">Token</td><td>Dispositivo físico/digital que actúa como credencial de acceso</td><td>🎟️ "El boleto electrónico de entrada"</td></tr>
+        <tr><td class="c-purple">DNS</td><td>Traduce nombres de dominio (google.com) a direcciones IP</td><td>📖 "La guía telefónica de Internet"</td></tr>
+        <tr><td class="c-purple">IPSec</td><td>Protocolo que añade cifrado y autenticación al protocolo IP</td><td>🔐 "El sobre sellado dentro del sobre"</td></tr>
+        <tr><td class="c-purple">Borrado Seguro</td><td>Eliminación permanente e irrecuperable de datos sensibles</td><td>🔥 "Quemar el papel en lugar de tirarlo"</td></tr>
+      </table>
+    </div>
+
+    <h4 class="c-orange" style="margin:20px 0 12px;font-family:var(--font-head)">📋 Normativas y Estándares</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Norma</th><th>¿Qué regula?</th></tr>
+        <tr><td class="c-orange">ISO 27001</td><td>Sistema de Gestión de Seguridad de la Información (SGSI)</td></tr>
+        <tr><td class="c-orange">ISO 27002</td><td>Controles y buenas prácticas de seguridad</td></tr>
+        <tr><td class="c-orange">NIST</td><td>Marco de ciberseguridad del Instituto Nacional de EE.UU.</td></tr>
+        <tr><td class="c-orange">PCI DSS</td><td>Seguridad para tarjetas de pago (bancos, comercios)</td></tr>
+        <tr><td class="c-orange">GDPR</td><td>Protección de datos personales en la Unión Europea</td></tr>
+        <tr><td class="c-orange">SOX</td><td>Transparencia financiera y auditoría (Sarbanes-Oxley)</td></tr>
+        <tr><td class="c-orange">Ley 81 Panamá</td><td>Protección de datos personales en Panamá</td></tr>
+      </table>
+    </div>
+    <div class="warn"><b>⚠️ Truco normativas:</b> "NIPGSL" — NIST, ISO, PCI, GDPR, SOX, Ley81</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 10. PALACIO DE MEMORIA ══════════════ -->
+<div id="s10"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-purple">🏰</div>
+  <div>
+    <h2>Palacio de la Memoria</h2>
+    <span class="sub">Recorre las salas para recordar todo</span>
+  </div>
+</div>
+
+<div class="palace">
+  <div class="room">
+    <div class="room-num">🚪</div>
+    <div class="room-content">
+      <h4>ENTRADA: La Tríada + Autenticación (CIDNA)</h4>
+      <p>Llegas a una fortaleza digital. El guardia (Autenticación) te pide identificación. Dentro hay 4 habitaciones: la caja fuerte sellada (Confidencialidad), los registros sin tachaduras (Integridad), la sala siempre iluminada 24/7 (Disponibilidad), y el escribano que certifica todo (No Repudio).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">1</div>
+    <div class="room-content">
+      <h4>SALA 1: Factores de Autenticación (STE)</h4>
+      <p>3 estatuas te bloquean el paso: La primera tiene la cabeza llena de conocimiento y te pregunta la contraseña (Sabes). La segunda sostiene un teléfono dorado (Tienes). La tercera te pone un escáner en la cara (Eres). Solo con las 3 puedes pasar = 3FA.</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">2</div>
+    <div class="room-content">
+      <h4>SALA 2: Los 7 Métodos (COPLTR·B)</h4>
+      <p>7 puertas de colores: Azul (Contraseña), Plateada (OTP con calculadora), Dorada (PKI/Token USB con certificado), Negra blindada (Llave Confidencial Defensa), Verde (Tarjeta inteligente), Esmeralda (Biometría con lector de huellas), Invisible (RFID te detecta desde la entrada).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">3</div>
+    <div class="room-content">
+      <h4>SALA 3: Las 4 Amenazas (IEID)</h4>
+      <p>4 zonas de alerta: Zona Roja con criminales con capucha (Intencionadas), Zona Amarilla con empleados distraídos tirando papeles (Errores), Zona Naranja con llamas y tuberías rotas (Industrial), Zona Gris con terremotos y tornados (Desastres Naturales).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">4</div>
+    <div class="room-content">
+      <h4>SALA 4: Los 5 Malwares (VTGSR)</h4>
+      <p>5 monstruos en vitrinas: El Virus rojo que contagia tocando (archivos), el Troyano disfrazado de regalo (puerta trasera), el Gusano que se duplica infinito (se propaga solo), el Spyware transparente que te observa (espía silencioso), el Ransomware con una enorme cadena y candado (cifra y pide rescate).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">5</div>
+    <div class="room-content">
+      <h4>SALA 5: Ingeniería Social (PSVS)</h4>
+      <p>Una sala llena de trampas de pesca: Una red enorme en el techo (Phishing masivo), un arpón con nombre en la punta (Spear Phishing personalizado), un teléfono rojo que suena (Vishing), una pantalla con alarma falsa y texto "¡TU PC ESTÁ INFECTADO!" (Scareware).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">6</div>
+    <div class="room-content">
+      <h4>SALA 6: Ataques a Redes (MDSZI)</h4>
+      <p>5 pantallas con ataques en vivo: Pantalla M → espía entre dos personas (MitM), Pantalla D → miles de bots atacando un servidor (DDoS), Pantalla S → un perro olfateando paquetes (Sniffing), Pantalla Z → bomba sin seguro (Zero-Day), Pantalla I → jeringa inyectando código en base de datos (SQL Injection).</p>
+    </div>
+  </div>
+  <div class="room">
+    <div class="room-num">7</div>
+    <div class="room-content">
+      <h4>SALA 7: Herramientas de Defensa</h4>
+      <p>El cuartel general: IDS (guardia con binoculares que avisa), IPS (guardia con rifle que bloquea), SIEM (torre de control con pantallas de todo el sistema), SOC (sala de crisis con analistas), DMZ (isla entre dos muros), Sandbox (caja de arena donde probar malware sin peligro).</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ 11. FLASH CARDS ══════════════ -->
+<div id="s11"></div>
+<div class="chapter">
+  <div class="chapter-icon icon-green">⚡</div>
+  <div>
+    <h2>Flash Cards de Repaso</h2>
+    <span class="sub">Prueba tu memoria · Responde antes de leer</span>
+  </div>
+</div>
+
+<div class="flash-grid">
+  <div class="flash">
+    <span class="flash-badge bg-blue c-cyan" style="font-size:.6rem">TRÍADA</span>
+    <div class="flash-q">¿Qué es la Confidencialidad?</div>
+    <div class="flash-a">Solo personal autorizado accede a la info. Caja sellada 🔒</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-blue c-cyan" style="font-size:.6rem">TRÍADA</span>
+    <div class="flash-q">¿Diferencia entre IDS e IPS?</div>
+    <div class="flash-a">IDS solo detecta y alerta. IPS detecta Y bloquea automáticamente.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿Qué es OTP?</div>
+    <div class="flash-a">One-Time Password. Contraseña válida por tiempo limitado y un solo uso. Calculadora especial.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿3 factores de autenticación?</div>
+    <div class="flash-a">STE: Sabes (contraseña), Tienes (token/phone), Eres (biometría)</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">ATAQUE</span>
+    <div class="flash-q">¿Diferencia Phishing vs Spear Phishing?</div>
+    <div class="flash-a">Phishing = red masiva. Spear = arpón personalizado con info del objetivo específico.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">MALWARE</span>
+    <div class="flash-q">¿Qué hace el Ransomware?</div>
+    <div class="flash-a">Cifra todos tus archivos y exige rescate (generalmente en crypto) para darte la clave.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-orange c-orange" style="font-size:.6rem">AMENAZA</span>
+    <div class="flash-q">¿Qué es un Zero-Day?</div>
+    <div class="flash-a">Vulnerabilidad desconocida por el fabricante. 0 días para parchearla antes del ataque. 💣</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-cyan c-cyan" style="font-size:.6rem">GLOSARIO</span>
+    <div class="flash-q">¿Qué es la DMZ?</div>
+    <div class="flash-a">Red aislada donde están los servidores públicos (web, correo). Isla entre Internet y la red interna.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-green c-green" style="font-size:.6rem">DEFENSA</span>
+    <div class="flash-q">¿Qué hace el Sandboxing?</div>
+    <div class="flash-a">Ejecuta código sospechoso en ambiente aislado para analizarlo sin riesgo. Ideal contra Zero-Day.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿Qué es el SSO?</div>
+    <div class="flash-a">Single Sign-On: autenticarse una sola vez para acceder a todas las aplicaciones de la empresa.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">VULNER.</span>
+    <div class="flash-q">¿Qué es un Buffer Overflow?</div>
+    <div class="flash-a">La app no controla datos en el buffer — al desbordarse, modifica zonas de memoria contiguas. 🪣</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-yellow c-yellow" style="font-size:.6rem">NORMAS</span>
+    <div class="flash-q">¿Qué regula la Ley 81 en Panamá?</div>
+    <div class="flash-a">Protección de datos personales de los ciudadanos panameños. Equivalente al GDPR europeo.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-cyan c-cyan" style="font-size:.6rem">GLOSARIO</span>
+    <div class="flash-q">¿Diferencia CVE vs CVSS?</div>
+    <div class="flash-a">CVE = base de datos de vulnerabilidades conocidas. CVSS = puntaje 0-10 de gravedad de cada CVE.</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-red c-red" style="font-size:.6rem">ATAQUE</span>
+    <div class="flash-q">¿Qué hace el Sniffing?</div>
+    <div class="flash-a">Captura paquetes de red en modo promiscuo. Lee tráfico no cifrado. El "perro" de la red. 🐕</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-purple c-purple" style="font-size:.6rem">SISTEMA</span>
+    <div class="flash-q">¿Qué hace el ASLR?</div>
+    <div class="flash-a">Randomiza la ubicación del código en memoria cada vez. Dificulta ataques de buffer overflow. 🎲</div>
+  </div>
+  <div class="flash">
+    <span class="flash-badge bg-orange c-orange" style="font-size:.6rem">AUTH</span>
+    <div class="flash-q">¿4 vulnerabilidades del SFA?</div>
+    <div class="flash-a">CFAR: Contraseñas débiles, Fishing (phishing), Atacante-Medio (MitM), Reutilización de contraseñas</div>
+  </div>
+</div>
+
+
+<!-- ══════════════ RESUMEN FINAL ══════════════ -->
+<div class="divider"></div>
+
+<div class="card" style="border-color:#2563eb40">
+  <div class="card-head" style="background:linear-gradient(135deg,#1e3a8a,#4c1d95);color:#e0f2fe;font-family:var(--font-head);font-size:1.1rem">
+    🧠 Tabla Maestra de Acrónimos
+  </div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table>
+        <tr><th>Acrónimo</th><th>Significado</th><th>Frase mnemónica</th></tr>
+        <tr><td class="c-blue">CIDNA</td><td>Confidencialidad, Integridad, Disponibilidad, No repudio, Autenticación</td><td>"Como Ingenieros Debemos No Abandonar"</td></tr>
+        <tr><td class="c-cyan">STE</td><td>Sabes, Tienes, Eres (3 factores auth)</td><td>"¿STE seguro de quién eres?"</td></tr>
+        <tr><td class="c-purple">COPLTR·B</td><td>7 Métodos de Autenticación</td><td>"Con OTP, Passwords Listos Traen Biometría"</td></tr>
+        <tr><td class="c-yellow">CFAR</td><td>4 vulnerabilidades del SFA</td><td>"Las CFAR de los hackers"</td></tr>
+        <tr><td class="c-green">USAVEA</td><td>6 Estrategias de mitigación</td><td>"USA VEA la seguridad"</td></tr>
+        <tr><td class="c-green">PAFC</td><td>Impacto certificados digitales</td><td>"El PAFC de los certificados"</td></tr>
+        <tr><td class="c-orange">IEID</td><td>4 tipos de amenazas</td><td>"IEID de dónde viene el peligro"</td></tr>
+        <tr><td class="c-red">VTGSR</td><td>5 tipos de malware</td><td>"Virus Teje Gusanos Silenciosos y Rehenes"</td></tr>
+        <tr><td class="c-red">PSVS</td><td>4 técnicas de ingeniería social</td><td>"Pescando Sin Ver al Sospechoso"</td></tr>
+        <tr><td class="c-cyan">MDSZI</td><td>5 ataques a redes</td><td>"Misiles Destruyen Sistemas Zona-día Infectando"</td></tr>
+        <tr><td class="c-orange">NIPGSL</td><td>6 normativas de seguridad</td><td>"NIPGSL: Normas Importantes Para la Gestión Segura Legal"</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <strong>🧠 Guía Mnemotécnica · Seguridad Informática</strong><br><br>
+  Basada en: Marmolejo et al. (XIKUA 2023) · Evidian IAM · Conceptos Generales Ing. Márquez · Glosario de Ciberseguridad<br><br>
+  <span style="color:#374151">Combina acrónimos + palacio de memoria + flash cards para máxima retención. Repasa cada semana.</span>
+</footer>
+
+</div><!-- end wrap -->
+
+<script>
+// Progress bar on scroll
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (scrolled / total * 100) + '%';
+});
+</script>
 </body>
 </html>
