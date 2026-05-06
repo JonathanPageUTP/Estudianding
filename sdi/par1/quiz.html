@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Seguridad Informática</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #1a1d26;
+    --border: #252932;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 48px 0 40px;
+  }
+  header .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 14px;
+    font-family: var(--mono);
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .progress-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* QUESTION CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 20px;
+    animation: cardIn 0.3s ease;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .q-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .q-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+  }
+  .q-text {
+    font-size: clamp(15px, 3vw, 18px);
+    font-weight: 600;
+    line-height: 1.5;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+
+  /* OPTIONS */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    text-align: left;
+    width: 100%;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .opt:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(0,229,255,0.05);
+    transform: translateX(3px);
+  }
+  .opt:disabled { cursor: default; transform: none; }
+  .opt.correct {
+    border-color: var(--success);
+    background: rgba(34,197,94,0.1);
+  }
+  .opt.wrong {
+    border-color: var(--danger);
+    background: rgba(239,68,68,0.1);
+  }
+  .opt-letter {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    transition: background 0.15s, color 0.15s;
+  }
+  .opt.correct .opt-letter { background: var(--success); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--danger); color: #fff; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 20px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px solid;
+    font-size: 14px;
+    line-height: 1.6;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .feedback.show { display: block; }
+  .feedback.correct {
+    border-color: rgba(34,197,94,0.3);
+    background: rgba(34,197,94,0.07);
+    color: #86efac;
+  }
+  .feedback.wrong {
+    border-color: rgba(239,68,68,0.3);
+    background: rgba(239,68,68,0.07);
+    color: #fca5a5;
+  }
+  .feedback strong {
+    display: block;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+  }
+  .feedback.correct strong { color: var(--success); }
+  .feedback.wrong strong { color: var(--danger); }
+  .feedback .explanation {
+    color: var(--text);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+  }
+
+  /* NAV BUTTON */
+  .nav-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+  }
+  .btn-primary:hover { background: #00c8e0; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: default; transform: none; }
+  .btn-ghost {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* RESULTS SCREEN */
+  #results {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  #results.show { display: block; }
+  .result-score {
+    font-family: var(--mono);
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 20px 0;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .result-msg {
+    font-size: 18px;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .result-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+  .breakdown-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .breakdown-val {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .breakdown-val.c { color: var(--success); }
+  .breakdown-val.w { color: var(--danger); }
+  .breakdown-val.p { color: var(--accent); }
+  .breakdown-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* MISSED QUESTIONS REVIEW */
+  .missed-title {
+    font-size: 14px;
+    font-family: var(--mono);
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 40px 0 20px;
+    text-align: left;
+  }
+  .missed-item {
+    background: var(--surface);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .missed-q { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #fff; }
+  .missed-correct { font-size: 13px; color: var(--success); margin-bottom: 6px; }
+  .missed-explain { font-size: 12px; color: var(--muted); line-height: 1.5; font-family: var(--mono); }
+
+  /* START SCREEN */
+  #start {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .start-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 480px;
+    margin: 32px auto;
+  }
+  .start-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 13px;
+  }
+  .start-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .start-card .title { font-weight: 700; margin-bottom: 4px; }
+  .start-card .desc { color: var(--muted); font-size: 12px; }
+
+  #quiz-section { display: none; }
+  #quiz-section.show { display: block; }
+
+  /* SHUFFLE INDICATOR */
+  .shuffle-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--warn);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .result-breakdown { grid-template-columns: repeat(3, 1fr); }
+    .start-info { grid-template-columns: 1fr; }
+    .card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="label">Unidad I · Seguridad Informática</div>
+    <h1>Quiz Master</h1>
+    <p>150 preguntas · Conceptos, amenazas, autenticación y más</p>
+  </header>
+
+  <!-- START SCREEN -->
+  <div id="start">
+    <div class="start-info">
+      <div class="start-card">
+        <div class="icon">📚</div>
+        <div class="title">150 Preguntas</div>
+        <div class="desc">Basadas en todos los materiales del curso</div>
+      </div>
+      <div class="start-card">
+        <div class="icon">🔀</div>
+        <div class="title">Aleatorio</div>
+        <div class="desc">Preguntas y opciones se mezclan cada vez</div>
+      </div>
+      <div class="start-card">
+        <div class="icon">🧠</div>
+        <div class="title">Aprende al fallar</div>
+        <div class="desc">Explicación detallada cuando te equivocas</div>
+      </div>
+      <div class="start-card">
+        <div class="icon">📊</div>
+        <div class="title">Resultados</div>
+        <div class="desc">Repaso de todo lo que fallaste al final</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()">▶ Comenzar Quiz</button>
+    <div class="shuffle-badge">⚡ Las preguntas se ordenan aleatoriamente</div>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div id="quiz-section">
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-val" id="s-current">1</div><div class="stat-label">Pregunta</div></div>
+      <div class="stat"><div class="stat-val" id="s-correct" style="color:var(--success)">0</div><div class="stat-label">Correctas</div></div>
+      <div class="stat"><div class="stat-val" id="s-wrong" style="color:var(--danger)">0</div><div class="stat-label">Incorrectas</div></div>
+      <div class="stat"><div class="stat-val" id="s-pct">0%</div><div class="stat-label">Score</div></div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span id="prog-label">Pregunta 1 de 150</span>
+        <span id="prog-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="card" id="q-card">
+      <div class="q-meta">
+        <span class="q-num" id="q-num">01</span>
+        <span class="q-tag" id="q-tag">Conceptos</span>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback">
+        <strong id="fb-title"></strong>
+        <div id="fb-msg"></div>
+        <div class="explanation" id="fb-explain"></div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>
+        Siguiente →
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="label">Quiz completado</div>
+    <div class="result-score" id="r-score">0%</div>
+    <div class="result-msg" id="r-msg"></div>
+    <div class="result-breakdown">
+      <div class="breakdown-item"><div class="breakdown-val c" id="r-correct">0</div><div class="breakdown-label">Correctas</div></div>
+      <div class="breakdown-item"><div class="breakdown-val w" id="r-wrong">0</div><div class="breakdown-label">Incorrectas</div></div>
+      <div class="breakdown-item"><div class="breakdown-val p" id="r-total">150</div><div class="breakdown-label">Total</div></div>
+    </div>
+    <button class="btn btn-primary" onclick="restartQuiz()" style="margin:0 auto 16px; display:flex;">🔄 Reintentar</button>
+    <div id="missed-section"></div>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  // ═══ CONCEPTOS GENERALES ═══
+  {tag:"Conceptos", q:"¿Qué es la Seguridad de la Información?", opts:["Proteger únicamente los archivos digitales de una empresa","Proteger activos de información sin importar su forma o estado, usando metodologías, normas y técnicas apropiadas","Garantizar que el hardware no falle en producción","Proteger solo la red interna de una organización"], ans:1, exp:"La Seguridad de la Información protege los activos sin importar si son físicos o digitales, valiéndose de metodologías, normas, técnicas, herramientas, estructuras organizacionales y gestión de medidas de seguridad apropiadas."},
+  {tag:"Conceptos", q:"¿Cuál es la definición de Seguridad Informática?", opts:["Proteger solo contraseñas y usuarios","Proteger sistemas de información incluyendo hardware, software, redes y datos digitales, enfocándose en integridad, disponibilidad y confidencialidad","Evitar que los empleados usen el internet","Hacer copias de seguridad de los datos"], ans:1, exp:"La Seguridad Informática abarca la protección de sistemas de información, incluyendo hardware, software, redes y datos digitales, con foco en la tríada CIA: Confidencialidad, Integridad y Disponibilidad."},
+  {tag:"Conceptos", q:"¿Qué es la Ciberseguridad?", opts:["Es lo mismo que la seguridad física de edificios","Protección de activos de información a través del tratamiento de amenazas que ponen en riesgo información procesada, almacenada y transportada por sistemas interconectados","Seguridad exclusiva de sistemas Windows","Protección de contraseñas únicamente"], ans:1, exp:"La Ciberseguridad protege activos de información tratando amenazas sobre información que es procesada, almacenada y transportada por sistemas de información que se encuentran interconectados. Difiere de Seguridad Informática en que se enfoca en el entorno interconectado."},
+  {tag:"Conceptos", q:"¿Cuál es la diferencia clave entre Seguridad Informática y Ciberseguridad?", opts:["No hay diferencia, son términos idénticos","La Seguridad Informática abarca hardware y software en general, mientras que la Ciberseguridad se enfoca en sistemas interconectados y amenazas en red","La Ciberseguridad es más barata de implementar","La Seguridad Informática solo aplica a empresas grandes"], ans:1, exp:"La Seguridad Informática protege sistemas (hardware, software, redes, datos), mientras que la Ciberseguridad específicamente aborda el tratamiento de amenazas sobre información procesada en sistemas interconectados."},
+  {tag:"Conceptos", q:"La Seguridad en la Red protege:", opts:["Solo los servidores web","La infraestructura de redes y la información que viaja a través de ellas","Únicamente los archivos PDF y Word","El hardware de los computadores"], ans:1, exp:"La Seguridad en la Red es parte de la Seguridad Informática que protege la infraestructura de redes y la información que viaja a través de ellas, enfrentando amenazas de atacantes, configuraciones incorrectas o interrupciones."},
+  {tag:"Conceptos", q:"¿Cuáles son los elementos de la Seguridad en Red según el material?", opts:["Contraseñas, antivirus, firewall y VPN","Seguridad en diseño de redes, detección de intrusiones, protección del tráfico, seguridad inalámbrica y herramientas de seguridad","Solo firewalls y antivirus","Switches, routers y access points"], ans:1, exp:"Los 5 elementos en la Seguridad de Red son: seguridad en diseño de redes, detección de intrusiones en la red, protección del tráfico de red, seguridad en redes inalámbricas, y herramientas de seguridad en la red."},
+  {tag:"Tipos Seguridad", q:"La Seguridad de Hardware se refiere a:", opts:["Protección de aplicaciones contra ciberataques","Protección propia de dispositivos como teléfonos, computadoras y tablets contra ataques","Medidas para proteger información en internet","Desarrollo de software seguro"], ans:1, exp:"La Seguridad de Hardware se refiere a la protección de los propios dispositivos físicos (teléfonos móviles, computadoras, tablets, dispositivos inteligentes) contra ataques que pueden comprometer su funcionamiento."},
+  {tag:"Tipos Seguridad", q:"¿Qué incluye la Seguridad de Software?", opts:["Protección física de los servidores","Protección de programas y aplicaciones contra ciberataques, incluyendo el desarrollo de software seguro","Solo actualización de antivirus","Configuración de firewalls"], ans:1, exp:"La Seguridad de Software es la protección de programas y aplicaciones contra los ciberataques, e incluye el desarrollo de software seguro como parte fundamental."},
+  {tag:"Tipos Seguridad", q:"¿Qué herramientas incluye la Seguridad de Red?", opts:["Solo contraseñas fuertes","Antivirus, firewalls, VPN y sistemas de prevención de intrusiones (IPS)","Únicamente backups y copias de seguridad","Solo cifrado de datos"], ans:1, exp:"Para la Seguridad de Red se dispone de antivirus, firewalls, redes de acceso privadas (VPN) y sistemas de prevención de intrusiones (IPS) como herramientas principales de protección."},
+  {tag:"Tipos Seguridad", q:"La seguridad física en términos informáticos se asocia a:", opts:["Protección de contraseñas y usuarios","Protección del sistema ante amenazas como inundaciones, incendios y robos físicos","Mecanismos de cifrado de datos","Control de acceso lógico a sistemas"], ans:1, exp:"La seguridad física en informática se asocia a la protección física del sistema ante amenazas del mundo físico como inundaciones, incendios, robos, terremotos, etc."},
+  {tag:"Tipos Seguridad", q:"La seguridad lógica protege:", opts:["Los edificios y centros de datos","La parte lógica de un sistema informático: datos, aplicaciones y sistemas operativos","Los cables y el hardware de red","Solo el acceso físico a los servidores"], ans:1, exp:"La seguridad lógica protege la parte lógica del sistema: datos, aplicaciones y sistemas operativos, mediante mecanismos digitales como contraseñas, cifrado y control de acceso."},
+  {tag:"Tipos Seguridad", q:"La seguridad activa se caracteriza por:", opts:["Minimizar consecuencias después de un incidente","Prevenir, detectar y evitar incidentes antes de que se produzcan (medidas preventivas)","Realizar copias de seguridad periódicas","Restaurar sistemas después de un ataque"], ans:1, exp:"La seguridad activa se encarga de prevenir, detectar y evitar cualquier incidente ANTES de que se produzca. Son medidas preventivas, como el uso de contraseñas, cifrado o antivirus."},
+  {tag:"Tipos Seguridad", q:"Un ejemplo de seguridad pasiva es:", opts:["Usar contraseñas complejas","Instalar un antivirus","Las copias de seguridad (backups)","Configurar un firewall"], ans:2, exp:"La seguridad pasiva comprende técnicas para minimizar las consecuencias de un incidente de seguridad (medidas correctivas). Las copias de seguridad son el ejemplo clásico, pues permiten restaurar datos tras un ataque."},
+  // ═══ SERVICIOS DE SEGURIDAD ═══
+  {tag:"Servicios CIA", q:"¿Qué es la Confidencialidad como servicio de seguridad?", opts:["Garantizar que los datos no sean modificados","Propiedad que garantiza que la información solo es accesible a personal autorizado","Capacidad de un sistema de estar disponible 24/7","Probar la participación de las partes en una comunicación"], ans:1, exp:"La Confidencialidad es la propiedad de la información por la que se garantiza que solo el personal autorizado puede acceder a dicha información. Es la 'C' del modelo CIA."},
+  {tag:"Servicios CIA", q:"¿Qué garantiza la Integridad en los servicios de seguridad?", opts:["Que la información sea accesible solo a usuarios autorizados","La exactitud de datos transportados o almacenados, asegurando que no ha habido alteración, pérdida o destrucción","Que los sistemas estén siempre disponibles","Que el emisor no pueda negar haber enviado un mensaje"], ans:1, exp:"La Integridad garantiza la exactitud de los datos transportados o almacenados, asegurando que no se ha producido su alteración, pérdida o destrucción, ya sea accidental o intencionada."},
+  {tag:"Servicios CIA", q:"La Disponibilidad como servicio de seguridad se define como:", opts:["Protección contra acceso no autorizado","La capacidad de un servicio, sistema o información de ser accesible y utilizable por usuarios autorizados cuando lo requieran","Verificación de identidad de usuarios","Protección de la integridad de los datos"], ans:1, exp:"La Disponibilidad es la capacidad de un servicio, sistema o información de ser accesible y utilizable por los usuarios o procesos autorizados cuando éstos lo requieran. Es la 'A' del modelo CIA."},
+  {tag:"Servicios CIA", q:"¿Qué es el No Repudio?", opts:["Impedir acceso no autorizado a sistemas","Servicio que permite probar la participación de las partes en una comunicación, de modo que el emisor no puede negar que envió el mensaje","Proceso de verificar la identidad de un usuario","Cifrado de datos en tránsito"], ans:1, exp:"El No Repudio es un servicio que permite probar la participación de las partes en una comunicación. En el No Repudio en origen, el emisor no puede negar que envió el mensaje porque el destinatario tiene pruebas del envío."},
+  {tag:"Servicios CIA", q:"¿Qué es la Autenticación como servicio de seguridad?", opts:["Cifrar datos para que no puedan ser leídos","Proceso de verificar la identidad de un usuario, aplicación o servicio antes de que pueda acceder a un sistema digital","Probar que el emisor no puede negar el envío","Garantizar disponibilidad del servicio"], ans:1, exp:"La Autenticación es el proceso de verificar la identidad de un usuario, aplicación o servicio antes de que pueda acceder a un sistema digital. Es el primer paso del control de acceso."},
+  {tag:"Servicios CIA", q:"Los tres factores de autenticación más comunes son:", opts:["Usuario, contraseña y captcha","Algo que conoces, algo que tengas y algo que seas","IP, MAC y certificado","Usuario, rol y permiso"], ans:1, exp:"Los tres factores de autenticación son: 1) Algo que conoces (contraseña o PIN), 2) Algo que tengas (smartphone o llave USB), 3) Algo que seas (huella digital o reconocimiento facial)."},
+  // ═══ AMENAZAS ═══
+  {tag:"Amenazas", q:"¿Cuál es la definición de Amenaza en seguridad informática?", opts:["Una falla en el código de una aplicación","Circunstancia desfavorable que puede ocurrir y que tiene consecuencias negativas sobre los activos cuando sucede","Un software desactualizado","Un error de configuración intencional"], ans:1, exp:"Una amenaza es una circunstancia desfavorable que puede ocurrir y que cuando sucede tiene consecuencias negativas sobre los activos, provocando indisponibilidad, funcionamiento incorrecto o pérdida de valor. Puede tener causas naturales, accidentales o intencionadas."},
+  {tag:"Amenazas", q:"¿Cuáles son los 4 tipos de amenazas según la clasificación del curso?", opts:["Malware, phishing, ransomware y spyware","Intencionadas, errores y fallos no intencionados, origen industrial y desastre natural","Físicas, lógicas, activas y pasivas","Internas, externas, accidentales y deliberadas"], ans:1, exp:"Los 4 tipos de amenazas son: 1) Intencionadas (ataques deliberados), 2) Errores y fallos no intencionados (errores humanos), 3) Origen industrial (fallos eléctricos, averías), 4) Desastre natural (fuego, agua, terremotos)."},
+  {tag:"Amenazas", q:"¿Cuál de los siguientes NO es un ejemplo de amenaza intencionada?", opts:["Suplantación de identidad de usuario","Denegación de servicio","Error de configuración del administrador","Acceso no autorizado"], ans:2, exp:"El error de configuración del administrador es una amenaza NO intencionada, no es deliberada. Las amenazas intencionadas incluyen suplantación de identidad, abuso de privilegios, difusión de malware, acceso no autorizado, análisis de tráfico, destrucción de información, etc."},
+  {tag:"Amenazas", q:"Las amenazas de origen industrial incluyen:", opts:["Phishing y ransomware","Fuego, daño por agua, avería física o lógica, corte eléctrico y fallo de comunicaciones","Suplantación de identidad y robo","Inundaciones y terremotos naturales"], ans:1, exp:"Las amenazas de origen industrial incluyen: fuego, daño por agua, avería de origen físico o lógico, corte de suministro eléctrico, fallo de servicios de comunicaciones y degradación del soporte de almacenamiento."},
+  {tag:"Amenazas", q:"La ingeniería social como amenaza intencionada se define como:", opts:["Explotar vulnerabilidades de software","Técnicas que usan delincuentes para engañar a usuarios de sistemas TIC y conseguir datos de valor como credenciales","Ataque de fuerza bruta a contraseñas","Interceptación del tráfico de red"], ans:1, exp:"La ingeniería social es un conjunto de técnicas que los delincuentes usan para engañar a usuarios de sistemas TIC para que les faciliten datos de valor (credenciales, información sobre sistemas, etc.)."},
+  {tag:"Amenazas", q:"Los errores y fallos NO intencionados incluyen:", opts:["Ransomware y phishing","Error de usuarios, error del administrador, error de configuración, alteración accidental y fuga de información","Ataques de denegación de servicio","Interceptación de tráfico y sniffing"], ans:1, exp:"Los errores y fallos no intencionados incluyen: error de los usuarios, error del administrador, error de configuración, alteración accidental de la información, fuga de información, errores de mantenimiento de hardware/software, caída del sistema y pérdida de equipo."},
+  // ═══ VULNERABILIDADES ═══
+  {tag:"Vulnerabilidades", q:"¿Qué es una vulnerabilidad en seguridad informática?", opts:["Un ataque ejecutado sobre un sistema","Una debilidad propia de un sistema que permite ser atacado y recibir un daño","Una amenaza proveniente del exterior","Un tipo de malware específico"], ans:1, exp:"Una vulnerabilidad es una debilidad propia de un sistema que permite ser atacado y recibir un daño. Se producen por baja protección, falta de actualizaciones, fallos de programación, etc. También se les conoce como 'agujeros de seguridad'."},
+  {tag:"Vulnerabilidades", q:"El Buffer Overflow (desbordamiento de buffer) ocurre cuando:", opts:["Un atacante roba credenciales por phishing","Las aplicaciones no controlan la cantidad de datos que copian en el buffer, pudiendo modificar zonas de memoria contiguas","Un atacante descifra contraseñas por fuerza bruta","Un virus se propaga por la red automáticamente"], ans:1, exp:"El Buffer Overflow ocurre cuando las aplicaciones no controlan la cantidad de datos que copian en el buffer. Al sobrepasar el tamaño del buffer, pueden modificar zonas de memoria contiguas y afectar los datos que albergan."},
+  {tag:"Vulnerabilidades", q:"¿Qué es la vulnerabilidad de Código de Carrera (Race Condition)?", opts:["Competencia entre hackers para explotar un sistema","Cuando aplicaciones no implementan exclusiones mutuas en recursos compartidos y varios procesos acceden simultáneamente con valores inesperados","Ataque que compite con otros ataques","Vulnerabilidad de contraseñas débiles"], ans:1, exp:"El Código de Carrera ocurre cuando las aplicaciones o sistemas no implementan exclusiones mutuas en el acceso a recursos compartidos. Varios procesos acceden a la misma variable al mismo tiempo, obteniendo valores no esperados."},
+  {tag:"Vulnerabilidades", q:"El Cross Site Scripting (XSS) se basa en que:", opts:["Los atacantes adivinan contraseñas por fuerza bruta","Los atacantes incrustan scripts en páginas web legítimas afectadas, capturando datos como usuario y contraseña","Un atacante intercepta el tráfico entre cliente y servidor","Los atacantes explotan vulnerabilidades en bases de datos"], ans:1, exp:"XSS se basa en que los atacantes incrustan scripts en páginas web legítimas vulnerables. El usuario navega por la web y si introduce datos (como usuario/contraseña), estos van a la web del atacante, no a la legítima."},
+  {tag:"Vulnerabilidades", q:"La vulnerabilidad de Inyección SQL ocurre cuando:", opts:["El atacante intercepta comunicaciones cifradas","No se validan los datos de entrada a formularios que se comunican con bases de datos, permitiendo ejecutar código SQL malicioso","El buffer de la aplicación se desborda","Se accede físicamente al servidor"], ans:1, exp:"La inyección SQL ocurre cuando no se validan los datos de entrada a formularios que se comunican con bases de datos. Esto permite ejecutar código SQL malicioso que puede obtener datos confidenciales o corromper datos."},
+  {tag:"Vulnerabilidades", q:"El Error de Formato en Cadenas ocurre cuando:", opts:["Se cifran incorrectamente los datos en tránsito","Las aplicaciones no validan los datos de entrada del usuario, permitiendo ejecutar comandos que pueden dar acceso a datos confidenciales","Los servidores no tienen actualizaciones instaladas","Los firewalls están mal configurados"], ans:1, exp:"El Error de Formato en Cadenas ocurre cuando las aplicaciones no validan los datos de entrada del usuario. Esto puede permitir ejecutar comandos o instrucciones que permitan al atacante obtener datos confidenciales o dañar el sistema."},
+  // ═══ ATAQUES ═══
+  {tag:"Ataques", q:"¿Cuál es la definición de Ataque informático?", opts:["Un fallo técnico del sistema","Cualquier esfuerzo intencional para robar, exponer, alterar, deshabilitar o destruir datos a través del acceso no autorizado","Una vulnerabilidad descubierta en software","Un error de configuración de red"], ans:1, exp:"Un ataque es cualquier esfuerzo intencional para robar, exponer, alterar, deshabilitar o destruir datos, aplicaciones u otros activos a través del acceso no autorizado a una red, sistema informático o dispositivo digital."},
+  {tag:"Ataques", q:"¿Qué es un atacante (en el contexto de seguridad)?", opts:["Solo un hacker individual","Cualquier entidad —persona, grupo u organización— que intenta vulnerar sistemas, redes, aplicaciones, robar información o interrumpir servicios","Un administrador con privilegios excesivos","Un programa malicioso automatizado"], ans:1, exp:"Un atacante es cualquier entidad —persona, grupo u organización— que intenta vulnerar sistemas, redes y aplicaciones, robar información o interrumpir servicios."},
+  {tag:"Ataques", q:"El Black Hat hacker se caracteriza por:", opts:["Buscar vulnerabilidades con fines defensivos","Tener como objetivo lucrarse o dañar un sistema u organización","Mejorar la seguridad de una infraestructura","Trabajar freelance para empresas de seguridad"], ans:1, exp:"Los Black Hat hackers tienen como objetivo lucrarse o dañar un sistema u organización. Actúan con intenciones maliciosas y generalmente violan la ley."},
+  {tag:"Ataques", q:"El White Hat hacker se caracteriza por:", opts:["Atacar sistemas sin autorización","Buscar vulnerabilidades, suelen trabajar freelance o pertenecen a empresas de seguridad","Operar en zonas legalmente grises","Dañar sistemas con el pretexto de mejorar la seguridad"], ans:1, exp:"Los White Hat hackers tienen como objetivo buscar vulnerabilidades con fines defensivos. Suelen trabajar como freelance o pertenecen a una empresa de seguridad, y actúan dentro del marco legal."},
+  {tag:"Ataques", q:"El Grey Hat hacker:", opts:["Solo tiene objetivos maliciosos","Actúa legalmente siempre","Busca potencialmente mejorar la seguridad de una infraestructura, aunque sus acciones son legalmente cuestionables","Es lo mismo que un White Hat"], ans:2, exp:"Los Grey Hat buscan potencialmente mejorar la seguridad de una infraestructura. Sin embargo, la legalidad de sus acciones es cuestionable, actuando en una zona gris entre los White Hat y Black Hat."},
+  {tag:"Ataques", q:"El Phishing es:", opts:["Un ataque de denegación de servicio","Técnica de ataque donde alguien suplanta a una entidad/servicio mediante correo o mensaje para conseguir credenciales o información financiera","Un tipo de malware que cifra archivos","Ataque que intercepta comunicaciones entre dos partes"], ans:1, exp:"El Phishing es una técnica de ataque en la que alguien suplanta a una entidad o servicio mediante correo electrónico o mensaje instantáneo para conseguir credenciales o información de tarjeta de crédito del usuario."},
+  {tag:"Ataques", q:"¿En qué se diferencia el Spear Phishing del Phishing regular?", opts:["El Spear Phishing ataca servidores, el Phishing ataca usuarios","El Spear Phishing son ataques dirigidos a individuos o empresas con información personalizada","El Phishing es más sofisticado","No hay diferencia entre ellos"], ans:1, exp:"El Spear Phishing son ataques dirigidos específicamente a individuos o empresas utilizando información personalizada sobre la víctima, haciéndolos más convincentes que el Phishing masivo genérico."},
+  {tag:"Ataques", q:"El Vishing se realiza a través de:", opts:["Correo electrónico","Sitios web falsos","Llamada telefónica","Mensajes SMS"], ans:2, exp:"El Vishing es una variante de la ingeniería social que se realiza a través de llamada telefónica, donde el atacante suplanta identidades para obtener información sensible de la víctima."},
+  {tag:"Ataques", q:"Un ataque Man-in-the-Middle consiste en:", opts:["Interceptar la comunicación entre dos partes para espiar o modificar los datos","Saturar un servidor con peticiones falsas","Cifrar archivos y pedir rescate","Adivinar contraseñas probando combinaciones"], ans:0, exp:"En un ataque Man-in-the-Middle (MitM), un atacante intercepta la comunicación entre dos partes para espiar o modificar los datos transmitidos, sin que ninguna de las partes lo sepa."},
+  {tag:"Ataques", q:"Un ataque de Denegación de Servicio (DoS/DDoS) tiene como objetivo:", opts:["Robar credenciales de usuarios","Saturar un sistema con peticiones hasta dejarlo fuera de servicio","Instalar un backdoor en el sistema","Descifrar contraseñas cifradas"], ans:1, exp:"Un ataque DoS/DDoS tiene como objetivo saturar un sistema, aplicación o dispositivo con peticiones hasta dejarlo fuera de servicio, agotando sus recursos e interrumpiendo el servicio legítimo."},
+  {tag:"Ataques", q:"Un ataque de Fuerza Bruta consiste en:", opts:["Engañar a usuarios para que revelen contraseñas","Probar todas las combinaciones posibles de contraseña hasta encontrar la correcta","Interceptar tráfico de red cifrado","Instalar malware en el sistema objetivo"], ans:1, exp:"Un ataque de fuerza bruta es un procedimiento para averiguar una contraseña que consiste en probar todas las combinaciones posibles hasta encontrar la correcta. Suele combinarse con ataque de diccionario."},
+  {tag:"Ataques", q:"¿Por qué los ataques de Fuerza Bruta suelen combinarse con ataques de Diccionario?", opts:["Para hacerlos más baratos de ejecutar","Porque la fuerza bruta puede tardar miles de años, y el diccionario acelera el proceso usando palabras comunes","Porque el diccionario es más seguro","Para evitar ser detectados por antivirus"], ans:1, exp:"Los ataques de fuerza bruta, usando el método de prueba y error, pueden tardar miles de años en encontrar la combinación. Por eso se combina con ataques de diccionario que prueban primero listas de palabras comunes, acelerando el proceso."},
+  {tag:"Ataques", q:"¿Qué es el Ransomware?", opts:["Malware que infecta archivos ejecutables y se propaga automáticamente","Malware que cifra archivos y exige un rescate para su recuperación","Software espía que recopila información","Ataque de denegación de servicio distribuido"], ans:1, exp:"El Ransomware es un tipo de malware que cifra los archivos de la víctima y exige el pago de un rescate (ransom) para proporcionar la clave de descifrado."},
+  {tag:"Ataques", q:"Un Virus informático se caracteriza por:", opts:["Crear puertas traseras en sistemas infectados","Infectar archivos ejecutables o sectores de arranque de dispositivos de almacenamiento","Propagarse muy rápidamente por la red","Cifrar archivos y pedir rescate"], ans:1, exp:"Un virus es malware cuya característica principal es que infecta archivos ejecutables o sectores de arranque de dispositivos de almacenamiento. Se diferencia del gusano en que necesita un archivo huésped para propagarse."},
+  {tag:"Ataques", q:"¿Cuál es la característica principal de los Gusanos informáticos?", opts:["Necesitan un archivo huésped para propagarse","Su alto grado de dispersabilidad, propagándose rápidamente","Cifrar archivos para pedir rescate","Crear puertas traseras en sistemas"], ans:1, exp:"Los gusanos se caracterizan por su alto grado de dispersabilidad, es decir, lo rápidamente que se propagan. A diferencia de los virus, no necesitan infectar un archivo huésped."},
+  {tag:"Ataques", q:"Un Troyano se distingue por:", opts:["Propagarse masivamente sin intervención del usuario","Tener múltiples utilidades, siendo la más común crear una puerta trasera (backdoor) en el equipo infectado","Cifrar archivos del sistema","Infectar sectores de arranque"], ans:1, exp:"Los troyanos son malware diseñado para tener múltiples utilidades. La más común es crear una puerta trasera en el equipo infectado para poder descargar actualizaciones y nuevas funcionalidades, o dar acceso remoto al atacante."},
+  {tag:"Ataques", q:"¿Qué es el Spam?", opts:["Malware que cifra archivos","Cualquier forma de comunicación no solicitada que se envía de forma masiva","Ataque de inyección de código","Un tipo de phishing avanzado"], ans:1, exp:"El Spam es cualquier forma de comunicación no solicitada que se envía de forma masiva, especialmente el correo electrónico masivo no solicitado."},
+  {tag:"Ataques", q:"Un ataque de Sniffing consiste en:", opts:["Cifrar el tráfico de red para protegerlo","Monitorizar la información que circula por la red con el objeto de capturar información","Saturar la red con peticiones falsas","Instalar malware en routers de red"], ans:1, exp:"Un sniffer es un programa que monitoriza la información que circula por la red con el objeto de capturar información. Coloca la tarjeta de red en modo promiscuo para aceptar todos los paquetes, incluso los no dirigidos al dispositivo."},
+  {tag:"Ataques", q:"¿Qué es un ataque Zero-Day?", opts:["Ataque que ocurre exactamente a la medianoche","Vector de ataque que usa una falla de seguridad desconocida o no abordada en software, hardware o firmware","Ataque que dura exactamente cero segundos","Primer ataque de un hacker principiante"], ans:1, exp:"Un exploit Zero-Day usa una falla de seguridad desconocida o no abordada. 'Día cero' se refiere a que el proveedor tiene cero días para arreglarla, porque los atacantes ya pueden usarla antes de que sea conocida."},
+  // ═══ NORMATIVAS ═══
+  {tag:"Normativas", q:"¿Qué norma regula la Gestión de Seguridad de la Información?", opts:["PCI DSS","ISO 27001","SOX","GDPR"], ans:1, exp:"ISO 27001 es el estándar internacional para la Gestión de Seguridad de la Información. Define los requisitos para establecer, implementar, mantener y mejorar un Sistema de Gestión de Seguridad de la Información (SGSI)."},
+  {tag:"Normativas", q:"El PCI DSS es:", opts:["Protección de datos en la Unión Europea","Estándar de Seguridad de Datos para la Industria de Tarjetas de Pago","Ley de transparencia financiera de EE.UU.","Protección de datos personales de Panamá"], ans:1, exp:"PCI DSS (Payment Card Industry Data Security Standard) es el estándar de seguridad para la industria de tarjetas de pago, que regula cómo se deben proteger los datos de tarjetas de crédito y débito."},
+  {tag:"Normativas", q:"¿Qué protege la Ley 81 de Panamá?", opts:["La seguridad de las infraestructuras críticas","Los datos personales de los ciudadanos panameños","La transparencia financiera de empresas","Las transacciones con tarjetas de crédito"], ans:1, exp:"La Ley 81 de Panamá regula la protección de datos personales de los ciudadanos panameños, estableciendo derechos y obligaciones sobre el tratamiento de información personal."},
+  {tag:"Normativas", q:"La norma SOX (Sarbanes-Oxley) regula:", opts:["Protección de datos personales","Seguridad de infraestructuras críticas","Transparencia financiera y auditoría de empresas","Seguridad en comunicaciones de red"], ans:2, exp:"SOX (Sarbanes-Oxley) es una ley para la transparencia financiera y auditoría, que exige mecanismos para aplicar la política de seguridad y demostrar que se aplica efectivamente en las organizaciones."},
+  {tag:"Normativas", q:"El GDPR regula:", opts:["Seguridad de pagos con tarjeta","La protección de datos personales en la Unión Europea","Infraestructura de internet a nivel global","Seguridad de sistemas industriales"], ans:1, exp:"El GDPR (General Data Protection Regulation) regula la protección de datos personales en la Unión Europea, estableciendo derechos de los ciudadanos y obligaciones para las organizaciones que tratan datos."},
+  // ═══ GLOSARIO ═══
+  {tag:"Glosario", q:"¿Qué es un Activo de Información?", opts:["Solo los servidores y computadoras de la empresa","Cualquier información o sistema relacionado con el tratamiento de información que tenga valor para la organización","Solo los datos almacenados en bases de datos","Los programas y aplicaciones de software"], ans:1, exp:"Un activo de información es cualquier información o sistema relacionado con el tratamiento de la misma que tenga valor para la organización. Incluye procesos de negocio, datos, aplicaciones, equipos, personal, soportes de información, redes e instalaciones."},
+  {tag:"Glosario", q:"¿Qué es el Análisis de Riesgos?", opts:["Eliminar todas las vulnerabilidades del sistema","Proceso que comprende identificación de activos, sus vulnerabilidades y amenazas, probabilidad e impacto para determinar controles adecuados","Instalar software de seguridad en todos los equipos","Auditoría anual de contraseñas"], ans:1, exp:"El Análisis de Riesgos es un proceso que comprende la identificación de activos de información, sus vulnerabilidades y amenazas, así como la probabilidad de ocurrencia y el impacto, a fin de determinar los controles adecuados para tratar el riesgo."},
+  {tag:"Glosario", q:"¿Qué es una Brecha de Seguridad?", opts:["Un fallo de hardware en el servidor","Incidente que permite acceso no autorizado a datos, aplicaciones, redes o dispositivos","Una vulnerabilidad de software conocida","Un ataque de fuerza bruta fallido"], ans:1, exp:"Una brecha de seguridad es un incidente que permite el acceso no autorizado a datos informáticos, aplicaciones, redes o dispositivos. Normalmente se produce cuando un intruso logra sortear los mecanismos de seguridad."},
+  {tag:"Glosario", q:"El Borrado Seguro es importante porque:", opts:["Libera espacio en disco más rápidamente","Aunque se borre un archivo, la información puede recuperarse por personas con conocimientos en ciberseguridad, por lo que el borrado seguro asegura eliminación permanente","Solo aplica a discos duros, no a USBs","Es un requisito legal en todos los países"], ans:1, exp:"El borrado seguro asegura la eliminación permanente y segura de la información sensible. Aunque se borre un archivo o carpeta, la información aún puede ser recuperada por personas con conocimientos en ciberseguridad."},
+  {tag:"Glosario", q:"¿Qué significa CVE en ciberseguridad?", opts:["Código de Vulnerabilidad Estándar","Common Vulnerabilities and Exposures — vulnerabilidades y exposiciones comunes, un sistema de referencia de riesgos conocidos públicamente","Centro de Vigilancia y Evaluación","Control de Versiones de Exploits"], ans:1, exp:"CVE (Common Vulnerabilities and Exposures) es un conjunto de amenazas de seguridad en un sistema de referencia que describe riesgos conocidos públicamente. Permite interoperabilidad entre herramientas de seguridad y priorización de parches."},
+  {tag:"Glosario", q:"¿Qué es el CVSS?", opts:["Sistema de Certificación de Vulnerabilidades de Software","Sistema Común de Puntuación de Vulnerabilidades, con métricas Base, Temporal y Ambiental y puntuación de 0 a 10","Control de Versiones de Sistemas Seguros","Centro de Verificación de Servicios de Seguridad"], ans:1, exp:"El CVSS (Common Vulnerability Scoring System) es un marco abierto para comunicar las características y gravedad de las vulnerabilidades. Tiene grupos Base, Temporal y Ambiental. El grupo base produce una puntuación de 0 a 10."},
+  {tag:"Glosario", q:"¿Qué es una DMZ en redes?", opts:["Zona de datos maximizados","Red aislada dentro de la red interna donde se ubican recursos accesibles desde Internet (servidores web, correo), con restricción de conexiones desde la DMZ a la red interna","Dispositivo de administración de zonas","Segmento de red completamente inaccesible"], ans:1, exp:"Una DMZ (Demilitarized Zone) es una red aislada dentro de la red interna de la organización. Contiene recursos accesibles desde Internet, pero las conexiones desde la DMZ a la red interna no están permitidas, protegiendo la red interna."},
+  {tag:"Glosario", q:"¿Cuál es la diferencia entre IDS e IPS?", opts:["Son exactamente lo mismo","IDS detecta y alerta sobre intrusiones; IPS es una extensión que además puede prevenir/bloquear el tráfico malicioso","IDS previene ataques activamente; IPS solo detecta","IDS es software y IPS es hardware"], ans:1, exp:"IDS (Intrusion Detection System) monitorea el tráfico y alerta sobre amenazas. IPS (Intrusion Prevention System) es considerado una extensión del IDS, pero además de detectar, puede bloquear activamente el tráfico malicioso. IPS es más cercano a un firewall."},
+  {tag:"Glosario", q:"¿Qué es DLP?", opts:["Detección de Líneas de Protocolo","Data Loss Prevention — solución de ciberseguridad que detecta y previene filtraciones de datos","Distribución de Licencias de Privacidad","Directorio de Logs del Sistema"], ans:1, exp:"DLP (Data Loss Prevention) es una solución de ciberseguridad que detecta y previene filtraciones de datos. Las organizaciones la utilizan para seguridad interna y cumplimiento normativo, bloqueando la extracción de información sensible."},
+  {tag:"Glosario", q:"¿Qué es un SOC?", opts:["Sistema Operativo Centralizado","Centro de operaciones de seguridad que monitorea los sistemas de información para detectar y responder a amenazas","Software de Opciones de Configuración","Servidor de Operaciones en Cloud"], ans:1, exp:"Un SOC (Security Operations Center) es un centro de comando para monitorear los sistemas de información. Evalúa su estado actual incluyendo amenazas, responde a ellas y establece medidas preventivas."},
+  {tag:"Glosario", q:"¿Qué es un CSIRT?", opts:["Certificado de Seguridad Internacional para Redes TI","Unidad encargada de mitigar daños y restaurar servicios tras un ciberataque, con actividades reactivas, proactivas y de gestión de calidad","Centro de Soporte de Infraestructura en Redes Tecnológicas","Sistema de Control Integrado de Redes Telefónicas"], ans:1, exp:"Un CSIRT (Computer Security Incident Response Team) es una unidad encargada de mitigar daños y restaurar servicios tras un ciberataque. Sus líneas de acción son: respuesta reactiva, actividades proactivas y gestión de calidad."},
+  {tag:"Glosario", q:"¿Qué es el Sandboxing?", opts:["Técnica de hackeo que evade firewalls","Práctica de seguridad donde se ejecuta y analiza código en un entorno aislado sin afectar el sistema principal","Cifrado de datos en discos duros","Técnica de ingeniería social"], ans:1, exp:"El Sandboxing es una práctica de seguridad donde se utiliza un entorno aislado (sandbox) para ejecutar y analizar código de forma segura sin afectar la aplicación, sistema o plataforma real. Es muy efectivo contra amenazas Zero-Day."},
+  {tag:"Glosario", q:"¿Qué es el Scareware?", opts:["Malware que cifra archivos y pide rescate","Táctica de ingeniería social que usa mensajes alarmistas (ventanas emergentes o correos falsos) para asustar al usuario y que descargue malware o compre software inútil","Ataque de fuerza bruta disfrazado","Tipo de troyano bancario"], ans:1, exp:"El Scareware es una táctica de ingeniería social que utiliza mensajes alarmistas (como ventanas emergentes que dicen que el equipo está infectado) para asustar al usuario, haciéndole comprar software inútil o descargar malware."},
+  {tag:"Glosario", q:"¿Qué es el SIEM?", opts:["Sistema de Identificación y Eliminación de Malware","Solución de seguridad que centraliza y analiza logs de una organización para detectar amenazas en tiempo real, principal herramienta de los SOC","Servidor de Información y Eventos de la red","Sistema de Inspección de Equipos y Módulos"], ans:1, exp:"SIEM (Security Information and Event Management) centraliza y analiza los registros (logs) de una organización para detectar amenazas en tiempo real. Es la herramienta principal de los SOC y utiliza IA y análisis de comportamiento (UEBA)."},
+  {tag:"Glosario", q:"¿Qué es el DNS?", opts:["Detección de Nuevas Señales","Domain Name Service — servicio que asocia nombres de dominio con información relacionada, principalmente traduce nombres inteligibles a direcciones IP","Dispositivo de Navegación Segura","Directorio Nacional de Servidores"], ans:1, exp:"DNS (Domain Name Service) es el servicio que asocia un nombre de dominio con información variada relacionada con ese dominio. Su función más importante es traducir nombres de dominio legibles por humanos en direcciones IP para localizar sistemas en la red."},
+  {tag:"Glosario", q:"¿Qué es IPSec?", opts:["Protocolo de internet para seguridad pasiva","Conjunto de reglas o protocolos para configurar conexiones seguras en una red, que agrega cifrado y autenticación al protocolo IP","Sistema de inspección de paquetes cifrados","Infraestructura de PKI estándar"], ans:1, exp:"IPSec es un conjunto de reglas o protocolos para configurar conexiones seguras a través de una red. Agrega cifrado y autenticación al protocolo IP estándar, codificando datos en el origen y decodificándolos en el destino."},
+  {tag:"Glosario", q:"¿Qué es un Token en el contexto de autenticación?", opts:["Solo una contraseña alfanumérica","Dispositivo periférico físico o digital utilizado para obtener acceso a un recurso restringido, además de o en lugar de una contraseña","Un tipo de malware","El nombre de usuario en un sistema"], ans:1, exp:"Un token es un dispositivo periférico físico o digital que se utiliza para obtener acceso a un recurso restringido electrónicamente. Se usa además de, o en lugar de, una contraseña. Ejemplos: tarjetas de acceso inalámbricas."},
+  {tag:"Glosario", q:"¿Qué es un Web Proxy?", opts:["Un tipo de ataque de red","Intermediario digital entre usuarios e internet que inspecciona tráfico, oculta IPs internas, filtra contenido malicioso y previene ataques directos","Un protocolo de cifrado web","Un servidor de nombres de dominio"], ans:1, exp:"Un web proxy es un intermediario digital entre los usuarios y el internet. Actúa como puerta de enlace controlada para inspeccionar tráfico, ocultar IPs internas, filtrar contenido malicioso o no deseado, y prevenir ataques directos."},
+  {tag:"Glosario", q:"¿Qué es el ASLR?", opts:["Advanced Security Layer Requirements","Técnica de seguridad que cambia aleatoriamente la ubicación donde se cargan el código y datos críticos en la memoria, dificultando ataques de desbordamiento de buffer","Protocolo de seguridad de redes LAN","Sistema de análisis de logs en tiempo real"], ans:1, exp:"ASLR (Address Space Layout Randomization) es una técnica de seguridad que cambia aleatoriamente la ubicación donde se cargan código y datos en la memoria cada vez que se ejecuta un programa, haciendo casi imposible que atacantes predigan direcciones exactas para sus ataques."},
+  {tag:"Glosario", q:"¿Qué es DEP (Prevención de ejecución de datos)?", opts:["Protocolo de descifrado de datos","Característica de seguridad del SO que marca regiones de memoria como no ejecutables para impedir que un atacante ejecute código malicioso","Sistema de detección de errores en programas","Dispositivo de entrada de contraseñas seguras"], ans:1, exp:"DEP (Data Execution Prevention) es una característica de seguridad del SO que marca regiones de memoria (pila, montón) como no ejecutables. Si un programa intenta ejecutar código desde una zona protegida, el sistema detiene el proceso."},
+  {tag:"Glosario", q:"¿Qué es un XSRF/CSRF?", opts:["Cross-Site Ransomware Framework","Ataque que engaña a un usuario autenticado para que realice acciones no deseadas en una aplicación web sin su consentimiento, aprovechando su sesión activa","Formato de certificado de seguridad web","Sistema de respuesta a fallos de servidor"], ans:1, exp:"XSRF/CSRF (Cross-Site Request Forgery) engaña a un usuario autenticado para que realice acciones no deseadas (como transferencias o cambios de contraseña) sin su consentimiento. El atacante aprovecha la sesión activa del usuario."},
+  {tag:"Glosario", q:"¿Qué es el Web Tracking?", opts:["Sistema de seguimiento de ataques cibernéticos","Práctica de recopilar y analizar datos sobre la actividad en línea de un usuario, incluyendo historial de navegación, búsquedas y ubicación","Protocolo de seguimiento de paquetes de red","Monitoreo de rendimiento de servidores web"], ans:1, exp:"El Web Tracking es la práctica de recopilar y analizar datos sobre la actividad en línea de un usuario. Puede incluir historial de navegación, búsquedas, datos de ubicación, información del dispositivo y tiempo en páginas."},
+  // ═══ MÉTODOS DE AUTENTICACIÓN ═══
+  {tag:"Autenticación", q:"¿Cuál es la diferencia entre identificación y autenticación?", opts:["No hay diferencia, son sinónimos","La identificación es una simple declaración con código no secreto; la autenticación se basa en un elemento de prueba como un secreto compartido","La autenticación es más rápida que la identificación","La identificación requiere biometría"], ans:1, exp:"La identificación se basa en una simple declaración (lectura de un código no secreto, público). La autenticación se basa en un elemento de prueba como un secreto compartido o asimétrico, permitiendo verificar la identidad con un nivel de confianza razonable."},
+  {tag:"Autenticación", q:"¿Cuántos elementos de autenticación existen según el documento de Evidian IAM?", opts:["3","5","7","10"], ans:2, exp:"Según el documento de Evidian IAM, existen 7 elementos de autenticación: 1) Identificador y contraseña, 2) Identificador y OTP, 3) Certificados PKI en tarjeta inteligente o token USB, 4) Llave Confidencial Defensa, 5) Identificador y contraseña sobre tarjeta inteligente, 6) Biometría, 7) RFID Activo."},
+  {tag:"Autenticación", q:"¿Qué es una OTP (One-Time Password)?", opts:["Una contraseña que nunca expira","Una contraseña válida solo durante un período limitado y para una única utilización","Una contraseña de 8 caracteres mínimo","Una contraseña compartida entre usuarios"], ans:1, exp:"OTP (One-Time Password) o Contraseña de un solo uso es una contraseña válida solo durante una duración limitada y para una única utilización. Se genera mediante un calculador especializado y se aplica principalmente para accesos externos mediante IP/VPN."},
+  {tag:"Autenticación", q:"Los certificados PKI (X.509) se basan en:", opts:["Contraseñas simples almacenadas en el servidor","Tecnología avanzada de codificación que permite calcular o firmar mensajes sin compartir el secreto, usando un certificado público firmado por una autoridad reconocida","Biometría facial y de huella","RFID de corto alcance"], ans:1, exp:"Los certificados X.509 aplican tecnología avanzada de codificación que permite calcular o firmar mensajes sin compartir el secreto. El identificador es un certificado público firmado y garantizado por una autoridad de certificación."},
+  {tag:"Autenticación", q:"La autenticación biométrica se basa en:", opts:["Un código PIN de 6 dígitos","La verificación de un elemento del cuerpo del usuario, generalmente la huella dactilar","Un token USB conectado al dispositivo","Una contraseña almacenada en tarjeta inteligente"], ans:1, exp:"La autenticación biométrica se basa en la verificación de un elemento del cuerpo del usuario, generalmente la huella dactilar. Puede almacenar datos en un servidor central, en el puesto de trabajo, o en una tarjeta inteligente."},
+  {tag:"Autenticación", q:"El RFID Activo se distingue del RFID Pasivo (HID) porque:", opts:["Es más barato de implementar","El RFID Activo tiene alimentación propia, permitiendo detección a mayor distancia; el pasivo necesita ser alimentado por el campo del lector y funciona a pocos centímetros","El pasivo funciona a mayor distancia","Son técnicamente idénticos"], ans:1, exp:"El RFID Activo tiene alimentación propia que permite detección a largo alcance (al entrar a una sala u oficina). El RFID Pasivo (HID) no tiene alimentación propia; la tarjeta es alimentada por el campo electromagnético del lector y funciona a pocos centímetros."},
+  {tag:"Autenticación", q:"La autenticación de 1 factor con biometría pertenece a la categoría:", opts:["Algo que conoces","Algo que tengas","Algo que seas","Ninguna de las anteriores"], ans:2, exp:"La biometría pertenece al factor 'algo que eres' (something you are), junto con características físicas como la huella dactilar, reconocimiento facial, iris, voz, etc."},
+  {tag:"Autenticación", q:"Un sistema de autenticación de 2 factores con tarjeta inteligente + código PIN usa:", opts:["Dos factores del tipo 'algo que sabes'","Factores de 'algo que posees' Y 'algo que sabes'","Factores de 'algo que eres' Y 'algo que sabes'","Un solo factor de alta seguridad"], ans:1, exp:"Tarjeta inteligente + código PIN combina 'algo que posees' (la tarjeta) y 'algo que sabes' (el código PIN). Este es un ejemplo clásico de autenticación de 2 factores (2FA)."},
+  {tag:"Autenticación", q:"¿Cuál es la ventaja principal de almacenar el identificador y contraseña en una tarjeta inteligente?", opts:["Elimina la necesidad de infraestructura PKI","La contraseña puede ser muy compleja y cambiar automáticamente de forma aleatoria; sin la tarjeta y su PIN no se puede acceder","Es más barato que usar una contraseña simple","Permite acceso desde cualquier dispositivo sin configuración"], ans:1, exp:"Al almacenar el identificador y contraseña en una tarjeta inteligente, la contraseña puede ser muy compleja (hasta 32 caracteres) con formato complejo y aleatorio. Sin la tarjeta y su código PIN, no se puede acceder a la contraseña, y el usuario no necesita administrarla."},
+  {tag:"Autenticación", q:"¿Qué es el SSO (Single Sign-On) de empresa?", opts:["Un método de autenticación de un solo factor","Sistema que proporciona automáticamente a las aplicaciones los identificadores y contraseñas requeridos, aplicando una política global de gestión y seguridad de accesos","Un tipo de token de autenticación","Software antivirus corporativo"], ans:1, exp:"El SSO de empresa permite proporcionar automáticamente a las aplicaciones los identificadores y contraseñas que requieren a su ejecución. Aplica una política de gestión y utilización de estos elementos, funcionando como puente entre la autenticación inicial y las aplicaciones."},
+  {tag:"Autenticación", q:"Los tokens Kerberos se aplican principalmente en:", opts:["Arquitecturas J2EE y Servicios Web","Entornos Windows","Sistemas Linux exclusivamente","Redes inalámbricas WPA3"], ans:1, exp:"Los tokens de tipo Kerberos se aplican en el entorno Windows. Los tokens SAML (aserciones SAML) se aplican en arquitecturas SOA/J2EE/Servicios Web."},
+  {tag:"Autenticación", q:"¿Qué problema tienen los tokens en las aplicaciones existentes?", opts:["Son demasiado seguros para aplicaciones modernas","Muchas aplicaciones existentes no pueden adaptarse para leer tokens y dialogar con el servidor de autenticación","Son incompatibles con Windows","Requieren demasiado ancho de banda"], ans:1, exp:"El enfoque por token requiere que las aplicaciones sean capaces de leer el token y dialogar con el servidor de autenticación. Desafortunadamente, muchas aplicaciones existentes (y algunas nuevas) no pueden adaptarse simplemente. El SSO de empresa soluciona esto interfazando directamente las ventanas de login."},
+  {tag:"Autenticación", q:"La función de re-autenticación en el SSO de empresa sirve para:", opts:["Cerrar sesión automáticamente tras un tiempo de inactividad","Volver a pedir autenticación cuando un usuario ejecuta una aplicación sensible, verificando que es el usuario correcto","Cambiar contraseñas automáticamente cada mes","Dar acceso a múltiples aplicaciones con una sola contraseña"], ans:1, exp:"La re-autenticación en el SSO de empresa sirve para que, al ejecutar una aplicación sensible, el motor de SSO vuelva a pedir una re-autenticación (la misma que la inicial) para verificar que el solicitante es realmente el usuario activo."},
+  {tag:"Autenticación", q:"¿Qué es un Card Management System (CMS)?", opts:["Software para diseñar tarjetas corporativas","Sistema que administra la atribución de tarjetas inteligentes: creación, préstamo, lista negra y desbloqueo de PIN","Módulo de autenticación del sistema operativo","Sistema de cifrado de tarjetas de crédito"], ans:1, exp:"Un Card Management System (CMS) administra la atribución de tarjetas inteligentes. Sus funciones incluyen: creación de tarjetas para nuevos empleados, préstamo de tarjetas temporales, puesta en lista negra de tarjetas perdidas y desbloqueo de códigos PIN."},
+  {tag:"Autenticación", q:"¿Cuál es la ventaja de las soluciones biométricas con tarjeta inteligente vs servidor central?", opts:["Son más baratas de implementar","Evitan la utilización de un servidor central y permiten movilidad del usuario en la empresa, ya que las firmas biométricas se conservan en la tarjeta","Son más fáciles de administrar","No requieren periféricos adicionales en los puestos de trabajo"], ans:1, exp:"Las soluciones biométricas con tarjeta inteligente evitan un servidor central (ventaja legal) y permiten movilidad, ya que las firmas biométricas se conservan en la tarjeta y siguen al usuario en todos los puestos de trabajo."},
+  {tag:"Autenticación", q:"¿Cuándo se habla de autenticación multi-factores?", opts:["Cuando se usan múltiples contraseñas","Cuando varios factores de autenticación (sabe, posee, es) entran en juego simultáneamente","Cuando se tienen múltiples cuentas de usuario","Cuando se usa el mismo factor en múltiples dispositivos"], ans:1, exp:"Se habla de autenticación multi-factores cuando varios factores de autenticación entran en juego: algo que se sabe (código secreto), algo que se posee (soporte físico) y/o algo que se es (biometría). Combinar más factores aumenta la seguridad."},
+  // ═══ SISTEMAS DE AUTENTICACIÓN (ARTÍCULO XIKUA) ═══
+  {tag:"Sistemas Auth", q:"¿Qué es la Autenticación de Factor Único (SFA)?", opts:["Sistema que usa tres formas de autenticación","Sistema que utiliza una única forma de autenticación, normalmente una contraseña, para verificar la identidad del usuario","Autenticación biométrica","Sistema que usa tarjeta y PIN"], ans:1, exp:"SFA (Single-Factor Authentication) es un sistema que utiliza una única forma de autenticación, normalmente una contraseña, para verificar la identidad de un usuario. Es el método más básico y sencillo."},
+  {tag:"Sistemas Auth", q:"¿Qué es la Autenticación de Dos Factores (2FA)?", opts:["Autenticación con dos contraseñas diferentes","Sistema que utiliza dos formas de autenticación, como contraseña más código enviado al móvil, para verificar la identidad","Biometría de dos factores físicos","Autenticación con dos usuarios distintos"], ans:1, exp:"2FA (Two-Factor Authentication) es un sistema que utiliza dos formas de autenticación para verificar la identidad de un usuario. Por ejemplo, una contraseña y un código enviado a un dispositivo móvil."},
+  {tag:"Sistemas Auth", q:"¿Cuál es la principal vulnerabilidad de las contraseñas débiles en SFA?", opts:["Solo son vulnerables a ingeniería social","Los atacantes pueden usar software automatizado para probar miles de combinaciones posibles (fuerza bruta) hasta dar con la contraseña correcta","Solo son vulnerables si se comparten","Las contraseñas débiles son igualmente seguras que las fuertes"], ans:1, exp:"Las contraseñas débiles son una de las mayores vulnerabilidades del SFA. Los atacantes pueden usar software automatizado para probar miles de combinaciones (ataque de fuerza bruta) hasta encontrar la contraseña correcta."},
+  {tag:"Sistemas Auth", q:"¿Cómo puede ser comprometida la 2FA basada en SMS?", opts:["Es completamente infalible","Los atacantes pueden clonar la tarjeta SIM del usuario y redirigir mensajes de texto a su propio dispositivo","El SMS siempre llega tarde","Los codes SMS son demasiado cortos"], ans:1, exp:"La 2FA basada en SMS puede comprometerse si los atacantes clonan la tarjeta SIM del usuario (SIM swapping), redirigiendo los mensajes de texto a su propio dispositivo y obteniendo el código de verificación."},
+  {tag:"Sistemas Auth", q:"¿Cuál es el origen histórico de los sistemas de autenticación según el artículo?", opts:["Nacieron en los años 80 con las computadoras personales","La antigua Roma utilizaba sellos para verificar la autenticidad de documentos","Se originaron en la Segunda Guerra Mundial","Nacieron con Internet en los años 90"], ans:1, exp:"Según el artículo, los antecedentes de los sistemas de autenticación se remontan a la antigua Roma, donde se utilizaban sellos para dar validez a la autenticidad de los documentos."},
+  {tag:"Sistemas Auth", q:"¿Qué estrategia de mitigación implica verificar la identidad en múltiples etapas durante el proceso?", opts:["Autenticación de factor único","Verificación de identidad en varias fases, incluyendo verificación de IP, ubicación geográfica y otros factores","Uso de contraseñas simples","Sandboxing de aplicaciones"], ans:1, exp:"La Verificación de identidad en varias fases implica verificar la identidad del usuario en múltiples etapas durante el proceso de autenticación, incluyendo verificación de dirección IP, ubicación geográfica y otros factores que confirman la identidad."},
+  {tag:"Sistemas Auth", q:"¿Cuál es la ventaja de los autenticadores de hardware sobre la 2FA por SMS?", opts:["Son más baratos","No pueden ser interceptados por atacantes malintencionados y pueden incluir huella dactilar y reconocimiento facial","Son más fáciles de usar","Funcionan sin conexión a internet"], ans:1, exp:"Los autenticadores de hardware son dispositivos físicos que generan códigos de seguridad. Son más seguros que los métodos basados en SMS o aplicaciones de autenticación, ya que no pueden ser interceptados. Además, pueden incluir huella dactilar y reconocimiento facial."},
+  {tag:"Sistemas Auth", q:"¿Por qué las actualizaciones periódicas son esenciales en sistemas de autenticación?", opts:["Para que los usuarios cambien contraseñas con frecuencia","Porque frecuentemente se descubren nuevas vulnerabilidades que pueden ser explotadas, y las actualizaciones las corrigen además de cumplir requisitos legales","Solo para mejorar la interfaz de usuario","Porque las bases de datos de contraseñas caducan"], ans:1, exp:"Las actualizaciones periódicas son esenciales porque frecuentemente se descubren nuevas vulnerabilidades en los sistemas de autenticación. Las actualizaciones corrigen estas vulnerabilidades y debilidades, y también permiten cumplir con requisitos legales o reglamentarios en constante cambio."},
+  {tag:"Sistemas Auth", q:"¿Qué es un certificado digital?", opts:["Un antivirus digital","Documento electrónico para verificar la identidad de una persona u organización en Internet, basado en tecnología criptográfica","Una licencia de software","Un tipo de cookie de navegador"], ans:1, exp:"Un certificado digital es un documento electrónico utilizado para verificar la identidad de una persona u organización en Internet. Se basa en tecnología criptográfica y se usa para proteger comunicaciones, firmar documentos y verificar identidades."},
+  {tag:"Sistemas Auth", q:"¿Qué es una Autoridad de Certificación (CA)?", opts:["Un organismo que regula el uso de internet","Entidad responsable de verificar la identidad del registrante del certificado y garantizar la autenticidad de la clave pública asociada","Un servidor de autenticación de contraseñas","Un sistema de gestión de usuarios"], ans:1, exp:"Una Autoridad de Certificación (CA) es la entidad responsable de verificar la identidad del registrante del certificado digital y garantizar la autenticidad de la clave pública asociada con el certificado."},
+  {tag:"Sistemas Auth", q:"Una reutilización de contraseñas hace vulnerable al SFA porque:", opts:["Aumenta la carga del servidor de autenticación","Si se compromete una contraseña, puede usarse para acceder a varios servicios/cuentas donde el usuario usa la misma contraseña","Las contraseñas reutilizadas expiran más rápido","Hace más lentos los procesos de autenticación"], ans:1, exp:"La reutilización de contraseñas significa que si una contraseña es comprometida en un servicio, los atacantes pueden usarla para acceder a todas las demás cuentas donde el usuario usa la misma contraseña, multiplicando el daño del ataque."},
+  {tag:"Sistemas Auth", q:"¿Por qué los ataques de intermediarios (MitM) son peligrosos para el SFA?", opts:["Porque descifran el tráfico cifrado automáticamente","Porque los atacantes interceptan la comunicación entre el usuario y el sistema, usando redes Wi-Fi públicas inseguras o malware, obteniendo las credenciales de login","Porque eliminan físicamente el servidor","Porque reinstalan el sistema operativo"], ans:1, exp:"Los ataques de intermediarios son peligrosos para el SFA porque los atacantes interceptan la comunicación entre el usuario y el sistema protegido. Pueden usar redes Wi-Fi públicas inseguras o malware para capturar la información de inicio de sesión."},
+  // ═══ PREGUNTAS AVANZADAS Y COMBINADAS ═══
+  {tag:"Avanzado", q:"La tríada CIA en seguridad informática representa:", opts:["Central Intelligence Agency, Confidential, Authorized","Confidencialidad, Integridad y Disponibilidad — los tres pilares fundamentales de la seguridad de la información","Cifrado, Identificación y Autenticación","Cortafuegos, IDS y Antivirus"], ans:1, exp:"La tríada CIA (Confidentiality, Integrity, Availability) representa los tres pilares fundamentales de la seguridad de la información: Confidencialidad (solo acceso autorizado), Integridad (exactitud de datos) y Disponibilidad (accesibilidad cuando se necesita)."},
+  {tag:"Avanzado", q:"¿Cuál es el proceso de conexión de un usuario en 4 etapas según Evidian?", opts:["Login, verificación, autorización, logout","1) Apertura de sesión y autenticación, 2) Comprobación de derechos del usuario, 3) Ejecución de aplicación y autenticación en ella, 4) Verificación de derechos en la aplicación","Identificación, autenticación, autorización, auditoría","Registro, validación, acceso, cierre de sesión"], ans:1, exp:"El proceso de conexión en 4 etapas según Evidian: 1) Apertura de sesión y autenticación del usuario, 2) Comprobación de derechos y conexión a recursos, 3) Ejecución de aplicación y autenticación en la misma, 4) La aplicación verifica derechos y conecta a transacciones y datos."},
+  {tag:"Avanzado", q:"¿Qué ocurre cuando una amenaza coincide con una vulnerabilidad existente?", opts:["La amenaza desaparece automáticamente","Puede derivar en un incidente de seguridad","Se crea una nueva vulnerabilidad","El sistema se vuelve invulnerable"], ans:1, exp:"Cuando una circunstancia desfavorable (amenaza) acontece a la vez que existe una vulnerabilidad o debilidad del sistema (o aprovechando su existencia), puede derivar en un incidente de seguridad."},
+  {tag:"Avanzado", q:"¿Cuál es la diferencia entre un virus y un gusano informático?", opts:["No hay diferencia, son iguales","Un virus infecta archivos ejecutables y necesita un huésped; un gusano se caracteriza por su alta dispersabilidad y propagación rápida sin necesitar huésped","El virus es más peligroso que el gusano siempre","Los gusanos solo afectan a Windows"], ans:1, exp:"Un virus infecta archivos ejecutables o sectores de arranque y necesita un archivo huésped para propagarse. Un gusano se caracteriza principalmente por su alta dispersabilidad y capacidad de propagarse rápidamente sin necesitar un archivo huésped."},
+  {tag:"Avanzado", q:"¿Por qué el RFID Activo es útil en hospitales?", opts:["Permite pagar servicios médicos sin efectivo","Permite el 'cambio rápido de usuario' en servicios como Urgencias, donde el PC detecta automáticamente la llegada/salida del personal sin acciones manuales","Es más barato que otros sistemas de identificación","Funciona sin necesitar tarjetas físicas"], ans:1, exp:"El RFID Activo es útil en hospitales para el 'cambio rápido de usuario' en el servicio de Urgencias. El PC detecta automáticamente la llegada o salida del personal de salud sin que este tenga que realizar ninguna acción, agilizando el acceso a sistemas críticos."},
+  {tag:"Avanzado", q:"La multiplicación de factores de autenticación plantea como problema:", opts:["Mayor seguridad sin inconvenientes adicionales","Mayor complejidad de ciclo de vida de cada factor, ergonomía más pesada para usuarios y costes adicionales de periféricos","Reducción de la seguridad general","Incompatibilidad con sistemas modernos"], ans:1, exp:"Aunque más factores aumentan la seguridad, también plantean problemas: el ciclo de vida de cada factor debe administrarse (inicialización, distribución), la ergonomía puede volverse pesada para usuarios, y se añaden costes de periféricos y carga del servicio de ayuda."},
+  {tag:"Avanzado", q:"¿Por qué la política de cambio de contraseñas complejas se delega mejor al SSO de empresa?", opts:["Porque los usuarios disfrutan cambiando contraseñas complejas","Porque una política extremadamente complicada es imposible de aplicar manualmente por el usuario en todas las aplicaciones; el SSO se encarga de mantenerla","Porque el SSO es más rápido","Porque el sistema operativo no puede manejar contraseñas complejas"], ans:1, exp:"Una política de contraseñas con requisitos complejos (longitud, caracteres, cambios mensuales) es extremadamente complicada para que un usuario la aplique en todas sus aplicaciones. El SSO de empresa se encarga de mantener esta política automáticamente."},
+  {tag:"Avanzado", q:"El modelo de autenticación SFA con 'identificador + contraseña' pertenece al factor:", opts:["Algo que eres","Algo que tienes","Algo que sabes","Ningún factor definido"], ans:2, exp:"La combinación identificador + contraseña pertenece al factor 'algo que sabes' (something you know). Es el método de autenticación más básico y conocido, aunque también el más vulnerable."},
+  {tag:"Avanzado", q:"¿Cuándo se recomienda aplicar biometría como método de autenticación corporativo?", opts:["Para todos los usuarios sin excepción","Para proteger acceso a aplicaciones muy sensibles como las de I+D, o para puestos de trabajo críticos","Solo para usuarios ejecutivos","Para acceso a sistemas de baja criticidad"], ans:1, exp:"La biometría se recomienda para proteger el acceso a las aplicaciones más sensibles, como las de I+D. No se aplica generalmente a través de navegadores en Internet, ya que no hay estándares aplicados para ello."},
+  {tag:"Avanzado", q:"¿Qué es la 'Llave Confidencial Defensa' en el contexto de autenticación?", opts:["Una tarjeta de acceso normal con PIN","Llave multifunciones que combina almacenamiento de certificado X.509, datos, recurso criptográfico, y cuyo PIN se compone sobre la propia llave para evitar key loggers","Un token USB simple para contraseñas","Un sistema biométrico portátil"], ans:1, exp:"La Llave 'Confidencial Defensa' es una declinación del token USB PKI. Es una llave multifunciones con almacenamiento de certificado X.509, datos y recurso criptográfico. El PIN se compone sobre la propia llave para evitar el riesgo de 'key loggers'."},
+  {tag:"Avanzado", q:"¿Qué es un 'key logger'?", opts:["Software para gestionar contraseñas de forma segura","Código malware que registra las teclas usadas por el usuario y las envía a un servidor del atacante","Herramienta de administración de teclados de red","Protocolo de seguridad para teclados biométricos"], ans:1, exp:"Un key logger es un código malware que se instala en el PC y registra las teclas usadas por el usuario, enviando esa información a un servidor del atacante. Por eso la Llave Confidencial Defensa tiene el PIN en la propia llave."},
+  // ═══ PREGUNTAS ADICIONALES ═══
+  {tag:"Conceptos", q:"¿Qué cuatro criterios componen el proceso de evaluación del curso de Seguridad Informática?", opts:["Tareas, laboratorios, proyectos y asistencia","Parciales (30%), Semestral (33%), Proyectos (15%), Laboratorios (10%), Portafolio (5%) y Tareas (7%)","Solo exámenes y proyectos","Presentaciones y trabajos escritos únicamente"], ans:1, exp:"El curso tiene: Parciales 30%, Semestral 33%, Proyectos 15%, Laboratorios 10%, Portafolio Estudiantil 5%, y Tareas/Trabajo en clase/Ejercicios cortos 7%."},
+  {tag:"Conceptos", q:"¿Cuáles son los 3 objetivos principales de la Unidad I?", opts:["Programar, diseñar y administrar sistemas","Conocer conceptos básicos, describir servicios de integridad/disponibilidad/confidencialidad/no repudio, y describir amenazas/vulnerabilidades/ataques","Solo conocer definiciones de seguridad","Administrar redes y servidores"], ans:1, exp:"Los 3 objetivos de la Unidad I son: 1) Conocer y comprender conceptos básicos de seguridad informática, 2) Describir servicios que garantizan integridad, confiabilidad, disponibilidad y no repudio, 3) Describir amenazas, vulnerabilidades y ataques que enfrentan los sistemas informáticos."},
+  {tag:"Conceptos", q:"La seguridad informática es la rama de la informática que estudia cómo:", opts:["Desarrollar software más rápido","Preservar la confidencialidad, integridad y disponibilidad de datos y programas en sistemas de cómputo","Administrar bases de datos relacionales","Diseñar interfaces de usuario seguras"], ans:1, exp:"La seguridad informática es la rama de la informática que se encarga de estudiar cómo preservar la confidencialidad, integridad y disponibilidad de datos y programas en sistemas de cómputo."},
+  {tag:"Normativas", q:"La norma ISO 27002 se enfoca en:", opts:["Gestión de sistemas de seguridad","Controles de seguridad específicos para implementar","Protección de datos personales en Europa","Seguridad de infraestructuras críticas"], ans:1, exp:"ISO 27002 es la norma que define los Controles de Seguridad específicos que las organizaciones pueden implementar para proteger su información. Complementa a la ISO 27001 que define el sistema de gestión."},
+  {tag:"Normativas", q:"El NIST es:", opts:["Una norma de la Unión Europea","El Instituto Nacional de Estándares y Tecnología de EE.UU., que provee marcos y guías de seguridad informática","Una ley de protección de datos en Asia","Un estándar de cifrado internacional"], ans:1, exp:"NIST es el Instituto Nacional de Estándares y Tecnología de EE.UU. (National Institute of Standards and Technology). Provee marcos y guías de ciberseguridad ampliamente adoptados, como el NIST Cybersecurity Framework."},
+  {tag:"Ataques", q:"Un ataque de Diccionario se basa en:", opts:["Usar diccionarios para entender el argot de los hackers","Usar listas de palabras comunes para descifrar contraseñas, siendo más eficiente que la fuerza bruta pura","Atacar los servidores de diccionarios de idiomas","Buscar palabras clave en documentos cifrados"], ans:1, exp:"Un ataque de diccionario usa listas de palabras comunes (palabras del diccionario, nombres frecuentes, contraseñas típicas) para descifrar contraseñas. Es más eficiente que la fuerza bruta pura porque muchos usuarios usan contraseñas predecibles."},
+  {tag:"Ataques", q:"Un USB Malicioso como vector de ataque consiste en:", opts:["Robar USB del usuario objetivo","Utilizar dispositivos USB que contienen malware que se ejecuta automáticamente al conectarlos","Crackear el cifrado de dispositivos USB","Bloquear puertos USB en servidores"], ans:1, exp:"Un USB Malicioso es un vector de ataque a dispositivos físicos. Se trata de un dispositivo USB que contiene malware que puede ejecutarse automáticamente al conectarse, comprometiendo el sistema objetivo."},
+  {tag:"Ataques", q:"El Spyware es un tipo de malware que:", opts:["Cifra archivos y pide rescate","Recopila información del usuario de forma oculta, espiando su actividad","Se propaga masivamente por la red","Crea puertas traseras en el sistema"], ans:1, exp:"El Spyware es malware diseñado para recopilar información del usuario de forma oculta, espiando su actividad. Puede capturar contraseñas, historial de navegación, datos de tarjetas, etc., y enviarlos al atacante."},
+  {tag:"Vulnerabilidades", q:"¿A qué se llama 'agujeros de seguridad' en el contexto de vulnerabilidades?", opts:["Huecos físicos en los centros de datos","Otro nombre para las vulnerabilidades, que tienen la ventaja de poder ser solventadas una vez descubiertas","Fallos en los firewalls","Errores en protocolos de red"], ans:1, exp:"A las vulnerabilidades también se les conoce como 'agujeros de seguridad'. Tienen la ventaja de que pueden ser solventadas una vez sean descubiertas, a diferencia de amenazas que pueden estar fuera del control de la organización."},
+  {tag:"Conceptos", q:"La Seguridad Informática constituye un amplio conjunto de medidas:", opts:["Exclusivamente técnicas","Multidisciplinares de protección para evitar que una red informática y sus datos sufran vulneración, filtración, publicación de información privada o ataque","Solo organizacionales","Solo de software"], ans:1, exp:"La seguridad informática (seguridad de TI) constituye un amplio conjunto de medidas multidisciplinares de protección para evitar que una red informática y sus datos sufran vulneración, filtración, publicación de información privada o ataque."},
+  {tag:"Glosario", q:"Según el glosario, ¿qué hace un Sniffer cuando se coloca en modo promiscuo?", opts:["Cifra todo el tráfico que pasa por la red","Desactiva el filtro de verificación de direcciones, aceptando todos los paquetes que llegan a la tarjeta de red aunque no estén dirigidos a ese dispositivo","Bloquea el tráfico sospechoso automáticamente","Autentica todos los paquetes de red"], ans:1, exp:"Un sniffer coloca la tarjeta de red en modo promiscuo, desactivando el filtro de verificación de direcciones, por lo que acepta todos los paquetes que llegan a la tarjeta, estén dirigidos o no a ese dispositivo. Permite capturar tráfico no cifrado."},
+  {tag:"Autenticación", q:"¿Cómo se llama el módulo de autenticación del PC en entornos Windows?", opts:["Win Auth Module","GINA (también llamado módulo de autentificación)","Security Center","Auth Manager"], ans:1, exp:"El módulo de autenticación del PC que gestiona la autenticación inicial y las excepciones inicializadas por Ctrl+Alt+Supr también se conoce bajo el nombre de GINA. Es quien alimenta los logs de seguridad."},
+  {tag:"Sistemas Auth", q:"¿Qué es la autenticación biométrica y cuál es su principal ventaja sobre contraseñas?", opts:["Es más barata pero menos segura","Usa características físicas únicas (huellas, reconocimiento facial, voz, iris) difíciles de falsificar, y es más rápida y cómoda para los usuarios","Es idéntica en seguridad a las contraseñas","Solo funciona con huellas dactilares"], ans:1, exp:"La autenticación biométrica usa características físicas únicas (huellas dactilares, reconocimiento facial, voz, iris) que son difíciles de falsificar. Además, es más rápida y cómoda, ya que los usuarios no tienen que teclear contraseñas o códigos cada vez."},
+  {tag:"Amenazas", q:"¿Qué ejemplos pertenecen a las amenazas de tipo 'Desastre Natural' en el contexto de seguridad informática?", opts:["Ransomware, phishing y troyanos","Fuego, daño por agua y desastres naturales como terremotos o huracanes","Error de usuario y fuga de información","Denegación de servicio y suplantación de identidad"], ans:1, exp:"Las amenazas de tipo Desastre Natural incluyen: fuego, daño por agua (inundaciones) y desastres naturales como terremotos, volcanes, huracanes, tornados, etc., que pueden destruir infraestructura de TI."},
+  {tag:"Conceptos", q:"¿Cuáles son los 4 temas principales del curso de Seguridad Informática?", opts:["Hardware, software, redes y bases de datos","Conceptos generales, mecanismos de seguridad/autenticación/control de acceso, seguridad en ciclo de vida del software/ataques/defensa, y análisis de riesgo/plan de contingencia/política de seguridad","Criptografía, firewalls, antivirus y VPN","Ética, derecho, política y economía digital"], ans:1, exp:"Los 4 temas son: 1) Conceptos generales de seguridad informática, 2) Mecanismos de seguridad, autenticación y control de acceso, 3) Seguridad en el ciclo de vida del software, vectores de ataque y estrategias de defensa, 4) Análisis de riesgo, plan de contingencia y política de seguridad."},
+  {tag:"Glosario", q:"¿Qué es el Control de Acceso según el glosario?", opts:["Software antivirus de acceso","Sistema de verificación que permite el acceso a un recurso (físico o lógico) si la persona o entidad tiene los derechos necesarios para solicitarlo","Protocolo de cifrado de datos","Sistema de monitoreo de redes"], ans:1, exp:"El Control de Acceso es un sistema de verificación que permite el acceso a un recurso si la persona o entidad tiene los derechos necesarios. El acceso puede ser a recursos físicos (edificio, departamento) o lógicos (sistema, aplicación de software)."},
+  {tag:"Avanzado", q:"En la política de ejemplo de Evidian, ¿qué tipo de autenticación se usa para aplicaciones 'Críticas nivel superior'?", opts:["Solo contraseña alfanumérica","Contraseñas ocultas con cambio automático planeado, re-autenticación en ejecución, acceso solo desde puestos del servicio y sin acceso web","RFID pasivo y biometría","Token OTP para todos los usuarios"], ans:1, exp:"Para aplicaciones 'Críticas nivel superior': contraseñas ocultas al usuario, cambios automáticos planeados, delegación prohibida para algunos, re-autenticación al ejecutar, acceso solo desde puestos del servicio/zona correspondiente, y sin acceso web desde Internet."},
+  {tag:"Avanzado", q:"¿Cuál es el propósito de la función de 'Delegación de accesos' en el SSO de empresa?", opts:["Dar acceso permanente a cualquier aplicación","Permitir que un usuario delegue sus accesos a otro usuario por un período y aplicación dados, sin que el delegado conozca las credenciales originales","Eliminar la necesidad de contraseñas","Dar acceso de administrador a todos los usuarios"], ans:1, exp:"La delegación de accesos en el SSO permite a un usuario delegar sus accesos a otro usuario para un período dado y una aplicación específica. El usuario delegado no necesita conocer el identificador y contraseña del delegante para conectarse."},
+  {tag:"Avanzado", q:"¿Qué es el 'Cambio rápido de usuario' en el contexto del RFID Activo?", opts:["Función para cambiar contraseñas rápidamente","Función que cambia rápidamente el contexto del SSO de empresa y abre las aplicaciones en el contexto de seguridad personal del nuevo usuario","Sistema para compartir cuentas entre usuarios","Proceso de cierre de sesión acelerado"], ans:1, exp:"El 'Cambio rápido de usuario' cambia rápidamente el contexto del SSO de empresa y abre las aplicaciones en el contexto de seguridad personal del usuario. Es especialmente útil en hospitales (Urgencias) y puestos compartidos en agencias bancarias."},
+  {tag:"Sistemas Auth", q:"¿Por qué la 2FA puede ser vulnerable a ataques de ingeniería social?", opts:["Porque la 2FA es fácil de hackear técnicamente","Porque los atacantes pueden engañar a los usuarios para que faciliten su información de autenticación aunque usen 2FA, manipulándolos psicológicamente","Porque los códigos 2FA son predecibles","Porque la 2FA no funciona en dispositivos móviles"], ans:1, exp:"La 2FA puede ser vulnerada por ingeniería social porque los atacantes pueden engañar psicológicamente a los usuarios para que ellos mismos faciliten su información de autenticación, incluyendo el código 2FA, sin ningún hackeo técnico."},
+  {tag:"Sistemas Auth", q:"¿Qué implica la 'Supervisión continua de la seguridad' como estrategia de mitigación?", opts:["Monitorear solo las contraseñas de los usuarios","Supervisar continuamente la seguridad de sistemas y redes para detectar y responder a amenazas, usando herramientas de detección de intrusos y pruebas de penetración periódicas","Revisar los logs semanalmente","Actualizar el antivirus cada mes"], ans:1, exp:"La supervisión continua implica que los proveedores de servicios monitoreen continuamente la seguridad de sus sistemas y redes para detectar y responder a posibles amenazas, incluyendo herramientas de detección de intrusos y pruebas de penetración periódicas."},
+  {tag:"Glosario", q:"¿Cuál es la función principal de una CA (Autoridad de Certificación) en la infraestructura PKI?", opts:["Gestionar las contraseñas de los usuarios","Firmar y garantizar la autenticidad de los certificados digitales, verificando la identidad del solicitante antes de emitir el certificado","Almacenar copias de seguridad de datos","Detectar intrusiones en la red"], ans:1, exp:"La Autoridad de Certificación (CA) en la infraestructura PKI es la responsable de firmar y garantizar la autenticidad de los certificados digitales, verificando la identidad del solicitante antes de emitir el certificado. Es la entidad de confianza del sistema."},
+  {tag:"Conceptos", q:"En seguridad informática, ¿qué es un 'incidente de seguridad'?", opts:["Cualquier actualización de software","Cuando una amenaza aprovecha una vulnerabilidad y genera un impacto negativo real en los activos","Un error de programación sin consecuencias","Una reunión de equipo de TI"], ans:1, exp:"Un incidente de seguridad ocurre cuando una amenaza (circunstancia desfavorable) coincide con una vulnerabilidad o debilidad del sistema y la aprovecha, derivando en un impacto negativo real (indisponibilidad, daño, pérdida de datos, etc.) sobre los activos."},
+  {tag:"Autenticación", q:"Las PKI (Infraestructura de Clave Pública) deben proporcionar dos componentes principales:", opts:["Servidor web y servidor de correo","La Autoridad de Certificación (CA) y la Autoridad de Registro","Servidor DNS y servidor DHCP","Firewall y sistema de detección de intrusos"], ans:1, exp:"La infraestructura de certificado X.509 (PKI) debe proporcionar dos componentes principales: la Autoridad de Certificación (CA) que firma los certificados, y la Autoridad de Registro (RA) que verifica la identidad de los solicitantes."},
+  {tag:"Avanzado", q:"¿Cuál es el protocolo de comunicación que usa el RFID Activo?", opts:["Bluetooth 5.0","Protocolo RFID con alimentación propia en la tarjeta que permite detección a mayor alcance","Wi-Fi Direct","NFC de corto alcance"], ans:1, exp:"El RFID Activo se basa en los protocolos de comunicación RFID pero asocia a la tarjeta una alimentación propia. Esta alimentación permite una detección de la tarjeta a más largo alcance (desde la entrada a una sala u oficina)."},
+  {tag:"Glosario", q:"¿Qué tipo de amenazas puede el Sandboxing contrarrestar especialmente bien?", opts:["Ataques de fuerza bruta","Amenazas de día cero (Zero-Day) que no coinciden con ningún malware conocido registrado","Ataques de ingeniería social","Vulnerabilidades de SQL injection"], ans:1, exp:"El Sandboxing es muy efectivo para defenderse contra amenazas de día cero (Zero-Day), que son amenazas no vistas antes o que no coinciden con ningún malware conocido registrado. Los filtros tradicionales no pueden detectarlas pero el sandbox las identifica al ejecutarlas."},
+  {tag:"Avanzado", q:"¿Cuándo se recomienda aplicar RFID Activo según el ejemplo de política de seguridad de Evidian?", opts:["Para todos los empleados como autenticación principal","Para proteger puestos de trabajo en zonas de acceso público, como agencias bancarias o zonas compartidas","Solo para directivos y ejecutivos","Para empleados que trabajan desde casa"], ans:1, exp:"El RFID Activo se recomienda para proteger puestos de trabajo en zonas de acceso público, como agencias bancarias o zonas de 'Espacio Abierto'. Permite gestionar el acceso de manera transparente sin que el usuario realice acciones manuales."},
+  {tag:"Sistemas Auth", q:"¿Qué información puede contener un certificado digital para su verificación?", opts:["Solo el nombre del usuario","Información cifrada y firmada que permite verificar la identidad, cifrar/descifrar datos, firmar documentos digitalmente y verificar la autenticidad de la clave pública","Solo la fecha de vencimiento","Solo el número de serie del dispositivo"], ans:1, exp:"Un certificado digital permite: cifrar y descifrar datos, firmar documentos digitalmente, y verificar la identidad de la persona u organización propietaria. Se emite por una CA que verifica la identidad y garantiza la autenticidad de la clave pública."},
+  {tag:"Ataques", q:"¿Qué tipo de ataque involucra la clonación de SIM para obtener códigos 2FA?", opts:["Phishing por correo electrónico","SIM Swapping: una técnica donde los atacantes clonan la tarjeta SIM del usuario para redirigir mensajes SMS a su dispositivo","Ataque de fuerza bruta","Man-in-the-Middle clásico"], ans:1, exp:"El SIM Swapping (clonación de SIM) es una técnica donde los atacantes clonan la tarjeta SIM del usuario, logrando que los mensajes SMS (incluyendo códigos 2FA) se redirijan a su propio dispositivo, comprometiendo la autenticación de dos factores basada en SMS."},
+  {tag:"Conceptos", q:"Las 3 arquitecturas de almacenamiento de datos biométricos son:", opts:["Local, remota y cifrada","Solución con servidor central, solución en puesto de trabajo del usuario y solución con tarjeta criptográfica","Nube, datacenter y dispositivo móvil","Pública, privada e híbrida"], ans:1, exp:"Las tres familias de solución de biométrica según el almacenamiento son: 1) Solución con servidor central (datos en servidor, verificación por servidor), 2) Solución en puesto de trabajo (datos en el PC del usuario), 3) Solución con tarjeta criptográfica (datos en la tarjeta inteligente)."},
+  {tag:"Glosario", q:"¿Qué es el Cifrado según el glosario?", opts:["Una técnica para borrar datos permanentemente","Forma de hacer datos ilegibles para partes no autorizadas, usando algoritmos para codificar datos en formato indescifrable; solo quien tiene la clave de descifrado puede leerlos","Un método de compresión de archivos","Un protocolo de red seguro"], ans:1, exp:"El cifrado es una forma de hacer que los datos sean ilegibles para una parte no autorizada. Funciona mediante algoritmos de cifrado que codifican los datos en un formato indescifrable. Solo las partes autorizadas con la clave de descifrado correcta pueden descifrar los datos."},
+  {tag:"Avanzado", q:"¿Qué es la función de 'Cuentas múltiples' en el SSO de empresa?", opts:["Permitir que múltiples usuarios compartan una cuenta","Cuando un usuario tiene varias cuentas para una aplicación, el SSO le ofrece elegir con cuál conectarse al ejecutar esa aplicación","Crear cuentas automáticamente para nuevos empleados","Compartir contraseñas entre aplicaciones"], ans:1, exp:"La función de Cuentas múltiples del SSO permite que cuando un usuario tiene varias cuentas para una aplicación integrada al SSO, el sistema le ofrezca la elección de la cuenta sobre la cual desea conectarse."},
+  {tag:"Avanzado", q:"¿Qué diferencia a la autenticación de factor 'algo que eres' de los otros factores?", opts:["Es más barata de implementar","Usa características físicas o biológicas inherentes al usuario que son difíciles de falsificar, robusteciendo significativamente la seguridad","Es el factor más común en uso empresarial","No requiere hardware especial"], ans:1, exp:"El factor 'algo que eres' (biometría) usa características físicas o biológicas inherentes al usuario (huella, iris, voz, cara) que son intrínsecas y difíciles de falsificar. Esto lo hace más robusto contra ciertos ataques comparado con contraseñas (que se olvidan o roban) o tokens (que se pierden)."},
+  {tag:"Sistemas Auth", q:"¿Qué ventaja tiene la autenticación biométrica sobre las contraseñas en términos de usabilidad?", opts:["La biometría es siempre más segura que las contraseñas","Los usuarios no tienen que recordar ni teclear contraseñas o códigos de seguridad, siendo más rápido y cómodo el acceso","La biometría es gratuita para implementar","La biometría no requiere ningún hardware adicional"], ans:1, exp:"La autenticación biométrica es más rápida y cómoda para los usuarios ya que no tienen que teclear una contraseña o código de seguridad cada vez que acceden a un sistema o aplicación; solo necesitan presentar su característica biométrica."},
+  {tag:"Vulnerabilidades", q:"¿Qué amenaza a la seguridad plantea la reutilización de contraseñas?", opts:["Ralentiza el sistema de autenticación","Si se compromete la contraseña en un servicio, el atacante puede acceder a todos los demás servicios donde el usuario usa la misma contraseña","Hace las contraseñas más débiles por definición","Solo es peligrosa si se comparte con terceros"], ans:1, exp:"La reutilización de contraseñas significa que una sola brecha puede comprometer múltiples cuentas. Si el atacante obtiene la contraseña de un servicio, puede intentarla en todos los demás servicios donde el usuario la usa, multiplicando el daño exponencialmente."},
+  {tag:"Glosario", q:"¿Cuál es la diferencia entre el RFID pasivo y el activo según el glosario?", opts:["No hay diferencia técnica real","El RFID pasivo (HID) se alimenta del campo del lector y funciona a centímetros; el activo tiene alimentación propia y detecta a mayor alcance","El activo es más barato","El pasivo funciona a mayor distancia"], ans:1, exp:"RFID Pasivo (HID): la tarjeta no tiene alimentación propia, se alimenta del campo electromagnético del lector, funciona a pocos centímetros. RFID Activo: tiene alimentación propia, permite detección a mayor alcance (metros), usado para presencia en salas u oficinas."},
+  {tag:"Conceptos", q:"¿Cuál es el propósito principal de la Política de Seguridad en una organización?", opts:["Aumentar el rendimiento de los sistemas","Definir los niveles mínimos de autenticación y protección en función de la criticidad de cada recurso del sistema de información","Reducir los costes de TI","Solo cumplir con regulaciones legales"], ans:1, exp:"La política de seguridad define los niveles mínimos de autenticación y protección en función de la criticidad del recurso utilizado. Por ejemplo, puede exigir que un puesto crítico requiera código confidencial, tarjeta inteligente y biometría simultáneamente."},
+  {tag:"Avanzado", q:"Según el artículo académico, ¿cómo se clasifican los sistemas de autenticación en base a lo que el usuario sabe?", opts:["En SFA y 2FA exclusivamente","Los sistemas que se basan en lo que el usuario sabe son una de las formas comunes de clasificación, que incluyen el uso de contraseñas y PINs como factor primario","Los sistemas biométricos","Los sistemas basados en tokens físicos"], ans:1, exp:"Una forma común de clasificar los sistemas de autenticación es si se basan en lo que el usuario sabe. Esto incluye los sistemas de contraseña (SFA) donde el factor único es conocimiento del usuario (usuario + contraseña)."},
+  {tag:"Ataques", q:"¿Cuáles son las 5 categorías principales de tipos y categorías de ataques según la diapositiva?", opts:["Virus, troyanos, gusanos, spyware y ransomware","Malware, ingeniería social, ataques a redes/sistemas, ataques a contraseñas y ataques a dispositivos","Phishing, vishing, smishing, whaling y pharming","DoS, DDoS, MitM, XSS y SQLi"], ans:1, exp:"Las 5 categorías son: 1) Ataques de Malware (virus, troyanos, ransomware, spyware), 2) Ataques de Ingeniería Social (phishing, spear phishing, vishing), 3) Ataques a Redes y Sistemas (MitM, DoS, sniffing, zero-day, SQL injection), 4) Ataques a Contraseñas (fuerza bruta, diccionario), 5) Ataques a Dispositivos (robo, USB malicioso)."},
+  {tag:"Conceptos", q:"¿Qué aspecto adicional toma en cuenta la Ciberseguridad que la Seguridad Informática básica no enfatiza tanto?", opts:["El control de acceso físico","El enfoque en sistemas interconectados y el tratamiento de amenazas sobre información procesada, almacenada y transportada en red","La protección de hardware obsoleto","El desarrollo de software seguro"], ans:1, exp:"La Ciberseguridad se enfoca específicamente en la protección de activos de información a través del tratamiento de amenazas sobre información procesada, almacenada y transportada por sistemas interconectados, enfatizando más el entorno en red y digital."},
+  {tag:"Autenticación", q:"¿Qué arquitecturas se integran en una solución de Token USB PKI?", opts:["Solo la tarjeta y el lector","Tarjeta/lector, infraestructura PKI (CA y RA), CMS, módulo de autenticación Windows y servidor de autenticación","Solo servidor de autenticación","Solo el directorio activo"], ans:1, exp:"La solución PKI con Token USB requiere integrar: la tarjeta con su lector y código informático, la infraestructura PKI (CA y RA), el CMS (Card Management System), el módulo de autenticación Windows y el servidor de autenticación."},
+  {tag:"Glosario", q:"¿Qué es la función de Autoridad de Registro en una PKI?", opts:["Emitir directamente los certificados","Verificar la identidad de los solicitantes de certificados antes de que la CA los emita","Almacenar las claves privadas de los usuarios","Detectar certificados expirados"], ans:1, exp:"La Autoridad de Registro (RA) en una PKI verifica la identidad de los solicitantes de certificados. Actúa como intermediaria entre el usuario y la CA, asegurando que solo los usuarios legítimamente identificados reciban certificados."},
+  {tag:"Avanzado", q:"¿Cuál es el impacto de una brecha de seguridad en los certificados digitales?", opts:["Ningún impacto significativo","Si se compromete la clave privada asociada con el certificado, la seguridad del certificado queda comprometida, haciendo inválida su garantía de autenticidad","Solo afecta a los usuarios del certificado","El certificado se renueva automáticamente"], ans:1, exp:"La seguridad de un certificado digital puede verse comprometida si se compromete la clave privada asociada con el certificado. Además, los certificados tienen fecha de caducidad y deben actualizarse regularmente para seguir siendo válidos."},
+  {tag:"Sistemas Auth", q:"¿Qué limitación tiene la 2FA respecto a la compatibilidad con servicios en línea?", opts:["Es incompatible con dispositivos móviles","La falta de compatibilidad con algunos servicios en línea puede hacer que los usuarios tengan que elegir entre seguridad y comodidad","Solo funciona con aplicaciones bancarias","Requiere conexión a internet constante"], ans:1, exp:"Uno de los problemas de la 2FA es la falta de compatibilidad con algunos servicios en línea, lo que puede obligar a los usuarios a elegir entre seguridad (usar 2FA en servicios compatibles) y comodidad (usar servicios sin 2FA que sean más convenientes)."},
+  {tag:"Avanzado", q:"La 'Integración de aplicaciones personales' en el SSO de empresa permite:", opts:["Que la empresa gestione las aplicaciones personales de los empleados","Que el propio usuario integre sus aplicaciones personales en el SSO, definiendo los atributos, identificadores y contraseñas de esas aplicaciones","Acceso automático a redes sociales","Sincronización de calendarios personales"], ans:1, exp:"La función de integración de aplicaciones personales permite que el propio usuario integre sus aplicaciones personales en el sistema de SSO. El usuario define los atributos, identificadores y contraseñas de sus aplicaciones personales, sin delegar a la administración."},
+  {tag:"Ataques", q:"¿Qué implica el 'análisis de tráfico' como amenaza intencionada?", opts:["Monitorear el rendimiento de la red","Analizar el tráfico de red para determinar relaciones entre usuarios o capturar información sensible que viaja sin cifrar","Optimizar el uso del ancho de banda","Detectar intrusiones en la red"], ans:1, exp:"El análisis de tráfico como amenaza intencionada implica analizar el tráfico de red para capturar información (especialmente si no viaja cifrada) o determinar relaciones entre varios usuarios, conociendo con quién o qué sistemas se relaciona alguien."},
+  {tag:"Conceptos", q:"¿Cuál es la distinción entre las medidas preventivas y correctivas en seguridad?", opts:["No hay diferencia real, ambas hacen lo mismo","Las preventivas (seguridad activa) evitan incidentes antes de que ocurran; las correctivas (seguridad pasiva) minimizan las consecuencias después de que ocurrieron","Las preventivas son más caras siempre","Las correctivas son más efectivas"], ans:1, exp:"Medidas preventivas (seguridad activa): previenen, detectan y evitan incidentes antes de que se produzcan (ej: contraseñas, antivirus). Medidas correctivas (seguridad pasiva): minimizan las consecuencias de un incidente después de que ocurrió (ej: copias de seguridad, planes de recuperación)."},
+  {tag:"Glosario", q:"¿Cuál es el objetivo principal del sistema CVE?", opts:["Puntuar vulnerabilidades de 0 a 10","Garantizar interoperabilidad entre herramientas de seguridad con identificación única de vulnerabilidades, permitiendo priorización y rastreo de soluciones","Reemplazar los sistemas de detección de intrusos","Gestionar incidentes de seguridad en tiempo real"], ans:1, exp:"El objetivo principal del CVE es la interoperabilidad: gracias a los CVE, diferentes herramientas de seguridad pueden 'hablar el mismo idioma' sobre vulnerabilidades. También permite identificación única, priorización de parches y rastreo de soluciones."},
+  {tag:"Autenticación", q:"En la política de autenticación de ejemplo, ¿qué protege la autenticación con tarjeta X.509 en acceso web?", opts:["Las aplicaciones de uso diario de correo electrónico","Las aplicaciones web accesibles desde Internet, sin tener que modificar las aplicaciones que pueden funcionar con su identificador y contraseña interno","Solo los servidores de base de datos","Las aplicaciones de I+D internas"], ans:1, exp:"En el ejemplo de política, la tarjeta X.509 protege las aplicaciones web accesibles desde Internet. El SSO web establece la autenticación con tarjeta X.509 sin modificar las aplicaciones, que siguen funcionando con identificador y contraseña internamente."},
+  {tag:"Sistemas Auth", q:"¿Qué capacidades ofrece la Aplicación de políticas de acceso seguro como estrategia de mitigación?", opts:["Solo cambio periódico de contraseñas","Implementar políticas de contraseñas seguras, autenticación multifactor y gestión de identidades y accesos para garantizar que solo usuarios autorizados accedan a recursos protegidos","Solo monitoreo de accesos","Solo capacitación de usuarios"], ans:1, exp:"La aplicación de políticas de acceso seguro incluye: políticas de contraseñas seguras, autenticación multifactor y gestión de identidades y accesos (IAM), garantizando que solo los usuarios autorizados tengan acceso a los recursos protegidos."},
+  {tag:"Avanzado", q:"¿Por qué las soluciones biométricas con servidor central son problemáticas en ciertos países?", opts:["Son demasiado costosas para implementar","El almacenamiento centralizado de datos biométricos choca con normas legales de protección del individuo; algunos países no autorizan bases de datos centrales de datos biométricos","Son técnicamente inferiores a otras soluciones","No escalan bien con muchos usuarios"], ans:1, exp:"El almacenamiento y gestión de datos biométricos en servidores centrales choca con normas legales de protección del individuo. Algunos países no autorizan la instauración de bases de datos centrales de datos biométricos, por razones de privacidad y derechos individuales."},
+  {tag:"Glosario", q:"¿Para qué sirve el CVSS en la práctica?", opts:["Para eliminar vulnerabilidades automáticamente","Para comunicar las características y gravedad de vulnerabilidades del software con una puntuación de 0-10, permitiendo priorizar la aplicación de parches","Para detectar ataques en tiempo real","Para gestionar identidades de usuarios"], ans:1, exp:"El CVSS sirve para comunicar las características y gravedad de las vulnerabilidades del software con una puntuación de 0 a 10 (base), que puede modificarse con métricas temporales y ambientales. Permite a los administradores priorizar qué parches aplicar con urgencia."},
+  {tag:"Avanzado", q:"¿Cuál es el papel del SSO en la consolidación de logs de auditoría?", opts:["El SSO no tiene relación con los logs","El SSO consolida la información de logs (auditoría) para todos los tipos de autenticación, tanto la inicial como la de las aplicaciones, en un único sistema","Solo registra los intentos fallidos de autenticación","Solo consolida logs de seguridad de red"], ans:1, exp:"El SSO de empresa consolida la información de logs (auditoría) para todos los tipos de autenticación —inicial y de las aplicaciones—. Esto es clave para la visibilidad, el cumplimiento normativo y la detección de actividades sospechosas."},
+  {tag:"Sistemas Auth", q:"¿Qué aspecto de los certificados digitales los hace especialmente útiles para prevenir el fraude en línea?", opts:["Son siempre gratuitos para los sitios web","Permiten verificar la autenticidad de sitios web y transacciones en línea; los sitios falsos se detectan fácilmente si no tienen un certificado digital válido","Ocultan el contenido de las transacciones","Son emitidos automáticamente sin verificación"], ans:1, exp:"Los certificados digitales son útiles contra el fraude en línea porque permiten verificar la autenticidad de los sitios web y transacciones. Los sitios web falsos (phishing, etc.) se pueden detectar fácilmente si no tienen un certificado digital válido emitido por una CA reconocida."},
+  {tag:"Avanzado", q:"Explica la relación entre los 'Cambios planeados de contraseñas secundarias' y la política de contraseñas en el SSO.", opts:["El SSO no gestiona cambios de contraseñas","El SSO puede cambiar automáticamente las contraseñas de aplicaciones según la política de seguridad, generando contraseñas complejas (hasta 32 caracteres) aleatorias sin que el usuario tenga que gestionarlas","El usuario siempre debe cambiar contraseñas manualmente","Los cambios se realizan cada año automáticamente"], ans:1, exp:"El SSO puede cambiar automáticamente las contraseñas de aplicaciones según la política de seguridad o cuando la aplicación lo solicita. Genera contraseñas de gran longitud (ej: 32 caracteres) con formato complejo y aleatorio. El usuario no necesita administrar estas contraseñas."},
+  {tag:"Ataques", q:"¿Qué factores hacen que ciertos sectores sean más frecuentemente blanco de ataques DDoS?", opts:["El tamaño del equipo de TI","La relevancia y el valor de sus recursos en línea; sectores como juegos, comercio electrónico y telecomunicaciones son blancos más frecuentes por su dependencia de la disponibilidad","La localización geográfica","El sistema operativo que usan"], ans:1, exp:"Los ataques DDoS se dirigen más a ciertos sectores como juegos, comercio electrónico y telecomunicaciones porque estos sectores dependen fuertemente de la disponibilidad continua de sus servicios en línea, haciendo que una interrupción cause mayor daño económico y reputacional."},
+  {tag:"Glosario", q:"¿Cómo contribuye el Web Tracking a preocupaciones de privacidad?", opts:["El web tracking nunca plantea problemas de privacidad","Puede recopilar historial de navegación, búsquedas, ubicación, información del dispositivo y tiempo en páginas para mostrar anuncios dirigidos o mejorar experiencia, levantando importantes preocupaciones de privacidad","Solo funciona con el consentimiento explícito del usuario","Solo recopila información de compras en línea"], ans:1, exp:"El Web Tracking puede recopilar información muy detallada sobre usuarios (historial, búsquedas, ubicación, dispositivo, tiempo en páginas) para personalizar contenido o mostrar anuncios dirigidos. Aunque algunos seguimientos mejoran la funcionalidad, otros plantean importantes preocupaciones sobre la privacidad."},
+  {tag:"Autenticación", q:"¿Por qué la Llave 'Confidencial Defensa' se considera una solución portable de SSO?", opts:["Porque es pequeña y liviana","Porque lleva consigo los distintos elementos del SSO de empresa, siendo utilizable sobre cualquier puesto de trabajo de forma segura","Porque funciona sin necesidad de instalar software","Porque no requiere autenticación adicional"], ans:1, exp:"La Llave Confidencial Defensa transporta de manera segura los distintos elementos del SSO de empresa, que se vuelve así portable y utilizable sobre cualquier puesto de trabajo. Actúa como una verdadera caja fuerte electrónica, integrando autenticación fuerte y SSO portable."},
+  {tag:"Sistemas Auth", q:"¿Qué aspecto crítico destaca el artículo académico sobre la colaboración entre proveedores y usuarios en ciberseguridad?", opts:["Los proveedores son los únicos responsables de la seguridad","La seguridad en línea es un esfuerzo conjunto: los proveedores implementan medidas técnicas y los usuarios deben aplicar contraseñas seguras, formarse y mantener sus dispositivos actualizados","Los usuarios son los únicos responsables de la seguridad","La seguridad es responsabilidad exclusiva del gobierno"], ans:1, exp:"El artículo destaca que la seguridad en línea es un esfuerzo conjunto entre proveedores de servicios y usuarios. Los proveedores implementan medidas técnicas, y los usuarios deben aplicar contraseñas seguras, recibir formación y mantener actualizados sus dispositivos."},
+  {tag:"Conceptos", q:"¿Qué elementos componen el proceso inicial de conexión (antes de la aplicación) según Evidian?", opts:["Solo la introducción de contraseña","La apertura de una sesión sobre el puesto de trabajo y la autenticación del usuario, seguido de la comprobación de derechos y conexión a recursos","Identificación de IP y verificación de MAC","Solo el login de Windows"], ans:1, exp:"El proceso inicial común a todas las conexiones tiene 2 etapas: 1) Apertura de una sesión sobre el puesto de trabajo y autenticación del usuario, 2) Comprobación de los derechos del usuario y conexión a sus recursos."},
+  {tag:"Glosario", q:"¿En qué se diferencia SIEM de un simple sistema de logs?", opts:["SIEM solo almacena logs sin analizarlos","SIEM centraliza Y analiza los logs en tiempo real para detectar amenazas, usando además Inteligencia Artificial y análisis de comportamiento (UEBA) para automatizar la respuesta ante incidentes","SIEM es solo para sistemas Windows","SIEM reemplaza completamente al firewall"], ans:1, exp:"A diferencia de un simple sistema de logs que solo almacena registros, el SIEM centraliza Y analiza en tiempo real los logs de toda la organización para detectar amenazas. Actualmente usa IA y análisis de comportamiento (UEBA) para automatizar la respuesta ante incidentes."},
+  {tag:"Avanzado", q:"¿Por qué la seguridad informática es multidisciplinar?", opts:["Porque involucra solo a ingenieros de sistemas","Porque combina tecnología, gestión organizacional, aspectos legales, psicología humana y procesos de negocio para proteger efectivamente los activos de información","Porque solo incluye múltiples herramientas de software","Porque abarca varias marcas de hardware"], ans:1, exp:"La seguridad informática es multidisciplinar porque combina múltiples dominios: tecnología (hardware, software, redes), gestión (políticas, procesos), aspectos legales (normativas, cumplimiento), psicología humana (ingeniería social, concienciación) y procesos de negocio (continuidad, contingencia)."},
+  {tag:"Normativas", q:"¿Cuál de estas normativas es específica para transacciones con tarjetas de pago?", opts:["ISO 27001","GDPR","PCI DSS","SOX"], ans:2, exp:"PCI DSS (Payment Card Industry Data Security Standard) es el estándar específico para la industria de tarjetas de pago, que establece requisitos de seguridad para todas las organizaciones que almacenan, procesan o transmiten datos de tarjetas de crédito o débito."},
+  {tag:"Avanzado", q:"¿Cuál es el concepto clave detrás de la función 'Controlar el acceso según el puesto de trabajo' en el SSO?", opts:["Todos los empleados deben tener acceso desde cualquier puesto","El sistema de SSO puede limitar el acceso a las aplicaciones más críticas solo desde un subconjunto específico de puestos de trabajo, como que I+D solo sea accesible desde puestos de I+D","Los empleados remotos tienen más accesos","Los puestos fijos tienen menos privilegios que los portátiles"], ans:1, exp:"La función 'Controlar el acceso según el puesto de trabajo' permite que el sistema de SSO limite el acceso a las aplicaciones más críticas solo desde un subconjunto dado de puestos de trabajo. Por ejemplo, las aplicaciones de I+D solo son accesibles desde los puestos de trabajo de I+D."},
+  {tag:"Sistemas Auth", q:"¿Qué es la 'Aplicación de políticas de contraseñas seguras' como estrategia de mitigación?", opts:["Usar la misma contraseña simple para todos","Exigir que las contraseñas sean complejas (combinación de mayúsculas, minúsculas, números, caracteres especiales) y cambiarlas regularmente para reducir el riesgo de compromiso","Compartir contraseñas solo con colegas de confianza","Usar el nombre completo como contraseña"], ans:1, exp:"La implementación de contraseñas seguras como estrategia de mitigación implica que deben ser complejas (combinación de letras mayúsculas y minúsculas, números y caracteres especiales) y que los usuarios deben cambiarlas con regularidad para reducir el riesgo."},
+  {tag:"Glosario", q:"¿Cómo funciona el cifrado asimétrico en los certificados PKI?", opts:["Usa la misma clave para cifrar y descifrar","Usa un par de claves: una pública (compartida con todos) para cifrar, y una privada (secreta del propietario) para descifrar, permitiendo verificar identidades sin compartir secretos","Solo cifra datos en reposo","Requiere que ambas partes conozcan la misma clave secreta"], ans:1, exp:"El cifrado asimétrico en PKI usa un par de claves: la clave pública (compartida con todos) se usa para cifrar o verificar firmas, y la clave privada (secreta del propietario) se usa para descifrar o firmar. Esto permite verificar identidades sin necesidad de compartir un secreto común."},
+  {tag:"Autenticación", q:"¿Qué módulo del PC en Windows se inicializa con Ctrl+Alt+Supr y gestiona la autenticación inicial?", opts:["Windows Defender","El módulo de autentificación (GINA) que gestiona la autenticación inicial, excepciones y alimenta los logs de seguridad","Active Directory","Security Center"], ans:1, exp:"El módulo de autentificación del PC (también conocido como GINA) se encarga de la autenticación inicial y la gestión de las excepciones inicializado por Ctrl+Alt+Supr. Es el que debe alimentar los logs de seguridad para la parte de autenticación inicial y de las aplicaciones."},
+];
+
+// State
+let questions = [];
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+let missed = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  questions = shuffle(ALL_QUESTIONS).slice(0, 150);
+  current = 0; correct = 0; wrong = 0; missed = [];
+  document.getElementById('start').style.display = 'none';
+  document.getElementById('quiz-section').classList.add('show');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  answered = false;
+
+  // Stats
+  document.getElementById('s-current').textContent = current + 1;
+  document.getElementById('s-correct').textContent = correct;
+  document.getElementById('s-wrong').textContent = wrong;
+  const pct = current > 0 ? Math.round((correct / current) * 100) : 0;
+  document.getElementById('s-pct').textContent = pct + '%';
+
+  // Progress
+  const progPct = Math.round(((current) / 150) * 100);
+  document.getElementById('prog-label').textContent = `Pregunta ${current + 1} de 150`;
+  document.getElementById('prog-pct').textContent = progPct + '%';
+  document.getElementById('prog-fill').style.width = progPct + '%';
+
+  // Question
+  document.getElementById('q-num').textContent = String(current + 1).padStart(2, '0');
+  document.getElementById('q-tag').textContent = q.tag;
+  document.getElementById('q-text').textContent = q.q;
+
+  // Shuffle options with original index tracking
+  const indices = q.opts.map((_, i) => i);
+  const shuffledIndices = shuffle(indices);
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const optContainer = document.getElementById('options');
+  optContainer.innerHTML = '';
+
+  shuffledIndices.forEach((origIdx, displayPos) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-letter">${letters[displayPos]}</span>${q.opts[origIdx]}`;
+    btn.onclick = () => selectAnswer(origIdx, btn);
+    optContainer.appendChild(btn);
+  });
+
+  // Reset feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.style.display = 'none';
+  document.getElementById('next-btn').disabled = true;
+
+  // Reanimate card
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none';
+  setTimeout(() => card.style.animation = 'cardIn 0.3s ease', 10);
+}
+
+function selectAnswer(selectedIdx, btn) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[current];
+  const allOpts = document.getElementById('options').querySelectorAll('.opt');
+  
+  // Find correct button
+  // We need to find which button corresponds to q.ans
+  // Each button was created with origIdx, so we need to track this
+  // Rebuild by re-checking all buttons' text against q.opts[q.ans]
+  allOpts.forEach(b => {
+    b.disabled = true;
+    const btnText = b.textContent.substring(1); // remove letter
+    if (btnText.trim() === q.opts[q.ans].trim()) {
+      b.classList.add('correct');
+    }
+  });
+
+  const isCorrect = selectedIdx === q.ans;
+  if (isCorrect) {
+    correct++;
+    btn.classList.add('correct');
+    showFeedback(true, q);
+  } else {
+    wrong++;
+    btn.classList.add('wrong');
+    showFeedback(false, q);
+    missed.push({ num: current + 1, q: q.q, correct: q.opts[q.ans], exp: q.exp });
+  }
+
+  document.getElementById('next-btn').disabled = false;
+  document.getElementById('s-correct').textContent = correct;
+  document.getElementById('s-wrong').textContent = wrong;
+  const pct = Math.round((correct / (current + 1)) * 100);
+  document.getElementById('s-pct').textContent = pct + '%';
+}
+
+function showFeedback(isCorrect, q) {
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+  fb.style.display = 'block';
+
+  document.getElementById('fb-title').textContent = isCorrect ? '✓ ¡Correcto!' : '✗ Incorrecto';
+  document.getElementById('fb-msg').textContent = isCorrect
+    ? '¡Bien! Sigue así.'
+    : `La respuesta correcta es: "${q.opts[q.ans]}"`;
+  document.getElementById('fb-explain').textContent = q.exp;
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= 150) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz-section').classList.remove('show');
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.classList.add('show');
+
+  const pct = Math.round((correct / 150) * 100);
+  document.getElementById('r-score').textContent = pct + '%';
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = wrong;
+  document.getElementById('r-total').textContent = 150;
+
+  let msg = '';
+  if (pct >= 90) msg = '🏆 Excelente dominio del contenido. ¡Estás listo para el parcial!';
+  else if (pct >= 75) msg = '👍 Buen nivel. Repasa los temas donde fallaste.';
+  else if (pct >= 60) msg = '📖 Nivel aceptable, pero hay temas por reforzar.';
+  else msg = '💪 Necesitas repasar más el material. ¡Inténtalo de nuevo!';
+  document.getElementById('r-msg').textContent = msg;
+
+  // Missed
+  const missedSection = document.getElementById('missed-section');
+  if (missed.length === 0) {
+    missedSection.innerHTML = '<p style="color:var(--success);font-family:var(--mono);font-size:13px;">🎉 ¡Respondiste todo correctamente!</p>';
+  } else {
+    let html = `<div class="missed-title">📌 Preguntas que fallaste (${missed.length})</div>`;
+    missed.forEach(m => {
+      html += `<div class="missed-item">
+        <div class="missed-q">#${m.num} — ${m.q}</div>
+        <div class="missed-correct">✓ Respuesta correcta: ${m.correct}</div>
+        <div class="missed-explain">${m.exp}</div>
+      </div>`;
+    });
+    missedSection.innerHTML = html;
+  }
+}
+
+function restartQuiz() {
+  document.getElementById('results').classList.remove('show');
+  startQuiz();
+}
+</script>
+</body>
+</html>
