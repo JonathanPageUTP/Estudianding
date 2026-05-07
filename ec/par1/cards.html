@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microeconomía — 100 Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f3ee;
+    --card-bg: #fff;
+    --card-back: #1c2340;
+    --accent: #c8392b;
+    --accent2: #2563eb;
+    --gold: #d97706;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5ddd5;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); font-family:'DM Sans',sans-serif; min-height:100vh; }
+  header {
+    background: var(--card-back);
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  header h1 {
+    font-family:'DM Serif Display',serif;
+    font-size: 28px;
+    color: #fff;
+  }
+  header h1 span { color: #f4c430; }
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family:'DM Sans',sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all .15s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #a52d21; }
+  .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+  .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+  .btn-success { background: #059669; color:#fff; }
+  .btn-success:hover { background:#047857; }
+
+  .filter-bar {
+    background: #fff;
+    padding: 16px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-label { font-size: 13px; font-weight: 600; color: var(--muted); margin-right: 4px; }
+  .filter-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-size: 12px;
+    font-family:'DM Sans',sans-serif;
+    color: var(--muted);
+    transition: all .15s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--card-back);
+    color: #fff;
+    border-color: var(--card-back);
+  }
+
+  .stats-bar {
+    padding: 12px 40px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .stat-item strong { color: var(--text); }
+
+  .grid {
+    padding: 32px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .fc-wrapper {
+    perspective: 1000px;
+    height: 180px;
+  }
+  .fc {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+    cursor: pointer;
+  }
+  .fc.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .fc-front {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .fc-front:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+  .fc-back {
+    background: var(--card-back);
+    border: 1.5px solid #2d3560;
+    transform: rotateY(180deg);
+    color: #fff;
+  }
+  .fc-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .fc-category {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .cat-def { background: #fef3c7; color: #92400e; }
+  .cat-eco { background: #d1fae5; color: #065f46; }
+  .cat-princ { background: #ede9fe; color: #5b21b6; }
+  .cat-teoria { background: #dbeafe; color: #1e40af; }
+  .cat-dem { background: #fce7f3; color: #9d174d; }
+  .cat-ofe { background: #fef9c3; color: #713f12; }
+
+  .fc-front .fc-category { align-self: flex-start; }
+  .fc-back .fc-category { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+
+  .fc-q {
+    font-family:'DM Serif Display',serif;
+    font-size: 16px;
+    color: var(--text);
+    line-height: 1.4;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .fc-a {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.55;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+  }
+  .fc-hint { font-size: 11px; color: var(--muted); text-align: right; }
+  .fc-back .fc-hint { color: rgba(255,255,255,0.35); }
+
+  .mastered-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: #059669;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    z-index: 10;
+  }
+  .fc-wrapper[data-mastered="true"] .fc-front { border-color: #059669; }
+
+  @media(max-width:600px){
+    .grid { padding: 16px; }
+    header { padding: 20px; }
+    .filter-bar { padding: 12px 16px; }
+    .stats-bar { padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Micro<span>economía</span> — <span style="color:rgba(255,255,255,0.6);font-size:18px">100 Flashcards</span></h1>
+  <div class="controls">
+    <button class="btn btn-secondary" onclick="shuffleCards()">🔀 Mezclar</button>
+    <button class="btn btn-secondary" onclick="resetAll()">↺ Reiniciar</button>
+    <button class="btn btn-success" onclick="toggleMastered()">✓ Ver no dominadas</button>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <span class="filter-label">Categoría:</span>
+  <button class="filter-btn active" onclick="filterCat('all',this)">Todas</button>
+  <button class="filter-btn" onclick="filterCat('def',this)">Definiciones</button>
+  <button class="filter-btn" onclick="filterCat('eco',this)">Economía</button>
+  <button class="filter-btn" onclick="filterCat('princ',this)">10 Principios</button>
+  <button class="filter-btn" onclick="filterCat('teoria',this)">Teoría Micro</button>
+  <button class="filter-btn" onclick="filterCat('dem',this)">Demanda</button>
+  <button class="filter-btn" onclick="filterCat('ofe',this)">Oferta</button>
+</div>
+
+<div class="stats-bar">
+  <span>Total: <strong id="stat-total">100</strong></span>
+  <span>Dominadas: <strong id="stat-mastered">0</strong></span>
+  <span>Pendientes: <strong id="stat-pending">100</strong></span>
+  <span style="color:#888;font-size:12px">Clic para voltear · Doble clic para marcar dominada</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const cards = [
+  // DEFINICIONES (1-15)
+  {q:"¿Qué es la Economía según Paul Samuelson?",a:"El estudio de la manera en que las sociedades utilizan los recursos escasos para producir mercancías y distribuirlas entre los diferentes grupos.",cat:"def"},
+  {q:"¿Qué es la Economía según Stiglitz?",a:"El estudio del modo en que nuestra sociedad, los individuos, empresas y el Estado eligen entre diversas opciones.",cat:"def"},
+  {q:"¿Qué es la Economía según Wonnacott?",a:"El estudio de cómo logran los individuos su subsistencia, o de cómo adquieren comida, vivienda, vestido y satisfacen otras necesidades materiales.",cat:"def"},
+  {q:"¿Cuál es la definición integradora de Economía?",a:"Ciencia social que estudia el comportamiento económico de agentes individuales: producción, intercambio, distribución, consumo de bienes y servicios como medios de satisfacer necesidades humanas.",cat:"def"},
+  {q:"¿Qué es la Microeconomía?",a:"Rama de la economía que estudia los comportamientos básicos de los agentes económicos individuales y los mecanismos de formación de precios.",cat:"def"},
+  {q:"¿Qué es la Macroeconomía?",a:"Rama de la economía que analiza los comportamientos agregados o globales de un país (empleo, inflación, PIB, balanza de pagos).",cat:"def"},
+  {q:"¿Qué es un Bien Económico?",a:"Bien que tiene límites en su disponibilidad (es escaso), involucra un oferente y un demandante, y tiene precio en el mercado.",cat:"def"},
+  {q:"¿Qué es un Bien No Económico?",a:"Bien abundante cuyo precio es cero, porque supera la demanda. Ejemplo: el aire, la luz solar.",cat:"def"},
+  {q:"¿Qué es un Agente Económico?",a:"Individuo, empresa o institución que participa en el proceso de producción y distribución de la riqueza y del valor en una economía.",cat:"def"},
+  {q:"¿Qué es la Escasez en Economía?",a:"No que no haya nada, sino que no hay suficiente para satisfacer todo lo que todos desean. Obliga a los agentes a priorizar.",cat:"def"},
+  {q:"¿Qué es el Costo de Oportunidad?",a:"Aquello de lo que un agente se priva o renuncia cuando hace una elección. El valor de la mejor opción no elegida.",cat:"def"},
+  {q:"¿Qué es una Necesidad en Economía?",a:"La carencia de algo. Son ilimitadas en número y limitadas en capacidad (existe un punto de saturación).",cat:"def"},
+  {q:"¿Cuáles son las necesidades primarias?",a:"Aquellas indispensables para vivir: alimentos, vivienda, educación.",cat:"def"},
+  {q:"¿Qué es la Elección en Economía?",a:"Seleccionar aquellos bienes económicos que permiten alcanzar las metas y objetivos. En un mundo de escasez, elegir una cosa significa renunciar a otra.",cat:"def"},
+  {q:"¿Qué es la utilidad marginal decreciente?",a:"El principio de que a medida que se consume más unidades de un bien, la satisfacción adicional obtenida por cada unidad extra disminuye.",cat:"def"},
+
+  // ECONOMÍA GENERAL (16-30)
+  {q:"¿Cuáles son las 3 preguntas básicas de la Economía?",a:"¿QUÉ producir? ¿CÓMO producir? ¿PARA QUIÉN producir?",cat:"eco"},
+  {q:"¿Qué preguntas hace la empresa en economía?",a:"¿Qué producir? ¿Cuánto y cómo producir? ¿Para quién producir? ¿Dónde producir?",cat:"eco"},
+  {q:"¿Qué preguntas hace el consumidor en economía?",a:"¿Qué comprar? ¿Cuánto y a qué precio? ¿A quién y dónde comprar lo que necesita?",cat:"eco"},
+  {q:"¿Qué preguntas hace el Estado en economía?",a:"¿Qué producir o qué servicio dar? ¿Cómo y cuánto? ¿Para quién? ¿Dónde?",cat:"eco"},
+  {q:"¿Qué estudia la Microeconomía? (temas)",a:"Producción de empresas, precios de bienes y servicios, distribución del ingreso, empleo en empresas e industrias individuales.",cat:"eco"},
+  {q:"¿Qué estudia la Macroeconomía? (temas)",a:"Producción Nacional, nivel agregado de precios, ingreso nacional, tasas de desempleo.",cat:"eco"},
+  {q:"¿Por qué es necesario estudiar Economía?",a:"Gran campo laboral, formación amplia, mejores decisiones políticas, menos probabilidades de fracaso en negocios.",cat:"eco"},
+  {q:"¿Qué es una necesidad desde el marketing?",a:"Una sensación de carencia unida al deseo de satisfacerla. Ej: sed = necesidad de agua.",cat:"eco"},
+  {q:"¿Cuál es la diferencia entre necesidad y deseo?",a:"Una necesidad es la carencia. Un deseo es esa necesidad tomando la forma de un producto, marca o empresa específica.",cat:"eco"},
+  {q:"¿Qué hace el marketing con las necesidades?",a:"Las detecta para transformarlas en oportunidades de negocio, produce productos/servicios y despierta el deseo por ellos.",cat:"eco"},
+  {q:"¿Las necesidades son creadas por el marketing?",a:"No. Las necesidades NO se crean; lo que se crea o fomenta es el deseo.",cat:"eco"},
+  {q:"¿Son las necesidades limitadas o ilimitadas?",a:"Son ilimitadas en número (siempre surgen nuevas) pero limitadas en capacidad (hay un punto de saturación por bien específico).",cat:"eco"},
+  {q:"¿Qué significa que las necesidades son concurrentes?",a:"Que se dan varias al mismo tiempo, no en forma sucesiva, y vuelven a aparecer.",cat:"eco"},
+  {q:"¿Qué significa que las necesidades son complementarias?",a:"Integran grupos: satisfacer una necesidad implica otras. Ej: tomar café implica taza, cucharita, azúcar.",cat:"eco"},
+  {q:"Da un ejemplo de escasez para el Estado",a:"El Estado debe elegir entre construir un hospital o mejorar la red vial, porque los recursos son limitados.",cat:"eco"},
+
+  // 10 PRINCIPIOS (31-50)
+  {q:"¿Cuál es el Principio 1 de la Economía?",a:"Los individuos se enfrentan a disyuntivas: para conseguir algo que queremos, debemos renunciar a algo que también queremos.",cat:"princ"},
+  {q:"¿Cuál es el Principio 2 de la Economía?",a:"El coste es aquello a lo que se renuncia (costo de oportunidad). El verdadero coste de cualquier cosa es su coste de oportunidad.",cat:"princ"},
+  {q:"¿Cuál es el Principio 3 de la Economía?",a:"Las personas racionales piensan en términos marginales: comparan los costes y beneficios marginales para tomar decisiones.",cat:"princ"},
+  {q:"¿Cuál es el Principio 4 de la Economía?",a:"Los individuos responden a incentivos: cuando los incentivos cambian, los agentes ajustan su comportamiento.",cat:"princ"},
+  {q:"¿Cuál es el Principio 5 de la Economía?",a:"El comercio puede mejorar el bienestar de todos: permite especializarse en lo que cada quien hace mejor.",cat:"princ"},
+  {q:"¿Cuál es el Principio 6 de la Economía?",a:"Los mercados normalmente son una buena manera de organizar la actividad económica (la 'mano invisible').",cat:"princ"},
+  {q:"¿Cuál es el Principio 7 de la Economía?",a:"El Estado puede mejorar a veces los resultados del mercado (ante monopolios, externalidades, etc.).",cat:"princ"},
+  {q:"¿Cuál es el Principio 8 de la Economía?",a:"El nivel de vida de un país depende de su capacidad para producir bienes y servicios (productividad).",cat:"princ"},
+  {q:"¿Cuál es el Principio 9 de la Economía?",a:"Los precios suben cuando el gobierno imprime demasiado dinero (inflación por exceso de oferta monetaria).",cat:"princ"},
+  {q:"¿Cuál es el Principio 10 de la Economía?",a:"La sociedad enfrenta a corto plazo una disyuntiva entre inflación y desempleo.",cat:"princ"},
+  {q:"¿Qué ilustra la frase 'cañones vs mantequilla'?",a:"El Principio 1: los individuos se enfrentan a disyuntivas. Los ejércitos deben elegir entre armamento y alimento.",cat:"princ"},
+  {q:"¿Qué ilustra el ejemplo del estudiante vs trabajador?",a:"El Principio 2: el coste es aquello a lo que se renuncia. Estudiar implica renunciar al dinero que podrías ganar trabajando.",cat:"princ"},
+  {q:"¿Qué ilustra la aerolínea con asientos vacíos?",a:"El Principio 3: personas racionales piensan en términos marginales. Vender el boleto barato es mejor que el asiento vacío.",cat:"princ"},
+  {q:"¿Qué ilustra el precio de la fruta en el mercado?",a:"El Principio 4: los individuos responden a incentivos. Si baja el precio, comprarán más.",cat:"princ"},
+  {q:"¿Cómo el comercio beneficia a todos los países?",a:"Principio 5: cada país se especializa en lo que hace mejor y obtiene de otros lo que estos hacen mejor.",cat:"princ"},
+  {q:"¿Qué es la 'mano invisible' en Economía?",a:"Concepto del Principio 6: los mercados coordinan millones de agentes a través del sistema de precios sin dirección central.",cat:"princ"},
+  {q:"¿Cuándo interviene el Estado en la economía?",a:"Principio 7: cuando la mano invisible falla; ante monopolios, externalidades negativas, escasez o sobreproducción.",cat:"princ"},
+  {q:"¿Qué relación hay entre productividad y nivel de vida?",a:"Principio 8: cuanto más productivo sea un país, mayor será su nivel de vida.",cat:"princ"},
+  {q:"¿Qué pasa si el gobierno imprime demasiado dinero?",a:"Principio 9: el valor del dinero disminuye proporcionalmente y suben los precios (inflación).",cat:"princ"},
+  {q:"¿Cuál es la disyuntiva inflación-desempleo?",a:"Principio 10: mayor demanda → empresas contratan más (↓desempleo) pero también suben precios (↑inflación).",cat:"princ"},
+
+  // TEORÍA MICROECONÓMICA (51-65)
+  {q:"¿Cuál es el propósito de una teoría económica?",a:"Predecir y explicar. Una teoría es una hipótesis probada satisfactoriamente.",cat:"teoria"},
+  {q:"¿Cómo se comprueba una hipótesis económica?",a:"No por el realismo de sus supuestos, sino por su capacidad para predecir con precisión y explicar, demostrando que el resultado es consecuencia lógica de los supuestos.",cat:"teoria"},
+  {q:"¿Qué estudia la Teoría Microeconómica?",a:"El comportamiento económico de las unidades decisorias individuales: consumidores, propietarios de recursos y empresas en una economía de libre empresa.",cat:"teoria"},
+  {q:"Otro nombre para la Teoría Microeconómica",a:"Teoría de los precios.",cat:"teoria"},
+  {q:"¿Qué es un mercado en Teoría Micro?",a:"Lugar o conjunto de lugares donde compradores y vendedores compran y venden bienes, servicios y recursos.",cat:"teoria"},
+  {q:"¿Qué es una función en economía?",a:"Relación entre dos o más variables; muestra cómo la variable dependiente depende de una o más variables independientes.",cat:"teoria"},
+  {q:"¿Qué es el Equilibrio en economía?",a:"Condición del mercado que, una vez alcanzada, tiende a persistir. Resulta del balance de las fuerzas del mercado.",cat:"teoria"},
+  {q:"¿Qué es la Estática Comparativa?",a:"Estudia y compara dos o más posiciones de equilibrio, sin considerar el periodo de transición ni el proceso de ajuste.",cat:"teoria"},
+  {q:"¿Qué es el análisis Dinámico en economía?",a:"Se ocupa de la trayectoria en el tiempo y del proceso de ajuste en sí (transición entre equilibrios).",cat:"teoria"},
+  {q:"¿Qué es el Equilibrio Parcial?",a:"Estudio del comportamiento de unidades decisorias individuales y mercados individuales, considerados de manera aislada.",cat:"teoria"},
+  {q:"¿Qué es el Equilibrio General?",a:"Estudia simultáneamente el comportamiento de todas las unidades decisorias individuales y de todos los mercados.",cat:"teoria"},
+  {q:"¿Qué es la Economía Positiva?",a:"Trata lo que ES; la forma en que una sociedad realmente resuelve los problemas económicos que enfrenta.",cat:"teoria"},
+  {q:"¿Qué es la Economía Normativa?",a:"Trata lo que DEBE SER; la forma en que una sociedad debería resolver los problemas económicos que enfrenta.",cat:"teoria"},
+  {q:"¿Diferencia entre Economía Positiva y Normativa?",a:"Positiva = descriptiva (lo que es). Normativa = prescriptiva (lo que debe ser).",cat:"teoria"},
+  {q:"¿Quiénes son las unidades decisorias en Microeconomía?",a:"Consumidores, propietarios de los recursos y empresas en una economía de libre empresa.",cat:"teoria"},
+
+  // DEMANDA (66-82)
+  {q:"¿Qué es la Demanda?",a:"La intención de compra que tiene el consumidor ante un bien o servicio a diferentes niveles de precio.",cat:"dem"},
+  {q:"¿Cuál es la Ley de la Demanda?",a:"A menor precio, las cantidades demandadas suben; a mayor precio, las cantidades demandadas disminuyen. Relación inversa.",cat:"dem"},
+  {q:"¿Qué tipo de relación hay entre precio y cantidad demandada?",a:"Relación INVERSA: cuando el precio sube, la cantidad demandada baja, y viceversa.",cat:"dem"},
+  {q:"¿Qué representa la curva de demanda?",a:"Gráficamente, los valores de la tabla de la demanda; la relación inversa entre precio y cantidades demandadas. Tiene pendiente negativa.",cat:"dem"},
+  {q:"¿Qué es la tabla de demanda?",a:"Una tabla que muestra las distintas cantidades de un bien que los consumidores estarían dispuestos a comprar a diferentes niveles de precio.",cat:"dem"},
+  {q:"¿Qué es la función de demanda?",a:"La relación matemática entre la cantidad demandada de un bien y los otros factores determinantes: Qd = f(P, I, Ps, Pc, G, E, N)",cat:"dem"},
+  {q:"Menciona 4 factores determinantes de la Demanda",a:"Precio del bien, ingreso del consumidor, precios de bienes relacionados, gustos y preferencias.",cat:"dem"},
+  {q:"¿Cuáles son otros 2 factores determinantes de la Demanda?",a:"Expectativas futuras (precios o ingresos) y el número de compradores en el mercado.",cat:"dem"},
+  {q:"¿Qué son bienes sustitutos?",a:"Bienes que pueden reemplazarse mutuamente: si sube el precio de uno, aumenta la demanda del otro.",cat:"dem"},
+  {q:"¿Qué son bienes complementarios?",a:"Bienes que se consumen juntos: si sube el precio de uno, baja la demanda de ambos.",cat:"dem"},
+  {q:"¿Qué es el comprador/consumidor en el mercado?",a:"El demandante de un bien o servicio; busca adquirir un producto que satisfaga una necesidad. Busca maximizar recursos comprando al precio más bajo.",cat:"dem"},
+  {q:"¿Qué hace que la curva de demanda se desplace?",a:"Un cambio en los factores determinantes distintos al precio (ingreso, gustos, precios relacionados, expectativas, número de compradores).",cat:"dem"},
+  {q:"¿Qué causa un movimiento a lo LARGO de la curva de demanda?",a:"Un cambio en el precio del bien (variable principal). Es el movimiento dentro de la misma curva.",cat:"dem"},
+  {q:"¿Qué ocurre con la demanda si aumenta el ingreso del consumidor (bien normal)?",a:"La demanda aumenta: la curva se desplaza hacia la derecha.",cat:"dem"},
+  {q:"¿Qué estudia el mercado según el análisis de demanda?",a:"Las exigencias del mercado: qué necesidades cubrir, qué solicita el demandante, qué tiene el ofertante, cuáles son los canales de distribución.",cat:"dem"},
+  {q:"¿Quién es el vendedor/productor (ofertante)?",a:"El que está dispuesto a recibir dinero a cambio de un bien o servicio. Vende al precio más alto que le genere ganancias.",cat:"dem"},
+  {q:"¿Qué implica la relación inversa en la demanda para las empresas?",a:"Que si suben sus precios, esperan vender menos unidades; si bajan precios, esperan vender más.",cat:"dem"},
+
+  // OFERTA (83-100)
+  {q:"¿Cuál es la Ley de la Oferta?",a:"Relación positiva entre precio y cantidad ofrecida: a mayor precio, mayor cantidad ofrecida; a menor precio, menor cantidad ofrecida.",cat:"ofe"},
+  {q:"¿Qué tipo de relación hay entre precio y cantidad ofrecida?",a:"Relación DIRECTA o POSITIVA: cuando el precio sube, la cantidad ofrecida también sube.",cat:"ofe"},
+  {q:"¿Cuál es la pendiente de la curva de oferta?",a:"Positiva (inclinada hacia arriba de izquierda a derecha), reflejando la relación directa precio-cantidad.",cat:"ofe"},
+  {q:"¿Qué causa un movimiento a lo largo de la curva de oferta?",a:"Un cambio en el precio del bien (la variable principal).",cat:"ofe"},
+  {q:"¿Qué causa un desplazamiento de la curva de oferta?",a:"Un cambio en los factores determinantes: costos de producción, tecnología, expectativas, número de vendedores, etc.",cat:"ofe"},
+  {q:"Menciona 3 factores determinantes de la Oferta",a:"Costos de los insumos, tecnología disponible, expectativas de los productores.",cat:"ofe"},
+  {q:"¿Cómo afecta una mejora tecnológica a la oferta?",a:"Reduce costos y aumenta la capacidad productiva → la curva de oferta se desplaza a la derecha (mayor oferta).",cat:"ofe"},
+  {q:"¿Qué es el equilibrio de mercado?",a:"El punto donde la cantidad demandada iguala a la cantidad ofrecida. Es donde se cruzan la curva de demanda y la curva de oferta.",cat:"ofe"},
+  {q:"¿Qué es el precio de equilibrio?",a:"El precio al que la cantidad ofrecida iguala a la cantidad demandada, vaciando el mercado.",cat:"ofe"},
+  {q:"Diferencia clave entre Ley de Demanda y Ley de Oferta",a:"Demanda: relación INVERSA (↑P → ↓Qd). Oferta: relación DIRECTA (↑P → ↑Qs).",cat:"ofe"},
+  {q:"¿Qué pasa cuando hay un exceso de oferta?",a:"La cantidad ofrecida supera a la demandada al precio actual → el precio tiende a bajar hasta el equilibrio.",cat:"ofe"},
+  {q:"¿Qué pasa cuando hay un exceso de demanda (escasez)?",a:"La cantidad demandada supera a la ofrecida → el precio tiende a subir hasta el equilibrio.",cat:"ofe"},
+  {q:"¿Cómo afecta un aumento en el costo de insumos a la oferta?",a:"Aumenta los costos → la curva de oferta se desplaza a la izquierda (menor oferta a cada precio).",cat:"ofe"},
+  {q:"¿Qué muestra la tabla de oferta?",a:"Las distintas cantidades de un bien que los productores estarían dispuestos a ofrecer a diferentes niveles de precio.",cat:"ofe"},
+  {q:"¿Qué indica una curva de oferta que se desplaza a la derecha?",a:"Un aumento en la oferta: se produce y vende más a cada nivel de precio.",cat:"ofe"},
+  {q:"¿Cómo se relacionan la oferta y la demanda con el mercado?",a:"La interacción entre oferentes y demandantes determina el precio y la cantidad de equilibrio en el mercado.",cat:"ofe"},
+  {q:"¿Qué hace eficiente al mercado según el Principio 6?",a:"La 'mano invisible': el sistema de precios coordina las decisiones de millones de compradores y vendedores sin necesidad de dirección central.",cat:"ofe"},
+  {q:"¿Qué es la curva de oferta del mercado?",a:"La suma horizontal de las curvas de oferta individuales de todos los productores en el mercado.",cat:"ofe"},
+];
+
+let mastered = new Set();
+let showOnlyUnmastered = false;
+let currentFilter = 'all';
+
+function catLabel(cat) {
+  const map = {def:'Definición',eco:'Economía',princ:'Principios',teoria:'Teoría Micro',dem:'Demanda',ofe:'Oferta'};
+  return map[cat]||cat;
+}
+function catClass(cat){ return `cat-${cat}`; }
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  let shown = 0;
+  cards.forEach((c, i) => {
+    if (currentFilter !== 'all' && c.cat !== currentFilter) return;
+    if (showOnlyUnmastered && mastered.has(i)) return;
+    shown++;
+    const w = document.createElement('div');
+    w.className = 'fc-wrapper';
+    w.dataset.mastered = mastered.has(i);
+    w.innerHTML = `
+      ${mastered.has(i) ? '<div class="mastered-badge">✓</div>' : ''}
+      <div class="fc" id="fc-${i}">
+        <div class="fc-face fc-front">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="fc-num">#${String(i+1).padStart(3,'0')}</span>
+            <span class="fc-category ${catClass(c.cat)}">${catLabel(c.cat)}</span>
+          </div>
+          <div class="fc-q">${c.q}</div>
+          <div class="fc-hint">Clic para ver respuesta</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="fc-num" style="color:rgba(255,255,255,0.4)">#${String(i+1).padStart(3,'0')}</span>
+            <span class="fc-category ${catClass(c.cat)}">${catLabel(c.cat)}</span>
+          </div>
+          <div class="fc-a">${c.a}</div>
+          <div class="fc-hint">Doble clic = dominada</div>
+        </div>
+      </div>`;
+    w.querySelector('.fc').addEventListener('click', () => {
+      document.getElementById(`fc-${i}`).classList.toggle('flipped');
+    });
+    w.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      if (mastered.has(i)) mastered.delete(i);
+      else mastered.add(i);
+      updateStats();
+      renderGrid();
+    });
+    grid.appendChild(w);
+  });
+  updateStats();
+}
+
+function updateStats() {
+  const total = cards.filter(c => currentFilter==='all'||c.cat===currentFilter).length;
+  const m = [...mastered].filter(i => currentFilter==='all'||cards[i].cat===currentFilter).length;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-mastered').textContent = m;
+  document.getElementById('stat-pending').textContent = total - m;
+}
+
+function shuffleCards() {
+  cards.sort(() => Math.random() - 0.5);
+  renderGrid();
+}
+function resetAll() {
+  mastered.clear();
+  document.querySelectorAll('.fc').forEach(el => el.classList.remove('flipped'));
+  renderGrid();
+}
+function toggleMastered() {
+  showOnlyUnmastered = !showOnlyUnmastered;
+  document.querySelector('.btn-success').textContent = showOnlyUnmastered ? '👁 Ver todas' : '✓ Ver no dominadas';
+  renderGrid();
+}
+function filterCat(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid();
+}
+
+renderGrid();
+</script>
+</body>
+</html>

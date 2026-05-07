@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microeconomía — Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4ff;
+    --white: #ffffff;
+    --dark: #0f172a;
+    --primary: #3b48e0;
+    --primary-light: #eef0fd;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --error: #dc2626;
+    --error-light: #fee2e2;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); font-family:'Outfit',sans-serif; color:var(--text); min-height:100vh; }
+
+  /* START SCREEN */
+  #start-screen {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .start-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 40px rgba(59,72,224,0.1);
+  }
+  .start-icon { font-size: 56px; margin-bottom: 20px; }
+  .start-card h1 { font-size: 32px; font-weight: 800; color: var(--dark); line-height: 1.2; }
+  .start-card h1 span { color: var(--primary); }
+  .start-card p { color: var(--muted); font-size: 15px; margin-top: 12px; line-height: 1.6; }
+  .settings { margin: 28px 0; display: flex; flex-direction: column; gap: 12px; text-align: left; }
+  .settings label { font-size: 14px; font-weight: 600; color: var(--text); display: block; margin-bottom: 8px; }
+  .mode-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mode-opt {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .mode-opt.selected { border-color: var(--primary); background: var(--primary-light); }
+  .mode-opt h4 { font-size: 14px; font-weight: 600; }
+  .mode-opt p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .mode-opt.selected h4 { color: var(--primary); }
+  .num-select {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .num-btn {
+    padding: 7px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-family: 'Outfit',sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--muted);
+    transition: all .15s;
+  }
+  .num-btn.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+  .start-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-family: 'Outfit',sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .start-btn:hover { background: #2d39c4; transform: translateY(-1px); }
+
+  /* QUIZ SCREEN */
+  #quiz-screen { display:none; }
+  .quiz-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: sticky; top: 0; z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .q-back {
+    background: none; border: none; cursor: pointer;
+    font-family: 'Outfit',sans-serif; font-size: 14px;
+    color: var(--muted); padding: 6px 0;
+  }
+  .q-back:hover { color: var(--primary); }
+  .progress-container { flex: 1; }
+  .progress-text { font-size: 13px; color: var(--muted); margin-bottom: 5px; }
+  .progress-bar {
+    height: 6px; background: var(--border); border-radius: 3px;
+  }
+  .progress-fill {
+    height: 100%; background: var(--primary); border-radius: 3px;
+    transition: width .3s;
+  }
+  .score-display {
+    font-size: 14px; font-weight: 600;
+    display: flex; gap: 12px;
+  }
+  .score-c { color: var(--success); }
+  .score-w { color: var(--error); }
+
+  .quiz-body {
+    max-width: 700px; margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+  .q-category {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 4px 12px; border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .q-num { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .q-text {
+    font-size: clamp(18px, 3vw, 23px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--dark);
+    margin-bottom: 28px;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    font-family: 'Outfit',sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: left;
+    transition: all .15s;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .opt:hover:not(.answered) { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+  .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+    border: 1.5px solid var(--border);
+    transition: all .15s;
+  }
+  .opt.correct { border-color: var(--success); background: var(--success-light); color: var(--success); }
+  .opt.correct .opt-letter { background: var(--success); color: #fff; border-color: var(--success); }
+  .opt.wrong { border-color: var(--error); background: var(--error-light); color: var(--error); }
+  .opt.wrong .opt-letter { background: var(--error); color: #fff; border-color: var(--error); }
+
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    display: none;
+  }
+  .feedback.correct { background: var(--success-light); border: 1px solid rgba(5,150,105,0.3); color: #065f46; }
+  .feedback.wrong { background: var(--error-light); border: 1px solid rgba(220,38,38,0.3); color: #7f1d1d; }
+  .feedback .fb-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+
+  .next-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-family: 'Outfit',sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    display: none;
+    transition: all .15s;
+  }
+  .next-btn:hover { background: #2d39c4; }
+
+  /* RESULTS SCREEN */
+  #result-screen {
+    display: none;
+    min-height: 100vh;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .result-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 44px 40px;
+    max-width: 600px; width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 40px rgba(59,72,224,0.1);
+  }
+  .result-emoji { font-size: 64px; margin-bottom: 16px; }
+  .result-card h2 { font-size: 28px; font-weight: 800; color: var(--dark); }
+  .result-score {
+    font-size: 64px; font-weight: 800;
+    color: var(--primary);
+    margin: 16px 0 4px;
+    line-height: 1;
+  }
+  .result-sub { font-size: 16px; color: var(--muted); }
+  .result-stats {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+    margin: 28px 0;
+  }
+  .rs { background: var(--bg); border-radius: 10px; padding: 16px 12px; }
+  .rs-num { font-size: 28px; font-weight: 800; }
+  .rs-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .rs-c .rs-num { color: var(--success); }
+  .rs-w .rs-num { color: var(--error); }
+  .rs-t .rs-num { color: var(--primary); }
+  .result-message {
+    background: var(--bg); border-radius: 10px; padding: 16px 20px;
+    font-size: 15px; color: var(--text); line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .action-btns { display: flex; gap: 10px; }
+  .ab1 {
+    flex: 1; padding: 13px; border-radius: 10px; border: none;
+    background: var(--primary); color: #fff; font-family:'Outfit',sans-serif;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+  }
+  .ab2 {
+    flex: 1; padding: 13px; border-radius: 10px;
+    border: 2px solid var(--border); background: transparent;
+    font-family:'Outfit',sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; color: var(--text);
+  }
+  .ab1:hover { background: #2d39c4; }
+  .ab2:hover { border-color: var(--primary); color: var(--primary); }
+
+  @media(max-width:480px){
+    .start-card, .result-card { padding: 32px 24px; }
+    .quiz-body { padding: 24px 16px 60px; }
+    .quiz-header { padding: 12px 16px; }
+    .mode-options { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div id="start-screen">
+  <div class="start-card">
+    <div class="start-icon">📊</div>
+    <h1>Quiz de <span>Microeconomía</span></h1>
+    <p>Pon a prueba tu conocimiento en definiciones, principios, teoría microeconómica, demanda y oferta.</p>
+
+    <div class="settings">
+      <div>
+        <label>Número de preguntas</label>
+        <div class="num-select">
+          <button class="num-btn" onclick="setNum(10,this)">10</button>
+          <button class="num-btn selected" onclick="setNum(20,this)">20</button>
+          <button class="num-btn" onclick="setNum(30,this)">30</button>
+          <button class="num-btn" onclick="setNum(50,this)">50</button>
+          <button class="num-btn" onclick="setNum(999,this)">Todas</button>
+        </div>
+      </div>
+      <div>
+        <label>Modo</label>
+        <div class="mode-options">
+          <div class="mode-opt selected" onclick="setMode('all',this)">
+            <h4>📚 Todo</h4>
+            <p>Todos los temas mezclados</p>
+          </div>
+          <div class="mode-opt" onclick="setMode('def',this)">
+            <h4>📖 Definiciones</h4>
+            <p>Solo conceptos base</p>
+          </div>
+          <div class="mode-opt" onclick="setMode('princ',this)">
+            <h4>🏛️ Principios</h4>
+            <p>Los 10 principios</p>
+          </div>
+          <div class="mode-opt" onclick="setMode('market',this)">
+            <h4>⚖️ Demanda/Oferta</h4>
+            <p>Mercados y leyes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">Comenzar Quiz →</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen">
+  <div class="quiz-header">
+    <button class="q-back" onclick="goHome()">← Volver</button>
+    <div class="progress-container">
+      <div class="progress-text" id="progress-text">Pregunta 1 de 20</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:5%"></div></div>
+    </div>
+    <div class="score-display">
+      <span class="score-c">✓ <span id="correct-count">0</span></span>
+      <span class="score-w">✗ <span id="wrong-count">0</span></span>
+    </div>
+  </div>
+  <div class="quiz-body">
+    <div class="q-category" id="q-cat"></div>
+    <div class="q-num" id="q-num"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback">
+      <div class="fb-title" id="fb-title"></div>
+      <div id="fb-body"></div>
+    </div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Siguiente pregunta →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="result-screen">
+  <div class="result-card">
+    <div class="result-emoji" id="result-emoji">🎉</div>
+    <h2 id="result-title">¡Quiz completado!</h2>
+    <div class="result-score" id="result-pct"></div>
+    <div class="result-sub" id="result-sub"></div>
+    <div class="result-stats">
+      <div class="rs rs-c"><div class="rs-num" id="rs-correct">0</div><div class="rs-label">Correctas</div></div>
+      <div class="rs rs-w"><div class="rs-num" id="rs-wrong">0</div><div class="rs-label">Incorrectas</div></div>
+      <div class="rs rs-t"><div class="rs-num" id="rs-total">0</div><div class="rs-label">Total</div></div>
+    </div>
+    <div class="result-message" id="result-message"></div>
+    <div class="action-btns">
+      <button class="ab1" onclick="startQuiz()">🔄 Intentar de nuevo</button>
+      <button class="ab2" onclick="goHome()">🏠 Menú</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const allQuestions = [
+  // DEFINICIONES (cat: def)
+  {q:"¿Cuál economista definió la economía como el estudio de cómo las sociedades utilizan recursos escasos para producir y distribuir mercancías?", opts:["Paul Samuelson","Joseph Stiglitz","Paul Wonnacott","Adam Smith"], ans:0, cat:"Definiciones", exp:"Paul Samuelson enfatizó los recursos escasos y la distribución entre grupos."},
+  {q:"¿Cuál es la diferencia entre Bien Económico y Bien No Económico?", opts:["El bien económico es gratuito; el no económico tiene precio","El bien económico es escaso y tiene precio; el no económico es abundante y gratuito","El bien económico es producido; el no económico es natural","El bien económico es tangible; el no económico es intangible"], ans:1, cat:"Definiciones", exp:"Bien económico = escaso + precio. Bien no económico = abundante + precio cero."},
+  {q:"¿Qué es un Agente Económico?", opts:["Solo las grandes empresas","El gobierno exclusivamente","Individuo, empresa o institución que participa en producción y distribución de riqueza","Solo el consumidor final"], ans:2, cat:"Definiciones", exp:"Los agentes económicos son individuos, empresas e instituciones que participan en la economía."},
+  {q:"¿Qué es la Escasez en términos económicos?", opts:["Ausencia total de recursos","Hay suficientes recursos para todos","No hay suficiente para satisfacer todo lo que todos desean","Solo aplica a países pobres"], ans:2, cat:"Definiciones", exp:"Escasez no es ausencia total; significa insuficiencia relativa a las necesidades."},
+  {q:"¿Qué es el Costo de Oportunidad?", opts:["El precio de mercado de un bien","Lo que se gana al tomar una decisión","El valor de la mejor opción no elegida","El costo de producción de un bien"], ans:2, cat:"Definiciones", exp:"El costo de oportunidad es el valor de lo mejor a lo que renunciamos cuando tomamos una decisión."},
+  {q:"¿Las necesidades son ilimitadas en...?", opts:["Número Y capacidad","Solo en número","Solo en capacidad","Ninguna de las anteriores"], ans:1, cat:"Definiciones", exp:"Las necesidades son ILIMITADAS en número pero LIMITADAS en capacidad (punto de saturación)."},
+  {q:"¿Qué describe la 'utilidad marginal decreciente'?", opts:["Cada unidad adicional de un bien da la misma satisfacción","A más precio, menos se consume","Cada unidad adicional de un bien da menos satisfacción que la anterior","El precio disminuye con el tiempo"], ans:2, cat:"Definiciones", exp:"Ley de utilidad marginal decreciente: la satisfacción por cada unidad extra disminuye."},
+  {q:"¿Qué es la Microeconomía?", opts:["Estudio de la economía de países pequeños","Estudio de los comportamientos económicos de agentes individuales y formación de precios","Análisis de la economía global","Estudio solo del consumo"], ans:1, cat:"Definiciones", exp:"La microeconomía estudia agentes individuales (consumidores, empresas) y la formación de precios."},
+  {q:"¿Qué estudia la Macroeconomía?", opts:["Comportamientos de empresas individuales","Salarios de trabajadores específicos","Comportamientos agregados o globales de un país","Precios de bienes individuales"], ans:2, cat:"Definiciones", exp:"La macroeconomía analiza variables nacionales: PIB, inflación, desempleo, balanza de pagos."},
+  {q:"¿Cuál es la definición integradora de Economía?", opts:["Ciencia que estudia el dinero y los bancos","Ciencia social que estudia producción, intercambio, distribución y consumo de bienes y servicios para satisfacer necesidades humanas","Arte de administrar empresas","Técnica para invertir en bolsa"], ans:1, cat:"Definiciones", exp:"La economía es la ciencia social que integra producción, intercambio, distribución y consumo."},
+
+  // MICRO vs MACRO
+  {q:"¿Cuál de estos temas pertenece a la MICROECONOMÍA?", opts:["Tasa nacional de desempleo","Producción de una empresa específica","PIB del país","Inflación anual"], ans:1, cat:"Divisiones", exp:"La microeconomía estudia unidades individuales: empresas, industrias, precios específicos."},
+  {q:"¿Cuál de estos temas pertenece a la MACROECONOMÍA?", opts:["Precio del pan en una tienda","Salario de un obrero específico","Balanza de pagos del país","Producción de una fábrica"], ans:2, cat:"Divisiones", exp:"La macroeconomía analiza variables agregadas como la balanza de pagos."},
+  {q:"El PIB nacional es un indicador de...", opts:["Microeconomía","Macroeconomía","Teoría de precios","Equilibrio parcial"], ans:1, cat:"Divisiones", exp:"El PIB es una variable macroeconómica (producción total de un país)."},
+  {q:"¿Qué estudia la distribución del ingreso y la riqueza?", opts:["Solo macroeconomía","Solo microeconomía","Tanto micro como macroeconomía","Ni micro ni macro"], ans:2, cat:"Divisiones", exp:"La distribución del ingreso se estudia en ambas: micro (individual) y macro (nacional)."},
+
+  // 10 PRINCIPIOS
+  {q:"¿Qué ilustra la frase 'Cañones vs Mantequilla' en Economía?", opts:["Principio 1: Los individuos se enfrentan a disyuntivas","Principio 4: Los individuos responden a incentivos","Principio 8: La productividad mejora el nivel de vida","Principio 6: Los mercados organizan la economía"], ans:0, cat:"10 Principios", exp:"'Cañones vs mantequilla' ilustra el Principio 1: hay que elegir entre alternativas."},
+  {q:"¿Cuál es el Principio 2 de la Economía?", opts:["Los mercados organizan la economía","El coste es aquello a lo que se renuncia","Los individuos responden a incentivos","El comercio mejora el bienestar"], ans:1, cat:"10 Principios", exp:"Principio 2: El verdadero coste de cualquier decisión es su coste de oportunidad."},
+  {q:"¿Qué ilustra el ejemplo de la aerolínea con asientos vacíos?", opts:["Principio 1","Principio 3: Pensamiento marginal","Principio 5","Principio 9"], ans:1, cat:"10 Principios", exp:"La aerolínea vende barato el último asiento porque el beneficio marginal supera el costo marginal."},
+  {q:"Si baja el precio de la fruta y la gente compra más, ¿qué principio ilustra esto?", opts:["Principio 2","Principio 6","Principio 4: Los individuos responden a incentivos","Principio 10"], ans:2, cat:"10 Principios", exp:"Principio 4: Los agentes responden a incentivos. Un precio más bajo es un incentivo para comprar más."},
+  {q:"¿Cuál principio explica por qué cada país se especializa en lo que hace mejor?", opts:["Principio 7","Principio 5: El comercio puede mejorar el bienestar","Principio 3","Principio 8"], ans:1, cat:"10 Principios", exp:"Principio 5: El comercio internacional permite la especialización y beneficia a todos."},
+  {q:"¿Qué es la 'mano invisible' en economía?", opts:["La intervención del Estado","El sistema de precios del mercado coordinando a los agentes","Los monopolios controlando precios","La publicidad manipulando a consumidores"], ans:1, cat:"10 Principios", exp:"Principio 6: Los mercados coordinan millones de agentes a través del sistema de precios sin dirección central."},
+  {q:"¿Cuándo puede el Estado mejorar los resultados del mercado? (Principio 7)", opts:["Siempre que quiera intervenir","Nunca, el mercado siempre es mejor","Cuando hay fallas de mercado: monopolios, externalidades, desequilibrios","Solo en tiempos de guerra"], ans:2, cat:"10 Principios", exp:"Principio 7: El Estado interviene cuando la mano invisible falla: monopolios, contaminación, escasez."},
+  {q:"¿Qué relación hay entre productividad y nivel de vida? (Principio 8)", opts:["Ninguna relación","Mayor productividad = mayor nivel de vida","Mayor productividad = menor nivel de vida","Solo aplica a países desarrollados"], ans:1, cat:"10 Principios", exp:"Principio 8: La productividad determina el nivel de vida. Sin producción no hay bienestar."},
+  {q:"¿Qué ocurre cuando el gobierno imprime demasiado dinero? (Principio 9)", opts:["El valor del dinero aumenta","Se genera crecimiento económico","El valor del dinero disminuye y suben los precios (inflación)","Baja el desempleo permanentemente"], ans:2, cat:"10 Principios", exp:"Principio 9: Más oferta monetaria → cada unidad vale menos → precios suben."},
+  {q:"¿Cuál es la disyuntiva del Principio 10?", opts:["Ahorro vs consumo","Inflación vs desempleo a corto plazo","Micro vs macroeconomía","Producción vs distribución"], ans:1, cat:"10 Principios", exp:"Principio 10: A corto plazo, mayor demanda → más empleo (↓desempleo) pero también ↑inflación."},
+  {q:"Según el Principio 10, ¿qué ocurre cuando sube la demanda agregada?", opts:["Solo baja el desempleo sin efectos en precios","Solo suben los precios sin efectos en empleo","Las empresas contratan más (↓desempleo) pero también suben precios (↑inflación)","No hay ningún efecto"], ans:2, cat:"10 Principios", exp:"Ambos efectos ocurren: más empleo a corto plazo pero también más inflación."},
+
+  // TEORÍA MICRO
+  {q:"¿Cuál es el propósito de una teoría económica?", opts:["Describir cómo debería ser el mundo","Predecir y explicar fenómenos económicos","Crear modelos perfectamente realistas","Solo aplicar matemáticas"], ans:1, cat:"Teoría Micro", exp:"Una teoría vale por su capacidad de predecir y explicar, no por el realismo de sus supuestos."},
+  {q:"¿Qué es la Teoría Microeconómica o teoría de los precios?", opts:["Estudio de la inflación de precios","Estudio del comportamiento de consumidores, propietarios y empresas en economía libre","Análisis de precios a nivel macroeconómico","Regulación estatal de precios"], ans:1, cat:"Teoría Micro", exp:"La teoría microeconómica estudia las unidades decisorias individuales: consumidores, empresas, propietarios."},
+  {q:"¿Qué diferencia a la Estática Comparativa de la Dinámica?", opts:["La estática usa matemáticas; la dinámica no","La estática compara posiciones de equilibrio; la dinámica estudia el proceso de ajuste","La estática estudia el largo plazo; la dinámica el corto plazo","No hay diferencia"], ans:1, cat:"Teoría Micro", exp:"Estática = foto de dos equilibrios. Dinámica = video del proceso de transición."},
+  {q:"¿Qué diferencia al Equilibrio Parcial del Equilibrio General?", opts:["El parcial usa más matemáticas","El parcial analiza mercados individuales aislados; el general analiza todos simultáneamente","El parcial es más completo","No hay diferencia relevante"], ans:1, cat:"Teoría Micro", exp:"Parcial = un mercado aislado. General = todos los mercados simultáneamente."},
+  {q:"¿Qué estudia la Economía Positiva?", opts:["Lo que DEBE ser","Lo que ES (descripción de la realidad)","Juicios de valor económicos","Políticas económicas ideales"], ans:1, cat:"Teoría Micro", exp:"Positiva = descriptiva, empírica, verificable con datos. Estudia lo que ES."},
+  {q:"¿Qué estudia la Economía Normativa?", opts:["Lo que es la economía actualmente","Lo que DEBE SER según criterios de valor","Solo estadísticas económicas","La historia de la economía"], ans:1, cat:"Teoría Micro", exp:"Normativa = prescriptiva, basada en juicios de valor. Propone cómo debería ser."},
+  {q:"¿Qué es el Equilibrio en un mercado?", opts:["Precio máximo legal","Condición que, una vez alcanzada, tiende a persistir por balance de fuerzas","El punto de mayor precio","El momento de mayor oferta"], ans:1, cat:"Teoría Micro", exp:"El equilibrio es la condición estable que resulta del balance entre oferta y demanda."},
+  {q:"¿Cómo se verifica una hipótesis en economía según la teoría microeconómica?", opts:["Por el realismo de sus supuestos","Por su capacidad para predecir y explicar","Por su complejidad matemática","Por el número de variables que incluye"], ans:1, cat:"Teoría Micro", exp:"Una hipótesis se verifica por su capacidad predictiva y explicativa, no por el realismo de supuestos."},
+
+  // DEMANDA
+  {q:"¿Cuál es la Ley de la Demanda?", opts:["A mayor precio, mayor cantidad demandada","A menor precio, menor cantidad demandada","A mayor precio, menor cantidad demandada (relación inversa)","Precio y cantidad no tienen relación"], ans:2, cat:"Demanda", exp:"Ley de la Demanda: ↑Precio → ↓Cantidad demandada. Relación inversa."},
+  {q:"¿Qué tipo de pendiente tiene la curva de demanda?", opts:["Positiva (↗)","Negativa (↘)","Horizontal","Vertical"], ans:1, cat:"Demanda", exp:"La curva de demanda tiene pendiente negativa porque precio y cantidad tienen relación inversa."},
+  {q:"¿Qué causa un movimiento SOBRE la curva de demanda (no desplazamiento)?", opts:["Cambio en el ingreso del consumidor","Cambio en los gustos","Cambio en el precio del bien","Cambio en el número de compradores"], ans:2, cat:"Demanda", exp:"Solo un cambio en el precio del bien causa movimiento SOBRE la misma curva."},
+  {q:"¿Qué causa un DESPLAZAMIENTO de la curva de demanda?", opts:["Solo un cambio en el precio del bien","Cambios en ingreso, gustos, precios relacionados, expectativas o número de compradores","Solo cambios en la oferta","Nada puede desplazar la curva"], ans:1, cat:"Demanda", exp:"Los factores distintos al precio desplazan toda la curva (la mueven a derecha o izquierda)."},
+  {q:"Si sube el precio de un bien sustituto, ¿qué ocurre con la demanda del bien original?", opts:["Disminuye","Aumenta (la gente se cambia al bien original)","No cambia","Depende del ingreso"], ans:1, cat:"Demanda", exp:"Si sube el precio del sustituto, el bien original se vuelve más atractivo → mayor demanda."},
+  {q:"¿Qué es la función de demanda?", opts:["Solo la curva gráfica","Relación matemática entre cantidad demandada y todos sus factores determinantes","El precio de equilibrio","La tabla de demanda"], ans:1, cat:"Demanda", exp:"Función de demanda: Qd = f(P, I, Ps, Pc, G, E, N)"},
+  {q:"El consumidor en el mercado busca:", opts:["Maximizar ganancias vendiendo al precio más alto","Minimizar sus recursos comprando al precio más alto","Maximizar sus recursos comprando al precio más bajo","Solo satisfacer necesidades sin considerar precios"], ans:2, cat:"Demanda", exp:"El consumidor/demandante busca maximizar recursos: obtener la mayor satisfacción pagando el menor precio."},
+  {q:"Si el ingreso del consumidor aumenta (bien normal), la curva de demanda:", opts:["Se desplaza a la izquierda","Se vuelve vertical","Se desplaza a la derecha (mayor demanda a cada precio)","No se mueve"], ans:2, cat:"Demanda", exp:"Mayor ingreso → mayor poder de compra → la demanda de bienes normales aumenta (curva a la derecha)."},
+  {q:"¿Qué muestra la tabla de demanda?", opts:["Solo el precio de equilibrio","Las cantidades demandadas a distintos niveles de precio","Los costos de producción","El número de compradores"], ans:1, cat:"Demanda", exp:"La tabla de demanda muestra pares precio-cantidad que reflejan la disposición a comprar."},
+
+  // OFERTA
+  {q:"¿Cuál es la Ley de la Oferta?", opts:["A mayor precio, menor cantidad ofrecida","A mayor precio, mayor cantidad ofrecida (relación directa)","Precio y cantidad ofrecida no tienen relación","A menor precio, mayor cantidad ofrecida"], ans:1, cat:"Oferta", exp:"Ley de la Oferta: ↑Precio → ↑Cantidad ofrecida. Relación directa/positiva."},
+  {q:"¿Qué tipo de pendiente tiene la curva de oferta?", opts:["Negativa (↘)","Positiva (↗)","Horizontal","Vertical"], ans:1, cat:"Oferta", exp:"La curva de oferta tiene pendiente positiva porque precio y cantidad tienen relación directa."},
+  {q:"¿Qué ocurre en el equilibrio de mercado?", opts:["La oferta supera a la demanda","La demanda supera a la oferta","La cantidad demandada iguala a la cantidad ofrecida","El precio es cero"], ans:2, cat:"Oferta", exp:"En el equilibrio: Qd = Qs. Es el punto donde se cruzan las curvas de demanda y oferta."},
+  {q:"Si hay un exceso de oferta (Qs > Qd), ¿qué ocurre con el precio?", opts:["El precio sube","El precio baja hasta el equilibrio","El precio no cambia","El mercado desaparece"], ans:1, cat:"Oferta", exp:"Exceso de oferta → productores bajan precios para vender → precio converge al equilibrio."},
+  {q:"¿Qué diferencia a la Demanda de la Oferta en cuanto al tipo de relación con el precio?", opts:["Ambas tienen relación positiva","Ambas tienen relación negativa","Demanda: relación inversa; Oferta: relación directa","Demanda: relación directa; Oferta: relación inversa"], ans:2, cat:"Oferta", exp:"Demanda: ↑P→↓Q (inversa). Oferta: ↑P→↑Q (directa). ¡Esta es la diferencia clave!"},
+  {q:"¿Qué provoca un desplazamiento de la curva de oferta?", opts:["Solo cambios en el precio del bien","Cambios en costos de insumos, tecnología, expectativas o número de productores","Solo cambios en la demanda","Nada puede desplazarla"], ans:1, cat:"Oferta", exp:"Los factores determinantes (costos, tecnología, expectativas) desplazan la curva de oferta."},
+  {q:"Una mejora tecnológica en la producción causa que la curva de oferta:", opts:["Se desplace a la izquierda (menor oferta)","No se mueva","Se desplace a la derecha (mayor oferta a cada precio)","Se vuelva vertical"], ans:2, cat:"Oferta", exp:"Mejora tecnológica → menores costos → mayor producción a cada precio → curva de oferta se desplaza derecha."},
+  {q:"Si hay escasez (Qd > Qs), ¿qué ocurre con el precio?", opts:["El precio baja","El precio sube hasta el equilibrio","El gobierno debe fijar el precio","El mercado se vuelve gratuito"], ans:1, cat:"Oferta", exp:"Escasez (exceso de demanda) → compradores compiten por el bien → precio sube hacia el equilibrio."},
+  {q:"El vendedor/productor (ofertante) busca:", opts:["Comprar al precio más bajo","Vender al precio más bajo para ganar clientes","Vender al precio más alto para maximizar ganancias","No tiene preferencias de precio"], ans:2, cat:"Oferta", exp:"El ofertante busca maximizar ganancias vendiendo al precio más alto que el mercado acepte."},
+  {q:"¿Qué muestra la curva de oferta del mercado?", opts:["La curva de un solo productor","La suma horizontal de las curvas individuales de todos los productores","Solo los precios de equilibrio","Los costos de producción"], ans:1, cat:"Oferta", exp:"La oferta de mercado es la suma horizontal de todas las ofertas individuales de los productores."},
+];
+
+let config = { num: 20, mode: 'all' };
+let quiz = { questions: [], current: 0, correct: 0, wrong: 0, answered: false };
+
+function setNum(n, btn) {
+  config.num = n;
+  document.querySelectorAll('.num-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function setMode(m, el) {
+  config.mode = m;
+  document.querySelectorAll('.mode-opt').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startQuiz() {
+  let pool = allQuestions;
+  if (config.mode === 'def') pool = allQuestions.filter(q => q.cat === 'Definiciones' || q.cat === 'Divisiones');
+  else if (config.mode === 'princ') pool = allQuestions.filter(q => q.cat === '10 Principios');
+  else if (config.mode === 'market') pool = allQuestions.filter(q => q.cat === 'Demanda' || q.cat === 'Oferta');
+
+  // Shuffle
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  quiz.questions = shuffled.slice(0, Math.min(config.num, shuffled.length));
+  quiz.current = 0; quiz.correct = 0; quiz.wrong = 0; quiz.answered = false;
+
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = quiz.questions[quiz.current];
+  const total = quiz.questions.length;
+  quiz.answered = false;
+
+  document.getElementById('progress-text').textContent = `Pregunta ${quiz.current + 1} de ${total}`;
+  document.getElementById('progress-fill').style.width = `${((quiz.current + 1) / total) * 100}%`;
+  document.getElementById('correct-count').textContent = quiz.correct;
+  document.getElementById('wrong-count').textContent = quiz.wrong;
+  document.getElementById('q-cat').textContent = q.cat;
+  document.getElementById('q-num').textContent = `#${quiz.current + 1}`;
+  document.getElementById('q-text').textContent = q.q;
+
+  const feedback = document.getElementById('feedback');
+  feedback.style.display = 'none';
+  feedback.className = 'feedback';
+  document.getElementById('next-btn').style.display = 'none';
+
+  // Shuffle options
+  const letters = ['A', 'B', 'C', 'D'];
+  const indices = [0,1,2,3].sort(() => Math.random() - 0.5);
+  const correctShuffledIdx = indices.indexOf(q.ans);
+
+  const optEl = document.getElementById('options');
+  optEl.innerHTML = '';
+  indices.forEach((origIdx, si) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-letter">${letters[si]}</span>${q.opts[origIdx]}`;
+    btn.addEventListener('click', () => {
+      if (quiz.answered) return;
+      quiz.answered = true;
+      const isCorrect = origIdx === q.ans;
+      if (isCorrect) { quiz.correct++; btn.classList.add('correct'); }
+      else {
+        btn.classList.add('wrong');
+        // Highlight correct
+        optEl.querySelectorAll('.opt')[correctShuffledIdx].classList.add('correct');
+      }
+      // Disable all
+      optEl.querySelectorAll('.opt').forEach(b => b.classList.add('answered'));
+      // Show feedback
+      feedback.style.display = 'block';
+      feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+      document.getElementById('fb-title').textContent = isCorrect ? '✓ ¡Correcto!' : '✗ Incorrecto';
+      document.getElementById('fb-body').textContent = q.exp;
+      document.getElementById('correct-count').textContent = quiz.correct;
+      document.getElementById('wrong-count').textContent = quiz.wrong;
+      const nBtn = document.getElementById('next-btn');
+      nBtn.style.display = 'block';
+      nBtn.textContent = quiz.current < quiz.questions.length - 1 ? 'Siguiente pregunta →' : 'Ver resultados →';
+      if (!isCorrect) quiz.wrong++;
+    });
+    optEl.appendChild(btn);
+  });
+}
+
+function nextQuestion() {
+  quiz.current++;
+  if (quiz.current >= quiz.questions.length) showResults();
+  else renderQuestion();
+}
+
+function showResults() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'flex';
+
+  const total = quiz.questions.length;
+  const pct = Math.round((quiz.correct / total) * 100);
+
+  document.getElementById('result-pct').textContent = pct + '%';
+  document.getElementById('result-sub').textContent = `${quiz.correct} de ${total} respuestas correctas`;
+  document.getElementById('rs-correct').textContent = quiz.correct;
+  document.getElementById('rs-wrong').textContent = quiz.wrong;
+  document.getElementById('rs-total').textContent = total;
+
+  let emoji, title, msg;
+  if (pct >= 90) { emoji='🏆'; title='¡Excelente!'; msg='Dominio sobresaliente. Estás listo para el examen.'; }
+  else if (pct >= 75) { emoji='🎉'; title='¡Muy bien!'; msg='Buen dominio del tema. Repasa los conceptos donde fallaste.'; }
+  else if (pct >= 60) { emoji='📚'; title='Bien, pero puedes mejorar'; msg='Sólida base. Refuerza las áreas donde tuviste dificultades.'; }
+  else if (pct >= 40) { emoji='💪'; title='Sigue estudiando'; msg='Hay áreas que necesitan refuerzo. Revisa la guía detallada y los mnemotécnicos.'; }
+  else { emoji='🔄'; title='Necesitas repasar más'; msg='Te recomendamos estudiar la guía detallada antes de volver a intentarlo.'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-message').textContent = msg;
+}
+
+function goHome() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'flex';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microeconomía — Mnemotécnicos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e14;
+    --surface: #16161f;
+    --card: #1d1d2b;
+    --accent: #7c3aed;
+    --accent2: #06b6d4;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #ef4444;
+    --text: #f1f0fb;
+    --muted: #6e7191;
+    --border: #2d2d42;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Syne',sans-serif; }
+
+  header {
+    padding: 50px 48px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '🧠';
+    position: absolute;
+    right: 80px; top: 30px;
+    font-size: 100px;
+    opacity: 0.07;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-size: clamp(32px,6vw,58px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+  }
+  header h1 em { font-style:normal; color: var(--accent3); }
+  header p { color: var(--muted); font-size: 15px; margin-top: 14px; max-width: 480px; line-height: 1.6; }
+
+  main { max-width: 1000px; margin: 0 auto; padding: 48px; }
+
+  .chapter {
+    margin-bottom: 64px;
+  }
+  .chapter-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ch-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .chapter-header h2 { font-size: 22px; font-weight: 700; color: #fff; }
+  .chapter-header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* Acronym block */
+  .acronym-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .acronym-block::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 12px 0 0 12px;
+  }
+  .ab-purple::before { background: var(--accent); }
+  .ab-cyan::before { background: var(--accent2); }
+  .ab-amber::before { background: var(--accent3); }
+  .ab-green::before { background: var(--accent4); }
+  .ab-red::before { background: var(--accent5); }
+
+  .acronym-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .acronym-word {
+    font-family: 'Syne Mono', monospace;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    margin-bottom: 20px;
+  }
+  .ab-purple .acronym-word { color: var(--accent); }
+  .ab-cyan .acronym-word { color: var(--accent2); }
+  .ab-amber .acronym-word { color: var(--accent3); }
+  .ab-green .acronym-word { color: var(--accent4); }
+  .ab-red .acronym-word { color: var(--accent5); }
+
+  .acronym-rows { display: flex; flex-direction: column; gap: 10px; }
+  .acronym-row {
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .ach {
+    font-family: 'Syne Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    width: 36px;
+    flex-shrink: 0;
+    line-height: 1.2;
+  }
+  .ab-purple .ach { color: var(--accent); }
+  .ab-cyan .ach { color: var(--accent2); }
+  .ab-amber .ach { color: var(--accent3); }
+  .ab-green .ach { color: var(--accent4); }
+  .ab-red .ach { color: var(--accent5); }
+
+  .ach-content {}
+  .ach-key { font-weight: 700; font-size: 15px; color: #fff; }
+  .ach-desc { font-size: 13px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+  /* Story block */
+  .story-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .story-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent3);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .story-label::before { content: '📖'; }
+  .story-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #d4d0f0;
+    font-style: italic;
+  }
+  .story-text strong { color: var(--accent3); font-style: normal; }
+
+  /* Visual mnemonic */
+  .visual-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .visual-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent4);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .visual-label::before { content: '👁'; }
+
+  /* Rhyme */
+  .rhyme-block {
+    background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(6,182,212,0.05));
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-bottom: 20px;
+  }
+  .rhyme-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rhyme-label::before { content: '🎵'; }
+  .rhyme-text {
+    font-size: 16px; line-height: 2;
+    color: #e0deff;
+  }
+  .rhyme-text strong { color: #fff; font-weight: 800; }
+
+  /* Comparison table */
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    margin-bottom: 20px;
+  }
+  .compare-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .compare-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .compare-box ul { list-style:none; font-size: 13px; color: var(--muted); line-height: 2; }
+  .compare-box li::before { content: '→ '; color: var(--accent2); }
+  .cb-left { border-top: 3px solid var(--accent); }
+  .cb-right { border-top: 3px solid var(--accent2); }
+  .cb-left h4 { color: var(--accent); }
+  .cb-right h4 { color: var(--accent2); }
+
+  /* Number sequence */
+  .num-sequence {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
+    margin-bottom: 20px;
+  }
+  .num-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color .2s;
+    position: relative;
+  }
+  .num-item:hover { border-color: var(--accent3); }
+  .num-big {
+    font-family: 'Syne Mono', monospace;
+    font-size: 36px; font-weight: 700; color: var(--accent3); line-height: 1;
+  }
+  .num-title { font-size: 13px; font-weight: 700; color: #fff; margin-top: 8px; line-height: 1.3; }
+  .num-keyword { font-size: 11px; color: var(--accent2); margin-top: 4px; letter-spacing: 1px; }
+
+  /* Tip box */
+  .tip-box {
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 20px;
+    font-size: 13.5px;
+    color: #a7f3d0;
+    line-height: 1.7;
+  }
+  .tip-box::before { content: '💡 TIP: '; font-weight: 700; color: var(--accent4); }
+
+  @media(max-width:600px){
+    main { padding: 20px; }
+    header { padding: 32px 20px 28px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .num-sequence { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero-label">Técnicas de Memorización</div>
+  <h1>Micro<em>economía</em><br>Mnemotécnicos</h1>
+  <p>Acrónimos, historias, rimas y patrones visuales para memorizar los conceptos clave.</p>
+</header>
+
+<main>
+
+<!-- DEFINICIÓN DE ECONOMÍA -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(124,58,237,0.2)">📚</div>
+    <div>
+      <h2>¿Qué es la Economía?</h2>
+      <p>Los 3 autores principales + definición integradora</p>
+    </div>
+  </div>
+
+  <div class="acronym-block ab-purple">
+    <div class="acronym-title">Acrónimo — Los 3 Economistas</div>
+    <div class="acronym-word">S·S·W</div>
+    <div class="acronym-rows">
+      <div class="acronym-row">
+        <div class="ach">S</div>
+        <div class="ach-content">
+          <div class="ach-key">Samuelson</div>
+          <div class="ach-desc">"Recursos escasos → producir y distribuir entre grupos"</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">S</div>
+        <div class="ach-content">
+          <div class="ach-key">Stiglitz</div>
+          <div class="ach-desc">"Sociedad + individuos + empresas + Estado → eligen opciones"</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">W</div>
+        <div class="ach-content">
+          <div class="ach-key">Wonnacott</div>
+          <div class="ach-desc">"Subsistencia: comida, vivienda, vestido, necesidades materiales"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story-block">
+    <div class="story-label">Historia Mnemotécnica</div>
+    <div class="story-text">
+      Imagínate a <strong>Sam</strong> (Samuelson) en un <strong>supermercado escaso</strong> distribuyendo la poca comida que hay. 
+      Llega <strong>Stig</strong> (Stiglitz) con su familia, empresa y un funcionario del <strong>Estado</strong> eligiendo qué llevar. 
+      Finalmente aparece <strong>Won</strong> (Wonnacott) preguntando: "¿cómo obtengo comida, vivienda y ropa para <strong>subsistir</strong>?"
+    </div>
+  </div>
+
+  <div class="tip-box">La clave de la Economía son 2 palabras: ESCASEZ + ELECCIÓN. Todo parte de ahí.</div>
+</div>
+
+<!-- MICRO VS MACRO -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(6,182,212,0.2)">🔭</div>
+    <div>
+      <h2>Micro vs. Macro</h2>
+      <p>Distinguir los dos grandes campos</p>
+    </div>
+  </div>
+
+  <div class="rhyme-block">
+    <div class="rhyme-label">Regla de Oro</div>
+    <div class="rhyme-text">
+      <strong>MICRO</strong> = microscopio = miras de <strong>CERCA</strong> (una empresa, un precio, un salario)<br>
+      <strong>MACRO</strong> = macrófono = miras de <strong>LEJOS</strong> (el país entero, el PIB, la inflación)
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-box cb-left">
+      <h4>🔬 MICRO (cerca)</h4>
+      <ul>
+        <li>Precios de bienes</li>
+        <li>Producción de empresas</li>
+        <li>Salarios individuales</li>
+        <li>Empleo en una industria</li>
+        <li>Distribución del ingreso</li>
+      </ul>
+    </div>
+    <div class="compare-box cb-right">
+      <h4>🌍 MACRO (lejos)</h4>
+      <ul>
+        <li>PIB nacional</li>
+        <li>Tasa de desempleo</li>
+        <li>Inflación general</li>
+        <li>Balanza de pagos</li>
+        <li>Ingreso nacional</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 3 PREGUNTAS BÁSICAS -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(245,158,11,0.2)">❓</div>
+    <div>
+      <h2>Las 3 Preguntas Básicas</h2>
+      <p>El problema económico fundamental</p>
+    </div>
+  </div>
+
+  <div class="acronym-block ab-amber">
+    <div class="acronym-title">Acrónimo — QCP</div>
+    <div class="acronym-word">Q·C·P</div>
+    <div class="acronym-rows">
+      <div class="acronym-row">
+        <div class="ach">Q</div>
+        <div class="ach-content">
+          <div class="ach-key">¿QUÉ producir?</div>
+          <div class="ach-desc">Qué bienes y servicios, en qué cantidad</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">C</div>
+        <div class="ach-content">
+          <div class="ach-key">¿CÓMO producir?</div>
+          <div class="ach-desc">Qué método, tecnología y factores usar</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">P</div>
+        <div class="ach-content">
+          <div class="ach-key">¿PARA QUIÉN producir?</div>
+          <div class="ach-desc">Quién recibirá los bienes producidos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story-block">
+    <div class="story-label">Historia Mnemotécnica</div>
+    <div class="story-text">
+      Piensa en un chef que abre un restaurante: primero decide <strong>QUÉ</strong> cocinar (menú), 
+      luego <strong>CÓMO</strong> cocinarlo (receta, utensilios, personal) y 
+      finalmente <strong>PARA QUIÉN</strong> sirve (clientes VIP, turistas, locales). 
+      Esas 3 preguntas son las mismas que responde toda la economía.
+    </div>
+  </div>
+</div>
+
+<!-- ESCASEZ + NECESIDADES -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(239,68,68,0.2)">⚡</div>
+    <div>
+      <h2>Escasez, Necesidades y Costo de Oportunidad</h2>
+      <p>El corazón de la economía</p>
+    </div>
+  </div>
+
+  <div class="acronym-block ab-red">
+    <div class="acronym-title">Acrónimo — Características de las Necesidades: ILCC</div>
+    <div class="acronym-word">I·L·C·C</div>
+    <div class="acronym-rows">
+      <div class="acronym-row">
+        <div class="ach">I</div>
+        <div class="ach-content">
+          <div class="ach-key">Ilimitadas en número</div>
+          <div class="ach-desc">Siempre aparecen nuevas necesidades</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">L</div>
+        <div class="ach-content">
+          <div class="ach-key">Limitadas en capacidad</div>
+          <div class="ach-desc">Punto de saturación por cada bien (3 vasos de agua y ya)</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">C</div>
+        <div class="ach-content">
+          <div class="ach-key">Concurrentes</div>
+          <div class="ach-desc">Varias al mismo tiempo, vuelven a aparecer</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">C</div>
+        <div class="ach-content">
+          <div class="ach-key">Complementarias</div>
+          <div class="ach-desc">Integran grupos (café → taza + cucharita + azúcar)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rhyme-block">
+    <div class="rhyme-label">Rima para el Costo de Oportunidad</div>
+    <div class="rhyme-text">
+      Cuando eliges A y no eliges B,<br>
+      el <strong>costo de oportunidad</strong> es lo que dejé.<br>
+      No es dinero perdido, es valor renunciado:<br>
+      <strong>lo mejor de lo que no fue elegido.</strong>
+    </div>
+  </div>
+
+  <div class="visual-block">
+    <div class="visual-label">Imagen Mental — Escasez</div>
+    <p style="font-size:15px;color:#c4c0e8;line-height:1.8">
+      Imagínate una <strong style="color:#fff">pizza de 8 porciones</strong> para 20 personas. 
+      La pizza no es nada (hay algo), pero NO ES SUFICIENTE para todos. 
+      Eso es la <strong style="color:var(--accent5)">escasez</strong>: no ausencia total, sino insuficiencia relativa. 
+      Cada trozo que alguien come implica que otro no puede comerlo → eso es el <strong style="color:var(--accent3)">costo de oportunidad</strong>.
+    </p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-box cb-left">
+      <h4>Bien Económico</h4>
+      <ul>
+        <li>Escaso (limitado)</li>
+        <li>Tiene precio</li>
+        <li>Hay ofertante y demandante</li>
+        <li>Ejemplo: agua embotellada</li>
+      </ul>
+    </div>
+    <div class="compare-box cb-right">
+      <h4>Bien No Económico</h4>
+      <ul>
+        <li>Abundante</li>
+        <li>Precio = cero</li>
+        <li>Supera la demanda</li>
+        <li>Ejemplo: aire</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 10 PRINCIPIOS -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(16,185,129,0.2)">🏛️</div>
+    <div>
+      <h2>Los 10 Principios de la Economía</h2>
+      <p>Acrónimos y patrones para recordarlos todos</p>
+    </div>
+  </div>
+
+  <div class="acronym-block ab-green">
+    <div class="acronym-title">Agrupación en 3 bloques: IDC — CPM — PDII</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:8px">
+      <div>
+        <div style="color:var(--accent4);font-size:22px;font-family:'Syne Mono',monospace;font-weight:700;margin-bottom:8px">IDC</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8">
+          <strong style="color:#fff">I</strong>ndividuos → disyuntivas<br>
+          <strong style="color:#fff">D</strong>ecisiones → coste<br>
+          <strong style="color:#fff">C</strong>onsumidores → marginales
+        </div>
+      </div>
+      <div>
+        <div style="color:var(--accent3);font-size:22px;font-family:'Syne Mono',monospace;font-weight:700;margin-bottom:8px">CIM</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8">
+          <strong style="color:#fff">C</strong>omercio → bienestar<br>
+          <strong style="color:#fff">I</strong>nterés propio → mercados<br>
+          <strong style="color:#fff">M</strong>ano pública → Estado
+        </div>
+      </div>
+      <div>
+        <div style="color:var(--accent);font-size:22px;font-family:'Syne Mono',monospace;font-weight:700;margin-bottom:8px">PID</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8">
+          <strong style="color:#fff">P</strong>roductividad → nivel de vida<br>
+          <strong style="color:#fff">I</strong>mpresión → inflación<br>
+          <strong style="color:#fff">D</strong>isyuntiva → inflación/desempleo
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="num-sequence">
+    <div class="num-item">
+      <div class="num-big">1</div>
+      <div class="num-title">Disyuntivas individuales</div>
+      <div class="num-keyword">CAÑONES vs MANTEQUILLA</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">2</div>
+      <div class="num-title">Coste = lo que renuncias</div>
+      <div class="num-keyword">TRABAJAR vs ESTUDIAR</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">3</div>
+      <div class="num-title">Pensamiento marginal</div>
+      <div class="num-keyword">ASIENTO VACÍO EN AVIÓN</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">4</div>
+      <div class="num-title">Responden a incentivos</div>
+      <div class="num-keyword">FRUTA MÁS BARATA</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">5</div>
+      <div class="num-title">Comercio mejora todos</div>
+      <div class="num-keyword">ESPECIALIZACIÓN PAÍSES</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">6</div>
+      <div class="num-title">Mercados organizan</div>
+      <div class="num-keyword">MANO INVISIBLE</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">7</div>
+      <div class="num-title">Estado interviene</div>
+      <div class="num-keyword">MONOPOLIOS + EXTERNALIDADES</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">8</div>
+      <div class="num-title">Productividad → nivel de vida</div>
+      <div class="num-keyword">SIN PRODUCCIÓN NO HAY VIDA</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">9</div>
+      <div class="num-title">Dinero → inflación</div>
+      <div class="num-keyword">+ DINERO = − VALOR</div>
+    </div>
+    <div class="num-item">
+      <div class="num-big">10</div>
+      <div class="num-title">Inflación vs desempleo</div>
+      <div class="num-keyword">CORTO PLAZO: SUBE UNO BAJA OTRO</div>
+    </div>
+  </div>
+
+  <div class="story-block">
+    <div class="story-label">Historia de los 10 Principios</div>
+    <div class="story-text">
+      Un <strong>rey medieval</strong> (1) enfrenta disyuntivas: <strong>armas o pan</strong>. 
+      Sabe que cada castillo construido (2) cuesta los campos que pudo cultivar. 
+      Sus consejeros (3) piensan en el último soldado que necesita: ¿vale la pena contratarlo? 
+      Los campesinos (4) responden a los impuestos: si bajan, producen más. 
+      Los reinos vecinos (5) comercian y todos ganan. 
+      El mercado del pueblo (6) coordina todo sin que el rey lo ordene. 
+      A veces (7) el rey debe intervenir si un monopolio acapara el trigo. 
+      El reino más productivo (8) tiene mejor nivel de vida. 
+      Si el rey imprime demasiado oro falso (9), los precios suben. 
+      Y cuando intenta crear empleo gastando más (10), la inflación lo persigue.
+    </div>
+  </div>
+</div>
+
+<!-- TEORÍA MICRO -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(99,102,241,0.2)">⚗️</div>
+    <div>
+      <h2>Teoría Microeconómica</h2>
+      <p>Conceptos teóricos clave</p>
+    </div>
+  </div>
+
+  <div class="acronym-block ab-cyan">
+    <div class="acronym-title">Acrónimo — MEFE (conceptos centrales)</div>
+    <div class="acronym-word">M·E·F·E</div>
+    <div class="acronym-rows">
+      <div class="acronym-row">
+        <div class="ach">M</div>
+        <div class="ach-content">
+          <div class="ach-key">Mercado</div>
+          <div class="ach-desc">Donde compradores y vendedores intercambian bienes, servicios y recursos</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">E</div>
+        <div class="ach-content">
+          <div class="ach-key">Equilibrio</div>
+          <div class="ach-desc">Condición que, una vez alcanzada, tiende a persistir</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">F</div>
+        <div class="ach-content">
+          <div class="ach-key">Función</div>
+          <div class="ach-desc">Relación matemática entre variables (dependiente e independientes)</div>
+        </div>
+      </div>
+      <div class="acronym-row">
+        <div class="ach">E</div>
+        <div class="ach-content">
+          <div class="ach-key">Estática vs Dinámica</div>
+          <div class="ach-desc">Estática = foto (compara equilibrios). Dinámica = video (proceso de ajuste)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-box cb-left">
+      <h4>📸 Economía POSITIVA</h4>
+      <ul>
+        <li>Lo que ES</li>
+        <li>Descriptiva</li>
+        <li>"La inflación subió 5%"</li>
+        <li>Verificable con datos</li>
+      </ul>
+    </div>
+    <div class="compare-box cb-right">
+      <h4>📋 Economía NORMATIVA</h4>
+      <ul>
+        <li>Lo que DEBE SER</li>
+        <li>Prescriptiva</li>
+        <li>"La inflación debería bajar"</li>
+        <li>Juicios de valor</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    POSITIVA = describe la realidad (POS = lo que puedes observar).
+    NORMATIVA = propone cambios (NORMA = regla de lo que debe ser).
+  </div>
+</div>
+
+<!-- DEMANDA Y OFERTA -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="ch-icon" style="background:rgba(245,158,11,0.2)">⚖️</div>
+    <div>
+      <h2>Demanda y Oferta</h2>
+      <p>Las leyes más importantes de la microeconomía</p>
+    </div>
+  </div>
+
+  <div class="rhyme-block">
+    <div class="rhyme-label">Rima para las dos leyes</div>
+    <div class="rhyme-text">
+      <strong>Demanda:</strong> precio SUBE, demanda BAJA — ¡van en CONTRARIA!<br>
+      <strong>Oferta:</strong> precio SUBE, oferta SUBE — ¡van en COMPAÑÍA!<br><br>
+      D → ↑P = ↓Q (inversa / negativa)<br>
+      O → ↑P = ↑Q (directa / positiva)
+    </div>
+  </div>
+
+  <div class="acronym-block ab-amber">
+    <div class="acronym-title">Acrónimo — Factores que desplazan la Demanda: IGPGE</div>
+    <div class="acronym-word">I·G·P·G·E</div>
+    <div class="acronym-rows">
+      <div class="acronym-row"><div class="ach">I</div><div class="ach-content"><div class="ach-key">Ingreso del consumidor</div><div class="ach-desc">Mayor ingreso → mayor demanda (bienes normales)</div></div></div>
+      <div class="acronym-row"><div class="ach">G</div><div class="ach-content"><div class="ach-key">Gustos y preferencias</div><div class="ach-desc">Modas, tendencias, publicidad</div></div></div>
+      <div class="acronym-row"><div class="ach">P</div><div class="ach-content"><div class="ach-key">Precios de bienes relacionados</div><div class="ach-desc">Sustitutos y complementarios</div></div></div>
+      <div class="acronym-row"><div class="ach">G</div><div class="ach-content"><div class="ach-key">Gente (número de compradores)</div><div class="ach-desc">Más compradores = mayor demanda de mercado</div></div></div>
+      <div class="acronym-row"><div class="ach">E</div><div class="ach-content"><div class="ach-key">Expectativas</div><div class="ach-desc">Si esperas que suba el precio, compras más ahora</div></div></div>
+    </div>
+  </div>
+
+  <div class="visual-block">
+    <div class="visual-label">Imagen Mental — Las 2 Curvas</div>
+    <p style="font-size:15px;color:#c4c0e8;line-height:1.9">
+      Imagina una tijera: la hoja de arriba (↗) es la <strong style="color:var(--accent3)">OFERTA</strong> (sube con el precio), 
+      la hoja de abajo (↘) es la <strong style="color:var(--accent2)">DEMANDA</strong> (baja con el precio). 
+      El punto donde se cruzan las hojas de la tijera es el <strong style="color:var(--accent4)">EQUILIBRIO</strong> del mercado.
+    </p>
+    <div style="text-align:center;font-size:60px;margin-top:20px;opacity:0.6">✂️</div>
+  </div>
+
+  <div class="compare-grid" style="margin-top:20px">
+    <div class="compare-box cb-left">
+      <h4>📉 DEMANDA baja</h4>
+      <ul>
+        <li>Relación INVERSA</li>
+        <li>Curva pendiente NEGATIVA</li>
+        <li>↑ Precio → ↓ Cantidad</li>
+        <li>Comprador maximiza</li>
+      </ul>
+    </div>
+    <div class="compare-box cb-right">
+      <h4>📈 OFERTA sube</h4>
+      <ul>
+        <li>Relación DIRECTA</li>
+        <li>Curva pendiente POSITIVA</li>
+        <li>↑ Precio → ↑ Cantidad</li>
+        <li>Productor maximiza</li><
+      </ul>
+    </div>
+  </div>
+</div>
+
+</main>
+</body>
+</html>

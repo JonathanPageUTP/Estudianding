@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microeconomía — Resumen</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --white: #ffffff;
+    --text: #1a1a1a;
+    --muted: #737373;
+    --border: #e8e8e3;
+    --c1: #2d4a8a;   /* azul */
+    --c2: #8a2d2d;   /* rojo */
+    --c3: #2d8a5a;   /* verde */
+    --c4: #8a6c2d;   /* ámbar */
+    --c5: #5a2d8a;   /* púrpura */
+    --c6: #2d7a8a;   /* cyan */
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Instrument Sans',sans-serif; font-size:15px; line-height:1.6; }
+
+  .page-header {
+    background: var(--c1);
+    color: #fff;
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .page-header h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(28px,5vw,48px);
+    line-height: 1.15;
+  }
+  .page-header p { font-size: 14px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+  .page-header .badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .toc {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 48px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .toc-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-right: 8px; }
+  .toc a {
+    font-size: 13px;
+    color: var(--c1);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid rgba(45,74,138,0.25);
+    border-radius: 4px;
+    transition: all .15s;
+  }
+  .toc a:hover { background: var(--c1); color: #fff; }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 48px; }
+
+  /* Section */
+  .section { margin-bottom: 52px; }
+  .sec-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px;
+  }
+  .sec-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sec-header h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+  }
+  .sec-header .sec-num {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .sec-line { height: 1px; background: var(--border); margin-bottom: 20px; }
+
+  /* Summary cards */
+  .sum-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .sum-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    border-top: 3px solid var(--border);
+  }
+  .sum-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .sum-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* Color variants */
+  .s1 { border-top-color: var(--c1); } .s1 h4 { color: var(--c1); }
+  .s2 { border-top-color: var(--c2); } .s2 h4 { color: var(--c2); }
+  .s3 { border-top-color: var(--c3); } .s3 h4 { color: var(--c3); }
+  .s4 { border-top-color: var(--c4); } .s4 h4 { color: var(--c4); }
+  .s5 { border-top-color: var(--c5); } .s5 h4 { color: var(--c5); }
+  .s6 { border-top-color: var(--c6); } .s6 h4 { color: var(--c6); }
+
+  /* Key definition */
+  .key-def {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px 16px 16px;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .kd-bar { width: 3px; border-radius: 2px; flex-shrink: 0; }
+  .kd-term { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .kd-def { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  /* Principles mini-list */
+  .princ-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+  .princ-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 12px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .princ-n {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px; font-weight: 700;
+    width: 28px; flex-shrink: 0;
+    line-height: 1.2;
+  }
+  .princ-content h5 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .princ-content p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* Two columns */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .col-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .col-box h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  .col-box ul { list-style: none; font-size: 13px; color: var(--muted); }
+  .col-box ul li { padding: 3px 0; display: flex; gap: 6px; }
+  .col-box ul li::before { content: '—'; color: var(--border); }
+
+  /* Big formula */
+  .formula {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    text-align: center;
+    margin-bottom: 14px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+  }
+  .formula span { color: var(--c2); }
+  .formula sub { font-family: 'Instrument Sans', sans-serif; font-size: 13px; }
+
+  /* Concept table */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; background: var(--white); border-radius: 8px; overflow:hidden; border: 1px solid var(--border); }
+  th { background: var(--c1); color: #fff; padding: 10px 14px; text-align: left; font-size: 13px; font-weight: 600; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--text); font-weight: 500; }
+
+  /* Key insight box */
+  .insight {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--c1);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .insight strong { color: var(--c1); }
+
+  /* Laws block */
+  .law-pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    margin-bottom: 14px;
+  }
+  .law-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .law-box h4 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .law-arrow { font-family: 'Instrument Serif', serif; font-size: 32px; line-height: 1.2; margin-bottom: 4px; }
+  .law-box p { font-size: 12px; color: var(--muted); }
+  .lb-dem { border-top: 3px solid var(--c2); } .lb-dem h4 { color: var(--c2); } .lb-dem .law-arrow { color: var(--c2); }
+  .lb-ofe { border-top: 3px solid var(--c3); } .lb-ofe h4 { color: var(--c3); } .lb-ofe .law-arrow { color: var(--c3); }
+
+  @media(max-width:640px){
+    main { padding: 20px; }
+    .page-header { padding: 28px 20px; }
+    .toc { padding: 12px 20px; }
+    .two-col, .law-pair { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: white; }
+    .page-header { background: #2d4a8a !important; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>Introducción a la<br>Microeconomía</h1>
+    <p>Prof. Diana Agames Jaén · UTP · Resumen completo</p>
+  </div>
+  <div class="badge">6 Presentaciones • Resumen</div>
+</div>
+
+<div class="toc">
+  <span class="toc-label">Ir a:</span>
+  <a href="#s1">¿Qué es Economía?</a>
+  <a href="#s2">Divisiones</a>
+  <a href="#s3">Problema Eco.</a>
+  <a href="#s4">Escasez</a>
+  <a href="#s5">10 Principios</a>
+  <a href="#s6">Teoría Micro</a>
+  <a href="#s7">Demanda</a>
+  <a href="#s8">Oferta</a>
+</div>
+
+<main>
+
+<!-- 1. QUÉ ES ECONOMÍA -->
+<div class="section" id="s1">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c1)"></div>
+    <h2>¿Qué es la Economía?</h2>
+    <span class="sec-num">01 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <div class="sum-grid">
+    <div class="sum-card s1">
+      <h4>Samuelson</h4>
+      <p>Estudio de cómo las sociedades utilizan recursos escasos para producir bienes y distribuirlos entre grupos.</p>
+    </div>
+    <div class="sum-card s1">
+      <h4>Stiglitz</h4>
+      <p>Cómo individuos, empresas y el Estado eligen entre diversas opciones ante la escasez.</p>
+    </div>
+    <div class="sum-card s1">
+      <h4>Wonnacott</h4>
+      <p>Estudio de cómo los individuos logran su subsistencia: comida, vivienda, vestido y necesidades materiales.</p>
+    </div>
+    <div class="sum-card s1">
+      <h4>Definición integradora</h4>
+      <p>Ciencia social que estudia producción, intercambio, distribución y consumo de bienes y servicios para satisfacer necesidades humanas.</p>
+    </div>
+  </div>
+
+  <div class="insight"><strong>Concepto central:</strong> La economía estudia la ESCASEZ y la ELECCIÓN. Los recursos son limitados; las necesidades son ilimitadas. Por eso hay que elegir.</div>
+</div>
+
+<!-- 2. DIVISIONES -->
+<div class="section" id="s2">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c2)"></div>
+    <h2>Divisiones de la Economía</h2>
+    <span class="sec-num">02 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <div class="two-col">
+    <div class="col-box" style="border-top:3px solid var(--c1)">
+      <h4 style="color:var(--c1)">🔬 Microeconomía</h4>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Estudia agentes individuales y mecanismos de formación de precios.</p>
+      <ul>
+        <li>Producción de empresas e industrias</li>
+        <li>Precios de bienes y servicios</li>
+        <li>Distribución del ingreso y riqueza</li>
+        <li>Empleo en empresas individuales</li>
+      </ul>
+    </div>
+    <div class="col-box" style="border-top:3px solid var(--c2)">
+      <h4 style="color:var(--c2)">🌍 Macroeconomía</h4>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Analiza comportamientos agregados o globales de un país.</p>
+      <ul>
+        <li>Producción Nacional (PIB)</li>
+        <li>Nivel agregado de precios</li>
+        <li>Ingreso Nacional</li>
+        <li>Tasas de desempleo</li>
+        <li>Balanza de pagos</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 3. PROBLEMA ECONÓMICO -->
+<div class="section" id="s3">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c3)"></div>
+    <h2>El Problema Económico</h2>
+    <span class="sec-num">03 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <table>
+    <tr>
+      <th>Agente</th>
+      <th>¿Qué?</th>
+      <th>¿Cómo?</th>
+      <th>¿Para quién?</th>
+    </tr>
+    <tr>
+      <td>Familia / Consumidor</td>
+      <td>¿Qué comprar?</td>
+      <td>¿Cuánto y a qué precio?</td>
+      <td>¿A quién comprar?</td>
+    </tr>
+    <tr>
+      <td>Empresa</td>
+      <td>¿Qué producir?</td>
+      <td>¿Cuánto y cómo producir?</td>
+      <td>¿Para quién producir?</td>
+    </tr>
+    <tr>
+      <td>Estado</td>
+      <td>¿Qué servicio dar?</td>
+      <td>¿Cómo y cuánto?</td>
+      <td>¿Para quién? ¿Dónde?</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 4. ESCASEZ Y NECESIDADES -->
+<div class="section" id="s4">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c4)"></div>
+    <h2>Escasez, Necesidades y Costo de Oportunidad</h2>
+    <span class="sec-num">04 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <div class="key-def">
+    <div class="kd-bar" style="background:var(--c4)"></div>
+    <div>
+      <div class="kd-term">Escasez</div>
+      <div class="kd-def">No significa ausencia total, sino insuficiencia: no hay suficiente para satisfacer todo lo que todos desean. Obliga a priorizar.</div>
+    </div>
+  </div>
+  <div class="key-def">
+    <div class="kd-bar" style="background:var(--c4)"></div>
+    <div>
+      <div class="kd-term">Bien Económico</div>
+      <div class="kd-def">Escaso, con límites en disponibilidad. Involucra un oferente y un demandante. Tiene precio en el mercado.</div>
+    </div>
+  </div>
+  <div class="key-def">
+    <div class="kd-bar" style="background:var(--c6)"></div>
+    <div>
+      <div class="kd-term">Bien No Económico</div>
+      <div class="kd-def">Abundante, supera la demanda y su precio es cero.</div>
+    </div>
+  </div>
+  <div class="key-def">
+    <div class="kd-bar" style="background:var(--c2)"></div>
+    <div>
+      <div class="kd-term">Costo de Oportunidad</div>
+      <div class="kd-def">Valor del bien o servicio al que se renuncia al hacer una elección. Es el "verdadero costo" de cualquier decisión.</div>
+    </div>
+  </div>
+
+  <table style="margin-top:16px">
+    <tr><th colspan="3">Características de las Necesidades</th></tr>
+    <tr>
+      <td>Ilimitadas en número</td>
+      <td>Siempre surgen nuevas necesidades a medida que la sociedad progresa</td>
+      <td>Nunca se satisfacen todas</td>
+    </tr>
+    <tr>
+      <td>Limitadas en capacidad</td>
+      <td>Punto de saturación por bien específico (utilidad marginal decreciente)</td>
+      <td>3 vasos de agua y ya no tienes sed</td>
+    </tr>
+    <tr>
+      <td>Concurrentes</td>
+      <td>Varias al mismo tiempo; vuelven a aparecer</td>
+      <td>Sed y hambre simultáneamente</td>
+    </tr>
+    <tr>
+      <td>Complementarias</td>
+      <td>Integran grupos: una necesidad implica otras</td>
+      <td>Tomar café → taza, cucharita, azúcar</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 5. 10 PRINCIPIOS -->
+<div class="section" id="s5">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c5)"></div>
+    <h2>Los 10 Principios de la Economía</h2>
+    <span class="sec-num">05 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <div class="princ-list">
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">1</div><div class="princ-content"><h5>Individuos enfrentan disyuntivas</h5><p>Para conseguir algo hay que renunciar a otra cosa. Cañones vs mantequilla.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">2</div><div class="princ-content"><h5>El coste = lo que se renuncia</h5><p>Coste de oportunidad: el verdadero coste de cualquier cosa.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">3</div><div class="princ-content"><h5>Personas racionales piensan marginalmente</h5><p>Comparan costes y beneficios del siguiente paso. Boleto de avión barato.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">4</div><div class="princ-content"><h5>Responden a incentivos</h5><p>Cuando el precio baja, se compra más. Los incentivos modifican el comportamiento.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">5</div><div class="princ-content"><h5>Comercio mejora el bienestar</h5><p>Especialización → intercambio → todos ganan.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">6</div><div class="princ-content"><h5>Mercados organizan la economía</h5><p>La "mano invisible" coordina sin dirección central.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">7</div><div class="princ-content"><h5>Estado mejora a veces los resultados</h5><p>Interviene ante monopolios, externalidades, desequilibrios.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">8</div><div class="princ-content"><h5>Productividad determina nivel de vida</h5><p>Más producción = mayor bienestar para los ciudadanos.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">9</div><div class="princ-content"><h5>Más dinero impreso = inflación</h5><p>El valor del dinero disminuye proporcionalmente al aumento de masa monetaria.</p></div></div>
+    <div class="princ-item"><div class="princ-n" style="color:var(--c5)">10</div><div class="princ-content"><h5>Disyuntiva inflación-desempleo</h5><p>A corto plazo: mayor demanda → más empleo pero también más inflación.</p></div></div>
+  </div>
+</div>
+
+<!-- 6. TEORÍA MICRO -->
+<div class="section" id="s6">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c6)"></div>
+    <h2>Teoría Microeconómica</h2>
+    <span class="sec-num">06 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <table>
+    <tr><th>Concepto</th><th>Definición clave</th></tr>
+    <tr><td>Teoría</td><td>Hipótesis probada; su valor es predecir y explicar, no el "realismo" de sus supuestos.</td></tr>
+    <tr><td>Mercado</td><td>Lugar donde compradores y vendedores intercambian bienes, servicios y recursos.</td></tr>
+    <tr><td>Función</td><td>Relación entre variables; muestra cómo la variable dependiente depende de la(s) independiente(s).</td></tr>
+    <tr><td>Equilibrio</td><td>Condición que, una vez alcanzada, tiende a persistir. Balance de fuerzas del mercado.</td></tr>
+    <tr><td>Estática comparativa</td><td>Compara dos o más posiciones de equilibrio sin considerar la transición.</td></tr>
+    <tr><td>Dinámica</td><td>Estudia la trayectoria en el tiempo y el proceso de ajuste entre equilibrios.</td></tr>
+    <tr><td>Equilibrio parcial</td><td>Analiza un mercado individual, aislado del resto.</td></tr>
+    <tr><td>Equilibrio general</td><td>Analiza simultáneamente todos los mercados.</td></tr>
+    <tr><td>Economía positiva</td><td>Describe lo que ES (empírica, verificable).</td></tr>
+    <tr><td>Economía normativa</td><td>Prescribe lo que DEBE SER (juicios de valor).</td></tr>
+  </table>
+</div>
+
+<!-- 7. DEMANDA -->
+<div class="section" id="s7">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c2)"></div>
+    <h2>La Demanda</h2>
+    <span class="sec-num">07 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <div class="key-def">
+    <div class="kd-bar" style="background:var(--c2)"></div>
+    <div>
+      <div class="kd-term">Ley de la Demanda</div>
+      <div class="kd-def">A menor precio → cantidad demandada SUBE. A mayor precio → cantidad demandada BAJA. Relación <strong>INVERSA</strong>. Curva de pendiente negativa (↘).</div>
+    </div>
+  </div>
+
+  <div class="formula">
+    Q<sub>D</sub> = f(P, I, P<sub>s</sub>, P<sub>c</sub>, G, E, N)
+    <div style="font-family:'Instrument Sans',sans-serif;font-size:12px;color:var(--muted);margin-top:8px">P=precio · I=ingreso · Ps=sustitutos · Pc=complementarios · G=gustos · E=expectativas · N=número de compradores</div>
+  </div>
+
+  <table>
+    <tr><th>Factor determinante</th><th>Efecto si aumenta</th></tr>
+    <tr><td>Precio del bien (P)</td><td>↓ Cantidad demandada (movimiento en la curva)</td></tr>
+    <tr><td>Ingreso del consumidor (I)</td><td>↑ Demanda (bienes normales) — desplaza curva derecha</td></tr>
+    <tr><td>Precio de sustitutos (Ps)</td><td>↑ Demanda del bien (si sube el sustituto, te cambias)</td></tr>
+    <tr><td>Precio de complementarios (Pc)</td><td>↓ Demanda de ambos</td></tr>
+    <tr><td>Gustos y preferencias (G)</td><td>↑ Demanda si el gusto favorece el bien</td></tr>
+    <tr><td>Expectativas (E)</td><td>Si esperas alza futura → compras más ahora</td></tr>
+    <tr><td>Número de compradores (N)</td><td>↑ Demanda de mercado</td></tr>
+  </table>
+
+  <div class="insight" style="border-left-color:var(--c2)"><strong>Diferencia clave:</strong> Movimiento SOBRE la curva = cambio de precio. Desplazamiento de la curva = cambio en otros factores.</div>
+</div>
+
+<!-- 8. OFERTA -->
+<div class="section" id="s8">
+  <div class="sec-header">
+    <div class="sec-dot" style="background:var(--c3)"></div>
+    <h2>La Oferta</h2>
+    <span class="sec-num">08 / 08</span>
+  </div>
+  <div class="sec-line"></div>
+
+  <div class="key-def">
+    <div class="kd-bar" style="background:var(--c3)"></div>
+    <div>
+      <div class="kd-term">Ley de la Oferta</div>
+      <div class="kd-def">A mayor precio → cantidad ofrecida SUBE. A menor precio → cantidad ofrecida BAJA. Relación <strong>DIRECTA</strong>. Curva de pendiente positiva (↗).</div>
+    </div>
+  </div>
+
+  <div class="law-pair">
+    <div class="law-box lb-dem">
+      <h4>📉 LEY DE LA DEMANDA</h4>
+      <div class="law-arrow">↑P → ↓Q</div>
+      <p>Relación INVERSA · Pendiente negativa</p>
+    </div>
+    <div class="law-box lb-ofe">
+      <h4>📈 LEY DE LA OFERTA</h4>
+      <div class="law-arrow">↑P → ↑Q</div>
+      <p>Relación DIRECTA · Pendiente positiva</p>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Concepto</th><th>Descripción</th></tr>
+    <tr><td>Curva de oferta</td><td>Pendiente positiva: muestra la relación directa precio-cantidad ofrecida.</td></tr>
+    <tr><td>Movimiento en la curva</td><td>Causado por cambio en el PRECIO del bien.</td></tr>
+    <tr><td>Desplazamiento de la curva</td><td>Causado por costos de insumos, tecnología, expectativas, número de productores.</td></tr>
+    <tr><td>Equilibrio de mercado</td><td>Punto donde Qd = Qs. Precio y cantidad que vacían el mercado.</td></tr>
+    <tr><td>Exceso de oferta</td><td>Qs > Qd → el precio tiende a BAJAR.</td></tr>
+    <tr><td>Exceso de demanda</td><td>Qd > Qs (escasez) → el precio tiende a SUBIR.</td></tr>
+  </table>
+</div>
+
+</main>
+</body>
+</html>
