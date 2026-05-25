@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blockchain — Guía de Presentación</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0a;
+    --surface: #111811;
+    --surface2: #162016;
+    --border: #1e2e1e;
+    --green: #2dff6e;
+    --green-dim: #1a9940;
+    --green-glow: rgba(45,255,110,0.12);
+    --text: #e8f5e8;
+    --muted: #7aad7a;
+    --accent: #00e5ff;
+    --accent2: #ffd54f;
+    --danger: #ff5252;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45,255,110,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,255,110,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 60px 48px 40px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .header-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    padding: 6px 14px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  header h1 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+
+  header h1 span {
+    color: var(--green);
+  }
+
+  .header-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ---- NAV DOTS ---- */
+  .nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .nav a {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: 1px solid var(--green-dim);
+    display: block;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .nav a:hover, .nav a.active {
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green);
+  }
+
+  /* ---- MAIN ---- */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 48px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+
+  /* ---- SECTION ---- */
+  .section {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.7s forwards;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.25s; }
+  .section:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .slide-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .section-header h2 {
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  .section-header h2 em {
+    font-style: normal;
+    color: var(--green);
+  }
+
+  /* ---- CARDS GRID ---- */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--green-dim);
+    transition: background 0.3s;
+  }
+
+  .card:hover {
+    border-color: var(--green-dim);
+    transform: translateY(-3px);
+  }
+
+  .card:hover::before {
+    background: var(--green);
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .card p strong {
+    color: var(--text);
+  }
+
+  /* ---- DETAIL BLOCK ---- */
+  .detail-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+
+  .detail-block h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .detail-block p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  /* ---- PRO/CON GRID ---- */
+  .procon {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .procon { grid-template-columns: 1fr; }
+    main { padding: 40px 20px 60px; }
+    header { padding: 40px 20px 28px; flex-direction: column; align-items: flex-start; }
+  }
+
+  .pros, .cons {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px;
+  }
+
+  .pros { border-top: 2px solid var(--green); }
+  .cons { border-top: 2px solid var(--danger); }
+
+  .procon-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    font-weight: 700;
+  }
+
+  .pros .procon-title { color: var(--green); }
+  .cons .procon-title { color: var(--danger); }
+
+  .procon-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+
+  .procon-item:last-child { margin-bottom: 0; }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .pros .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .cons .dot { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+
+  .procon-item p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .procon-item p strong { color: var(--text); }
+
+  /* ---- TIMELINE ---- */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--green), var(--green-dim), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    padding: 0 0 32px 24px;
+  }
+
+  .tl-item:last-child { padding-bottom: 0; }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    border: 2px solid var(--bg);
+  }
+
+  .tl-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .tl-item h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .tl-item p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ---- APPS GRID ---- */
+  .apps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .app-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: border-color 0.3s;
+  }
+
+  .app-pill:hover { border-color: var(--green-dim); }
+
+  .app-pill .icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .app-pill h5 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .app-pill p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ---- QUOTE ---- */
+  .quote {
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin-top: 28px;
+  }
+
+  .quote p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    font-style: italic;
+  }
+
+  .quote cite {
+    display: block;
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 1px;
+    font-style: normal;
+  }
+
+  /* ---- DIVIDER ---- */
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* ---- SPEAKER NOTE ---- */
+  .speaker-note {
+    background: #0d1a12;
+    border: 1px dashed var(--green-dim);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-top: 28px;
+  }
+
+  .speaker-note label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .speaker-note p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .speaker-note p strong { color: var(--accent2); }
+
+  /* ---- FOOTER ---- */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  footer span { color: var(--green); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#slide1" class="active" title="¿Qué es Blockchain?"></a>
+  <a href="#slide2" title="Mecanismo de Funcionamiento"></a>
+  <a href="#slide3" title="Evolución e Impacto"></a>
+</nav>
+
+<header>
+  <div>
+    <div class="header-badge" style="margin-bottom:16px">CRYPTO CURRENCY — GUÍA DE PRESENTACIÓN</div>
+    <h1>Blockchain &<br><span>Criptomonedas</span></h1>
+  </div>
+  <div class="header-meta">
+    Jonathan Page<br>
+    Guía detallada<br>
+    3 diapositivas
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== SLIDE 1 ===== -->
+  <section class="section" id="slide1">
+    <div class="section-header">
+      <span class="slide-num">SLIDE 01</span>
+      <h2>¿Qué es <em>Blockchain?</em></h2>
+    </div>
+
+    <div class="detail-block">
+      <h4>Definición central</h4>
+      <p>Blockchain es un <strong>libro de contabilidad digital compartido e inmutable</strong> que permite registrar transacciones y realizar el seguimiento de activos dentro de una red descentralizada. A diferencia de una base de datos convencional centralizada (como la de un banco), aquí no existe un servidor único: la información se replica en cientos o miles de nodos simultáneamente.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <span class="card-icon">📖</span>
+        <h3>Libro de contabilidad</h3>
+        <p>Piénsalo como un <strong>Excel gigante compartido</strong> entre todos los participantes de la red, donde cada fila es una transacción. Nadie puede borrar filas, solo agregar nuevas.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌐</span>
+        <h3>Base de datos distribuida</h3>
+        <p>Los datos no viven en un servidor central. <strong>Cada nodo tiene una copia exacta</strong> de toda la cadena. Si uno falla o es hackeado, los demás siguen intactos.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔒</span>
+        <h3>Inmutabilidad</h3>
+        <p>Una vez que una transacción se escribe, <strong>no se puede modificar ni eliminar</strong>. Esto elimina el fraude retroactivo y genera confianza sin necesidad de intermediarios.</p>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <h4>¿Por qué es importante?</h4>
+      <p>El beneficio clave de blockchain radica en su capacidad para proporcionar <strong>seguridad, transparencia y confianza sin depender de intermediarios tradicionales</strong> como bancos u organismos de verificación. Esto reduce costos operativos, elimina puntos únicos de fallo y permite que dos partes desconocidas puedan transaccionar de forma segura.</p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="procon">
+      <div class="pros">
+        <p class="procon-title">✅ Ventajas clave</p>
+        <div class="procon-item"><div class="dot"></div><p><strong>Sin intermediarios</strong> — transacciones directas entre pares (peer-to-peer)</p></div>
+        <div class="procon-item"><div class="dot"></div><p><strong>Transparencia total</strong> — cualquier participante puede auditar el historial</p></div>
+        <div class="procon-item"><div class="dot"></div><p><strong>Alta disponibilidad</strong> — no hay servidor central que pueda caer</p></div>
+        <div class="procon-item"><div class="dot"></div><p><strong>Resistente a censura</strong> — nadie puede bloquear una transacción válida</p></div>
+      </div>
+      <div class="cons">
+        <p class="procon-title">⚠️ Limitaciones</p>
+        <div class="procon-item"><div class="dot"></div><p><strong>Escalabilidad</strong> — procesa menos transacciones por segundo que sistemas centralizados</p></div>
+        <div class="procon-item"><div class="dot"></div><p><strong>Consumo energético</strong> — especialmente en redes Proof of Work como Bitcoin</p></div>
+        <div class="procon-item"><div class="dot"></div><p><strong>Irreversibilidad</strong> — un error en una transacción no puede deshacerse directamente</p></div>
+        <div class="procon-item"><div class="dot"></div><p><strong>Complejidad técnica</strong> — curva de adopción alta para usuarios finales</p></div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <label>🎤 Nota del presentador</label>
+      <p>Puedes abrir con la analogía: <strong>"imagina un Google Docs que nadie puede editar, solo agregar líneas, y que miles de personas tienen una copia exacta en tiempo real."</strong> Eso capta la esencia de blockchain de forma intuitiva. Luego introduce el concepto técnico gradualmente.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 2 ===== -->
+  <section class="section" id="slide2">
+    <div class="section-header">
+      <span class="slide-num">SLIDE 02</span>
+      <h2>Mecanismo de <em>Funcionamiento</em></h2>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <span class="card-icon">🧱</span>
+        <h3>Bloques y Hashes</h3>
+        <p>Cada transacción se agrupa en un <strong>bloque</strong>. Ese bloque recibe un <strong>hash</strong>: una huella digital única generada criptográficamente. Si cambias un solo carácter del bloque, el hash cambia completamente — lo que delata cualquier intento de manipulación.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🔗</span>
+        <h3>Cadena cronológica</h3>
+        <p>Cada bloque <strong>contiene el hash del bloque anterior</strong>. Esto crea una cadena: para alterar un bloque antiguo tendrías que recalcular todos los bloques posteriores simultáneamente, lo cual es computacionalmente imposible en la práctica.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🌍</span>
+        <h3>Descentralización</h3>
+        <p>La cadena existe en <strong>miles de nodos independientes</strong>. No hay un servidor central. Si atacas uno, los demás la mantienen intacta. La red llega a consenso sobre cuál es la versión válida mediante algoritmos matemáticos.</p>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <h4>Paso a paso: ¿cómo se añade un bloque?</h4>
+      <p>
+        <strong>1. Inicio de transacción</strong> — Un usuario inicia una operación (ej: enviar 1 BTC).<br><br>
+        <strong>2. Broadcast a la red</strong> — La transacción se transmite a todos los nodos de la red.<br><br>
+        <strong>3. Validación</strong> — Los nodos verifican que la transacción sea legítima (fondos suficientes, firma válida).<br><br>
+        <strong>4. Agrupación en bloque</strong> — Las transacciones válidas se agrupan en un bloque candidato.<br><br>
+        <strong>5. Mecanismo de consenso</strong> — Los nodos compiten (PoW) o votan (PoS) para determinar quién añade el siguiente bloque.<br><br>
+        <strong>6. Escritura en la cadena</strong> — El bloque ganador se añade. Es permanente e inmutable.
+      </p>
+    </div>
+
+    <hr class="divider">
+
+    <div class="cards">
+      <div class="card">
+        <span class="card-icon">⛏️</span>
+        <h3>Proof of Work (PoW)</h3>
+        <p>Los mineros compiten resolviendo <strong>puzzles criptográficos complejos</strong>. El primero que lo resuelve añade el bloque y recibe recompensa. Muy seguro, pero consume mucha energía. Usado por <strong>Bitcoin</strong>.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🪙</span>
+        <h3>Proof of Stake (PoS)</h3>
+        <p>Los validadores son elegidos según la cantidad de criptomoneda que <strong>"apuestan" como garantía</strong>. Mucho más eficiente energéticamente. Usado por <strong>Ethereum 2.0</strong>, Cardano, Solana.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">📜</span>
+        <h3>Smart Contracts</h3>
+        <p>Código almacenado en blockchain que <strong>se ejecuta automáticamente</strong> cuando se cumplen condiciones predefinidas. Ejemplo: liberar el pago al comprador cuando el seguro de viaje confirma un vuelo cancelado. Sin necesidad de abogados ni intermediarios.</p>
+      </div>
+    </div>
+
+    <div class="detail-block">
+      <h4>Criptografía de clave pública</h4>
+      <p>
+        Cada usuario tiene dos claves:<br><br>
+        🔓 <strong>Clave Pública</strong> — Es como tu número de cuenta bancaria. La compartes para recibir fondos o datos. Visible para todos.<br><br>
+        🔑 <strong>Clave Privada</strong> — Es tu firma digital secreta. La usas para autorizar transacciones. <em>Nunca se comparte.</em> Quien la pierde, pierde acceso a sus fondos de forma irrecuperable.
+      </p>
+    </div>
+
+    <div class="speaker-note">
+      <label>🎤 Nota del presentador</label>
+      <p>Para explicar el hash, usa esta analogía: <strong>"es como una licuadora matemática — puedes meter ingredientes y siempre obtienes el mismo batido; pero si cambias un ingrediente, el batido cambia completamente y no puedes reconstruir los ingredientes originales."</strong> Para los Smart Contracts: <strong>"son como máquinas expendedoras: insertas la condición, cumples el requisito, y el resultado se entrega automáticamente sin que nadie tenga que intervenir."</strong></p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3 ===== -->
+  <section class="section" id="slide3">
+    <div class="section-header">
+      <span class="slide-num">SLIDE 03</span>
+      <h2>Evolución e <em>Impacto Sectorial</em></h2>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">2008</div>
+        <h4>Satoshi Nakamoto — Bitcoin</h4>
+        <p>Una figura o grupo anónimo publica el whitepaper de Bitcoin, introduciendo la primera implementación práctica de blockchain. Su objetivo: crear una moneda digital descentralizada que permita transacciones peer-to-peer sin bancos. El blockchain sirve como libro mayor público para evitar el doble gasto.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2015</div>
+        <h4>Ethereum — Smart Contracts</h4>
+        <p>Vitalik Buterin lanza Ethereum, expandiendo blockchain más allá de las monedas digitales. Los contratos inteligentes permiten programar acuerdos autoejecutables, abriendo la puerta a aplicaciones descentralizadas (dApps) en cualquier industria.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2017–2020</div>
+        <h4>DeFi y NFTs — Finanzas descentralizadas</h4>
+        <p>Emergen protocolos DeFi (Uniswap, Aave, Compound) que replican servicios bancarios sin bancos. Los NFTs crean escasez digital verificable, revolucionando arte, gaming y derechos de propiedad.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021–hoy</div>
+        <h4>Adopción empresarial e integración con IA</h4>
+        <p>Grandes corporaciones (IBM, Microsoft, Walmart) adoptan blockchain en supply chain. La integración con IA crea sistemas donde la IA analiza datos y blockchain garantiza su autenticidad e inmutabilidad. Se proyecta un mercado de casi 1 billón USD para 2032.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-header" style="margin-top:0; margin-bottom:20px">
+      <h2 style="font-size:22px">Aplicaciones <em>Reales</em></h2>
+    </div>
+
+    <div class="apps">
+      <div class="app-pill">
+        <div class="icon">🚚</div>
+        <div>
+          <h5>Cadena de Suministro y Logística</h5>
+          <p>Walmart rastrea el origen de alimentos en segundos con blockchain. IBM Food Trust registra cada paso del producto del campo al supermercado. Elimina recalls masivos al aislar el lote exacto contaminado.</p>
+        </div>
+      </div>
+      <div class="app-pill">
+        <div class="icon">🏠</div>
+        <div>
+          <h5>Sector Inmobiliario</h5>
+          <p>Los títulos de propiedad en blockchain eliminan la burocracia de registro. Smart contracts automatizan el cambio de titularidad al confirmarse el pago, reduciendo semanas de trámites a horas.</p>
+        </div>
+      </div>
+      <div class="app-pill">
+        <div class="icon">🏥</div>
+        <div>
+          <h5>Sanidad</h5>
+          <p>Registros médicos en blockchain accesibles por cualquier médico con permiso del paciente, sin riesgo de pérdida o alteración. Trazabilidad de medicamentos para combatir la falsificación.</p>
+        </div>
+      </div>
+      <div class="app-pill">
+        <div class="icon">🗳️</div>
+        <div>
+          <h5>Sistemas de Votación</h5>
+          <p>Voto electrónico verificable donde cada ciudadano puede confirmar que su voto fue contado correctamente, sin revelar por quién votó. Elimina fraude y permite auditorías transparentes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote">
+      <p>"La tecnología blockchain podría tener un impacto tan profundo como Internet en los próximos 20 años, transformando no solo las finanzas sino cualquier industria que dependa de registros, contratos y confianza verificable."</p>
+      <cite>— Tapscott & Tapscott, Blockchain Revolution (2016)</cite>
+    </div>
+
+    <div class="speaker-note">
+      <label>🎤 Nota del presentador</label>
+      <p>Para cerrar la presentación puedes mencionar el dato de proyección: <strong>casi 1 billón de dólares de mercado para 2032 con TCAC del 56.1%</strong> según Statista. Enfatiza que blockchain no es solo Bitcoin — es infraestructura. Puedes compararlo con <strong>Internet en los 90s</strong>: muchos no entendían para qué servía, pero hoy no concebimos el mundo sin él. Termina con una pregunta abierta al público: <strong>"¿en qué sector de Panamá creen que blockchain tendría mayor impacto?"</strong></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Jonathan Page — <span>Blockchain & Crypto Currency</span></p>
+  <p>3 slides · Guía de presentación</p>
+</footer>
+
+<script>
+  // Active nav dot on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const dots = document.querySelectorAll('.nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const active = document.querySelector(`.nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll
+  document.querySelectorAll('.nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
