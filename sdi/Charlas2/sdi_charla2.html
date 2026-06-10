@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma ISO/IEC 27001:2022 — ANSDP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0F2347;
+    --navy2:   #1A3461;
+    --teal:    #00C9A7;
+    --amber:   #FFB830;
+    --red:     #EF4444;
+    --white:   #FFFFFF;
+    --gray50:  #F8FAFC;
+    --gray100: #F1F5F9;
+    --gray200: #E2E8F0;
+    --gray400: #94A3B8;
+    --gray600: #475569;
+    --gray800: #1E293B;
+    --radius:  12px;
+    --shadow:  0 4px 24px rgba(15,35,71,.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray50);
+    color: var(--gray800);
+    line-height: 1.6;
+  }
+
+  /* ── HERO ─────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #0e3060 100%);
+    color: var(--white);
+    padding: 64px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,201,167,.15) 0%, transparent 70%);
+    top: -200px; right: -150px;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,201,167,.15);
+    border: 1px solid rgba(0,201,167,.4);
+    color: var(--teal);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--teal); }
+  .hero p {
+    font-size: clamp(14px, 2vw, 17px);
+    color: rgba(255,255,255,.72);
+    max-width: 560px;
+    margin: 0 auto 36px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat strong {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--teal);
+    line-height: 1;
+  }
+  .hero-stat span {
+    font-size: 12px;
+    color: rgba(255,255,255,.6);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  /* ── NAV PILLS ────────────────────────────── */
+  .nav-pills {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray200);
+    padding: 12px 24px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-pills::-webkit-scrollbar { display: none; }
+  .nav-pill {
+    flex-shrink: 0;
+    padding: 7px 18px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--gray100);
+    color: var(--gray600);
+    transition: background .2s, color .2s;
+    text-decoration: none;
+  }
+  .nav-pill:hover, .nav-pill.active {
+    background: var(--navy);
+    color: var(--white);
+  }
+
+  /* ── SECTIONS ─────────────────────────────── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+  .section-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 36px;
+    line-height: 1.25;
+  }
+
+  /* ── GANTT ────────────────────────────────── */
+  #gantt { background: var(--white); }
+  .gantt-wrapper {
+    border: 1px solid var(--gray200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .gantt-header {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .gantt-header-cell {
+    padding: 12px 6px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,.1);
+  }
+  .gantt-header-cell:first-child {
+    text-align: left;
+    padding-left: 16px;
+  }
+  .gantt-row {
+    display: grid;
+    grid-template-columns: 200px repeat(12, 1fr);
+    border-bottom: 1px solid var(--gray100);
+    transition: background .15s;
+    cursor: pointer;
+  }
+  .gantt-row:last-child { border-bottom: none; }
+  .gantt-row:hover { background: var(--gray50); }
+  .gantt-label {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray800);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-right: 1px solid var(--gray200);
+  }
+  .gantt-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .gantt-cell {
+    position: relative;
+    padding: 8px 3px;
+    border-right: 1px solid var(--gray100);
+    display: flex;
+    align-items: center;
+  }
+  .gantt-bar {
+    height: 22px;
+    border-radius: 4px;
+    width: 0;
+    transition: width .7s cubic-bezier(.4,0,.2,1);
+    position: relative;
+    overflow: visible;
+  }
+  .gantt-bar.animate { width: 100%; }
+  .gantt-tooltip {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--navy);
+    color: var(--white);
+    font-size: 11px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    z-index: 200;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  }
+  .gantt-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--navy);
+  }
+  .gantt-row:hover .gantt-tooltip { display: block; }
+
+  @media (max-width: 700px) {
+    .gantt-header { grid-template-columns: 140px repeat(12, 1fr); }
+    .gantt-row    { grid-template-columns: 140px repeat(12, 1fr); }
+    .gantt-label  { font-size: 10px; padding: 8px 8px; }
+    .gantt-header-cell { font-size: 10px; padding: 10px 2px; }
+  }
+
+  /* ── PHASES GRID ──────────────────────────── */
+  #fases { background: var(--gray50); }
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .phase-card {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .phase-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(15,35,71,.15);
+  }
+  .phase-card-header {
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .phase-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .phase-meta { flex: 1; min-width: 0; }
+  .phase-month {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 4px;
+  }
+  .phase-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .phase-toggle {
+    font-size: 18px;
+    color: var(--gray400);
+    transition: transform .3s;
+    margin-top: 2px;
+  }
+  .phase-card.open .phase-toggle { transform: rotate(180deg); }
+  .phase-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--gray100);
+  }
+  .phase-body.visible { display: block; }
+  .phase-body p {
+    font-size: 13.5px;
+    color: var(--gray600);
+    margin-top: 14px;
+    line-height: 1.65;
+  }
+  .phase-key {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .phase-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--gray100);
+    color: var(--gray600);
+  }
+
+  /* ── PDCA ─────────────────────────────────── */
+  #pdca { background: var(--white); }
+  .pdca-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .pdca-card {
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .pdca-card::before {
+    content: attr(data-letter);
+    position: absolute;
+    right: -10px; top: -20px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 100px;
+    font-weight: 700;
+    opacity: .12;
+    line-height: 1;
+  }
+  .pdca-letter {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    opacity: .8;
+    margin-bottom: 6px;
+  }
+  .pdca-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .pdca-items {
+    list-style: none;
+    font-size: 13px;
+    opacity: .88;
+    line-height: 1.7;
+  }
+  .pdca-items li::before { content: '→ '; opacity: .7; }
+
+  /* ── RESUMEN ──────────────────────────────── */
+  #resumen { background: var(--gray50); }
+  .summary-box {
+    background: var(--white);
+    border: 1px solid var(--gray200);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: var(--shadow);
+  }
+  .summary-box p {
+    font-size: 15px;
+    color: var(--gray600);
+    line-height: 1.75;
+    margin-bottom: 20px;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+  .summary-box strong { color: var(--navy); }
+  .key-points {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .key-point {
+    background: var(--gray50);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px;
+    font-size: 14px;
+    color: var(--gray700);
+  }
+  .key-point strong {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  /* ── Q&A ──────────────────────────────────── */
+  #qa { background: var(--white); }
+  .qa-list { display: flex; flex-direction: column; gap: 12px; }
+  .qa-item {
+    border: 1px solid var(--gray200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .qa-item.open { border-color: var(--teal); }
+  .qa-question {
+    width: 100%;
+    text-align: left;
+    padding: 18px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    transition: background .15s;
+  }
+  .qa-question:hover { background: var(--gray50); }
+  .qa-q-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .qa-item.open .qa-q-num { background: var(--teal); }
+  .qa-chevron {
+    margin-left: auto;
+    font-size: 18px;
+    color: var(--gray400);
+    transition: transform .3s;
+  }
+  .qa-item.open .qa-chevron { transform: rotate(180deg); color: var(--teal); }
+  .qa-answer {
+    display: none;
+    padding: 0 20px 20px 62px;
+    font-size: 14px;
+    color: var(--gray600);
+    line-height: 1.72;
+  }
+  .qa-answer.visible { display: block; }
+  .qa-answer strong { color: var(--navy); }
+
+  /* ── FOOTER ───────────────────────────────── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.55);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 13px;
+  }
+  footer strong { color: var(--teal); }
+
+  /* ── PROGRESS BAR ─────────────────────────── */
+  .progress-bar-wrap {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 3px;
+    z-index: 9999;
+    background: transparent;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--amber));
+    width: 0%;
+    transition: width .1s;
+  }
+
+  /* ── ANIMATIONS ───────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { opacity: 0; }
+  .fade-up.visible { animation: fadeUp .6s ease forwards; }
+
+  @media (max-width: 500px) {
+    .hero { padding: 48px 16px 60px; }
+    .section { padding: 48px 16px; }
+    .summary-box { padding: 24px; }
+    .qa-answer { padding-left: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ── HERO ─────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-badge">📋 SGSI · ISO/IEC 27001:2022</div>
+  <h1>Cronograma de Implementación<br><span>en el Sector Público</span></h1>
+  <p>Plan de 12 meses para que la <strong>ANSDP</strong> obtenga la certificación ISO 27001. Aprende cada etapa, entiende el orden y domina las preguntas.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>12</strong><span>Meses</span></div>
+    <div class="hero-stat"><strong>16</strong><span>Etapas</span></div>
+    <div class="hero-stat"><strong>93</strong><span>Controles (Anexo A)</span></div>
+    <div class="hero-stat"><strong>4</strong><span>Fases PDCA</span></div>
+  </div>
+</section>
+
+<!-- ── NAV ──────────────────────────────────── -->
+<nav class="nav-pills" id="navPills">
+  <a class="nav-pill" href="#gantt">📊 Cronograma</a>
+  <a class="nav-pill" href="#fases">📌 Fases</a>
+  <a class="nav-pill" href="#pdca">🔄 PDCA</a>
+  <a class="nav-pill" href="#resumen">📝 Resumen</a>
+  <a class="nav-pill" href="#qa">❓ Preguntas</a>
+</nav>
+
+<!-- ── GANTT ─────────────────────────────────── -->
+<div id="gantt">
+  <div class="section">
+    <div class="section-label">Diagrama de Gantt</div>
+    <h2 class="section-title">Cronograma visual — 12 meses</h2>
+    <div class="gantt-wrapper fade-up" id="ganttChart">
+      <div class="gantt-header">
+        <div class="gantt-header-cell">Actividad</div>
+        <div class="gantt-header-cell">M1</div>
+        <div class="gantt-header-cell">M2</div>
+        <div class="gantt-header-cell">M3</div>
+        <div class="gantt-header-cell">M4</div>
+        <div class="gantt-header-cell">M5</div>
+        <div class="gantt-header-cell">M6</div>
+        <div class="gantt-header-cell">M7</div>
+        <div class="gantt-header-cell">M8</div>
+        <div class="gantt-header-cell">M9</div>
+        <div class="gantt-header-cell">M10</div>
+        <div class="gantt-header-cell">M11</div>
+        <div class="gantt-header-cell">M12</div>
+      </div>
+      <!-- rows injected by JS -->
+      <div id="ganttRows"></div>
+    </div>
+    <p style="margin-top:14px; font-size:12px; color:var(--gray400); text-align:center;">💡 Pasa el cursor sobre cada fila para ver más detalles</p>
+  </div>
+</div>
+
+<!-- ── FASES ─────────────────────────────────── -->
+<div id="fases">
+  <div class="section">
+    <div class="section-label">Detalle de etapas</div>
+    <h2 class="section-title">Las 16 etapas explicadas</h2>
+    <div class="phases-grid" id="phasesGrid"></div>
+  </div>
+</div>
+
+<!-- ── PDCA ──────────────────────────────────── -->
+<div id="pdca">
+  <div class="section">
+    <div class="section-label">Metodología base</div>
+    <h2 class="section-title">Ciclo PDCA — el corazón de ISO 27001</h2>
+    <div class="pdca-grid">
+      <div class="pdca-card fade-up" data-letter="P" style="background:linear-gradient(135deg,#0F2347,#1A3461)">
+        <div class="pdca-letter">Plan · Planificar</div>
+        <div class="pdca-title">Planificar</div>
+        <ul class="pdca-items">
+          <li>Comité SGSI</li>
+          <li>Diagnóstico inicial</li>
+          <li>Definición del alcance</li>
+          <li>Inventario de activos</li>
+          <li>Análisis de riesgos</li>
+          <li>Plan de tratamiento</li>
+        </ul>
+      </div>
+      <div class="pdca-card fade-up" data-letter="D" style="background:linear-gradient(135deg,#00796B,#00C9A7)">
+        <div class="pdca-letter">Do · Hacer</div>
+        <div class="pdca-title">Hacer</div>
+        <ul class="pdca-items">
+          <li>Políticas y procedimientos</li>
+          <li>Implementación de controles</li>
+          <li>Capacitación del personal</li>
+          <li>Operación formal del SGSI</li>
+        </ul>
+      </div>
+      <div class="pdca-card fade-up" data-letter="C" style="background:linear-gradient(135deg,#7C3AED,#A855F7)">
+        <div class="pdca-letter">Check · Verificar</div>
+        <div class="pdca-title">Verificar</div>
+        <ul class="pdca-items">
+          <li>Auditoría interna</li>
+          <li>Revisión por la dirección</li>
+          <li>Precertificación</li>
+        </ul>
+      </div>
+      <div class="pdca-card fade-up" data-letter="A" style="background:linear-gradient(135deg,#B45309,#FFB830)">
+        <div class="pdca-letter">Act · Actuar</div>
+        <div class="pdca-title">Actuar</div>
+        <ul class="pdca-items">
+          <li>Corrección de hallazgos</li>
+          <li>Correcciones finales</li>
+          <li>Certificación oficial</li>
+          <li>Mejora continua</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RESUMEN ────────────────────────────────── -->
+<div id="resumen">
+  <div class="section">
+    <div class="section-label">Síntesis</div>
+    <h2 class="section-title">Resumen del cronograma</h2>
+    <div class="summary-box fade-up">
+      <p>
+        El cronograma de implementación de <strong>ISO/IEC 27001:2022 en la ANSDP</strong> se estructura en <strong>12 meses</strong> y <strong>16 etapas</strong> que siguen la lógica del ciclo <strong>PDCA</strong> (Planificar → Hacer → Verificar → Actuar). El orden de las etapas no es arbitrario: cada fase depende de la anterior, lo que garantiza que el Sistema de Gestión de Seguridad de la Información (SGSI) se construya de manera sólida y verificable.
+      </p>
+      <p>
+        El proceso comienza en el <strong>mes 1</strong> estableciendo el equipo y el diagnóstico, avanza durante los meses 2-6 con la identificación de activos, análisis de riesgos, documentación e implementación de controles, entra en operación real en los <strong>meses 7-8</strong>, pasa por revisión interna y correcciones en los <strong>meses 9-11</strong>, y culmina en el <strong>mes 12</strong> con la auditoría externa y la <strong>obtención de la certificación</strong>.
+      </p>
+      <p>
+        La etapa más crítica es el <strong>análisis de riesgos</strong> (meses 2-3), porque sin conocer las amenazas y vulnerabilidades no es posible diseñar controles efectivos. La etapa que involucra más personas es la <strong>capacitación</strong> (mes 6), ya que la seguridad de la información no depende solo de tecnología, sino del comportamiento humano.
+      </p>
+      <div class="key-points">
+        <div class="key-point"><strong>🏗️ Meses 1–3 · Bases</strong>Equipo, diagnóstico, alcance, inventario y riesgos.</div>
+        <div class="key-point"><strong>📄 Meses 4–5 · Documentar</strong>Políticas, procedimientos y controles definidos por escrito.</div>
+        <div class="key-point"><strong>⚙️ Meses 5–8 · Implementar</strong>Controles activos, capacitación y SGSI en operación real.</div>
+        <div class="key-point"><strong>🔍 Meses 9–11 · Verificar</strong>Auditoría interna, correcciones y revisión por dirección.</div>
+        <div class="key-point"><strong>🏆 Mes 12 · Certificar</strong>Auditor externo, correcciones finales y certificado oficial.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Q&A ────────────────────────────────────── -->
+<div id="qa">
+  <div class="section">
+    <div class="section-label">Preparación para la presentación</div>
+    <h2 class="section-title">Preguntas que te podrían hacer</h2>
+    <div class="qa-list" id="qaList"></div>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────── -->
+<footer>
+  <strong>ISO/IEC 27001:2022 — ANSDP</strong> · Seguridad en los Sistemas de Información · UTP · 2026
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const PHASES = [
+  {
+    name: "Inicio y Comité SGSI",
+    months: [1],
+    color: "#3B82F6",
+    icon: "👥",
+    month: "Mes 1",
+    desc: "Se forma el equipo responsable de liderar todo el proyecto. Se asignan roles, responsabilidades y autoridad. Sin este equipo, nada avanza. El Director General, el Jefe de Tecnología y el Oficial de Seguridad son piezas clave.",
+    tags: ["Liderazgo", "Organización", "Planificar"]
+  },
+  {
+    name: "Diagnóstico inicial",
+    months: [1],
+    color: "#F97316",
+    icon: "🔍",
+    month: "Mes 1",
+    desc: "Funciona como un 'chequeo médico' de la organización. Se compara la situación actual de la ANSDP contra los requisitos de ISO 27001 para identificar brechas: qué ya cumple y qué le falta.",
+    tags: ["Análisis", "Brecha", "Planificar"]
+  },
+  {
+    name: "Definición del alcance",
+    months: [1],
+    color: "#22C55E",
+    icon: "🗺️",
+    month: "Mes 1",
+    desc: "Se determina qué entra y qué queda fuera del SGSI. Para la ANSDP incluye: sistemas web, bases de datos, servidores y personal. Excluye procesos manuales no conectados a sistemas digitales.",
+    tags: ["Scope", "Límites", "Planificar"]
+  },
+  {
+    name: "Inventario de activos",
+    months: [2],
+    color: "#EF4444",
+    icon: "📦",
+    month: "Mes 2",
+    desc: "Se identifican todos los recursos que hay que proteger: bases de datos, servidores, redes, documentos, equipos y personal clave. Principio fundamental: no puedes proteger lo que no sabes que tienes.",
+    tags: ["Activos", "Inventario", "Hacer"]
+  },
+  {
+    name: "Análisis de riesgos",
+    months: [2, 3],
+    color: "#8B5CF6",
+    icon: "⚠️",
+    month: "Meses 2–3",
+    desc: "La etapa más crítica. Se evalúan amenazas (ataques, malware), vulnerabilidades de los sistemas y el impacto si algo falla. Sin este análisis es imposible diseñar controles eficaces.",
+    tags: ["Riesgos", "Amenazas", "Crítico", "Planificar"]
+  },
+  {
+    name: "Plan de tratamiento",
+    months: [3],
+    color: "#78716C",
+    icon: "🛡️",
+    month: "Mes 3",
+    desc: "Con los riesgos identificados, se decide qué hacer con cada uno. Las 4 opciones son: reducirlo (aplicar controles), aceptarlo (si el impacto es bajo), transferirlo (seguro) o evitarlo (eliminar la actividad).",
+    tags: ["Tratamiento", "Controles", "Planificar"]
+  },
+  {
+    name: "Políticas y procedimientos",
+    months: [4, 5],
+    color: "#EC4899",
+    icon: "📄",
+    month: "Meses 4–5",
+    desc: "Se redactan formalmente: política de seguridad de la información, control de acceso, procedimientos de respaldo, gestión de incidentes y protección de datos. ISO 27001 exige evidencia documental.",
+    tags: ["Documentación", "Políticas", "Hacer"]
+  },
+  {
+    name: "Implementación de controles",
+    months: [5, 6],
+    color: "#6B7280",
+    icon: "⚙️",
+    month: "Meses 5–6",
+    desc: "La teoría se convierte en acción. Se instalan antivirus, se configuran sistemas de autenticación, se activan backups, se aplican políticas de acceso y se establecen planes de continuidad. Provienen del Anexo A.",
+    tags: ["Controles", "Tecnología", "Anexo A", "Hacer"]
+  },
+  {
+    name: "Capacitación",
+    months: [6],
+    color: "#EAB308",
+    icon: "🎓",
+    month: "Mes 6",
+    desc: "Se entrena a todos los funcionarios en: contraseñas seguras, reconocimiento de phishing, protección de datos ciudadanos y reporte de incidentes. La seguridad no depende solo de tecnología, sino del factor humano.",
+    tags: ["Personal", "Phishing", "Contraseñas", "Hacer"]
+  },
+  {
+    name: "Operación del SGSI",
+    months: [7, 8],
+    color: "#06B6D4",
+    icon: "🚀",
+    month: "Meses 7–8",
+    desc: "El SGSI entra en operación formal. Se recopila evidencia de que controles y políticas se cumplen en el día a día. Esta evidencia es indispensable para demostrarle al auditor externo que el sistema es real.",
+    tags: ["Operación", "Evidencia", "Hacer"]
+  },
+  {
+    name: "Auditoría interna",
+    months: [9],
+    color: "#3B82F6",
+    icon: "🔎",
+    month: "Mes 9",
+    desc: "El propio equipo de la ANSDP revisa si el SGSI cumple con todos los requisitos de ISO 27001. Se buscan fallas, incumplimientos y debilidades antes de llamar al auditor externo.",
+    tags: ["Auditoría", "Interna", "Verificar"]
+  },
+  {
+    name: "Corrección de hallazgos",
+    months: [10, 11],
+    color: "#F97316",
+    icon: "🔧",
+    month: "Meses 10–11",
+    desc: "Con los resultados de la auditoría interna se corrigen: documentación incompleta, controles mal aplicados o procesos que no se siguen correctamente. Sin esta etapa la certificación puede perderse.",
+    tags: ["Correcciones", "No conformidades", "Actuar"]
+  },
+  {
+    name: "Revisión por la dirección",
+    months: [10, 11],
+    color: "#22C55E",
+    icon: "👔",
+    month: "Meses 10–11",
+    desc: "La alta dirección evalúa el desempeño general del SGSI, aprueba mejoras y confirma que se cumplen los objetivos de seguridad. Es obligatoria según la norma ISO 27001.",
+    tags: ["Dirección", "Revisión", "Verificar"]
+  },
+  {
+    name: "Precertificación",
+    months: [11],
+    color: "#EF4444",
+    icon: "📋",
+    month: "Mes 11",
+    desc: "Revisión previa opcional que funciona como ensayo general. Detecta cualquier falla que podría hacer que la ANSDP repruebe la certificación oficial. Reduce el riesgo de fracaso.",
+    tags: ["Ensayo", "Pre-auditoría", "Verificar"]
+  },
+  {
+    name: "Correcciones finales",
+    months: [11],
+    color: "#8B5CF6",
+    icon: "✅",
+    month: "Mes 11",
+    desc: "Se ajustan los últimos detalles técnicos, documentales y operativos. Es la preparación final antes de abrir las puertas al auditor externo.",
+    tags: ["Ajustes", "Preparación", "Actuar"]
+  },
+  {
+    name: "Certificación",
+    months: [12],
+    color: "#D97706",
+    icon: "🏆",
+    month: "Mes 12",
+    desc: "Un organismo externo e independiente audita el SGSI completo. Si todo cumple con los requisitos de ISO 27001, la ANSDP obtiene oficialmente la certificación. Este es el objetivo de todo el proceso.",
+    tags: ["Auditor externo", "Certificado", "Meta"]
+  }
+];
+
+const QA = [
+  {
+    q: "¿Por qué el análisis de riesgos dura dos meses?",
+    a: "Porque es la etapa más crítica y compleja del proceso. En los meses 2 y 3 se deben identificar todos los activos, evaluar cada amenaza posible (ataques cibernéticos, malware, errores humanos), medir la probabilidad e impacto de cada riesgo y documentarlo. Hacerlo bien toma tiempo, y si se hace mal, los controles que vendrán después no servirán de nada."
+  },
+  {
+    q: "¿Qué pasa si se detectan problemas en la auditoría interna?",
+    a: "Se activa la etapa de 'Corrección de hallazgos' en los meses 10-11. Los problemas encontrados —como documentación incompleta, controles mal implementados o procedimientos que no se siguen— se corrigen antes de la auditoría externa. Ese es precisamente el objetivo de la auditoría interna: encontrar fallas mientras aún hay tiempo de arreglarlas."
+  },
+  {
+    q: "¿Por qué la capacitación del personal es en el mes 6 y no al inicio?",
+    a: "Porque primero se necesita saber QUÉ capacitar. En los meses anteriores se identificaron los activos, los riesgos y se definieron las políticas. Solo con esa información es posible diseñar una capacitación relevante y específica: qué contraseñas usar, cómo reconocer el phishing dirigido a la institución, cómo reportar incidentes según los procedimientos ya documentados."
+  },
+  {
+    q: "¿Qué es la precertificación y por qué es importante?",
+    a: "Es una auditoría de práctica realizada en el mes 11, antes de la certificación oficial. Es opcional pero muy valiosa porque simula la auditoría externa y detecta fallas de último momento. Si la ANSDP 'reprueba' la precertificación, tiene tiempo de corregir antes de que llegue el auditor oficial. Reduce significativamente el riesgo de no obtener el certificado."
+  },
+  {
+    q: "¿Cuántos controles tiene ISO/IEC 27001:2022 y cómo se aplican en la ANSDP?",
+    a: "La versión 2022 tiene 93 controles en el Anexo A, agrupados en 4 categorías: organizacionales, de personas, físicos y tecnológicos. En la ANSDP se aplican, por ejemplo: A.5.15 (control de acceso con credenciales únicas), A.5.34 (protección de datos personales conforme a las leyes panameñas), A.8.7 (antimalware en servidores), A.5.30 (planes de continuidad del negocio) y A.5.16 (gestión de identidades para funcionarios)."
+  },
+  {
+    q: "¿Qué relación tiene el cronograma con el ciclo PDCA?",
+    a: "El cronograma sigue exactamente el ciclo PDCA: los meses 1-3 son PLAN (planificar: equipo, riesgos, alcance), los meses 4-8 son DO (hacer: documentar, implementar, operar), los meses 9-11 son CHECK (verificar: auditoría interna, revisión por dirección), y el mes 12 junto con las correcciones finales son ACT (actuar: mejorar y certificar). El orden importa porque cada etapa alimenta a la siguiente."
+  },
+  {
+    q: "¿Qué diferencia hay entre la auditoría interna y la certificación?",
+    a: "La auditoría interna (mes 9) la realiza el propio equipo de la ANSDP para identificar problemas antes de ser evaluados externamente. Es un ejercicio interno sin consecuencias externas. La certificación (mes 12) la realiza un organismo externo e independiente, acreditado para emitir certificados ISO. Si la ANSDP aprueba esta auditoría, recibe el certificado oficial. Si falla, debe corregir y volver a intentarlo."
+  },
+  {
+    q: "¿Qué incluye y qué excluye el alcance del SGSI de la ANSDP?",
+    a: "Incluye: sistemas web de atención ciudadana, bases de datos con información personal, servidores institucionales, personal del departamento de tecnología, personal administrativo que accede a información ciudadana, y procesos de respaldo, acceso, almacenamiento y recuperación de información. Excluye: procesos manuales externos que no están conectados con los sistemas digitales de la institución."
+  },
+  {
+    q: "¿Por qué el cronograma es de exactamente 12 meses?",
+    a: "Es un plazo estándar y razonable para una implementación ordenada. El cronograma está diseñado para ser flexible: etapas complejas como el análisis de riesgos o la operación del SGSI tienen mayor duración porque lo requieren. 12 meses permite planificar, implementar, verificar y corregir sin apresurarse, garantizando que el sistema sea sólido cuando llegue la auditoría externa."
+  },
+  {
+    q: "¿Qué roles son clave en la implementación y cuáles son sus responsabilidades?",
+    a: "El Director General aprueba la política y asigna recursos. El Jefe de Tecnología coordina la implementación técnica y gestiona incidentes. El Oficial de Seguridad identifica riesgos, diseña controles y reporta a la dirección. Recursos Humanos gestiona cláusulas de confidencialidad en contratos y coordina capacitaciones. Los usuarios internos cumplen políticas de contraseñas, acceso y reportan incidentes."
+  }
+];
+
+// ── RENDER GANTT ──────────────────────────────────────────────────────────────
+
+function renderGantt() {
+  const container = document.getElementById('ganttRows');
+  PHASES.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'gantt-row';
+
+    // label
+    const label = document.createElement('div');
+    label.className = 'gantt-label';
+    label.innerHTML = `<span class="dot" style="background:${p.color}"></span>${p.name}`;
+    row.appendChild(label);
+
+    // cells
+    for (let m = 1; m <= 12; m++) {
+      const cell = document.createElement('div');
+      cell.className = 'gantt-cell';
+      if (p.months.includes(m)) {
+        const bar = document.createElement('div');
+        bar.className = 'gantt-bar';
+        bar.style.background = p.color;
+        bar.style.width = '100%';
+        bar.style.opacity = '0.85';
+        // tooltip only in first month of range
+        if (m === p.months[0]) {
+          const tip = document.createElement('div');
+          tip.className = 'gantt-tooltip';
+          tip.textContent = `${p.icon} ${p.name} — ${p.month}`;
+          bar.appendChild(tip);
+        }
+        cell.appendChild(bar);
+      }
+      row.appendChild(cell);
+    }
+    container.appendChild(row);
+  });
+}
+
+// ── RENDER PHASES ─────────────────────────────────────────────────────────────
+
+function renderPhases() {
+  const grid = document.getElementById('phasesGrid');
+  PHASES.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'phase-card';
+    card.innerHTML = `
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:${p.color}20; color:${p.color}">${p.icon}</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:${p.color}">${p.month}</div>
+          <div class="phase-name">${p.name}</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>${p.desc}</p>
+        <div class="phase-key">${p.tags.map(t=>`<span class="phase-tag">${t}</span>`).join('')}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function togglePhase(header) {
+  const card = header.closest('.phase-card');
+  const body = card.querySelector('.phase-body');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+  body.classList.toggle('visible', !isOpen);
+}
+
+// ── RENDER Q&A ────────────────────────────────────────────────────────────────
+
+function renderQA() {
+  const list = document.getElementById('qaList');
+  QA.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'qa-item';
+    el.innerHTML = `
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">${i+1}</span>
+        ${item.q}
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer"><strong>Respuesta:</strong> ${item.a}</div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function toggleQA(btn) {
+  const item = btn.closest('.qa-item');
+  const answer = item.querySelector('.qa-answer');
+  const isOpen = item.classList.contains('open');
+  item.classList.toggle('open', !isOpen);
+  answer.classList.toggle('visible', !isOpen);
+}
+
+// ── SCROLL PROGRESS ───────────────────────────────────────────────────────────
+
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progressBar').style.width = (scrolled / max * 100) + '%';
+});
+
+// ── INTERSECTION OBSERVER (fade-up) ───────────────────────────────────────────
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+renderGantt();
+renderPhases();
+renderQA();
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// nav active highlight
+const sections = ['gantt','fases','pdca','resumen','qa'];
+const navLinks = document.querySelectorAll('.nav-pill');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 80) current = id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
