@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen de Estudio — ISO/IEC 27001:2022</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:      #111827;
+  --ink2:     #374151;
+  --ink3:     #6B7280;
+  --paper:    #FAFAF8;
+  --line:     #E5E7EB;
+  --teal:     #00A896;
+  --teal-bg:  #E6F7F5;
+  --amber:    #F5A623;
+  --amber-bg: #FEF3DC;
+  --red:      #E84855;
+  --red-bg:   #FDECEA;
+  --violet:   #7C3AED;
+  --violet-bg:#F3EFFE;
+  --navy:     #1D3557;
+
+  /* PDCA colors */
+  --plan:    #1D3557;
+  --plan-bg: #E8EDF5;
+  --do:      #00A896;
+  --do-bg:   #E6F7F5;
+  --check:   #7C3AED;
+  --check-bg:#F3EFFE;
+  --act:     #F5A623;
+  --act-bg:  #FEF3DC;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+/* ── STICKY HEADER ─────────────────────────── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.topbar-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  letter-spacing: -.01em;
+}
+.topbar-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.topbar-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.8);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.topbar-pill:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+/* ── WRAPPER ───────────────────────────────── */
+.page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ── SECTION HEADING ────────────────────────── */
+.s-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.s-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.s-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--navy);
+  line-height: 1.2;
+}
+.s-sub {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 14px;
+  padding-left: 48px;
+}
+
+/* ── CARD ───────────────────────────────────── */
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  position: relative;
+}
+.card + .card { margin-top: 0; }
+
+/* left accent stripe */
+.card.stripe-teal   { border-left: 4px solid var(--teal); }
+.card.stripe-amber  { border-left: 4px solid var(--amber); }
+.card.stripe-red    { border-left: 4px solid var(--red); }
+.card.stripe-violet { border-left: 4px solid var(--violet); }
+.card.stripe-navy   { border-left: 4px solid var(--navy); }
+
+.card-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.card p {
+  color: var(--ink2);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.card p:last-child { margin-bottom: 0; }
+
+/* ── HIGHLIGHT ──────────────────────────────── */
+mark {
+  background: var(--amber-bg);
+  color: var(--ink);
+  padding: 0 3px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+mark.teal   { background: var(--teal-bg);   color: var(--teal); }
+mark.violet { background: var(--violet-bg); color: var(--violet); }
+mark.red    { background: var(--red-bg);    color: var(--red); }
+
+/* ── PILL / TAG ─────────────────────────────── */
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin: 3px 3px 0 0;
+}
+.tag-plan   { background: var(--plan-bg);   color: var(--plan); }
+.tag-do     { background: var(--do-bg);     color: var(--do); }
+.tag-check  { background: var(--check-bg);  color: var(--check); }
+.tag-act    { background: var(--act-bg);    color: #B45309; }
+
+/* ── TABLE-STYLE LIST ───────────────────────── */
+.tlist { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.tlist tr { border-bottom: 1px solid var(--line); }
+.tlist tr:last-child { border-bottom: none; }
+.tlist td { padding: 9px 8px; vertical-align: top; }
+.tlist td:first-child {
+  font-weight: 600;
+  color: var(--navy);
+  white-space: nowrap;
+  width: 130px;
+}
+.tlist td:last-child { color: var(--ink2); }
+
+/* ── TWO-COL GRID ───────────────────────────── */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 540px) { .grid2 { grid-template-columns: 1fr; } }
+
+/* ── DEFINITION ROW ─────────────────────────── */
+.def-row {
+  display: flex;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: flex-start;
+}
+.def-row:last-child { border-bottom: none; padding-bottom: 0; }
+.def-term {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--navy);
+  min-width: 90px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.def-desc { font-size: 13.5px; color: var(--ink2); line-height: 1.6; }
+
+/* ── TIMELINE ───────────────────────────────── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 9px; top: 6px; bottom: 6px;
+  width: 2px;
+  background: var(--line);
+}
+.tl-item {
+  position: relative;
+  margin-bottom: 18px;
+}
+.tl-item:last-child { margin-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px currentColor;
+}
+.tl-month {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+.tl-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.tl-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+
+/* ── PDCA BLOCK ─────────────────────────────── */
+.pdca-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (max-width: 500px) { .pdca-grid { grid-template-columns: 1fr; } }
+.pdca-block {
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+}
+.pdca-block.plan   { background: var(--plan); }
+.pdca-block.do     { background: var(--do); }
+.pdca-block.check  { background: var(--violet); }
+.pdca-block.act    { background: #B45309; }
+.pdca-letter {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: .75;
+  margin-bottom: 4px;
+}
+.pdca-word {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.pdca-list {
+  list-style: none;
+  font-size: 13px;
+  opacity: .9;
+  line-height: 1.75;
+}
+.pdca-list li::before { content: '› '; opacity: .6; }
+
+/* ── CONTROL TABLE ──────────────────────────── */
+.ctrl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.ctrl-table th {
+  background: var(--navy);
+  color: #fff;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.ctrl-table th:first-child { border-radius: 8px 0 0 0; }
+.ctrl-table th:last-child  { border-radius: 0 8px 0 0; }
+.ctrl-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.ctrl-table tr:last-child td { border-bottom: none; }
+.ctrl-table tr:nth-child(even) td { background: #FAFAF8; }
+.ctrl-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--teal);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ctrl-table td:nth-child(2) { font-weight: 600; color: var(--navy); }
+.ctrl-table td:nth-child(3) { color: var(--ink2); }
+
+/* ── ROLE CARDS ─────────────────────────────── */
+.roles-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.role-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+.role-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.role-name {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--navy);
+  margin-bottom: 3px;
+}
+.role-desc { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ── BENEFIT CHIPS ──────────────────────────── */
+.benefits { display: flex; flex-wrap: wrap; gap: 10px; }
+.benefit-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  flex: 1 1 210px;
+}
+.benefit-chip .bi { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.benefit-chip-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.benefit-chip-text span { font-size: 12.5px; color: var(--ink2); line-height: 1.5; }
+
+/* ── MEMORY AIDS ────────────────────────────── */
+.memory-box {
+  background: var(--amber-bg);
+  border: 1.5px dashed var(--amber);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.memory-box h4 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #B45309;
+  margin-bottom: 8px;
+}
+.memory-box p, .memory-box li { font-size: 13.5px; color: var(--ink2); line-height: 1.7; }
+.memory-box ul { padding-left: 18px; }
+
+/* ── SCOPE BOX ──────────────────────────────── */
+.scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 500px) { .scope-grid { grid-template-columns: 1fr; } }
+.scope-col { border-radius: 10px; padding: 16px; }
+.scope-col.inc { background: var(--teal-bg); }
+.scope-col.exc { background: var(--red-bg); }
+.scope-col h4 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.scope-col.inc h4 { color: var(--teal); }
+.scope-col.exc h4 { color: var(--red); }
+.scope-col ul { list-style: none; padding: 0; }
+.scope-col li {
+  font-size: 13px;
+  color: var(--ink2);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+  display: flex;
+  gap: 7px;
+}
+.scope-col li:last-child { border-bottom: none; }
+.scope-col.inc li::before { content: '✓'; color: var(--teal); font-weight: 700; }
+.scope-col.exc li::before { content: '✗'; color: var(--red); font-weight: 700; }
+
+/* ── DIVIDER ────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 4px 0;
+}
+
+/* ── PRINT FRIENDLY ─────────────────────────── */
+@media print {
+  .topbar { position: static; }
+  .page { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">📚 Resumen de Estudio — ISO/IEC 27001:2022</div>
+  <div class="topbar-pills">
+    <a class="topbar-pill" href="#que-es">¿Qué es?</a>
+    <a class="topbar-pill" href="#beneficios">Beneficios</a>
+    <a class="topbar-pill" href="#pdca">PDCA</a>
+    <a class="topbar-pill" href="#empresa">ANSDP</a>
+    <a class="topbar-pill" href="#roles">Roles</a>
+    <a class="topbar-pill" href="#cronograma">Cronograma</a>
+    <a class="topbar-pill" href="#controles">Controles</a>
+    <a class="topbar-pill" href="#claves">Claves</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ① QUÉ ES ────────────────────────────────────── -->
+  <div id="que-es">
+    <div class="s-head">
+      <div class="s-icon" style="background:#E8EDF5">🔐</div>
+      <div class="s-title">¿Qué es ISO/IEC 27001?</div>
+    </div>
+    <div class="s-sub">Concepto base — esto siempre lo preguntan</div>
+    <div class="card stripe-navy">
+      <p>Es la <mark>norma internacional más reconocida</mark> para crear, implementar, mantener y mejorar un <mark>Sistema de Gestión de Seguridad de la Información (SGSI)</mark>. Aplica a organizaciones de <strong>cualquier tamaño o sector</strong>: pública, privada, educativa, financiera, etc.</p>
+      <p>Su objetivo central es proteger tres pilares fundamentales de la información:</p>
+      <div class="grid2" style="margin-top:10px">
+        <div class="card stripe-teal" style="padding:14px">
+          <div style="font-weight:700; color:var(--teal); margin-bottom:4px">🔒 Confidencialidad</div>
+          <div style="font-size:13px; color:var(--ink2)">Solo las personas autorizadas acceden a la información.</div>
+        </div>
+        <div class="card stripe-amber" style="padding:14px">
+          <div style="font-weight:700; color:#B45309; margin-bottom:4px">✔️ Integridad</div>
+          <div style="font-size:13px; color:var(--ink2)">La información no se modifica sin autorización.</div>
+        </div>
+      </div>
+      <div class="card stripe-violet" style="padding:14px; margin-top:14px">
+        <div style="font-weight:700; color:var(--violet); margin-bottom:4px">⚡ Disponibilidad</div>
+        <div style="font-size:13px; color:var(--ink2)">La información está accesible cuando se necesita.</div>
+      </div>
+      <div class="memory-box" style="margin-top:16px">
+        <h4>💡 Truco para recordar los 3 pilares</h4>
+        <p><strong>CIA</strong> — <strong>C</strong>onfidencialidad, <strong>I</strong>ntegridad, <strong>A</strong>vailability (Disponibilidad). Mismo orden que en inglés.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② BENEFICIOS ───────────────────────────────── -->
+  <div id="beneficios">
+    <div class="s-head">
+      <div class="s-icon" style="background:var(--teal-bg)">🏅</div>
+      <div class="s-title">Beneficios de implementar ISO 27001</div>
+    </div>
+    <div class="s-sub">4 beneficios clave</div>
+    <div class="card">
+      <div class="benefits">
+        <div class="benefit-chip">
+          <div class="bi">🛡️</div>
+          <div class="benefit-chip-text">
+            <strong>Protección de datos críticos</strong>
+            <span>Reduce accesos no autorizados, pérdida o modificación indebida de datos personales y documentos.</span>
+          </div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">⚖️</div>
+          <div class="benefit-chip-text">
+            <strong>Gestión proactiva de riesgos</strong>
+            <span>Identifica y evalúa riesgos continuamente. Se actúa antes de que ocurra el problema.</span>
+          </div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">📜</div>
+          <div class="benefit-chip-text">
+            <strong>Cumplimiento legal y confianza</strong>
+            <span>Facilita cumplir leyes de protección de datos. Genera confianza en ciudadanos, clientes y aliados.</span>
+          </div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">🌟</div>
+          <div class="benefit-chip-text">
+            <strong>Imagen institucional</strong>
+            <span>El certificado ISO 27001 es ventaja en licitaciones, auditorías y contratos. Reconocimiento internacional.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ PDCA ─────────────────────────────────────── -->
+  <div id="pdca">
+    <div class="s-head">
+      <div class="s-icon" style="background:var(--violet-bg)">🔄</div>
+      <div class="s-title">Ciclo PDCA — el motor de ISO 27001</div>
+    </div>
+    <div class="s-sub">Plan → Do → Check → Act · Mejora continua</div>
+    <div class="card">
+      <div class="pdca-grid">
+        <div class="pdca-block plan">
+          <div class="pdca-letter">Plan · Meses 1–3</div>
+          <div class="pdca-word">Planificar</div>
+          <ul class="pdca-list">
+            <li>Definir objetivos y política</li>
+            <li>Analizar contexto interno/externo</li>
+            <li>Inventario de activos</li>
+            <li>Análisis y tratamiento de riesgos</li>
+            <li>Asignar recursos y roles</li>
+          </ul>
+        </div>
+        <div class="pdca-block do">
+          <div class="pdca-letter">Do · Meses 4–8</div>
+          <div class="pdca-word">Hacer</div>
+          <ul class="pdca-list">
+            <li>Implementar el SGSI</li>
+            <li>Aplicar procedimientos y controles</li>
+            <li>Capacitar al personal</li>
+            <li>Operar el sistema formalmente</li>
+          </ul>
+        </div>
+        <div class="pdca-block check">
+          <div class="pdca-letter">Check · Meses 9–11</div>
+          <div class="pdca-word">Verificar</div>
+          <ul class="pdca-list">
+            <li>Auditoría interna</li>
+            <li>Métricas e indicadores</li>
+            <li>Revisión por la dirección</li>
+            <li>Precertificación</li>
+          </ul>
+        </div>
+        <div class="pdca-block act">
+          <div class="pdca-letter">Act · Mes 12</div>
+          <div class="pdca-word">Actuar</div>
+          <ul class="pdca-list">
+            <li>Corregir no conformidades</li>
+            <li>Acciones preventivas</li>
+            <li>Mejora continua</li>
+            <li>Certificación oficial</li>
+          </ul>
+        </div>
+      </div>
+      <div class="memory-box" style="margin-top:16px">
+        <h4>💡 Clave para recordarlo</h4>
+        <p>El ciclo PDCA garantiza que la seguridad <strong>no sea estática</strong>. El SGSI se revisa constantemente para adaptarse a nuevas amenazas. <em>Ningún proceso se queda perfecto para siempre.</em></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ EMPRESA / ANSDP ───────────────────────────── -->
+  <div id="empresa">
+    <div class="s-head">
+      <div class="s-icon" style="background:var(--amber-bg)">🏛️</div>
+      <div class="s-title">La empresa ficticia — ANSDP</div>
+    </div>
+    <div class="s-sub">Autoridad Nacional de Servicios Digitales Públicos</div>
+    <div class="card stripe-amber">
+      <table class="tlist">
+        <tr><td>Nombre</td><td>Autoridad Nacional de Servicios Digitales Públicos (ANSDP)</td></tr>
+        <tr><td>Tipo</td><td>Institución pública — administra trámites digitales ciudadanos</td></tr>
+        <tr><td>Servicios</td><td>Certificados digitales, gestión de solicitudes, expedientes digitales, atención en línea</td></tr>
+        <tr><td>Maneja</td><td>Nombres, cédulas, direcciones, documentos escaneados, registros de trámites</td></tr>
+        <tr><td>Amenazas</td><td>Ataques cibernéticos, malware, suplantación de identidad, acceso no autorizado, pérdida de datos</td></tr>
+      </table>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="s-sub" style="padding-left:0; margin-bottom:10px">Alcance del SGSI</div>
+      <div class="card" style="padding:16px">
+        <div class="scope-grid">
+          <div class="scope-col inc">
+            <h4>✓ Incluye</h4>
+            <ul>
+              <li>Sistemas web de atención ciudadana</li>
+              <li>Bases de datos con info personal</li>
+              <li>Servidores institucionales</li>
+              <li>Dpto. de Tecnología</li>
+              <li>Personal administrativo con acceso a datos</li>
+              <li>Procesos de respaldo y recuperación</li>
+            </ul>
+          </div>
+          <div class="scope-col exc">
+            <h4>✗ Excluye</h4>
+            <ul>
+              <li>Procesos manuales externos no conectados a sistemas digitales</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ ROLES ────────────────────────────────────── -->
+  <div id="roles">
+    <div class="s-head">
+      <div class="s-icon" style="background:#E8EDF5">👤</div>
+      <div class="s-title">Funciones y responsabilidades</div>
+    </div>
+    <div class="s-sub">Quién hace qué — pregunta frecuente</div>
+    <div class="card" style="padding:16px">
+      <div class="roles-grid">
+        <div class="role-row">
+          <div class="role-icon">🎖️</div>
+          <div>
+            <div class="role-name">Director General</div>
+            <div class="role-desc">Aprueba la política de seguridad, respalda el SGSI con autoridad institucional y asigna los recursos necesarios.</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">💻</div>
+          <div>
+            <div class="role-name">Jefe de Tecnología</div>
+            <div class="role-desc">Coordina la implementación técnica, supervisa la infraestructura, gestiona incidentes y garantiza la disponibilidad de los sistemas.</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">🔍</div>
+          <div>
+            <div class="role-name">Oficial de Seguridad de la Información</div>
+            <div class="role-desc">Identifica y evalúa riesgos, diseña controles, reporta incidentes a la dirección y vela por el cumplimiento de la norma.</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">📋</div>
+          <div>
+            <div class="role-name">Recursos Humanos</div>
+            <div class="role-desc">Gestiona cláusulas de confidencialidad en contratos y coordina los programas de capacitación en seguridad para todo el personal.</div>
+          </div>
+        </div>
+        <div class="role-row">
+          <div class="role-icon">🧑‍💼</div>
+          <div>
+            <div class="role-name">Usuarios internos</div>
+            <div class="role-desc">Cumplen políticas de contraseñas y control de acceso, usan los equipos de forma responsable y reportan cualquier incidente sospechoso.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ CRONOGRAMA ────────────────────────────────── -->
+  <div id="cronograma">
+    <div class="s-head">
+      <div class="s-icon" style="background:#E8EDF5">📅</div>
+      <div class="s-title">Cronograma — 12 meses · 16 etapas</div>
+    </div>
+    <div class="s-sub">Secuencia completa en orden — el orden importa</div>
+    <div class="card" style="padding:20px">
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--plan)"></div>
+          <div class="tl-month" style="color:var(--plan)">MES 1 · <span class="tag tag-plan">PLAN</span></div>
+          <div class="tl-name">👥 Inicio y Comité SGSI</div>
+          <div class="tl-desc">Se forma el equipo que liderará todo el proyecto. Se asignan roles y autoridad. <em>Sin equipo, nada avanza.</em></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--plan)"></div>
+          <div class="tl-month" style="color:var(--plan)">MES 1 · <span class="tag tag-plan">PLAN</span></div>
+          <div class="tl-name">🔍 Diagnóstico inicial</div>
+          <div class="tl-desc">"Chequeo médico" de la organización: compara la situación actual vs. lo que exige ISO 27001. Identifica brechas.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--plan)"></div>
+          <div class="tl-month" style="color:var(--plan)">MES 1 · <span class="tag tag-plan">PLAN</span></div>
+          <div class="tl-name">🗺️ Definición del alcance</div>
+          <div class="tl-desc">Se delimita qué sistemas, personas y procesos entran en el SGSI. En la ANSDP: sistemas web, BD, servidores y personal.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--plan)"></div>
+          <div class="tl-month" style="color:var(--plan)">MES 2 · <span class="tag tag-plan">PLAN</span></div>
+          <div class="tl-name">📦 Inventario de activos</div>
+          <div class="tl-desc">Se listan todos los recursos a proteger: BD, servidores, redes, equipos, documentos, personal clave. <em>No puedes proteger lo que no sabes que tienes.</em></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--plan)"></div>
+          <div class="tl-month" style="color:var(--plan)">MESES 2–3 · <span class="tag tag-plan">PLAN</span> <mark class="red" style="font-size:11px">⚠️ Más crítica</mark></div>
+          <div class="tl-name">⚠️ Análisis de riesgos</div>
+          <div class="tl-desc">Evalúa amenazas (ataques, malware), vulnerabilidades e impacto. Dura 2 meses porque es la base de todos los controles. <strong>Sin este paso, los controles no tienen sentido.</strong></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--plan)"></div>
+          <div class="tl-month" style="color:var(--plan)">MES 3 · <span class="tag tag-plan">PLAN</span></div>
+          <div class="tl-name">🛡️ Plan de tratamiento</div>
+          <div class="tl-desc">Para cada riesgo se decide: <strong>Reducir</strong> (controles), <strong>Aceptar</strong> (impacto bajo), <strong>Transferir</strong> (seguro) o <strong>Evitar</strong> (eliminar la actividad).</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--do)"></div>
+          <div class="tl-month" style="color:var(--do)">MESES 4–5 · <span class="tag tag-do">DO</span></div>
+          <div class="tl-name">📄 Políticas y procedimientos</div>
+          <div class="tl-desc">Se redactan: política de seguridad, control de acceso, respaldo, gestión de incidentes, protección de datos. ISO 27001 exige evidencia documental.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--do)"></div>
+          <div class="tl-month" style="color:var(--do)">MESES 5–6 · <span class="tag tag-do">DO</span></div>
+          <div class="tl-name">⚙️ Implementación de controles</div>
+          <div class="tl-desc">La teoría se hace realidad: antivirus, autenticación, backups, control de acceso, continuidad del negocio. Provienen del <strong>Anexo A</strong>.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--do)"></div>
+          <div class="tl-month" style="color:var(--do)">MES 6 · <span class="tag tag-do">DO</span></div>
+          <div class="tl-name">🎓 Capacitación del personal</div>
+          <div class="tl-desc">Se entrena a todos en: contraseñas seguras, phishing, protección de datos ciudadanos y reporte de incidentes. <em>La seguridad depende del factor humano.</em></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--do)"></div>
+          <div class="tl-month" style="color:var(--do)">MESES 7–8 · <span class="tag tag-do">DO</span></div>
+          <div class="tl-name">🚀 Operación del SGSI</div>
+          <div class="tl-desc">El sistema entra en marcha formal. Se recopila <strong>evidencia de cumplimiento</strong> diaria — indispensable para el auditor externo.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--check)"></div>
+          <div class="tl-month" style="color:var(--check)">MES 9 · <span class="tag tag-check">CHECK</span></div>
+          <div class="tl-name">🔎 Auditoría interna</div>
+          <div class="tl-desc">El propio equipo de la ANSDP revisa si el SGSI cumple ISO 27001. Se encuentran fallas <strong>antes</strong> de llamar al auditor externo.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--check)"></div>
+          <div class="tl-month" style="color:var(--check)">MESES 10–11 · <span class="tag tag-check">CHECK</span></div>
+          <div class="tl-name">🔧 Corrección de hallazgos</div>
+          <div class="tl-desc">Se corrigen errores encontrados en la auditoría: documentación incompleta, controles mal aplicados, procesos omitidos.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--check)"></div>
+          <div class="tl-month" style="color:var(--check)">MESES 10–11 · <span class="tag tag-check">CHECK</span></div>
+          <div class="tl-name">👔 Revisión por la dirección</div>
+          <div class="tl-desc">La alta dirección evalúa el desempeño del SGSI y aprueba mejoras. <strong>Obligatoria según la norma.</strong></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--check)"></div>
+          <div class="tl-month" style="color:var(--check)">MES 11 · <span class="tag tag-check">CHECK</span></div>
+          <div class="tl-name">📋 Precertificación</div>
+          <div class="tl-desc">Ensayo general opcional. Simula la auditoría externa para detectar fallas de último momento y evitar reprobar la certificación oficial.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:#B45309"></div>
+          <div class="tl-month" style="color:#B45309">MES 11 · <span class="tag tag-act">ACT</span></div>
+          <div class="tl-name">✅ Correcciones finales</div>
+          <div class="tl-desc">Últimos ajustes técnicos, documentales y operativos antes de abrir la puerta al auditor externo.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot" style="color:#B45309"></div>
+          <div class="tl-month" style="color:#B45309">MES 12 · <span class="tag tag-act">ACT</span> <mark style="font-size:11px">🏆 Meta final</mark></div>
+          <div class="tl-name">🏆 Certificación</div>
+          <div class="tl-desc">Organismo externo e independiente audita el SGSI completo. Si cumple todos los requisitos, la ANSDP obtiene el certificado <strong>ISO/IEC 27001</strong>.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑦ CONTROLES ─────────────────────────────────── -->
+  <div id="controles">
+    <div class="s-head">
+      <div class="s-icon" style="background:var(--teal-bg)">🔩</div>
+      <div class="s-title">Controles del Anexo A aplicados en la ANSDP</div>
+    </div>
+    <div class="s-sub">ISO 27001:2022 tiene 93 controles en total — estos son los del proyecto</div>
+    <div class="card" style="padding:0; overflow:hidden">
+      <table class="ctrl-table">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Control</th>
+            <th>Aplicación en ANSDP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ctrl-code">A.5.15</td>
+            <td>Control de acceso</td>
+            <td>Cuentas con credenciales únicas, perfiles según función, autenticación para sistemas con datos ciudadanos.</td>
+          </tr>
+          <tr>
+            <td class="ctrl-code">A.5.34</td>
+            <td>Privacidad y protección de datos</td>
+            <td>Procedimientos para tratar datos personales solo con fines institucionales y conforme a leyes panameñas.</td>
+          </tr>
+          <tr>
+            <td class="ctrl-code">A.8.7</td>
+            <td>Protección contra malware</td>
+            <td>Antivirus y antimalware actualizados en servidores y estaciones; análisis de archivos y correos entrantes.</td>
+          </tr>
+          <tr>
+            <td class="ctrl-code">A.5.30</td>
+            <td>Preparación TIC para continuidad</td>
+            <td>Respaldos periódicos de BD, planes de recuperación ante desastres para garantizar continuidad del servicio.</td>
+          </tr>
+          <tr>
+            <td class="ctrl-code">A.5.16</td>
+            <td>Gestión de identidades</td>
+            <td>Al ingresar, cambiar de puesto o salir un funcionario, sus permisos se asignan, modifican o eliminan de inmediato.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="memory-box" style="margin-top:14px">
+      <h4>💡 Para recordar los 4 grupos del Anexo A</h4>
+      <p><strong>O-P-F-T</strong> → <strong>O</strong>rganizacionales · <strong>P</strong>ersonas · <strong>F</strong>ísicos · <strong>T</strong>ecnológicos. En total: <strong>93 controles</strong>.</p>
+    </div>
+  </div>
+
+  <!-- ⑧ PUNTOS CLAVE ──────────────────────────────── -->
+  <div id="claves">
+    <div class="s-head">
+      <div class="s-icon" style="background:var(--amber-bg)">⭐</div>
+      <div class="s-title">Puntos clave para memorizar</div>
+    </div>
+    <div class="s-sub">Lo que no te puede fallar en la presentación</div>
+
+    <div class="card stripe-teal">
+      <div class="card-title">Datos duros que debes saber de memoria</div>
+      <table class="tlist">
+        <tr><td>Norma</td><td>ISO/IEC 27001:2022</td></tr>
+        <tr><td>Duración</td><td>12 meses · 16 etapas</td></tr>
+        <tr><td>Controles</td><td>93 en el Anexo A (versión 2022)</td></tr>
+        <tr><td>Ciclo base</td><td>PDCA — Plan, Do, Check, Act</td></tr>
+        <tr><td>3 pilares</td><td>Confidencialidad, Integridad, Disponibilidad (CIA)</td></tr>
+        <tr><td>Etapa más crítica</td><td>Análisis de riesgos (meses 2–3)</td></tr>
+        <tr><td>Etapa más inclusiva</td><td>Capacitación (mes 6) — involucra a todo el personal</td></tr>
+        <tr><td>Etapa final</td><td>Certificación (mes 12) — organismo externo</td></tr>
+        <tr><td>Empresa ficticia</td><td>ANSDP — Autoridad Nacional de Servicios Digitales Públicos</td></tr>
+      </table>
+    </div>
+
+    <div class="card stripe-violet" style="margin-top:14px">
+      <div class="card-title">Las 4 opciones del plan de tratamiento de riesgos</div>
+      <div class="grid2">
+        <div style="padding:10px; background:var(--teal-bg); border-radius:8px">
+          <strong style="color:var(--teal); font-size:13px">Reducir</strong>
+          <p style="font-size:12.5px; margin-top:4px; color:var(--ink2)">Aplicar controles para disminuir el riesgo.</p>
+        </div>
+        <div style="padding:10px; background:var(--amber-bg); border-radius:8px">
+          <strong style="color:#B45309; font-size:13px">Aceptar</strong>
+          <p style="font-size:12.5px; margin-top:4px; color:var(--ink2)">Asumir el riesgo si su impacto es bajo.</p>
+        </div>
+        <div style="padding:10px; background:var(--violet-bg); border-radius:8px">
+          <strong style="color:var(--violet); font-size:13px">Transferir</strong>
+          <p style="font-size:12.5px; margin-top:4px; color:var(--ink2)">Pasar el riesgo a otro (ej. contratar seguro).</p>
+        </div>
+        <div style="padding:10px; background:var(--red-bg); border-radius:8px">
+          <strong style="color:var(--red); font-size:13px">Evitar</strong>
+          <p style="font-size:12.5px; margin-top:4px; color:var(--ink2)">Eliminar la actividad que genera el riesgo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card stripe-amber" style="margin-top:14px">
+      <div class="card-title">Diferencias clave que te pueden preguntar</div>
+      <div class="def-row">
+        <div class="def-term">Auditoría interna</div>
+        <div class="def-desc">La realiza el <strong>propio equipo de la ANSDP</strong> en el mes 9. Busca fallas internas antes de la evaluación externa. Sin consecuencias oficiales.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Certificación</div>
+        <div class="def-desc">La realiza un <strong>organismo externo e independiente</strong> en el mes 12. Si aprueba, se emite el certificado ISO 27001. Si no, hay que corregir y volver a intentarlo.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Precertificación</div>
+        <div class="def-desc">Es un <strong>ensayo general opcional</strong> en el mes 11. Simula la certificación oficial para detectar problemas de último momento.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Plan vs. Hecho</div>
+        <div class="def-desc">Las <strong>políticas</strong> (meses 4-5) son teoría escrita. Los <strong>controles</strong> (meses 5-6) son esa teoría puesta en práctica técnicamente.</div>
+      </div>
+    </div>
+
+    <div class="memory-box" style="margin-top:14px">
+      <h4>🧠 Orden lógico del cronograma en una frase</h4>
+      <p>Primero <strong>sabes qué proteger</strong> (activos) → luego <strong>encuentras los peligros</strong> (riesgos) → luego <strong>escribes las reglas</strong> (políticas) → luego las <strong>aplicas</strong> (controles) → luego <strong>entrenas</strong> al personal → luego <strong>operas y recopilas evidencia</strong> → luego <strong>te auto-revisas</strong> (auditoría interna) → luego <strong>corriges</strong> → y finalmente <strong>te certificas</strong>.</p>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
