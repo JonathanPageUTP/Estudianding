@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodología de la Investigación — Guía Completa de Estudio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── PASTE styles.css inline ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-body);background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+img,video,svg{display:block;max-width:100%}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+strong{font-weight:700}
+em{font-style:italic}
+ul,ol{padding-left:1.25rem}
+:root{
+  --navy:#0F2347;--navy2:#1A3461;--navy3:#1D3557;
+  --accent:#00C9A7;--accent2:#00A896;
+  --amber:#FFB830;--amber2:#F5A623;
+  --red:#EF4444;--red2:#E84855;
+  --violet:#7C3AED;
+  --accent-bg:#E6F7F5;--amber-bg:#FEF3DC;--red-bg:#FDECEA;--violet-bg:#F3EFFE;--navy-bg:#E8EDF5;
+  --white:#FFFFFF;--bg:#FAFAF8;
+  --gray50:#F8FAFC;--gray100:#F1F5F9;--gray200:#E2E8F0;--gray300:#E5E7EB;--gray400:#94A3B8;--gray500:#6B7280;--gray600:#475569;--gray700:#374151;--gray800:#1E293B;
+  --ink:#111827;--ink2:#374151;--ink3:#6B7280;--line:#E5E7EB;
+  --plan:#1D3557;--plan-bg:#E8EDF5;--do:#00A896;--do-bg:#E6F7F5;--check:#7C3AED;--check-bg:#F3EFFE;--act:#F5A623;--act-bg:#FEF3DC;--act-dark:#B45309;
+  --font-display:'Space Grotesk',sans-serif;--font-serif:'DM Serif Display',serif;--font-body:'DM Sans','Inter',sans-serif;--font-mono:'DM Mono',monospace;
+  --radius-sm:8px;--radius:12px;--radius-lg:16px;
+  --shadow-sm:0 2px 8px rgba(15,35,71,.08);--shadow:0 4px 24px rgba(15,35,71,.12);--shadow-lg:0 12px 40px rgba(15,35,71,.16);
+  --space-xs:4px;--space-sm:8px;--space-md:16px;--space-lg:24px;--space-xl:40px;--space-2xl:64px;
+  --transition:.2s ease;--transition-slow:.4s ease;
+}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--navy);line-height:1.2}
+h1{font-size:clamp(28px,5vw,52px);font-weight:700}
+h2{font-size:clamp(22px,3.5vw,32px);font-weight:700}
+h3{font-size:clamp(18px,2.5vw,24px);font-weight:600}
+h4{font-size:16px;font-weight:600}
+h5{font-size:14px;font-weight:600}
+h6{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+p{color:var(--ink2);line-height:1.72;margin-bottom:10px}
+p:last-child{margin-bottom:0}
+.text-muted{color:var(--ink3)}.text-accent{color:var(--accent)}.text-navy{color:var(--navy)}.text-amber{color:var(--act-dark)}.text-red{color:var(--red)}.text-violet{color:var(--violet)}
+.text-center{text-align:center}.font-bold{font-weight:700}.uppercase{text-transform:uppercase;letter-spacing:.08em}
+.container{max-width:1100px;margin:0 auto;padding:0 var(--space-lg)}
+.page{max-width:820px;margin:0 auto;padding:var(--space-xl) var(--space-md) 80px;display:flex;flex-direction:column;gap:28px}
+.section{max-width:1100px;margin:0 auto;padding:var(--space-2xl) var(--space-lg)}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-md)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md)}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-md)}
+.flex{display:flex}.flex-col{display:flex;flex-direction:column}.flex-center{display:flex;align-items:center;justify-content:center}.flex-between{display:flex;align-items:center;justify-content:space-between}.flex-wrap{flex-wrap:wrap}
+.gap-xs{gap:var(--space-xs)}.gap-sm{gap:var(--space-sm)}.gap-md{gap:var(--space-md)}.gap-lg{gap:var(--space-lg)}
+.mt-sm{margin-top:var(--space-sm)}.mt-md{margin-top:var(--space-md)}.mt-lg{margin-top:var(--space-lg)}.mt-xl{margin-top:var(--space-xl)}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:12px var(--space-lg);gap:var(--space-md);flex-wrap:wrap}
+.topbar-title{font-family:var(--font-serif);font-size:16px;letter-spacing:-.01em;color:#fff}
+.topbar-pills{display:flex;gap:6px;flex-wrap:wrap}
+.topbar-pill{font-size:11px;font-weight:600;padding:4px 11px;border-radius:100px;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);cursor:pointer;text-decoration:none;transition:background var(--transition);white-space:nowrap}
+.topbar-pill:hover{background:rgba(255,255,255,.15);color:#fff;text-decoration:none}
+/* NAV PILLS */
+.nav-pills{position:sticky;top:48px;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--gray200);padding:10px var(--space-lg);display:flex;gap:var(--space-sm);overflow-x:auto;scrollbar-width:none}
+.nav-pills::-webkit-scrollbar{display:none}
+.nav-pill{flex-shrink:0;padding:7px 18px;border-radius:100px;border:none;cursor:pointer;font-family:var(--font-display);font-size:12px;font-weight:600;background:var(--gray100);color:var(--gray600);transition:background var(--transition),color var(--transition);text-decoration:none}
+.nav-pill:hover,.nav-pill.active{background:var(--navy);color:var(--white);text-decoration:none}
+/* PROGRESS BAR */
+.progress-bar-wrap{position:fixed;top:0;left:0;width:100%;height:3px;z-index:9999}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--amber2));width:0%;transition:width .1s linear}
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#0e3060 100%);color:var(--white);padding:var(--space-2xl) var(--space-lg) 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,201,167,.15) 0%,transparent 70%);top:-200px;right:-150px;pointer-events:none}
+.hero h1{color:var(--white);margin-bottom:var(--space-md)}
+.hero h1 span{color:var(--accent)}
+.hero p{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.72);max-width:560px;margin:0 auto 36px}
+.hero-badge{display:inline-flex;align-items:center;gap:var(--space-sm);background:rgba(0,201,167,.15);border:1px solid rgba(0,201,167,.4);color:var(--accent);font-family:var(--font-display);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:var(--space-lg)}
+.hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat strong{display:block;font-family:var(--font-display);font-size:36px;font-weight:700;color:var(--accent);line-height:1}
+.hero-stat span{font-size:12px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.06em}
+/* SECTION LABELS */
+.section-label,.s-label{font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:var(--space-sm);display:block}
+.section-title{font-family:var(--font-display);font-size:clamp(22px,3.5vw,32px);font-weight:700;color:var(--navy);margin-bottom:36px;line-height:1.25}
+.s-head{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.s-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.s-title{font-family:var(--font-serif);font-size:20px;color:var(--navy);line-height:1.2}
+.s-sub{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;padding-left:48px}
+.divider{border:none;border-top:1px solid var(--line);margin:var(--space-md) 0}
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);padding:var(--space-lg);position:relative;transition:transform var(--transition),box-shadow var(--transition)}
+.card:hover{box-shadow:var(--shadow)}
+.card-elevated{box-shadow:var(--shadow)}
+.card-elevated:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.card-title{font-family:var(--font-serif);font-size:17px;color:var(--navy);margin-bottom:10px}
+.stripe-accent{border-left:4px solid var(--accent)}.stripe-amber{border-left:4px solid var(--amber2)}.stripe-red{border-left:4px solid var(--red2)}.stripe-violet{border-left:4px solid var(--violet)}.stripe-navy{border-left:4px solid var(--navy)}
+.card-teal{background:var(--accent-bg);border-color:var(--accent)}.card-amber{background:var(--amber-bg);border-color:var(--amber2)}.card-red{background:var(--red-bg);border-color:var(--red2)}.card-violet{background:var(--violet-bg);border-color:var(--violet)}.card-navy{background:var(--navy-bg);border-color:var(--navy)}
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table thead tr{background:var(--navy);color:var(--white)}
+.data-table thead th{text-align:left;padding:10px 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.data-table thead th:first-child{border-radius:var(--radius-sm) 0 0 0}
+.data-table thead th:last-child{border-radius:0 var(--radius-sm) 0 0}
+.data-table tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink2)}
+.data-table tbody tr:last-child td{border-bottom:none}
+.data-table tbody tr:nth-child(even) td{background:var(--bg)}
+/* TAGS */
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;margin:3px 3px 0 0;font-family:var(--font-body)}
+.tag-teal{background:var(--accent-bg);color:var(--accent2)}.tag-amber{background:var(--amber-bg);color:var(--act-dark)}.tag-red{background:var(--red-bg);color:var(--red2)}.tag-violet{background:var(--violet-bg);color:var(--violet)}.tag-navy{background:var(--navy-bg);color:var(--navy)}.tag-gray{background:var(--gray100);color:var(--gray600)}
+/* MARK */
+mark{background:var(--amber-bg);color:var(--ink);padding:0 3px;border-radius:3px;font-weight:500}
+mark.teal{background:var(--accent-bg);color:var(--accent2)}mark.violet{background:var(--violet-bg);color:var(--violet)}mark.red{background:var(--red-bg);color:var(--red2)}mark.navy{background:var(--navy-bg);color:var(--navy)}
+/* TIMELINE */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--line);border-radius:2px}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-item:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-24px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid var(--white);box-shadow:0 0 0 2px currentColor;background:var(--white)}
+.tl-month{font-family:var(--font-mono);font-size:11px;font-weight:500;margin-bottom:3px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.tl-name{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:3px}
+.tl-desc{font-size:13px;color:var(--ink2);line-height:1.65}
+/* PDCA */
+.pdca-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-md)}
+.pdca-block{border-radius:var(--radius);padding:24px 20px;color:var(--white);position:relative;overflow:hidden}
+.pdca-block::before{content:attr(data-letter);position:absolute;right:-10px;top:-20px;font-family:var(--font-display);font-size:100px;font-weight:700;opacity:.12;line-height:1;pointer-events:none}
+.pdca-block.plan{background:var(--plan)}.pdca-block.do{background:var(--do)}.pdca-block.check{background:var(--check)}.pdca-block.act{background:var(--act-dark)}
+.pdca-letter{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:4px}
+.pdca-word{font-family:var(--font-serif);font-size:22px;margin-bottom:12px}
+.pdca-list{list-style:none;font-size:13px;opacity:.9;line-height:1.75;padding:0}
+.pdca-list li::before{content:'› ';opacity:.6}
+/* ACCORDION */
+.qa-list{display:flex;flex-direction:column;gap:12px}
+.qa-item{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:border-color var(--transition)}
+.qa-item.open{border-color:var(--accent)}
+.qa-question{width:100%;text-align:left;padding:18px 20px;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:14px;font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--navy);transition:background var(--transition)}
+.qa-question:hover{background:var(--gray50)}
+.qa-q-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--white);font-size:12px;display:flex;align-items:center;justify-content:center;transition:background var(--transition)}
+.qa-item.open .qa-q-num{background:var(--accent)}
+.qa-chevron{margin-left:auto;font-size:18px;color:var(--gray400);transition:transform .3s,color .3s;flex-shrink:0}
+.qa-item.open .qa-chevron{transform:rotate(180deg);color:var(--accent)}
+.qa-answer{display:none;padding:0 20px 20px 62px;font-size:14px;color:var(--ink2);line-height:1.72}
+.qa-answer.visible{display:block}
+/* ROLES */
+.roles-grid{display:flex;flex-direction:column;gap:10px}
+.role-row{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--white);transition:box-shadow var(--transition)}
+.role-row:hover{box-shadow:var(--shadow-sm)}
+.role-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.role-name{font-weight:700;font-size:13.5px;color:var(--navy);margin-bottom:3px}
+.role-desc{font-size:13px;color:var(--ink2);line-height:1.55}
+/* SCOPE */
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md)}
+.scope-col{border-radius:var(--radius-sm);padding:var(--space-md)}
+.scope-col.inc{background:var(--accent-bg)}.scope-col.exc{background:var(--red-bg)}
+.scope-col h4{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.scope-col.inc h4{color:var(--accent2)}.scope-col.exc h4{color:var(--red2)}
+.scope-col ul{list-style:none;padding:0}
+.scope-col li{font-size:13px;color:var(--ink2);padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;gap:7px;align-items:flex-start}
+.scope-col li:last-child{border-bottom:none}
+.scope-col.inc li::before{content:'✓';color:var(--accent2);font-weight:700;flex-shrink:0}
+.scope-col.exc li::before{content:'✗';color:var(--red2);font-weight:700;flex-shrink:0}
+/* BENEFITS */
+.benefits{display:flex;flex-wrap:wrap;gap:12px}
+.benefit-chip{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;flex:1 1 210px;transition:box-shadow var(--transition)}
+.benefit-chip:hover{box-shadow:var(--shadow-sm)}
+.benefit-chip .bi{font-size:20px;flex-shrink:0;margin-top:1px}
+.benefit-chip-text strong{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.benefit-chip-text span{font-size:12.5px;color:var(--ink2);line-height:1.5}
+/* MEMORY BOX */
+.memory-box{background:var(--amber-bg);border:1.5px dashed var(--amber2);border-radius:var(--radius);padding:18px 20px}
+.memory-box h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--act-dark);margin-bottom:8px}
+.memory-box p,.memory-box li{font-size:13.5px;color:var(--ink2);line-height:1.7}
+.memory-box ul{padding-left:18px}
+/* CALLOUT */
+.callout{border-radius:var(--radius);padding:16px 20px;font-size:14px;line-height:1.65}
+.callout-teal{background:var(--accent-bg);border-left:4px solid var(--accent2);color:var(--ink2)}
+.callout-amber{background:var(--amber-bg);border-left:4px solid var(--amber2);color:var(--ink2)}
+.callout-red{background:var(--red-bg);border-left:4px solid var(--red2);color:var(--ink2)}
+.callout-violet{background:var(--violet-bg);border-left:4px solid var(--violet);color:var(--ink2)}
+.callout-navy{background:var(--navy-bg);border-left:4px solid var(--navy);color:var(--ink2)}
+.callout h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 22px;border-radius:var(--radius);border:none;cursor:pointer;font-family:var(--font-display);font-size:14px;font-weight:600;transition:all var(--transition);text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--navy);color:var(--white)}.btn-primary:hover{background:var(--navy2)}
+.btn-accent{background:var(--accent);color:var(--white)}.btn-accent:hover{background:var(--accent2)}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0}
+.fade-up.visible{animation:fadeUp .6s ease forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.fade-in{animation:fadeIn .4s ease}
+/* UTILS */
+.hidden{display:none!important}
+.rounded-sm{border-radius:var(--radius-sm)}.rounded{border-radius:var(--radius)}.rounded-lg{border-radius:var(--radius-lg)}
+.shadow-sm{box-shadow:var(--shadow-sm)}.shadow{box-shadow:var(--shadow)}.shadow-lg{box-shadow:var(--shadow-lg)}
+/* QUIZ */
+.quiz-section{background:var(--navy-bg);border-radius:var(--radius-lg);padding:var(--space-lg)}
+.quiz-question{font-weight:600;color:var(--navy);margin-bottom:12px;font-size:15px}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:10px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);cursor:pointer;background:var(--white);font-size:13.5px;color:var(--ink2);transition:all .2s;text-align:left}
+.quiz-opt:hover{border-color:var(--accent);background:var(--accent-bg)}
+.quiz-opt.correct{background:#dcfce7;border-color:#16a34a;color:#15803d;font-weight:600}
+.quiz-opt.wrong{background:var(--red-bg);border-color:var(--red2);color:var(--red2)}
+.quiz-feedback{margin-top:10px;font-size:13px;font-weight:600;display:none}
+.quiz-feedback.show{display:block}
+/* FLASHCARD */
+.flashcard-wrap{perspective:1000px}
+.flashcard{width:100%;min-height:160px;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform .5s}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;width:100%;min-height:160px;border-radius:var(--radius);padding:var(--space-lg);backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center}
+.fc-front{background:var(--navy);color:#fff}
+.fc-back{background:var(--accent-bg);color:var(--navy);transform:rotateY(180deg)}
+.fc-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:8px}
+.fc-text{font-size:15px;font-weight:600;line-height:1.5}
+.fc-hint{font-size:11px;opacity:.5;margin-top:12px}
+/* NUMBER BADGE */
+.num-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
+/* STICKY NOTE */
+.sticky{background:#fff9c4;border-radius:var(--radius-sm);padding:14px 16px;box-shadow:2px 2px 8px rgba(0,0,0,.1);position:relative;font-size:13.5px;color:var(--ink2);line-height:1.7}
+.sticky::before{content:'📌';position:absolute;top:-8px;left:10px;font-size:16px}
+/* COMPARISON TABLE */
+.comp-table{width:100%;border-collapse:collapse;font-size:13px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+.comp-table thead tr{background:var(--navy);color:#fff}
+.comp-table th{padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-align:left}
+.comp-table td{padding:10px 14px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:nth-child(even) td{background:var(--gray50)}
+/* RESPONSIVE */
+@media(max-width:768px){.grid-3{grid-template-columns:1fr 1fr}.pdca-grid{grid-template-columns:1fr 1fr}.scope-grid{grid-template-columns:1fr}.hero{padding:48px 20px 60px}.section{padding:48px 20px}.topbar{padding:10px 16px}}
+@media(max-width:540px){.grid-2,.grid-3,.grid-4,.pdca-grid{grid-template-columns:1fr}.hero-stats{gap:20px}.page{padding:24px 14px 60px}.fc-front,.fc-back{position:relative}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <span class="topbar-title">📚 Metodología de la Investigación</span>
+  <div class="topbar-pills">
+    <a href="#formulacion" class="topbar-pill">Formulación</a>
+    <a href="#objetivos" class="topbar-pill">Objetivos</a>
+    <a href="#marco" class="topbar-pill">Marco Teórico</a>
+    <a href="#alcance" class="topbar-pill">Alcance</a>
+    <a href="#hipotesis" class="topbar-pill">Hipótesis</a>
+    <a href="#variables" class="topbar-pill">Variables</a>
+    <a href="#quiz" class="topbar-pill">🧠 Quiz</a>
+  </div>
+</nav>
+
+<!-- NAV PILLS -->
+<div class="nav-pills">
+  <a href="#formulacion" class="nav-pill">2.1 Formulación</a>
+  <a href="#criterios" class="nav-pill">2.2 Criterios</a>
+  <a href="#objetivos" class="nav-pill">2.1.1 Objetivos</a>
+  <a href="#preguntas" class="nav-pill">2.1.2 Preguntas</a>
+  <a href="#justificacion" class="nav-pill">2.1.3 Justificación</a>
+  <a href="#marco" class="nav-pill">3. Marco Teórico</a>
+  <a href="#alcance" class="nav-pill">4. Alcance</a>
+  <a href="#hipotesis" class="nav-pill">5. Hipótesis</a>
+  <a href="#variables" class="nav-pill">5.2 Variables</a>
+  <a href="#flashcards" class="nav-pill">🃏 Flashcards</a>
+  <a href="#quiz" class="nav-pill">🧠 Quiz</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">✏️ Módulo II · Guía de Estudio Completa</div>
+    <h1>Metodología de la <span>Investigación</span></h1>
+    <p>Guía visual completa con técnicas de memorización, flashcards y quiz. Profesora Maritza Morales.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>6</strong><span>Temas</span></div>
+      <div class="hero-stat"><strong>5</strong><span>Criterios</span></div>
+      <div class="hero-stat"><strong>4</strong><span>Alcances</span></div>
+      <div class="hero-stat"><strong>4</strong><span>Hipótesis</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 1. FORMULACIÓN DEL PROBLEMA -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="formulacion">
+  <span class="s-label">Documento 1 · Sección 2.1</span>
+  <h2 class="section-title" style="margin-bottom:8px">Formulación del Problema</h2>
+
+  <div class="callout callout-teal">
+    <h4>¿Qué es?</h4>
+    El proceso de <mark>definir y expresar</mark> de manera <mark>clara, concisa y específica</mark> una situación, dificultad o brecha de conocimiento que requiere una solución o investigación. Sirve como <strong>punto de partida y guía</strong> para todo proyecto o tesis.
+  </div>
+
+  <div class="memory-box">
+    <h4>🧠 Para memorizar — Las 3 ideas clave</h4>
+    <ul>
+      <li><strong>Punto de partida:</strong> define lo que se busca aprender o entender.</li>
+      <li><strong>Se plantea como pregunta:</strong> la pregunta de investigación sintetiza identificación + definición + formulación.</li>
+      <li><strong>Contextualiza:</strong> describe la situación, establece las preguntas que guiarán la investigación y estructura formalmente la idea.</li>
+    </ul>
+  </div>
+
+  <!-- CRITERIOS -->
+  <section id="criterios">
+    <h3 style="margin-bottom:16px">2.2 Los 5 Criterios para Formular el Problema</h3>
+    <div class="memory-box" style="margin-bottom:18px">
+      <h4>🧠 Mnemotecnia — "D·G·T·J·F"</h4>
+      <p><strong>D</strong>escripción · <strong>G</strong>eografía · <strong>T</strong>iempo · <strong>J</strong>ustificación · <strong>F</strong>ormulación (pregunta central)</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--accent)"></div>
+        <div class="tl-month"><span class="tag tag-teal">1</span></div>
+        <div class="tl-name">Descripción del Problema</div>
+        <div class="tl-desc">Presenta la situación que origina la investigación, explica el contexto e importancia. Incluye antecedentes y muestra por qué el tema es relevante y qué consecuencias tiene no atenderlo.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--violet)"></div>
+        <div class="tl-month"><span class="tag tag-violet">2</span></div>
+        <div class="tl-name">Delimitación en el Espacio Geográfico</div>
+        <div class="tl-desc">Define el <mark>lugar físico</mark> donde el objeto de estudio se manifiesta (ciudad, barrio, región). Evita que la investigación sea demasiado amplia.<br><em>Ejemplo: contaminación del río Juan Díaz en El Chirú, Coclé.</em></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--amber2)"></div>
+        <div class="tl-month"><span class="tag tag-amber">3</span></div>
+        <div class="tl-name">Delimitación del Espacio Temporal</div>
+        <div class="tl-desc">Define el <mark>período de tiempo</mark> en que se estudiará el problema.<br><em>Ejemplo: 2015 – 2020.</em></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--red2)"></div>
+        <div class="tl-month"><span class="tag tag-red">4</span></div>
+        <div class="tl-name">Definición e Investigación del Problema</div>
+        <div class="tl-desc">Argumenta por qué vale la pena investigar. Puede ser justificación <strong>teórica</strong>, <strong>práctica</strong>, <strong>metodológica</strong> o <strong>social</strong>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--navy)"></div>
+        <div class="tl-month"><span class="tag tag-navy">5</span></div>
+        <div class="tl-name">Formulación del Problema (pregunta central)</div>
+        <div class="tl-desc">El problema se expresa como una <mark>pregunta central</mark> que guíe todo el estudio. Debe ser clara, precisa y delimitada en tiempo, espacio y población.<br><em>Ej: ¿Cómo influye la calidad del servicio en la satisfacción de los clientes de X empresa en 2025?</em></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EJEMPLO COMPLETO -->
+  <section>
+    <h3 style="margin-bottom:14px">Ejemplo de Formulación Completa — Río Juan Díaz</h3>
+    <div class="card card-elevated">
+      <div class="pdca-grid">
+        <div class="pdca-block plan" data-letter="D">
+          <div class="pdca-letter">Criterio 1</div>
+          <div class="pdca-word">Descripción</div>
+          <ul class="pdca-list">
+            <li>Comunidad El Chirú, Coclé</li>
+            <li>Agua con cambios de color y olor</li>
+            <li>Familias dependen del río Juan Díaz</li>
+          </ul>
+        </div>
+        <div class="pdca-block do" data-letter="G">
+          <div class="pdca-letter">Criterio 2</div>
+          <div class="pdca-word">Geografía</div>
+          <ul class="pdca-list">
+            <li>Río Juan Díaz</li>
+            <li>El Chirú, provincia de Coclé</li>
+            <li>Panamá</li>
+          </ul>
+        </div>
+        <div class="pdca-block check" data-letter="T">
+          <div class="pdca-letter">Criterio 3</div>
+          <div class="pdca-word">Tiempo</div>
+          <ul class="pdca-list">
+            <li>Período 2015 – 2020</li>
+            <li>Aumento visible reportado por pobladores</li>
+          </ul>
+        </div>
+        <div class="pdca-block act" data-letter="F">
+          <div class="pdca-letter">Criterio 5 · Pregunta</div>
+          <div class="pdca-word">Formulación</div>
+          <ul class="pdca-list">
+            <li>¿Cuáles son las principales causas de la contaminación?</li>
+            <li>¿Qué efectos en la calidad de vida?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS GENERALES VS ESPECÍFICAS -->
+  <section>
+    <h3 style="margin-bottom:14px">Preguntas Generales vs. Específicas</h3>
+    <div class="memory-box">
+      <h4>🧠 Clave para distinguirlas</h4>
+      <p>La pregunta <strong>general</strong> es amplia y conceptual. La <strong>específica</strong> delimita: población exacta, lugar, tiempo y variables medibles.</p>
+    </div>
+    <div class="grid-2 mt-md">
+      <div class="card card-teal">
+        <div class="card-title">🌐 General (amplia)</div>
+        <p class="text-muted" style="font-size:13px">¿Por qué hay personas más satisfechas con su trabajo que otras?</p>
+        <p class="text-muted" style="font-size:13px">¿Los gerentes se comprometen más con su empresa que los obreros?</p>
+        <p class="text-muted" style="font-size:13px">¿Cómo se relacionan los medios de comunicación con el voto?</p>
+      </div>
+      <div class="card card-violet">
+        <div class="card-title">🔬 Específica (delimitada)</div>
+        <p class="text-muted" style="font-size:13px">¿Existe relación entre el nivel jerárquico y la motivación intrínseca en empleados de Metales y Metales?</p>
+        <p class="text-muted" style="font-size:13px">¿La exposición a debates televisivos está relacionada con la decisión de votar en Panamá?</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 2. OBJETIVOS DE INVESTIGACIÓN -->
+<!-- ═══════════════════════════════════ -->
+<div style="background:var(--gray50);padding:var(--space-2xl) 0" id="objetivos">
+  <div class="page" style="padding-top:0;padding-bottom:0">
+    <span class="s-label">Documento 2 · Sección 2.1.1</span>
+    <h2 class="section-title" style="margin-bottom:8px">Objetivos de Investigación</h2>
+
+    <div class="callout callout-navy">
+      <h4>Definición</h4>
+      Enunciado vinculado a la pregunta de investigación que funciona como <mark class="navy">guía del proceso investigativo</mark>. Expresa las expectativas y resultados esperados del estudio.
+    </div>
+
+    <div class="grid-2">
+      <div class="card stripe-accent">
+        <div class="card-title">🎯 Objetivo General</div>
+        <p>Representa el <strong>propósito amplio y fundamental</strong> del estudio. Expresa la meta principal que se busca alcanzar al finalizar.</p>
+        <span class="tag tag-teal">¿QUÉ se logra?</span>
+      </div>
+      <div class="card stripe-violet">
+        <div class="card-title">🔩 Objetivos Específicos</div>
+        <p>Presentan el <strong>"cómo"</strong> se alcanzará el objetivo general. Son metas concretas del proceso investigativo, <em>no un listado de actividades</em>.</p>
+        <span class="tag tag-violet">¿CÓMO se logra?</span>
+      </div>
+    </div>
+
+    <section>
+      <h3 style="margin-bottom:14px">Características de los Objetivos</h3>
+      <div class="grid-3">
+        <div class="card card-teal">
+          <div style="font-size:24px;margin-bottom:8px">💡</div>
+          <div class="card-title">Son Claros</div>
+          <p style="font-size:13px">Indican las <strong>variables</strong> de investigación y los métodos de cuantificación. Permite conocer qué análisis estadístico realizarán.</p>
+        </div>
+        <div class="card card-amber">
+          <div style="font-size:24px;margin-bottom:8px">✂️</div>
+          <div class="card-title">Son Concisos</div>
+          <p style="font-size:13px">Evita redundancias, usa pocas palabras precisas, cualquier lector entiende la intención sin esfuerzo.</p>
+        </div>
+        <div class="card card-violet">
+          <div style="font-size:24px;margin-bottom:8px">📊</div>
+          <div class="card-title">Número Limitado</div>
+          <p style="font-size:13px">Máximo <strong>5 objetivos</strong> para evitar abrumarse. Se recomienda la metodología <mark.violet>SMART</mark>.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="callout callout-violet">
+      <h4>Metodología SMART</h4>
+      <div class="grid-4" style="gap:8px;margin-top:8px">
+        <div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--violet)">S</div><div style="font-size:12px"><strong>Específico</strong><br>Specific</div></div>
+        <div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--accent2)">M</div><div style="font-size:12px"><strong>Medible</strong><br>Measurable</div></div>
+        <div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--amber2)">A</div><div style="font-size:12px"><strong>Alcanzable</strong><br>Achievable</div></div>
+        <div style="text-align:center"><div style="font-size:28px;font-weight:800;color:var(--red2)">R</div><div style="font-size:12px"><strong>Relevante</strong><br>Relevant</div></div>
+      </div>
+      <div style="text-align:center;margin-top:8px"><div style="font-size:28px;font-weight:800;color:var(--navy)">T</div><div style="font-size:12px"><strong>Con Tiempo definido</strong><br>Time-bound</div></div>
+    </div>
+
+    <!-- EJEMPLO SMART -->
+    <section>
+      <h3 style="margin-bottom:14px">Ejemplo Completo — Deserción Cursos Virtuales UTP</h3>
+      <div class="card card-elevated">
+        <div class="sticky" style="margin-bottom:14px">📌 Título: <em>"Causas que inciden en la deserción de estudiantes matriculados en cursos virtuales ofrecidos por la UTP"</em></div>
+        <div class="callout callout-teal" style="margin-bottom:12px">
+          <h4>Objetivo General</h4>
+          Evaluar las causas de la deserción de los estudiantes matriculados en los cursos virtuales ofrecidos por la UTP.
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot" style="color:var(--accent)"></div>
+            <div class="tl-name">Obj. Específico 1</div>
+            <div class="tl-desc">Identificar los problemas confrontados por los estudiantes que no finalizan los cursos virtuales.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="color:var(--violet)"></div>
+            <div class="tl-name">Obj. Específico 2</div>
+            <div class="tl-desc">Analizar el comportamiento de los estudiantes en el ambiente de la plataforma Moodle.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="color:var(--amber2)"></div>
+            <div class="tl-name">Obj. Específico 3</div>
+            <div class="tl-desc">Analizar y comparar los resultados obtenidos en cada uno de los semestres.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="color:var(--red2)"></div>
+            <div class="tl-name">Obj. Específico 4</div>
+            <div class="tl-desc">Identificar la opinión de los docentes virtuales en relación con la deserción.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 3. PREGUNTAS DE INVESTIGACIÓN -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="preguntas">
+  <span class="s-label">Sección 2.1.2</span>
+  <h2 class="section-title" style="margin-bottom:8px">Preguntas de Investigación</h2>
+
+  <div class="callout callout-teal">
+    <h4>Definición</h4>
+    El <mark>cuestionamiento central</mark> que un estudio se plantea responder. Reside en el <strong>corazón de la investigación sistemática</strong> y es el <strong>primer paso</strong> de la metodología. Determina el ritmo de trabajo a seguir.
+  </div>
+
+  <h3 style="margin-bottom:14px">Tipos de Preguntas de Investigación</h3>
+  <div class="grid-3">
+    <div class="card stripe-accent">
+      <span class="tag tag-teal" style="margin-bottom:10px">Cuantitativas</span>
+      <div class="card-title">Preguntas Cuantitativas</div>
+      <div class="timeline" style="margin-top:8px">
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--accent)"></div>
+          <div class="tl-name">Descriptivas</div>
+          <div class="tl-desc">Asocian una cantidad a la variable.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--accent)"></div>
+          <div class="tl-name">Comparativas</div>
+          <div class="tl-desc">Comparan dos o más grupos sobre la base de variables confiables.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="color:var(--accent)"></div>
+          <div class="tl-name">Relacionales</div>
+          <div class="tl-desc">Buscan la asociación o relación causal entre variables.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card stripe-violet">
+      <span class="tag tag-violet" style="margin-bottom:10px">Cualitativas</span>
+      <div class="card-title">Preguntas Cualitativas</div>
+      <p style="font-size:13px">Son <strong>adaptables, no-direccionales y flexibles</strong>. Los estudios buscan <em>"descubrir", "explicar"</em> o <em>"explorar"</em> fenómenos en contextos particulares.</p>
+    </div>
+    <div class="card stripe-amber">
+      <span class="tag tag-amber" style="margin-bottom:10px">Métodos mixtos</span>
+      <div class="card-title">Preguntas Mixtas</div>
+      <p style="font-size:13px">Requieren un conjunto tanto de preguntas cuantitativas <em>como</em> cualitativas. Apropiadas cuando el estudio se enfoca en el significado y diferencias entre ambos enfoques.</p>
+    </div>
+  </div>
+
+  <section id="justificacion">
+    <h3 style="margin-bottom:14px">2.1.3 Justificación del Estudio</h3>
+    <div class="memory-box">
+      <h4>🧠 Los 4 tipos de justificación</h4>
+      <p>Recuerda: <strong>T·P·M·S</strong> — Teórica, Práctica, Metodológica, Social</p>
+    </div>
+    <div class="grid-2 mt-md">
+      <div class="benefit-chip">
+        <div class="bi">📖</div>
+        <div class="benefit-chip-text"><strong>Teórica</strong><span>Aporte al conocimiento científico existente.</span></div>
+      </div>
+      <div class="benefit-chip">
+        <div class="bi">🔧</div>
+        <div class="benefit-chip-text"><strong>Práctica</strong><span>Utilidad real y aplicable en el contexto.</span></div>
+      </div>
+      <div class="benefit-chip">
+        <div class="bi">🔬</div>
+        <div class="benefit-chip-text"><strong>Metodológica</strong><span>Innovación en el enfoque investigativo.</span></div>
+      </div>
+      <div class="benefit-chip">
+        <div class="bi">🌍</div>
+        <div class="benefit-chip-text"><strong>Social</strong><span>Impacto y beneficio en la comunidad.</span></div>
+      </div>
+    </div>
+    <div class="callout callout-amber mt-md">
+      <h4>Preguntas guía para reflexionar sobre tu investigación</h4>
+      <ol style="padding-left:18px;font-size:13.5px;line-height:2">
+        <li><strong>Naturaleza del problema:</strong> ¿Qué problema práctico o laguna teórica estoy abordando?</li>
+        <li><strong>Relevancia y audiencia:</strong> ¿Por qué es importante ahora? ¿Para quién es útil?</li>
+        <li><strong>Estado del conocimiento:</strong> ¿Qué vacíos o debates existen en la literatura actual?</li>
+        <li><strong>Viabilidad:</strong> ¿Cuento con recursos, tiempo y acceso para responder estas preguntas?</li>
+      </ol>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 4. MARCO TEÓRICO -->
+<!-- ═══════════════════════════════════ -->
+<div style="background:var(--navy);padding:var(--space-2xl) 0" id="marco">
+  <div class="page" style="padding-top:0;padding-bottom:0">
+    <span class="s-label" style="color:var(--accent)">Documento 3 · Sección 3</span>
+    <h2 class="section-title" style="color:#fff;margin-bottom:8px">Marco Teórico</h2>
+    <p style="color:rgba(255,255,255,.7);max-width:660px">El conjunto integrado de teorías, conceptos y antecedentes que sustentan la investigación, proporcionando el soporte conceptual necesario para entender, contextualizar y abordar eficazmente el problema de investigación.</p>
+
+    <div style="margin-top:24px">
+      <h3 style="color:#fff;margin-bottom:14px">7 Funciones del Marco Teórico</h3>
+      <div class="benefits" style="margin-top:0">
+        <div class="benefit-chip">
+          <div class="bi">🧭</div>
+          <div class="benefit-chip-text"><strong>Brújula Conceptual</strong><span>Guía la definición del problema, objetivos y variables.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">🏛️</div>
+          <div class="benefit-chip-text"><strong>Marco Científico</strong><span>Ubica el tema dentro del conocimiento existente.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">💡</div>
+          <div class="benefit-chip-text"><strong>Claridad Conceptual</strong><span>Clarifica términos clave y relaciones entre variables.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">🌱</div>
+          <div class="benefit-chip-text"><strong>Contribución Original</strong><span>Señala brechas para posicionar la investigación como aporte innovador.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">📚</div>
+          <div class="benefit-chip-text"><strong>Respaldo Académico</strong><span>Proporciona base teórica para decisiones metodológicas e hipótesis.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">✨</div>
+          <div class="benefit-chip-text"><strong>Innovación</strong><span>Identifica vacíos en la literatura para fomentar la originalidad.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">🔍</div>
+          <div class="benefit-chip-text"><strong>Referencia para el Análisis</strong><span>Sirve como base para comparar hallazgos en la discusión.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" style="padding-top:var(--space-xl)">
+  <h3 style="margin-bottom:14px">4 Pasos para Construir el Marco Teórico</h3>
+  <div class="memory-box">
+    <h4>🧠 Mnemotecnia — "I·J·E·A"</h4>
+    <p><strong>I</strong>dentificar teorías → <strong>J</strong>ustificar selección → <strong>E</strong>stablecer conexiones → <strong>A</strong>nalizar conceptos</p>
+  </div>
+  <div class="pdca-grid mt-md">
+    <div class="pdca-block plan" data-letter="I">
+      <div class="pdca-letter">Paso 1</div>
+      <div class="pdca-word">Identificar</div>
+      <ul class="pdca-list">
+        <li>Reconocer teorías clave</li>
+        <li>Mapear términos y variables</li>
+        <li>Definir alcance de conceptos</li>
+      </ul>
+    </div>
+    <div class="pdca-block do" data-letter="J">
+      <div class="pdca-letter">Paso 2</div>
+      <div class="pdca-word">Justificar</div>
+      <ul class="pdca-list">
+        <li>Defender la elección de marcos</li>
+        <li>Argumentar pertinencia teórica</li>
+        <li>Vincular a la pregunta de investigación</li>
+      </ul>
+    </div>
+    <div class="pdca-block check" data-letter="E">
+      <div class="pdca-letter">Paso 3</div>
+      <div class="pdca-word">Establecer</div>
+      <ul class="pdca-list">
+        <li>Vincular perspectivas teóricas</li>
+        <li>Comprensión holística</li>
+        <li>Relacionar variables e hipótesis</li>
+      </ul>
+    </div>
+    <div class="pdca-block act" data-letter="A">
+      <div class="pdca-letter">Paso 4</div>
+      <div class="pdca-word">Analizar</div>
+      <ul class="pdca-list">
+        <li>Evaluar críticamente conceptos</li>
+        <li>Detectar vacíos en la literatura</li>
+        <li>Posicionar la investigación</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COMPONENTES DEL MARCO TEÓRICO -->
+  <section>
+    <h3 style="margin-bottom:14px">4 Componentes del Marco Teórico</h3>
+    <div class="memory-box">
+      <h4>🧠 Mnemotecnia — "A·B·J·D"</h4>
+      <p><strong>A</strong>ntecedentes · <strong>B</strong>ases teóricas · <strong>J</strong>ustificación de bases · <strong>D</strong>efinición de términos</p>
+    </div>
+    <div class="roles-grid mt-md">
+      <div class="role-row">
+        <div class="role-icon">📜</div>
+        <div><div class="role-name">Antecedentes de la Investigación</div><div class="role-desc">Revisión bibliográfica exhaustiva y rigurosa de lo que ya se ha investigado sobre el tema.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">🏗️</div>
+        <div><div class="role-name">Bases Teóricas</div><div class="role-desc">Definición de las bases teóricas e identificación de variables. Aquí se establecen relaciones entre teorías e hipótesis consultadas.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">⚖️</div>
+        <div><div class="role-name">Justificación de la Elección de Bases Teóricas</div><div class="role-desc">Argumentación del porqué de la teoría seleccionada en relación con la pregunta de investigación.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">📖</div>
+        <div><div class="role-name">Definición de Términos Básicos</div><div class="role-desc">Definición y delimitación de los conceptos relevantes para el estudio.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPOS DE MARCOS TEÓRICOS -->
+  <section>
+    <h3 style="margin-bottom:14px">Tipos de Marco Teórico</h3>
+    <div class="grid-2">
+      <div class="card stripe-accent"><div class="card-title">📚 Referencial</div><p style="font-size:13px">Para investigación académica y profesional; requiere revisión de trabajos existentes.</p></div>
+      <div class="card stripe-violet"><div class="card-title">🗺️ Conceptual</div><p style="font-size:13px">Presenta ideas en esquema, resaltando ideas principales y secundarias.</p></div>
+      <div class="card stripe-amber"><div class="card-title">⚖️ Legal</div><p style="font-size:13px">Sustenta la investigación en normas legales específicas del país o institución.</p></div>
+      <div class="card stripe-red"><div class="card-title">🕰️ Histórico</div><p style="font-size:13px">Describe la historia para identificar el contexto de problemas históricos.</p></div>
+    </div>
+  </section>
+
+  <!-- EQUIPO DE INVESTIGACIÓN -->
+  <section>
+    <h3 style="margin-bottom:14px">Constitución del Equipo de Investigación</h3>
+    <div class="roles-grid">
+      <div class="role-row">
+        <div class="role-icon">👩‍🔬</div>
+        <div><div class="role-name">Investigador Principal</div><div class="role-desc">Ejerce el liderazgo general, toma decisiones estratégicas y coordina todas las actividades investigativas.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">🤝</div>
+        <div><div class="role-name">Co-investigadores</div><div class="role-desc">Proporcionan apoyo especializado en áreas temáticas o metodológicas específicas.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">📊</div>
+        <div><div class="role-name">Asistentes y Técnicos</div><div class="role-desc">Ejecutan la recopilación sistemática de datos, realizan análisis preliminares y dan soporte operativo.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">🎓</div>
+        <div><div class="role-name">Asesores Especializados</div><div class="role-desc">Ofrecen orientación metodológica experta y apoyo bibliográfico, asegurando el rigor científico.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESQUEMA PRESUPUESTARIO -->
+  <section>
+    <h3 style="margin-bottom:14px">Esquema Presupuestario</h3>
+    <div class="callout callout-teal" style="margin-bottom:14px">
+      Plan que organiza los <mark>recursos necesarios</mark> para llevar a cabo la investigación, especialmente los costos. Da una visión clara de cuánto se necesita y cómo se distribuirán.
+    </div>
+    <div class="card card-elevated" style="overflow-x:auto">
+      <table class="comp-table">
+        <thead><tr><th>Categoría</th><th>Descripción</th><th>Monto ($)</th></tr></thead>
+        <tbody>
+          <tr><td>Recursos humanos</td><td>Asistentes de investigación (2)</td><td>1,200</td></tr>
+          <tr><td>Materiales y suministros</td><td>Papelería, impresiones, cuestionarios</td><td>300</td></tr>
+          <tr><td>Equipos y tecnología</td><td>Licencia de software estadístico</td><td>500</td></tr>
+          <tr><td>Transporte y logística</td><td>Traslados al sitio de estudio</td><td>400</td></tr>
+          <tr><td>Capacitación</td><td>Taller para encuestadores</td><td>200</td></tr>
+          <tr><td>Difusión de resultados</td><td>Impresión de informe</td><td>250</td></tr>
+          <tr><td>Contingencias (10%)</td><td>Fondo para imprevistos</td><td>285</td></tr>
+          <tr><td style="font-weight:700;color:var(--navy)">TOTAL</td><td></td><td style="font-weight:700;color:var(--navy)">3,135</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 5. ALCANCE DE LA INVESTIGACIÓN -->
+<!-- ═══════════════════════════════════ -->
+<div style="background:var(--gray50);padding:var(--space-2xl) 0" id="alcance">
+  <div class="page" style="padding-top:0;padding-bottom:0">
+    <span class="s-label">Módulo II · Sección 4</span>
+    <h2 class="section-title" style="margin-bottom:8px">Alcance de la Investigación</h2>
+    <div class="callout callout-navy" style="margin-bottom:20px">
+      Indica el <mark class="navy">nivel de profundidad y amplitud</mark> con que se aborda un fenómeno. No es jerarquía de valor, sino una <strong>decisión estratégica</strong> según el estado del conocimiento sobre el fenómeno estudiado.
+    </div>
+
+    <div class="memory-box">
+      <h4>🧠 Progresión de los 4 Alcances — de menor a mayor profundidad</h4>
+      <p><strong>Exploratorio → Descriptivo → Correlacional → Explicativo</strong></p>
+      <p style="margin-top:6px">Cada nivel se construye sobre el anterior. <em>"EDCE"</em> — <strong>E</strong>xplorar, <strong>D</strong>escribir, <strong>C</strong>orrelacionar, <strong>E</strong>xplicar.</p>
+    </div>
+
+    <!-- LOS 4 ALCANCES EN ACORDEÓN -->
+    <div class="qa-list" id="alcanceAccordion">
+
+      <div class="qa-item open">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">1</span>
+          🔭 Alcance Exploratorio
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer visible">
+          <div class="callout callout-teal" style="margin-bottom:12px">Investiga fenómenos <strong>poco estudiados o nuevos</strong>. Genera hipótesis preliminares, no las prueba.</div>
+          <div class="grid-2">
+            <div>
+              <strong style="font-size:13px;color:var(--navy)">Aspectos clave:</strong>
+              <ul style="font-size:13px;margin-top:6px;line-height:2">
+                <li>Examina temas novedosos o poco estudiados</li>
+                <li>Genera hipótesis e interrogantes para estudios futuros</li>
+                <li>Diseños flexibles: entrevistas, grupos focales, etnografía</li>
+                <li>Resultados tentatives, no generaliza</li>
+                <li>Frecuente en disciplinas emergentes</li>
+              </ul>
+            </div>
+            <div class="card card-teal">
+              <strong style="font-size:13px;color:var(--navy)">Ejemplo real:</strong>
+              <p style="font-size:13px;margin-top:6px"><em>Impacto psicológico de la realidad aumentada en adultos mayores.</em><br>→ 12 entrevistas semiestructuradas para identificar reacciones emocionales.</p>
+              <strong style="font-size:12px;color:var(--accent2)">Preguntas típicas:</strong>
+              <p style="font-size:12px">¿Qué factores podrían estar asociados con el abandono escolar en zonas rurales?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">2</span>
+          📋 Alcance Descriptivo
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="callout callout-violet" style="margin-bottom:12px">Describe <strong>características, propiedades o perfiles</strong>. Mide y especifica sin buscar explicar causas.</div>
+          <div class="grid-2">
+            <div>
+              <strong style="font-size:13px;color:var(--navy)">Aspectos clave:</strong>
+              <ul style="font-size:13px;margin-top:6px;line-height:2">
+                <li>El investigador define qué va a medir antes de recolectar datos</li>
+                <li>Puede medir variables de forma independiente</li>
+                <li>Usa encuestas, observación estructurada, estadística descriptiva</li>
+                <li>Permite generalizaciones con muestras representativas</li>
+              </ul>
+            </div>
+            <div class="card card-violet">
+              <strong style="font-size:13px;color:var(--navy)">Ejemplo real:</strong>
+              <p style="font-size:13px;margin-top:6px"><em>Hábitos de lectura en estudiantes de posgrado en universidades panameñas.</em><br>→ Encuesta de 45 ítems sobre frecuencia, tipo y formato.</p>
+              <strong style="font-size:12px;color:var(--violet)">Preguntas típicas:</strong>
+              <p style="font-size:12px">¿Cuál es el perfil de competencias digitales de los docentes universitarios?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">3</span>
+          📈 Alcance Correlacional
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="callout callout-amber" style="margin-bottom:12px">Analiza el <strong>grado de relación entre variables</strong>. Evalúa asociaciones sin establecer causalidad directa.</div>
+          <div class="callout callout-red" style="margin-bottom:12px">
+            <h4>⚠️ Principio fundamental</h4>
+            <strong>Correlación NO implica causalidad.</strong> Si A y B están correlacionadas, no significa que A cause B.
+          </div>
+          <div class="grid-2">
+            <div>
+              <strong style="font-size:13px;color:var(--navy)">Aspectos clave:</strong>
+              <ul style="font-size:13px;margin-top:6px;line-height:2">
+                <li>Mide dirección: positiva, negativa o nula</li>
+                <li>Coeficientes: r de Pearson, rho de Spearman, tau de Kendall</li>
+                <li>No manipula variables: observa lo natural</li>
+                <li>Tiene valor predictivo limitado</li>
+              </ul>
+            </div>
+            <div class="card card-amber">
+              <strong style="font-size:13px;color:var(--navy)">Ejemplo real:</strong>
+              <p style="font-size:13px;margin-top:6px"><em>Inteligencia emocional y liderazgo transformacional en directivos.</em><br>→ r = .67, p &lt; .01: correlación positiva significativa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">4</span>
+          🔬 Alcance Explicativo
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <div class="callout callout-navy" style="margin-bottom:12px">Determina las <strong>causas de los fenómenos</strong>. Mayor profundidad, ofrece razones y contribuye al mejor entendimiento.</div>
+          <ul style="font-size:13.5px;line-height:2">
+            <li>Permite determinar las causas de los fenómenos</li>
+            <li>Contribuye a un mejor entendimiento del objeto de estudio</li>
+            <li>Ofrece las razones de los fenómenos</li>
+            <li>Se formulan hipótesis <strong>causales</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTORES QUE INFLUYEN -->
+    <section style="margin-top:28px">
+      <h3 style="margin-bottom:14px">Factores que Influyen en el Alcance</h3>
+      <div class="grid-3">
+        <div class="card stripe-accent">
+          <div class="card-title">🎯 Objetivos del Estudio</div>
+          <p style="font-size:13px">Amplios → expanden pero dispersan. Específicos → reducen y aumentan la profundidad.</p>
+        </div>
+        <div class="card stripe-amber">
+          <div class="card-title">💰 Recursos y Presupuesto</div>
+          <p style="font-size:13px">Mayor financiamiento permite muestras más grandes. Recursos limitados → reducir variables o población.</p>
+        </div>
+        <div class="card stripe-violet">
+          <div class="card-title">⏰ Tiempo Disponible</div>
+          <p style="font-size:13px">Plazos cortos → alcances concretos y muestras reducidas. Plazos largos → mayor amplitud geográfica.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ERRORES COMUNES -->
+    <section>
+      <h3 style="margin-bottom:14px">Errores Comunes al Definir el Alcance</h3>
+      <div class="scope-grid">
+        <div class="scope-col inc">
+          <h4>✓ Alcance bien definido</h4>
+          <ul>
+            <li>Pregunta específica e investigable</li>
+            <li>Límites geográficos, temáticos y temporales claros</li>
+            <li>Población e inclusión definida</li>
+            <li>Coherente con recursos disponibles</li>
+          </ul>
+        </div>
+        <div class="scope-col exc">
+          <h4>✗ Errores frecuentes</h4>
+          <ul>
+            <li>Ámbito ambiguo: cambio de fronteras, difícil gestión</li>
+            <li>Demasiado amplio: muchos temas y variables</li>
+            <li>Demasiado limitado: generalización imposible</li>
+            <li>Sin coherencia con objetivos del estudio</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 6. HIPÓTESIS -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="hipotesis">
+  <span class="s-label">Módulo II · Sección 5</span>
+  <h2 class="section-title" style="margin-bottom:8px">Formulación de Hipótesis</h2>
+
+  <div class="callout callout-teal">
+    <h4>Analogía para recordar</h4>
+    Eres médico y pacientes llegan con los mismos síntomas. <strong>Antes del examen, ya tienes una sospecha.</strong> Eso es una hipótesis: una <mark>respuesta tentativa</mark> formulada antes de tener la evidencia completa.
+  </div>
+
+  <div class="callout callout-navy">
+    <h4>Definición Formal</h4>
+    Afirmación <mark class="navy">provisional</mark> sobre la relación entre dos o más variables, formulada de manera que pueda ser sometida a <mark class="navy">prueba empírica</mark>.<br>
+    <strong>3 palabras clave: provisional · relación · comprobable</strong>
+  </div>
+
+  <!-- ESTRUCTURA -->
+  <section>
+    <h3 style="margin-bottom:14px">Estructura de una Hipótesis</h3>
+    <div class="grid-3">
+      <div class="card card-teal" style="text-align:center">
+        <div style="font-size:28px">⚙️</div>
+        <div class="card-title">Variable Independiente</div>
+        <p style="font-size:13px">Factor manipulado o predictor. <strong>La causa.</strong></p>
+        <span class="tag tag-teal">VI</span>
+      </div>
+      <div class="card card-amber" style="text-align:center">
+        <div style="font-size:28px">🔗</div>
+        <div class="card-title">Relación Propuesta</div>
+        <p style="font-size:13px">Tipo de conexión esperada entre variables.</p>
+        <span class="tag tag-amber">enlace</span>
+      </div>
+      <div class="card card-violet" style="text-align:center">
+        <div style="font-size:28px">📏</div>
+        <div class="card-title">Variable Dependiente</div>
+        <p style="font-size:13px">Factor medido o resultado. <strong>El efecto.</strong></p>
+        <span class="tag tag-violet">VD</span>
+      </div>
+    </div>
+    <div class="callout callout-teal mt-md">
+      <h4>Ejemplo de hipótesis bien estructurada</h4>
+      <em>"El incremento en las horas de estudio <span style="color:var(--accent2)">[VI]</span> aumenta significativamente el rendimiento académico <span style="color:var(--violet)">[VD]</span> en estudiantes universitarios."</em>
+    </div>
+  </section>
+
+  <!-- TIPOS DE HIPÓTESIS -->
+  <section>
+    <h3 style="margin-bottom:14px">Tipos de Hipótesis</h3>
+    <div class="memory-box">
+      <h4>🧠 Mnemotecnia — "TH · H0 · Ha · C · Cor"</h4>
+      <p>Trabajo/Investigación · Nula · Alternativa · Causal · Correlacional</p>
+    </div>
+    <div class="qa-list mt-md" id="hipoAccordion">
+
+      <div class="qa-item open">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">H₁</span>
+          Hipótesis de Trabajo / Investigación (Hᵢ)
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer visible">
+          <p>La hipótesis principal que el investigador busca <strong>comprobar</strong>. Representa la predicción central. Se simboliza como <code>Hi</code>, <code>H1</code>, <code>H2</code>...</p>
+          <div class="callout callout-teal" style="margin-top:10px">
+            <strong>Ejemplo:</strong> "El aumento de horas de estudio <em>mejora significativamente</em> las calificaciones finales de los estudiantes."
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">H₀</span>
+          Hipótesis Nula (H₀)
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Afirma que <strong>NO existe relación, diferencia ni efecto</strong> entre las variables. Es el punto de partida técnico estadístico que se busca <em>refutar</em>. No implica que el investigador la crea verdad.</p>
+          <ul style="font-size:13.5px;margin-top:8px;line-height:2">
+            <li>Se acepta cuando no hay evidencia suficiente para rechazarla</li>
+            <li>Fundamental para pruebas estadísticas de significancia</li>
+          </ul>
+          <div class="callout callout-amber" style="margin-top:10px">
+            <strong>Ejemplo:</strong> "El ejercicio físico regular <em>no tiene efecto</em> estadísticamente significativo sobre los niveles de estrés."
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">Hₐ</span>
+          Hipótesis Alternativa (Hₐ)
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Ofrece <strong>explicaciones alternativas o complementarias</strong> a la hipótesis de trabajo. Es otra posibilidad distinta a H₁ y H₀.</p>
+          <div class="callout callout-violet" style="margin-top:10px">
+            <strong>Ejemplo:</strong> "El tipo específico de ejercicio (aeróbico vs. anaeróbico) influye de manera <em>diferencial</em> en la reducción del estrés, independientemente del tiempo dedicado."
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">Hc</span>
+          Hipótesis Causal
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Propone una relación de <strong>causa y efecto</strong> entre variables. Los cambios en una variable <em>causan directamente</em> cambios en otra.</p>
+          <div class="callout callout-red" style="margin-top:10px">
+            <strong>Ejemplo:</strong> "A mayor tiempo de estudio → calificaciones más altas." (relación directa causa-efecto)
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <button class="qa-question" onclick="toggleQA(this)">
+          <span class="qa-q-num">Hco</span>
+          Hipótesis Correlacional
+          <span class="qa-chevron">▾</span>
+        </button>
+        <div class="qa-answer">
+          <p>Especifica las <strong>relaciones entre dos o más variables</strong>. No solo que están vinculadas, sino cómo. Alcanzan nivel predictivo y parcialmente explicativo.</p>
+          <div class="callout callout-navy" style="margin-top:10px">
+            <strong>Ejemplo:</strong> "El tabaquismo está relacionado con la presencia de padecimientos pulmonares."
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLA ALCANCE - HIPÓTESIS -->
+  <section>
+    <h3 style="margin-bottom:14px">¿Qué Alcances Formulan Hipótesis?</h3>
+    <div class="card card-elevated" style="overflow-x:auto">
+      <table class="comp-table">
+        <thead><tr><th>Alcance</th><th>¿Formula hipótesis?</th><th>Tipo</th></tr></thead>
+        <tbody>
+          <tr><td>🔭 Exploratorio</td><td style="color:var(--red2);font-weight:600">No se formulan</td><td>—</td></tr>
+          <tr><td>📋 Descriptivo</td><td style="color:var(--amber2);font-weight:600">Solo si se pronostica un hecho</td><td>Descriptiva</td></tr>
+          <tr><td>📈 Correlacional</td><td style="color:var(--accent2);font-weight:600">Sí</td><td>Correlacional</td></tr>
+          <tr><td>🔬 Explicativo</td><td style="color:var(--accent2);font-weight:600">Sí</td><td>Causal</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-amber mt-md">
+      <h4>⚠️ Importante</h4>
+      Las hipótesis son <strong>explicaciones tentativas, no hechos</strong>. Solo después de ser comprobadas con evidencia pueden convertirse en teorías o leyes científicas.
+    </div>
+  </section>
+
+  <!-- PASOS PARA REDACTAR -->
+  <section>
+    <h3 style="margin-bottom:14px">4 Pasos para Redactar una Hipótesis</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--accent)"></div>
+        <div class="tl-month"><span class="tag tag-teal">Paso 1</span></div>
+        <div class="tl-name">Identificar las Variables</div>
+        <div class="tl-desc"><strong>VI (causa):</strong> lo que se manipula o es el factor explicativo.<br><strong>VD (efecto):</strong> lo que se mide como resultado.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--violet)"></div>
+        <div class="tl-month"><span class="tag tag-violet">Paso 2</span></div>
+        <div class="tl-name">Definir la Relación Esperada</div>
+        <div class="tl-desc"><strong>Positiva:</strong> cuando una sube, la otra sube. <strong>Negativa:</strong> cuando una sube, la otra baja. <strong>Causal:</strong> una produce efecto directo. <strong>De diferencia:</strong> dos grupos se comportan distinto.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--amber2)"></div>
+        <div class="tl-month"><span class="tag tag-amber">Paso 3</span></div>
+        <div class="tl-name">Redactar en Proposición Clara y Comprobable</div>
+        <div class="tl-desc">Evitar ambigüedades, usar lenguaje preciso, que pueda someterse a prueba empírica. Incluir: sujetos de estudio, VI, VD, relación, y delimitación de tiempo/lugar.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:var(--navy)"></div>
+        <div class="tl-month"><span class="tag tag-navy">Paso 4</span></div>
+        <div class="tl-name">Mantener Coherencia con el Marco Teórico</div>
+        <div class="tl-desc">La hipótesis debe surgir de la revisión de literatura, no de suposiciones sin fundamento. Debe estar respaldada en evidencia previa.</div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO COMPLETO SUEÑO-RENDIMIENTO -->
+    <div class="card card-elevated mt-md">
+      <h4 style="margin-bottom:12px">Ejemplo Completo — Sueño y Rendimiento Académico</h4>
+      <div class="sticky" style="margin-bottom:14px">Problema: Docente nota que más estudiantes reprueban. Mencionan estudiar tarde en la noche y dormir poco. <strong>¿El tiempo de sueño afecta el rendimiento académico?</strong></div>
+      <div class="grid-2">
+        <div class="callout callout-teal">
+          <h4>Hipótesis de Investigación (H₁)</h4>
+          "Los estudiantes de primer año de la Facultad de Ciencias de la Educación de la UP que duermen <em>menos de seis horas</em> obtienen calificaciones significativamente más bajas en el primer parcial, durante el primer semestre de 2024."
+        </div>
+        <div class="callout callout-amber">
+          <h4>Hipótesis Nula (H₀)</h4>
+          "No existe diferencia significativa en las calificaciones del primer parcial entre los estudiantes que duermen menos de seis horas y los que duermen seis horas o más."
+        </div>
+      </div>
+      <div class="callout callout-violet mt-md">
+        <h4>Hipótesis Alternativa (Hₐ)</h4>
+        "La relación entre horas de sueño y rendimiento académico está <em>moderada por el tiempo de traslado diario</em> de los estudiantes hacia la universidad."
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- 7. VARIABLES -->
+<!-- ═══════════════════════════════════ -->
+<div style="background:var(--gray50);padding:var(--space-2xl) 0" id="variables">
+  <div class="page" style="padding-top:0;padding-bottom:0">
+    <span class="s-label">Módulo II · Sección 5.2</span>
+    <h2 class="section-title" style="margin-bottom:8px">Variables en la Investigación</h2>
+
+    <div class="callout callout-teal">
+      <h4>Definición</h4>
+      Según Rojas Soriano: <em>"característica, atributo, propiedad o cualidad que puede estar o no presente en los individuos, grupos o sociedades; puede presentarse en matices, modalidades o grados distintos a lo largo de un continuum."</em>
+    </div>
+
+    <h3 style="margin-bottom:14px">Tipos de Variables</h3>
+    <div class="roles-grid">
+      <div class="role-row">
+        <div class="role-icon">⚙️</div>
+        <div><div class="role-name">Variable Independiente (VI) — La Causa</div><div class="role-desc">El investigador la manipula, controla o selecciona para observar su efecto. Representa la causa o condición antecedente en la relación de estudio.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">📏</div>
+        <div><div class="role-name">Variable Dependiente (VD) — El Efecto</div><div class="role-desc">Se mide u observa para detectar cambios. Constituye el efecto o consecuencia que se espera resulte de la variable independiente.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">🔒</div>
+        <div><div class="role-name">Variable de Control</div><div class="role-desc">Se mantiene constante para evitar que interfiera con la relación estudiada, asegurando que los resultados sean atribuibles a la VI.</div></div>
+      </div>
+      <div class="role-row">
+        <div class="role-icon">⚡</div>
+        <div><div class="role-name">Variable de Confusión</div><div class="role-desc">Factores externos que pueden influir en los resultados. Deben identificarse para evitar conclusiones erróneas sobre relaciones causales.</div></div>
+      </div>
+    </div>
+
+    <!-- DEFINICIÓN CONCEPTUAL vs OPERACIONAL -->
+    <section>
+      <h3 style="margin-bottom:14px">Definición Conceptual vs. Operacional</h3>
+      <div class="memory-box">
+        <h4>🧠 Para no confundirlas</h4>
+        <p><strong>Conceptual:</strong> ¿QUÉ ES la variable? (teórica, abstracta) — viene del marco teórico.</p>
+        <p><strong>Operacional:</strong> ¿CÓMO SE MIDE? (práctica, concreta) — dice el instrumento y la escala.</p>
+      </div>
+
+      <div class="card card-elevated mt-md" style="overflow-x:auto">
+        <table class="comp-table">
+          <thead><tr><th>Característica</th><th>Definición Conceptual</th><th>Definición Operacional</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Pregunta central</strong></td><td>¿Qué es la variable?</td><td>¿Cómo se mide la variable?</td></tr>
+            <tr><td><strong>Enfoque</strong></td><td>Teórico y abstracto</td><td>Práctico y concreto</td></tr>
+            <tr><td><strong>Propósito</strong></td><td>Fundamentar en el marco teórico</td><td>Especificar procedimientos de medición</td></tr>
+            <tr><td><strong>Ejemplo</strong></td><td>"La motivación es el impulso interno que dirige el comportamiento hacia metas"</td><td>"Puntaje en el Cuestionario de Motivación Académica"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid-2 mt-md">
+        <div class="card card-teal">
+          <div class="card-title">Definición Conceptual</div>
+          <p style="font-size:13px"><strong>Variable: Estrés</strong></p>
+          <p style="font-size:13px">Estado de tensión emocional y física que experimenta una persona ante demandas que percibe como amenazantes o superiores a sus recursos de afrontamiento.</p>
+          <div style="margin-top:8px"><span class="tag tag-teal">teórica</span><span class="tag tag-navy">abstracta</span></div>
+        </div>
+        <div class="card card-violet">
+          <div class="card-title">Definición Operacional — Estrés</div>
+          <ul style="font-size:13px;line-height:2">
+            <li><strong>Instrumento:</strong> Escala de Estrés Percibido</li>
+            <li><strong>Procedimiento:</strong> Cuestionario de 10 ítems en formato digital</li>
+            <li><strong>Escala:</strong> Likert 5 puntos (0=Nunca a 4=Muy a menudo)</li>
+            <li><strong>Puntaje:</strong> Suma total (rango 0–40)</li>
+            <li><strong>Categorías:</strong> Bajo (0–13) · Moderado (14–26) · Alto (27–40)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPORTANCIA DEFINICIÓN CONCEPTUAL -->
+    <section>
+      <h3 style="margin-bottom:14px">Importancia de Definir las Variables</h3>
+      <div class="benefits">
+        <div class="benefit-chip">
+          <div class="bi">🏛️</div>
+          <div class="benefit-chip-text"><strong>Fundamentación teórica</strong><span>Ancla la variable en un cuerpo de conocimientos establecidos.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">🔬</div>
+          <div class="benefit-chip-text"><strong>Comprensión científica</strong><span>Facilita la comunicación rigurosa entre investigadores.</span></div>
+        </div>
+        <div class="benefit-chip">
+          <div class="bi">📐</div>
+          <div class="benefit-chip-text"><strong>Base para operacionalización</strong><span>El concepto abstracto se convierte en indicadores medibles.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EJEMPLO EJERCICIO Y PESO -->
+    <section>
+      <h3 style="margin-bottom:14px">Ejemplo Completo — Ejercicio y Pérdida de Peso</h3>
+      <div class="card card-elevated">
+        <div class="sticky" style="margin-bottom:14px">Investigación sobre el efecto de diferentes programas de ejercicio en la reducción de peso corporal en adultos con sobrepeso.</div>
+        <div class="grid-2">
+          <div>
+            <div class="card card-teal" style="margin-bottom:10px">
+              <div class="card-title">VI — Programa de Ejercicio</div>
+              <p style="font-size:13px"><strong>Conceptual:</strong> Actividad física estructurada y planificada para mejorar la condición física.</p>
+              <p style="font-size:13px"><strong>Operacional:</strong> Tres modalidades: (A) aeróbico 30 min/día, (B) resistencia 45 min/día, (C) combinado — durante 12 semanas, 5 días/semana.</p>
+            </div>
+          </div>
+          <div>
+            <div class="card card-violet">
+              <div class="card-title">VD — Pérdida de Peso</div>
+              <p style="font-size:13px"><strong>Conceptual:</strong> Reducción de la masa corporal total del individuo.</p>
+              <p style="font-size:13px"><strong>Operacional:</strong> Kilogramos perdidos medidos con balanza digital calibrada, pesaje en ayunas, mediciones semanales pre y post intervención.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- FLASHCARDS -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="flashcards">
+  <span class="s-label">Técnica de memorización</span>
+  <h2 class="section-title" style="margin-bottom:8px">🃏 Flashcards — Haz clic para voltear</h2>
+  <p style="margin-bottom:20px;color:var(--ink3);font-size:14px">Haz clic en cada tarjeta para ver la respuesta.</p>
+
+  <div class="grid-2" id="fcContainer">
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Cuáles son los 5 criterios para formular adecuadamente un problema?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text">1. Descripción del problema<br>2. Delimitación geográfica<br>3. Delimitación temporal<br>4. Definición e investigación<br>5. Formulación (pregunta central)<br><em style="font-size:12px">Mnemotecnia: D·G·T·J·F</em></div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Qué significa SMART en la redacción de objetivos?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text"><strong>S</strong>pecific (Específico)<br><strong>M</strong>easurable (Medible)<br><strong>A</strong>chievable (Alcanzable)<br><strong>R</strong>elevant (Relevante)<br><strong>T</strong>ime-bound (Con tiempo definido)</div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Cuáles son los 4 componentes del Marco Teórico?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta — "A·B·J·D"</div><div class="fc-text"><strong>A</strong>ntecedentes de la investigación<br><strong>B</strong>ases teóricas<br><strong>J</strong>ustificación de bases teóricas<br><strong>D</strong>efinición de términos básicos</div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Qué alcance NO formula hipótesis?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text">El alcance <strong>Exploratorio</strong> no formula hipótesis (solo genera hipótesis preliminares para estudios futuros, no las prueba). El Descriptivo solo si se pronostica un hecho.</div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Cuál es el principio metodológico más importante del alcance correlacional?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text"><strong>Correlación NO implica causalidad.</strong><br>Si A y B están correlacionadas, eso no significa que A cause B. El investigador observa, no manipula variables.</div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Cuál es la diferencia entre definición conceptual y operacional?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text"><strong>Conceptual:</strong> ¿QUÉ ES? → teórica, abstracta, viene del marco teórico.<br><strong>Operacional:</strong> ¿CÓMO SE MIDE? → práctica, concreta, define instrumento, escala y procedimiento.</div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Cuáles son los 3 tipos de preguntas cuantitativas?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text"><strong>Descriptivas:</strong> asocian una cantidad a la variable.<br><strong>Comparativas:</strong> comparan dos o más grupos.<br><strong>Relacionales:</strong> buscan asociación o causalidad entre variables.</div></div>
+    </div></div>
+
+    <div class="flashcard-wrap"><div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front"><div class="fc-label">Pregunta</div><div class="fc-text">¿Qué 3 palabras clave definen una hipótesis?</div><div class="fc-hint">Toca para ver la respuesta</div></div>
+      <div class="fc-back"><div class="fc-label">Respuesta</div><div class="fc-text"><strong>Provisional</strong> — es una respuesta tentativa, no definitiva.<br><strong>Relación</strong> — entre dos o más variables.<br><strong>Comprobable</strong> — puede someterse a prueba empírica.</div></div>
+    </div></div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- QUIZ -->
+<!-- ═══════════════════════════════════ -->
+<div style="background:var(--navy-bg);padding:var(--space-2xl) 0" id="quiz">
+  <div class="page" style="padding-top:0;padding-bottom:0">
+    <span class="s-label">Autoevaluación</span>
+    <h2 class="section-title" style="margin-bottom:8px">🧠 Quiz de Autoevaluación</h2>
+    <p style="margin-bottom:24px;color:var(--ink3);font-size:14px">Pon a prueba tu conocimiento. Haz clic en la respuesta correcta.</p>
+
+    <div class="qa-list" id="quizContainer">
+
+      <!-- Q1 -->
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">1. ¿Cuántos criterios existen para formular adecuadamente un problema de investigación?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">3 criterios</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">5 criterios</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">7 criterios</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">4 criterios</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb1"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">2. En la metodología SMART, ¿qué significa la "A"?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Aplicable</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Analítico</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">Alcanzable (Achievable)</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Actualizado</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb2"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">3. ¿Cuál es el alcance que NO formula hipótesis?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Correlacional</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Explicativo</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">Exploratorio</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Descriptivo (siempre)</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb3"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">4. ¿Cuáles son los 4 componentes del Marco Teórico?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Objetivos, hipótesis, variables, alcance</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">Antecedentes, bases teóricas, justificación de bases, definición de términos</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Descripción, geografía, tiempo, formulación</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Identificar, justificar, establecer, analizar</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb4"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">5. "El tabaquismo está relacionado con la presencia de padecimientos pulmonares." ¿Qué tipo de hipótesis es?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Hipótesis nula</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Hipótesis causal</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">Hipótesis correlacional</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Hipótesis alternativa</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb5"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">6. La definición operacional de una variable responde a la pregunta:</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">¿Qué es la variable teóricamente?</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">¿Cómo se mide, evalúa u observa la variable?</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">¿Por qué es relevante la variable?</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">¿En qué contexto surge la variable?</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb6"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">7. ¿Qué progresión correcta muestran los alcances de menor a mayor profundidad?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Explicativo → Correlacional → Descriptivo → Exploratorio</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">Exploratorio → Descriptivo → Correlacional → Explicativo</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Descriptivo → Exploratorio → Explicativo → Correlacional</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Correlacional → Descriptivo → Explicativo → Exploratorio</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb7"></div>
+      </div>
+
+      <div class="card card-elevated" style="margin-bottom:0">
+        <div class="quiz-question">8. ¿Cuál de las siguientes afirmaciones sobre la hipótesis nula (H₀) es CORRECTA?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">El investigador la plantea porque cree que es verdad</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Propone una relación positiva entre variables</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, true)">Afirma que NO existe relación entre variables; es el punto de partida estadístico que se busca refutar</button>
+          <button class="quiz-opt" onclick="checkAnswer(this, false)">Es la hipótesis principal de la investigación</button>
+        </div>
+        <div class="quiz-feedback text-accent" id="fb8"></div>
+      </div>
+
+    </div>
+
+    <div class="callout callout-teal mt-lg" id="quizScore" style="display:none">
+      <h4>Tu resultado</h4>
+      <p id="scoreText"></p>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-accent" onclick="showScore()">Ver mi puntaje 🎯</button>
+      <button class="btn btn-primary" onclick="resetQuiz()" style="margin-left:10px">Reiniciar 🔄</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESUMEN FINAL -->
+<div style="background:var(--navy);padding:var(--space-2xl) 0">
+  <div class="page" style="padding-top:0;padding-bottom:0">
+    <h2 style="color:#fff;margin-bottom:20px">📋 Resumen Ejecutivo — Todo en un vistazo</h2>
+    <div class="grid-2">
+      <div class="card card-elevated">
+        <div class="card-title">Módulo II · Formulación del Problema</div>
+        <ul style="font-size:13px;line-height:2">
+          <li><strong>5 criterios:</strong> D·G·T·J·F</li>
+          <li><strong>Objetivos SMART:</strong> E·M·A·R·T</li>
+          <li><strong>Tipos de preguntas:</strong> cuantitativas (descriptivas, comparativas, relacionales), cualitativas, mixtas</li>
+          <li><strong>Justificación:</strong> Teórica · Práctica · Metodológica · Social</li>
+        </ul>
+      </div>
+      <div class="card card-elevated">
+        <div class="card-title">Marco Teórico</div>
+        <ul style="font-size:13px;line-height:2">
+          <li><strong>4 componentes:</strong> A·B·J·D</li>
+          <li><strong>4 pasos:</strong> I·J·E·A</li>
+          <li><strong>4 tipos:</strong> Referencial · Conceptual · Legal · Histórico</li>
+          <li><strong>4 roles:</strong> IP · Co-investigadores · Técnicos · Asesores</li>
+        </ul>
+      </div>
+      <div class="card card-elevated">
+        <div class="card-title">Alcance de la Investigación</div>
+        <ul style="font-size:13px;line-height:2">
+          <li><strong>Exploratorio:</strong> fenómenos nuevos, sin hipótesis</li>
+          <li><strong>Descriptivo:</strong> características, hipótesis si pronóstica</li>
+          <li><strong>Correlacional:</strong> relaciones entre variables, hipótesis correlacional</li>
+          <li><strong>Explicativo:</strong> causas, hipótesis causal</li>
+        </ul>
+      </div>
+      <div class="card card-elevated">
+        <div class="card-title">Hipótesis y Variables</div>
+        <ul style="font-size:13px;line-height:2">
+          <li><strong>Hipótesis:</strong> provisional · relación · comprobable</li>
+          <li><strong>Tipos H:</strong> Trabajo (H₁) · Nula (H₀) · Alternativa (Hₐ) · Causal · Correlacional</li>
+          <li><strong>Variables:</strong> VI (causa) · VD (efecto) · Control · Confusión</li>
+          <li><strong>Definición conceptual:</strong> ¿qué es? vs. <strong>operacional:</strong> ¿cómo se mide?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// PROGRESS BAR
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+});
+
+// ACCORDION
+function toggleQA(btn) {
+  const item = btn.closest('.qa-item');
+  const answer = item.querySelector('.qa-answer');
+  item.classList.toggle('open');
+  answer.classList.toggle('visible');
+}
+
+// FLASHCARDS — handled by onclick
+
+// QUIZ
+let answers = {};
+let questionCount = 8;
+
+function checkAnswer(btn, isCorrect) {
+  const allBtns = btn.closest('.quiz-options').querySelectorAll('.quiz-opt');
+  allBtns.forEach(b => b.disabled = true);
+  if (isCorrect) {
+    btn.classList.add('correct');
+    const qNum = Array.from(btn.closest('.card').parentNode.children).indexOf(btn.closest('.card')) + 1;
+    answers[btn.closest('.card').querySelector('.quiz-question').textContent] = true;
+  } else {
+    btn.classList.add('wrong');
+    answers[btn.closest('.card').querySelector('.quiz-question').textContent] = false;
+    // highlight correct
+    allBtns.forEach(b => { if (b.onclick.toString().includes('true')) b.classList.add('correct'); });
+  }
+}
+
+function showScore() {
+  const opts = document.querySelectorAll('.quiz-opt');
+  let correct = 0, total = questionCount;
+  document.querySelectorAll('.quiz-options').forEach(qo => {
+    const correctBtn = Array.from(qo.querySelectorAll('.quiz-opt')).find(b => b.classList.contains('correct'));
+    if (correctBtn) correct++;
+  });
+  const score = document.getElementById('quizScore');
+  score.style.display = 'block';
+  const pct = Math.round((correct / total) * 100);
+  let msg = pct >= 80 ? '🎉 ¡Excelente!' : pct >= 60 ? '👍 Bien, sigue repasando.' : '📚 Repasa el material nuevamente.';
+  document.getElementById('scoreText').innerHTML = `Obtuviste <strong>${correct} de ${total}</strong> correctas (${pct}%). ${msg}`;
+}
+
+function resetQuiz() {
+  answers = {};
+  document.querySelectorAll('.quiz-opt').forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = false;
+  });
+  document.getElementById('quizScore').style.display = 'none';
+}
+
+// FADE UP ON SCROLL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.card, .benefit-chip, .role-row').forEach(el => {
+  el.classList.add('fade-up');
+  observer.observe(el);
+});
+
+// NAV PILL ACTIVE STATE
+const sections = document.querySelectorAll('[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  document.querySelectorAll('.nav-pill').forEach(p => {
+    p.classList.remove('active');
+    if (p.getAttribute('href') === '#' + current) p.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
