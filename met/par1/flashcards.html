@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Metodología de la Investigación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans','Inter',sans-serif;background:#FAFAF8;color:#111827;line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:#00C9A7;text-decoration:none}
+strong{font-weight:700}
+ul,ol{padding-left:1.25rem}
+
+/* ── Tokens ── */
+:root{
+  --navy:#0F2347;--navy2:#1A3461;
+  --accent:#00C9A7;--accent2:#00A896;
+  --amber:#FFB830;--amber2:#F5A623;
+  --red:#EF4444;--red2:#E84855;
+  --violet:#7C3AED;
+  --accent-bg:#E6F7F5;--amber-bg:#FEF3DC;--red-bg:#FDECEA;--violet-bg:#F3EFFE;--navy-bg:#E8EDF5;
+  --white:#fff;--bg:#FAFAF8;--gray100:#F1F5F9;--gray200:#E2E8F0;--gray300:#E5E7EB;
+  --gray400:#94A3B8;--gray500:#6B7280;--gray600:#475569;--gray700:#374151;--gray800:#1E293B;
+  --ink:#111827;--ink2:#374151;--ink3:#6B7280;--line:#E5E7EB;
+  --plan:#1D3557;--plan-bg:#E8EDF5;--do:#00A896;--do-bg:#E6F7F5;
+  --check:#7C3AED;--check-bg:#F3EFFE;--act:#F5A623;--act-bg:#FEF3DC;--act-dark:#B45309;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-serif:'DM Serif Display',serif;
+  --font-body:'DM Sans','Inter',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --radius-sm:8px;--radius:12px;--radius-lg:16px;
+  --shadow-sm:0 2px 8px rgba(15,35,71,.08);
+  --shadow:0 4px 24px rgba(15,35,71,.12);
+  --shadow-lg:0 12px 40px rgba(15,35,71,.16);
+  --space-xs:4px;--space-sm:8px;--space-md:16px;--space-lg:24px;--space-xl:40px;--space-2xl:64px;
+  --transition:.2s ease;
+}
+
+/* ── Typography ── */
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--navy);line-height:1.2}
+h1{font-size:clamp(26px,5vw,48px);font-weight:700}
+h2{font-size:clamp(20px,3.5vw,30px);font-weight:700}
+h3{font-size:clamp(16px,2.5vw,22px);font-weight:600}
+h4{font-size:15px;font-weight:600}
+p{color:var(--ink2);line-height:1.72;margin-bottom:10px}
+p:last-child{margin-bottom:0}
+
+/* ── Progress bar ── */
+.pb-wrap{position:fixed;top:0;left:0;width:100%;height:3px;z-index:9999}
+.pb{height:100%;background:linear-gradient(90deg,var(--accent),var(--amber2));width:0;transition:width .1s linear}
+
+/* ── Topbar ── */
+.topbar{
+  position:sticky;top:3px;z-index:200;
+  background:var(--navy);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px var(--space-lg);gap:var(--space-md);flex-wrap:wrap;
+}
+.topbar-title{font-family:var(--font-serif);font-size:16px;color:#fff;letter-spacing:-.01em}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.progress-text{font-size:12px;color:rgba(255,255,255,.7);font-family:var(--font-display)}
+.progress-ring{font-size:12px;font-weight:700;color:var(--accent)}
+.btn-shuffle{
+  background:rgba(0,201,167,.2);border:1px solid rgba(0,201,167,.4);
+  color:var(--accent);font-family:var(--font-display);font-size:12px;font-weight:600;
+  padding:5px 14px;border-radius:100px;cursor:pointer;transition:all var(--transition);
+}
+.btn-shuffle:hover{background:rgba(0,201,167,.35)}
+.btn-reset{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.8);font-family:var(--font-display);font-size:12px;font-weight:600;
+  padding:5px 14px;border-radius:100px;cursor:pointer;transition:all var(--transition);
+}
+.btn-reset:hover{background:rgba(255,255,255,.2)}
+
+/* ── Hero ── */
+.hero{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#0e3060 100%);
+  color:var(--white);padding:var(--space-2xl) var(--space-lg) 72px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,201,167,.15) 0%,transparent 70%);
+  top:-200px;right:-150px;pointer-events:none;
+}
+.hero h1{color:var(--white);margin-bottom:var(--space-md)}
+.hero h1 span{color:var(--accent)}
+.hero p{font-size:clamp(13px,2vw,16px);color:rgba(255,255,255,.72);max-width:560px;margin:0 auto 36px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:var(--space-sm);
+  background:rgba(0,201,167,.15);border:1px solid rgba(0,201,167,.4);
+  color:var(--accent);font-family:var(--font-display);
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 14px;border-radius:100px;margin-bottom:var(--space-lg);
+}
+.hero-stats{display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat strong{display:block;font-family:var(--font-display);font-size:34px;font-weight:700;color:var(--accent);line-height:1}
+.hero-stat span{font-size:11px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.06em}
+
+/* ── Filter nav ── */
+.nav-pills{
+  position:sticky;top:45px;z-index:100;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--gray200);
+  padding:10px var(--space-lg);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+}
+.nav-pills::-webkit-scrollbar{display:none}
+.nav-pill{
+  flex-shrink:0;padding:6px 16px;border-radius:100px;border:none;cursor:pointer;
+  font-family:var(--font-display);font-size:12px;font-weight:600;
+  background:var(--gray100);color:var(--gray600);transition:background var(--transition),color var(--transition);
+}
+.nav-pill:hover,.nav-pill.active{color:var(--white)}
+.nav-pill.active[data-cat="all"],.nav-pill[data-cat="all"]:hover{background:var(--navy)}
+.nav-pill.active[data-cat="formulacion"],.nav-pill[data-cat="formulacion"]:hover{background:var(--navy)}
+.nav-pill.active[data-cat="marco"],.nav-pill[data-cat="marco"]:hover{background:var(--accent2)}
+.nav-pill.active[data-cat="alcance"],.nav-pill[data-cat="alcance"]:hover{background:var(--violet)}
+.nav-pill.active[data-cat="hipotesis"],.nav-pill[data-cat="hipotesis"]:hover{background:var(--red2)}
+.nav-pill.active[data-cat="variables"],.nav-pill[data-cat="variables"]:hover{background:var(--amber2);color:var(--ink)}
+
+/* ── Grid section ── */
+.section{max-width:1200px;margin:0 auto;padding:var(--space-xl) var(--space-lg) 80px}
+.cards-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:var(--space-lg);flex-wrap:wrap;gap:var(--space-sm);
+}
+.cards-count{font-size:13px;color:var(--ink3);font-family:var(--font-display)}
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:var(--space-md);
+}
+
+/* ── Flashcard ── */
+.fc-wrap{
+  perspective:1000px;cursor:pointer;
+  min-height:240px;position:relative;
+}
+.fc{
+  position:relative;width:100%;height:100%;min-height:240px;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);
+}
+.fc.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{
+  position:absolute;width:100%;min-height:240px;top:0;left:0;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:var(--radius-lg);padding:var(--space-lg);
+  display:flex;flex-direction:column;
+}
+.fc-back{transform:rotateY(180deg)}
+
+/* Front styles */
+.fc-front{
+  background:var(--navy);border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+}
+.fc-front:hover{box-shadow:var(--shadow-lg)}
+.fc-front-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.fc-num{
+  font-family:var(--font-mono);font-size:11px;font-weight:500;
+  color:rgba(255,255,255,.35);
+}
+.fc-tag{
+  font-family:var(--font-display);font-size:10px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 10px;border-radius:100px;
+}
+.fc-q{
+  font-family:var(--font-display);font-size:14px;font-weight:600;
+  color:var(--white);line-height:1.55;flex:1;
+  display:flex;align-items:center;
+}
+.fc-hint{
+  margin-top:auto;padding-top:12px;
+  font-size:11px;color:rgba(255,255,255,.35);
+  display:flex;align-items:center;gap:6px;
+}
+.fc-hint::before{content:'↻';font-size:14px}
+
+/* Back styles */
+.fc-back{
+  background:var(--white);border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.fc-back-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.fc-back-label{
+  font-family:var(--font-display);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);
+}
+.fc-a{
+  font-size:13.5px;color:var(--ink2);line-height:1.68;flex:1;
+}
+.fc-seen-badge{
+  display:none;align-items:center;gap:4px;
+  font-size:11px;font-weight:700;font-family:var(--font-display);
+  color:var(--accent2);
+}
+.fc-wrap.seen .fc-seen-badge{display:flex}
+.fc-wrap.seen .fc-front{background:linear-gradient(135deg,#0a3d2e,#0d2a4a)}
+.fc-wrap.seen .fc-front::after{
+  content:'✓';position:absolute;bottom:12px;right:14px;
+  font-size:16px;color:var(--accent);font-weight:700;
+}
+
+/* Category accent bar on back */
+.fc-back::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+}
+.fc-wrap[data-cat="formulacion"] .fc-back::before{background:var(--navy)}
+.fc-wrap[data-cat="marco"] .fc-back::before{background:var(--accent2)}
+.fc-wrap[data-cat="alcance"] .fc-back::before{background:var(--violet)}
+.fc-wrap[data-cat="hipotesis"] .fc-back::before{background:var(--red2)}
+.fc-wrap[data-cat="variables"] .fc-back::before{background:var(--amber2)}
+
+/* Tag colors per category */
+.fc-wrap[data-cat="formulacion"] .fc-tag{background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
+.fc-wrap[data-cat="marco"] .fc-tag{background:rgba(0,201,167,.2);color:var(--accent)}
+.fc-wrap[data-cat="alcance"] .fc-tag{background:rgba(124,58,237,.25);color:#c4b5fd}
+.fc-wrap[data-cat="hipotesis"] .fc-tag{background:rgba(232,72,85,.25);color:#fca5a5}
+.fc-wrap[data-cat="variables"] .fc-tag{background:rgba(245,166,35,.25);color:#fcd34d}
+
+/* ── Empty state ── */
+.empty-state{
+  grid-column:1/-1;text-align:center;padding:60px 20px;
+  color:var(--ink3);font-family:var(--font-display);font-size:14px;
+}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fc-wrap{animation:fadeUp .4s ease both}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .cards-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .hero{padding:40px 20px 56px}
+  .section{padding:var(--space-lg) var(--space-md) 60px}
+}
+@media(max-width:480px){
+  .cards-grid{grid-template-columns:1fr}
+  .topbar{padding:10px var(--space-md)}
+}
+@media(prefers-reduced-motion:reduce){
+  .fc{transition:none}
+  .fc-wrap{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll progress -->
+<div class="pb-wrap"><div class="pb" id="pb"></div></div>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-title">Metodología de la Investigación</div>
+  <div class="topbar-right">
+    <span class="progress-text">Vistas: <span class="progress-ring" id="seenCount">0</span> / <span id="totalCount">200</span></span>
+    <button class="btn-shuffle" onclick="shuffleCards()">⇄ Mezclar</button>
+    <button class="btn-reset" onclick="resetSeen()">↺ Reiniciar</button>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">📚 Profa. Maritza Morales · Módulo I y II</div>
+  <h1>Flashcards de <span>Metodología</span></h1>
+  <p>200 tarjetas únicas. Haz clic para voltear y ver la respuesta. Todas las tarjetas vistas se marcan con ✓.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>200</strong><span>Tarjetas totales</span></div>
+    <div class="hero-stat"><strong>5</strong><span>Categorías</span></div>
+    <div class="hero-stat"><strong id="pctSeen">0%</strong><span>Completado</span></div>
+  </div>
+</section>
+
+<!-- Category filter -->
+<nav class="nav-pills" id="filterNav">
+  <button class="nav-pill active" data-cat="all">Todas (200)</button>
+  <button class="nav-pill" data-cat="formulacion">🔵 Formulación del Problema</button>
+  <button class="nav-pill" data-cat="marco">🟢 Marco Teórico</button>
+  <button class="nav-pill" data-cat="alcance">🟣 Alcance</button>
+  <button class="nav-pill" data-cat="hipotesis">🔴 Hipótesis</button>
+  <button class="nav-pill" data-cat="variables">🟡 Variables</button>
+</nav>
+
+<!-- Cards section -->
+<div class="section">
+  <div class="cards-header">
+    <span class="cards-count" id="cardsCount">Mostrando 200 tarjetas</span>
+  </div>
+  <div class="cards-grid" id="grid"></div>
+</div>
+
+<script>
+/* ======================================================
+   DATA — 200 flashcards únicas
+   cat: formulacion | marco | alcance | hipotesis | variables
+====================================================== */
+const CARDS = [
+/* ── FORMULACIÓN DEL PROBLEMA (1-45) ── */
+{id:1,cat:"formulacion",q:"¿Qué es la formulación del problema?",a:"Es el proceso de definir y expresar de manera clara, concisa y específica una situación, dificultad o brecha de conocimiento que requiere solución o investigación, sirviendo como punto de partida y guía del estudio."},
+{id:2,cat:"formulacion",q:"¿Cuál es el punto de partida de cualquier investigación?",a:"La formulación del problema, ya que define claramente lo que se busca aprender o entender antes de iniciar cualquier proceso investigativo."},
+{id:3,cat:"formulacion",q:"¿Cómo se plantea la formulación del problema?",a:"A través de una pregunta de investigación que el investigador espera responder, sintetizando la identificación, definición y formulación propiamente dicha del problema."},
+{id:4,cat:"formulacion",q:"¿Qué es el planteamiento del problema?",a:"Consiste en describir de manera amplia la situación objeto de estudio, contextualizándola y estableciendo las preguntas que guiarán la investigación."},
+{id:5,cat:"formulacion",q:"¿Qué implica plantear formalmente un problema?",a:"Desarrollar, explicar o exponer con amplitud la idea de investigación, afinándola y estructurándola formalmente para que sirva de guía al proyecto."},
+{id:6,cat:"formulacion",q:"¿Qué son los criterios en la formulación del problema?",a:"Son las pautas clave para definir una pregunta de investigación clara, investigable y relevante."},
+{id:7,cat:"formulacion",q:"Criterio 1: ¿Qué incluye la descripción del problema?",a:"La situación que origina la investigación, sus antecedentes, el contexto, la realidad donde surge la problemática y la importancia de atenderla."},
+{id:8,cat:"formulacion",q:"¿Qué se busca mostrar en la descripción del problema?",a:"Por qué el tema es relevante y qué consecuencias tiene no atenderlo, justificando así la necesidad del estudio."},
+{id:9,cat:"formulacion",q:"Criterio 2: ¿Qué es delimitar el objeto en el espacio-geográfico?",a:"Definir el lugar físico donde se manifiesta el fenómeno investigado, para evitar que la investigación sea demasiado amplia o vaga."},
+{id:10,cat:"formulacion",q:"Ejemplo de delimitación geográfica (general → específico)",a:"General: 'La contaminación del agua'. Delimitado: 'La contaminación del río Juan Díaz en la comunidad de El Chirú, Coclé.'"},
+{id:11,cat:"formulacion",q:"Criterio 3: ¿Qué es la delimitación del espacio temporal?",a:"Establecer el período de tiempo en el cual se va a investigar el problema, lo que orienta el alcance cronológico del estudio."},
+{id:12,cat:"formulacion",q:"Ejemplo de delimitación temporal",a:"'La contaminación del río Juan Díaz en la comunidad de El Chirú, Coclé, entre los años 2015 y 2020.'"},
+{id:13,cat:"formulacion",q:"Criterio 4: ¿Qué es 'Definir e investigar el problema'?",a:"Explicar la relevancia del estudio y las razones por las que debe realizarse; argumentar por qué vale la pena investigar ese problema específico."},
+{id:14,cat:"formulacion",q:"¿Cuáles son los tipos de justificación de una investigación?",a:"Teórica (aporte al conocimiento), práctica (utilidad real), metodológica (innovación en el enfoque) y social (impacto en la comunidad)."},
+{id:15,cat:"formulacion",q:"Criterio 5: ¿En qué consiste la formulación del problema?",a:"Expresar el problema en forma de una pregunta central que guíe todo el estudio; debe ser clara, precisa y delimitada en tiempo, espacio y población."},
+{id:16,cat:"formulacion",q:"¿Cómo debe ser la pregunta central de investigación?",a:"Clara, precisa, delimitada en tiempo, espacio y población, e investigable de manera sistemática."},
+{id:17,cat:"formulacion",q:"Ejemplo de pregunta de investigación bien formulada",a:"¿Cómo influye la calidad del servicio en la satisfacción de los clientes de X empresa en 2025?"},
+{id:18,cat:"formulacion",q:"Ejemplo de pregunta general sobre satisfacción laboral",a:"¿Cómo se asocian la satisfacción laboral y la variedad en el trabajo en la gestión gerencial de empresas industriales con más de mil trabajadores en Ciudad de Panamá?"},
+{id:19,cat:"formulacion",q:"Ejemplo de pregunta específica sobre motivación intrínseca",a:"¿Existe alguna relación entre el nivel jerárquico y la motivación intrínseca en los empleados de la empresa Metales y Metales?"},
+{id:20,cat:"formulacion",q:"Ejemplo de pregunta sobre medios de comunicación y voto",a:"¿La exposición de los votantes a los debates televisivos de los candidatos está relacionada con la decisión de votar o de abstenerse?"},
+{id:21,cat:"formulacion",q:"Descripción del problema: caso río Juan Díaz",a:"Los habitantes de El Chirú, Coclé, notaron cambios en el color y olor del agua del río Juan Díaz, afectando actividades cotidianas como lavar, regar cultivos y consumo."},
+{id:22,cat:"formulacion",q:"Delimitación geográfica: caso río Juan Díaz",a:"El problema se centra en el río Juan Díaz, ubicado en la comunidad de El Chirú, provincia de Coclé, Panamá."},
+{id:23,cat:"formulacion",q:"Delimitación temporal: caso río Juan Díaz",a:"Se estudia el período 2015-2020, años en los que los pobladores reportaron un aumento visible en la contaminación."},
+{id:24,cat:"formulacion",q:"Formulación del problema: caso río Juan Díaz",a:"¿Cuáles son las principales causas de la contaminación del río Juan Díaz en El Chirú, Coclé, durante 2015-2020, y qué efectos ha tenido en la calidad de vida de sus habitantes?"},
+{id:25,cat:"formulacion",q:"¿Qué es un objetivo de investigación?",a:"Es el enunciado vinculado a la pregunta de investigación que funciona como guía del proceso, expresando las expectativas y resultados que se esperan obtener del estudio."},
+{id:26,cat:"formulacion",q:"¿Cuál es la finalidad de los objetivos de investigación?",a:"Impulsar el proyecto de investigación, incluyendo la recolección de datos, el análisis y las conclusiones."},
+{id:27,cat:"formulacion",q:"¿Qué es el Objetivo General?",a:"Representa el propósito amplio y fundamental del estudio; expresa la meta principal que se busca alcanzar al finalizar la investigación."},
+{id:28,cat:"formulacion",q:"¿Qué son los Objetivos Específicos?",a:"Presentan el 'cómo' se alcanzará el objetivo general. Son metas del proceso investigativo, no un listado de actividades a realizar."},
+{id:29,cat:"formulacion",q:"Característica 1: ¿Qué significa que los objetivos son 'claros'?",a:"Indican los tipos de variables y los métodos de cuantificación. En lo cuantitativo, las variables deben ser tangibles y medibles con procedimientos aritméticos."},
+{id:30,cat:"formulacion",q:"Característica 2: ¿Qué significa que los objetivos son 'concisos'?",a:"Expresan lo que se busca sin redundancias, son fáciles de entender y usan pocas palabras precisas que aportan al sentido del objetivo."},
+{id:31,cat:"formulacion",q:"¿Cuántos objetivos se recomienda no superar?",a:"Cinco objetivos o menos, para evitar sentirse abrumado por una lista extensa y mantener el enfoque del proyecto."},
+{id:32,cat:"formulacion",q:"¿Qué es el método SMART?",a:"Herramienta de planificación para formular objetivos Específicos, Medibles, Alcanzables, Relevantes y con Tiempo definido."},
+{id:33,cat:"formulacion",q:"Paso 1 para redactar objetivos de investigación",a:"Determinar el objetivo principal del proyecto de investigación, estableciendo la meta central que guiará todo el proceso."},
+{id:34,cat:"formulacion",q:"Paso 2 para redactar objetivos de investigación",a:"Desglosar el enfoque de la investigación en objetivos más pequeños y separados: un objetivo general y varios específicos y limitados."},
+{id:35,cat:"formulacion",q:"Paso 3 (retroalimentación) en los objetivos",a:"Redactar un borrador y solicitar la revisión de un colega o mentor para verificar que los objetivos sean claros y bien formulados."},
+{id:36,cat:"formulacion",q:"Ejemplo de objetivo general (deserción en cursos virtuales UTP)",a:"Evaluar las causas de la deserción de los estudiantes matriculados en los cursos virtuales ofrecidos por la Universidad Tecnológica de Panamá."},
+{id:37,cat:"formulacion",q:"Ejemplo de objetivo general (redes sociales y rendimiento académico)",a:"Analizar la relación entre el uso de redes sociales y el rendimiento académico en estudiantes de nivel medio superior en Ciudad de México."},
+{id:38,cat:"formulacion",q:"¿Qué es la pregunta de investigación?",a:"Es el cuestionamiento central que un estudio se plantea responder. Es el primer paso de la metodología y determina el ritmo de trabajo de la investigación."},
+{id:39,cat:"formulacion",q:"Tipos de preguntas de investigación cuantitativa",a:"Descriptivas (miden variables), comparativas (comparan dos o más grupos) y relacionales (buscan asociaciones o causalidades entre variables)."},
+{id:40,cat:"formulacion",q:"Características de las preguntas de investigación cualitativa",a:"Son adaptables, no-direccionales y más flexibles; generalmente buscan 'descubrir', 'explicar' o 'explorar' el fenómeno estudiado."},
+{id:41,cat:"formulacion",q:"¿Qué son las preguntas de métodos mixtos?",a:"Requieren un conjunto de preguntas tanto cuantitativas como cualitativas, apropiadas cuando el estudio se enfoca en el significado y las diferencias entre ambos métodos."},
+{id:42,cat:"formulacion",q:"Pregunta guía: Naturaleza del problema",a:"¿Qué problema práctico o laguna teórica fundamental se aborda? ¿Por qué merece atención académica?"},
+{id:43,cat:"formulacion",q:"Pregunta guía: Relevancia y audiencia",a:"¿Por qué es importante investigar este tema ahora? ¿Para quién será útil: académicos, formuladores de políticas, profesionales o la población general?"},
+{id:44,cat:"formulacion",q:"Pregunta guía: Estado del conocimiento",a:"¿Qué lagunas, inconsistencias o debates existen en la literatura científica actual sobre el tema? ¿Qué nuevas perspectivas puede aportar el estudio?"},
+{id:45,cat:"formulacion",q:"Pregunta guía: Viabilidad metodológica",a:"¿Se cuenta con los recursos, tiempo y acceso necesarios para responder las preguntas de investigación de manera rigurosa y sistemática?"},
+
+/* ── MARCO TEÓRICO (46-90) ── */
+{id:46,cat:"marco",q:"¿Qué es el Marco Teórico?",a:"Es el conjunto integrado de teorías, conceptos y antecedentes que sustentan una investigación, proporcionando el soporte conceptual necesario para abordar el problema."},
+{id:47,cat:"marco",q:"¿Qué es el 'desarrollo de la perspectiva teórica'?",a:"La etapa en que el investigador reúne, organiza y explica las ideas y teorías existentes sobre su tema, para darle un marco de referencia y sustento a su estudio."},
+{id:48,cat:"marco",q:"Función principal del Marco Teórico",a:"Proporcionar la estructura conceptual necesaria para entender, contextualizar y abordar eficazmente un problema de investigación específico."},
+{id:49,cat:"marco",q:"¿Es el Marco Teórico solo un requisito formal?",a:"No. Es una herramienta estratégica que cumple múltiples funciones y fortalece la validez y el rigor metodológico del estudio."},
+{id:50,cat:"marco",q:"Marco Teórico como 'Brújula Conceptual'",a:"Guía al investigador en la definición del problema, los objetivos y las variables del estudio, orientando todo el proceso investigativo."},
+{id:51,cat:"marco",q:"Marco Teórico como 'Marco Científico'",a:"Ubica el tema dentro del conocimiento existente y las aproximaciones previas, otorgando credibilidad y coherencia al estudio."},
+{id:52,cat:"marco",q:"Marco Teórico y 'Claridad Conceptual'",a:"Clarifica el significado de términos clave y establece las relaciones entre las variables del estudio, facilitando la comprensión del fenómeno."},
+{id:53,cat:"marco",q:"Marco Teórico y 'Contribución Original'",a:"Señala brechas y limitaciones del conocimiento existente para posicionar la investigación como un aporte innovador al campo académico."},
+{id:54,cat:"marco",q:"Marco Teórico y 'Respaldo Académico'",a:"Proporciona la base teórica para las decisiones metodológicas y las hipótesis del estudio, legitimando el diseño de la investigación."},
+{id:55,cat:"marco",q:"Marco Teórico e 'Innovación'",a:"Identifica vacíos en la literatura para evitar repetición innecesaria y fomentar la originalidad de la nueva investigación."},
+{id:56,cat:"marco",q:"Marco Teórico como 'Referencia para el Análisis'",a:"Sirve como base para comparar los hallazgos del estudio con la teoría existente y fortalecer la discusión de resultados."},
+{id:57,cat:"marco",q:"Paso 1 para construir el Marco Teórico",a:"Identificar las teorías clave que informan la investigación y son pertinentes al problema planteado."},
+{id:58,cat:"marco",q:"Paso 2 para construir el Marco Teórico",a:"Justificar la selección: defender la elección de marcos conceptuales específicos y su pertinencia para el estudio."},
+{id:59,cat:"marco",q:"Paso 3 para construir el Marco Teórico",a:"Establecer conexiones: vincular diferentes perspectivas teóricas para lograr una comprensión holística del fenómeno."},
+{id:60,cat:"marco",q:"Paso 4 para construir el Marco Teórico",a:"Analizar conceptos: evaluar críticamente los conceptos y modelos existentes que fundamentan la investigación."},
+{id:61,cat:"marco",q:"¿Qué implica identificar y delimitar conceptos clave?",a:"Realizar un mapeo detallado de los términos y variables del estudio, definiendo su alcance, significado y relaciones dentro del contexto académico."},
+{id:62,cat:"marco",q:"¿Qué debe lograr el análisis exhaustivo de conceptos?",a:"Definir cada concepto con claridad, establecer límites conceptuales, identificar interconexiones entre variables y determinar los niveles de abstracción necesarios."},
+{id:63,cat:"marco",q:"Ejemplo de límite conceptual: redes informáticas",a:"El estudio se limitará a redes domésticas, excluyendo redes empresariales o de gran escala, para mantener el enfoque de la investigación."},
+{id:64,cat:"marco",q:"Ejemplo de interconexión entre variables (seguridad informática)",a:"La seguridad informática depende de la correcta configuración del router doméstico; los protocolos de comunicación determinan el nivel de protección de la red."},
+{id:65,cat:"marco",q:"Nivel general de abstracción en el Marco Teórico",a:"El concepto general de red informática como sistema de interconexión que permite compartir información mediante protocolos de comunicación."},
+{id:66,cat:"marco",q:"Nivel intermedio de abstracción en el Marco Teórico",a:"Tipos de redes (domésticas vs empresariales) y sus características diferenciadas en términos de escala, seguridad y administración."},
+{id:67,cat:"marco",q:"¿Qué es la revisión de la literatura?",a:"El proceso de buscar, seleccionar, leer y sintetizar estudios y publicaciones previas relacionadas con el tema, para fundamentar teóricamente la investigación."},
+{id:68,cat:"marco",q:"¿Qué es el estado del arte?",a:"El conjunto de conocimientos actuales existentes sobre un tema, que permite identificar brechas del conocimiento y orientar la nueva investigación."},
+{id:69,cat:"marco",q:"¿Para qué sirve revisar la literatura?",a:"Para no repetir lo ya investigado, identificar brechas, seleccionar metodologías adecuadas y fundamentar teóricamente el estudio con evidencia previa."},
+{id:70,cat:"marco",q:"¿Qué es un equipo de investigación?",a:"El grupo de personas con roles diferenciados (investigador principal, co-investigadores, asistentes) que colaboran para ejecutar el proyecto de investigación."},
+{id:71,cat:"marco",q:"¿Qué es un diagrama metodológico?",a:"Representación gráfica que secuencia los pasos de un estudio desde la idea inicial hasta las conclusiones, facilitando la planificación y organización del proyecto."},
+{id:72,cat:"marco",q:"Etapas típicas de un diagrama metodológico",a:"Planteamiento del problema, revisión de literatura, diseño metodológico, recolección y análisis de datos, e informe final de resultados."},
+{id:73,cat:"marco",q:"¿Qué tipos de diagramas se usan en metodología de investigación?",a:"Diagramas de flujo, marcos conceptuales y diagramas de Gantt, cada uno con un propósito específico dentro del proceso investigativo."},
+{id:74,cat:"marco",q:"¿Qué es el esquema presupuestario?",a:"El plan que organiza los recursos necesarios para llevar a cabo la investigación, especialmente los costos, con una visión clara de cuánto se necesita y cómo se distribuirán."},
+{id:75,cat:"marco",q:"Rubro presupuestario: Recursos humanos",a:"Honorarios de investigadores, asistentes, encuestadores y otros profesionales involucrados en el desarrollo del estudio."},
+{id:76,cat:"marco",q:"Rubro presupuestario: Materiales y suministros",a:"Papelería, impresiones, cuestionarios, reactivos y software necesarios para la recolección y procesamiento de datos."},
+{id:77,cat:"marco",q:"Rubro presupuestario: Equipos y tecnología",a:"Computadoras, dispositivos móviles, licencias de programas estadísticos y acceso a bases de datos académicas."},
+{id:78,cat:"marco",q:"Rubro presupuestario: Transporte y logística",a:"Viáticos, combustible y costos de traslados o visitas al área de estudio durante la fase de recolección de datos."},
+{id:79,cat:"marco",q:"Rubro presupuestario: Difusión de resultados",a:"Impresión de informes, preparación de presentaciones y publicación en revistas especializadas o congresos académicos."},
+{id:80,cat:"marco",q:"¿Qué son las contingencias en el presupuesto?",a:"Un porcentaje (normalmente 10%) destinado a imprevistos para cubrir gastos no previstos durante la ejecución de la investigación."},
+{id:81,cat:"marco",q:"¿Qué garantiza combinar diagramas metodológicos con esquemas presupuestarios?",a:"Que los proyectos de investigación se ejecuten eficientemente, dentro de los plazos y recursos establecidos en la planificación."},
+{id:82,cat:"marco",q:"¿Qué es la 'definición e investigación del problema' en el Marco Teórico?",a:"La fase que identifica las causas y efectos del fenómeno estudiado, investiga el origen del problema y analiza sus consecuencias sobre la población o contexto estudiado."},
+{id:83,cat:"marco",q:"Ejemplo de Marco Teórico: tema seguridad en redes domésticas",a:"Se define 'red informática' (dispositivos interconectados) y 'seguridad informática' (protección de integridad, confidencialidad y disponibilidad de la información), estableciendo sus relaciones."},
+{id:84,cat:"marco",q:"¿Cómo se complementan el Marco Teórico y el problema de investigación?",a:"El Marco Teórico proporciona el sustento conceptual para entender el problema, mientras que el problema orienta qué teorías y conceptos deben incluirse en el marco."},
+{id:85,cat:"marco",q:"¿Cuándo se construye el Marco Teórico en el proceso investigativo?",a:"Después de formular el problema de investigación y antes del diseño metodológico, ya que el marco conceptual guía las decisiones metodológicas del estudio."},
+{id:86,cat:"marco",q:"¿Qué es la 'Contribución Original' en el Marco Teórico?",a:"La identificación de brechas, inconsistencias o debates en la literatura existente que permiten posicionar la investigación como un aporte nuevo al conocimiento."},
+{id:87,cat:"marco",q:"¿Qué herramientas usa el Marco Teórico para el análisis?",a:"Teorías, modelos, conceptos y paradigmas que permiten trazar el camino para explorar, analizar y comprender fenómenos complejos con rigurosidad científica."},
+{id:88,cat:"marco",q:"¿Por qué el Marco Teórico no es un simple listado de citas?",a:"Porque debe integrar activamente las teorías y conceptos para explicar el problema, no solo recopilar información; exige análisis, síntesis y argumentación crítica."},
+{id:89,cat:"marco",q:"¿Qué muestra un diagrama de Gantt en investigación?",a:"La distribución temporal de las actividades del proyecto, mostrando qué tareas se realizan en cada período para una gestión eficiente del tiempo."},
+{id:90,cat:"marco",q:"Rubro presupuestario: Capacitación",a:"Talleres previos para encuestadores o formación del equipo en herramientas digitales, técnicas de recolección y procesamiento de datos."},
+
+/* ── ALCANCE (91-135) ── */
+{id:91,cat:"alcance",q:"¿Qué indica el alcance de la investigación?",a:"El nivel de profundidad y amplitud con que se aborda un fenómeno o problema de estudio, determinando el tipo de resultados y conclusiones que se pueden obtener."},
+{id:92,cat:"alcance",q:"¿Es el alcance una jerarquía de valor?",a:"No. Es una decisión estratégica: cada alcance responde a un estado particular del conocimiento sobre el fenómeno estudiado, sin que uno sea mejor que otro."},
+{id:93,cat:"alcance",q:"¿Qué condiciona el diseño metodológico?",a:"El alcance de la investigación, ya que condiciona las técnicas de recolección, el tipo de análisis y la selección de métodos cualitativos, cuantitativos o mixtos."},
+{id:94,cat:"alcance",q:"Importancia del alcance: ¿Qué orienta?",a:"La metodología, facilitando la selección apropiada entre enfoques cualitativos, cuantitativos o mixtos según los objetivos establecidos."},
+{id:95,cat:"alcance",q:"Importancia del alcance: ¿Qué delimita?",a:"El problema de investigación, estableciendo límites claros y objetivos específicos y alcanzables para el estudio."},
+{id:96,cat:"alcance",q:"Importancia del alcance: ¿Qué asegura?",a:"La relevancia del estudio, evitando desviaciones metodológicas y garantizando que los resultados sean pertinentes, válidos y útiles para el campo."},
+{id:97,cat:"alcance",q:"Alcance Exploratorio: ¿cuándo se aplica?",a:"Cuando el fenómeno ha sido escasamente investigado o presenta perspectivas novedosas no abordadas sistemáticamente; se busca generar familiaridad con el tema."},
+{id:98,cat:"alcance",q:"Alcance Exploratorio: ¿qué propósito tiene?",a:"Generar familiaridad con el tema, identificar variables clave y sentar las bases para estudios más rigurosos; genera hipótesis preliminares, no las prueba."},
+{id:99,cat:"alcance",q:"Métodos típicos del alcance exploratorio",a:"Diseños flexibles y emergentes: entrevistas en profundidad, grupos focales, etnografía y revisión de fuentes secundarias."},
+{id:100,cat:"alcance",q:"¿Qué tipo de resultados produce el alcance exploratorio?",a:"Resultados tentativos; no pretenden generalizar ni establecer conclusiones definitivas, sino orientar investigaciones posteriores más rigurosas."},
+{id:101,cat:"alcance",q:"Pregunta típica del alcance exploratorio",a:"¿Qué factores podrían estar asociados con el abandono escolar en zonas rurales? / ¿Cómo viven los trabajadores informales la transición a la economía digital?"},
+{id:102,cat:"alcance",q:"Ejemplo de investigación exploratoria",a:"Estudio sobre el impacto psicológico de la realidad aumentada en adultos mayores: entrevistas semiestructuradas a 12 personas para identificar reacciones emocionales y dificultades de uso."},
+{id:103,cat:"alcance",q:"Alcance Descriptivo: ¿qué busca?",a:"Especificar propiedades, características y perfiles de personas, grupos, comunidades, procesos u objetos sin buscar explicar sus causas."},
+{id:104,cat:"alcance",q:"Alcance Descriptivo: ¿mide causas?",a:"No. Retrata con exactitud cómo es el fenómeno en su contexto natural, describiendo sus características sin proponer relaciones causales."},
+{id:105,cat:"alcance",q:"¿Qué debe poder hacer el investigador en el alcance descriptivo?",a:"Definir qué va a medir antes de recolectar datos, especificando con detalle las dimensiones, categorías o variables del fenómeno a estudiar."},
+{id:106,cat:"alcance",q:"Métodos del alcance descriptivo",a:"Encuestas, observación estructurada, análisis de contenido y estadística descriptiva (frecuencias, tablas, gráficos de distribución)."},
+{id:107,cat:"alcance",q:"¿Para qué sirven los resultados del alcance descriptivo?",a:"Permiten generalizaciones con muestras representativas y sirven de base sólida para estudios correlacionales y explicativos posteriores."},
+{id:108,cat:"alcance",q:"Pregunta típica del alcance descriptivo",a:"¿Cuáles son las principales características sociodemográficas de los emprendedores tecnológicos en Panamá? / ¿Qué hábitos alimenticios predominan en adolescentes de colegios públicos?"},
+{id:109,cat:"alcance",q:"Ejemplo de investigación descriptiva",a:"Encuesta de 45 ítems sobre hábitos de lectura en estudiantes de posgrado panameños: frecuencia, tipos de texto, tiempo diario y formatos (físico, digital, audiolibro)."},
+{id:110,cat:"alcance",q:"Alcance Correlacional: ¿qué analiza?",a:"El grado de relación entre dos o más variables, evaluando asociaciones y tendencias sin establecer relaciones de causalidad directa entre ellas."},
+{id:111,cat:"alcance",q:"Alcance Correlacional: ¿tiene valor predictivo?",a:"Sí, limitado: si A y B están correlacionadas, conocer A ayuda a predecir B, aunque no se puede concluir que A causa B."},
+{id:112,cat:"alcance",q:"Instrumentos estadísticos del alcance correlacional",a:"Coeficientes estadísticos: r de Pearson (variables continuas), rho de Spearman y tau de Kendall (variables ordinales o no paramétricas)."},
+{id:113,cat:"alcance",q:"Principio metodológico más importante del alcance correlacional",a:"Correlación NO implica causalidad. Una asociación entre variables no significa que una cause la otra."},
+{id:114,cat:"alcance",q:"¿Manipula variables el alcance correlacional?",a:"No. El investigador observa lo que ocurre naturalmente sin manipular ninguna variable; ambas variables se miden en la misma unidad de análisis."},
+{id:115,cat:"alcance",q:"Pregunta típica del alcance correlacional",a:"¿Existe relación entre el rendimiento académico de los hijos y el tipo de unión de los padres? / ¿Cómo se relacionan motivación y productividad en trabajadores?"},
+{id:116,cat:"alcance",q:"Ejemplo de investigación correlacional",a:"Estudio de la relación entre inteligencia emocional y liderazgo transformacional en 120 directivos; se encontró r=.67, p<.01 (correlación positiva significativa)."},
+{id:117,cat:"alcance",q:"Alcance Explicativo: ¿qué determina?",a:"Las causas de los fenómenos u objetos de estudio; contribuye a un mejor entendimiento del problema y ofrece las razones que generan los fenómenos."},
+{id:118,cat:"alcance",q:"¿Sobre qué se construye cada nivel de alcance?",a:"Cada nivel se construye sobre el anterior: exploratorio → descriptivo → correlacional → explicativo, aumentando progresivamente la profundidad del conocimiento."},
+{id:119,cat:"alcance",q:"Factor 1 del alcance: objetivos amplios vs específicos",a:"Objetivos amplios expanden el alcance pero pueden dispersar el enfoque; objetivos específicos reducen el alcance pero aumentan la profundidad y precisión."},
+{id:120,cat:"alcance",q:"Factor 2: ¿cómo afectan los recursos al alcance?",a:"Mayor financiamiento permite metodologías sofisticadas y muestras grandes; recursos limitados requieren reducir variables o población para mantener la viabilidad."},
+{id:121,cat:"alcance",q:"Factor 3: plazos cortos en el alcance",a:"Exigen alcances más concretos y muestras reducidas; los investigadores deben concentrarse en aspectos específicos del tema para garantizar resultados precisos."},
+{id:122,cat:"alcance",q:"Factor 4: plazos largos en el alcance",a:"Permiten mayor amplitud geográfica, recolección de datos más extensa y la posibilidad de abordar metodologías más complejas y rigurosas."},
+{id:123,cat:"alcance",q:"Fase 1 para formular el alcance: Enfoque estratégico",a:"Formular preguntas de investigación específicas, relevantes, investigables y no vagas para guiar todo el proceso de manera coherente."},
+{id:124,cat:"alcance",q:"Fase 2 para formular el alcance: Delimitación y muestreo",a:"Establecer límites geográficos, temáticos y temporales; identificar la población objetivo y los criterios de inclusión según los recursos disponibles."},
+{id:125,cat:"alcance",q:"Límite geográfico en la delimitación del alcance",a:"Gestionar la recolección de datos por región o escala, definiendo el espacio físico donde se estudiará el fenómeno."},
+{id:126,cat:"alcance",q:"Límite temático en la delimitación del alcance",a:"Excluir temas no relacionados con el problema de investigación para evitar la dilución del foco y mantener la pertinencia del estudio."},
+{id:127,cat:"alcance",q:"Límite temporal en la delimitación del alcance",a:"Estructurar la investigación según períodos históricos o actuales relevantes para el problema, definiendo el horizonte cronológico del estudio."},
+{id:128,cat:"alcance",q:"Error de alcance: Ámbito ambiguo o poco claro",a:"Genera falta de claridad en el estudio, cambio constante de fronteras durante la investigación y dificultad para gestionar las expectativas de resultados."},
+{id:129,cat:"alcance",q:"Error de alcance: Ámbito demasiado amplio",a:"Incluye demasiados temas, variables y poblaciones, dispersando el enfoque y comprometiendo la profundidad y calidad del estudio."},
+{id:130,cat:"alcance",q:"Error de alcance: Ámbito demasiado limitado",a:"Reduce excesivamente variables y población, generando una generalización muy limitada y resultados que no aportan suficientemente al conocimiento."},
+{id:131,cat:"alcance",q:"Ejemplo de múltiples alcances: bienestar emocional estudiantil",a:"Puede estudiarse de forma exploratoria (primera aproximación), descriptiva (caracterizar su prevalencia), correlacional (relación con rendimiento académico) o explicativa (identificar sus causas)."},
+{id:132,cat:"alcance",q:"¿Cuál es el principal factor para definir el alcance?",a:"Los objetivos y metas específicos del estudio, que constituyen la base para dar forma a la dirección, el enfoque y la profundidad de la investigación."},
+{id:133,cat:"alcance",q:"Factor: experiencia del equipo investigador",a:"La poca experiencia exige un enfoque más estrecho y controlado; equipos más experimentados pueden manejar alcances más amplios y complejos."},
+{id:134,cat:"alcance",q:"Factor: acceso a datos en la investigación",a:"Los datos escasos o de difícil acceso limitan el alcance y la profundidad del estudio, obligando a ajustar los objetivos a la disponibilidad real."},
+{id:135,cat:"alcance",q:"Progresión: ¿qué hace el alcance exploratorio en la secuencia?",a:"Es la primera aproximación al fenómeno desconocido; prepara el terreno conceptual y genera las preguntas que guiarán los estudios descriptivos y correlacioanles posteriores."},
+
+/* ── HIPÓTESIS (136-175) ── */
+{id:136,cat:"hipotesis",q:"¿Qué es una hipótesis en investigación?",a:"Una afirmación provisional sobre la relación entre dos o más variables, formulada de manera que pueda ser sometida a prueba empírica. Palabras clave: provisional, relación y comprobable."},
+{id:137,cat:"hipotesis",q:"Analogía: ¿por qué la hipótesis es como el diagnóstico médico?",a:"Al igual que el médico tiene una sospecha antes de hacer exámenes, el investigador formula una respuesta tentativa al problema antes de tener evidencia completa."},
+{id:138,cat:"hipotesis",q:"¿Cuándo se formula la hipótesis?",a:"Tras una revisión exhaustiva de la literatura y el planteamiento claro del problema de investigación; no puede formularse sin haber identificado el problema y los objetivos."},
+{id:139,cat:"hipotesis",q:"Elemento 1 de la hipótesis: Unidades de observación",a:"Las personas, grupos, objetos o fenómenos sobre los que recae el estudio; responden a la pregunta ¿a quiénes o a qué se estudia?"},
+{id:140,cat:"hipotesis",q:"Elemento 2: ¿Qué son las variables en una hipótesis?",a:"Las características o propiedades de las unidades de observación que el investigador va a medir, comparar o relacionar. Toda hipótesis tiene al menos dos variables."},
+{id:141,cat:"hipotesis",q:"Variable independiente en la hipótesis",a:"La que se supone que influye, causa o antecede. Es la que el investigador manipula o toma como punto de partida en la relación propuesta."},
+{id:142,cat:"hipotesis",q:"Variable dependiente en la hipótesis",a:"La que se supone que cambia o se ve afectada por la variable independiente; es el resultado que se mide o el efecto esperado."},
+{id:143,cat:"hipotesis",q:"Elemento 3: La relación entre variables en una hipótesis",a:"Es el núcleo de la hipótesis; indica qué tipo de vínculo se espera encontrar entre las variables (positivo, negativo, causal, de diferencia)."},
+{id:144,cat:"hipotesis",q:"Ejemplo de estructura completa de una hipótesis",a:"'El incremento en las horas de estudio (VI) aumenta significativamente el rendimiento académico (VD) en estudiantes universitarios.' [VI → relación propuesta → VD]"},
+{id:145,cat:"hipotesis",q:"¿Qué es la Hipótesis de trabajo (H₁)?",a:"La hipótesis principal que el investigador busca comprobar; representa la predicción central de la investigación y se simboliza Hi, H1, H2, etc."},
+{id:146,cat:"hipotesis",q:"Hipótesis de trabajo: ejemplo",a:"'El aumento de horas de estudio mejora significativamente las calificaciones finales de los estudiantes universitarios de primer año.'"},
+{id:147,cat:"hipotesis",q:"¿Qué es la Hipótesis nula (H₀)?",a:"La contraparte de la hipótesis de investigación; afirma que NO existe relación, diferencia ni efecto entre las variables. Es el punto de partida estadístico a refutar."},
+{id:148,cat:"hipotesis",q:"¿Por qué se plantea la hipótesis nula si no se cree en ella?",a:"Porque el análisis estadístico necesita algo que intentar rechazar; si se rechaza la H₀ con evidencia suficiente, se respalda la hipótesis de investigación."},
+{id:149,cat:"hipotesis",q:"Características de la hipótesis nula",a:"Afirma que no hay diferencia significativa entre variables; se acepta cuando no hay evidencia suficiente para rechazarla; es fundamental para pruebas de significancia estadística."},
+{id:150,cat:"hipotesis",q:"¿Qué es la Hipótesis alternativa (Hₐ)?",a:"Ofrece explicaciones alternativas o complementarias a la hipótesis de trabajo; propone una posibilidad distinta tanto a Hi como a H₀."},
+{id:151,cat:"hipotesis",q:"Hipótesis alternativa: ejemplo",a:"'El tipo específico de ejercicio (aeróbico vs. anaeróbico) influye de manera diferencial en la reducción del estrés, independientemente del tiempo dedicado.'"},
+{id:152,cat:"hipotesis",q:"¿Qué es una hipótesis causal?",a:"Propone una relación de causa y efecto entre dos variables; sugiere que los cambios en una variable causan directamente cambios en la otra."},
+{id:153,cat:"hipotesis",q:"Hipótesis causal: ejemplo",a:"'Al aumentar el tiempo de estudio, el estudiante experimenta calificaciones más altas en los exámenes.' La causa (tiempo de estudio) produce directamente el efecto (calificaciones)."},
+{id:154,cat:"hipotesis",q:"¿Qué son las hipótesis correlacionales?",a:"Especifican las relaciones entre dos o más variables, indicando no solo que están vinculadas sino cómo están asociadas; alcanzan nivel predictivo y parcialmente explicativo."},
+{id:155,cat:"hipotesis",q:"Hipótesis correlacional: ejemplo 1",a:"Hi: 'El tabaquismo está relacionado con la presencia de padecimientos pulmonares.' (Relación entre hábito y enfermedad)"},
+{id:156,cat:"hipotesis",q:"Hipótesis correlacional: ejemplo 2",a:"Hi: 'La administración de ciertos medicamentos se encuentra asociada con daños físicos en la estructura de los dientes.'"},
+{id:157,cat:"hipotesis",q:"Ejemplo de H₁ sobre ejercicio y estrés",a:"'El ejercicio físico regular (mínimo 3 veces/semana, 30 min.) reduce significativamente los niveles de estrés percibido en adultos de 25 a 45 años.'"},
+{id:158,cat:"hipotesis",q:"Ejemplo de H₀ sobre ejercicio y estrés",a:"'El ejercicio físico regular no tiene efecto estadísticamente significativo sobre los niveles de estrés percibido en adultos de 25 a 45 años.'"},
+{id:159,cat:"hipotesis",q:"Ejemplo de Hₐ sobre ejercicio y estrés",a:"'El tipo específico de ejercicio (aeróbico vs. anaeróbico) influye de manera diferencial en la reducción del estrés percibido en adultos.'"},
+{id:160,cat:"hipotesis",q:"Ejemplo de Hi: niños y televisión en Panamá",a:"'Los niños de la ciudad de Panamá ven en promedio más de tres horas diarias de televisión.'"},
+{id:161,cat:"hipotesis",q:"Ejemplo de H₀: niños y televisión en Panamá",a:"'Los niños de la ciudad de Panamá no ven en promedio más de tres horas diarias de televisión.'"},
+{id:162,cat:"hipotesis",q:"Ejemplo de Hₐ: niños y televisión en Panamá",a:"'Los niños de la ciudad de Panamá ven en promedio menos de tres horas diarias de televisión.'"},
+{id:163,cat:"hipotesis",q:"¿Toda investigación debe plantear hipótesis?",a:"No. Depende del enfoque del estudio y del alcance inicial; no todos los estudios requieren hipótesis formales para ser válidos."},
+{id:164,cat:"hipotesis",q:"¿Las hipótesis son siempre verdaderas?",a:"No necesariamente. Son explicaciones tentativas. Solo después de ser comprobadas con evidencia empírica pueden convertirse en teorías o leyes científicas."},
+{id:165,cat:"hipotesis",q:"¿Qué alcance NO formula hipótesis?",a:"El alcance exploratorio no formula hipótesis, ya que su objetivo es explorar y generar preguntas, no verificar relaciones entre variables."},
+{id:166,cat:"hipotesis",q:"¿Cuándo formula hipótesis el alcance descriptivo?",a:"Solo cuando se pronostica un hecho o dato específico; no es obligatorio en todos los estudios descriptivos."},
+{id:167,cat:"hipotesis",q:"¿Qué tipo de hipótesis formula el alcance correlacional?",a:"Formula hipótesis correlacionales, que especifican la relación esperada entre dos o más variables medidas en la misma unidad de análisis."},
+{id:168,cat:"hipotesis",q:"¿Qué tipo de hipótesis formula el alcance explicativo?",a:"Formula hipótesis causales, que proponen una relación de causa y efecto entre la variable independiente y la dependiente."},
+{id:169,cat:"hipotesis",q:"Paso 1 para redactar una hipótesis: identificar variables",a:"Determinar la variable independiente (causa: lo que se manipula o explica) y la variable dependiente (efecto: lo que se mide como resultado)."},
+{id:170,cat:"hipotesis",q:"Paso 2: definir la relación esperada entre variables",a:"Indicar qué tipo de vínculo se espera encontrar: positiva (ambas suben), negativa (una sube, la otra baja), causal (una produce efecto) o de diferencia entre grupos."},
+{id:171,cat:"hipotesis",q:"Paso 3: redactar en proposición clara y comprobable",a:"Evitar ambigüedades, usar lenguaje preciso y asegurarse de que la hipótesis pueda someterse a prueba empírica con datos reales."},
+{id:172,cat:"hipotesis",q:"Paso 4: coherencia con el Marco Teórico",a:"La hipótesis debe surgir de la revisión de literatura y del problema de investigación, no de suposiciones sin fundamento teórico previo."},
+{id:173,cat:"hipotesis",q:"Ejemplo de hipótesis bien redactada (sueño y rendimiento académico)",a:"'Los estudiantes de primer año de la UP que duermen menos de 6h obtienen calificaciones más bajas en el primer parcial que quienes duermen 6h o más (1er semestre 2024).'"},
+{id:174,cat:"hipotesis",q:"¿Qué elementos debe tener una hipótesis bien redactada?",a:"Sujetos de estudio, variable independiente, variable dependiente, relación esperada, delimitación temporal y espacial, y ser comprobable con datos reales."},
+{id:175,cat:"hipotesis",q:"Hipótesis descriptiva: ejemplo",a:"'Los estudiantes que practican deporte al menos tres veces por semana presentan mayor autoestima que aquellos que no lo hacen.'"},
+
+/* ── VARIABLES (176-200) ── */
+{id:176,cat:"variables",q:"¿Qué es una variable en investigación?",a:"Un atributo medible que cambia a lo largo de un experimento. Cuenta con diferentes medidas según el contexto del estudio y los límites establecidos por los investigadores."},
+{id:177,cat:"variables",q:"Definición de variable según Rojas Soriano",a:"'Una característica, atributo, propiedad o cualidad que puede estar o no presente en individuos, grupos o sociedades, y que puede presentarse en grados, magnitudes o medidas distintas.'"},
+{id:178,cat:"variables",q:"¿Qué es la Variable Independiente?",a:"La que el investigador manipula, controla o selecciona para observar su efecto. Representa la causa o condición antecedente en la relación de estudio."},
+{id:179,cat:"variables",q:"¿Qué es la Variable Dependiente?",a:"La que se mide u observa para detectar cambios; constituye el efecto o consecuencia que se espera resulte de la acción de la variable independiente."},
+{id:180,cat:"variables",q:"¿Qué es la Variable de Control?",a:"Se mantiene constante para evitar que interfiera con la relación estudiada, asegurando que los resultados sean atribuibles únicamente a la variable independiente."},
+{id:181,cat:"variables",q:"¿Qué es la Variable de Confusión?",a:"Factores externos que pueden influir en los resultados y deben identificarse y controlarse para evitar conclusiones erróneas sobre las relaciones causales del estudio."},
+{id:182,cat:"variables",q:"¿Qué establece la relación causal entre variables?",a:"Las hipótesis establecen que cambios en la variable independiente producen efectos en la variable dependiente, proponiendo una conexión verificable entre ambas."},
+{id:183,cat:"variables",q:"¿Por qué es clave identificar claramente las variables?",a:"Porque la identificación de variables independientes (causa) y dependientes (efecto) estructura todo el diseño metodológico de la investigación."},
+{id:184,cat:"variables",q:"¿Qué es la Definición Conceptual de una variable?",a:"La descripción teórica que representa la idea general o significado abstracto de la variable según el marco teórico adoptado en la investigación."},
+{id:185,cat:"variables",q:"¿Qué expresa la definición conceptual de una variable?",a:"El concepto basándose en teorías, modelos y conocimientos previos documentados en la literatura especializada (fundamentación científica)."},
+{id:186,cat:"variables",q:"Importancia de la definición conceptual: Fundamentación teórica",a:"Ancla la variable en un cuerpo de conocimientos establecidos, otorgando credibilidad, coherencia y rigor científico al estudio."},
+{id:187,cat:"variables",q:"Importancia de la definición conceptual: Comprensión científica",a:"Permite entender el fenómeno desde una perspectiva rigurosa, facilitando la comunicación precisa entre investigadores de la misma área."},
+{id:188,cat:"variables",q:"Importancia de la definición conceptual: Base para operacionalización",a:"Proporciona el punto de partida conceptual para traducir el concepto abstracto en indicadores medibles y concretos en la definición operacional."},
+{id:189,cat:"variables",q:"Ejemplo de definición conceptual: variable 'Estrés'",a:"Estado de tensión emocional y física que experimenta una persona ante demandas que percibe como amenazantes o superiores a sus recursos de afrontamiento."},
+{id:190,cat:"variables",q:"Ejemplo de definición conceptual: 'Rendimiento Académico'",a:"El nivel de logro y dominio que un estudiante alcanza en actividades académicas, evaluado según estándares educativos y reflejado en calificaciones, competencias y capacidad de aplicar conocimientos."},
+{id:191,cat:"variables",q:"¿Qué es la Definición Operacional de una variable?",a:"Especificación precisa y detallada de cómo se medirá, evaluará u observará la variable en el contexto específico del estudio."},
+{id:192,cat:"variables",q:"¿Qué convierte la definición operacional?",a:"Convierte el concepto teórico abstracto en elementos observables, cuantificables y verificables empíricamente dentro del diseño del estudio."},
+{id:193,cat:"variables",q:"Elemento operacional: Instrumentos de medición",a:"Herramientas específicas como cuestionarios, pruebas estandarizadas, equipos de laboratorio, escalas psicométricas o dispositivos tecnológicos para recoger datos."},
+{id:194,cat:"variables",q:"Elemento operacional: Escalas y categorías",a:"Sistemas de clasificación nominales, ordinales, de intervalo o de razón, que definen los valores posibles que puede adoptar la variable en el estudio."},
+{id:195,cat:"variables",q:"Elemento operacional: Procedimientos de recolección",a:"Protocolos que especifican cuándo, cómo, dónde y por quién se recopilará la información, asegurando consistencia y replicabilidad del estudio."},
+{id:196,cat:"variables",q:"Diferencia conceptual vs operacional: pregunta central",a:"La definición conceptual pregunta ¿Qué es la variable? La operacional pregunta ¿Cómo se mide la variable?"},
+{id:197,cat:"variables",q:"Diferencia conceptual vs operacional: enfoque",a:"La conceptual tiene enfoque teórico y abstracto; la operacional tiene enfoque práctico y concreto orientado a la medición empírica."},
+{id:198,cat:"variables",q:"Diferencia conceptual vs operacional: propósito",a:"La conceptual fundamenta la variable en el marco teórico; la operacional especifica los procedimientos exactos de medición para el estudio."},
+{id:199,cat:"variables",q:"Ejemplo de operacionalización completa: variable 'Estrés'",a:"Instrumento: Escala de Estrés Percibido (10 ítems). Escala: Likert 5 puntos (0=Nunca a 4=Muy a menudo). Categorías: Bajo (0-13), Moderado (14-26), Alto (27-40)."},
+{id:200,cat:"variables",q:"Ejemplo de operacionalización: variable 'Pérdida de peso'",a:"Kilogramos perdidos medidos con balanza digital calibrada, en ayunas, con mediciones semanales pre y post intervención durante 12 semanas, 5 días/semana."}
+];
+
+/* ======================================================
+   LABELS
+====================================================== */
+const CAT_LABELS = {
+  formulacion:"Formulación del Problema",
+  marco:"Marco Teórico",
+  alcance:"Alcance",
+  hipotesis:"Hipótesis",
+  variables:"Variables"
+};
+
+/* ======================================================
+   STATE
+====================================================== */
+let currentFilter = "all";
+let seen = new Set(JSON.parse(localStorage.getItem("fcSeen") || "[]"));
+let order = CARDS.map((_,i)=>i); // indices into CARDS
+
+/* ======================================================
+   RENDER
+====================================================== */
+function render(){
+  const grid = document.getElementById("grid");
+  const visible = order.filter(i=>{
+    const c = CARDS[i];
+    return currentFilter === "all" || c.cat === currentFilter;
+  });
+  document.getElementById("cardsCount").textContent =
+    `Mostrando ${visible.length} tarjeta${visible.length!==1?"s":""}`;
+  document.getElementById("totalCount").textContent = CARDS.length;
+  updateStats();
+
+  if(!visible.length){
+    grid.innerHTML = `<div class="empty-state">No hay tarjetas en esta categoría.</div>`;
+    return;
+  }
+
+  grid.innerHTML = visible.map((idx,pos)=>{
+    const c = CARDS[idx];
+    const isSeen = seen.has(c.id);
+    const delay = Math.min(pos * 30, 600);
+    return `
+<div class="fc-wrap${isSeen?" seen":""}" data-cat="${c.cat}" data-id="${c.id}"
+     style="animation-delay:${delay}ms" onclick="flip(this)">
+  <div class="fc${isSeen?" flipped":""}">
+    <div class="fc-front">
+      <div class="fc-front-head">
+        <span class="fc-num">#${String(c.id).padStart(3,"0")}</span>
+        <span class="fc-tag">${CAT_LABELS[c.cat]}</span>
+      </div>
+      <div class="fc-q">${c.q}</div>
+      <div class="fc-hint">Clic para ver la respuesta</div>
+    </div>
+    <div class="fc-back">
+      <div class="fc-back-head">
+        <span class="fc-back-label">Respuesta</span>
+        <span class="fc-seen-badge">✓ Vista</span>
+      </div>
+      <div class="fc-a">${c.a}</div>
+    </div>
+  </div>
+</div>`;
+  }).join("");
+}
+
+/* ======================================================
+   FLIP
+====================================================== */
+function flip(wrap){
+  const fc = wrap.querySelector(".fc");
+  const isFlipped = fc.classList.toggle("flipped");
+  if(isFlipped){
+    const id = parseInt(wrap.dataset.id);
+    seen.add(id);
+    wrap.classList.add("seen");
+    localStorage.setItem("fcSeen", JSON.stringify([...seen]));
+    updateStats();
+  }
+}
+
+/* ======================================================
+   STATS
+====================================================== */
+function updateStats(){
+  const n = seen.size;
+  const pct = Math.round(n/CARDS.length*100);
+  document.getElementById("seenCount").textContent = n;
+  document.getElementById("pctSeen").textContent = pct + "%";
+}
+
+/* ======================================================
+   FILTER
+====================================================== */
+document.getElementById("filterNav").addEventListener("click", e=>{
+  const pill = e.target.closest(".nav-pill");
+  if(!pill) return;
+  document.querySelectorAll(".nav-pill").forEach(p=>p.classList.remove("active"));
+  pill.classList.add("active");
+  currentFilter = pill.dataset.cat;
+  render();
+});
+
+/* ======================================================
+   SHUFFLE
+====================================================== */
+function shuffleCards(){
+  for(let i=order.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [order[i],order[j]]=[order[j],order[i]];
+  }
+  render();
+}
+
+/* ======================================================
+   RESET SEEN
+====================================================== */
+function resetSeen(){
+  if(!confirm("¿Reiniciar el progreso? Todas las tarjetas se marcarán como no vistas.")) return;
+  seen.clear();
+  localStorage.setItem("fcSeen","[]");
+  render();
+}
+
+/* ======================================================
+   SCROLL PROGRESS
+====================================================== */
+window.addEventListener("scroll",()=>{
+  const el=document.getElementById("pb");
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  el.style.width=(h>0?window.scrollY/h*100:0)+"%";
+});
+
+/* ======================================================
+   INIT
+====================================================== */
+render();
+</script>
+</body>
+</html>
