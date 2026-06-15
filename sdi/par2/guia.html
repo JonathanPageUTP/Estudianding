@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Estudio: Seguridad, Criptografía y Desarrollo Seguro de Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<div class="topbar">
+  <div class="topbar-title">Guía de Estudio — Parcial 2</div>
+  <div class="topbar-pills">
+    <a href="#bloque1" class="topbar-pill">Criptografía</a>
+    <a href="#bloque2" class="topbar-pill">Cortafuegos / IDS / IPS</a>
+    <a href="#bloque3" class="topbar-pill">Autenticación y Acceso</a>
+    <a href="#bloque4" class="topbar-pill">SDLC Seguro</a>
+    <a href="#bloque5" class="topbar-pill">DevOps / DevSecOps</a>
+    <a href="#bloque6" class="topbar-pill">Normas y Auditoría</a>
+  </div>
+</div>
+
+<header class="hero">
+  <span class="hero-badge">Mgtr. Lizmayrem Márquez</span>
+  <h1>Mecanismos de Seguridad, <span>Autenticación</span> y Control de Acceso</h1>
+  <p>Guía de estudio integral: criptografía, criptosistemas, cifrado simétrico/asimétrico, funciones hash, firma digital, cortafuegos, IDS/IPS, autenticación, control de acceso, y el aseguramiento del ciclo de vida del software seguro (SDLC, DevSecOps, normativas y auditoría).</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>6</strong><span>Bloques Temáticos</span></div>
+    <div class="hero-stat"><strong>4</strong><span>Objetivos de la Criptografía</span></div>
+    <div class="hero-stat"><strong>3</strong><span>Factores de Autenticación</span></div>
+    <div class="hero-stat"><strong>5</strong><span>Generaciones de Cortafuegos</span></div>
+  </div>
+</header>
+
+<div class="page">
+
+<div class="callout callout-navy">
+  <h4>🎯 Objetivo de la Unidad</h4>
+  <p>Describir los mecanismos de seguridad que permiten la protección de un sistema informático, así como los controles adecuados para la autenticación y autorización de la información.</p>
+</div>
+
+<!-- ================= BLOQUE 1: CRIPTOGRAFÍA ================= -->
+<section id="bloque1">
+<span class="s-label">Bloque 1</span>
+<h2 class="section-title">Criptografía</h2>
+
+<div class="card stripe-navy">
+<h3>Definición</h3>
+<p>La <strong>criptografía</strong> se ha definido tradicionalmente como el ámbito de la <strong>criptología</strong> que se ocupa de las técnicas de cifrado o codificado destinadas a alterar las representaciones lingüísticas de ciertos mensajes con el fin de hacerlos incomprensibles a receptores no autorizados.</p>
+<p>Es una práctica que consiste en proteger información mediante el uso de <strong>algoritmos codificados, hashes y firmas</strong>. La información puede estar:</p>
+<ul>
+<li><strong>En reposo:</strong> como un archivo ubicado en un disco duro.</li>
+<li><strong>En tránsito:</strong> una comunicación electrónica intercambiada entre dos o más partes.</li>
+<li><strong>En uso:</strong> mientras se ejecutan operaciones de computación con los datos.</li>
+</ul>
+<div class="memory-box mt-md">
+<h4>💡 Para recordar</h4>
+<p>La palabra <strong>criptografía</strong> proviene del griego: <em>Kriptos</em> = ocultar y <em>Graphos</em> = escritura → "ocultar la escritura".</p>
+</div>
+</div>
+
+<h3 class="mt-lg">Objetivos de la Criptografía</h3>
+<p>La criptografía tiene <strong>cuatro objetivos principales</strong>:</p>
+<div class="grid-2">
+  <div class="benefit-chip"><span class="bi">🔒</span><div class="benefit-chip-text"><strong>Confidencialidad</strong><span>Poner la información únicamente a disposición de usuarios autorizados.</span></div></div>
+  <div class="benefit-chip"><span class="bi">✅</span><div class="benefit-chip-text"><strong>Integridad</strong><span>Asegurar que la información no se ha manipulado.</span></div></div>
+  <div class="benefit-chip"><span class="bi">🪪</span><div class="benefit-chip-text"><strong>Autenticación</strong><span>Confirmar la autenticidad de la información o de la identidad de un usuario.</span></div></div>
+  <div class="benefit-chip"><span class="bi">📝</span><div class="benefit-chip-text"><strong>No repudio</strong><span>Evitar que un usuario deniegue compromisos o acciones previas.</span></div></div>
+</div>
+
+<h3 class="mt-lg">Origen e Historia de la Criptografía</h3>
+<p>Las <strong>guerras</strong> fueron el principal factor que promovió los avances criptográficos en la historia, debido a la necesidad de comunicarse secretamente.</p>
+
+<div class="timeline mt-md">
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#1D3557"></div>
+    <div class="tl-month"><span class="tag tag-navy">600-500 AC</span></div>
+    <div class="tl-name">Hebreos</div>
+    <div class="tl-desc">Hicieron uso de sencillos <strong>cifrados por sustitución monoalfabéticos</strong> (como el cifrado <strong>Atbash</strong>).</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#00A896"></div>
+    <div class="tl-month"><span class="tag tag-teal">400-100 AC</span></div>
+    <div class="tl-name">Griegos de la época clásica</div>
+    <div class="tl-desc">Se dice que conocían el cifrado; por ejemplo, los militares espartanos utilizaban el <strong>cifrado por transposición de la escítala</strong>.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#F5A623"></div>
+    <div class="tl-month"><span class="tag tag-amber">800 DC</span></div>
+    <div class="tl-name">El Corán</div>
+    <div class="tl-desc">Su estudio llevó a la invención de la técnica del <strong>análisis de frecuencias</strong> para romper los cifrados por sustitución monoalfabéticos.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#7C3AED"></div>
+    <div class="tl-month"><span class="tag tag-violet">1446</span></div>
+    <div class="tl-name">Leon Battista Alberti</div>
+    <div class="tl-desc">Desarrolla el modelo de <strong>cifrado polialfabético</strong>.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#EF4444"></div>
+    <div class="tl-month"><span class="tag tag-red">1917</span></div>
+    <div class="tl-name">Gilbert Vernam</div>
+    <div class="tl-desc">Crea el <strong>One Time Pad (OTP)</strong>, un criptosistema empleado a inicios de la Primera Guerra Mundial.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#1D3557"></div>
+    <div class="tl-month"><span class="tag tag-navy">1932</span></div>
+    <div class="tl-name">Arthur Scherbius — Máquina Enigma</div>
+    <div class="tl-desc">Creó la máquina <strong>Enigma</strong>, compuesta por un conjunto de ruedas cuyas caras tenían contactos eléctricos entre sí. Se utilizó en la <strong>Segunda Guerra Mundial</strong>.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#00A896"></div>
+    <div class="tl-month"><span class="tag tag-teal">1984-1991</span></div>
+    <div class="tl-name">Protocolo BB84 y SSL</div>
+    <div class="tl-desc">Se crea el protocolo de <strong>cifrado cuántico BB84</strong>. También se publica el protocolo <strong>Secure Socket Layer (SSL)</strong> de Netscape.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#F5A623"></div>
+    <div class="tl-month"><span class="tag tag-amber">1995-2001</span></div>
+    <div class="tl-name">NSA — SHA1 y AES</div>
+    <div class="tl-desc">La NSA crea en 1995 el algoritmo hash <strong>SHA1</strong> y en 2001 el criptograma actualmente conocido como cifrado <strong>AES</strong>.</div>
+  </div>
+  <div class="tl-item">
+    <div class="tl-dot" style="color:#7C3AED"></div>
+    <div class="tl-month"><span class="tag tag-violet">2002 - Actualidad</span></div>
+    <div class="tl-name">Criptografía Moderna</div>
+    <div class="tl-desc">Se crean los cifrados criptográficos <strong>DES</strong>, el esquema de cifrado del Wi-Fi <strong>WEP (64/128 bit)</strong>, el cifrado <strong>A5/1 y A5/2</strong> usado para celulares GSM, <strong>WPA/WPA2</strong> y cifrados <strong>AES de 128 bit</strong>, entre muchos más que vendrán conforme avancemos en la tecnología.</div>
+  </div>
+</div>
+
+<h3 class="mt-lg">¿Para qué se utiliza la criptografía?</h3>
+<ul>
+<li>Tiene sus raíces en el envío de información sensible entre <strong>militares y políticos</strong>. Los mensajes podían encriptarse para que parecieran texto aleatorio a cualquiera que no fuera el destinatario.</li>
+<li>A medida que la seguridad avanza, el campo de la criptografía se amplía para incluir objetivos como la <strong>autenticación de mensajes</strong>, la <strong>integridad de los datos</strong> y el <strong>cálculo seguro</strong>.</li>
+<li>Está en la base de la sociedad moderna: protocolo <strong>HTTPS</strong>, comunicación segura de texto y voz, y <strong>monedas digitales</strong>.</li>
+</ul>
+
+<h3 class="mt-lg">Criptosistemas</h3>
+<p>Se refiere al <strong>conjunto completo de elementos</strong> de un sistema criptográfico que puede ser utilizado para cumplir con sus funciones. En un criptosistema, el mensaje es transformado mediante un algoritmo y la aplicación de una o más claves, convirtiéndose en un <strong>criptograma</strong>.</p>
+
+<div class="card mt-md">
+<h4 class="card-title">Elementos de un criptosistema</h4>
+<table class="tlist">
+<tr><td>Emisor</td><td>Realiza el proceso del cifrado.</td></tr>
+<tr><td>Receptor</td><td>Realiza el proceso de descifrado.</td></tr>
+<tr><td>Medio</td><td>Canal utilizado para intercambiar la información.</td></tr>
+<tr><td>Algoritmo</td><td>Conjunto de transformaciones aplicadas al mensaje para obtener el criptograma.</td></tr>
+<tr><td>Mensaje</td><td>Información que desea ocultar (texto plano).</td></tr>
+<tr><td>Clave o llave</td><td>Pieza de información que, aplicada al algoritmo, permite transformar el mensaje.</td></tr>
+<tr><td>Criptograma</td><td>Mensaje transformado / mensaje cifrado.</td></tr>
+<tr><td>Protocolo</td><td>Conjunto de reglas que permiten intercambiar información entre entidades.</td></tr>
+</table>
+</div>
+
+<div class="card mt-md card-navy">
+<h4 class="card-title">¿Qué es cifrar?</h4>
+<p>Es <strong>transformar un mensaje no entendible</strong> para que la gente que no está autorizada a verlo no pueda comprenderlo. Los elementos básicos de la comunicación incluyen: <strong>Emisor</strong>, <strong>Receptor</strong> y un <strong>canal de comunicación inseguro</strong> entre ambos.</p>
+</div>
+
+<h3 class="mt-lg">¿Qué es el cifrado?</h3>
+<p>Un <strong>algoritmo de cifrado</strong> es un procedimiento que convierte un mensaje de texto plano en un texto cifrado. Los algoritmos modernos utilizan matemáticas avanzadas y una o varias claves de cifrado, lo que hace relativamente fácil cifrar un mensaje, pero prácticamente imposible descifrarlo sin conocer las claves.</p>
+<p>Las técnicas de cifrado se dividen en dos categorías según el funcionamiento de sus claves: <strong>simétricas</strong> y <strong>asimétricas</strong>.</p>
+
+<div class="grid-2 mt-md">
+<div class="card stripe-accent">
+<h4 class="card-title">🔐 Encriptación — Pasos</h4>
+<ol>
+<li><strong>Preparación de datos:</strong> los datos a cifrar se preparan para el proceso de cifrado (por ejemplo, llevarlos a una longitud específica).</li>
+<li><strong>Aplicación del algoritmo:</strong> el algoritmo criptográfico se aplica a los datos preparados, mediante operaciones matemáticas complejas (aritmética modular, exponenciación, etc.).</li>
+<li><strong>Integración de claves:</strong> se incorpora una clave o combinación de claves a los cálculos, actuando como instrucciones secretas que transforman el texto plano en texto cifrado.</li>
+<li><strong>Generación de texto cifrado:</strong> como resultado se obtiene un conjunto de datos codificados y aparentemente sin sentido: el <strong>texto cifrado</strong>.</li>
+</ol>
+</div>
+
+<div class="card stripe-violet">
+<h4 class="card-title">🔓 Descifrado — Pasos</h4>
+<ol>
+<li><strong>Entrada de texto cifrado:</strong> los datos cifrados se introducen en el algoritmo de descifrado elegido.</li>
+<li><strong>Inversión del algoritmo:</strong> se aplica el algoritmo de descifrado, esencialmente el inverso matemático del algoritmo de cifrado.</li>
+<li><strong>Aplicación de la clave:</strong> se usan las mismas claves del cifrado (u otras, según el método) para revertir la transformación.</li>
+<li><strong>Recuperación de texto sin formato:</strong> mediante algoritmo y claves, el texto cifrado vuelve a su forma original: el <strong>texto legible</strong>.</li>
+</ol>
+</div>
+</div>
+
+<div class="callout callout-amber mt-md">
+<h4>🔑 Proceso de Gestión de Claves</h4>
+<p>Es el <strong>método para administrar el conjunto completo de claves</strong> de los miembros del sistema.</p>
+</div>
+
+<h3 class="mt-lg">Clasificación de la Criptografía</h3>
+<div class="flex flex-wrap gap-sm mt-sm">
+<span class="tag tag-navy">Transposición</span>
+<span class="tag tag-teal">Sustitución Clásica</span>
+<span class="tag tag-amber">Simétrica</span>
+<span class="tag tag-violet">Asimétrica Moderna</span>
+</div>
+
+<h3 class="mt-lg">Criptografía Clásica</h3>
+<p>Se utilizó <strong>desde antes de la época actual hasta la mitad del siglo XX</strong>. También puede entenderse como la criptografía <strong>no computarizada o no digitalizada</strong>. Los métodos eran variados, algunos muy simples y otros muy complicados de criptoanalizar para su época. <strong>Opera sobre las letras del alfabeto.</strong></p>
+
+<div class="qa-list mt-md">
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">1</span> La Escítala <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Dispositivo utilizado por los antiguos griegos para crear mensajes cifrados. Consistía en una cinta enrollada alrededor de un palo, donde el mensaje solo podía leerse al envolverla en un palo del mismo tamaño.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">2</span> Cifrado de Polybios <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Utiliza una cuadrícula para asignar letras del alfabeto a coordenadas numéricas. Es una forma de cifrado por <strong>sustitución</strong>.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">3</span> Cifrado César <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Desplaza las letras de un mensaje por un número fijo de posiciones en el alfabeto. Por ejemplo, un desplazamiento de 3 convierte "A" en "D".</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">4</span> Cifrado de Vigenère <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Usa una palabra clave para cifrar texto, aplicando desplazamientos basados en las letras de la palabra clave. Es <strong>más seguro que el cifrado César</strong>.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">5</span> El disco de Alberti <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Herramienta creada por Leon Battista Alberti que permite cifrar utilizando discos giratorios para crear sustituciones más complejas.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">6</span> El cilindro de Bazeries <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Dispositivo mecánico en forma de cilindro que facilita la creación de códigos utilizando piezas móviles con letras.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">7</span> Cifrado de Hill <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Sistema basado en álgebra lineal que usa matrices para realizar operaciones sobre bloques de texto. Es más complejo y potente.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">8</span> Cifrado de Vernam <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Usa una clave de longitud igual al mensaje, aplicando una operación <strong>XOR</strong> entre el texto y la clave. <strong>Teóricamente irrompible</strong> si la clave es completamente aleatoria y única.</div>
+  </div>
+  <div class="qa-item">
+    <button class="qa-question"><span class="qa-q-num">9</span> La máquina Enigma <span class="qa-chevron">⌄</span></button>
+    <div class="qa-answer">Dispositivo electromecánico usado durante la Segunda Guerra Mundial para cifrar mensajes, diseñado con múltiples configuraciones para realizar sustituciones y permutaciones.</div>
+  </div>
+</div>
+
+<div class="callout callout-teal mt-md">
+<h4>📌 Ejemplo del Cifrado César</h4>
+<p>Un desplazamiento de 3 posiciones convierte la letra "A" en "D", "B" en "E", y así sucesivamente con todo el alfabeto.</p>
+</div>
+
+<h3 class="mt-lg">Criptografía Moderna</h3>
+<p>Se inició después de <strong>tres hechos</strong>:</p>
+<ol>
+<li>La publicación de la <strong>"Teoría de la Información"</strong> por <strong>Shannon</strong>.</li>
+<li>La aparición del estándar del sistema de cifrado <strong>DES (Data Encryption Standard)</strong> en <strong>1974</strong>.</li>
+<li>El estudio de <strong>Martin Hellman</strong> sobre la aplicación de funciones matemáticas de un solo sentido a un modelo de cifrado, denominado <strong>cifrado de llave pública</strong> en <strong>1976</strong>.</li>
+</ol>
+
+<h3 class="mt-lg">Algoritmos Simétricos</h3>
+<p>Se caracterizan por utilizar <strong>la misma clave para el cifrado y el descifrado</strong>.</p>
+
+<div class="card mt-md">
+<table class="data-table">
+<thead><tr><th>Algoritmo</th><th>Descripción</th></tr></thead>
+<tbody>
+<tr><td class="code-cell">DES</td><td>(Data Encryption Standard): en 1976 se adoptó como estándar y se autorizó su uso en comunicaciones gubernamentales no clasificadas.</td></tr>
+<tr><td class="code-cell">3DES</td><td>Desarrollado por IBM en 1998; opera aplicando tres veces el DES.</td></tr>
+<tr><td class="code-cell">ChaCha20</td><td>Alternativa moderna y segura, especialmente usada en protocolos como TLS.</td></tr>
+<tr><td class="code-cell">AES</td><td>(Advanced Encryption Standard): uno de los más seguros y usados actualmente.</td></tr>
+<tr><td class="code-cell">IDEA</td><td>(International Data Encryption Algorithm): utilizado en PGP.</td></tr>
+<tr><td class="code-cell">RC4</td><td>Algoritmo de flujo usado en el pasado, aunque ahora se considera débil.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="mt-lg">Ventajas y Desventajas del Cifrado Simétrico</h3>
+<div class="grid-2 mt-sm">
+<div class="card card-teal">
+<h4 class="card-title">✅ Ventajas</h4>
+<ul>
+<li><strong>Rapidez y eficiencia:</strong> mucho más rápido que el cifrado asimétrico, ideal para grandes volúmenes de datos.</li>
+<li><strong>Menor uso de recursos:</strong> consume menos potencia de procesamiento, adecuado para dispositivos con recursos limitados.</li>
+<li><strong>Buen desempeño en almacenamiento:</strong> efectivo para cifrar datos que no necesitan compartirse regularmente, como discos duros o bases de datos.</li>
+</ul>
+</div>
+<div class="card card-red">
+<h4 class="card-title">❌ Desventajas</h4>
+<ul>
+<li><strong>Gestión de clave:</strong> es compleja; la cantidad de claves crece en proporción, volviéndose difícil de manejar cuando se requieren muchas.</li>
+<li><strong>Distribución de clave:</strong> no puede asegurarse; no provee mecanismos para enviar claves de manera segura por un medio inseguro.</li>
+<li><strong>Firma:</strong> sin firma digital, hay autenticación parcial.</li>
+<li><strong>Escalabilidad:</strong> en redes grandes, gestionar muchas claves diferentes se vuelve complejo.</li>
+</ul>
+</div>
+</div>
+
+<h3 class="mt-lg">Cifrado Asimétrico</h3>
+<ul>
+<li>Se usan <strong>dos claves</strong> por cada parte (emisor o receptor), llamadas <strong>pública</strong> y <strong>privada</strong>. Si se cifra con una, se debe descifrar con la otra.</li>
+<li>Su seguridad está asociada a la resolución de <strong>un problema matemático de difícil solución</strong> en un tiempo razonable.</li>
+</ul>
+
+<div class="card mt-md">
+<h4 class="card-title">Ejemplos de cifrado asimétrico</h4>
+<table class="tlist">
+<tr><td>RSA</td><td>(Rivest–Shamir–Adleman): uno de los algoritmos más populares y ampliamente utilizados.</td></tr>
+<tr><td>ECC</td><td>(Elliptic Curve Cryptography): proporciona seguridad eficiente usando claves más pequeñas.</td></tr>
+<tr><td>Diffie-Hellman</td><td>Algoritmo para el intercambio seguro de claves.</td></tr>
+<tr><td>DSA</td><td>(Digital Signature Algorithm): específico para generar firmas digitales seguras.</td></tr>
+<tr><td>ElGamal</td><td>Utiliza el concepto de Diffie-Hellman para el cifrado y las firmas digitales.</td></tr>
+</table>
+</div>
+
+<h3 class="mt-lg">Ventajas y Desventajas del Cifrado Asimétrico</h3>
+<div class="grid-2 mt-sm">
+<div class="card card-teal">
+<h4 class="card-title">✅ Ventajas</h4>
+<ul>
+<li><strong>Mayor seguridad en el intercambio de claves:</strong> no es necesario compartir la clave privada, cada parte tiene su propia clave.</li>
+<li><strong>Autenticación:</strong> permite verificar la identidad de los participantes mediante firmas digitales.</li>
+<li><strong>Integridad de los datos:</strong> garantiza que los datos no hayan sido modificados durante la transmisión.</li>
+<li><strong>Escalabilidad:</strong> más fácil de gestionar en redes grandes, no requiere compartir claves individuales con cada usuario.</li>
+<li><strong>Compatibilidad con cifrado híbrido:</strong> se combina eficazmente con cifrado simétrico para aprovechar lo mejor de ambos mundos.</li>
+</ul>
+</div>
+<div class="card card-red">
+<h4 class="card-title">❌ Desventajas</h4>
+<ul>
+<li><strong>Menor velocidad:</strong> más lento que el cifrado simétrico debido a su complejidad matemática.</li>
+<li><strong>Mayor uso de recursos:</strong> consume más potencia de procesamiento, problemático en dispositivos con capacidades limitadas.</li>
+<li><strong>Complejidad técnica:</strong> implementación más compleja y susceptible a errores si no se realiza correctamente.</li>
+<li><strong>Dependencia de la longitud de la clave:</strong> para ser seguro requiere claves largas, lo que aumenta el tamaño de los datos cifrados.</li>
+</ul>
+</div>
+</div>
+
+<h3 class="mt-lg">Usos Comunes para la Criptografía</h3>
+<div class="grid-2 mt-sm">
+<div class="card stripe-accent">
+<h4 class="card-title">🔑 Contraseñas</h4>
+<p>La criptografía se utiliza frecuentemente para <strong>validar la autenticidad</strong> de las contraseñas y también para <strong>proteger las contraseñas almacenadas</strong>. De esta manera, los servicios pueden autenticar contraseñas sin necesidad de mantener una base de datos de texto simple de todas las contraseñas, que podrían ser vulnerables a los hackers.</p>
+</div>
+<div class="card stripe-amber">
+<h4 class="card-title">₿ Criptomonedas</h4>
+<p><strong>Bitcoin y Ethereum</strong> se basan en complejos sistemas de cifrado de datos que requieren grandes cantidades de potencia de cálculo para descifrarlos. A través de estos procesos de descifrado se "acuñan" nuevas monedas y entran en circulación. También se basan en criptografía avanzada para salvaguardar las criptocarteras, verificar transacciones y evitar fraude.</p>
+</div>
+<div class="card stripe-navy">
+<h4 class="card-title">🏦 Transacciones financieras y banca en línea</h4>
+<p>En los sistemas bancarios y en cualquier transacción financiera, la criptografía es una herramienta esencial para garantizar la seguridad de cualquier intercambio financiero.</p>
+</div>
+<div class="card stripe-violet">
+<h4 class="card-title">🌐 Sitios web protegidos por SSL/TLS</h4>
+<p>Este certificado se apoya en diversos protocolos criptográficos para proteger la información que envía y recibe el navegador al visitar distintos sitios web.</p>
+</div>
+</div>
+<div class="callout callout-teal mt-md">
+<h4>🛡️ VPN</h4>
+<p>Podemos pensar en las <strong>Redes Privadas Virtuales (VPN)</strong> como un túnel seguro que se usa al navegar por Internet, donde la criptografía forma las paredes del túnel, protegiendo la privacidad y garantizando la seguridad de la información.</p>
+</div>
+
+<h3 class="mt-lg">Aplicaciones de la Criptografía</h3>
+<div class="roles-grid mt-sm">
+<div class="role-row"><span class="role-icon">📡</span><div><div class="role-name">Seguridad de las comunicaciones</div><div class="role-desc">Principal aplicación de la criptografía a las redes de computadores: permite establecer canales seguros sobre redes que no lo son. Con la potencia de cálculo actual y algoritmos de cifrado simétrico (intercambiados usando algoritmos de clave pública) se consigue privacidad sin perder velocidad en la transferencia.</div></div></div>
+<div class="role-row"><span class="role-icon">🪪</span><div><div class="role-name">Identificación y autentificación</div><div class="role-desc">Gracias a las firmas digitales y otras técnicas criptográficas, es posible identificar a un individuo o validar el acceso a un recurso en red con más garantías que con los sistemas de usuario y clave tradicionales.</div></div></div>
+<div class="role-row"><span class="role-icon">📜</span><div><div class="role-name">Certificación</div><div class="role-desc">Esquema mediante el cual agentes fiables (como una entidad certificadora) validan la identidad de agentes desconocidos (como usuarios reales). Es la extensión lógica del uso de la criptografía para identificar y autentificar a gran escala.</div></div></div>
+<div class="role-row"><span class="role-icon">🛒</span><div><div class="role-name">Comercio electrónico</div><div class="role-desc">Gracias al empleo de canales seguros y mecanismos de identificación se posibilita el comercio electrónico, dando garantías de que las operaciones no pueden ser espiadas, reduciendo el riesgo de fraudes y robos.</div></div></div>
+</div>
+
+<h3 class="mt-lg">Funciones Hash</h3>
+<p>Son algoritmos que transforman datos de entrada (de cualquier tamaño) en un <strong>valor fijo</strong>, conocido como <strong>código hash</strong> o resumen hash. Se utilizan principalmente para garantizar la <strong>integridad y seguridad</strong> de los datos.</p>
+
+<div class="grid-2 mt-md">
+<div class="card stripe-accent">
+<h4 class="card-title">Características principales</h4>
+<ul>
+<li><strong>Unidireccionalidad:</strong> el proceso de hashing no puede invertirse para obtener los datos originales.</li>
+<li><strong>Determinismo:</strong> el mismo dato de entrada siempre genera el mismo valor de hash.</li>
+<li><strong>Eficiencia:</strong> la generación de un código hash es rápida y eficiente.</li>
+<li><strong>Colisiones mínimas:</strong> las funciones hash seguras evitan que diferentes entradas generen el mismo hash.</li>
+</ul>
+</div>
+<div class="card stripe-amber">
+<h4 class="card-title">Usos comunes</h4>
+<ul>
+<li><strong>Seguridad de contraseñas:</strong> se almacenan como hashes en lugar de texto claro.</li>
+<li><strong>Verificación de integridad:</strong> comprobar que los datos no han sido modificados.</li>
+<li><strong>Firmas digitales:</strong> garantizan que un documento o mensaje sea auténtico.</li>
+<li><strong>Criptografía:</strong> fundamentales en sistemas como Blockchain y protocolos como SSL/TLS.</li>
+</ul>
+</div>
+</div>
+
+<div class="card mt-md">
+<h4 class="card-title">Ejemplos de funciones hash</h4>
+<div class="flex flex-wrap gap-sm">
+<span class="tag tag-red">MD5 (obsoleto)</span>
+<span class="tag tag-red">SHA-1 (inseguro)</span>
+<span class="tag tag-teal">SHA-256</span>
+<span class="tag tag-teal">SHA-512</span>
+<span class="tag tag-navy">Whirlpool</span>
+<span class="tag tag-navy">Blake2</span>
+<span class="tag tag-navy">Haval</span>
+</div>
+</div>
+
+<h3 class="mt-lg">Firma Digital</h3>
+<p>Una <strong>firma digital</strong> es un mecanismo criptográfico que garantiza la <strong>autenticidad, integridad y no repudio</strong> de un mensaje o documento electrónico. Se basa en la <strong>criptografía asimétrica</strong> y las <strong>funciones hash</strong>.</p>
+
+<div class="card mt-md">
+<h4 class="card-title">Cómo funciona una firma digital</h4>
+<div class="timeline">
+  <div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-name">1. Generación de claves</div><div class="tl-desc">Se crea un par de claves: una <strong>privada</strong> (solo la conoce el firmante) y una <strong>pública</strong> (cualquiera puede usarla para verificar la firma).</div></div>
+  <div class="tl-item"><div class="tl-dot" style="color:#00A896"></div><div class="tl-name">2. Hash del mensaje</div><div class="tl-desc">El documento o mensaje se procesa mediante una función hash, generando un resumen único.</div></div>
+  <div class="tl-item"><div class="tl-dot" style="color:#F5A623"></div><div class="tl-name">3. Cifrado con la clave privada</div><div class="tl-desc">El hash se cifra con la clave privada del remitente, creando la firma digital.</div></div>
+  <div class="tl-item"><div class="tl-dot" style="color:#7C3AED"></div><div class="tl-name">4. Verificación</div><div class="tl-desc">El destinatario usa la clave pública del remitente para descifrar la firma y comparar el hash con el original. Si coinciden, la firma es válida.</div></div>
+</div>
+</div>
+
+<div class="grid-2 mt-md">
+<div class="card card-teal">
+<h4 class="card-title">✅ Ventajas</h4>
+<ul>
+<li><strong>Autenticidad:</strong> confirma la identidad del remitente.</li>
+<li><strong>Integridad:</strong> asegura que el mensaje no ha sido modificado.</li>
+<li><strong>No repudio:</strong> el remitente no puede negar haber firmado el documento.</li>
+</ul>
+</div>
+<div class="card card-navy">
+<h4 class="card-title">Algoritmos usados en firmas digitales</h4>
+<ul>
+<li><strong>RSA:</strong> uno de los más utilizados.</li>
+<li><strong>DSA</strong> (Digital Signature Algorithm): estandarizado por el NIST.</li>
+<li><strong>ECDSA</strong> (Elliptic Curve Digital Signature Algorithm): alternativa eficiente con claves más cortas.</li>
+<li><strong>EdDSA:</strong> basado en curvas elípticas, más rápido y seguro en ciertas aplicaciones.</li>
+</ul>
+</div>
+</div>
+
+</section>
+
+<!-- ================= BLOQUE 2: CORTAFUEGOS, IDS, IPS ================= -->
+<section id="bloque2">
+<span class="s-label">Bloque 2</span>
+<h2 class="section-title">Cortafuego (Firewall), IDS e IPS</h2>
+
+<div class="card stripe-navy">
+<h3>Cortafuego o Firewall</h3>
+<p>Sistema que implanta una <strong>política de control de accesos</strong> entre dos redes (ej. Internet-LAN).</p>
+<p><strong>Mecanismos que utiliza:</strong></p>
+<ul>
+<li>Bloquea o permite el tráfico entre redes.</li>
+<li>Hay que tener muy claro lo que se quiere permitir o denegar.</li>
+</ul>
+</div>
+
+<div class="grid-2 mt-md">
+<div class="card stripe-accent">
+<h4 class="card-title">¿Por qué necesito un Firewall?</h4>
+<ul>
+<li>Permitir acceso a Internet de usuarios internos.</li>
+<li>Permitir acceso desde Internet a usuarios autorizados.</li>
+<li>Prohibir acceso desde Internet a los no autorizados.</li>
+</ul>
+</div>
+<div class="card stripe-teal">
+<h4 class="card-title">Contra qué protege un Cortafuego</h4>
+<ul>
+<li>Contra accesos no autenticados del exterior.</li>
+<li>Contra tráfico no autorizado del exterior.</li>
+<li>Permitiendo salida desde el interior.</li>
+<li>Proporciona un único punto para implantar una política de seguridad y auditoría.</li>
+</ul>
+</div>
+</div>
+
+<div class="scope-grid mt-md">
+<div class="scope-col inc">
+<h4>✅ Lo que SÍ protege</h4>
+<ul>
+<li>Accesos no autenticados del exterior.</li>
+<li>Tráfico no autorizado del exterior.</li>
+<li>Permite salida controlada desde el interior.</li>
+<li>Punto único para política de seguridad y auditoría.</li>
+</ul>
+</div>
+<div class="scope-col exc">
+<h4>❌ Lo que NO protege</h4>
+<ul>
+<li>Accesos externos que no van por el cortafuego (módems, etc.).</li>
+<li>Ataques desde el interior.</li>
+<li>Virus, troyanos, túneles.</li>
+<li>Salida de información por otro medio (disquetes, etc.).</li>
+<li>Debe ser parte de una política global.</li>
+</ul>
+</div>
+</div>
+
+<h3 class="mt-lg">Tipos de Cortafuegos</h3>
+
+<p><strong>Clasificación por tecnología:</strong></p>
+<div class="flex flex-wrap gap-sm mt-sm">
+<span class="tag tag-navy">Filtros de paquetes</span>
+<span class="tag tag-teal">Proxy de aplicación</span>
+<span class="tag tag-amber">Inspección de estados (stateful)</span>
+<span class="tag tag-violet">Híbridos</span>
+</div>
+
+<p class="mt-md"><strong>Clasificación por ubicación:</strong></p>
+<div class="flex flex-wrap gap-sm mt-sm">
+<span class="tag tag-gray">Cortafuegos personales</span>
+<span class="tag tag-gray">Pequeñas oficinas (SOHO)</span>
+<span class="tag tag-gray">Equipos hardware (Appliances)</span>
+<span class="tag tag-gray">Cortafuegos corporativos</span>
+</div>
+
+<div class="phases-grid mt-md">
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--navy-bg)">🌐</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--navy)">Nivel de Red</div><div class="phase-name">Filtros de Paquetes</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<ul>
+<li>Trabajan a nivel de red (IP).</li>
+<li>Filtran paquetes IP según sus cabeceras y criterios: direcciones IP origen/destino, puertos TCP/UDP origen/destino.</li>
+<li>Un <strong>router es un cortafuego básico</strong> a nivel de red.</li>
+<li>Pueden utilizar filtros estáticos o dinámicos.</li>
+</ul>
+<div class="phase-key">
+<span class="phase-tag" style="background:var(--accent-bg);color:var(--accent2)">PRO: Independencia de aplicaciones</span>
+<span class="phase-tag" style="background:var(--accent-bg);color:var(--accent2)">PRO: Muy rápidos y escalables</span>
+<span class="phase-tag" style="background:var(--red-bg);color:var(--red2)">CON: Menor seguridad</span>
+<span class="phase-tag" style="background:var(--red-bg);color:var(--red2)">CON: No examinan contexto</span>
+</div>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--accent-bg)">🛰️</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--accent2)">Nivel Aplicación</div><div class="phase-name">Gateways de Aplicación / Proxy</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<ul>
+<li>No permiten tráfico entre las dos redes si no es mediante un <strong>proxy a nivel de aplicación</strong>.</li>
+<li>Existe una conexión entre el exterior y el cortafuego, y otra entre el cortafuego y el interior.</li>
+</ul>
+<div class="phase-key">
+<span class="phase-tag" style="background:var(--accent-bg);color:var(--accent2)">PRO: Alto nivel de seguridad</span>
+<span class="phase-tag" style="background:var(--accent-bg);color:var(--accent2)">PRO: Examina información a nivel aplicación</span>
+<span class="phase-tag" style="background:var(--red-bg);color:var(--red2)">CON: Menor rendimiento y escalabilidad</span>
+<span class="phase-tag" style="background:var(--red-bg);color:var(--red2)">CON: Rompe modelo cliente/servidor</span>
+<span class="phase-tag" style="background:var(--red-bg);color:var(--red2)">CON: Requiere un proxy por aplicación</span>
+</div>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--violet-bg)">📊</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--violet)">Varios Niveles</div><div class="phase-name">Inspección de Estados (Stateful)</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<ul>
+<li>Realizan filtros en base a las cabeceras; el paquete se intercepta a nivel de red, pero extrae información de los datos para analizar en función de la aplicación.</li>
+<li>Mantiene una <strong>tabla dinámica de estados</strong> con información para las decisiones de seguridad.</li>
+<li><strong>No rompe</strong> el modelo cliente/servidor.</li>
+</ul>
+<div class="phase-key">
+<span class="phase-tag" style="background:var(--accent-bg);color:var(--accent2)">PRO: Alta seguridad, velocidad y escalabilidad</span>
+<span class="phase-tag" style="background:var(--accent-bg);color:var(--accent2)">PRO: Inspecciona datos a nivel aplicación</span>
+<span class="phase-tag" style="background:var(--red-bg);color:var(--red2)">CON: No se rompe la conexión totalmente</span>
+</div>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--amber-bg)">🧩</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--act-dark)">Mixto</div><div class="phase-name">Cortafuegos Híbridos</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<ul>
+<li>La mayoría de los productos comerciales actuales.</li>
+<li>Incorporan una mezcla de varias tecnologías.</li>
+<li>Pueden definirse reglas de filtros para tráfico que requiere alta velocidad, y proxy para alta seguridad.</li>
+<li><strong>Adaptativos</strong> (proxy durante el establecimiento y filtro de paquetes durante la transferencia de datos).</li>
+</ul>
+</div>
+</div>
+</div>
+
+<h3 class="mt-lg">Cortafuegos por Ubicación</h3>
+<div class="card mt-md">
+<table class="tlist">
+<tr><td>Cortafuegos personales (PC)</td><td>Novedad en el mercado. Protegen el PC controlando el stack IP e inspeccionando las aplicaciones más comunes. Permiten filtros de entrada y salida. Utilizables en PC en LAN, Módem, ADSL.</td></tr>
+<tr><td>Pequeñas oficinas (SOHO)</td><td>Small Office Home Office. Protegen a varios usuarios en pequeñas oficinas (típicamente entre 2 y 50). Suelen ser pequeños equipos instalados antes del router, o incluso integrados. Muy utilizable para el acceso con ADSL.</td></tr>
+<tr><td>Equipos hardware (Appliances)</td><td>Utilizados en oficinas medias y sucursales. Fáciles de configurar, con funcionalidades básicas y gestionados centralizadamente. Utilizan sistemas operativos propios del hardware en el que están implantados.</td></tr>
+<tr><td>Cortafuegos corporativos</td><td>Punto central de accesos a Internet de una empresa y donde se implanta la política de seguridad. Puede conectar múltiples redes. Software instalado en grandes servidores con configuraciones tolerantes a fallos.</td></tr>
+</table>
+</div>
+
+<h3 class="mt-lg">Generación de Cortafuegos</h3>
+<div class="pdca-grid">
+<div class="pdca-block plan" data-letter="1">
+<div class="pdca-letter">1ª Generación</div>
+<div class="pdca-word">Filtros de paquetes</div>
+<ul class="pdca-list">
+<li>Inspeccionan paquetes según reglas predefinidas.</li>
+<li>Rápidos pero sin comprensión del contenido del tráfico.</li>
+<li>Operan en la capa de red, basados en IP y puertos.</li>
+</ul>
+</div>
+<div class="pdca-block do" data-letter="2">
+<div class="pdca-letter">2ª Generación</div>
+<div class="pdca-word">Sesiones válidas</div>
+<ul class="pdca-list">
+<li>Determinan si un paquete pertenece a una sesión válida antes de permitir/bloquear.</li>
+<li>Analizan conexiones activas, no solo paquetes individuales.</li>
+<li>Mayor seguridad que los filtros básicos.</li>
+</ul>
+</div>
+<div class="pdca-block check" data-letter="3">
+<div class="pdca-letter">3ª Generación</div>
+<div class="pdca-word">Capa de aplicación</div>
+<ul class="pdca-list">
+<li>Comprenden protocolos como HTTP, FTP y SMTP.</li>
+<li>Detectan y bloquean actividades sospechosas en aplicaciones específicas.</li>
+<li>Más efectivos contra malware y ataques web.</li>
+</ul>
+</div>
+<div class="pdca-block act" data-letter="4">
+<div class="pdca-letter">4ª Generación</div>
+<div class="pdca-word">Tiempo real</div>
+<ul class="pdca-list">
+<li>Bloquean tráfico malicioso en tiempo real.</li>
+<li>Utilizan firmas de amenazas y análisis de comportamiento.</li>
+<li>Técnicas avanzadas para identificar y mitigar ataques.</li>
+</ul>
+</div>
+</div>
+<div class="card mt-md card-violet">
+<h4 class="card-title">5ª Generación</h4>
+<ul>
+<li>Incorporan <strong>inteligencia artificial</strong> y análisis predictivo para adaptarse a nuevas amenazas.</li>
+<li>Ofrecen protección contra ataques sofisticados como <strong>ransomware</strong> y <strong>amenazas persistentes avanzadas (APT)</strong>.</li>
+<li>Integran detección avanzada de amenazas, inspección profunda de paquetes y seguridad en la nube.</li>
+</ul>
+</div>
+
+<h3 class="mt-lg">Funciones Principales del Cortafuego</h3>
+<ul>
+<li>Bloquea tráfico no deseado.</li>
+<li>Redirecciona tráfico de entrada a sistemas internos de más confianza.</li>
+<li>Oculta sistemas vulnerables, que pueden ser fácilmente asegurados, de Internet.</li>
+<li>Puede registrar el tráfico desde y hacia la red privada.</li>
+<li>Puede ocultar información como nombres de sistemas, topología de la red, tipos de dispositivos de red e identificadores de usuarios internos, de Internet.</li>
+<li>Puede proveer autenticación más robusta que las aplicaciones.</li>
+</ul>
+
+<h3 class="mt-lg">Ventajas y Desventajas de Cortafuegos</h3>
+<div class="grid-2 mt-sm">
+<div class="card card-teal">
+<h4 class="card-title">✅ Ventajas</h4>
+<ul>
+<li>Protección contra amenazas externas.</li>
+<li>Control de tráfico de red.</li>
+<li>Flexibilidad en las políticas de seguridad.</li>
+<li>Monitoreo de actividad.</li>
+<li>Compatibilidad con tecnologías avanzadas.</li>
+</ul>
+</div>
+<div class="card card-red">
+<h4 class="card-title">❌ Desventajas</h4>
+<ul>
+<li>Limitaciones contra amenazas internas.</li>
+<li>Altos costos.</li>
+<li>Impacto en el rendimiento.</li>
+<li>Falsa sensación completa de seguridad.</li>
+</ul>
+</div>
+</div>
+
+<h3 class="mt-lg">IDS — Sistemas de Detección de Intrusos</h3>
+<p>Son herramientas de seguridad diseñadas para identificar <strong>actividades sospechosas o maliciosas</strong> dentro de una red o sistema informático. Se clasifican en dos categorías principales:</p>
+
+<div class="grid-2 mt-sm">
+<div class="card stripe-navy">
+<h4 class="card-title">Basados en Red</h4>
+<ul>
+<li>Monitorean el tráfico en toda la red.</li>
+<li>Analizan paquetes de datos en busca de patrones maliciosos.</li>
+</ul>
+</div>
+<div class="card stripe-accent">
+<h4 class="card-title">Basados en Host</h4>
+<ul>
+<li>Funcionan en dispositivos individuales, como servidores o estaciones de trabajo.</li>
+<li>Analizan registros de eventos y cambios de archivo.</li>
+</ul>
+</div>
+</div>
+
+<h4 class="mt-md">Métodos de Detección</h4>
+<ul>
+<li><strong>Por anomalía:</strong> identifica comportamiento inusual.</li>
+<li><strong>Por firma:</strong> compara el tráfico con una base de datos de ataques conocidos.</li>
+<li><strong>Basados en inteligencia artificial:</strong> utilizan técnicas de aprendizaje automático para adaptarse a amenazas nuevas.</li>
+</ul>
+
+<div class="grid-2 mt-md">
+<div class="card card-teal">
+<h4 class="card-title">✅ Ventajas de IDS</h4>
+<ul>
+<li>Detectan intrusiones en tiempo real.</li>
+<li>Proveen alertas detalladas sobre posibles ataques.</li>
+<li>Permiten análisis forense posterior a incidentes.</li>
+</ul>
+</div>
+<div class="card card-red">
+<h4 class="card-title">❌ Desventajas de IDS</h4>
+<ul>
+<li>No puede prevenir ataques, solo detectarlos.</li>
+<li>Pueden generar falsos positivos, requiriendo ajustes constantes.</li>
+<li>Requieren supervisión y mantenimiento para ser efectivos.</li>
+</ul>
+</div>
+</div>
+
+<h3 class="mt-lg">IPS — Prevención de Intrusos</h3>
+<p>Es una <strong>evolución de los IDS</strong> y se centra no solo en detectar amenazas, sino también en <strong>bloquearlas en tiempo real</strong>. Los IPS son esenciales en una estrategia de seguridad proactiva, ya que ayudan a mitigar ataques antes de que afecten a los sistemas.</p>
+
+<div class="card mt-md">
+<table class="tlist">
+<tr><td>Basado en Red</td><td>Inspeccionan el tráfico en toda la red para identificar y prevenir actividades maliciosas. Funcionan en puntos estratégicos como el perímetro de la red.</td></tr>
+<tr><td>Basado en Host</td><td>Operan en dispositivos individuales (servidores, estaciones de trabajo). Detectan y bloquean amenazas específicas contra el host, como exploits.</td></tr>
+<tr><td>Basado en comportamiento</td><td>Utilizan análisis de comportamiento para identificar y bloquear anomalías. Ofrecen alta precisión al adaptarse a nuevas amenazas.</td></tr>
+</table>
+</div>
+
+<div class="grid-2 mt-md">
+<div class="card card-teal">
+<h4 class="card-title">✅ Ventajas de IPS</h4>
+<ul>
+<li><strong>Bloqueo en tiempo real:</strong> responde automáticamente a las amenazas detectadas.</li>
+<li><strong>Protección avanzada:</strong> mitiga ataques como DDoS, exploits de vulnerabilidades y malware.</li>
+<li><strong>Mayor control:</strong> brinda una capa adicional de seguridad más allá de los cortafuegos y antivirus.</li>
+</ul>
+</div>
+<div class="card card-red">
+<h4 class="card-title">❌ Desventajas de IPS</h4>
+<ul>
+<li><strong>Configuración compleja:</strong> un mal ajuste puede bloquear tráfico legítimo.</li>
+<li><strong>Requiere recursos:</strong> puede consumir gran capacidad de procesamiento en redes de alto tráfico.</li>
+</ul>
+</div>
+</div>
+
+<h3 class="mt-lg">Diferencias entre IDS e IPS</h3>
+<div class="card mt-md">
+<table class="data-table">
+<thead><tr><th>Característica</th><th>IDS</th><th>IPS</th></tr></thead>
+<tbody>
+<tr><td><strong>Propósito principal</strong></td><td>Detectar y alertar sobre actividades sospechosas.</td><td>Prevenir amenazas al bloquearlas en tiempo real.</td></tr>
+<tr><td><strong>Reacción ante amenazas</strong></td><td>Genera alertas, pero no interfiere directamente.</td><td>Responde automáticamente, bloqueando o mitigando las amenazas.</td></tr>
+<tr><td><strong>Modo de operación</strong></td><td>Pasivo: solo monitorea y analiza el tráfico.</td><td>Activo: analiza, detecta y actúa sobre las amenazas.</td></tr>
+<tr><td><strong>Impacto en el tráfico</strong></td><td>No afecta el flujo del tráfico de la red.</td><td>Puede ralentizar el tráfico si no está bien configurado.</td></tr>
+<tr><td><strong>Uso típico</strong></td><td>Análisis forense y monitoreo continuo.</td><td>Mitigación en tiempo real de ataques.</td></tr>
+<tr><td><strong>Falsos positivos</strong></td><td>Más tolerante con falsos positivos, ya que no interfiere.</td><td>Un falso positivo puede bloquear tráfico legítimo, requiere ajustes cuidadosos.</td></tr>
+</tbody>
+</table>
+</div>
+
+</section>
+
+<!-- ================= BLOQUE 3: AUTENTICACIÓN Y CONTROL DE ACCESO ================= -->
+<section id="bloque3">
+<span class="s-label">Bloque 3</span>
+<h2 class="section-title">Autenticación y Control de Acceso</h2>
+
+<div class="card stripe-navy">
+<h3>Autenticación</h3>
+<p>Es el proceso de <strong>verificar la identidad</strong> de un usuario, dispositivo o sistema. Comúnmente se realiza a través de <strong>credenciales</strong> como nombres de usuario y contraseñas, <strong>tokens de seguridad</strong>, <strong>datos biométricos</strong>, entre otros.</p>
+<p>La autenticación es la <strong>primera línea de defensa</strong> contra el acceso no autorizado y es crucial para la seguridad de la información.</p>
+</div>
+
+<h3 class="mt-lg">Factores de Autenticación</h3>
+<div class="grid-3">
+<div class="benefit-chip"><span class="bi">🧠</span><div class="benefit-chip-text"><strong>Algo que el usuario sabe</strong><span>Como una contraseña.</span></div></div>
+<div class="benefit-chip"><span class="bi">💳</span><div class="benefit-chip-text"><strong>Algo que tiene el usuario</strong><span>Como una tarjeta de acceso o un token.</span></div></div>
+<div class="benefit-chip"><span class="bi">🫆</span><div class="benefit-chip-text"><strong>Algo que el usuario es</strong><span>Como una huella dactilar o un reconocimiento facial.</span></div></div>
+</div>
+
+<h3 class="mt-lg">Control de Acceso</h3>
+<div class="callout callout-navy">
+<p>Es el proceso de <strong>determinar qué usuarios o sistemas pueden acceder a recursos específicos</strong>. Es una parte fundamental de la seguridad de la información, ya que ayuda a proteger los datos confidenciales del acceso no autorizado y posibles infracciones.</p>
+</div>
+
+<h3 class="mt-lg">Mecanismos de Control de Acceso</h3>
+
+<div class="phases-grid mt-md">
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--navy-bg)">📋</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--navy)">ACL</div><div class="phase-name">Lista de Control de Acceso</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<p>El <strong>propietario del archivo</strong> define qué tipo de acceso pueden tener determinados usuarios: <strong>leer, escribir, actualizar, eliminar</strong> o cualquier otra forma de uso que el propietario acepte. Este concepto es fácil de comprender y administrar en el caso de <strong>objetos individuales</strong>.</p>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--accent-bg)">👥</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--accent2)">RBAC</div><div class="phase-name">Control de Acceso Basado en Roles</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<p>Modelo de seguridad que asigna permisos a los usuarios según sus <strong>funciones dentro de una organización</strong>. En lugar de conceder privilegios individualmente, se definen roles con permisos específicos y luego se asignan usuarios a esos roles.</p>
+<p><strong>Principios aplicados:</strong></p>
+<ul>
+<li>Roles y permisos.</li>
+<li>Separación de funciones.</li>
+<li>Menor privilegio.</li>
+<li>Asignación basada en reglas.</li>
+</ul>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--violet-bg)">🧬</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--violet)">ABAC</div><div class="phase-name">Control de Acceso Basado en Atributos</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<p>Modelo <strong>avanzado</strong> de seguridad que determina los permisos de acceso en función de <strong>múltiples atributos</strong> asociados al usuario, recurso, acción y entorno. Ofrece <strong>mayor flexibilidad y granularidad</strong>.</p>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header">
+<div class="phase-icon" style="background:var(--amber-bg)">🤖</div>
+<div class="phase-meta"><div class="phase-month" style="color:var(--act-dark)">AIAC</div><div class="phase-name">Control de Acceso Basado en IA</div></div>
+<span class="phase-toggle">⌄</span>
+</div>
+<div class="phase-body visible">
+<p>Es una <strong>evolución de los modelos tradicionales</strong>, integrando algoritmos de aprendizaje automático para tomar decisiones de acceso en tiempo real. Se adapta dinámicamente a los patrones de comportamiento y amenazas emergentes.</p>
+<p><strong>Características clave del modelo:</strong></p>
+<ul>
+<li>Autoadaptación y aprendizaje continuo.</li>
+<li>Autenticación avanzada.</li>
+<li>Análisis de riesgo en tiempo real.</li>
+<li>Integración con Zero Trust.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<h3 class="mt-lg">Aplicaciones de Autenticación</h3>
+<p>Las aplicaciones de autenticación son herramientas esenciales para implementar la <strong>autenticación multifactor (MFA)</strong>, añadiendo una capa adicional de seguridad a las cuentas.</p>
+
+<div class="grid-2 mt-md">
+<div class="benefit-chip"><span class="bi">🔐</span><div class="benefit-chip-text"><strong>Autenticación Multifactor (MFA)</strong><span>Complementan el uso de contraseñas con un segundo factor, como códigos temporales.</span></div></div>
+<div class="benefit-chip"><span class="bi">📱</span><div class="benefit-chip-text"><strong>Portabilidad</strong><span>Disponibles en dispositivos móviles, como smartphones, permitiendo llevar la autenticación siempre contigo.</span></div></div>
+<div class="benefit-chip"><span class="bi">🛡️</span><div class="benefit-chip-text"><strong>Seguridad avanzada</strong><span>Algunos incorporan autenticación biométrica (huella dactilar, reconocimiento facial) o patrones de comportamiento.</span></div></div>
+<div class="benefit-chip"><span class="bi">🔗</span><div class="benefit-chip-text"><strong>Compatibilidad</strong><span>Funcionan con amplia variedad de servicios y plataformas: correos electrónicos, redes sociales, aplicaciones empresariales.</span></div></div>
+<div class="benefit-chip"><span class="bi">☁️</span><div class="benefit-chip-text"><strong>Respaldo y sincronización</strong><span>Algunas aplicaciones permiten respaldar los códigos en la nube, útil en caso de pérdida del dispositivo.</span></div></div>
+</div>
+
+</section>
+
+<!-- ================= BLOQUE 4: SDLC Y DESARROLLO SEGURO DE SOFTWARE ================= -->
+<section id="bloque4">
+<span class="s-label">Bloque 4 — Tema 5</span>
+<h2 class="section-title">Aseguramiento del Ciclo de Vida del Software Seguro</h2>
+
+<div class="callout callout-navy">
+<h4>Introducción</h4>
+<p>En la era digital actual, la <strong>seguridad del software</strong> se ha convertido en una preocupación central para cualquier organización que dependa de sistemas informáticos. Un software inseguro puede exponer a una organización a <strong>riesgos financieros y legales</strong>, y socavar la confianza de usuarios y clientes.</p>
+<p class="mt-sm">Para evitar problemas de seguridad recurrentes, es esencial construir la seguridad <strong>dentro del Ciclo de Vida de Desarrollo del Software (SDLC)</strong>, desarrollando estándares, políticas y guías que encajen con la metodología de desarrollo. Un ciclo de desarrollo seguro requiere una <strong>mentalidad proactiva</strong> que coloca la seguridad en el núcleo del proceso, desde la concepción hasta el despliegue y más allá. Estos esfuerzos culminan en la metodología conocida como <strong>DevSecOps</strong>.</p>
+</div>
+
+<h3 class="mt-lg">Software Development Lifecycle (SDLC)</h3>
+<p>El <strong>SDLC</strong> (Ciclo de Vida del Desarrollo de Software) es un proceso estructurado utilizado para desarrollar y mantener software de manera sistemática y efectiva. Guía a los equipos a través de las diferentes etapas, desde la concepción de la idea hasta la entrega del producto final y su mantenimiento continuo.</p>
+
+<h4 class="mt-md">Fases del SDLC</h4>
+<div class="timeline mt-sm">
+<div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-name">1. Requisitos</div><div class="tl-desc">Fase inicial donde se definen y recopilan los requisitos del software. Se identifican las necesidades del cliente y las funcionalidades que debe tener la aplicación.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#00A896"></div><div class="tl-name">2. Diseño</div><div class="tl-desc">Se elabora una especificación detallada del software. Se crea un diseño técnico y arquitectónico que servirá como base para el desarrollo.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#F5A623"></div><div class="tl-name">3. Implementación</div><div class="tl-desc">Se lleva a cabo la codificación del software según las especificaciones y el diseño previo. Los desarrolladores escriben el código y crean el producto funcional.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#7C3AED"></div><div class="tl-name">4. Pruebas</div><div class="tl-desc">El software se somete a pruebas exhaustivas para identificar y corregir errores, asegurando que funcione correctamente y cumpla con los requisitos establecidos.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#EF4444"></div><div class="tl-name">5. Despliegue</div><div class="tl-desc">Una vez probado y asegurada su calidad, el software se implementa en el entorno de producción y se pone a disposición de los usuarios finales.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-name">6. Mantenimiento</div><div class="tl-desc">Implica la corrección de errores, la realización de actualizaciones y mejoras, y la gestión del software a lo largo de su vida útil para garantizar su eficiencia y seguridad continua.</div></div>
+</div>
+
+<h3 class="mt-lg">Modelos Clásicos del SDLC</h3>
+<p>Han sido ampliamente utilizados durante décadas. Suelen seguir un enfoque <strong>lineal y secuencial</strong>, con énfasis en la planificación detallada y la ejecución paso a paso.</p>
+
+<div class="card mt-md">
+<table class="tlist">
+<tr><td>Cascada (Waterfall)</td><td>Enfoque lineal y secuencial que divide el desarrollo en etapas bien definidas: requisitos, diseño, implementación, pruebas y mantenimiento. Cada fase debe completarse antes de pasar a la siguiente, lo que hace difícil volver atrás en caso de cambios, requiriendo gran cantidad de recursos y tiempo.</td></tr>
+<tr><td>Modelo en V (V-Model)</td><td>Extensión del modelo en cascada que asocia cada etapa de desarrollo con una etapa de pruebas correspondiente, enfatizando la verificación y validación en cada fase del proceso.</td></tr>
+<tr><td>Modelo en Espiral (Spiral)</td><td>Enfoque iterativo que combina elementos del modelo en cascada con prototipos y evaluaciones continuas de riesgos. El desarrollo se divide en ciclos, cada uno con planificación, análisis de riesgos, desarrollo, pruebas y revisión.</td></tr>
+</table>
+</div>
+
+<div class="callout callout-amber mt-md">
+<h4>⚠️ Limitaciones de los modelos clásicos</h4>
+<p>Son lineales y secuenciales: una vez completada una etapa, es difícil o costoso volver atrás. No son ideales para proyectos con requisitos propensos a cambiar. La interacción con usuarios/stakeholders ocurre principalmente al inicio (análisis de requisitos), lo que puede llevar a malentendidos. Tienden a requerir demasiada documentación, limitando el desarrollo real del software, y las etapas de pruebas y control de calidad pueden relegarse al final, dificultando la detección temprana de errores.</p>
+</div>
+
+<h3 class="mt-lg">Modelos Ágiles</h3>
+<p>Surgieron a principios del nuevo milenio cuando los desarrolladores cuestionaron la viabilidad del modelo en cascada, que se mostraba insuficiente para las necesidades cambiantes de los clientes. Se centran en crear <strong>iteraciones cortas y frecuentes</strong> del software, permitiendo obtener <strong>feedback rápido</strong> del cliente y realizar mejoras de manera cíclica.</p>
+<p>Las prácticas ágiles, como <strong>Scrum</strong> o <strong>Kanban</strong>, se basan en pequeños equipos que se enfocan en tareas definidas como <strong>sprints</strong>, con ciclos de retroalimentación cortos para mejorar continuamente el proceso y el producto final.</p>
+
+<h3 class="mt-lg">Comparativa: Cascada vs. Agile vs. DevOps</h3>
+<div class="card mt-md">
+<table class="data-table">
+<thead><tr><th>Metodología</th><th>Descripción</th><th>Ventajas</th><th>Desventajas</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Cascada (Waterfall)</strong></td>
+<td>Enfoque secuencial donde cada fase debe completarse antes de pasar a la siguiente.</td>
+<td>Claridad y estructura; documentación extensa; facilidad de gestión.</td>
+<td>Rigidez; riesgo de problemas tardíos; poca flexibilidad.</td>
+</tr>
+<tr>
+<td><strong>Agile</strong></td>
+<td>Metodología iterativa y flexible con ciclos cortos llamados "Sprints".</td>
+<td>Flexibilidad; colaboración y comunicación; entrega continua.</td>
+<td>Falta de documentación formal; requiere disciplina; incertidumbre.</td>
+</tr>
+<tr>
+<td><strong>DevOps</strong></td>
+<td>Práctica que combina desarrollo y operaciones para mejorar la colaboración y eficiencia.</td>
+<td>Entrega rápida y continua; mejora la colaboración; alta fiabilidad.</td>
+<td>Complejidad inicial; cambio cultural; requiere alta automatización.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="mt-lg">Metodología Tradicional vs. Ágil</h3>
+<div class="grid-2 mt-md">
+<div class="card stripe-navy">
+<h4 class="card-title">Metodología Tradicional</h4>
+<p><strong>Triángulo fijo:</strong> Tiempo, Alcance y Costo están definidos desde el inicio (rigidez).</p>
+<p><strong>Características:</strong></p>
+<ul>
+<li>Negociación de contrato.</li>
+<li>Procesos y herramientas.</li>
+<li>Documentación comprensiva.</li>
+<li>Seguimiento al plan.</li>
+<li>Procesos muy controlados.</li>
+<li>Grupos de gran tamaño.</li>
+</ul>
+</div>
+<div class="card stripe-accent">
+<h4 class="card-title">Metodología Ágil</h4>
+<p><strong>Triángulo flexible:</strong> Tiempo, Alcance y Costo se ajustan iterativamente (flexibilidad).</p>
+<p><strong>Características:</strong></p>
+<ul>
+<li>Colaboración del cliente.</li>
+<li>Personas e interacción.</li>
+<li>Software funcionando.</li>
+<li>Adaptarse a los cambios.</li>
+<li>Procesos menos controlados.</li>
+<li>Grupos pequeños in-situ.</li>
+</ul>
+</div>
+</div>
+
+<div class="callout callout-violet mt-md">
+<p><strong>Nota importante:</strong> existen otras metodologías de desarrollo de software, pero su análisis no está dentro del alcance de esta guía.</p>
+</div>
+
+</section>
+
+<!-- ================= BLOQUE 5: DEVOPS Y DEVSECOPS ================= -->
+<section id="bloque5">
+<span class="s-label">Bloque 5 — Capítulos 3 y 4</span>
+<h2 class="section-title">DevOps, S-SDLC y DevSecOps</h2>
+
+<h3>3. DevOps: Un Enfoque Detallado</h3>
+<p>En el dinámico panorama tecnológico actual, <strong>DevOps</strong> ha emergido como una práctica revolucionaria que integra el <strong>desarrollo de software (Dev)</strong> y las <strong>operaciones de TI (Ops)</strong>. Tiene como objetivo mejorar la <strong>colaboración, la eficiencia y la velocidad de entrega</strong> mediante la automatización y la integración continua.</p>
+
+<h4 class="mt-md">Principios Fundamentales de DevOps</h4>
+<div class="pdca-grid mt-sm">
+<div class="pdca-block plan" data-letter="01">
+<div class="pdca-letter">01 · Colaboración</div>
+<div class="pdca-word">Comunicación</div>
+<ul class="pdca-list">
+<li>Colaboración estrecha entre desarrollo y operaciones.</li>
+<li>Rompe los silos tradicionales.</li>
+<li>Reuniones regulares y herramientas colaborativas.</li>
+</ul>
+</div>
+<div class="pdca-block do" data-letter="02">
+<div class="pdca-letter">02 · Automatización</div>
+<div class="pdca-word">Pilar central</div>
+<ul class="pdca-list">
+<li>Acelera desarrollo, pruebas y despliegue.</li>
+<li>Herramientas CI/CD automatizan construcción, prueba y despliegue.</li>
+<li>Garantiza entrega rápida y eficiente.</li>
+</ul>
+</div>
+<div class="pdca-block check" data-letter="03">
+<div class="pdca-letter">03 · Integración Continua (CI)</div>
+<div class="pdca-word">CI</div>
+<ul class="pdca-list">
+<li>Integración frecuente del código en un repositorio compartido.</li>
+<li>Verificación automática con pruebas unitarias y de integración.</li>
+<li>Asegura que el nuevo código no rompa la funcionalidad existente.</li>
+</ul>
+</div>
+<div class="pdca-block act" data-letter="04">
+<div class="pdca-letter">04 · Entrega Continua (CD)</div>
+<div class="pdca-word">CD</div>
+<ul class="pdca-list">
+<li>Extiende la CI al despliegue automático de cambios que pasan pruebas.</li>
+<li>Software entregado de manera rápida y frecuente.</li>
+<li>Mínimas interrupciones.</li>
+</ul>
+</div>
+</div>
+
+<div class="grid-2 mt-md">
+<div class="card stripe-teal">
+<h4 class="card-title">05 · Monitoreo y Registro Continuo</h4>
+<p>El monitoreo continuo de aplicaciones e infraestructura permite la <strong>detección proactiva de problemas</strong>. Los registros detallados ayudan a identificar y resolver problemas rápidamente, mejorando la estabilidad y rendimiento del software.</p>
+</div>
+<div class="card stripe-amber">
+<h4 class="card-title">06 · Infraestructura como Código (IaC)</h4>
+<p>Permite gestionar y aprovisionar la infraestructura mediante <strong>scripts de configuración automatizados</strong>, en lugar de procesos manuales. Asegura que entornos de desarrollo, prueba y producción sean <strong>consistentes y reproducibles</strong>.</p>
+</div>
+</div>
+
+<div class="memory-box mt-md">
+<h4>💡 Desarrollo Iterativo vs. Incremental</h4>
+<p><strong>Incremental:</strong> el software se construye y entrega en piezas funcionales sucesivas (1, 2, 3...) que se van sumando hasta completar el producto.<br><strong>Iterativo:</strong> el software se desarrolla repitiendo ciclos completos (1, 2, 3...) que refinan progresivamente todas las partes del producto en cada vuelta.</p>
+</div>
+
+<h4 class="mt-lg">Beneficios de DevOps</h4>
+<div class="grid-2 mt-sm">
+<div class="benefit-chip"><span class="bi">⚡</span><div class="benefit-chip-text"><strong>1. Velocidad y Agilidad</strong><span>Ciclos de desarrollo más cortos y tiempos de entrega más rápidos, facilitando la respuesta ágil a las necesidades del mercado y del cliente. Reduce el tiempo de comercialización y mejora la competitividad.</span></div></div>
+<div class="benefit-chip"><span class="bi">✅</span><div class="benefit-chip-text"><strong>2. Calidad y Fiabilidad</strong><span>Las pruebas automatizadas y el monitoreo continuo aseguran software robusto y fiable. La integración continua detecta errores en etapas tempranas, reduciendo defectos en producción.</span></div></div>
+<div class="benefit-chip"><span class="bi">📈</span><div class="benefit-chip-text"><strong>3. Escalabilidad y Consistencia</strong><span>IaC y la automatización aseguran que la infraestructura sea escalable y consistente, facilitando la gestión de entornos grandes y complejos.</span></div></div>
+<div class="benefit-chip"><span class="bi">🤝</span><div class="benefit-chip-text"><strong>4. Colaboración y Responsabilidad</strong><span>Promueve una cultura de responsabilidad compartida por la calidad y el éxito del producto, fomentando un sentido de propiedad y compromiso entre los miembros del equipo.</span></div></div>
+</div>
+
+<h4 class="mt-lg">Herramientas y Tecnologías DevOps</h4>
+<div class="card mt-sm">
+<table class="data-table">
+<thead><tr><th>Categoría</th><th>Herramientas</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Control de Versiones</strong></td><td><span class="code-cell">Git</span> — sistema distribuido que facilita la gestión del código fuente y la colaboración. <span class="code-cell">Subversion (SVN)</span> — alternativa más tradicional y centralizada.</td></tr>
+<tr><td><strong>2. Integración y Entrega Continua</strong></td><td><span class="code-cell">Jenkins</span> — automatización de código abierto que soporta CI/CD. <span class="code-cell">Travis CI</span> — servicio de CI basado en la nube para proyectos en GitHub.</td></tr>
+<tr><td><strong>3. Gestión de Configuración e IaC</strong></td><td><span class="code-cell">CircleCI</span> — automatiza construcción, prueba y despliegue. <span class="code-cell">Terraform</span> — provisión de infraestructura multi-nube. <span class="code-cell">Ansible</span> — automatización de configuración y despliegue. <span class="code-cell">Chef/Puppet</span> — gestión de configuración de servidores.</td></tr>
+<tr><td><strong>4. Monitoreo y Registro</strong></td><td><span class="code-cell">Prometheus</span> — monitoreo y alertas. <span class="code-cell">ELK Stack</span> (Elasticsearch, Logstash, Kibana) — búsqueda, análisis y visualización de datos en tiempo real. <span class="code-cell">Grafana</span> — visualización y análisis de datos.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="divider"></div>
+
+<h3>3. Secure Software Development Lifecycle (S-SDLC)</h3>
+<p>Uno de los problemas más comunes es que la seguridad se aborda en una etapa demasiado avanzada del proceso (pruebas), después de completar diseño e implementación. En muchos casos, los controles de seguridad de esa etapa son superficiales (análisis y pruebas de intrusión), por lo que pueden pasarse por alto problemas más complejos que retrasarían la llegada del sistema a producción y cuya resolución es más costosa.</p>
+
+<div class="callout callout-red">
+<p><strong>Importante:</strong> los costes son <strong>exponenciales</strong> según avanzamos en las fases hasta el producto final, y se disparan cuando el producto está en el mercado o entregado al cliente, momento en que los defectos encontrados en la fase de pruebas ya son muy numerosos.</p>
+</div>
+
+<p class="mt-md"><strong>S-SDLC</strong> es un conjunto de <strong>principios de diseño y buenas prácticas</strong> a implantar en el SDLC, para detectar, prevenir y corregir defectos de seguridad en el desarrollo y adquisición de aplicaciones, obteniendo software de confianza y robusto frente a ataques maliciosos, que realice solo las funciones para las que fue diseñado, libre de vulnerabilidades (intencionales o accidentales), asegurando su <strong>integridad, disponibilidad y confidencialidad</strong>.</p>
+
+<h4 class="mt-md">Tabla: SDLC — Medidas de Seguridad por Etapa</h4>
+<div class="card mt-sm">
+<table class="data-table">
+<thead><tr><th>Etapa del SDLC</th><th>Medida de Seguridad</th></tr></thead>
+<tbody>
+<tr><td><strong>Planificación</strong></td><td>Evaluar los riesgos y el panorama de las amenazas a la seguridad. Evaluar el posible impacto de los incidentes de seguridad, como el riesgo para la reputación de la empresa.</td></tr>
+<tr><td><strong>Análisis de los requisitos</strong></td><td>Incluir los requisitos de seguridad. Comprender e incorporar los requisitos de cumplimiento normativo.</td></tr>
+<tr><td><strong>Diseño</strong></td><td>Elaborar modelos de amenazas. Incluir las consideraciones de seguridad como parte integral del plan de arquitectura. Evaluar el impacto de la seguridad en decisiones de diseño, como plataforma e interfaz de usuario.</td></tr>
+<tr><td><strong>Desarrollo</strong></td><td>Capacitar a los desarrolladores sobre prácticas de codificación seguras. Incorporar herramientas de pruebas de seguridad. Evaluar las dependencias del software y reducir riesgos.</td></tr>
+<tr><td><strong>Documentación</strong></td><td>Documentar los procesos y controles de seguridad. Reunir información para auditorías, controles de cumplimiento normativo y revisiones de seguridad.</td></tr>
+<tr><td><strong>Pruebas</strong></td><td>Implementar procesos de revisión del código. Realizar pruebas estáticas y dinámicas de la seguridad de las aplicaciones.</td></tr>
+<tr><td><strong>Implementación</strong></td><td>Evaluar la seguridad del entorno de implementación. Revisar las configuraciones de seguridad.</td></tr>
+<tr><td><strong>Mantenimiento</strong></td><td>Supervisar el sistema para detectar amenazas. Prepararse para eliminar puntos vulnerables y solucionar intrusiones.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="divider"></div>
+
+<h3>3.1 Microsoft Security Development Lifecycle (SDL)</h3>
+<p>Proceso propuesto por <strong>Microsoft en 2004</strong>, diseñado para mejorar la seguridad del desarrollo de software. Consta de <strong>siete componentes</strong>, incluidas <strong>cinco fases principales</strong> y <strong>dos actividades de seguridad auxiliares</strong>. Cada fase contiene comprobaciones y aprobaciones obligatorias.</p>
+
+<div class="timeline mt-md">
+<div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-name">1. Formación</div><div class="tl-desc">Importancia de proporcionar formación continua a los roles técnicos del equipo de desarrollo, para que estén actualizados con las últimas prácticas y respondan a amenazas emergentes.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#00A896"></div><div class="tl-name">2. Requisitos y diseño</div><div class="tl-desc">Identificación y documentación de los requisitos de seguridad y aplicación de técnicas de diseño seguro. El <strong>modelo de amenazas</strong> es una característica fundamental, apoyado por la threat modelling tool de Microsoft.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#F5A623"></div><div class="tl-name">3. Implementación</div><div class="tl-desc">Codificación segura mediante herramientas de desarrollo seguras. Énfasis en buenas prácticas de programación y <strong>análisis estático del código</strong> para detectar problemas durante el desarrollo.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#7C3AED"></div><div class="tl-name">4. Comprobación</div><div class="tl-desc">Crucial para identificar y corregir vulnerabilidades antes del lanzamiento. Se utilizan <strong>análisis dinámico</strong>, <strong>fuzzing</strong> y otras técnicas de prueba.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#EF4444"></div><div class="tl-name">5. Lanzamiento y respuesta</div><div class="tl-desc">Se implementan medidas para un lanzamiento seguro: las compilaciones se publican gradualmente en grupos llamados "anillos" (proceso de implementación segura, SDP), y se planifica respuesta a incidentes futuros.</div></div>
+</div>
+
+<div class="divider"></div>
+
+<h3>3.2 CLASP — Proceso de Seguridad en Aplicación Completo y Ligero</h3>
+<p><strong>CLASP</strong> (Comprehensive Lightweight Application Security Process) es un proyecto de <strong>OWASP</strong> que establece actividades, roles y buenas prácticas dirigidas a coordinar los procesos de desarrollo seguro de software. Se asienta en <strong>cinco vistas o perspectivas</strong>.</p>
+
+<div class="phases-grid mt-md">
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--navy-bg)">1️⃣</div><div class="phase-meta"><div class="phase-name">Vista de conceptos</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Proporciona una introducción de alto nivel a la metodología CLASP: describe la interacción de las diferentes vistas, las mejores prácticas y la secuencia de aplicación de los componentes.</p></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--accent-bg)">2️⃣</div><div class="phase-meta"><div class="phase-name">Vista basada en roles</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Presenta instrucciones del proceso basadas en las funciones de los miembros del equipo, ayudándolos a comprender sus responsabilidades en relación con la seguridad.</p></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--amber-bg)">3️⃣</div><div class="phase-meta"><div class="phase-name">Vista de evaluación de actividades</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Asiste a los responsables del proyecto en la evaluación y selección de las actividades más apropiadas para aplicar durante el desarrollo.</p></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--violet-bg)">4️⃣</div><div class="phase-meta"><div class="phase-name">Vista de implementación de actividades</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Detalla todas las actividades de seguridad de CLASP que pueden integrarse en el proceso de desarrollo, contribuyendo a generar software seguro y resistente a amenazas.</p></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--red-bg)">5️⃣</div><div class="phase-meta"><div class="phase-name">Vista de vulnerabilidades</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Comprende un catálogo de problemas previamente identificados por CLASP (base de datos de vulnerabilidades del código fuente), clasificados en cinco categorías, con ejemplos prácticos de causas y soluciones.</p></div>
+</div>
+</div>
+
+<div class="callout callout-amber mt-md">
+<h4>104 Tipos de Problemas</h4>
+<p>CLASP identifica <strong>104 tipos de problemas subyacentes</strong> que forman la base de la seguridad de vulnerabilidades en el código fuente. Un tipo de problema individual a menudo no es por sí mismo una vulnerabilidad de seguridad; con frecuencia es una <strong>combinación de problemas</strong> que crea una falsa condición de seguridad que conduce a una vulnerabilidad.</p>
+<p class="mt-sm">Se clasifican en <strong>5 categorías de alto nivel</strong> (un mismo tipo puede pertenecer a más de una): errores de rango y tipo, problemas de entorno, errores de tiempo y sincronización, errores de protocolo y errores lógicos generales.</p>
+</div>
+
+<p class="mt-md">CLASP define una <strong>consecuencia de una vulnerabilidad explotada o explotable</strong> como un fallo en uno o más de estos servicios básicos de seguridad:</p>
+<div class="flex flex-wrap gap-sm mt-sm">
+<span class="tag tag-navy">Autorización (control de acceso a recursos)</span>
+<span class="tag tag-teal">Confidencialidad</span>
+<span class="tag tag-amber">Autenticación (identidad)</span>
+<span class="tag tag-violet">Disponibilidad (negación de servicio)</span>
+<span class="tag tag-red">Responsabilidad</span>
+<span class="tag tag-gray">No repudio</span>
+</div>
+
+<h4 class="mt-lg">Mejores prácticas que promueve CLASP</h4>
+<div class="qa-list mt-sm">
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">1</span> Instituir programas de concienciación <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Los conceptos de seguridad pueden ser ajenos a los desarrolladores y demás involucrados. Es imperativo educar a todos desde el principio. Los gerentes de proyecto deben promover que la seguridad sea un objetivo importante mediante capacitación y rendición de cuentas.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">2</span> Realizar evaluaciones de aplicaciones <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Las pruebas y evaluaciones, en particular las automatizadas, deben seguir siendo un componente central de la estrategia de seguridad, encontrando problemas no detectados en revisiones de código o implementación, incluyendo riesgos del entorno operativo (defensa en profundidad).</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">3</span> Capturar requisitos de seguridad <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Los requisitos de seguridad deben tener el mismo nivel de importancia que cualquier otro requisito imprescindible. Es crucial considerar cómo se usarán las aplicaciones, posibles ataques dirigidos, los activos a proteger, el nivel de protección apropiado según regulaciones y el impacto reputacional potencial.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">4</span> Implementar prácticas de desarrollo seguras <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Actividades de seguridad definidas, artefactos, alineamientos y refuerzo continuo deben convertirse en parte de la cultura general de la organización.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">5</span> Construir procedimientos de remediación de vulnerabilidades <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Especialmente importante en actualizaciones y mejoras: definir qué pasos se tomarán para identificar, evaluar, priorizar y remediar vulnerabilidades.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">6</span> Definir y monitorear métricas <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">No se puede gestionar lo que no se puede medir. Las métricas son esenciales para evaluar la postura de seguridad actual, centrar la atención en las vulnerabilidades más críticas y revelar qué tan bien funcionan las inversiones en mejoras.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">7</span> Publicar alineamientos de seguridad operacional <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">La seguridad no termina cuando una aplicación se implementa en producción. Hay que informar y educar a quienes monitorean y administran la seguridad de los sistemas en ejecución, con orientación sobre los requisitos de seguridad exigidos.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">8</span> Revisión por pares <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Parte del proceso de solicitud de incorporación de cambios. Suelen detectar defectos, errores o problemas relacionados con errores humanos. Se recomienda contar con un experto en seguridad que guíe al desarrollador antes de crear la solicitud de incorporación de cambios.</div></div>
+</div>
+
+<div class="divider"></div>
+
+<h3>3.3 Secure Software Development Framework (SSDF)</h3>
+<p>El <strong>Instituto Nacional de Estándares y Tecnología (NIST)</strong> desarrolló el <strong>SSDF</strong> con el objetivo de mejorar la resistencia a las vulnerabilidades en el software. En lugar de introducir terminología nueva, consolida las <strong>mejores prácticas y pautas existentes</strong> establecidas por organizaciones como BSA, OWASP o SAFECode, enfocándose en prácticas óptimas sin limitarse a herramientas o mecanismos específicos.</p>
+
+<p class="mt-sm">SSDF se divide en <strong>cuatro categorías principales</strong> de prácticas:</p>
+<div class="pdca-grid mt-md">
+<div class="pdca-block plan" data-letter="PO">
+<div class="pdca-letter">PO</div>
+<div class="pdca-word">Preparar la Organización</div>
+<ul class="pdca-list"><li>Asegurar que procesos, personas y tecnología estén listos para garantizar la seguridad a nivel organizacional.</li><li>Prácticas aplicables a subconjuntos de la organización (grupos o proyectos específicos).</li></ul>
+</div>
+<div class="pdca-block do" data-letter="PS">
+<div class="pdca-letter">PS</div>
+<div class="pdca-word">Proteger el Software</div>
+<ul class="pdca-list"><li>Garantizar que todos los componentes estén protegidos contra acceso no autorizado y manipulación.</li><li>Medidas sólidas desde el diseño hasta la implementación.</li></ul>
+</div>
+<div class="pdca-block check" data-letter="PW">
+<div class="pdca-letter">PW</div>
+<div class="pdca-word">Producir Software Seguro</div>
+<ul class="pdca-list"><li>Producir software bien protegido desde la cadena de suministro.</li><li>Medidas mínimas de seguridad ante vulnerabilidades potenciales y gestión de vulnerabilidades conocidas.</li></ul>
+</div>
+<div class="pdca-block act" data-letter="RV">
+<div class="pdca-letter">RV</div>
+<div class="pdca-word">Responder a las Vulnerabilidades</div>
+<ul class="pdca-list"><li>Capacidad de identificar y corregir vulnerabilidades restantes en las versiones de software.</li><li>Mecanismos de respuesta rápida y efectiva ante amenazas emergentes.</li></ul>
+</div>
+</div>
+
+<div class="memory-box mt-md">
+<h4>📌 Algunas prácticas concretas de SSDF</h4>
+<ul>
+<li>Definir criterios para las comprobaciones de seguridad del software.</li>
+<li>Proteger todas las formas de código contra acceso no autorizado y manipulación, siguiendo el principio de mínimo privilegio.</li>
+<li>Proporcionar un mecanismo para verificar la integridad de la versión del software mediante <strong>firma digital del código</strong>.</li>
+<li>Diseñar el software para cumplir con los requisitos de seguridad y mitigar riesgos.</li>
+<li>Verificar que el software de terceros cumple con los requisitos de seguridad.</li>
+<li>Configurar los procesos de compilación y construcción para mejorar la seguridad de los ejecutables.</li>
+<li>Revisar/analizar el código legible por humanos para identificar vulnerabilidades y verificar cumplimiento.</li>
+<li>Probar el código ejecutable para identificar vulnerabilidades y verificar cumplimiento.</li>
+<li>Configurar el software para que tenga una configuración segura por defecto.</li>
+<li>Archivar y proteger cada versión del software.</li>
+<li>Identificar, analizar y corregir las vulnerabilidades de forma continua.</li>
+</ul>
+</div>
+
+<div class="divider"></div>
+
+<h3>4. Implementación del SSDLC con DevSecOps</h3>
+
+<h4 class="mt-md">4.1 DevOps</h4>
+<p>Esta filosofía se basa en que las personas trabajen juntas para <strong>concebir, construir y entregar software seguro a alta velocidad</strong>. Las prácticas de DevOps permiten a los equipos de desarrollo (dev) y operaciones (ops) acelerar la entrega mediante automatización, colaboración, retroalimentación rápida y mejora iterativa. Comparte una estrecha relación con el desarrollo ágil, integrando el trabajo de ambos equipos al facilitar una cultura de colaboración y responsabilidad compartida.</p>
+<p>DevOps representa sobre todo un <strong>cambio en la mentalidad de la cultura del software</strong>, enfocándose en el desarrollo incremental y la entrega rápida. La comunicación y la confianza entre el equipo son indispensables, extendiendo la colaboración a otros equipos como calidad, infraestructura o seguridad. El éxito radica en crear una cultura de responsabilidad, colaboración, empatía y responsabilidad conjunta por los resultados del negocio.</p>
+
+<h4 class="mt-lg">4.2 DevSecOps</h4>
+<p>Tradicionalmente, la seguridad de las aplicaciones se abordaba <strong>solo después de completar todo el desarrollo</strong>. El equipo de seguridad trabajaba separado, ralentizando procesos y limitando el conocimiento de riesgos al resto del equipo.</p>
+<p><strong>DevSecOps</strong>, también conocida como <strong>SecDevOps</strong>, es una filosofía de desarrollo que promueve la adopción de la seguridad en <strong>todo el ciclo de vida del SSDLC</strong>. Nace como evolución de DevOps y su principal motivación es <strong>automatizar la seguridad</strong> para responder a la aceleración de los ciclos de lanzamiento. No solo añade elementos de seguridad a ciclos DevOps, sino que la convierte en parte integral de todo el proceso, desde el inicio hasta el final.</p>
+<p>Cuando la seguridad se integra en el proceso DevSecOps desde el inicio hasta la producción, las organizaciones pueden implementar conjuntamente los tres componentes más importantes de la creación y entrega de software, permitiendo pruebas de seguridad transparentes, automáticas y en paralelo a otros desarrollos (tanto durante el desarrollo como en producción, para corregir vulnerabilidades poco después de localizarlas).</p>
+<p>Como consecuencia, el equipo de seguridad se compromete mucho más con Desarrollo y Operaciones, eliminando la fricción y compartiendo la tensión natural entre velocidad y seguridad. Mientras que el S-SDLC involucra mucho más que lo automatizable (capacitaciones, modelado de amenazas, revisiones de diseño/arquitectura), para DevSecOps es casi indispensable que sean procesos automatizables incluidos en "tuberías de entrega" (Delivery pipeline) con soluciones de CI/CD.</p>
+
+<div class="callout callout-teal mt-md">
+<p>No es obligatorio agregar todos los pasos siguientes, pero cada uno ayuda a revelar problemas de seguridad cuanto antes, cuando son mucho más baratos y fáciles de corregir.</p>
+</div>
+
+<h4 class="mt-lg">4.2.1 Planificación</h4>
+<p>El desarrollo moderno sigue normalmente una metodología ágil. <strong>Scrum</strong> inicia cada sprint con una actividad de planeamiento. La introducción de la seguridad en esta fase debe centrarse en:</p>
+<div class="qa-list mt-sm">
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">1</span> Modelado de amenazas <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Ver la aplicación desde la perspectiva de un posible atacante: identificar cómo puede abusar de la aplicación y cómo evitarlo. Herramientas: <strong>Microsoft Threat Modeling Tool, OWASP Threat Dragon, IriusRisk, OWASP pytm, ThreatModeler, ThreatPlayBook</strong>. Herramienta lúdica de formación: <strong>Microsoft Elevation of Privilege (EoP)</strong>.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">2</span> Directrices de prácticas de codificación <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Como la guía rápida de OWASP, estándares de seguridad según contexto (IoT, Cloud) y regulaciones aplicables, como el <strong>RGPD</strong>, la <strong>LOPDGDD</strong> o la <strong>LSSI</strong>.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">3</span> Definición de casos de uso y requisitos <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Teniendo en cuenta la ciberseguridad. Recurso educativo: el juego <strong>OWASP Cornucopia</strong>, para aprender a identificar requisitos de seguridad.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">4</span> Priorización <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">En ciberseguridad es imposible garantizar 100% de seguridad; hay que valorar el tiempo a dedicar a proteger el código frente a los beneficios obtenidos, identificando qué problemas son más urgentes o pueden hacer más daño.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">5</span> Revisión por pares <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Parte del proceso de solicitud de incorporación de cambios; detecta defectos y errores humanos. Se recomienda un experto en seguridad que guíe al desarrollador antes de crear la solicitud.</div></div>
+</div>
+<p class="mt-sm">Las fases de planificación de DevSecOps son las <strong>menos automatizadas</strong>, ya que involucran colaboración y discusión. Herramientas de apoyo: <strong>Slack</strong> (colaboración), <strong>Jira Software</strong> (gestión y seguimiento de problemas).</p>
+
+<h4 class="mt-lg">4.2.2 Desarrollo / Codificación</h4>
+<p>Los desarrolladores suelen centrarse en la velocidad de entrega, y los controles de seguridad pueden ralentizar el proceso. Para acelerar y dar comentarios inmediatos, conviene agregar:</p>
+<div class="phases-grid mt-sm">
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--navy-bg)">🔍</div><div class="phase-meta"><div class="phase-name">SAST</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Pruebas de Seguridad de Aplicaciones Estáticas: escanean el código (sin ejecutar la aplicación) en busca de debilidades. Generan muchos falsos positivos y no aplican a todos los lenguajes; tardan horas o días, por lo que la mejor práctica es realizar pruebas incrementales en días laborables y escanear todo el código durante el fin de semana.</p>
+<div class="phase-key"><span class="phase-tag">SonarCloud</span><span class="phase-tag">SonarQube</span><span class="phase-tag">Gitleaks (secretos)</span></div></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--accent-bg)">🧩</div><div class="phase-meta"><div class="phase-name">Complementos de seguridad del IDE</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Identifican problemas de seguridad durante el desarrollo en el IDE, dando comentarios inmediatos sobre riesgos en el código o en bibliotecas/paquetes de terceros.</p>
+<div class="phase-key"><span class="phase-tag">DevSkim</span><span class="phase-tag">JFrog</span><span class="phase-tag">Snyk</span></div></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--amber-bg)">🪝</div><div class="phase-meta"><div class="phase-name">Precommit hooks</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Ayudan a identificar problemas antes de enviar el código para revisión, evitando incluir información sensible (credenciales) en la plataforma de gestión de código.</p>
+<div class="phase-key"><span class="phase-tag">git-hound</span><span class="phase-tag">git-secrets</span><span class="phase-tag">Precommit hook GitHub</span><span class="phase-tag">repo-supervisor</span></div></div>
+</div>
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--violet-bg)">🗝️</div><div class="phase-meta"><div class="phase-name">Gestión de secretos</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible"><p>Almacenar credenciales en archivos/configuraciones puede exponerlas a una audiencia inadecuada. Los <strong>secretos</strong> son cualquier credencial sensible que debe ser estrictamente controlada y supervisada (contraseñas, claves de API, etc.).</p>
+<div class="phase-key"><span class="phase-tag">HashiCorp</span><span class="phase-tag">AWS</span><span class="phase-tag">Microsoft</span><span class="phase-tag">Google</span></div></div>
+</div>
+</div>
+
+<h4 class="mt-lg">4.2.3 Compilación y Prueba</h4>
+<p>Se gestionan las versiones y compilaciones del software con herramientas automatizadas para compilar y crear paquetes de código antes de su publicación. Una vez compilado, se realizan pruebas para garantizar la seguridad de la programación:</p>
+<div class="card mt-sm">
+<table class="tlist">
+<tr><td>Pruebas SAST</td><td>(caja blanca) — análisis del código fuente.</td></tr>
+<tr><td>DAST</td><td>Pruebas de Seguridad de Aplicaciones Dinámicas (caja negra): detectan problemas en la aplicación en ejecución observando cómo responde a solicitudes diseñadas específicamente. Menos falsos positivos que SAST, pero consume mucho tiempo. Ejemplos: <strong>OWASP ZAP, Arachni Scanner, Subgraph Vega, Skipfish, Nikto, GoLismero, Wapiti</strong>.</td></tr>
+<tr><td>Análisis de seguridad de bases de datos</td><td>Verifican parches y versiones actualizadas, contraseñas débiles, errores de configuración, problemas de ACL, etc. Ejemplo: <strong>Oracle Database Security Assessment</strong>.</td></tr>
+<tr><td>SCA (Análisis de Composición de Software)</td><td>Examinan bibliotecas usadas en el proyecto y señalan las que tienen vulnerabilidades (SW malicioso o vulnerable de terceros), inspeccionando administradores de paquetes, manifiestos, código fuente, binarios, imágenes de contenedores, etc. Crean una Lista de Materiales (<strong>BOM</strong>). Ejemplos: <strong>OWASP Dependency-Check, OWASP Dependency-Track, Bundler Audit, Retire JS, Rubysec</strong>.</td></tr>
+</table>
+</div>
+
+<h4 class="mt-lg">4.2.4 Producción y Despliegue</h4>
+<p>Se gestionan, coordinan, programan y automatizan las tareas de producción de las versiones de productos:</p>
+<div class="card mt-sm">
+<table class="tlist">
+<tr><td>DAST</td><td>Pruebas de Seguridad de Aplicaciones Dinámicas (caja negra).</td></tr>
+<tr><td>IAST</td><td>Pruebas de Seguridad de Aplicaciones Interactivas: combinan elementos de SAST y DAST, colocando un agente dentro de la aplicación y realizando análisis en tiempo real durante el desarrollo. La prueba abarca código fuente y elementos externos (bibliotecas, APIs), con resultados más precisos, aunque puede afectar el rendimiento.</td></tr>
+<tr><td>System Hardening</td><td>Proceso de asegurar un sistema reduciendo su superficie de ataque. Un sistema con una única función es más seguro que uno con muchos propósitos. Incluye cambiar claves por defecto, desinstalar software innecesario, dar de baja usuarios y accesos no usados, y deshabilitar servicios innecesarios. Herramientas: <strong>Lynis, Bastille Linux, JASS (Solaris), Apache/PHP Hardener</strong>.</td></tr>
+<tr><td>Escaneo de imágenes y contenedores en la nube</td><td>Verifican el código fuente y su cumplimiento con configuraciones seguras. A medida que los contenedores ganan popularidad, son objeto de interés para malware; es necesario escanear imágenes Docker descargadas de repositorios públicos. Herramienta: <strong>Clair</strong>.</td></tr>
+<tr><td>Escaneo de infraestructura</td><td>Detectan y corrigen automáticamente vulnerabilidades y problemas de configuración en entornos de nube. Herramientas nativas de Azure: <strong>Microsoft Defender for Cloud, Microsoft Sentinel</strong>.</td></tr>
+</table>
+</div>
+
+<h4 class="mt-lg">4.2.5 Operaciones y Monitorización</h4>
+<p>Se gestiona el software durante su producción y se recopila información sobre problemas en versiones específicas en producción. Durante la monitorización se detectan y notifican eventos o configuraciones anómalas que requieren investigación y posible corrección:</p>
+<div class="card mt-sm">
+<table class="tlist">
+<tr><td>DAST</td><td>Pruebas de caja negra en el entorno de producción.</td></tr>
+<tr><td>WAF</td><td>Web Application Firewall: permite definir reglas de red específicas para una aplicación web, filtrando, supervisando y bloqueando tráfico HTTP correspondiente a patrones de ataque conocidos, como inyección de SQL. Proveedores: Google, AWS, Microsoft; especializados: <strong>Cloudflare, Imperva, Wallarm</strong>.</td></tr>
+<tr><td>RASP</td><td>Autoprotección de Aplicaciones en Tiempo de Ejecución: las aplicaciones realizan controles continuos de seguridad y reaccionan en tiempo real (cerrando la sesión del atacante y alertando al equipo). A diferencia del enfoque perimetral WAF, protege desde el interior, con mejor visibilidad del flujo de datos. Puede afectar el rendimiento, como IAST.</td></tr>
+<tr><td>Herramientas de monitorización</td><td>La monitorización es crucial en DevOps; DevSecOps la lleva al siguiente nivel, abarcando tiempo de inactividad y amenazas de seguridad. Incluye IDS como <strong>Snort</strong> y herramientas SIEM (Gestión de Información y Eventos de Seguridad) que correlacionan información de seguridad de diferentes fuentes, como <strong>Elastic</strong>.</td></tr>
+<tr><td>Gestión de vulnerabilidades</td><td>Medidas para detectar, discernir, clasificar, priorizar y resolver vulnerabilidades en tiempo real, combinando parches consistentes y reconfiguración de controles. Incluye identificación (escáneres), evaluación (<strong>CVSS, CVE</strong>), tratamiento y generación de informes. Puede combinarse con herramientas de respuesta a incidentes como <strong>TheHive</strong>.</td></tr>
+<tr><td>Compartición de información de amenazas (CTI sharing)</td><td><strong>CTI</strong> (Cyber Threat Intelligence) es la información de ciberamenazas recopilada, evaluada y analizada. Estándares: <strong>STIX</strong> (lenguaje para expresar e intercambiar CTI legible por máquinas y humanos, define objetos como indicadores, tácticas, técnicas, campañas, incidentes y actores de amenazas), <strong>TAXII</strong> (protocolo para transportar e intercambiar CTI usando STIX), <strong>CybOX</strong> (lenguaje para describir observables cibernéticos como archivos, procesos, conexiones de red y claves de registro, usado dentro de STIX). Plataforma de ejemplo: <strong>MISP</strong>.</td></tr>
+</table>
+</div>
+
+<h4 class="mt-lg">4.2.6 Cómo Tener Éxito al Aplicar DevSecOps</h4>
+<div class="qa-list mt-sm">
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">1</span> Sensibilización y responsabilidad de la seguridad <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Todos los miembros de los equipos deben conocer los fundamentos de seguridad y sentirse responsables de los resultados. El ideal es <strong>"la seguridad es responsabilidad de todos"</strong>, uno de los pilares de la cultura DevSecOps.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">2</span> Operaciones automatizadas <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Las herramientas de CI/CD cuentan con alto grado de automatización; las herramientas DevSecOps deben tener automatización completa, con pasos manuales nulos o prácticamente ninguno, facilitando información de seguridad relevante en todo momento.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">3</span> Herramientas adecuadas <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Identificar qué herramientas son apropiadas para cada fase y proyecto, con integración natural y eficiente en el flujo de trabajo. Cuanto más automatizadas e integradas con CI/CD, menos formación y cambio cultural requerirá el equipo.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">4</span> Definición de políticas de seguridad para desarrolladores <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Los pipelines de DevSecOps suelen tener un equipo dedicado a definir políticas (reglas de cifrado, normas de uso de SAST/DAST/SCA, mejores prácticas de codificación), para que el equipo de desarrollo sepa qué hacer y mejore la seguridad día a día.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">5</span> Integrar con canalizaciones de CI/CD <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">El objetivo es descubrir problemas de calidad y generar ciclos rápidos de retroalimentación. CI/CD debe ejecutar herramientas de seguridad de manera continua y automática, registrar cambios para métricas e informes, lanzar respuestas automáticas ante problemas y compartir herramientas de colaboración entre equipos.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">6</span> Resultados en tiempos reducidos <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Las herramientas deben generar resultados prácticamente en tiempo real, ya que la velocidad es una piedra angular de un equipo DevOps actual.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">7</span> Alcance extenso y poder de adaptación <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Las herramientas de seguridad deben funcionar sin limitar capacidades en diferentes entornos (contenedores cloud, PaaS, Kubernetes, nubes híbridas), sin generar silos ni puntos ciegos, y proporcionar información sobre cualquier aplicación, incluidas las de código abierto y de terceros sin código fuente propio.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">8</span> Shift-left y shift-right <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Realizar evaluaciones de seguridad desde el principio del proyecto ("shift-left") evita que vulnerabilidades lleguen a producción. Pero también hay que considerar las últimas etapas ("shift-right"): en producción se generan la mayoría de los ataques, la información obtenida en ejecución "vale su peso en oro", y algunas aplicaciones en producción nunca fueron analizadas en desarrollo, por lo que deben monitorizarse en tiempo real.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">9</span> Precisión <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">La automatización debe acompañarse de calidad y precisión. La mayoría de las alertas de seguridad resultan ser falsos positivos. Hay que recurrir a pruebas capaces de detectar falsos positivos y falsos negativos, ofreciendo información valiosa al equipo.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">10</span> Aceptación del desarrollador <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Todos los elementos del programa DevSecOps deben ser aceptados por el equipo de desarrollo, capaces de realizar las pruebas necesarias, encontrar vulnerabilidades y solucionar problemas.</div></div>
+<div class="qa-item"><button class="qa-question"><span class="qa-q-num">11</span> Trazabilidad, auditabilidad y visibilidad <span class="qa-chevron">⌄</span></button>
+<div class="qa-answer">Clave para el éxito de DevSecOps. <strong>Trazabilidad:</strong> seguimiento de cambios de configuración y entorno desde la planificación hasta producción. <strong>Auditabilidad:</strong> generar automáticamente informes de procesos de desarrollo y controles de seguridad. <strong>Visibilidad:</strong> comprensión de lo que se ejecuta en el entorno, identificar amenazas y responder ante ellas.</div></div>
+</div>
+
+</section>
+
+<!-- ================= BLOQUE 6: MARCO NORMATIVO Y AUDITORÍA ================= -->
+<section id="bloque6">
+<span class="s-label">Bloque 6 — Capítulos 4, 5 y 6</span>
+<h2 class="section-title">Marco Normativo, Importancia en el SDLC y Guía de Auditoría</h2>
+
+<div class="callout callout-navy">
+<h4>Nota conceptual importante</h4>
+<p>Estrictamente hablando, <strong>"Seguridad de la Información"</strong> y <strong>"Ciberseguridad"</strong> son dos conceptos diferentes. La <strong>Seguridad de la Información</strong> es la preservación de la <strong>Confidencialidad, Integridad y Disponibilidad</strong> de la información en los activos de información, en cualquier medio (incluso las personas); la <strong>Ciberseguridad</strong> hace referencia exclusiva al ciberespacio y activos digitales. Esta guía adopta el concepto "Seguridad de la Información y Ciberseguridad" (<strong>SIC</strong>), usando ambos términos como sinónimos para mejorar la comprensión.</p>
+</div>
+
+<h3 class="mt-lg">4. Marco Normativo y Estándares de Referencia</h3>
+<p>Existen múltiples estándares y marcos que proporcionan directrices y mejores prácticas. Los más reconocidos son <strong>ISO/IEC 27034</strong>, <strong>OWASP SAMM</strong> y el <strong>NIST SP 800-218 (SSDF)</strong>.</p>
+
+<div class="grid-2 mt-md">
+<div class="card stripe-navy">
+<h4 class="card-title">ISO/IEC 27034</h4>
+<p>Proporciona un marco comprensivo para <strong>integrar la seguridad en el proceso de desarrollo de software</strong>. Define un conjunto de prácticas organizativas, documentales y técnicas que ayudan a asegurar que las aplicaciones se desarrollan con la seguridad en mente, considerándola desde las <strong>etapas iniciales</strong> y estableciendo controles y medidas de implementación continua.</p>
+</div>
+<div class="card stripe-accent">
+<h4 class="card-title">OWASP SAMM</h4>
+<p>El <strong>Software Assurance Maturity Model</strong> es un modelo de madurez que permite a las organizaciones <strong>evaluar y mejorar</strong> sus prácticas de desarrollo seguro. Se organiza en varias categorías —<strong>gobernanza, diseño, implementación, verificación y despliegue</strong>— cada una con actividades específicas que promueven la seguridad.</p>
+</div>
+<div class="card stripe-amber">
+<h4 class="card-title">NIST SP 800-218 (SSDF)</h4>
+<p>Ofrece un conjunto de prácticas de desarrollo seguro que las organizaciones pueden integrar en sus procesos, con directrices detalladas sobre cómo gestionar la seguridad a lo largo del ciclo de vida: <strong>planificación, implementación, verificación y respuesta a incidentes</strong>. Particularmente relevante para organizaciones gubernamentales, alineado con políticas y requisitos de seguridad federales.</p>
+</div>
+<div class="card stripe-violet">
+<h4 class="card-title">Relevancia para Auditores Gubernamentales</h4>
+<p>La comprensión y evaluación de las prácticas de desarrollo seguro es esencial para garantizar la protección de sistemas y datos críticos. Aplicar estos estándares permite verificar que las organizaciones adoptan medidas adecuadas para mitigar riesgos, proporcionando un lenguaje común y expectativas compartidas entre equipos de desarrollo, seguridad y auditoría.</p>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<h3>5. Importancia de la Seguridad en el SDLC</h3>
+<p>La integración de la seguridad en cada fase del SDLC es esencial para desarrollar software robusto y resistente a ataques. Se han definido cuatro temas principales (no excluyentes de nuevas tendencias o actualizaciones futuras):</p>
+
+<div class="phases-grid mt-md">
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--navy-bg)">5.1</div><div class="phase-meta"><div class="phase-name">Planeación y Definición de Requisitos</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible">
+<p>Sub-temas: <strong>Definición del Proceso</strong>, <strong>Definición de Requisitos de Seguridad</strong>, <strong>Funciones y Responsabilidades</strong>.</p>
+<p class="mt-sm"><strong>Definición del Proceso:</strong> definir requisitos de seguridad desde el principio es esencial para proteger datos y operaciones de usuarios finales (datos sensibles, autenticación de usuarios, resistencia a ataques externos). La inclusión de expertos en seguridad en esta fase es vital para identificar vulnerabilidades y desarrollar estrategias de mitigación de forma proactiva.</p>
+<p class="mt-sm"><strong>Definición de Requisitos de Seguridad / Funciones y Responsabilidades:</strong> asignar roles y responsabilidades claras dentro del equipo es esencial para el éxito del proyecto. Incluye no solo a desarrolladores, sino a gerentes de proyecto, analistas de negocios, ingenieros de seguridad y demás stakeholders. Un organigrama bien definido y comunicación constante asegura que las tareas críticas se manejen eficientemente.</p>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--accent-bg)">5.2</div><div class="phase-meta"><div class="phase-name">Herramientas y Entornos de Desarrollo</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible">
+<p>Sub-temas: <strong>Herramientas y Cadenas de Soporte</strong>, <strong>Implementación de Entornos Seguros</strong>, <strong>Arquitectura de Software: Construcción, Despliegue y Seguimiento</strong>.</p>
+<p class="mt-sm"><strong>Herramientas y Cadenas de Soporte:</strong> herramientas de gestión de versiones, integración continua y automatización de pruebas son esenciales para mantener el código limpio y funcional. Las herramientas de seguimiento de errores y gestión de proyectos ayudan a los equipos a mantenerse organizados.</p>
+<p class="mt-sm"><strong>Implementación de Entornos Seguros:</strong> crear entornos seguros para desarrollo y prueba protege el código y los datos. Implica asegurar servidores y redes, implementar políticas de acceso estrictas y usar herramientas de cifrado. Los entornos de desarrollo deben ser similares a los de producción, con auditorías de seguridad periódicas.</p>
+<p class="mt-sm"><strong>Arquitectura de Software:</strong> debe ser escalable, flexible y fácil de mantener. El despliegue debe ser automatizado para minimizar errores humanos. El seguimiento continuo mediante herramientas de monitoreo permite detectar y resolver problemas en tiempo real.</p>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--amber-bg)">5.3</div><div class="phase-meta"><div class="phase-name">Pruebas, Verificación y Mantenimiento</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible">
+<p>Sub-temas: <strong>Pruebas y Verificación</strong>, <strong>Revisión y Evaluación Continua de Vulnerabilidades</strong>, <strong>Funcionalidad de Software Existente</strong>.</p>
+<p class="mt-sm"><strong>Pruebas y Verificación:</strong> las pruebas unitarias, de integración y de sistema aseguran que cada componente funcione correctamente. Las pruebas de aceptación validan que el software cumple los requisitos, y las pruebas de seguridad ayudan a identificar vulnerabilidades explotables.</p>
+<p class="mt-sm"><strong>Revisión y Evaluación Continua de Vulnerabilidades:</strong> la seguridad del software es un proceso continuo, no un evento único. Incluye auditorías de código, pruebas de penetración y análisis de vulnerabilidades regulares, manteniéndose actualizado sobre amenazas y técnicas de ataque. Los programas de divulgación de vulnerabilidades pueden ser beneficiosos.</p>
+<p class="mt-sm"><strong>Funcionalidad de Software Existente:</strong> el mantenimiento es tan importante como el desarrollo de nuevas funcionalidades, incluyendo corregir errores, aplicar parches y optimizar rendimiento. La monitorización continua y la retroalimentación de usuarios identifican áreas de mejora, planificando actualizaciones que minimicen interrupciones del servicio.</p>
+</div>
+</div>
+
+<div class="phase-card open">
+<div class="phase-card-header"><div class="phase-icon" style="background:var(--violet-bg)">5.4</div><div class="phase-meta"><div class="phase-name">Codificación y Protección de Software</div></div><span class="phase-toggle">⌄</span></div>
+<div class="phase-body visible">
+<p>Sub-temas: <strong>Codificación Segura</strong>, <strong>Protección del Código y Software</strong>, <strong>Seguridad del Software</strong>.</p>
+<p class="mt-sm"><strong>Codificación Segura:</strong> fundamental para prevenir vulnerabilidades explotables. Incluye validación de entradas, gestión adecuada de errores y excepciones, e implementación de controles de acceso adecuados. Requiere educación continua y formación en seguridad.</p>
+<p class="mt-sm"><strong>Protección del Código y Software:</strong> proteger el código fuente contra acceso no autorizado y manipulación es crucial para la integridad y confidencialidad del producto. Incluye sistemas de control de versiones seguros, cifrado, gestión adecuada de claves, repositorios seguros con acceso restringido, políticas de control de acceso y auditorías regulares.</p>
+<p class="mt-sm"><strong>Seguridad del Software:</strong> abarca todas las medidas y prácticas para proteger el software de amenazas y vulnerabilidades, incluyendo controles de seguridad en todas las fases del ciclo de desarrollo. La adopción de marcos como <strong>OWASP y NIST</strong> proporciona guía estructurada, y la colaboración con expertos y comunidades de seguridad ayuda a mantenerse actualizado.</p>
+</div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<h3>6. Cómo Utilizar la Guía para la Auditoría Interna</h3>
+<p>Para que el auditor interno aproveche al máximo esta publicación, conviene referirse a los instrumentos complementarios: las <strong>preguntas de auditoría temáticas</strong> y el <strong>modelo de madurez general</strong>. Cada <strong>GASIC</strong> (Guía de Auditoría de la Seguridad de la Información y Ciberseguridad) se compone de tres componentes:</p>
+
+<div class="card mt-md">
+<table class="tlist">
+<tr><td>GASIC</td><td>Cuerpo teórico que consiste en el marco contextual necesario para que el auditor interno comprenda el alcance y dominio de seguridad que está evaluando. Es un instrumento con los conceptos fundamentales recopilados de mejores prácticas.</td></tr>
+<tr><td>Modelo de Madurez</td><td>Recopila controles desde las mejores prácticas asociadas al tema central de la Guía de Auditoría, organiza los controles en una propuesta de madurez y permite al auditor conocer los requisitos que debería evaluar.</td></tr>
+<tr><td>Ejemplos de Preguntas de Auditoría</td><td>Complementa el modelo de madurez mediante preguntas organizadas en varios documentos. Cada documento representa un control que pertenece a uno de los ejes temáticos de la Guía de Auditoría.</td></tr>
+</table>
+</div>
+
+<div class="callout callout-teal mt-md">
+<h4>Información de Referencia</h4>
+<p>El GASIC se contextualiza en: <strong>Normas ISO</strong>, <strong>Controles Sectoriales</strong> y <strong>Mejores Prácticas</strong>; y se ilustra en la <strong>Matriz de Controles</strong>, que es la base para los <strong>Requisitos de Cumplimiento</strong>.</p>
+</div>
+
+<h4 class="mt-lg">Pasos para el Auditor Interno</h4>
+<div class="timeline mt-sm">
+<div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-month"><span class="tag tag-navy">Paso 01</span></div><div class="tl-name">Estudiar la Guía y su contexto</div><div class="tl-desc">El auditor interno debe estudiar cada Guía de Auditoría y su contexto para tener plena comprensión del tema a trabajar. A continuación, puede utilizar el Modelo de Madurez para seleccionar los controles apropiados para la organización.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#00A896"></div><div class="tl-month"><span class="tag tag-teal">Paso 02</span></div><div class="tl-name">Alinear la selección de controles</div><div class="tl-desc">La selección de controles debe estar alineada con: <strong>a)</strong> la estrategia de la organización; <strong>b)</strong> los resultados de la evaluación de riesgos; <strong>c)</strong> los requisitos de cumplimiento; <strong>d)</strong> la estrategia de auditoría interna, expresada en el plan.</div></div>
+<div class="tl-item"><div class="tl-dot" style="color:#F5A623"></div><div class="tl-month"><span class="tag tag-amber">Paso final</span></div><div class="tl-name">Planificación de pruebas</div><div class="tl-desc">Por último, puede utilizar los documentos de ejemplo para la planificación de las preguntas y pruebas a realizar. El formato del programa, plan, instrumentos, pruebas y reportería debe ser el solicitado en el contexto de cada auditoría, lo cual está fuera del alcance de esta guía.</div></div>
+</div>
+
+<div class="callout callout-amber mt-lg">
+<h4>📚 Contexto del Documento (GASIC N°8)</h4>
+<p>Esta guía corresponde a la <strong>GASIC N°8: Desarrollo Seguro de Software</strong>, parte de la iniciativa del <strong>Consejo de Auditoría Interna General de Gobierno (CAIGG)</strong> de Chile, que busca fortalecer la posición del sector público en materia de Seguridad de la Información y Ciberseguridad, dotando a los Auditores Internos y Servicios Públicos de instrumentos y herramientas para el levantamiento de información basado en mejores prácticas y legislación vigente.</p>
+</div>
+
+</section>
+
+<div class="memory-box mt-lg">
+<h4>🎓 Resumen Final para Repaso Rápido</h4>
+<ul>
+<li><strong>Criptografía:</strong> 4 objetivos (confidencialidad, integridad, autenticación, no repudio); clasificación en clásica (transposición/sustitución) y moderna (simétrica/asimétrica); funciones hash y firma digital.</li>
+<li><strong>Cortafuegos:</strong> 5 generaciones, tipos por tecnología (filtros de paquetes, proxy, stateful, híbridos) y por ubicación (personal, SOHO, appliance, corporativo).</li>
+<li><strong>IDS vs IPS:</strong> IDS es pasivo (detecta y alerta), IPS es activo (detecta y bloquea en tiempo real).</li>
+<li><strong>Autenticación:</strong> 3 factores — algo que sabes, algo que tienes, algo que eres.</li>
+<li><strong>Control de Acceso:</strong> ACL, RBAC, ABAC y AIAC (basado en IA / Zero Trust).</li>
+<li><strong>SDLC:</strong> Requisitos → Diseño → Implementación → Pruebas → Despliegue → Mantenimiento.</li>
+<li><strong>DevSecOps:</strong> integra seguridad en todo el SDLC mediante SAST, DAST, IAST, SCA, WAF, RASP, shift-left/shift-right.</li>
+<li><strong>Marcos normativos:</strong> ISO/IEC 27034, OWASP SAMM, NIST SSDF (SP 800-218), Microsoft SDL, CLASP.</li>
+</ul>
+</div>
+
+</div><!-- /.page -->
+
+<script>
+  // Progress bar de scroll
+  window.addEventListener('scroll', function () {
+    const h = document.documentElement;
+    const scrollPercent = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    const bar = document.getElementById('progressBar');
+    if (bar) bar.style.width = scrollPercent + '%';
+  });
+
+  // Acordeón Q&A
+  document.querySelectorAll('.qa-question').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const item = btn.closest('.qa-item');
+      const answer = item.querySelector('.qa-answer');
+      item.classList.toggle('open');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Acordeón phase-card
+  document.querySelectorAll('.phase-card-header').forEach(function (header) {
+    header.addEventListener('click', function () {
+      const card = header.closest('.phase-card');
+      const body = card.querySelector('.phase-body');
+      card.classList.toggle('open');
+      body.classList.toggle('visible');
+    });
+  });
+
+  // Nav pill activo según scroll
+  const sections = document.querySelectorAll('section[id]');
+  const pills = document.querySelectorAll('.topbar-pill');
+  window.addEventListener('scroll', function () {
+    let current = '';
+    sections.forEach(function (sec) {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom > 120) current = sec.id;
+    });
+    pills.forEach(function (pill) {
+      pill.classList.toggle('active', pill.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
