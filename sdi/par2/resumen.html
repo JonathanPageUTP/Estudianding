@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Guía de Estudio: Seguridad, Autenticación y SDLC</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #f3f1fb;
+    --card-bg: #ffffff;
+    --navy: #2b2d6e;
+    --accent: #6c5ce7;
+    --accent-light: #efeafd;
+    --teal: #00b3a4;
+    --teal-light: #e0f7f4;
+    --amber: #f5a623;
+    --amber-light: #fff4e0;
+    --text: #2d2d3a;
+    --text-dim: #6b6b80;
+    --line: #e6e3f5;
+    --radius: 18px;
+    --shadow: 0 6px 20px rgba(108, 92, 231, 0.10);
+  }
+
+  html, body {
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+  }
+
+  body {
+    padding: 14px 12px 40px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ---------- HEADER ---------- */
+  .top-header {
+    text-align: center;
+    padding: 22px 14px 24px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--navy), var(--accent));
+    color: #fff;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .top-header h1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.35;
+  }
+
+  .top-header p {
+    font-size: 0.8rem;
+    margin-top: 8px;
+    opacity: 0.85;
+  }
+
+  .top-header .badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ---------- CARD BLOCKS ---------- */
+  .block {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+
+  .block-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .block-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .block h3 {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 12px 0 5px;
+  }
+
+  .block h3:first-of-type {
+    margin-top: 8px;
+  }
+
+  .block p {
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .block ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 6px;
+  }
+
+  .block ul li {
+    font-size: 0.86rem;
+    padding: 4px 0 4px 20px;
+    position: relative;
+    color: var(--text);
+  }
+
+  .block ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 2px;
+    color: var(--teal);
+    font-weight: 700;
+  }
+
+  .block strong {
+    color: var(--navy);
+  }
+
+  /* ---------- KEY IDEAS BOX ---------- */
+  .key-box {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 10px 0;
+    font-size: 0.85rem;
+  }
+
+  .key-box .key-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* ---------- TABLE-LIKE COMPARISON ---------- */
+  .compare {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0;
+  }
+
+  .compare > div {
+    flex: 1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+  }
+
+  .compare .col-a {
+    background: var(--teal-light);
+    border: 1px solid #bfe9e4;
+  }
+
+  .compare .col-b {
+    background: var(--amber-light);
+    border: 1px solid #f6dcb0;
+  }
+
+  .compare .col-title {
+    font-weight: 800;
+    font-size: 0.74rem;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .compare .col-a .col-title { color: var(--teal); }
+  .compare .col-b .col-title { color: var(--amber); }
+
+  /* ---------- MNEMONIC BOX ---------- */
+  .mnemo {
+    margin-top: 14px;
+    background: linear-gradient(135deg, var(--teal-light), #fff);
+    border: 2px dashed var(--teal);
+    border-radius: 14px;
+    padding: 12px 13px;
+    position: relative;
+  }
+
+  .mnemo-title {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--teal);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mnemo-body {
+    font-size: 0.84rem;
+    color: var(--text);
+  }
+
+  .mnemo-body b {
+    color: #007a6e;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .footer-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 8px;
+    padding: 10px;
+  }
+
+  /* ---------- SECTION DIVIDER LABEL ---------- */
+  .section-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 22px 0 8px 4px;
+  }
+
+  .section-tag::before {
+    content: "— ";
+  }
+
+  /* ---------- RESPONSIVE TWEAKS ---------- */
+  @media (max-width: 360px) {
+    .top-header h1 { font-size: 1.1rem; }
+    .block-title { font-size: 0.95rem; }
+    .block p, .block ul li, .mnemo-body, .key-box { font-size: 0.82rem; }
+    .compare { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="top-header">
+    <h1>🔐 Guía de Estudio<br>Seguridad, Autenticación, Control de Acceso y SDLC</h1>
+    <p>Ideas fuerza + datos clave para tu examen</p>
+    <span class="badge">Repaso rápido</span>
+  </div>
+
+  <div class="section-tag">Bloque I — Criptografía</div>
+
+  <!-- BLOQUE 1 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">1</span>Criptografía: definición y objetivos</div>
+    <p><strong>Definición:</strong> técnica de cifrado que altera mensajes para que sean incomprensibles a receptores no autorizados. Del griego <em>Kriptos</em> (ocultar) + <em>Graphos</em> (escritura).</p>
+    <p>Protege información en 3 estados: <strong>reposo, tránsito y uso</strong>.</p>
+    <h3>Los 4 objetivos (CIAN)</h3>
+    <ul>
+      <li><strong>Confidencialidad:</strong> solo usuarios autorizados acceden.</li>
+      <li><strong>Integridad:</strong> la info no fue manipulada.</li>
+      <li><strong>Autenticación:</strong> confirma identidad/origen.</li>
+      <li><strong>No repudio:</strong> nadie niega acciones previas.</li>
+    </ul>
+    <div class="key-box">
+      <span class="key-label">Idea fuerza</span>
+      Memoriza estos 4 objetivos: <strong>Confidencialidad, Integridad, Autenticación, No repudio</strong>. Son la base de TODO el tema.
+    </div>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Recuerda <b>"CIAN"</b> como el color: <b>C</b>onfidencialidad, <b>I</b>ntegridad, <b>A</b>utenticación, <b>N</b>o repudio. Imagina un mensaje "pintado de cian" que solo el destinatario correcto puede ver sin que nadie lo manche (integridad) ni niegue haberlo enviado.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">2</span>Historia de la criptografía (línea de tiempo)</div>
+    <ul>
+      <li><strong>600-500 a.C.:</strong> Hebreos usan cifrado Atbash (sustitución monoalfabética).</li>
+      <li><strong>Época clásica:</strong> Griegos/espartanos usan la <strong>Escítala</strong> (transposición).</li>
+      <li><strong>800 d.C.:</strong> Aparece el <strong>análisis de frecuencias</strong> (rompe sustituciones).</li>
+      <li><strong>1446:</strong> Leon Battista Alberti crea el <strong>cifrado polialfabético</strong>.</li>
+      <li><strong>1917:</strong> Gilbert Vernam crea el <strong>One Time Pad (OTP)</strong>.</li>
+      <li><strong>WWII:</strong> Máquina <strong>Enigma</strong> (Arthur Scherbius).</li>
+      <li><strong>1995-2001:</strong> NSA crea <strong>SHA-1</strong> (1995) y <strong>AES</strong> (2001).</li>
+      <li><strong>2002-actualidad:</strong> DES, WEP, A5/1/A5/2 (GSM), etc.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Crea la frase: <b>"H</b>ebreos <b>E</b>scriben con <b>A</b>lberti, <b>V</b>ernam <b>E</b>scribe con <b>E</b>nigma, <b>N</b>SA <b>S</b>aca <b>A</b>ES" → <b>HEAVE-NSA</b>. Cada letra te lleva al hito en orden cronológico: Hebreos→Escítala→Análisis frecuencias→Alberti→Vernam→Enigma→NSA(SHA1)→AES.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">3</span>Criptosistema: elementos clave</div>
+    <p>Un criptosistema transforma un mensaje en un <strong>criptograma</strong> usando un algoritmo + clave(s).</p>
+    <ul>
+      <li><strong>Emisor:</strong> cifra el mensaje.</li>
+      <li><strong>Receptor:</strong> descifra el mensaje.</li>
+      <li><strong>Medio:</strong> canal de comunicación.</li>
+      <li><strong>Algoritmo:</strong> transformaciones aplicadas.</li>
+      <li><strong>Mensaje:</strong> texto plano original.</li>
+      <li><strong>Clave/Llave:</strong> pieza para transformar.</li>
+      <li><strong>Criptograma:</strong> mensaje cifrado.</li>
+      <li><strong>Protocolo:</strong> reglas de intercambio.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Piensa en una <b>carta postal secreta</b>: el <b>EMISOR</b> escribe el <b>MENSAJE</b>, usa una <b>CLAVE</b> (candado) y un <b>ALGORITMO</b> (la caja fuerte) para crear el <b>CRIPTOGRAMA</b>, lo envía por el <b>MEDIO</b> (correo) siguiendo un <b>PROTOCOLO</b> (reglas postales) hasta el <b>RECEPTOR</b>. 8 elementos = 8 pasos de una carta.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">4</span>Criptografía clásica: métodos de cifrado</div>
+    <ul>
+      <li><strong>Escítala:</strong> cinta enrollada en un palo (transposición).</li>
+      <li><strong>Polybios:</strong> cuadrícula → coordenadas numéricas.</li>
+      <li><strong>César:</strong> desplaza letras N posiciones (ej. +3: A→D).</li>
+      <li><strong>Vigenère:</strong> palabra clave + desplazamientos (más seguro que César).</li>
+      <li><strong>Disco de Alberti:</strong> discos giratorios para sustituciones complejas.</li>
+      <li><strong>Cilindro de Bazeries:</strong> cilindro con piezas móviles.</li>
+      <li><strong>Cifrado de Hill:</strong> álgebra lineal con matrices.</li>
+      <li><strong>Vernam:</strong> XOR con clave del mismo largo que el mensaje → irrompible si es aleatoria y única.</li>
+      <li><strong>Enigma:</strong> ruedas con contactos eléctricos (WWII).</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Frase: <b>"E</b>l <b>P</b>rofesor <b>C</b>ésar <b>V</b>iene <b>A</b>l <b>B</b>aile con su <b>H</b>ija <b>V</b>aliente y su <b>E</b>nigma" → <b>E-P-C-V-A-B-H-V-E</b>: Escítala, Polybios, César, Vigenère, Alberti, Bazeries, Hill, Vernam, Enigma. Cada inicial = un método clásico, en orden de complejidad creciente.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">5</span>Criptografía moderna: 3 hitos de origen</div>
+    <ul>
+      <li><strong>1.</strong> Teoría de la Información de <strong>Shannon</strong>.</li>
+      <li><strong>2.</strong> Estándar <strong>DES</strong> (1974).</li>
+      <li><strong>3.</strong> Estudio de <strong>Martin Hellman</strong> → cifrado de llave pública (1976).</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"S-D-H"</b> = <b>S</b>hannon piensa, <b>D</b>ES nace (1974), <b>H</b>ellman abre la puerta pública (1976). Como las siglas de un trío musical: "Shannon, DES & Hellman".
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 6 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">6</span>Cifrado Simétrico vs Asimétrico</div>
+    <p><strong>Simétrico:</strong> misma clave para cifrar y descifrar. <strong>Asimétrico:</strong> par de claves (pública + privada); si ciframos con una, descifra la otra.</p>
+    <h3>Algoritmos simétricos</h3>
+    <ul>
+      <li><strong>DES</strong> (1976, estándar gubernamental).</li>
+      <li><strong>3DES</strong> (IBM 1998, aplica DES x3).</li>
+      <li><strong>ChaCha20</strong> (usado en TLS).</li>
+      <li><strong>AES</strong> (el más seguro y usado hoy).</li>
+      <li><strong>IDEA</strong> (usado en PGP).</li>
+      <li><strong>RC4</strong> (flujo, ahora débil).</li>
+    </ul>
+    <h3>Algoritmos asimétricos</h3>
+    <ul>
+      <li><strong>RSA</strong> (el más popular).</li>
+      <li><strong>ECC</strong> (claves pequeñas y eficientes).</li>
+      <li><strong>Diffie-Hellman</strong> (intercambio de claves).</li>
+      <li><strong>DSA</strong> (firmas digitales).</li>
+      <li><strong>ElGamal</strong> (cifrado + firmas, basado en DH).</li>
+    </ul>
+    <div class="compare">
+      <div class="col-a">
+        <div class="col-title">Simétrico</div>
+        ✅ Rápido, eficiente, bajo consumo.<br>
+        ❌ Mala gestión/distribución de claves, sin firma, baja escalabilidad.
+      </div>
+      <div class="col-b">
+        <div class="col-title">Asimétrico</div>
+        ✅ Seguro al intercambiar claves, autenticación, escalable.<br>
+        ❌ Más lento, complejo, claves largas.
+      </div>
+    </div>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>SIMÉTRICO = "una sola llave de casa"</b> (rápida, pero si la pierdes o la copias mal, problema). <b>ASIMÉTRICO = "buzón con candado público y llave privada"</b> (cualquiera mete la carta con el candado, solo tú abres con tu llave privada → más seguro pero más lento). Para los algoritmos: simétricos suenan a "siglas cortas técnicas" (DES, AES, RC4); asimétricos suenan a "apellidos de personas" (RSA = Rivest-Shamir-Adleman, Diffie-Hellman, ElGamal).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 7 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">7</span>Funciones Hash y Firma Digital</div>
+    <h3>Funciones Hash</h3>
+    <p>Transforman datos de cualquier tamaño en un valor fijo (hash).</p>
+    <ul>
+      <li><strong>Unidireccional:</strong> no se puede revertir.</li>
+      <li><strong>Determinista:</strong> mismo input = mismo hash.</li>
+      <li><strong>Eficiente</strong> y con <strong>colisiones mínimas</strong>.</li>
+    </ul>
+    <p><strong>Ejemplos:</strong> MD5 y SHA-1 (obsoletos/inseguros), <strong>SHA-256/512</strong> (seguros), Whirlpool, Blake2, Haval.</p>
+    <h3>Firma Digital (4 pasos)</h3>
+    <ul>
+      <li><strong>1. Generación de claves:</strong> privada (firma) + pública (verifica).</li>
+      <li><strong>2. Hash del mensaje:</strong> se genera un resumen.</li>
+      <li><strong>3. Cifrado con clave privada:</strong> se crea la firma.</li>
+      <li><strong>4. Verificación:</strong> el receptor usa la clave pública y compara hashes.</li>
+    </ul>
+    <p><strong>Garantiza:</strong> Autenticidad + Integridad + No repudio. <strong>Algoritmos:</strong> RSA, DSA, ECDSA, EdDSA.</p>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Para hash recuerda: <b>"Hashear es como una huella digital"</b>: única, no puedes regenerar a la persona desde la huella (unidireccional), y la misma persona siempre deja la misma huella (determinismo). Para firma digital: <b>"Genero-Resumo-Sello-Verifico"</b> (Generar claves → Hash/resumen → Cifro/sello con privada → Verifico con pública), como sellar un sobre con tu sello personal que solo tú tienes.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-tag">Bloque II — Firewalls e IDS/IPS</div>
+
+  <!-- BLOQUE 8 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">8</span>Firewall: definición, usos y protección</div>
+    <p>Sistema que implanta una política de control de accesos entre dos redes (ej. Internet-LAN). Bloquea o permite tráfico.</p>
+    <h3>¿Por qué se necesita?</h3>
+    <ul>
+      <li>Permitir acceso a Internet de usuarios internos.</li>
+      <li>Permitir acceso autorizado desde Internet.</li>
+      <li>Prohibir acceso no autorizado desde Internet.</li>
+    </ul>
+    <div class="compare">
+      <div class="col-a">
+        <div class="col-title">SÍ protege contra</div>
+        Accesos/tráfico no autenticado externo, da punto único de política y auditoría.
+      </div>
+      <div class="col-b">
+        <div class="col-title">NO protege contra</div>
+        Accesos externos que evitan el firewall (modems), ataques internos, virus/troyanos, fuga por USB.
+      </div>
+    </div>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        El firewall es como un <b>"guardia de seguridad en la puerta principal"</b>: controla quién entra/sale por LA PUERTA (tráfico autorizado), pero NO puede detener a alguien que entra por la ventana (otro medio), ni a un empleado que ya está dentro robando (amenaza interna).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 9 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">9</span>Tipos de Firewall por tecnología</div>
+    <ul>
+      <li><strong>Filtros de paquetes (red/IP):</strong> filtran por IP y puertos. ✅ Rápidos y escalables. ❌ Poca seguridad, no ven contexto.</li>
+      <li><strong>Gateways de aplicación (proxy):</strong> requiere proxy por app. ✅ Alta seguridad, examina nivel aplicación. ❌ Menor rendimiento, rompe modelo cliente/servidor.</li>
+      <li><strong>Inspección de estados (stateful):</strong> tabla dinámica de sesiones. ✅ Alta seguridad+velocidad+escalabilidad, no rompe el modelo.</li>
+      <li><strong>Híbridos:</strong> mezclan tecnologías; filtros para velocidad + proxy para seguridad.</li>
+    </ul>
+    <h3>Por ubicación</h3>
+    <ul>
+      <li><strong>Personales (PC):</strong> protegen 1 equipo.</li>
+      <li><strong>SOHO:</strong> oficinas pequeñas (2-50 usuarios).</li>
+      <li><strong>Appliances:</strong> hardware dedicado, oficinas medianas.</li>
+      <li><strong>Corporativos:</strong> punto central de toda la empresa.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Por tecnología, de menos a más inteligente: <b>"Paquete → Proxy → Estado → Híbrido"</b> = <b>"PPEH"</b>, como subir de nivel en un videojuego (filtro básico de IP es nivel 1, híbrido es el jefe final). Por ubicación, de pequeño a grande: <b>"PC < SOHO < Appliance < Corporativo"</b> = como tallas de ropa (S, M, L, XL).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 10 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">10</span>Generaciones de Firewall (1ª-5ª)</div>
+    <ul>
+      <li><strong>1ª:</strong> filtra paquetes por reglas fijas, capa de red (IP/puertos).</li>
+      <li><strong>2ª:</strong> valida si el paquete pertenece a una sesión válida.</li>
+      <li><strong>3ª:</strong> opera en capa de aplicación (HTTP, FTP, SMTP).</li>
+      <li><strong>4ª:</strong> bloquea tráfico malicioso en tiempo real con firmas y comportamiento.</li>
+      <li><strong>5ª:</strong> IA + análisis predictivo, protege contra ransomware/APT, seguridad en la nube.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Imagina la evolución de un robot guardián: <b>1ª = mira solo el carnet (IP/puerto)</b> → <b>2ª = recuerda si ya entraste antes (sesión)</b> → <b>3ª = entiende lo que dices (aplicación)</b> → <b>4ª = reacciona al instante a amenazas conocidas</b> → <b>5ª = piensa y predice como un cerebro con IA</b>. Cada generación = un "upgrade" del robot.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 11 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">11</span>IDS vs IPS</div>
+    <p><strong>IDS</strong> (Sistema de Detección de Intrusos): detecta y alerta, NO bloquea. <strong>IPS</strong> (Prevención): detecta Y bloquea en tiempo real.</p>
+    <h3>Tipos (ambos)</h3>
+    <ul>
+      <li><strong>Basado en Red:</strong> monitorea todo el tráfico de la red.</li>
+      <li><strong>Basado en Host:</strong> protege un dispositivo individual.</li>
+      <li><strong>(IPS) Basado en comportamiento:</strong> análisis de anomalías.</li>
+    </ul>
+    <p><strong>Métodos de detección IDS:</strong> por anomalía, por firma, basado en IA.</p>
+    <div class="compare">
+      <div class="col-a">
+        <div class="col-title">IDS</div>
+        Pasivo. Genera alertas. No afecta el tráfico. Tolera falsos positivos. Uso: forense/monitoreo.
+      </div>
+      <div class="col-b">
+        <div class="col-title">IPS</div>
+        Activo. Bloquea automáticamente. Puede ralentizar tráfico. Falso positivo = bloqueo real. Uso: mitigación en tiempo real.
+      </div>
+    </div>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>IDS = "Detective"</b> (investiga y avisa, no actúa). <b>IPS = "Policía"</b> (detiene al sospechoso ahí mismo). La "D" de IDS = Detective/Detecta; la "P" de IPS = Policía/Previene.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-tag">Bloque III — Autenticación y Control de Acceso</div>
+
+  <!-- BLOQUE 12 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">12</span>Autenticación: factores y MFA</div>
+    <p>Verificar la identidad de un usuario, dispositivo o sistema. Es la <strong>primera línea de defensa</strong>.</p>
+    <h3>3 Factores de autenticación</h3>
+    <ul>
+      <li><strong>Algo que SABES:</strong> contraseña.</li>
+      <li><strong>Algo que TIENES:</strong> tarjeta de acceso o token.</li>
+      <li><strong>Algo que ERES:</strong> huella, reconocimiento facial.</li>
+    </ul>
+    <h3>Apps de autenticación (MFA)</h3>
+    <ul>
+      <li>Añaden un segundo factor (código temporal).</li>
+      <li>Portables (smartphones).</li>
+      <li>Pueden incluir biometría.</li>
+      <li>Compatibles con múltiples servicios.</li>
+      <li>Respaldo en la nube de códigos.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"SABES - TIENES - ERES"</b> = como entrar a tu casa: <b>SABES</b> el código de la puerta (contraseña), <b>TIENES</b> la llave física (token), y <b>ERES</b> tú (tu cara abre la puerta con Face ID). Si combinas 2+ factores = MFA.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 13 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">13</span>Control de Acceso: modelos (ACL, RBAC, ABAC, AIAC)</div>
+    <p>Determina QUÉ usuarios/sistemas acceden a QUÉ recursos.</p>
+    <ul>
+      <li><strong>ACL (Lista de Control de Acceso):</strong> el propietario define accesos por usuario (leer, escribir, eliminar). Fácil para objetos individuales.</li>
+      <li><strong>RBAC (Basado en Roles):</strong> permisos según el rol del usuario en la organización. Principios: roles/permisos, separación de funciones, menor privilegio, asignación por reglas.</li>
+      <li><strong>ABAC (Basado en Atributos):</strong> permisos según múltiples atributos (usuario, recurso, acción, entorno). Más flexible y granular.</li>
+      <li><strong>AIAC (Basado en IA):</strong> aprendizaje automático para decisiones en tiempo real. Características: autoadaptación, autenticación avanzada, análisis de riesgo en tiempo real, integración con Zero Trust.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Orden de evolución <b>"A-R-A-A"</b> (de simple a inteligente): <b>A</b>CL (lista manual, como una libreta de visitas) → <b>R</b>BAC (por uniforme/rol, como en un hospital: médico vs enfermera) → <b>A</b>BAC (por contexto: hora, lugar, dispositivo) → <b>A</b>IAC (un robot de seguridad con IA que decide solo). Recuerda: "A Roberto Asignan Aprendizaje" (ACL→RBAC→ABAC→AIAC).
+      </div>
+    </div>
+  </div>
+
+  <div class="section-tag">Bloque IV — Ciclo de Vida del Software Seguro (SDLC)</div>
+
+  <!-- BLOQUE 14 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">14</span>SDLC: fases clásicas</div>
+    <p>Proceso estructurado para desarrollar y mantener software, desde la idea hasta el mantenimiento.</p>
+    <h3>6 Fases típicas</h3>
+    <ul>
+      <li><strong>1. Requisitos:</strong> identificar necesidades del cliente.</li>
+      <li><strong>2. Diseño:</strong> especificación técnica y arquitectónica.</li>
+      <li><strong>3. Implementación:</strong> codificación del software.</li>
+      <li><strong>4. Pruebas:</strong> identificar y corregir errores.</li>
+      <li><strong>5. Despliegue:</strong> puesta en producción.</li>
+      <li><strong>6. Mantenimiento:</strong> correcciones y mejoras continuas.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"RE-DI-IM-PRU-DES-MAN"</b> → frase: <b>"RE</b>cetas <b>DI</b>vinas <b>IM</b>presionan en <b>PRU</b>ebas, <b>DES</b>pués <b>MAN</b>tienen" (Requisitos, Diseño, Implementación, Pruebas, Despliegue, Mantenimiento). Como cocinar: pides la receta (requisitos), planeas (diseño), cocinas (implementación), pruebas el sabor (pruebas), sirves el plato (despliegue), y guardas las sobras (mantenimiento).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 15 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">15</span>Modelos Clásicos vs Ágiles</div>
+    <h3>Modelos Clásicos (lineales)</h3>
+    <ul>
+      <li><strong>Cascada (Waterfall):</strong> etapas secuenciales, difícil volver atrás.</li>
+      <li><strong>Modelo V:</strong> cada etapa de desarrollo tiene su etapa de prueba correspondiente.</li>
+      <li><strong>Espiral:</strong> iterativo, combina cascada + prototipos + análisis de riesgo por ciclos.</li>
+    </ul>
+    <p><strong>Problema de los clásicos:</strong> rígidos, poca interacción con el cliente tras el inicio, pruebas relegadas al final.</p>
+    <h3>Modelos Ágiles</h3>
+    <p>Iteraciones cortas y frecuentes (Scrum, Kanban), feedback rápido del cliente, sprints, mejora cíclica continua.</p>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>Clásico = "Tren en vías fijas"</b> (cascada=avanza solo hacia adelante; V=cada estación tiene su control de calidad; espiral=da vueltas pero siempre avanzando). <b>Ágil = "Auto con GPS"</b> (recalcula la ruta constantemente con feedback del cliente, en viajes cortos = sprints).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 16 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">16</span>S-SDLC: medidas de seguridad por etapa</div>
+    <p>Conjunto de buenas prácticas para detectar/prevenir/corregir defectos de seguridad durante todo el SDLC (no solo al final).</p>
+    <ul>
+      <li><strong>Planificación:</strong> evaluar riesgos y amenazas, e impacto reputacional.</li>
+      <li><strong>Análisis de requisitos:</strong> incluir requisitos de seguridad y cumplimiento normativo.</li>
+      <li><strong>Diseño:</strong> modelos de amenazas, seguridad integrada en la arquitectura.</li>
+      <li><strong>Desarrollo:</strong> capacitación, herramientas de pruebas de seguridad, evaluar dependencias.</li>
+      <li><strong>Documentación:</strong> documentar controles, preparar auditorías.</li>
+      <li><strong>Pruebas:</strong> revisión de código, pruebas estáticas y dinámicas.</li>
+      <li><strong>Implementación:</strong> evaluar seguridad del entorno y configuraciones.</li>
+      <li><strong>Mantenimiento:</strong> supervisión continua y respuesta a vulnerabilidades.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        Frase clave: <b>"La seguridad NO es un parche al final, es un ingrediente desde el inicio"</b>. Asocia cada fase del SDLC con un "chequeo de seguridad" como si fuera un check de salud en cada etapa de un embarazo: revisión constante, no solo al nacer (despliegue).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 17 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">17</span>Microsoft SDL (5 fases)</div>
+    <p>Propuesto por Microsoft en 2004 para mejorar la seguridad del desarrollo.</p>
+    <ul>
+      <li><strong>1. Formación:</strong> capacitación continua al equipo.</li>
+      <li><strong>2. Requisitos y diseño:</strong> modelado de amenazas (Threat Modeling Tool de Microsoft).</li>
+      <li><strong>3. Implementación:</strong> codificación segura + análisis estático del código.</li>
+      <li><strong>4. Comprobación:</strong> análisis dinámico y fuzzing antes del lanzamiento.</li>
+      <li><strong>5. Lanzamiento y respuesta:</strong> despliegue por "anillos" (SDP) + plan de respuesta a incidentes.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"FOR-RE-IM-COM-LAN"</b> → "<b>FOR</b>ma a tu equipo, <b>RE</b>quiere y diseña amenazas, <b>IM</b>plementa con código limpio, <b>COM</b>prueba con fuzzing, y <b>LAN</b>za por anillos". Como entrenar (Formación) → planear la jugada (Requisitos/diseño) → ejecutar (Implementación) → revisar la repetición (Comprobación) → salir a la cancha por turnos (Lanzamiento).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 18 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">18</span>CLASP: 5 vistas y categorías</div>
+    <p>Proyecto OWASP con actividades, roles y buenas prácticas para desarrollo seguro.</p>
+    <h3>5 Vistas</h3>
+    <ul>
+      <li><strong>Conceptos:</strong> introducción de alto nivel a la metodología.</li>
+      <li><strong>Basada en roles:</strong> instrucciones según función del miembro del equipo.</li>
+      <li><strong>Evaluación de actividades:</strong> selecciona actividades apropiadas.</li>
+      <li><strong>Implementación de actividades:</strong> detalla actividades de seguridad a integrar.</li>
+      <li><strong>Vulnerabilidades:</strong> catálogo de 104 tipos de problemas en 5 categorías.</li>
+    </ul>
+    <h3>5 Servicios básicos de seguridad (CLASP)</h3>
+    <p>Autorización, Confidencialidad, Autenticación, Disponibilidad, Responsabilidad y No repudio.</p>
+    <div class="key-box">
+      <span class="key-label">Dato clave</span>
+      CLASP = <strong>104 tipos de problemas</strong> en <strong>5 categorías</strong>: errores de rango/tipo, problemas de entorno, errores de tiempo/sincronización, errores de protocolo, errores lógicos generales.
+    </div>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"CLASP = Concepto, Líderes (roles), Análisis, Soluciones, Problemas"</b> — las 5 vistas en orden: primero entiendes el Concepto, luego ves qué hace cada Líder/rol, después Analizas/evalúas qué hacer, luego implementas Soluciones (actividades), y finalmente revisas el catálogo de Problemas (vulnerabilidades).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 19 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">19</span>SSDF (NIST): 4 categorías</div>
+    <p>Marco del NIST que consolida mejores prácticas (BSA, OWASP, SAFECode) para reducir vulnerabilidades.</p>
+    <ul>
+      <li><strong>PO - Preparar la Organización:</strong> procesos, personas y tecnología listos.</li>
+      <li><strong>PS - Proteger el Software:</strong> componentes protegidos contra acceso no autorizado y manipulación.</li>
+      <li><strong>PW - Producir software seguro:</strong> bien protegido desde la cadena de suministro, gestión de vulnerabilidades conocidas.</li>
+      <li><strong>RV - Responder a vulnerabilidades:</strong> identificar y corregir rápido, mecanismos de respuesta efectiva.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"PO-PS-PW-RV"</b> → "<b>P</b>repara la <b>O</b>rganización, <b>P</b>rotege y <b>P</b>roduce con <b>S</b>eguridad/<b>W</b> (sin fallas), y <b>R</b>esponde a las <b>V</b>ulnerabilidades". Imagina construir una casa: primero preparas el terreno y equipo (PO), proteges los materiales (PS), construyes la casa segura (PW), y reparas cualquier grieta que aparezca (RV).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 20 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">20</span>DevOps vs DevSecOps</div>
+    <p><strong>DevOps:</strong> dev + ops trabajan juntos para entregar software rápido mediante automatización, colaboración y feedback rápido.</p>
+    <p><strong>DevSecOps (SecDevOps):</strong> integra la SEGURIDAD en TODO el ciclo (SSDLC), no solo al final. Automatiza la seguridad para no frenar la velocidad de DevOps.</p>
+    <div class="key-box">
+      <span class="key-label">Idea fuerza</span>
+      Antes: seguridad = equipo separado, al final del proceso (lento). DevSecOps: seguridad = integrada y automatizada desde el día 1, en pipelines CI/CD.
+    </div>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>DevOps = "Dev y Ops se dan la mano"</b> (2 equipos unidos). <b>DevSecOps = "Sec se mete EN MEDIO del apretón de manos"</b> (Dev-SEC-Ops), la seguridad ya no es un invitado al final, sino parte del equipo desde el inicio.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 21 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">21</span>DevSecOps: actividades por fase</div>
+    <h3>Planificación</h3>
+    <ul>
+      <li>Modelado de amenazas (Microsoft Threat Modeling Tool, OWASP Threat Dragon, pytm).</li>
+      <li>Guías OWASP, normativas (RGPD, LOPDGDD).</li>
+      <li>Priorización y revisión por pares.</li>
+    </ul>
+    <h3>Desarrollo/Codificación</h3>
+    <ul>
+      <li><strong>SAST</strong> (caja blanca): escanea código sin ejecutar. Ej: SonarCloud, SonarQube, Gitleaks.</li>
+      <li>Complementos de IDE: DevSkim, JFrog, Snyk.</li>
+      <li>Precommit hooks: git-secrets, git-hound.</li>
+      <li>Gestión de secretos: Hashicorp, AWS/Azure/GCP.</li>
+    </ul>
+    <h3>Compilación y Prueba</h3>
+    <ul>
+      <li><strong>DAST</strong> (caja negra): app en ejecución. Ej: OWASP ZAP, Nikto.</li>
+      <li><strong>SCA</strong>: analiza librerías/dependencias. Ej: OWASP Dependency-Check, Retire JS.</li>
+    </ul>
+    <h3>Producción y Despliegue</h3>
+    <ul>
+      <li><strong>IAST:</strong> combina SAST+DAST con agente interno en tiempo real.</li>
+      <li><strong>System hardening:</strong> reducir superficie de ataque (cambiar claves default, deshabilitar servicios). Ej: Lynis, Bastille Linux.</li>
+      <li>Escaneo de imágenes/contenedores (Clair) y de infraestructura cloud (Microsoft Defender, Sentinel).</li>
+    </ul>
+    <h3>Operaciones y Monitorización</h3>
+    <ul>
+      <li><strong>WAF</strong> (Web Application Firewall): filtra tráfico HTTP malicioso (ej. inyección SQL).</li>
+      <li>DAST continuo.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"SAST antes de correr, DAST mientras corre"</b> → SAST = código quieto (estático = sin ejecutar), DAST = código corriendo (dinámico = en ejecución). Para recordar el flujo completo: <b>"Planeo-Codeo-Compilo-Despliego-Vigilo"</b> = Planificación → Desarrollo (SAST) → Compilación/Prueba (DAST/SCA) → Despliegue (IAST/Hardening) → Operaciones (WAF).
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 22 -->
+  <div class="block">
+    <div class="block-title"><span class="block-num">22</span>GASIC: Guía de Auditoría de Seguridad</div>
+    <p>Marco para que el auditor interno comprenda el alcance del dominio de seguridad a evaluar.</p>
+    <h3>3 Componentes</h3>
+    <ul>
+      <li><strong>Guía de Auditoría (GASIC):</strong> cuerpo teórico, marco contextual con conceptos fundamentales.</li>
+      <li><strong>Modelo de Madurez:</strong> organiza controles en niveles de madurez para evaluar.</li>
+      <li><strong>Preguntas de Auditoría:</strong> complementan el modelo con preguntas por control/eje temático.</li>
+    </ul>
+    <h3>Pasos de uso (3)</h3>
+    <ul>
+      <li><strong>1.</strong> Estudiar la Guía y su contexto.</li>
+      <li><strong>2.</strong> Usar el Modelo de Madurez para elegir controles, alineados con estrategia, riesgos, cumplimiento y plan de auditoría.</li>
+      <li><strong>3.</strong> Usar las preguntas de ejemplo para planificar pruebas.</li>
+    </ul>
+    <div class="mnemo">
+      <div class="mnemo-title">💡 Truco Mnemotécnico</div>
+      <div class="mnemo-body">
+        <b>"Guía-Madurez-Preguntas" = "Estudia-Madura-Pregunta"</b>: primero ESTUDIAS la teoría (Guía), luego ves qué tan MADURO está el control (Modelo de Madurez), y finalmente haces las PREGUNTAS de auditoría para comprobarlo. Como un examen: estudias la materia, evalúas tu nivel, y respondes preguntas.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    📚 Guía generada para repaso rápido antes del examen.<br>
+    Repasa primero los <strong>cuadros 💡 Mnemotécnicos</strong> y luego los <strong>bloques completos</strong>.
+  </div>
+
+</body>
+</html>
