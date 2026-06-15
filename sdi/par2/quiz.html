@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Quiz — Seguridad Informática · 100 Preguntas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══ VARIABLES ═══ */
+:root {
+  --bg:        #0B1520;
+  --surface:   #131F2E;
+  --surface2:  #1C2D40;
+  --surface3:  #243044;
+  --accent:    #00C9A7;
+  --accent2:   #00A896;
+  --amber:     #FFB830;
+  --violet:    #9B72F0;
+  --rose:      #F06292;
+  --blue:      #60AFFF;
+  --correct:   #22C55E;
+  --wrong:     #EF4444;
+  --ink:       #E8F0FA;
+  --ink2:      #9DB4CE;
+  --ink3:      #5A7898;
+  --line:      #1E3248;
+  --r:         14px;
+  --r-sm:      8px;
+  --sh:        0 6px 28px rgba(0,0,0,.45);
+  --fd:        'Space Grotesk', sans-serif;
+  --fb:        'DM Sans', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100dvh;overscroll-behavior:none}
+button{font-family:var(--fb);cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.95)}
+
+/* ═══ HEADER ═══ */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,21,32,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+  padding:12px 16px 10px;
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.quiz-title{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--accent)}
+.quiz-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+.score-badge{
+  display:flex;align-items:center;gap:5px;
+  background:var(--surface2);border:1px solid var(--line);
+  border-radius:99px;padding:5px 12px;
+  font-family:var(--fd);font-size:12px;font-weight:700;color:var(--ink)
+}
+.score-badge .s-val{font-size:15px;color:var(--accent)}
+.prog-track{height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--violet));border-radius:99px;transition:width .4s ease;width:0}
+
+/* ═══ SCREEN MANAGEMENT ═══ */
+.screen{display:none;max-width:560px;margin:0 auto;padding:20px 16px 48px}
+.screen.active{display:block}
+
+/* ═══ SPLASH / START ═══ */
+.splash-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:32px 24px;text-align:center;margin-top:8px
+}
+.splash-icon{font-size:56px;margin-bottom:20px;line-height:1}
+.splash-card h1{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.splash-card p{color:var(--ink2);font-size:14px;line-height:1.65;margin-bottom:20px}
+.splash-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px
+}
+.s-chip{
+  background:var(--surface2);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:14px 8px;text-align:center
+}
+.s-chip .n{font-family:var(--fd);font-size:22px;font-weight:700;color:var(--accent);display:block;line-height:1;margin-bottom:3px}
+.s-chip .l{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.cat-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:28px}
+.cat-tag{
+  padding:5px 11px;border-radius:99px;font-size:11px;font-weight:700;font-family:var(--fd);
+  border:1px solid;
+}
+.btn-start{
+  width:100%;padding:17px;border-radius:var(--r-sm);border:none;
+  background:var(--accent);color:#071210;
+  font-family:var(--fd);font-size:16px;font-weight:700;
+  letter-spacing:-.2px;transition:background .15s
+}
+.btn-start:hover{background:var(--accent2)}
+
+/* ═══ QUESTION SCREEN ═══ */
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.q-counter{font-family:var(--fd);font-size:12px;color:var(--ink3);font-weight:600}
+.q-counter span{color:var(--ink);font-size:14px}
+.q-cat-tag{
+  padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:var(--fd);
+  letter-spacing:.5px;text-transform:uppercase;border:1px solid;
+}
+.q-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:22px 18px 20px;margin-bottom:16px;box-shadow:var(--sh)
+}
+.q-num-label{font-size:11px;color:var(--ink3);font-weight:600;margin-bottom:10px;font-family:var(--fd);letter-spacing:.3px}
+.q-text{font-family:var(--fd);font-size:17px;font-weight:700;line-height:1.4;color:var(--ink)}
+.options-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.opt-btn{
+  width:100%;padding:14px 16px;
+  background:var(--surface2);border:1.5px solid var(--line);border-radius:var(--r-sm);
+  color:var(--ink);font-size:14px;text-align:left;line-height:1.4;
+  transition:border-color .15s,background .15s;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.opt-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(0,201,167,.08)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct{border-color:var(--correct)!important;background:rgba(34,197,94,.12)!important;color:var(--correct)!important}
+.opt-btn.wrong{border-color:var(--wrong)!important;background:rgba(239,68,68,.12)!important;color:var(--wrong)!important}
+.opt-letter{
+  flex-shrink:0;width:26px;height:26px;border-radius:6px;
+  background:var(--surface3);border:1px solid var(--line);
+  font-family:var(--fd);font-size:11px;font-weight:700;color:var(--ink3);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s,border-color .15s
+}
+.opt-btn.correct .opt-letter{background:var(--correct);color:#fff;border-color:var(--correct)}
+.opt-btn.wrong .opt-letter{background:var(--wrong);color:#fff;border-color:var(--wrong)}
+.opt-btn.correct-hint .opt-letter{background:rgba(34,197,94,.2);color:var(--correct);border-color:var(--correct)}
+.opt-btn.correct-hint{border-color:rgba(34,197,94,.4)!important}
+
+/* feedback box */
+.feedback-box{
+  border-radius:var(--r-sm);padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;
+  border:1.5px solid;display:none
+}
+.feedback-box.correct{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.08);color:var(--correct)}
+.feedback-box.wrong{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08);color:#ff8888}
+.feedback-box .fb-head{font-family:var(--fd);font-weight:700;font-size:14px;margin-bottom:5px}
+.feedback-box strong{font-weight:700}
+
+.btn-next{
+  width:100%;padding:15px;border-radius:var(--r-sm);border:none;
+  background:var(--accent);color:#071210;
+  font-family:var(--fd);font-size:15px;font-weight:700;
+  display:none;
+}
+
+/* ═══ RESULTS SCREEN ═══ */
+.results-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:28px 20px;text-align:center;margin-bottom:20px;box-shadow:var(--sh)
+}
+.result-emoji{font-size:64px;margin-bottom:16px;line-height:1}
+.results-card h2{font-family:var(--fd);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.results-card .result-subtitle{font-size:14px;color:var(--ink2);margin-bottom:22px}
+.big-score{font-family:var(--fd);font-size:64px;font-weight:700;line-height:1;margin-bottom:4px}
+.big-score-sub{font-size:12px;color:var(--ink3);margin-bottom:22px;font-family:var(--fd);text-transform:uppercase;letter-spacing:.5px}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px}
+.res-chip{
+  background:var(--surface2);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:14px 10px;text-align:center
+}
+.res-chip .rv{font-family:var(--fd);font-size:20px;font-weight:700;display:block;line-height:1;margin-bottom:3px}
+.res-chip .rl{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.res-chip.c .rv{color:var(--correct)}
+.res-chip.w .rv{color:var(--wrong)}
+.res-chip.t .rv{color:var(--violet)}
+.res-chip.p .rv{color:var(--amber)}
+.badge-band{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:24px}
+.badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 18px;border-radius:99px;font-family:var(--fd);font-size:13px;font-weight:700;
+  border:1.5px solid;
+}
+.result-btns{display:flex;flex-direction:column;gap:10px}
+.btn-retry{
+  width:100%;padding:15px;border-radius:var(--r-sm);border:none;
+  background:var(--accent);color:#071210;font-family:var(--fd);font-size:15px;font-weight:700;
+}
+.btn-review{
+  width:100%;padding:15px;border-radius:var(--r-sm);
+  border:1.5px solid var(--line);background:transparent;
+  color:var(--ink2);font-family:var(--fd);font-size:15px;font-weight:600;
+}
+
+/* review list */
+.review-section h3{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.review-item{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:14px 16px;margin-bottom:10px
+}
+.review-item.ri-correct{border-color:rgba(34,197,94,.3)}
+.review-item.ri-wrong{border-color:rgba(239,68,68,.35)}
+.review-item .ri-q{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.4}
+.review-item .ri-row{font-size:12px;color:var(--ink2);margin-bottom:3px;display:flex;gap:6px;align-items:baseline}
+.review-item .ri-row .ri-label{font-weight:700;flex-shrink:0;font-family:var(--fd)}
+.review-item .ri-row.correct .ri-label{color:var(--correct)}
+.review-item .ri-row.wrong .ri-label{color:var(--wrong)}
+.review-item .ri-row.answer .ri-label{color:var(--accent)}
+.review-item .ri-exp{font-size:11.5px;color:var(--ink3);margin-top:7px;line-height:1.55}
+
+/* ═══ MISC ═══ */
+@keyframes pop{0%{transform:scale(.92);opacity:.5}100%{transform:scale(1);opacity:1}}
+.q-card{animation:pop .28s ease}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-row">
+    <div>
+      <div class="quiz-title">🔐 Quiz · Seguridad Informática</div>
+      <div class="quiz-sub" id="topSub">100 preguntas · 8 categorías</div>
+    </div>
+    <div class="score-badge">
+      <span>⭐</span>
+      <span class="s-val" id="topScore">0</span>
+      <span style="color:var(--ink3);font-size:11px">/ 0</span>
+    </div>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+</header>
+
+<!-- ═══ START SCREEN ═══ -->
+<section class="screen active" id="screenStart">
+  <div style="max-width:560px;margin:0 auto;padding:20px 16px 48px">
+    <div class="splash-card">
+      <div class="splash-icon">🧠</div>
+      <h1>Pon a prueba tus conocimientos</h1>
+      <p>100 preguntas de selección múltiple sobre Criptografía, Cifrado, Firewalls, IDS/IPS, Autenticación, SDLC, DevSecOps y GASIC.</p>
+      <div class="splash-stats">
+        <div class="s-chip"><span class="n">100</span><span class="l">Preguntas</span></div>
+        <div class="s-chip"><span class="n">4</span><span class="l">Opciones c/u</span></div>
+        <div class="s-chip"><span class="n">8</span><span class="l">Categorías</span></div>
+      </div>
+      <div class="cat-tags">
+        <span class="cat-tag" style="border-color:#00C9A7;color:#00C9A7;background:rgba(0,201,167,.08)">🔒 Criptografía</span>
+        <span class="cat-tag" style="border-color:#FFB830;color:#FFB830;background:rgba(255,184,48,.08)">🔑 Cifrado</span>
+        <span class="cat-tag" style="border-color:#9B72F0;color:#9B72F0;background:rgba(155,114,240,.08)">🛡️ Firewall</span>
+        <span class="cat-tag" style="border-color:#F06292;color:#F06292;background:rgba(240,98,146,.08)">🚨 IDS/IPS</span>
+        <span class="cat-tag" style="border-color:#56d4a0;color:#56d4a0;background:rgba(86,212,160,.08)">👤 Autenticación</span>
+        <span class="cat-tag" style="border-color:#60AFFF;color:#60AFFF;background:rgba(96,175,255,.08)">⚙️ SDLC</span>
+        <span class="cat-tag" style="border-color:#f97316;color:#f97316;background:rgba(249,115,22,.08)">🔐 DevSecOps</span>
+        <span class="cat-tag" style="border-color:#e879f9;color:#e879f9;background:rgba(232,121,249,.08)">📋 GASIC</span>
+      </div>
+      <button class="btn-start" onclick="startQuiz()">▶ Comenzar Quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUESTION SCREEN ═══ -->
+<section class="screen" id="screenQ">
+  <div style="max-width:560px;margin:0 auto;padding:20px 16px 48px">
+    <div class="q-meta">
+      <div class="q-counter">Pregunta <span id="qPos">1</span> de 100</div>
+      <div class="q-cat-tag" id="qCatTag"></div>
+    </div>
+    <div class="q-card" id="qCard">
+      <div class="q-num-label" id="qNumLabel"></div>
+      <div class="q-text" id="qText"></div>
+    </div>
+    <div class="options-grid" id="optionsGrid"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">Siguiente →</button>
+  </div>
+</section>
+
+<!-- ═══ RESULTS SCREEN ═══ -->
+<section class="screen" id="screenResults">
+  <div style="max-width:560px;margin:0 auto;padding:20px 16px 48px">
+    <div class="results-card">
+      <div class="result-emoji" id="resEmoji">🎉</div>
+      <h2 id="resTitle">¡Excelente!</h2>
+      <p class="result-subtitle" id="resSub">Completaste el quiz de seguridad informática</p>
+      <div class="big-score" id="bigScore" style="color:var(--accent)">0</div>
+      <div class="big-score-sub">puntos correctos</div>
+      <div class="result-grid">
+        <div class="res-chip c"><span class="rv" id="resCorrect">0</span><span class="rl">✓ Correctas</span></div>
+        <div class="res-chip w"><span class="rv" id="resWrong">0</span><span class="rl">✗ Incorrectas</span></div>
+        <div class="res-chip p"><span class="rv" id="resPct">0%</span><span class="rl">Porcentaje</span></div>
+        <div class="res-chip t"><span class="rv" id="resTime">0s</span><span class="rl">⏱ Tiempo</span></div>
+      </div>
+      <div class="badge-band" id="badgeBand"></div>
+      <div class="result-btns">
+        <button class="btn-retry" onclick="startQuiz()">🔄 Intentar de nuevo</button>
+        <button class="btn-review" onclick="showReview()">📋 Ver respuestas</button>
+      </div>
+    </div>
+    <div class="review-section" id="reviewSection" style="display:none">
+      <h3>Revisión de respuestas</h3>
+      <div id="reviewList"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ════════════════════════════════════════════════════
+//  QUIZ DATA — 100 PREGUNTAS
+// ════════════════════════════════════════════════════
+const QUESTIONS = [
+// ─── 01-13 CRIPTOGRAFÍA ───
+{id:1,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Cuál es la definición etimológica correcta de 'Criptografía'?",
+opts:["Transferir datos de forma rápida","Ocultar la escritura","Proteger redes informáticas","Autenticar usuarios remotos"],
+ans:1,exp:"Del griego Kriptos (ocultar) + Graphos (escritura). Significa literalmente ocultar la escritura."},
+
+{id:2,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Cuál de estos NO es un objetivo principal de la criptografía?",
+opts:["Confidencialidad","Disponibilidad","Integridad","No repudio"],
+ans:1,exp:"Los 4 objetivos son: Confidencialidad, Integridad, Autenticación y No repudio. La Disponibilidad pertenece a la tríada CIA de seguridad de la información pero no es un objetivo directo de la criptografía."},
+
+{id:3,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Qué objetivo criptográfico 'evita que un usuario deniegue compromisos o acciones previas'?",
+opts:["Confidencialidad","Integridad","Autenticación","No repudio"],
+ans:3,exp:"El no repudio asegura que el emisor no puede negar haber enviado un mensaje, vital en transacciones legales y comerciales."},
+
+{id:4,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Cuál fue el principal factor histórico que promovió los avances criptográficos?",
+opts:["El comercio marítimo","Las guerras","La invención del telégrafo","La revolución industrial"],
+ans:1,exp:"Las guerras fueron el principal factor que promovió los avances criptográficos, por la necesidad de comunicarse secretamente entre ejércitos."},
+
+{id:5,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿En qué año aproximadamente los Hebreos utilizaron el cifrado Atbash?",
+opts:["400 AC","600-500 AC","100 AC","800 DC"],
+ans:1,exp:"Entre 600-500 AC los Hebreos usaron el cifrado Atbash, un sencillo cifrado por sustitución monoalfabética."},
+
+{id:6,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Quién creó la máquina Enigma en 1932?",
+opts:["Gilbert Vernam","Leon Battista Alberti","Arthur Sherbius","Martin Hellman"],
+ans:2,exp:"Arthur Sherbius creó la máquina Enigma, compuesta por ruedas con contactos eléctricos. Fue usada en la Segunda Guerra Mundial."},
+
+{id:7,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Qué organización creó el algoritmo SHA-1 en 1995?",
+opts:["IBM","NSA","NIST","Microsoft"],
+ans:1,exp:"La NSA (National Security Agency) creó el algoritmo hash SHA-1 en 1995, y en 2001 creó el AES."},
+
+{id:8,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿En qué estado puede estar la información protegida por criptografía?",
+opts:["Solo en tránsito","Solo en reposo","En reposo, en tránsito y en uso","Solo en uso durante cómputo"],
+ans:2,exp:"La criptografía protege la información en sus tres estados: en reposo (archivos), en tránsito (comunicaciones) y en uso (durante operaciones de cómputo)."},
+
+{id:9,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Qué es un Criptosistema?",
+opts:["Un software antivirus","El conjunto completo de elementos de un sistema criptográfico","Un tipo de firewall","Un protocolo de red segura"],
+ans:1,exp:"Un criptosistema es el conjunto completo de elementos (emisor, receptor, medio, algoritmo, mensaje, clave, criptograma y protocolo) que permite cumplir con las funciones criptográficas."},
+
+{id:10,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"En un criptosistema, ¿qué es la 'clave o llave'?",
+opts:["El mensaje original en texto plano","El canal de comunicación","Pieza de información que aplicada al algoritmo transforma el mensaje","El criptograma resultante"],
+ans:2,exp:"La clave es la pieza de información secreta que, aplicada al algoritmo criptográfico, permite transformar el mensaje original en criptograma o viceversa."},
+
+{id:11,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Cuál es la base tecnológica del protocolo HTTPS?",
+opts:["Cifrado de César","Criptografía moderna (SSL/TLS)","La máquina Enigma","Cifrado Atbash"],
+ans:1,exp:"HTTPS se basa en protocolos criptográficos SSL/TLS que protegen la información intercambiada entre el navegador y el servidor web."},
+
+{id:12,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Qué técnica criptográfica es 'fundamental en sistemas como Blockchain'?",
+opts:["Cifrado César","Cifrado de Vigenère","Funciones Hash","Escítala"],
+ans:2,exp:"Las funciones hash son fundamentales en Blockchain y en protocolos como SSL/TLS, ya que garantizan la integridad de los datos sin posibilidad de inversión."},
+
+{id:13,cat:"🔒 Criptografía",catColor:"#00C9A7",
+q:"¿Qué es un VPN desde el punto de vista criptográfico?",
+opts:["Un antivirus basado en la nube","Un 'túnel seguro' donde la criptografía forma las paredes protegiendo la privacidad","Un firewall de cuarta generación","Un sistema de detección de intrusos"],
+ans:1,exp:"Las VPN (Virtual Private Networks) funcionan como un túnel seguro en Internet donde la criptografía forma las paredes del túnel, protegiendo la privacidad y la información."},
+
+// ─── 14-28 CIFRADO ───
+{id:14,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿En qué dos categorías se dividen las técnicas de cifrado según sus claves?",
+opts:["Digitales y analógicas","Simétricas y asimétricas","Públicas y secretas","Modernas y clásicas"],
+ans:1,exp:"Las técnicas de cifrado se dividen en simétricas (misma clave para cifrar y descifrar) y asimétricas (par de claves pública y privada)."},
+
+{id:15,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Qué hace el Cifrado César con las letras del mensaje?",
+opts:["Las invierte en espejo","Las sustituye por números","Las desplaza un número fijo de posiciones en el alfabeto","Las transpone en una cuadrícula"],
+ans:2,exp:"El Cifrado César desplaza las letras por un número fijo de posiciones. Por ejemplo, con desplazamiento 3, la 'A' se convierte en 'D'."},
+
+{id:16,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cuál de los siguientes cifrados clásicos es 'teóricamente irrompible si la clave es aleatoria y única'?",
+opts:["Cifrado César","Cifrado de Hill","Cifrado de Vernam (OTP)","Cifrado de Polybios"],
+ans:2,exp:"El Cifrado de Vernam (One Time Pad) aplica XOR con una clave del mismo largo que el mensaje. Si la clave es completamente aleatoria y se usa una sola vez, es teóricamente irrompible."},
+
+{id:17,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Qué algoritmo matemático usa el Cifrado de Hill?",
+opts:["Aritmética modular simple","Álgebra lineal con matrices","Curvas elípticas","Exponenciación discreta"],
+ans:1,exp:"El Cifrado de Hill es un sistema basado en álgebra lineal que usa matrices para realizar operaciones sobre bloques de texto, siendo más complejo y potente que cifrados de sustitución simples."},
+
+{id:18,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Qué es la escítala?",
+opts:["Un disco giratorio de Alberti","Una cinta enrollada en un palo que solo se lee con el palo del mismo tamaño","Una máquina eléctrica alemana","Un cifrado de sustitución hebreo"],
+ans:1,exp:"La escítala era un dispositivo griego: una cinta enrollada alrededor de un palo donde el mensaje solo podía leerse al enrollarlo en un palo del mismo diámetro."},
+
+{id:19,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿En qué año se adoptó el estándar DES como cifrado gubernamental?",
+opts:["1932","1962","1976","1998"],
+ans:2,exp:"El DES (Data Encryption Standard) fue adoptado como estándar en 1976 y autorizado para comunicaciones gubernamentales no clasificadas."},
+
+{id:20,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cuál es la principal VENTAJA del cifrado simétrico sobre el asimétrico?",
+opts:["Mayor seguridad en el intercambio de claves","Permite autenticación mediante firmas digitales","Es mucho más rápido y eficiente","Escalabilidad en redes grandes"],
+ans:2,exp:"El cifrado simétrico es significativamente más rápido y consume menos recursos que el asimétrico, haciéndolo ideal para cifrar grandes volúmenes de datos."},
+
+{id:21,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cuál es la principal DESVENTAJA del cifrado simétrico?",
+opts:["Es demasiado lento para uso cotidiano","No puede distribuir claves de forma segura por medios inseguros","No funciona con discos duros","Requiere dos personas para operar"],
+ans:1,exp:"La distribución de claves es la gran debilidad del cifrado simétrico: no provee mecanismos para enviar claves de forma segura a través de un canal inseguro."},
+
+{id:22,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Qué algoritmo asimétrico es 'específico para generar firmas digitales seguras'?",
+opts:["RSA","ECC","DSA","Diffie-Hellman"],
+ans:2,exp:"El DSA (Digital Signature Algorithm) está específicamente diseñado y estandarizado para la generación de firmas digitales seguras."},
+
+{id:23,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Qué algoritmo simétrico es 'uno de los más seguros y usados actualmente'?",
+opts:["DES","RC4","3DES","AES"],
+ans:3,exp:"El AES (Advanced Encryption Standard) es actualmente el estándar de facto para cifrado simétrico, siendo uno de los más seguros y ampliamente usados."},
+
+{id:24,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Para qué es específicamente útil el algoritmo Diffie-Hellman?",
+opts:["Cifrar archivos en disco","Intercambio seguro de claves","Generar firmas digitales","Autenticar contraseñas"],
+ans:1,exp:"Diffie-Hellman es un algoritmo diseñado para el intercambio seguro de claves criptográficas a través de canales públicos no seguros."},
+
+{id:25,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cuál es la característica de 'Unidireccionalidad' en las funciones hash?",
+opts:["El proceso puede invertirse para obtener el dato original","El proceso NO puede invertirse para obtener los datos originales","Genera siempre el mismo tamaño de hash","Puede usarse como clave de cifrado"],
+ans:1,exp:"La unidireccionalidad significa que dado un hash, es computacionalmente imposible recuperar los datos originales que lo generaron."},
+
+{id:26,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cuál de estos algoritmos hash es considerado actualmente SEGURO para uso criptográfico?",
+opts:["MD5","SHA-1","SHA-256","RC4"],
+ans:2,exp:"SHA-256 (y SHA-512) son actualmente seguros y ampliamente usados. MD5 y SHA-1 se consideran obsoletos e inseguros para propósitos criptográficos."},
+
+{id:27,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cómo funciona el proceso de firma digital? ¿Con qué clave se cifra el hash del mensaje?",
+opts:["Con la clave pública del remitente","Con la clave privada del remitente","Con la clave pública del receptor","Con una clave simétrica compartida"],
+ans:1,exp:"En una firma digital, el hash del mensaje se cifra con la clave PRIVADA del remitente, creando la firma. El receptor verifica con la clave PÚBLICA."},
+
+{id:28,cat:"🔑 Cifrado",catColor:"#FFB830",
+q:"¿Cuál fue el inicio de la Criptografía Moderna según el material?",
+opts:["La invención de la máquina Enigma","La publicación de la Teoría de la Información de Shannon, el estándar DES (1974) y el cifrado de llave pública de Hellman (1976)","La creación del SHA-1 por la NSA","El protocolo BB84 de cifrado cuántico"],
+ans:1,exp:"La criptografía moderna nació tras tres hitos: la Teoría de la Información de Shannon, el estándar DES en 1974, y el modelo de cifrado de llave pública de Martin Hellman en 1976."},
+
+// ─── 29-43 FIREWALL ───
+{id:29,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué es un cortafuegos (firewall)?",
+opts:["Un antivirus para correo electrónico","Sistema que implanta una política de control de accesos entre dos redes","Un sistema de detección de intrusos","Un protocolo de cifrado de red"],
+ans:1,exp:"Un cortafuegos es un sistema que implanta una política de control de accesos entre dos redes (por ejemplo, Internet y LAN), bloqueando o permitiendo el tráfico según las reglas definidas."},
+
+{id:30,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Contra qué NO protege un cortafuegos?",
+opts:["Accesos no autenticados del exterior","Tráfico no autorizado del exterior","Ataques desde el interior de la red","Control del tráfico de salida"],
+ans:2,exp:"Un cortafuegos NO protege contra ataques desde el interior, ni contra accesos que no pasen por él (modems directos), ni contra virus/troyanos, ni contra la salida de información por otros medios."},
+
+{id:31,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿En qué capa trabajan los 'Filtros de paquetes'?",
+opts:["Capa de aplicación","Capa de presentación","Capa de red (IP)","Capa de sesión"],
+ans:2,exp:"Los filtros de paquetes trabajan a nivel de red (IP), filtrando según cabeceras: direcciones IP origen/destino y puertos TCP/UDP."},
+
+{id:32,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Cuál es la DESVENTAJA principal de los filtros de paquetes?",
+opts:["Son demasiado lentos","No examinan el tráfico ni entienden el contexto","No funcionan con IPv6","Requieren un proxy por aplicación"],
+ans:1,exp:"Los filtros de paquetes tienen menor nivel de seguridad porque no examinan el contenido del tráfico ni entienden el contexto de las conexiones; solo analizan cabeceras."},
+
+{id:33,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué tipo de cortafuegos requiere 'implantar un proxy por cada aplicación'?",
+opts:["Filtros de paquetes","Gateways de aplicación (proxy)","Inspección de estados","Cortafuegos híbridos"],
+ans:1,exp:"Los Gateways de aplicación no permiten tráfico directo entre redes; todo pasa por un proxy a nivel de aplicación, lo que requiere un proxy específico por cada tipo de aplicación."},
+
+{id:34,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué tipo de cortafuegos 'mantiene una tabla dinámica de estados con información para las decisiones de seguridad'?",
+opts:["Filtros de paquetes","Gateways de aplicación","Inspección de estados (stateful)","Cortafuegos personal"],
+ans:2,exp:"Los cortafuegos de inspección de estados (stateful inspection) mantienen una tabla dinámica con información del contexto de las conexiones activas para tomar mejores decisiones."},
+
+{id:35,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué generación de cortafuegos incorpora inteligencia artificial y análisis predictivo?",
+opts:["Segunda generación","Tercera generación","Cuarta generación","Quinta generación"],
+ans:3,exp:"La quinta generación de cortafuegos incorpora IA y análisis predictivo para adaptarse a nuevas amenazas, incluyendo protección contra ransomware y APTs (amenazas persistentes avanzadas)."},
+
+{id:36,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué tipo de cortafuegos protege a 'entre 2 y 50 usuarios en pequeñas oficinas'?",
+opts:["Cortafuegos personal","SOHO (Small Office Home Office)","Appliance corporativo","Cortafuegos de tercera generación"],
+ans:1,exp:"Los cortafuegos SOHO (Small Office Home Office) protegen a varios usuarios en pequeñas oficinas (típicamente entre 2 y 50 usuarios), y suelen instalarse antes del router."},
+
+{id:37,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué hace la primera generación de cortafuegos?",
+opts:["Opera en capa de aplicación entendiendo protocolos como HTTP","Mantiene tabla de estados de conexiones activas","Inspecciona paquetes según reglas predefinidas basadas en IP y puertos","Usa IA para análisis predictivo"],
+ans:2,exp:"La primera generación (filtros de paquetes) inspecciona paquetes según reglas predefinidas, operando en la capa de red con base en IP y puertos. Son rápidos pero sin comprensión del contenido."},
+
+{id:38,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué son los 'Cortafuegos híbridos'?",
+opts:["Solo filtros de paquetes mejorados","Mezcla de varias tecnologías; la mayoría de los productos comerciales actuales","Cortafuegos solo para redes inalámbricas","Cortafuegos de primera generación actualizados"],
+ans:1,exp:"Los cortafuegos híbridos incorporan una mezcla de varias tecnologías. Pueden definir reglas de filtrado para tráfico de alta velocidad y proxy para alta seguridad. Son la mayoría de los productos comerciales actuales."},
+
+{id:39,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Cuál es una ventaja de los Gateways de aplicación (proxy) respecto a otros cortafuegos?",
+opts:["Son los más rápidos y escalables","Alto nivel de seguridad, examinan información a nivel de aplicación","No requieren configuración","No rompen el modelo cliente/servidor"],
+ans:1,exp:"Los gateways de aplicación tienen un alto nivel de seguridad porque examinan la información a nivel de aplicación y toman decisiones basadas en datos específicos de cada aplicación."},
+
+{id:40,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Cuál es una DESVENTAJA de los Gateways de aplicación (proxy)?",
+opts:["No examinan el tráfico","Menor rendimiento y escalabilidad; rompe el modelo cliente/servidor","No funcionan con redes modernas","Solo protegen una capa de red"],
+ans:1,exp:"Los proxies tienen menor rendimiento y escalabilidad, rompen el modelo cliente/servidor (requieren dos conexiones separadas) y necesitan un proxy diferente por cada aplicación."},
+
+{id:41,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué función cumple el cortafuegos como 'punto central' en una empresa?",
+opts:["Reemplaza al antivirus corporativo","Punto central donde se implanta la política de seguridad de la empresa y donde se conectan múltiples redes","Solo registra el tráfico entrante","Gestiona las contraseñas de todos los usuarios"],
+ans:1,exp:"El cortafuegos corporativo actúa como punto central de acceso a Internet y es donde se implanta la política de seguridad de toda la empresa, pudiendo conectar múltiples redes."},
+
+{id:42,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Cuál es una desventaja importante de los cortafuegos?",
+opts:["No pueden bloquear tráfico externo","Generan una falsa sensación de seguridad completa","No funcionan con redes inalámbricas","Son incompatibles con sistemas operativos modernos"],
+ans:1,exp:"Una desventaja crítica es que los cortafuegos pueden generar una falsa sensación de seguridad completa, ya que tienen limitaciones (especialmente ante amenazas internas) y no son la única medida necesaria."},
+
+{id:43,cat:"🛡️ Firewall",catColor:"#9B72F0",
+q:"¿Qué puede 'ocultar' un cortafuegos de Internet?",
+opts:["Solo las contraseñas de usuarios","Nombres de sistemas, topología de red, tipos de dispositivos e identificadores de usuarios internos","El código fuente de las aplicaciones","Los archivos encriptados del servidor"],
+ans:1,exp:"Un cortafuegos puede ocultar de Internet: nombres de sistemas, topología de la red, tipos de dispositivos de red e identificadores de usuarios internos, protegiendo información valiosa para un atacante."},
+
+// ─── 44-53 IDS/IPS ───
+{id:44,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Qué son los IDS?",
+opts:["Protocolos de cifrado para redes","Herramientas de seguridad para identificar actividades sospechosas o maliciosas en una red","Sistemas de autenticación biométrica","Tipos de cortafuegos de quinta generación"],
+ans:1,exp:"Los IDS (Intrusion Detection Systems) son herramientas de seguridad diseñadas para identificar actividades sospechosas o maliciosas dentro de una red o sistema informático."},
+
+{id:45,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿En qué se diferencia un IDS basado en red (NIDS) de uno basado en host (HIDS)?",
+opts:["El NIDS solo detecta virus; el HIDS detecta intrusos externos","El NIDS monitorea toda la red; el HIDS funciona en dispositivos individuales analizando registros locales","El NIDS es más lento; el HIDS es más rápido","El NIDS es de hardware; el HIDS es de software"],
+ans:1,exp:"NIDS monitorea el tráfico en toda la red y analiza paquetes; HIDS funciona en dispositivos individuales (servidores, estaciones) analizando registros de eventos y cambios de archivo."},
+
+{id:46,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Qué método de detección IDS 'identifica comportamiento inusual'?",
+opts:["Detección por firma","Detección por anomalía","Detección por protocolo","Detección heurística de puertos"],
+ans:1,exp:"La detección por anomalía identifica comportamiento que se desvía del patrón normal establecido, mientras que la detección por firma compara con una base de datos de ataques conocidos."},
+
+{id:47,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Cuál es la limitación fundamental de un IDS respecto a los ataques?",
+opts:["No puede analizar tráfico de red","Solo funciona en sistemas Windows","No puede PREVENIR ataques, solo detectarlos y alertar","No detecta ataques conocidos"],
+ans:2,exp:"La limitación fundamental del IDS es que es un sistema PASIVO: solo monitorea y genera alertas, pero no puede interferir directamente ni bloquear los ataques detectados."},
+
+{id:48,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Cuál es la diferencia clave entre IDS e IPS en cuanto al modo de operación?",
+opts:["IDS es activo e IPS es pasivo","IDS es pasivo (solo monitorea) e IPS es activo (detecta y actúa bloqueando)","Ambos son pasivos pero con distintas velocidades","IDS es hardware e IPS es software"],
+ans:1,exp:"El IDS es PASIVO: monitorea y alerta sin interferir. El IPS es ACTIVO: analiza, detecta y actúa automáticamente bloqueando o mitigando las amenazas en tiempo real."},
+
+{id:49,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Qué problema puede generar un IPS con una configuración deficiente?",
+opts:["Generar solo alertas sin bloquear","Ralentizar el tráfico y bloquear tráfico legítimo (falsos positivos)","No detectar ataques de red","Consumir excesiva memoria RAM únicamente"],
+ans:1,exp:"Un IPS mal configurado puede generar falsos positivos que bloqueen tráfico legítimo, e incluso ralentizar el tráfico de la red si no está correctamente ajustado."},
+
+{id:50,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Qué es el IPS 'basado en comportamiento'?",
+opts:["Usa firmas de ataques conocidos para bloquear","Utiliza análisis de comportamiento para identificar y bloquear anomalías, adaptándose a nuevas amenazas","Monitorea solo el tráfico HTTP","Funciona únicamente en dispositivos móviles"],
+ans:1,exp:"El IPS basado en comportamiento utiliza análisis de comportamiento para identificar y bloquear anomalías, ofreciendo alta precisión al adaptarse dinámicamente a nuevas amenazas no conocidas previamente."},
+
+{id:51,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Para qué es 'típicamente' más útil un IDS según sus características?",
+opts:["Bloqueo en tiempo real de ataques DDoS","Análisis forense y monitoreo continuo posterior a incidentes","Prevención activa de ransomware","Gestión de contraseñas de usuarios"],
+ans:1,exp:"El IDS se usa típicamente para análisis forense y monitoreo continuo, ya que registra información detallada de incidentes para análisis posterior, sin interferir en el tráfico."},
+
+{id:52,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Cuál de estas es una VENTAJA de un IDS?",
+opts:["Bloquea ataques antes de que ocurran","Puede generar alertas detalladas sobre posibles ataques y permite análisis forense","No genera nunca falsos positivos","Reemplaza completamente al cortafuegos"],
+ans:1,exp:"El IDS provee alertas detalladas sobre posibles ataques y permite análisis forense posterior a incidentes, siendo valioso para entender qué ocurrió y mejorar la seguridad."},
+
+{id:53,cat:"🚨 IDS/IPS",catColor:"#F06292",
+q:"¿Cómo responde un IPS al detectar una amenaza, a diferencia de un IDS?",
+opts:["Genera un informe semanal","Responde automáticamente, bloqueando o mitigando las amenazas en tiempo real","Envía un correo al administrador","Reinicia el sistema afectado"],
+ans:1,exp:"El IPS responde automáticamente a las amenazas detectadas, bloqueándolas o mitigándolas en tiempo real, en contraste con el IDS que solo genera alertas sin intervenir."},
+
+// ─── 54-62 AUTENTICACIÓN ───
+{id:54,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué es la autenticación en seguridad informática?",
+opts:["Proceso de cifrar la información del usuario","Proceso de verificar la identidad de un usuario, dispositivo o sistema","Proceso de autorizar permisos de acceso","Proceso de auditar las actividades del sistema"],
+ans:1,exp:"La autenticación es el proceso de verificar la identidad de un usuario, dispositivo o sistema, usualmente mediante credenciales como contraseñas, tokens o datos biométricos."},
+
+{id:55,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Cuáles son los 3 factores de autenticación?",
+opts:["Lo que piensas, lo que haces y lo que ves","Algo que sabe, algo que tiene y algo que es (el usuario)","Contraseña, token y biometría solamente","PIN, tarjeta y huella dactilar"],
+ans:1,exp:"Los tres factores son: algo que SABE el usuario (contraseña, PIN), algo que TIENE (tarjeta, token) y algo que ES el usuario (huella dactilar, reconocimiento facial)."},
+
+{id:56,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué es el Control de Acceso basado en Roles (RBAC)?",
+opts:["Asignar permisos individualmente a cada usuario","Modelo que asigna permisos según las funciones/roles del usuario en la organización","Control de acceso mediante atributos múltiples","Sistema de autenticación biométrica avanzada"],
+ans:1,exp:"RBAC (Role-Based Access Control) define roles con permisos específicos y asigna usuarios a esos roles, en lugar de gestionar permisos individualmente. Aplica principios de menor privilegio y separación de funciones."},
+
+{id:57,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué principio del RBAC limita los accesos al mínimo necesario?",
+opts:["Separación de funciones","Asignación basada en reglas","Menor privilegio (mínimo privilegio)","Roles y permisos jerárquicos"],
+ans:2,exp:"El principio de menor privilegio (least privilege) asegura que cada usuario solo tenga los permisos estrictamente necesarios para realizar sus funciones, reduciendo la superficie de ataque."},
+
+{id:58,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué es el ABAC (Control de acceso basado en atributos)?",
+opts:["Sistema de autenticación por huellas digitales","Modelo avanzado que determina permisos según múltiples atributos del usuario, recurso, acción y entorno","Sistema de listas de control de acceso simples","Control de acceso basado únicamente en el rol laboral"],
+ans:1,exp:"ABAC (Attribute-Based Access Control) ofrece mayor flexibilidad y granularidad al determinar permisos considerando múltiples atributos: del usuario, del recurso, de la acción y del entorno."},
+
+{id:59,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué distingue al AIAC (Control de Acceso con Inteligencia Artificial)?",
+opts:["Usa contraseñas más largas","Integra algoritmos de aprendizaje automático para decisiones en tiempo real y se adapta a patrones y amenazas emergentes","Solo funciona en dispositivos Apple","Es un estándar ISO específico"],
+ans:1,exp:"El AIAC integra algoritmos de aprendizaje automático para tomar decisiones de acceso en tiempo real, adaptándose dinámicamente a patrones de comportamiento y amenazas emergentes. Se integra con Zero Trust."},
+
+{id:60,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué función cumplen las aplicaciones de autenticación (como Google Authenticator)?",
+opts:["Reemplazar completamente las contraseñas","Implementar MFA (Autenticación Multifactor) añadiendo una capa adicional como códigos temporales","Cifrar toda la comunicación del dispositivo","Gestionar contraseñas en texto plano"],
+ans:1,exp:"Las aplicaciones de autenticación implementan MFA complementando las contraseñas con un segundo factor, usualmente códigos TOTP (temporales) que cambian cada 30 segundos."},
+
+{id:61,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué es una ACL (Lista de Control de Acceso)?",
+opts:["Un tipo de cortafuegos","Sistema donde el propietario del archivo define qué tipo de acceso tienen determinados usuarios","Un protocolo de cifrado de red","Un modelo de gestión de identidades"],
+ans:1,exp:"En las ACL, el propietario del archivo define los tipos de acceso permitidos para cada usuario: leer, escribir, actualizar, eliminar, u otras acciones definidas por el propietario."},
+
+{id:62,cat:"👤 Autenticación",catColor:"#56d4a0",
+q:"¿Qué característica de las apps de autenticación permite 'usarlas siempre contigo'?",
+opts:["Integración con sistemas de escritorio","Portabilidad — disponibles en smartphones","Compatibilidad solo con redes corporativas","Sincronización solo offline"],
+ans:1,exp:"La portabilidad es una característica clave: las aplicaciones de autenticación están disponibles en dispositivos móviles (smartphones), permitiendo llevar siempre el segundo factor de autenticación."},
+
+// ─── 63-75 SDLC ───
+{id:63,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Qué significa SDLC?",
+opts:["Secure Data Learning Cycle","Software Development Life Cycle (Ciclo de Vida del Desarrollo de Software)","System Design and Launch Criteria","Secure Digital Layered Control"],
+ans:1,exp:"SDLC son las siglas de Software Development Life Cycle, el marco que define las fases que un proyecto de software sigue desde su inicio hasta su finalización."},
+
+{id:64,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Cuántas fases principales tiene el SDLC según el material?",
+opts:["3 fases","4 fases","6 fases","8 fases"],
+ans:2,exp:"El SDLC tiene 6 fases: 1) Planificación y Análisis de Requisitos, 2) Diseño del Sistema, 3) Desarrollo y Codificación, 4) Pruebas, 5) Despliegue y 6) Mantenimiento y Soporte."},
+
+{id:65,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿En qué fase del SDLC se deben incluir requisitos de seguridad como protección de datos y gestión de identidades?",
+opts:["Solo en la fase de Pruebas","Solo en la fase de Despliegue","En la fase de Planificación y Análisis de Requisitos, desde el inicio","Solo en el Mantenimiento"],
+ans:2,exp:"En la fase de Planificación y Análisis de Requisitos se deben identificar los requisitos de seguridad específicos, como la protección de datos, gestión de identidades y conformidad con normativas."},
+
+{id:66,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Qué principio de diseño de software se debe aplicar en la fase de Diseño del Sistema?",
+opts:["Máximo privilegio para mayor productividad","Defensa en profundidad, mínimo privilegio y separación de funciones","Código abierto sin restricciones","Desarrollo rápido sin documentación"],
+ans:1,exp:"El diseño seguro debe considerar: defensa en profundidad, principio del mínimo privilegio y separación de funciones. También se deben definir controles de seguridad en la arquitectura."},
+
+{id:67,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Cuál es la característica principal de la metodología Cascada (Waterfall)?",
+opts:["Iterativa con ciclos cortos llamados sprints","Secuencial: cada fase debe completarse antes de pasar a la siguiente","Combina desarrollo y operaciones con CI/CD","Adaptativa y flexible a cambios continuos"],
+ans:1,exp:"La metodología Cascada es un enfoque secuencial donde cada fase del SDLC debe completarse completamente antes de pasar a la siguiente. Es fácil de gestionar pero rígida."},
+
+{id:68,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Cuál es la VENTAJA de la metodología Ágil respecto a Cascada?",
+opts:["Documentación más extensa","Mayor claridad y estructura fija","Flexibilidad y entrega continua con ciclos cortos (sprints)","Menos reuniones de equipo necesarias"],
+ans:2,exp:"Ágil ofrece flexibilidad, colaboración continua con el cliente y entrega incremental mediante ciclos cortos (sprints), permitiendo adaptarse rápidamente a cambios en los requisitos."},
+
+{id:69,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Cuál es la DESVENTAJA de la metodología Cascada?",
+opts:["Demasiada flexibilidad que complica la gestión","Rigidez, poco margen para cambios y riesgo de detectar problemas tardíamente","Falta de documentación formal","Incertidumbre en los plazos de entrega"],
+ans:1,exp:"La metodología Cascada es rígida: una vez que una fase concluye no se permite volver atrás fácilmente, y los problemas suelen detectarse tarde (en las fases finales), aumentando el costo de corrección."},
+
+{id:70,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Qué es el Microsoft SDL?",
+opts:["Un lenguaje de programación seguro","Un proceso de desarrollo seguro de software que integra la seguridad en cada fase del ciclo de vida","Un estándar ISO para criptografía","Un tipo de cortafuegos de Microsoft"],
+ans:1,exp:"El SDL (Security Development Lifecycle) de Microsoft es un proceso estructurado que integra prácticas de seguridad en cada fase del desarrollo de software, desde formación hasta lanzamiento."},
+
+{id:71,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Cuántos tipos de problemas identifica CLASP en el código fuente?",
+opts:["26 tipos","50 tipos","104 tipos","200 tipos"],
+ans:2,exp:"CLASP identifica 104 tipos de problemas subyacentes clasificados en 5 categorías: errores de rango/tipo, problemas de entorno, errores de tiempo/sincronización, errores de protocolo y errores lógicos."},
+
+{id:72,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Qué significa SSDF?",
+opts:["Secure Software Design Framework","Secure Software Development Framework (Marco de Desarrollo de Software Seguro)","System Security and Defense Foundation","Software Stability and Deployment Framework"],
+ans:1,exp:"SSDF es el Secure Software Development Framework, desarrollado por el NIST (SP 800-218) para mejorar la resistencia a vulnerabilidades en el software."},
+
+{id:73,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Cuántas categorías principales tiene el SSDF?",
+opts:["2 categorías","3 categorías","4 categorías","6 categorías"],
+ans:2,exp:"El SSDF tiene 4 categorías: PO (Preparar la Organización), PS (Proteger el Software), PW (Producir Software Seguro) y RV (Responder a las Vulnerabilidades)."},
+
+{id:74,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Qué hace la categoría 'PS - Proteger el Software' del SSDF?",
+opts:["Gestiona las actualizaciones del sistema operativo","Garantiza que los componentes de software estén protegidos contra acceso no autorizado y manipulación","Define los requisitos funcionales del usuario","Establece las métricas de rendimiento"],
+ans:1,exp:"La categoría PS (Protect the Software) del SSDF se centra en garantizar que todos los componentes de software estén protegidos contra el acceso no autorizado y manipulación por actores maliciosos."},
+
+{id:75,cat:"⚙️ SDLC",catColor:"#60AFFF",
+q:"¿Qué fase del SDLC debe incluir 'controles de acceso, configuración segura y planes de respuesta ante incidentes'?",
+opts:["Análisis de Requisitos","Diseño del Sistema","Despliegue","Mantenimiento"],
+ans:2,exp:"La fase de Despliegue debe incluir: implementación de controles de acceso, configuración segura del entorno y preparación de planes de respuesta ante incidentes, además de actualizar dependencias."},
+
+// ─── 76-88 DEVSECOPS ───
+{id:76,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué significa DevSecOps?",
+opts:["Desarrollo, Seguridad y Operaciones integrados en todo el SDLC","Solo desarrollo + operaciones automatizadas","Seguridad de dispositivos móviles","Un tipo de cortafuegos de nueva generación"],
+ans:0,exp:"DevSecOps integra Desarrollo (Dev), Seguridad (Sec) y Operaciones (Ops) en todo el ciclo de vida del desarrollo de software, haciendo de la seguridad una parte integral desde el inicio."},
+
+{id:77,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Cuál era el enfoque TRADICIONAL de la seguridad en el desarrollo de software antes de DevSecOps?",
+opts:["Integrar la seguridad desde el primer día del desarrollo","Preocuparse por la seguridad solo DESPUÉS de completar todo el desarrollo","Usar DevSecOps desde los años 90","Contratar un equipo de seguridad dentro del equipo de desarrollo"],
+ans:1,exp:"Tradicionalmente, la seguridad se abordaba solo después de completar el desarrollo, con el equipo de seguridad trabajando separado de Dev y Ops, ralentizando los procesos y limitando el conocimiento de riesgos."},
+
+{id:78,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es DevOps?",
+opts:["Solo un sistema de control de versiones","Filosofía donde personas trabajan juntas para concebir, construir y entregar software seguro a alta velocidad, integrando Dev y Ops","Un lenguaje de programación orientado a seguridad","Un protocolo de red para desarrollo remoto"],
+ans:1,exp:"DevOps es una filosofía que integra equipos de desarrollo (Dev) y operaciones (Ops) para acelerar la entrega mediante automatización, colaboración y mejora continua. Comparte relación estrecha con el desarrollo ágil."},
+
+{id:79,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué significa CI/CD en el contexto de DevSecOps?",
+opts:["Cybersecurity Incident / Control Dashboard","Integración Continua / Entrega Continua (Continuous Integration / Continuous Delivery)","Critical Infrastructure / Cloud Defense","Code Inspection / Code Deployment"],
+ans:1,exp:"CI/CD son las prácticas de Integración Continua y Entrega Continua, fundamentales en DevSecOps para automatizar la construcción, prueba y despliegue del software de forma continua y segura."},
+
+{id:80,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es el 'Modelado de Amenazas' en la fase de planificación de DevSecOps?",
+opts:["Un modelo matemático de cifrado","Ver la aplicación desde la perspectiva de un atacante para identificar cómo puede ser abusada y cómo evitarlo","Una técnica para diseñar interfaces de usuario","Un método de pruebas de carga del servidor"],
+ans:1,exp:"El modelado de amenazas consiste en analizar la aplicación desde el punto de vista del atacante para identificar vectores de ataque y planificar contramedidas. Herramientas: Microsoft Threat Modeling Tool, OWASP Threat Dragon."},
+
+{id:81,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es el principio 'Shift-left' en DevSecOps?",
+opts:["Mover el equipo de seguridad al departamento de operaciones","Realizar evaluaciones de seguridad DESDE EL PRINCIPIO del proyecto para evitar que vulnerabilidades lleguen a producción","Desplazar servidores físicamente a otra ubicación","Priorizar las pruebas de usabilidad sobre las de seguridad"],
+ans:1,exp:"Shift-left significa aplicar la seguridad lo más temprano posible en el SDLC (hacia la izquierda de la línea de tiempo del proyecto), para detectar y corregir vulnerabilidades cuando son más baratas de resolver."},
+
+{id:82,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es el principio 'Shift-right' en DevSecOps?",
+opts:["Implementar seguridad solo en la fase de diseño","Monitorear en el entorno de PRODUCCIÓN para detectar vulnerabilidades en tiempo real","Desplazar toda la seguridad al equipo de QA","Priorizar la velocidad de entrega sobre la seguridad"],
+ans:1,exp:"Shift-right significa también monitorear la seguridad en producción (lado derecho del SDLC), donde ocurre la mayoría de los ataques y donde se puede obtener información valiosa de la aplicación en ejecución real."},
+
+{id:83,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es la 'Trazabilidad' en DevSecOps?",
+opts:["La capacidad de rastrear paquetes de red en tiempo real","Seguimiento de los cambios de configuración y entorno desde la planificación hasta la producción","El registro automático de todos los inicios de sesión","La capacidad de identificar virus en el código fuente"],
+ans:1,exp:"La Trazabilidad en DevSecOps es el seguimiento completo de los cambios de configuración y entorno a lo largo de todo el ciclo, desde la planificación hasta la producción, para garantizar transparencia y control."},
+
+{id:84,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es la 'Auditabilidad' en DevSecOps?",
+opts:["La capacidad de revertir cambios al código","Generar automáticamente informes de los procesos de desarrollo y controles de seguridad","El acceso al código fuente por terceros","La verificación manual de cada línea de código"],
+ans:1,exp:"La Auditabilidad en DevSecOps consiste en generar de manera automática los informes de los procesos de desarrollo y los controles de seguridad aplicados, facilitando revisiones y cumplimiento normativo."},
+
+{id:85,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es la IaC (Infraestructura como Código) en DevOps?",
+opts:["Un lenguaje de programación para bases de datos","Gestionar y aprovisionar infraestructura mediante scripts automatizados, asegurando entornos consistentes y reproducibles","Un protocolo de seguridad de red","Un método de cifrado para archivos de configuración"],
+ans:1,exp:"IaC (Infrastructure as Code) permite gestionar infraestructura mediante scripts de configuración automatizados en lugar de procesos manuales, asegurando que los entornos de dev, prueba y producción sean consistentes."},
+
+{id:86,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es la 'Entrega Continua (CD)' en DevOps?",
+opts:["Entregar software solo una vez por año","Despliegue automático de cada cambio que pasa las pruebas al entorno de producción, de forma rápida y frecuente","Entregar documentación continua al cliente","El proceso de integrar código de todos los desarrolladores"],
+ans:1,exp:"La Entrega Continua (CD) extiende la Integración Continua al despliegue automático de cada cambio validado al entorno de producción, permitiendo entregas rápidas y frecuentes con mínimas interrupciones."},
+
+{id:87,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Qué es OWASP SAMM?",
+opts:["Un tipo de ataque de inyección SQL","Un modelo de madurez de OWASP para medir el estado actual de prácticas de seguridad del software y planificar mejoras","Un protocolo de autenticación multifactor","Un estándar de cifrado de datos en reposo"],
+ans:1,exp:"OWASP SAMM (Software Assurance Maturity Model) proporciona un enfoque estructurado para medir el estado actual de las prácticas de seguridad del software y planificar mejoras organizadas en gobernanza, diseño, implementación, verificación y despliegue."},
+
+{id:88,cat:"🔐 DevSecOps",catColor:"#f97316",
+q:"¿Por qué la automatización es 'casi indispensable' en DevSecOps?",
+opts:["Porque los humanos no pueden escribir código seguro","Para poder incluir procesos de seguridad dentro de las 'tuberías de entrega' (CI/CD pipelines) sin ralentizar el desarrollo","Porque los auditores requieren código automatizado","Para reemplazar completamente al equipo de seguridad"],
+ans:1,exp:"En DevSecOps, la automatización es indispensable para incluir procesos de seguridad dentro de los pipelines de entrega CI/CD, permitiendo que las pruebas de seguridad se ejecuten automáticamente sin retrasar el desarrollo."},
+
+// ─── 89-100 GASIC ───
+{id:89,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué significa GASIC?",
+opts:["Gestión Avanzada de Sistemas de Información Cibernética","Guía de Auditoría de la Seguridad de la Información y Ciberseguridad","Guía de Acceso Seguro a Infraestructuras Críticas","Gestión Auditada de Sistemas y Control"],
+ans:1,exp:"GASIC significa Guía de Auditoría de la Seguridad de la Información y Ciberseguridad, un instrumento del CAIGG para fortalecer la seguridad en el sector público."},
+
+{id:90,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Cuántos componentes tiene cada GASIC?",
+opts:["2 componentes","3 componentes","5 componentes","7 componentes"],
+ans:1,exp:"Cada GASIC se compone de 3 componentes: la Guía de Auditoría (marco teórico), el Modelo de Madurez (controles organizados) y los Ejemplos de Preguntas de Auditoría."},
+
+{id:91,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué diferencia 'Seguridad de la Información' de 'Ciberseguridad'?",
+opts:["No hay diferencia, son exactamente lo mismo","Seguridad de la Información cubre CUALQUIER MEDIO incluyendo físico y personas; Ciberseguridad se refiere exclusivamente al ciberespacio y activos digitales","Seguridad de la Información es solo para empresas; Ciberseguridad para gobiernos","La Ciberseguridad incluye la seguridad física"],
+ans:1,exp:"La Seguridad de la Información preserva la CID (Confidencialidad, Integridad, Disponibilidad) en cualquier medio, incluso personas y medios físicos. La Ciberseguridad hace referencia exclusiva al ciberespacio y activos digitales."},
+
+{id:92,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué es el 'Modelo de Madurez' dentro de una GASIC?",
+opts:["Una lista de vulnerabilidades conocidas","Un modelo que recopila controles de mejores prácticas, los organiza en una propuesta de madurez y permite al auditor conocer los requisitos a evaluar","Un glosario de términos de seguridad","Un protocolo de cifrado avanzado"],
+ans:1,exp:"El Modelo de Madurez de la GASIC recopila controles desde mejores prácticas, los organiza en una propuesta de niveles de madurez y permite al auditor interno conocer y seleccionar los requisitos que debe evaluar."},
+
+{id:93,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Con qué debe estar alineada la selección de controles del Modelo de Madurez?",
+opts:["Solo con el presupuesto disponible","Con la estrategia de la organización, resultados de evaluación de riesgos, requisitos de cumplimiento y la estrategia de auditoría interna","Solo con las leyes nacionales vigentes","Únicamente con las mejores prácticas ISO"],
+ans:1,exp:"La selección de controles debe alinearse con: a) la estrategia de la organización, b) los resultados de la evaluación de riesgos, c) los requisitos de cumplimiento, y d) la estrategia de auditoría interna expresada en el plan."},
+
+{id:94,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Cuáles son las 4 áreas temáticas de seguridad en el SDLC según la GASIC?",
+opts:["Análisis, Diseño, Código y Pruebas","Planeación/Requisitos, Herramientas/Entornos, Pruebas/Verificación/Mantenimiento, y Codificación/Protección","Firewall, IDS, Autenticación y Cifrado","Prevención, Detección, Respuesta y Recuperación"],
+ans:1,exp:"Las 4 áreas temáticas de seguridad en el SDLC según la GASIC son: 1) Planeación y Definición de Requisitos, 2) Herramientas y Entornos de Desarrollo, 3) Pruebas, Verificación y Mantenimiento, y 4) Codificación y Protección de Software."},
+
+{id:95,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué es la 'Codificación Segura' en el contexto de la GASIC?",
+opts:["Usar siempre el mismo lenguaje de programación","Escribir código siguiendo prácticas que prevengan vulnerabilidades: validación de entradas, gestión adecuada de errores, implementación de controles de acceso","Cifrar el código fuente con AES","Documentar el código con comentarios de seguridad"],
+ans:1,exp:"La codificación segura implica seguir prácticas como validación de entradas, gestión adecuada de errores y excepciones, e implementación de controles de acceso para prevenir vulnerabilidades explotables."},
+
+{id:96,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué es el 'Desarrollo Seguro de Software' según la GASIC?",
+opts:["Solo el uso de herramientas antivirus en el entorno de desarrollo","Un proceso que no es aislado: debe integrarse a lo largo de TODO el ciclo de vida del desarrollo, desde concepción hasta mantenimiento","Solo la fase de pruebas de seguridad antes del lanzamiento","El uso exclusivo de software de código abierto"],
+ans:1,exp:"El desarrollo seguro de software no es un proceso aislado; debe integrarse a lo largo de todo el SDLC, desde la concepción y planificación hasta el despliegue y mantenimiento, considerando y mitigando riesgos en cada etapa."},
+
+{id:97,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué marcos de seguridad menciona la GASIC para asegurar el software?",
+opts:["Solo el estándar ISO 9001","OWASP, NIST y otros marcos que proporcionan guía estructurada para asegurar el software","Solo estándares militares NATO","Únicamente el estándar PCI-DSS"],
+ans:1,exp:"La GASIC menciona marcos como OWASP y NIST como guías estructuradas para asegurar el software. La colaboración con expertos en seguridad y la participación en comunidades ayudan a mantenerse actualizado."},
+
+{id:98,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué contiene el NIST SP 800-218 (SSDF)?",
+opts:["Una lista de vulnerabilidades del año 2022","Un conjunto de prácticas de desarrollo seguro que las organizaciones pueden integrar en sus procesos de desarrollo, incluyendo planificación, implementación, verificación y respuesta","El catálogo completo de algoritmos de cifrado aprobados","Las regulaciones de privacidad de datos de la UE"],
+ans:1,exp:"El NIST SP 800-218 (SSDF) ofrece prácticas de desarrollo seguro que las organizaciones pueden integrar en sus procesos, cubriendo planificación, implementación, verificación y respuesta a incidentes. Es especialmente relevante para organizaciones gubernamentales."},
+
+{id:99,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Cuál es la primera acción que debe realizar el auditor interno según la GASIC?",
+opts:["Seleccionar inmediatamente los controles del Modelo de Madurez","Estudiar cada Guía de Auditoría y su contexto para tener plena comprensión del tema a trabajar","Realizar pruebas de penetración directamente","Aplicar el cuestionario de preguntas sin preparación previa"],
+ans:1,exp:"El primer paso (01) es que el auditor interno estudie cada Guía de Auditoría y su contexto para tener plena comprensión del dominio de seguridad que está evaluando antes de seleccionar controles."},
+
+{id:100,cat:"📋 GASIC",catColor:"#e879f9",
+q:"¿Qué aspecto es 'crucial' en la fase de Pruebas del SDLC según la GASIC?",
+opts:["Solo probar funcionalidad básica del usuario","Las pruebas de seguridad como pruebas de penetración y análisis de vulnerabilidades para identificar fallos antes del despliegue a producción","Solo realizar pruebas de rendimiento y velocidad","Probar únicamente en el entorno de producción final"],
+ans:1,exp:"Las pruebas de seguridad, incluyendo pruebas de penetración y análisis de vulnerabilidades, son componentes esenciales de la fase de Pruebas, ya que ayudan a identificar posibles fallos de seguridad antes del despliegue a producción."},
+];
+
+// ════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════
+let deck = [];
+let currentQ = 0;
+let score = 0;
+let answers = []; // {qIdx, chosen, correct}
+let startTime = 0;
+let answered = false;
+
+// ════════════════════════════════════════════════════
+//  DOM
+// ════════════════════════════════════════════════════
+const screens = {
+  start: document.getElementById("screenStart"),
+  q:     document.getElementById("screenQ"),
+  res:   document.getElementById("screenResults"),
+};
+const qPos        = document.getElementById("qPos");
+const qCatTag     = document.getElementById("qCatTag");
+const qNumLabel   = document.getElementById("qNumLabel");
+const qText       = document.getElementById("qText");
+const qCard       = document.getElementById("qCard");
+const optGrid     = document.getElementById("optionsGrid");
+const feedbackBox = document.getElementById("feedbackBox");
+const btnNext     = document.getElementById("btnNext");
+const progFill    = document.getElementById("progFill");
+const topScore    = document.getElementById("topScore");
+const topSub      = document.getElementById("topSub");
+
+// ════════════════════════════════════════════════════
+//  SCREENS
+// ════════════════════════════════════════════════════
+function showScreen(id) {
+  Object.values(screens).forEach(s => s.classList.remove("active"));
+  screens[id].classList.add("active");
+}
+
+// ════════════════════════════════════════════════════
+//  START
+// ════════════════════════════════════════════════════
+function startQuiz() {
+  deck = [...QUESTIONS].sort(() => Math.random() - 0.5);
+  currentQ = 0;
+  score = 0;
+  answers = [];
+  startTime = Date.now();
+  showScreen("q");
+  renderQuestion();
+  updateTopBar();
+}
+
+// ════════════════════════════════════════════════════
+//  RENDER QUESTION
+// ════════════════════════════════════════════════════
+function renderQuestion() {
+  answered = false;
+  feedbackBox.style.display = "none";
+  feedbackBox.className = "feedback-box";
+  btnNext.style.display = "none";
+
+  const q = deck[currentQ];
+  qPos.textContent = currentQ + 1;
+
+  // Category tag
+  qCatTag.textContent = q.cat;
+  qCatTag.style.borderColor = q.catColor + "66";
+  qCatTag.style.color = q.catColor;
+  qCatTag.style.background = q.catColor + "18";
+
+  qNumLabel.textContent = `Pregunta ${currentQ + 1} de 100`;
+  qText.textContent = q.q;
+
+  // Animate
+  qCard.style.animation = "none";
+  requestAnimationFrame(() => qCard.style.animation = "pop .28s ease");
+
+  // Options
+  const letters = ["A","B","C","D"];
+  optGrid.innerHTML = "";
+  // Shuffle options display
+  const shuffledIdx = q.opts.map((_,i)=>i).sort(()=>Math.random()-.5);
+  shuffledIdx.forEach((origIdx, displayPos) => {
+    const btn = document.createElement("button");
+    btn.className = "opt-btn";
+    btn.dataset.orig = origIdx;
+    btn.innerHTML = `<span class="opt-letter">${letters[displayPos]}</span><span>${q.opts[origIdx]}</span>`;
+    btn.addEventListener("click", () => handleAnswer(btn, origIdx, q));
+    optGrid.appendChild(btn);
+  });
+
+  // Update progress
+  const pct = Math.round((currentQ / 100) * 100);
+  progFill.style.width = pct + "%";
+}
+
+// ════════════════════════════════════════════════════
+//  HANDLE ANSWER
+// ════════════════════════════════════════════════════
+function handleAnswer(btn, chosenIdx, q) {
+  if (answered) return;
+  answered = true;
+
+  const isCorrect = chosenIdx === q.ans;
+  if (isCorrect) score++;
+
+  // Mark all buttons
+  const allBtns = optGrid.querySelectorAll(".opt-btn");
+  allBtns.forEach(b => {
+    b.disabled = true;
+    const orig = parseInt(b.dataset.orig);
+    if (orig === q.ans) {
+      b.classList.add(isCorrect && orig === chosenIdx ? "correct" : "correct-hint");
+    } else if (orig === chosenIdx && !isCorrect) {
+      b.classList.add("wrong");
+    }
+  });
+
+  // Feedback
+  feedbackBox.style.display = "block";
+  feedbackBox.className = "feedback-box " + (isCorrect ? "correct" : "wrong");
+  feedbackBox.innerHTML = `<div class="fb-head">${isCorrect ? "✅ ¡Correcto!" : "❌ Incorrecto"}</div>${q.exp}`;
+
+  // Record
+  answers.push({ qIdx: currentQ, chosen: chosenIdx, correct: q.ans, isCorrect });
+
+  // Show next
+  btnNext.style.display = "block";
+  btnNext.textContent = currentQ < 99 ? "Siguiente →" : "Ver Resultados";
+
+  updateTopBar();
+}
+
+// ════════════════════════════════════════════════════
+//  NEXT QUESTION
+// ════════════════════════════════════════════════════
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= 100) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ════════════════════════════════════════════════════
+//  TOP BAR UPDATE
+// ════════════════════════════════════════════════════
+function updateTopBar() {
+  topScore.textContent = score;
+  document.querySelector(".score-badge span:last-child").textContent = `/ ${answers.length}`;
+}
+
+// ════════════════════════════════════════════════════
+//  RESULTS
+// ════════════════════════════════════════════════════
+function showResults() {
+  showScreen("res");
+  progFill.style.width = "100%";
+
+  const elapsed = Math.round((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+
+  const wrong = answers.length - score;
+  const pct = Math.round((score / 100) * 100);
+
+  // Emoji & title
+  let emoji, title, sub;
+  if (pct >= 90) { emoji="🏆"; title="¡Nivel Experto!"; sub="Dominas la seguridad informática."; }
+  else if (pct >= 75) { emoji="🎉"; title="¡Muy bien!"; sub="Sólido conocimiento. Repasa los errores."; }
+  else if (pct >= 60) { emoji="💪"; title="¡Buen intento!"; sub="Estás en el camino correcto. Sigue estudiando."; }
+  else if (pct >= 40) { emoji="📚"; title="Necesitas repasar"; sub="Revisa el material y vuelve a intentarlo."; }
+  else { emoji="😅"; title="¡A estudiar!"; sub="Repasa las flashcards y regresa al quiz."; }
+
+  document.getElementById("resEmoji").textContent = emoji;
+  document.getElementById("resTitle").textContent = title;
+  document.getElementById("resSub").textContent = sub;
+
+  const scoreColor = pct >= 75 ? "var(--correct)" : pct >= 50 ? "var(--amber)" : "var(--wrong)";
+  document.getElementById("bigScore").style.color = scoreColor;
+  document.getElementById("bigScore").textContent = score;
+  document.getElementById("resCorrect").textContent = score;
+  document.getElementById("resWrong").textContent = wrong;
+  document.getElementById("resPct").textContent = pct + "%";
+  document.getElementById("resTime").textContent = timeStr;
+
+  // Badges by category
+  const catStats = {};
+  answers.forEach((a, i) => {
+    const cat = deck[a.qIdx].cat;
+    if (!catStats[cat]) catStats[cat] = {c:0,t:0,color:deck[a.qIdx].catColor};
+    catStats[cat].t++;
+    if (a.isCorrect) catStats[cat].c++;
+  });
+
+  const band = document.getElementById("badgeBand");
+  band.innerHTML = "<div style='font-size:12px;color:var(--ink3);margin-bottom:8px;font-family:var(--fd);font-weight:600;letter-spacing:.3px;text-transform:uppercase'>Rendimiento por categoría</div>";
+  Object.entries(catStats).forEach(([cat, s]) => {
+    const cpct = Math.round((s.c/s.t)*100);
+    const b = document.createElement("div");
+    b.className = "badge";
+    b.style.borderColor = s.color + "55";
+    b.style.background = s.color + "12";
+    b.style.color = s.color;
+    b.style.fontSize = "12px";
+    b.innerHTML = `${cat} <span style="opacity:.7">${s.c}/${s.t}</span> <strong>${cpct}%</strong>`;
+    band.appendChild(b);
+  });
+
+  document.getElementById("reviewSection").style.display = "none";
+}
+
+// ════════════════════════════════════════════════════
+//  REVIEW
+// ════════════════════════════════════════════════════
+function showReview() {
+  const sec = document.getElementById("reviewSection");
+  if (sec.style.display === "block") { sec.style.display = "none"; return; }
+  sec.style.display = "block";
+  const list = document.getElementById("reviewList");
+  list.innerHTML = "";
+
+  answers.forEach((a) => {
+    const q = deck[a.qIdx];
+    const div = document.createElement("div");
+    div.className = "review-item " + (a.isCorrect ? "ri-correct" : "ri-wrong");
+    div.innerHTML = `
+      <div class="ri-q">${currentQ > 0 ? answers.indexOf(a)+1 : ""}. ${q.q}</div>
+      ${!a.isCorrect ? `<div class="ri-row wrong"><span class="ri-label">✗ Tu respuesta:</span> ${q.opts[a.chosen]}</div>` : ""}
+      <div class="ri-row ${a.isCorrect ? 'correct' : 'answer'}"><span class="ri-label">${a.isCorrect ? "✓ Correcto:" : "✓ Respuesta:"}</span> ${q.opts[a.correct]}</div>
+      <div class="ri-exp">${q.exp}</div>
+    `;
+    list.appendChild(div);
+  });
+
+  sec.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+// keyboard
+document.addEventListener("keydown", e => {
+  const screen = document.querySelector(".screen.active");
+  if (!screen) return;
+  if (screen.id === "screenQ") {
+    const letters = ["a","b","c","d"];
+    const li = letters.indexOf(e.key.toLowerCase());
+    if (li !== -1 && !answered) {
+      const btns = optGrid.querySelectorAll(".opt-btn");
+      if (btns[li]) btns[li].click();
+    }
+    if ((e.key === "Enter" || e.key === " ") && answered) { e.preventDefault(); nextQuestion(); }
+  }
+});
+</script>
+</body>
+</html>
