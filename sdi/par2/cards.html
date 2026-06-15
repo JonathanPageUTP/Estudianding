@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Flashcards: Seguridad, Autenticación y SDLC</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :root {
+    --bg-deep: #1a1b2e;
+    --bg-grad-1: #1f2138;
+    --bg-grad-2: #2d2b52;
+    --card-front: linear-gradient(145deg, #3a3d6b 0%, #2c2e52 100%);
+    --card-back: linear-gradient(145deg, #4a5d8f 0%, #354270 100%);
+    --accent: #8fd3c7;
+    --accent2: #f6c89f;
+    --text-light: #f5f3ff;
+    --text-dim: #b8b6d4;
+    --pill-bg: rgba(255,255,255,0.08);
+    --shadow: 0 12px 30px rgba(0,0,0,0.35);
+    --radius: 22px;
+    --font-main: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: var(--font-main);
+    background: linear-gradient(160deg, var(--bg-grad-1), var(--bg-deep) 60%, var(--bg-grad-2));
+    color: var(--text-light);
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 14px 28px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  header p {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* ---------- PROGRESS BAR ---------- */
+  .progress-wrap {
+    width: 100%;
+    max-width: 480px;
+    margin: 10px 0 16px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 999px;
+    transition: width 0.35s ease;
+    width: 0%;
+  }
+
+  /* ---------- CARD STAGE ---------- */
+  .stage {
+    width: 100%;
+    max-width: 480px;
+    perspective: 1600px;
+    margin-bottom: 18px;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(.4,.2,.2,1);
+    cursor: pointer;
+  }
+
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 22px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .face::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
+    pointer-events: none;
+  }
+
+  .face-front {
+    background: var(--card-front);
+  }
+
+  .face-back {
+    background: var(--card-back);
+    transform: rotateY(180deg);
+  }
+
+  .face-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .face-back .face-label {
+    color: var(--accent2);
+  }
+
+  .face-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+
+  .face-content::-webkit-scrollbar {
+    width: 4px;
+  }
+  .face-content::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.18);
+    border-radius: 4px;
+  }
+
+  .face-front .face-content p {
+    font-size: 1.28rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .face-back .face-content p {
+    font-size: 1.02rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text-light);
+    text-align: left;
+  }
+
+  .face-hint {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---------- CONTROLS ---------- */
+  .controls {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn {
+    flex: 1;
+    border: none;
+    border-radius: 16px;
+    padding: 16px 10px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.12s ease, opacity 0.2s ease;
+    -webkit-user-select: none;
+    user-select: none;
+    min-height: 56px;
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+  }
+
+  .btn-prev, .btn-next {
+    background: var(--pill-bg);
+    color: var(--text-light);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .btn-flip {
+    flex: 1.4;
+    background: linear-gradient(90deg, var(--accent), #6fb8ab);
+    color: #16263a;
+  }
+
+  .btn-shuffle {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 480px;
+    background: transparent;
+    color: var(--accent2);
+    border: 1px dashed rgba(246,200,159,0.45);
+    border-radius: 16px;
+    padding: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-shuffle:active {
+    transform: scale(0.98);
+  }
+
+  /* ---------- SWIPE ANIMATION ---------- */
+  .stage .card.swipe-left {
+    animation: swipeLeft 0.32s ease forwards;
+  }
+  .stage .card.swipe-right {
+    animation: swipeRight 0.32s ease forwards;
+  }
+
+  @keyframes swipeLeft {
+    to { transform: translateX(-120%) rotate(-8deg); opacity: 0; }
+  }
+  @keyframes swipeRight {
+    to { transform: translateX(120%) rotate(8deg); opacity: 0; }
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 380px) {
+    .card { height: 380px; }
+    .face { padding: 22px 18px; }
+    .face-front .face-content p { font-size: 1.12rem; }
+    .face-back .face-content p { font-size: 0.95rem; }
+    .btn { padding: 14px 8px; font-size: 0.92rem; }
+  }
+
+  @media (min-width: 481px) {
+    .card { height: 440px; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>🔐 Mecanismos de Seguridad, Autenticación y SDLC</h1>
+    <p>150 flashcards · Toca la tarjeta para ver la respuesta</p>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="counter">1 / 150</span>
+      <span id="status">Frente</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="face face-front">
+        <div class="face-label">Pregunta</div>
+        <div class="face-content"><p id="frontText"></p></div>
+        <div class="face-hint">👆 Toca para revelar la respuesta</div>
+      </div>
+      <div class="face face-back">
+        <div class="face-label">Respuesta</div>
+        <div class="face-content"><p id="backText"></p></div>
+        <div class="face-hint">👆 Toca para volver</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-prev" id="prevBtn" aria-label="Anterior">⟵ Atrás</button>
+    <button class="btn btn-flip" id="flipBtn" aria-label="Girar tarjeta">🔄 Girar</button>
+    <button class="btn btn-next" id="nextBtn" aria-label="Siguiente">Siguiente ⟶</button>
+  </div>
+
+  <button class="btn-shuffle" id="shuffleBtn">🔀 Mezclar tarjetas</button>
+
+<script>
+  const cards = [{"f": "¿Qué es la criptografía?", "b": "Ámbito de la criptología que se ocupa de las técnicas de cifrado o codificado destinadas a alterar las representaciones lingüísticas de ciertos mensajes para hacerlos incomprensibles a receptores no autorizados."}, {"f": "¿En qué tres estados puede estar la información protegida por criptografía?", "b": "En reposo (archivo en disco duro), en tránsito (comunicación electrónica entre partes) y en uso (mientras se ejecutan operaciones de computación con los datos)."}, {"f": "¿Cuál es el origen etimológico de la palabra 'criptografía'?", "b": "Proviene del griego 'Kriptos' = ocultar y 'Graphos' = escritura, es decir, 'ocultar la escritura'."}, {"f": "Objetivo de la criptografía: Confidencialidad", "b": "Poner la información únicamente a disposición de usuarios autorizados."}, {"f": "Objetivo de la criptografía: Integridad", "b": "Asegurar que la información no ha sido manipulada."}, {"f": "Objetivo de la criptografía: Autenticación", "b": "Confirmar la autenticidad de la información o de la identidad de un usuario."}, {"f": "Objetivo de la criptografía: No repudio", "b": "Evitar que un usuario deniegue compromisos o acciones previas."}, {"f": "¿Cuál fue el principal factor histórico que promovió los avances criptográficos?", "b": "Las guerras, debido a la necesidad de comunicarse secretamente."}, {"f": "600-500 a.C. — ¿Qué hicieron los hebreos en criptografía?", "b": "Usaron sencillos cifrados por sustitución monoalfabéticos, como el cifrado Atbash."}, {"f": "¿Qué dispositivo se atribuye a los militares espartanos en la antigüedad?", "b": "La escítala, un cifrado por transposición usado por la época clásica griega."}, {"f": "800 d.C. — ¿Qué avance criptográfico se asocia al Corán?", "b": "Llevó a la invención del análisis de frecuencias, técnica para romper cifrados por sustitución monoalfabéticos."}, {"f": "1446 — ¿Qué aportó Leon Battista Alberti?", "b": "Desarrolló el modelo de cifrado polialfabético."}, {"f": "1917 — ¿Qué creó Gilbert Vernam?", "b": "El One Time Pad (OTP), un criptosistema empleado a inicios de la Primera Guerra Mundial."}, {"f": "¿Quién creó la máquina Enigma y cuándo se utilizó?", "b": "Arthur Scherbius la creó; era un dispositivo electromecánico compuesto por ruedas con contactos eléctricos, utilizado en la Segunda Guerra Mundial."}, {"f": "1995-2001 — ¿Qué creó la NSA?", "b": "En 1995 creó el algoritmo Hash SHA-1, y en 2001 creó el cifrado actualmente conocido como AES."}, {"f": "2002-actualidad — ¿Qué cifrados surgieron en la criptografía moderna relacionados con redes?", "b": "Cifrados como DES, el esquema WEP del Wi-Fi, y el cifrado A5/1 y A5/2 utilizado en celulares GSM, entre otros que seguirán surgiendo."}, {"f": "¿Cuáles son las raíces históricas del uso de la criptografía?", "b": "El envío de información sensible entre militares y políticos, encriptando mensajes para que parecieran texto aleatorio a quien no fuera el destinatario."}, {"f": "¿Cómo se ha ampliado el campo de la criptografía a medida que avanza la seguridad?", "b": "Incluye una gama más amplia de objetivos: autenticación de mensajes, integridad de los datos, cálculo seguro, etc."}, {"f": "¿Por qué se dice que la criptografía está en la base de la sociedad moderna?", "b": "Porque sustenta innumerables aplicaciones de Internet como HTTPS, comunicación segura de texto y voz, e incluso monedas digitales."}, {"f": "¿Qué es un criptosistema?", "b": "El conjunto completo de elementos de un sistema criptográfico que puede utilizarse para cumplir con sus funciones."}, {"f": "Elemento de criptosistema: Emisor", "b": "Quien realiza el proceso de cifrado."}, {"f": "Elemento de criptosistema: Receptor", "b": "Quien realiza el proceso de descifrado."}, {"f": "Elemento de criptosistema: Medio", "b": "Canal utilizado para intercambiar la información."}, {"f": "Elemento de criptosistema: Algoritmo", "b": "Conjunto de transformaciones aplicadas al mensaje para obtener el criptograma."}, {"f": "Elemento de criptosistema: Mensaje", "b": "Información que se desea ocultar (texto plano)."}, {"f": "Elemento de criptosistema: Clave o llave", "b": "Pieza de información que, aplicada al algoritmo, permite transformar el mensaje."}, {"f": "Elemento de criptosistema: Criptograma", "b": "El mensaje transformado o mensaje cifrado."}, {"f": "Elemento de criptosistema: Protocolo", "b": "Conjunto de reglas que permiten intercambiar información entre entidades."}, {"f": "¿Qué es el cifrado?", "b": "Un algoritmo de cifrado es un procedimiento que convierte un mensaje de texto plano en un texto cifrado, usando matemáticas avanzadas y una o varias claves."}, {"f": "¿En qué dos categorías se dividen las técnicas de cifrado?", "b": "Simétricas y asimétricas, según el funcionamiento de sus claves."}, {"f": "Encriptación — Paso 1: Preparación de datos", "b": "Los datos que se van a cifrar se preparan para el proceso de cifrado, llevándolos a una longitud específica o pre-procesándolos según el algoritmo."}, {"f": "Encriptación — Paso 2: Aplicación del algoritmo", "b": "El algoritmo criptográfico elegido se aplica a los datos preparados, mediante operaciones matemáticas complejas (aritmética modular, exponenciación, etc.)."}, {"f": "Encriptación — Paso 3: Integración de claves", "b": "Durante el cifrado se incorpora una clave o combinación de claves que actúan como instrucciones secretas, transformando el texto plano en texto cifrado."}, {"f": "Encriptación — Paso 4: Generación de texto cifrado", "b": "Como resultado del algoritmo y la aplicación de la clave, el texto plano se transforma en un conjunto de datos codificados: el texto cifrado."}, {"f": "Descifrado — Paso 1: Entrada de texto cifrado", "b": "Los datos cifrados (texto cifrado) se introducen en el algoritmo de descifrado elegido."}, {"f": "Descifrado — Paso 2: Inversión del algoritmo", "b": "Se aplica al texto cifrado el algoritmo de descifrado, que es esencialmente el inverso matemático del algoritmo de cifrado."}, {"f": "Descifrado — Paso 3: Aplicación de la clave", "b": "Se utilizan las mismas claves del cifrado (u otras, según el método) para revertir la transformación del cifrado."}, {"f": "Descifrado — Paso 4: Recuperación de texto sin formato", "b": "Mediante la acción combinada del algoritmo y las claves, el texto cifrado se transforma nuevamente a su forma legible original."}, {"f": "¿Qué es 'Cifrar'?", "b": "Transformar un mensaje en algo no entendible para que la gente no autorizada no pueda comprenderlo."}, {"f": "¿Qué es el proceso de gestión de claves?", "b": "Método para administrar el conjunto completo de claves de los miembros del sistema."}, {"f": "¿Cómo se convierte un mensaje en criptograma dentro de un criptosistema?", "b": "El mensaje es transformado por medio de un algoritmo y la aplicación de una o más claves o llaves."}, {"f": "¿Cuál es la clasificación general de la criptografía?", "b": "Transposición, Sustitución Clásica, Simétrica y Asimétrica Moderna."}, {"f": "¿Qué es la criptografía clásica y sobre qué opera?", "b": "Se utilizó desde antes de la época actual hasta mediados del siglo XX (no computarizada). Opera sobre las letras del alfabeto, con métodos desde muy simples hasta muy complicados de criptoanalizar."}, {"f": "La Escítala", "b": "Dispositivo usado por los antiguos griegos: una cinta enrollada alrededor de un palo, cuyo mensaje cifrado solo podía leerse al envolverla en un palo del mismo tamaño."}, {"f": "Cifrado de Polybios", "b": "Utiliza una cuadrícula para asignar letras del alfabeto a coordenadas numéricas; es una forma de cifrado por sustitución."}, {"f": "Cifrado César", "b": "Desplaza las letras de un mensaje un número fijo de posiciones en el alfabeto. Ejemplo: un desplazamiento de 3 convierte 'A' en 'D'."}, {"f": "Cifrado de Vigenère", "b": "Usa una palabra clave para cifrar texto, aplicando desplazamientos basados en las letras de dicha clave. Es más seguro que el cifrado César."}, {"f": "El disco de Alberti", "b": "Herramienta creada por Leon Battista Alberti que permite cifrar utilizando discos giratorios para crear sustituciones más complejas."}, {"f": "El cilindro de Bazeries", "b": "Dispositivo mecánico en forma de cilindro que facilita la creación de códigos usando piezas móviles con letras."}, {"f": "Cifrado de Hill", "b": "Sistema basado en álgebra lineal que usa matrices para operar sobre bloques de texto; es más complejo y potente."}, {"f": "Cifrado de Vernam", "b": "Usa una clave de longitud igual al mensaje, aplicando una operación XOR entre texto y clave. Es teóricamente irrompible si la clave es completamente aleatoria y única."}, {"f": "¿Qué tres hechos iniciaron la criptografía moderna?", "b": "1) La publicación de la 'Teoría de la Información' por Shannon. 2) La aparición del estándar DES en 1974. 3) El estudio de Martin Hellman sobre funciones de un solo sentido (cifrado de llave pública, 1976)."}, {"f": "DES (Data Encryption Standard)", "b": "Adoptado como estándar en 1976; se autorizó su uso en comunicaciones gubernamentales no clasificadas."}, {"f": "3DES", "b": "Desarrollado por IBM en 1998; opera aplicando tres veces el algoritmo DES."}, {"f": "ChaCha20", "b": "Alternativa moderna y segura, especialmente usada en protocolos como TLS."}, {"f": "AES (Advanced Encryption Standard)", "b": "Uno de los algoritmos simétricos más seguros y usados actualmente."}, {"f": "IDEA (International Data Encryption Algorithm)", "b": "Algoritmo simétrico utilizado en PGP."}, {"f": "RC4", "b": "Algoritmo de flujo usado en el pasado, aunque actualmente se considera débil."}, {"f": "¿Qué caracteriza a los algoritmos simétricos?", "b": "Utilizan la misma clave para el cifrado y el descifrado."}, {"f": "Cifrado simétrico — Ventaja: Rapidez y eficiencia", "b": "Es mucho más rápido que el cifrado asimétrico, ideal para manejar grandes volúmenes de datos."}, {"f": "Cifrado simétrico — Ventaja: Menor uso de recursos", "b": "Consume menos potencia de procesamiento, adecuado para dispositivos con recursos limitados."}, {"f": "Cifrado simétrico — Ventaja: Buen desempeño en almacenamiento", "b": "Efectivo para cifrar datos que no necesitan compartirse regularmente, como discos duros o bases de datos."}, {"f": "Cifrado simétrico — Desventaja: Gestión de claves", "b": "Es compleja; la cantidad de claves crece en proporción, volviéndose difícil de manejar cuando se requieren muchas."}, {"f": "Cifrado simétrico — Desventaja: Distribución de clave", "b": "No puede asegurarse; no provee mecanismos para enviar claves de forma segura a través de un medio inseguro."}, {"f": "Cifrado simétrico — Desventajas: Firma y Escalabilidad", "b": "Sin firma digital hay solo autenticación parcial; en redes grandes gestionar muchas claves diferentes se vuelve complejo."}, {"f": "¿Cómo funciona el cifrado asimétrico?", "b": "Cada parte usa dos claves: pública y privada. Si ciframos con una, debemos descifrar con la otra. Su seguridad depende de un problema matemático de difícil solución en tiempo razonable."}, {"f": "RSA (Rivest-Shamir-Adleman)", "b": "Uno de los algoritmos asimétricos más populares y ampliamente utilizados."}, {"f": "ECC (Elliptic Curve Cryptography)", "b": "Proporciona seguridad eficiente usando claves más pequeñas."}, {"f": "Diffie-Hellman", "b": "Algoritmo para el intercambio seguro de claves."}, {"f": "DSA (Digital Signature Algorithm)", "b": "Específico para generar firmas digitales seguras."}, {"f": "ElGamal", "b": "Utiliza el concepto de Diffie-Hellman para el cifrado y las firmas digitales."}, {"f": "Cifrado asimétrico — Ventaja: Mayor seguridad en el intercambio de claves", "b": "No es necesario compartir la clave privada, ya que cada parte tiene su propia clave."}, {"f": "Cifrado asimétrico — Ventaja: Autenticación", "b": "Permite verificar la identidad de los participantes mediante firmas digitales."}, {"f": "Cifrado asimétrico — Ventaja: Integridad de los datos", "b": "Garantiza que los datos no hayan sido modificados durante la transmisión."}, {"f": "Cifrado asimétrico — Ventaja: Escalabilidad", "b": "Más fácil de gestionar en redes grandes, ya que no requiere compartir claves individuales con cada usuario."}, {"f": "Cifrado asimétrico — Ventaja: Compatibilidad con cifrado híbrido", "b": "Se combina eficazmente con cifrado simétrico para aprovechar lo mejor de ambos mundos."}, {"f": "Cifrado asimétrico — Desventaja: Menor velocidad", "b": "Es más lento que el cifrado simétrico debido a su complejidad matemática."}, {"f": "Cifrado asimétrico — Desventajas: Recursos y complejidad técnica", "b": "Consume más potencia de procesamiento (problemático en dispositivos limitados) y su implementación es más compleja y susceptible a errores."}, {"f": "Cifrado asimétrico — Desventaja: Dependencia de la longitud de la clave", "b": "Para ser seguro requiere claves largas, lo que aumenta el tamaño de los datos cifrados."}, {"f": "Uso de criptografía: Contraseñas", "b": "Se utiliza para validar la autenticidad de contraseñas y proteger las almacenadas, evitando mantener bases de datos en texto simple vulnerables a hackers."}, {"f": "Uso de criptografía: Criptomonedas", "b": "Bitcoin y Ethereum se basan en complejos sistemas de cifrado que requieren gran potencia de cálculo; la criptografía protege criptocarteras, verifica transacciones y evita fraude."}, {"f": "Uso de criptografía: Transacciones financieras y banca en línea", "b": "La criptografía es esencial para garantizar la seguridad de cualquier intercambio financiero en sistemas bancarios."}, {"f": "Uso de criptografía: Sitios web protegidos por SSL/TLS", "b": "Este certificado se apoya en protocolos criptográficos para proteger la información enviada y recibida por el navegador."}, {"f": "Uso de criptografía: VPN", "b": "Una VPN es como un túnel seguro al navegar por Internet, donde la criptografía forma las paredes del túnel, protegiendo privacidad y seguridad."}, {"f": "Aplicación de la criptografía: Seguridad de las comunicaciones", "b": "Principal aplicación a redes de computadores; permite establecer canales seguros sobre redes inseguras, logrando privacidad sin perder velocidad gracias al cifrado simétrico intercambiado con claves públicas."}, {"f": "Aplicación de la criptografía: Identificación y autentificación", "b": "Mediante firmas digitales y técnicas criptográficas es posible identificar a un individuo o validar el acceso con más garantías que usuario/clave tradicionales."}, {"f": "Aplicación de la criptografía: Certificación", "b": "Esquema mediante el cual agentes fiables (entidad certificadora) validan la identidad de agentes desconocidos (usuarios reales); es la extensión lógica de la identificación a gran escala."}, {"f": "Aplicación de la criptografía: Comercio electrónico", "b": "Gracias a canales seguros y mecanismos de identificación, empresas y usuarios tienen garantías de que las operaciones no pueden ser espiadas, reduciendo fraudes y robos."}, {"f": "¿Qué son las funciones hash?", "b": "Algoritmos que transforman datos de entrada de cualquier tamaño en un valor fijo (código hash o resumen hash), usados para garantizar integridad y seguridad de los datos."}, {"f": "Función hash — Característica: Unidireccionalidad", "b": "El proceso de hashing no puede invertirse para obtener los datos originales."}, {"f": "Función hash — Característica: Determinismo", "b": "El mismo dato de entrada siempre generará el mismo valor de hash."}, {"f": "Función hash — Característica: Eficiencia", "b": "La generación de un código hash es rápida y eficiente."}, {"f": "Función hash — Característica: Colisiones mínimas", "b": "Las funciones hash seguras están diseñadas para evitar que diferentes entradas generen el mismo hash."}, {"f": "Usos comunes de las funciones hash", "b": "Seguridad de contraseñas (almacenadas como hashes), verificación de integridad de datos, firmas digitales y criptografía (Blockchain, SSL/TLS)."}, {"f": "Ejemplos de funciones hash", "b": "MD5 (obsoleto), SHA-1 (inseguro), SHA-256 y SHA-512 (más seguros y ampliamente usados), Whirlpool, Blake2, Haval."}, {"f": "¿Qué es una firma digital?", "b": "Mecanismo criptográfico que garantiza la autenticidad, integridad y no repudio de un mensaje o documento electrónico, basado en criptografía asimétrica y funciones hash."}, {"f": "Firma digital — Paso 1: Generación de claves", "b": "Se crea un par de claves: una privada (que solo conoce el firmante) y una pública (que cualquiera puede usar para verificar la firma)."}, {"f": "Firma digital — Paso 2: Hash del mensaje", "b": "El documento o mensaje se procesa mediante una función hash, generando un resumen único."}, {"f": "Firma digital — Paso 3: Cifrado con la clave privada", "b": "El hash se cifra con la clave privada del remitente, creando la firma digital."}, {"f": "Firma digital — Paso 4: Verificación", "b": "El destinatario usa la clave pública del remitente para descifrar la firma y comparar el hash con el original; si coinciden, la firma es válida."}, {"f": "Ventajas de la firma digital", "b": "Autenticidad (confirma identidad del remitente), Integridad (asegura que el mensaje no fue modificado) y No repudio (el remitente no puede negar haber firmado)."}, {"f": "Algoritmos usados en firmas digitales", "b": "RSA (uno de los más utilizados), DSA (estandarizado por NIST), ECDSA (claves más cortas, eficiente) y EdDSA (basado en curvas elípticas, más rápido y seguro)."}, {"f": "¿Qué es un cortafuego o firewall?", "b": "Sistema que implanta una política de control de accesos entre dos redes (ej. Internet-LAN); bloquea o permite el tráfico según lo que se desee permitir o denegar."}, {"f": "¿Por qué se necesita un firewall?", "b": "Para permitir acceso a Internet de usuarios internos, permitir acceso desde Internet a usuarios autorizados y prohibir acceso desde Internet a no autorizados."}, {"f": "¿Contra qué protege un cortafuegos?", "b": "Contra accesos no autenticados y tráfico no autorizado del exterior, permitiendo salida desde el interior; proporciona un único punto para implantar política de seguridad y auditoría."}, {"f": "¿Contra qué NO protege un cortafuegos?", "b": "Contra accesos externos que no pasan por él (modems), ataques desde el interior, virus/troyanos/túneles, salida de información por otro medio (USB, disquetes); debe ser parte de una política global."}, {"f": "Clasificación de cortafuegos por tecnología", "b": "Filtros de paquetes, Proxy de aplicación, Inspección de estados (stateful inspection) e Híbridos."}, {"f": "Clasificación de cortafuegos por ubicación", "b": "Cortafuegos personales, para pequeñas oficinas (SOHO), equipos hardware específicos (Appliances) y cortafuegos corporativos."}, {"f": "Filtros de paquetes (nivel de red)", "b": "Trabajan a nivel de red (IP), filtrando paquetes según direcciones IP y puertos origen/destino. Un router es un cortafuegos básico. PROS: independencia de aplicaciones, rápidos y escalables. CONS: menor seguridad, no entienden el contexto."}, {"f": "Gateways de aplicación (nivel aplicación)", "b": "No permiten tráfico entre redes salvo mediante proxy a nivel de aplicación; existe una conexión entre exterior-cortafuegos y otra entre cortafuegos-interior."}, {"f": "Servidores proxy — Pros y contras", "b": "PROS: alto nivel de seguridad, examinan información a nivel de aplicación y toman decisiones basadas en datos de cada aplicación. CONS: menor rendimiento/escalabilidad, rompe el modelo cliente/servidor (requiere dos conexiones) y requiere un proxy por aplicación."}, {"f": "Inspección de estados (stateful inspection)", "b": "Filtra en base a cabeceras, intercepta a nivel de red pero extrae información para analizar según la aplicación; mantiene una tabla dinámica de estados y no rompe el modelo cliente/servidor. PROS: alta seguridad, velocidad y escalabilidad. CONS: no rompe totalmente la conexión."}, {"f": "Cortafuegos híbridos", "b": "La mayoría de productos comerciales actuales; incorporan mezcla de tecnologías, permiten reglas de filtros para tráfico de alta velocidad y proxy para alta seguridad (adaptativos)."}, {"f": "Cortafuegos personales (PC)", "b": "Protegen el PC controlando el stack IP e inspeccionando aplicaciones comunes; permiten filtros de entrada y salida; usables en LAN, Modem, ADSL."}, {"f": "Cortafuegos para pequeñas oficinas (SOHO)", "b": "Protegen entre 2 y 50 usuarios en pequeñas oficinas; suelen ser pequeños equipos instalados antes del router o integrados; muy utilizables con ADSL."}, {"f": "Equipos hardware (Appliances) y cortafuegos corporativos", "b": "Appliances: usados en oficinas medias/sucursales, fáciles de configurar y gestionados centralizadamente. Corporativos: punto central de acceso a Internet de una empresa donde se implanta la política de seguridad, puede conectar múltiples redes."}, {"f": "Cortafuegos de Primera Generación", "b": "Inspeccionan paquetes según reglas predefinidas; son rápidos pero carecen de comprensión del contenido del tráfico; funcionan en la capa de red basándose en IP y puertos."}, {"f": "Cortafuegos de Segunda Generación", "b": "Determinan si un paquete pertenece a una sesión válida antes de permitir o bloquear su paso, analizando conexiones activas y aumentando la seguridad frente a los filtros básicos."}, {"f": "Cortafuegos de Tercera Generación", "b": "Operan en la capa de aplicación, comprenden protocolos como HTTP, FTP y SMTP, detectan y bloquean actividades sospechosas, siendo más efectivos contra malware y ataques web."}, {"f": "Cortafuegos de Cuarta Generación", "b": "Bloquean tráfico malicioso en tiempo real, usan firmas de amenazas y análisis de comportamiento, e incorporan técnicas avanzadas para identificar y mitigar ataques."}, {"f": "Cortafuegos de Quinta Generación", "b": "Incorporan inteligencia artificial y análisis predictivo, ofrecen protección contra ransomware y APT, e integran detección avanzada de amenazas, inspección profunda de paquetes y seguridad en la nube."}, {"f": "Funciones principales de un cortafuegos", "b": "Bloquear tráfico no deseado, redireccionar tráfico de entrada a sistemas internos confiables, ocultar sistemas vulnerables, registrar tráfico, ocultar información de la red y proveer autenticación robusta."}, {"f": "Ventajas de los cortafuegos", "b": "Protección contra amenazas externas, control de tráfico de red, flexibilidad en políticas de seguridad, monitoreo de actividad y compatibilidad con tecnologías avanzadas."}, {"f": "Desventajas de los cortafuegos", "b": "Limitaciones contra amenazas internas, altos costos, impacto en el rendimiento y falsa sensación completa de seguridad."}, {"f": "¿Qué es un IDS (Sistema de Detección de Intrusos)?", "b": "Herramienta de seguridad diseñada para identificar actividades sospechosas o maliciosas dentro de una red o sistema informático."}, {"f": "IDS basado en Red", "b": "Monitorea el tráfico en toda la red y analiza paquetes de datos en busca de patrones maliciosos."}, {"f": "IDS basado en Host", "b": "Funciona en dispositivos individuales como servidores o estaciones de trabajo, analizando registros de eventos y cambios de archivo."}, {"f": "Métodos de detección de un IDS", "b": "Por anomalía (identifica comportamiento inusual), por firma (compara con base de datos de ataques conocidos) y basados en IA (aprendizaje automático para amenazas nuevas)."}, {"f": "Ventajas de un IDS", "b": "Detectan intrusiones en tiempo real, proveen alertas detalladas sobre posibles ataques y permiten análisis forense posterior a incidentes."}, {"f": "Desventajas de un IDS", "b": "No puede prevenir ataques, solo detectarlos; puede generar falsos positivos que requieren ajustes constantes; y requiere supervisión y mantenimiento para ser efectivo."}, {"f": "¿Qué es un IPS (Sistema de Prevención de Intrusos)?", "b": "Evolución del IDS que no solo detecta amenazas sino que también las bloquea en tiempo real, siendo esencial en una estrategia de seguridad proactiva."}, {"f": "IPS basado en Red", "b": "Inspecciona el tráfico en toda la red para identificar y prevenir actividades maliciosas, funcionando en puntos estratégicos como el perímetro de la red."}, {"f": "IPS basado en Host", "b": "Opera en dispositivos individuales (servidores, estaciones de trabajo), detectando y bloqueando amenazas específicas contra el host, como exploits."}, {"f": "IPS basado en comportamiento", "b": "Utiliza análisis de comportamiento para identificar y bloquear anomalías, ofreciendo alta precisión al adaptarse a nuevas amenazas."}, {"f": "Ventajas de un IPS", "b": "Bloqueo en tiempo real respondiendo automáticamente a amenazas, protección avanzada (mitiga DDoS, exploits y malware) y mayor control como capa adicional de seguridad."}, {"f": "Desventajas de un IPS", "b": "Configuración compleja (un mal ajuste puede bloquear tráfico legítimo) y requiere muchos recursos, pudiendo consumir gran capacidad de procesamiento en redes de alto tráfico."}, {"f": "Diferencia IDS vs IPS: Propósito principal", "b": "IDS: detectar y alertar sobre actividades sospechosas. IPS: prevenir amenazas bloqueándolas en tiempo real."}, {"f": "Diferencia IDS vs IPS: Reacción ante amenazas", "b": "IDS: genera alertas pero no interfiere directamente. IPS: responde automáticamente, bloqueando o mitigando amenazas."}, {"f": "Diferencia IDS vs IPS: Modo de operación e impacto en el tráfico", "b": "IDS: pasivo, solo monitorea y analiza, no afecta el flujo del tráfico. IPS: activo, analiza, detecta y actúa, pudiendo ralentizar el tráfico si no está bien configurado."}, {"f": "Diferencia IDS vs IPS: Falsos positivos", "b": "IDS es más tolerante con falsos positivos ya que no interfiere. En IPS, un falso positivo puede bloquear tráfico legítimo, requiriendo ajustes cuidadosos."}, {"f": "¿Qué es la autenticación?", "b": "Proceso de verificar la identidad de un usuario, dispositivo o sistema, comúnmente mediante credenciales (usuario/contraseña, tokens, biometría). Es la primera línea de defensa contra el acceso no autorizado."}, {"f": "Factores de autenticación: 'Algo que el usuario sabe'", "b": "Como una contraseña."}, {"f": "Factores de autenticación: 'Algo que tenga el usuario'", "b": "Como una tarjeta de acceso o un token."}, {"f": "Factores de autenticación: 'Algo que el usuario es'", "b": "Como una huella dactilar o reconocimiento facial."}, {"f": "¿Qué es el control de acceso?", "b": "Proceso de determinar qué usuarios o sistemas pueden acceder a recursos específicos; ayuda a proteger datos confidenciales del acceso no autorizado y posibles infracciones."}, {"f": "Lista de Control de Acceso (ACL)", "b": "El propietario del archivo define qué tipo de acceso pueden tener determinados usuarios (leer, escribir, actualizar, eliminar, etc.); es fácil de comprender y administrar para objetos individuales."}, {"f": "Control de Acceso Basado en Roles (RBAC)", "b": "Modelo de seguridad que asigna permisos a los usuarios según sus funciones en la organización, definiendo roles con permisos específicos y asignando usuarios a esos roles."}, {"f": "Principios aplicados en RBAC", "b": "Roles y permisos, separación de funciones, menor privilegio y asignación basada en reglas."}, {"f": "Control de Acceso Basado en Atributos (ABAC)", "b": "Modelo avanzado que determina permisos de acceso en función de múltiples atributos asociados al usuario, recurso, acción y entorno, ofreciendo mayor flexibilidad y granularidad."}, {"f": "Control de Acceso Basado en Inteligencia Artificial (AIAC)", "b": "Evolución de los modelos tradicionales que integra algoritmos de aprendizaje automático para tomar decisiones de acceso en tiempo real, adaptándose a patrones de comportamiento y amenazas emergentes."}];
+
+  let order = cards.map((_, i) => i);
+  let current = 0;
+  let flipped = false;
+
+  const cardEl = document.getElementById('card');
+  const frontText = document.getElementById('frontText');
+  const backText = document.getElementById('backText');
+  const counter = document.getElementById('counter');
+  const status = document.getElementById('status');
+  const progressFill = document.getElementById('progressFill');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const flipBtn = document.getElementById('flipBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+
+  function render() {
+    const idx = order[current];
+    frontText.textContent = cards[idx].f;
+    backText.textContent = cards[idx].b;
+    counter.textContent = (current + 1) + ' / ' + cards.length;
+    status.textContent = flipped ? 'Respuesta' : 'Frente';
+    progressFill.style.width = (((current + 1) / cards.length) * 100) + '%';
+  }
+
+  function flipCard() {
+    flipped = !flipped;
+    cardEl.classList.toggle('flipped', flipped);
+    status.textContent = flipped ? 'Respuesta' : 'Frente';
+  }
+
+  function goTo(newIndex, direction) {
+    if (newIndex < 0) newIndex = cards.length - 1;
+    if (newIndex >= cards.length) newIndex = 0;
+
+    cardEl.classList.add(direction === 'next' ? 'swipe-left' : 'swipe-right');
+
+    setTimeout(() => {
+      current = newIndex;
+      flipped = false;
+      cardEl.classList.remove('flipped', 'swipe-left', 'swipe-right');
+      render();
+    }, 280);
+  }
+
+  cardEl.addEventListener('click', flipCard);
+
+  flipBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    flipCard();
+  });
+
+  nextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    goTo(current + 1, 'next');
+  });
+
+  prevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    goTo(current - 1, 'prev');
+  });
+
+  shuffleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    current = 0;
+    flipped = false;
+    cardEl.classList.remove('flipped');
+    render();
+  });
+
+  // Keyboard support (desktop testing)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goTo(current + 1, 'next');
+    if (e.key === 'ArrowLeft') goTo(current - 1, 'prev');
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  });
+
+  // Basic swipe gesture support
+  let touchStartX = 0;
+  cardEl.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  }, {passive: true});
+
+  cardEl.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 60) {
+      if (diff < 0) goTo(current + 1, 'next');
+      else goTo(current - 1, 'prev');
+    }
+  }, {passive: true});
+
+  render();
+</script>
+
+</body>
+</html>
