@@ -558,6 +558,7 @@ p:last-child { margin-bottom: 0; }
   width: 100%;
   border-collapse: collapse;
   font-size: 13.5px;
+  table-layout: fixed;   /* ← fuerza que se respeten los anchos de columna */
 }
 .tlist tr { border-bottom: 1px solid var(--line); }
 .tlist tr:last-child { border-bottom: none; }
@@ -565,10 +566,15 @@ p:last-child { margin-bottom: 0; }
 .tlist td:first-child {
   font-weight: 600;
   color: var(--navy);
-  white-space: nowrap;
-  width: 140px;
+  white-space: normal;   /* ← antes era nowrap, causaba desborde en términos largos */
+  width: 30%;            /* ← antes era 140px; porcentaje funciona con table-layout: fixed */
+  word-break: break-word;
 }
-.tlist td:last-child { color: var(--ink2); }
+.tlist td:last-child {
+  color: var(--ink2);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 
 /* Tabla con encabezado oscuro */
 .data-table {
@@ -1521,7 +1527,11 @@ mark.navy   { background: var(--navy-bg);    color: var(--navy); }
   .data-table thead th      { font-size: 10px; padding: 8px; }
   .data-table tbody td      { font-size: 12px; padding: 8px; }
   .tlist td                 { font-size: 12px; padding: 7px 6px; }
-  .tlist td:first-child     { width: auto; min-width: 80px; }
+ .tlist td:first-child {
+    width: auto;
+    min-width: 80px;
+    white-space: normal;      /* ← permite que también se parta si es largo */
+  }
 
   /* Acordeón Q&A */
   .qa-question              { padding: 12px 14px; font-size: 13px; gap: 10px; }
@@ -1557,7 +1567,54 @@ mark.navy   { background: var(--navy-bg);    color: var(--navy); }
   /* Flex utilitario — permite apilado en filas con space-between */
   .flex-between             { flex-wrap: wrap; gap: var(--space-sm); }
 }
+@media (max-width: 500px) {
+  .tlist {
+    min-width: unset;   /* ← cancela el min-width: 480px del breakpoint de 768px */
+    width: 100%;
+  }
 
+  .tlist,
+  .tlist tbody,
+  .tlist tr,
+  .tlist td {
+    display: block;
+    width: 100%;
+    max-width: 100%;    /* ← evita que cualquier herencia lo expanda */
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 450px) {
+  .tlist td:first-child {
+    font-size: 10px;
+    padding-bottom: 3px;
+  }
+
+  .tlist td:last-child {
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .tlist tr {
+    padding: 10px 0;
+  }
+}
+
+@media (max-width: 350px) {
+  .tlist td:first-child {
+    font-size: 9px;
+    letter-spacing: .04em;
+  }
+
+  .tlist td:last-child {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .tlist tr {
+    padding: 8px 0;
+  }
+}
 
 /* ── Teléfonos muy pequeños ≤ 390px (iPhone SE, Moto E, etc.) ──────────── */
 @media (max-width: 390px) {
