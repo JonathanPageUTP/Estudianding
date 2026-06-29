@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlashCards — Estudio Interactivo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Design system base -->
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       FLASHCARD APP — SPECIFIC STYLES
+       Augments styles.css with 3D flip, layout, dashboard,
+       controls, search/filter bar, catalog modal, theme overrides.
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* ── App Shell ─────────────────────────────────────────────── */
+    body {
+      background: var(--gray100);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top Bar ───────────────────────────────────────────────── */
+    .app-topbar {
+      background: var(--navy);
+      color: var(--white);
+      padding: 0 var(--space-lg);
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 16px rgba(0,0,0,.25);
+    }
+    .app-topbar-brand {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .app-topbar-brand .brand-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .app-topbar-pills {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .topbar-chip {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.75);
+      letter-spacing: .04em;
+    }
+    .topbar-chip.teal { background: rgba(0,201,167,.2); color: var(--accent); }
+
+    /* ── Main Layout ───────────────────────────────────────────── */
+    .app-main {
+      flex: 1;
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px var(--space-md) 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── Stats Dashboard ───────────────────────────────────────── */
+    .stats-panel {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink2);
+    }
+    .stat-chip .stat-num {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-chip.learned .stat-num  { color: #16a34a; }
+    .stat-chip.review  .stat-num  { color: var(--red); }
+    .stat-chip.total   .stat-num  { color: var(--navy); }
+    .stat-chip.pct     .stat-num  { color: var(--accent2); }
+
+    .stat-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .stat-dot.green  { background: #16a34a; }
+    .stat-dot.red    { background: var(--red); }
+    .stat-dot.navy   { background: var(--navy); }
+    .stat-dot.teal   { background: var(--accent); }
+
+    .progress-bar-wrap {
+      height: 7px;
+      background: var(--gray200);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--accent), #16a34a);
+      transition: width .5s ease;
+    }
+    .progress-label {
+      font-size: 11px;
+      color: var(--ink3);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    /* ── Filter / Search Bar ───────────────────────────────────── */
+    .filter-bar {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 12px var(--space-md);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-bar .form-input,
+    .filter-bar .form-select {
+      flex: 1;
+      min-width: 140px;
+      font-size: 14px;
+      height: 40px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      background: var(--gray50);
+      color: var(--ink);
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .filter-bar .form-input:focus,
+    .filter-bar .form-select:focus {
+      border-color: var(--accent);
+    }
+    .filter-bar .form-input { min-width: 200px; }
+
+    .filter-btn-group {
+      display: flex;
+      gap: 4px;
+    }
+    .flt-btn {
+      height: 40px;
+      padding: 0 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      background: var(--gray50);
+      color: var(--ink3);
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .flt-btn:hover   { background: var(--navy-bg); color: var(--navy); border-color: var(--navy); }
+    .flt-btn.active  { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .flt-btn.shuffle { border-color: var(--accent2); color: var(--accent2); }
+    .flt-btn.shuffle:hover { background: var(--accent2); color: var(--white); }
+
+    /* ── Card Counter ──────────────────────────────────────────── */
+    .card-counter {
+      text-align: center;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--ink3);
+      letter-spacing: .06em;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       3D FLIP CARD — Core Mechanic
+    ═══════════════════════════════════════════════════════════════ */
+    .flip-scene {
+      perspective: 1200px;
+      width: 100%;
+      /* Responsive height */
+      height: 320px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @media (max-width: 540px) { .flip-scene { height: 280px; } }
+    @media (max-width: 390px) { .flip-scene { height: 260px; } }
+
+    .flip-card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .55s cubic-bezier(.4,0,.2,1);
+    }
+    .flip-card.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-face {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-lg) var(--space-xl);
+      text-align: center;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    /* Front face */
+    .flip-front {
+      background: var(--white);
+      border: 2px solid var(--gray200);
+    }
+    .flip-front::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--navy));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .card-category-badge {
+      position: absolute;
+      top: 16px; left: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+    }
+    .cat-web    { background: var(--navy-bg);   color: var(--navy); }
+    .cat-cs     { background: var(--violet-bg); color: var(--violet); }
+    .cat-sci    { background: #e0f2fe;           color: #0369a1; }
+    .cat-geo    { background: var(--amber-bg);  color: var(--act-dark); }
+    .cat-sec    { background: var(--red-bg);    color: var(--red); }
+
+    .card-id-badge {
+      position: absolute;
+      top: 16px; right: 16px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--ink3);
+    }
+
+    .flip-front .card-question {
+      font-family: var(--font-display);
+      font-size: clamp(16px, 3vw, 22px);
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .flip-front .card-hint {
+      font-size: 12px;
+      color: var(--ink3);
+      font-style: italic;
+      margin-top: 4px;
+    }
+    .tap-cue {
+      position: absolute;
+      bottom: 16px;
+      font-size: 11px;
+      color: var(--ink3);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      letter-spacing: .04em;
+    }
+    .tap-cue svg { opacity: .5; }
+
+    /* Back face */
+    .flip-back {
+      background: linear-gradient(145deg, var(--navy) 0%, var(--navy2) 100%);
+      transform: rotateY(180deg);
+    }
+    .flip-back .card-answer {
+      font-size: clamp(14px, 2.5vw, 17px);
+      color: rgba(255,255,255,.92);
+      line-height: 1.7;
+      font-family: var(--font-body);
+      font-weight: 400;
+    }
+    .flip-back .card-answer strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .flip-back .answer-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      font-family: var(--font-mono);
+      margin-bottom: 12px;
+    }
+    .flip-back-decoration {
+      position: absolute;
+      bottom: -30px; right: -30px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      pointer-events: none;
+    }
+
+    /* Empty state */
+    .empty-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--ink3);
+      border: 2px dashed var(--gray300);
+    }
+    .empty-card svg { opacity: .4; }
+    .empty-card p { font-size: 14px; font-weight: 500; }
+
+    /* ── Action Buttons ────────────────────────────────────────── */
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn-action {
+      height: 58px;
+      border-radius: var(--radius);
+      border: none;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all var(--transition);
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .btn-learned {
+      background: #16a34a;
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(22,163,74,.3);
+    }
+    .btn-learned:hover  { background: #15803d; transform: translateY(-1px); }
+    .btn-learned:active { transform: scale(.97); }
+
+    .btn-review {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(239,68,68,.3);
+    }
+    .btn-review:hover  { background: #dc2626; transform: translateY(-1px); }
+    .btn-review:active { transform: scale(.97); }
+
+    .btn-action svg { flex-shrink: 0; }
+
+    /* ── Nav Buttons ───────────────────────────────────────────── */
+    .nav-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn-nav {
+      height: 48px;
+      border-radius: var(--radius);
+      border: 2px solid var(--line);
+      background: var(--white);
+      color: var(--navy);
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-nav:hover  { border-color: var(--navy); background: var(--navy-bg); }
+    .btn-nav:active { transform: scale(.97); }
+    .btn-nav:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* ── Status Ribbon on Card ─────────────────────────────────── */
+    .card-status-ribbon {
+      position: absolute;
+      bottom: 16px; right: 16px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+    }
+    .ribbon-learned { background: #dcfce7; color: #16a34a; }
+    .ribbon-review  { background: var(--red-bg); color: var(--red); }
+
+    /* ── Catalog Modal / Details ───────────────────────────────── */
+    .catalog-wrap {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .catalog-wrap summary {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      gap: 10px;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .catalog-wrap summary::-webkit-details-marker { display: none; }
+    .catalog-wrap summary .catalog-chevron {
+      transition: transform .3s ease;
+      flex-shrink: 0;
+      color: var(--ink3);
+    }
+    .catalog-wrap[open] summary .catalog-chevron {
+      transform: rotate(180deg);
+    }
+    .catalog-wrap summary:hover { background: var(--gray50); }
+
+    .catalog-body {
+      border-top: 1px solid var(--line);
+      max-height: 440px;
+      overflow-y: auto;
+    }
+    .catalog-category-group { margin-bottom: 0; }
+    .catalog-cat-header {
+      position: sticky;
+      top: 0;
+      background: var(--gray50);
+      padding: 8px 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink3);
+      font-family: var(--font-mono);
+      border-bottom: 1px solid var(--line);
+      z-index: 2;
+    }
+    .catalog-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 9px 20px;
+      border-bottom: 1px solid var(--gray100);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .catalog-item:hover { background: var(--navy-bg); }
+    .catalog-item:last-child { border-bottom: none; }
+    .catalog-item-num {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--ink3);
+      min-width: 28px;
+      padding-top: 2px;
+    }
+    .catalog-item-q {
+      font-size: 13px;
+      color: var(--ink2);
+      line-height: 1.5;
+    }
+    .catalog-item.is-learned .catalog-item-q { color: #16a34a; }
+    .catalog-item.is-review  .catalog-item-q { color: var(--red); }
+
+    /* ── Keyboard Shortcut Hint ────────────────────────────────── */
+    .kbd-hint {
+      text-align: center;
+      font-size: 11px;
+      color: var(--ink3);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .kbd-hint kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      border: 1.5px solid var(--gray300);
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--navy);
+      box-shadow: 0 2px 0 var(--gray300);
+    }
+
+    /* ── Toast Notification ────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      box-shadow: var(--shadow-lg);
+      z-index: 999;
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.green { background: #16a34a; }
+    .toast.red   { background: var(--red); }
+
+    /* ── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 540px) {
+      .app-topbar { height: 50px; padding: 0 14px; }
+      .app-main   { padding: 14px 12px 40px; gap: 12px; }
+      .stats-panel { padding: 12px 14px; }
+      .stat-chip .stat-num { font-size: 17px; }
+      .filter-bar { padding: 10px 12px; }
+      .filter-bar .form-input { min-width: 120px; }
+      .flip-face  { padding: var(--space-md) var(--space-lg); }
+      .action-row, .nav-row { gap: 8px; }
+      .btn-action { height: 52px; font-size: 14px; }
+      .btn-nav    { height: 44px; font-size: 13px; }
+    }
+    @media (max-width: 390px) {
+      .app-topbar-pills { display: none; }
+      .flt-btn { padding: 0 10px; font-size: 11px; }
+      .flip-face { padding: 12px; }
+    }
+
+    /* ── @media: reduced motion ────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .flip-card { transition: none; }
+      .btn-action:hover, .btn-nav:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ TOP BAR ════════ -->
+<header class="app-topbar">
+  <div class="app-topbar-brand">
+    <span class="brand-dot"></span>
+    FlashCards
+  </div>
+  <div class="app-topbar-pills">
+    <span class="topbar-chip">100 tarjetas</span>
+    <span class="topbar-chip teal" id="topbar-progress">0% aprendido</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ MAIN ═══════════ -->
+<main class="app-main">
+
+  <!-- Dashboard de Estadísticas -->
+  <section class="stats-panel">
+    <div class="stats-row">
+      <div class="stat-chip total">
+        <span class="stat-dot navy"></span>
+        <span class="stat-num" id="stat-total">0</span>
+        <span>total</span>
+      </div>
+      <div class="stat-chip learned">
+        <span class="stat-dot green"></span>
+        <span class="stat-num" id="stat-learned">0</span>
+        <span>aprendidas</span>
+      </div>
+      <div class="stat-chip review">
+        <span class="stat-dot red"></span>
+        <span class="stat-num" id="stat-review">0</span>
+        <span>repasar</span>
+      </div>
+      <div class="stat-chip pct">
+        <span class="stat-dot teal"></span>
+        <span class="stat-num" id="stat-pct">0%</span>
+        <span>progreso</span>
+      </div>
+    </div>
+    <div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <p class="progress-label" id="progress-label">0 de 100 tarjetas aprendidas</p>
+    </div>
+  </section>
+
+  <!-- Barra de filtros / búsqueda -->
+  <div class="filter-bar">
+    <input type="search" class="form-input" id="search-input" placeholder="🔍 Buscar pregunta…" autocomplete="off">
+    <select class="form-select" id="cat-filter">
+      <option value="all">Todas las categorías</option>
+      <option value="Desarrollo Web">Desarrollo Web</option>
+      <option value="Ciencia Computacional">Ciencia Computacional</option>
+      <option value="Ciencia y Astronomía">Ciencia y Astronomía</option>
+      <option value="Geografía e Historia">Geografía e Historia</option>
+    </select>
+    <div class="filter-btn-group">
+      <button class="flt-btn active" id="flt-all"      onclick="setFilter('all')">Todas</button>
+      <button class="flt-btn"        id="flt-learned"  onclick="setFilter('learned')">✅ Aprendidas</button>
+      <button class="flt-btn"        id="flt-review"   onclick="setFilter('review')">🔁 Repasar</button>
+      <button class="flt-btn shuffle"                  onclick="shuffleDeck()">⇄ Mezclar</button>
+    </div>
+  </div>
+
+  <!-- Contador -->
+  <p class="card-counter" id="card-counter">Tarjeta 1 de 100</p>
+
+  <!-- ════════════ 3D FLIP CARD ════════════ -->
+  <div class="flip-scene" id="flip-scene" onclick="flipCard()" role="button" aria-label="Girar tarjeta">
+    <div class="flip-card" id="flip-card">
+
+      <!-- FRENTE -->
+      <div class="flip-face flip-front" id="card-front">
+        <span class="card-category-badge" id="front-cat">Categoría</span>
+        <span class="card-id-badge"       id="front-id">#001</span>
+
+        <p class="card-question" id="front-question">Cargando…</p>
+        <p class="card-hint"     id="front-hint"></p>
+
+        <span class="card-status-ribbon" id="front-ribbon" style="display:none"></span>
+        <span class="tap-cue">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          Toca para voltear
+        </span>
+      </div>
+
+      <!-- REVERSO -->
+      <div class="flip-face flip-back" id="card-back">
+        <div class="flip-back-decoration"></div>
+        <p class="answer-label">Respuesta</p>
+        <p class="card-answer" id="back-answer">Respuesta</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Botones de acción principales -->
+  <div class="action-row">
+    <button class="btn-action btn-learned" onclick="markCard('learned')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      ¡Lo Sé!
+    </button>
+    <button class="btn-action btn-review" onclick="markCard('review')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
+      Repasar
+    </button>
+  </div>
+
+  <!-- Botones de navegación -->
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev" onclick="navigate(-1)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      Anterior
+    </button>
+    <button class="btn-nav" id="btn-next" onclick="navigate(1)">
+      Siguiente
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Atajos de teclado -->
+  <p class="kbd-hint">
+    <span><kbd>Espacio</kbd> voltear</span>
+    <span><kbd>←</kbd> anterior</span>
+    <span><kbd>→</kbd> siguiente</span>
+    <span><kbd>L</kbd> aprendida</span>
+    <span><kbd>R</kbd> repasar</span>
+  </p>
+
+  <!-- Catálogo de las 100 preguntas -->
+  <details class="catalog-wrap" id="catalog">
+    <summary>
+      <span>📋 Catálogo completo — 100 preguntas de un vistazo</span>
+      <svg class="catalog-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </summary>
+    <div class="catalog-body" id="catalog-body">
+      <!-- generado por JS -->
+    </div>
+  </details>
+
+</main>
+
+<!-- Toast global -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+/* ─────────────────────────────────────────────────────────────────
+   DATA — 100 Flashcards
+   Categorías: Desarrollo Web (25), Ciencia Computacional (25),
+               Ciencia y Astronomía (25), Geografía e Historia (25)
+───────────────────────────────────────────────────────────────── */
+const ALL_CARDS = [
+
+/* ══════════════════════════ DESARROLLO WEB (1–25) ══════════════ */
+{ id:1,  category:"Desarrollo Web", question:"¿Qué es el modelo de caja (Box Model) en CSS?", answer:"Es la forma en que CSS trata cada elemento como una caja rectangular compuesta por cuatro áreas: <strong>content</strong> (contenido), <strong>padding</strong> (relleno interior), <strong>border</strong> (borde) y <strong>margin</strong> (margen exterior). El tamaño total visible depende de qué propiedad `box-sizing` se use.", hint:"Piensa en una caja de regalo con cuatro capas."},
+{ id:2,  category:"Desarrollo Web", question:"¿Cuál es la diferencia entre `display: flex` y `display: grid`?", answer:"<strong>Flexbox</strong> es unidimensional: organiza elementos en una fila o columna. <strong>Grid</strong> es bidimensional: permite controlar filas y columnas simultáneamente. Flexbox es ideal para componentes de una dimensión; Grid para layouts completos de página.", hint:"Flex = 1D; Grid = 2D."},
+{ id:3,  category:"Desarrollo Web", question:"¿Qué es el DOM (Document Object Model)?", answer:"El <strong>DOM</strong> es una representación en árbol que el navegador crea a partir del HTML. Cada etiqueta se convierte en un nodo. JavaScript puede leer y modificar ese árbol en tiempo real para cambiar el contenido, estilos o estructura de la página sin recargarla.", hint:"Árbol de nodos que JS puede manipular."},
+{ id:4,  category:"Desarrollo Web", question:"¿Qué significa 'semántica' en HTML5?", answer:"El HTML semántico usa etiquetas que <strong>describen su propósito</strong> además de su apariencia, como `<header>`, `<nav>`, `<article>`, `<section>`, `<footer>`. Mejoran la accesibilidad, el SEO y la legibilidad del código para humanos y lectores de pantalla.", hint:"Las etiquetas tienen significado, no solo forma."},
+{ id:5,  category:"Desarrollo Web", question:"¿Qué es CSS Specificity (especificidad)?", answer:"Es un sistema de puntos que determina qué regla CSS se aplica cuando varias reglas compiten. El orden de mayor a menor peso es: <strong>inline styles &gt; IDs &gt; clases/atributos &gt; elementos</strong>. `!important` lo rompe todo y debe evitarse.", hint:"ID &gt; clase &gt; elemento."},
+{ id:6,  category:"Desarrollo Web", question:"¿Para qué sirve `async` y `await` en JavaScript?", answer:"Son sintaxis sobre las <strong>Promesas</strong> que hacen el código asíncrono más legible. `async` declara una función que retorna una Promesa; `await` pausa la ejecución dentro de esa función hasta que la Promesa resuelva, sin bloquear el hilo principal.", hint:"Azúcar sintáctica sobre Promesas."},
+{ id:7,  category:"Desarrollo Web", question:"¿Qué es un Web Component?", answer:"Son un conjunto de APIs nativas del navegador que permiten crear <strong>elementos HTML reutilizables y encapsulados</strong>: Custom Elements, Shadow DOM y HTML Templates. Funcionan sin frameworks y son interoperables con cualquier biblioteca.", hint:"Elementos HTML personalizados y encapsulados."},
+{ id:8,  category:"Desarrollo Web", question:"¿Cuál es la diferencia entre `null` y `undefined` en JavaScript?", answer:"<strong>`undefined`</strong> significa que una variable fue declarada pero no asignada. <strong>`null`</strong> es un valor explícito que representa 'ningún objeto'. Ambos son falsy, pero `typeof null === 'object'` es una anomalía histórica del lenguaje.", hint:"undefined = sin asignar; null = vacío intencional."},
+{ id:9,  category:"Desarrollo Web", question:"¿Qué es el event bubbling en el DOM?", answer:"Cuando un evento ocurre en un elemento, primero se dispara en ese nodo y luego <strong>sube (burbujea)</strong> por sus ancestros en el DOM hasta `window`. `stopPropagation()` detiene el burbujeo; `preventDefault()` cancela la acción por defecto, pero no el burbujeo.", hint:"Los eventos suben por el árbol DOM."},
+{ id:10, category:"Desarrollo Web", question:"¿Qué es `localStorage` vs `sessionStorage`?", answer:"Ambas son APIs de almacenamiento web en el navegador. <strong>`localStorage`</strong> persiste los datos sin fecha de expiración, incluso si se cierra el navegador. <strong>`sessionStorage`</strong> solo dura mientras dura la pestaña o sesión del navegador.", hint:"local = permanente; session = mientras dura la pestaña."},
+{ id:11, category:"Desarrollo Web", question:"¿Qué es un closure en JavaScript?", answer:"Un <strong>closure</strong> es la combinación de una función con su entorno léxico (el ámbito donde fue definida). La función 'recuerda' las variables de su scope externo incluso después de que ese scope haya terminado de ejecutarse.", hint:"Una función que recuerda su entorno de creación."},
+{ id:12, category:"Desarrollo Web", question:"¿Qué hace el atributo `defer` en una etiqueta `<script>`?", answer:"Indica al navegador que <strong>descargue el script en paralelo</strong> con el parseo del HTML, pero que lo ejecute solo después de que el DOM esté completamente analizado. Mantiene el orden de ejecución entre scripts diferidos. Es equivalente a colocar el script al final del body.", hint:"Descarga paralela, ejecución al final del DOM."},
+{ id:13, category:"Desarrollo Web", question:"¿Qué es el protocolo HTTP/2 y qué lo diferencia de HTTP/1.1?", answer:"HTTP/2 introduce <strong>multiplexación</strong> (múltiples peticiones en una conexión TCP), compresión de cabeceras (HPACK), Server Push y binario en lugar de texto. Esto elimina el head-of-line blocking de HTTP/1.1 y reduce la latencia de las páginas web.", hint:"Multiplexación, cabeceras comprimidas, binario."},
+{ id:14, category:"Desarrollo Web", question:"¿Qué es el concepto de 'Responsive Design'?", answer:"Técnica de diseño web que usa <strong>media queries CSS</strong>, rejillas fluidas e imágenes flexibles para que una página se adapte automáticamente al tamaño de la pantalla del dispositivo, sin necesidad de versiones separadas móvil/escritorio.", hint:"Una sola web que se adapta a todo tamaño."},
+{ id:15, category:"Desarrollo Web", question:"¿Qué es `var`, `let` y `const` en JavaScript y en qué se diferencian?", answer:"<strong>`var`</strong> tiene scope de función y se eleva (hoisting). <strong>`let`</strong> y <strong>`const`</strong> tienen scope de bloque (`{}`). `const` no permite reasignación. En código moderno se prefiere `const` por defecto y `let` cuando la variable cambiará.", hint:"var=función, let/const=bloque; const no se reasigna."},
+{ id:16, category:"Desarrollo Web", question:"¿Qué es ARIA y para qué se usa?", answer:"<strong>ARIA (Accessible Rich Internet Applications)</strong> es un conjunto de atributos HTML que mejoran la accesibilidad para usuarios de tecnologías asistivas (lectores de pantalla). Permite describir roles, estados y propiedades de elementos interactivos personalizados.", hint:"Accesibilidad para tecnologías asistivas."},
+{ id:17, category:"Desarrollo Web", question:"¿Qué es el patrón MVC en desarrollo web?", answer:"<strong>Model-View-Controller</strong> separa la aplicación en tres capas: el <strong>Model</strong> gestiona los datos y la lógica de negocio, la <strong>View</strong> presenta la interfaz al usuario, y el <strong>Controller</strong> actúa de intermediario procesando las entradas del usuario.", hint:"Datos, Vista, Controlador — separación de responsabilidades."},
+{ id:18, category:"Desarrollo Web", question:"¿Qué es una API REST?", answer:"Una <strong>API REST</strong> sigue los principios de la arquitectura REST: usa verbos HTTP (GET, POST, PUT, DELETE), es sin estado (stateless), tiene recursos identificados por URLs, y devuelve representaciones de datos (generalmente JSON). Es el estilo arquitectónico más común para servicios web.", hint:"Verbos HTTP + URLs + JSON + sin estado."},
+{ id:19, category:"Desarrollo Web", question:"¿Qué son los Web Vitals de Google?", answer:"Son métricas de rendimiento definidas por Google para medir la experiencia del usuario: <strong>LCP</strong> (Largest Contentful Paint, velocidad de carga), <strong>FID/INP</strong> (interactividad) y <strong>CLS</strong> (Cumulative Layout Shift, estabilidad visual). Afectan el ranking SEO.", hint:"LCP, INP y CLS — velocidad, respuesta, estabilidad."},
+{ id:20, category:"Desarrollo Web", question:"¿Qué es el Shadow DOM?", answer:"Es una forma de encapsular un árbol DOM 'oculto' dentro de un elemento, de modo que su estructura, estilos y comportamiento <strong>no interfieren con el resto de la página</strong>. Es la base de los Web Components y permite crear componentes verdaderamente encapsulados.", hint:"DOM encapsulado que no se contamina con el exterior."},
+{ id:21, category:"Desarrollo Web", question:"¿Qué diferencia hay entre `==` y `===` en JavaScript?", answer:"<strong>`==`</strong> realiza coerción de tipos antes de comparar (ej: `0 == '0'` es `true`). <strong>`===`</strong> compara valor y tipo sin conversión (ej: `0 === '0'` es `false`). Siempre se recomienda usar `===` para evitar comportamientos inesperados.", hint:"=== compara tipo y valor; == solo valor tras coerción."},
+{ id:22, category:"Desarrollo Web", question:"¿Qué es CSS Custom Properties (variables CSS)?", answer:"Son propiedades definidas por el desarrollador que comienzan con `--` y se acceden con `var()`. Se heredan en cascada como cualquier propiedad CSS. A diferencia de las variables Sass, <strong>son nativas del navegador</strong> y pueden modificarse con JavaScript en tiempo real.", hint:"--mi-variable en :root; se usa con var()."},
+{ id:23, category:"Desarrollo Web", question:"¿Qué es el método `fetch()` en JavaScript?", answer:"Es la API nativa del navegador para hacer <strong>peticiones HTTP asíncronas</strong>. Retorna una Promesa que resuelve en un objeto `Response`. Es el reemplazo moderno de XMLHttpRequest (XHR), más limpio y compatible con `async/await`.", hint:"El XHR moderno, basado en Promesas."},
+{ id:24, category:"Desarrollo Web", question:"¿Qué son los módulos ES Modules en JavaScript?", answer:"Son el sistema nativo de módulos de JavaScript. Permiten dividir el código en archivos separados usando <strong>`export`</strong> (para exponer valores) e <strong>`import`</strong> (para consumirlos). Tienen scope propio, son estáticos y se cargan de forma asíncrona con `<script type='module'>`.", hint:"import/export nativo del navegador."},
+{ id:25, category:"Desarrollo Web", question:"¿Qué es la accesibilidad web (a11y)?", answer:"Es el conjunto de prácticas y estándares que aseguran que los sitios web sean <strong>usables por personas con discapacidades</strong> (visuales, motoras, cognitivas). Las pautas WCAG 2.1 definen criterios de éxito en niveles A, AA y AAA.", hint:"Diseño inclusivo para todos los usuarios."},
+
+/* ══════════════ CIENCIA COMPUTACIONAL (26–50) ════════════════ */
+{ id:26, category:"Ciencia Computacional", question:"¿Qué es la notación Big O?", answer:"Es una notación matemática que describe el <strong>peor caso de complejidad</strong> (tiempo o espacio) de un algoritmo en función del tamaño de la entrada (n). Ignora constantes y términos de menor orden. Ejemplos: O(1) constante, O(log n) logarítmico, O(n) lineal, O(n²) cuadrático.", hint:"Cuánto crece el tiempo/espacio al crecer n."},
+{ id:27, category:"Ciencia Computacional", question:"¿Qué es una lista enlazada (linked list)?", answer:"Estructura de datos donde cada elemento (<strong>nodo</strong>) contiene un valor y un puntero al nodo siguiente. A diferencia de los arrays, la memoria no es contigua. Inserción/eliminación son O(1) si tienes el nodo; la búsqueda es O(n). Puede ser simple, doble o circular.", hint:"Nodos conectados por punteros, no contiguos en memoria."},
+{ id:28, category:"Ciencia Computacional", question:"¿Cuál es la diferencia entre una pila (stack) y una cola (queue)?", answer:"<strong>Stack</strong> sigue LIFO (Last In, First Out): el último en entrar es el primero en salir (como una pila de platos). <strong>Queue</strong> sigue FIFO (First In, First Out): el primero en entrar es el primero en salir (como una fila de espera).", hint:"Stack=LIFO (platos), Queue=FIFO (fila de banco)."},
+{ id:29, category:"Ciencia Computacional", question:"¿Qué es un árbol binario de búsqueda (BST)?", answer:"Un árbol donde cada nodo tiene como máximo dos hijos. La propiedad clave: todos los nodos del <strong>subárbol izquierdo son menores</strong> y los del <strong>subárbol derecho son mayores</strong> que el nodo padre. La búsqueda es O(log n) en caso promedio, O(n) en el peor caso si está desequilibrado.", hint:"Izquierda < nodo < derecha, siempre."},
+{ id:30, category:"Ciencia Computacional", question:"¿Qué es el algoritmo QuickSort?", answer:"Algoritmo de ordenamiento divide y vencerás. Elige un <strong>pivote</strong>, particiona el array en elementos menores y mayores al pivote, y aplica recursivamente. Complejidad promedio: <strong>O(n log n)</strong>; peor caso O(n²) si el pivote es siempre el máximo o mínimo.", hint:"Pivote, particionar, recursión."},
+{ id:31, category:"Ciencia Computacional", question:"¿Qué es la recursión y qué es un caso base?", answer:"La <strong>recursión</strong> es cuando una función se llama a sí misma para resolver subproblemas más pequeños. El <strong>caso base</strong> es la condición de parada que termina la recursión. Sin caso base, se produce un stack overflow por llamadas infinitas.", hint:"Función que se llama a sí misma + caso de parada."},
+{ id:32, category:"Ciencia Computacional", question:"¿Qué es una tabla hash (hash table)?", answer:"Estructura de datos que mapea <strong>claves a valores</strong> usando una función hash que convierte la clave en un índice de array. Permite búsqueda, inserción y eliminación en <strong>O(1) promedio</strong>. Las colisiones (dos claves producen el mismo índice) se resuelven con chaining o probing.", hint:"Clave → función hash → índice. Búsqueda O(1)."},
+{ id:33, category:"Ciencia Computacional", question:"¿Qué es la programación dinámica?", answer:"Técnica de optimización que descompone un problema en <strong>subproblemas superpuestos</strong> y almacena sus resultados (memoization o tabulación) para no recalcularlos. Transforma soluciones exponenciales en polinomiales. Ejemplos clásicos: Fibonacci, mochila, distancia de edición.", hint:"Dividir + almacenar resultados para no recalcular."},
+{ id:34, category:"Ciencia Computacional", question:"¿Cuál es la diferencia entre BFS y DFS?", answer:"<strong>BFS (Breadth-First Search)</strong> explora nivel por nivel usando una cola; ideal para encontrar el camino más corto. <strong>DFS (Depth-First Search)</strong> explora tan profundo como sea posible usando una pila (o recursión); ideal para detectar ciclos y hacer topological sort.", hint:"BFS=por capas/cola; DFS=en profundidad/pila."},
+{ id:35, category:"Ciencia Computacional", question:"¿Qué es el concepto ACID en bases de datos?", answer:"Son cuatro propiedades que garantizan la fiabilidad de transacciones: <strong>Atomicidad</strong> (todo o nada), <strong>Consistencia</strong> (de estado válido a estado válido), <strong>Aislamiento</strong> (transacciones no se interfieren) y <strong>Durabilidad</strong> (los cambios persisten tras un fallo).", hint:"Atomicidad, Consistencia, Aislamiento, Durabilidad."},
+{ id:36, category:"Ciencia Computacional", question:"¿Qué es la normalización de bases de datos?", answer:"Proceso de organizar los datos en tablas para reducir la <strong>redundancia y dependencias</strong>. Se divide en Formas Normales (1NF, 2NF, 3NF, BCNF). 1NF elimina grupos repetidos; 2NF elimina dependencias parciales; 3NF elimina dependencias transitivas.", hint:"Eliminar redundancia dividiendo en tablas."},
+{ id:37, category:"Ciencia Computacional", question:"¿Qué es un índice en una base de datos SQL?", answer:"Es una estructura de datos adicional (usualmente un árbol B o B+) que permite que el motor de base de datos encuentre filas <strong>sin escanear toda la tabla</strong>. Mejora dramáticamente la velocidad de las consultas SELECT, pero ralentiza INSERT/UPDATE/DELETE al mantenerlos actualizados.", hint:"Como el índice de un libro: acceso rápido sin leer todo."},
+{ id:38, category:"Ciencia Computacional", question:"¿Qué es la complejidad espacial?", answer:"Mide la cantidad de <strong>memoria adicional</strong> que necesita un algoritmo en función del tamaño de la entrada, también expresada en notación Big O. Un algoritmo in-place tiene O(1) espacio adicional. La complejidad espacial es tan importante como la temporal en sistemas con poca memoria.", hint:"Cuánta memoria extra usa el algoritmo."},
+{ id:39, category:"Ciencia Computacional", question:"¿Qué es el paradigma de programación funcional?", answer:"Estilo de programación que trata la computación como la evaluación de <strong>funciones matemáticas puras</strong>, sin estado mutable ni efectos secundarios. Sus pilares son: funciones puras, inmutabilidad, funciones de orden superior (map, filter, reduce) y composición.", hint:"Funciones puras, sin estado, sin efectos secundarios."},
+{ id:40, category:"Ciencia Computacional", question:"¿Qué es el garbage collection (recolección de basura)?", answer:"Mecanismo automático de gestión de memoria que <strong>libera objetos que ya no son referenciados</strong> por el programa. Evita memory leaks sin que el programador deba liberar memoria manualmente. Lenguajes como Java, Python y JavaScript lo implementan; C/C++ requieren gestión manual.", hint:"Liberar automáticamente memoria no referenciada."},
+{ id:41, category:"Ciencia Computacional", question:"¿Qué es un grafo y para qué se usa?", answer:"Estructura de datos compuesta por <strong>vértices (nodos) y aristas (conexiones)</strong>. Puede ser dirigido o no dirigido, ponderado o no. Se usa para modelar redes sociales, mapas, dependencias, rutas de transporte y cualquier sistema de relaciones entre entidades.", hint:"Nodos + conexiones. Modela relaciones complejas."},
+{ id:42, category:"Ciencia Computacional", question:"¿Qué es el teorema CAP en sistemas distribuidos?", answer:"Afirma que un sistema distribuido solo puede garantizar <strong>dos de tres propiedades simultáneamente</strong>: Consistencia (todos los nodos ven los mismos datos), Disponibilidad (siempre responde) y Tolerancia a particiones de red. Es imposible tener las tres a la vez.", hint:"Solo 2 de 3: Consistencia, Disponibilidad, Particiones."},
+{ id:43, category:"Ciencia Computacional", question:"¿Qué es la diferencia entre compilado e interpretado?", answer:"Un lenguaje <strong>compilado</strong> (C, C++, Rust) convierte todo el código a binario de máquina antes de ejecutarlo. Un lenguaje <strong>interpretado</strong> (Python, Ruby) ejecuta el código línea a línea en tiempo real mediante un intérprete. Java y JS son híbridos que usan compilación JIT.", hint:"Compilado=todo antes; interpretado=línea a línea."},
+{ id:44, category:"Ciencia Computacional", question:"¿Qué es el algoritmo Merge Sort?", answer:"Algoritmo de ordenamiento divide y vencerás que <strong>divide el array en mitades</strong>, ordena cada mitad recursivamente y luego las <strong>fusiona</strong> (merge) en orden. Su complejidad es siempre O(n log n) en todos los casos. Requiere O(n) de espacio adicional.", hint:"Divide, ordena mitades, fusiona. Siempre O(n log n)."},
+{ id:45, category:"Ciencia Computacional", question:"¿Qué es el protocolo TCP/IP?", answer:"<strong>TCP (Transmission Control Protocol)</strong> garantiza la entrega ordenada y sin errores de datos mediante confirmaciones. <strong>IP (Internet Protocol)</strong> se encarga del direccionamiento y enrutamiento de paquetes. Juntos forman la base de Internet: TCP en la capa de transporte, IP en la de red.", hint:"TCP=entrega garantizada; IP=enrutamiento de paquetes."},
+{ id:46, category:"Ciencia Computacional", question:"¿Qué es un deadlock?", answer:"Situación en la que dos o más procesos o hilos están <strong>bloqueados indefinidamente</strong>, cada uno esperando un recurso que el otro tiene. Para que ocurra deben darse cuatro condiciones (Coffman): exclusión mutua, retención y espera, no expropiación y espera circular.", hint:"Dos procesos esperándose mutuamente para siempre."},
+{ id:47, category:"Ciencia Computacional", question:"¿Qué es la abstracción en programación orientada a objetos?", answer:"Principio que consiste en <strong>mostrar solo los detalles relevantes</strong> de un objeto al mundo exterior y ocultar la implementación interna. En POO se implementa mediante interfaces, clases abstractas y niveles de acceso (public/private/protected).", hint:"Mostrar lo necesario, ocultar la implementación."},
+{ id:48, category:"Ciencia Computacional", question:"¿Qué es el patrón de diseño Observer?", answer:"Patrón de comportamiento en el que un objeto (<strong>Subject</strong>) mantiene una lista de dependientes (<strong>Observers</strong>) y les notifica automáticamente cuando su estado cambia. Es la base de eventos, reactividad y el patrón publicador/suscriptor (pub/sub).", hint:"Subject notifica a sus Observers cuando cambia."},
+{ id:49, category:"Ciencia Computacional", question:"¿Qué es la memoria cache y por qué es importante?", answer:"Es una memoria de acceso muy rápido (L1, L2, L3) ubicada entre la CPU y la RAM que almacena datos de uso frecuente. Reduce el tiempo de acceso explotando la <strong>localidad temporal</strong> (acceder de nuevo pronto a los mismos datos) y <strong>espacial</strong> (acceder a datos cercanos).", hint:"Memoria ultrarrápida entre CPU y RAM."},
+{ id:50, category:"Ciencia Computacional", question:"¿Qué es el principio DRY?", answer:"<strong>Don't Repeat Yourself</strong>: cada pieza de conocimiento o lógica debe tener una única representación en el sistema. Evitar la duplicación de código reduce los bugs (basta corregir en un lugar) y mejora la mantenibilidad. Su opuesto es WET (Write Everything Twice).", hint:"No repitas código — una sola fuente de verdad."},
+
+/* ══════════════════════ CIENCIA Y ASTRONOMÍA (51–75) ════════════ */
+{ id:51, category:"Ciencia y Astronomía", question:"¿Qué es un año luz?", answer:"Es una unidad de distancia (no de tiempo) equivalente a la distancia que recorre la luz en el vacío durante un año: aproximadamente <strong>9.46 × 10¹² km</strong> (9.46 billones de kilómetros). Se usa para expresar distancias astronómicas entre estrellas y galaxias.", hint:"Distancia que recorre la luz en un año."},
+{ id:52, category:"Ciencia y Astronomía", question:"¿Qué es un agujero negro?", answer:"Región del espacio con una <strong>curvatura gravitatoria tan intensa</strong> que nada, ni siquiera la luz, puede escapar una vez que cruza el horizonte de sucesos. Se forman cuando una estrella masiva colapsa. El primero fotografiado (M87*, 2019) tiene 6.500 millones de masas solares.", hint:"Gravedad tan intensa que atrapa hasta la luz."},
+{ id:53, category:"Ciencia y Astronomía", question:"¿Qué es la energía oscura?", answer:"Componente hipotética que representa aproximadamente el <strong>68% de la energía total del universo</strong> y es responsable de la expansión acelerada del cosmos. Su naturaleza es desconocida; podría ser la constante cosmológica de Einstein o un campo dinámico llamado quintaesencia.", hint:"68% del universo, causa su expansión acelerada."},
+{ id:54, category:"Ciencia y Astronomía", question:"¿Qué es la materia oscura?", answer:"Componente que no emite, absorbe ni refleja luz, por lo que no se puede detectar directamente. Representa el <strong>27% del universo</strong> y se detecta por sus efectos gravitacionales (lentes gravitacionales, rotación de galaxias). Aún no se conoce de qué está compuesta.", hint:"27% del universo; invisible pero gravitacionalmente activa."},
+{ id:55, category:"Ciencia y Astronomía", question:"¿Qué es el efecto Doppler en astronomía?", answer:"Cambio en la frecuencia observada de ondas (luz o sonido) según el movimiento relativo entre fuente y observador. En astronomía: si un objeto se aleja, su luz se desplaza al rojo (<strong>redshift</strong>); si se acerca, al azul (<strong>blueshift</strong>). Fue clave para descubrir la expansión del universo.", hint:"Galaxias que se alejan muestran redshift."},
+{ id:56, category:"Ciencia y Astronomía", question:"¿Cuál es la diferencia entre una estrella y un planeta?", answer:"Una <strong>estrella</strong> genera su propio brillo mediante fusión nuclear en su núcleo (convierte H en He). Un <strong>planeta</strong> no tiene fusión nuclear y brilla por reflexión de la luz de su estrella anfitriona. Los planetas orbitan estrellas; las estrellas orbitan centros galácticos.", hint:"Estrellas fusionan hidrógeno; planetas solo reflejan luz."},
+{ id:57, category:"Ciencia y Astronomía", question:"¿Qué es la fusión nuclear y cómo alimenta al Sol?", answer:"Proceso en el que núcleos ligeros se unen para formar un núcleo más pesado, liberando <strong>enormes cantidades de energía</strong> (E=mc²). El Sol fusiona 600 millones de toneladas de hidrógeno por segundo en su núcleo (15 millones de °C), convirtiéndolo en helio.", hint:"H + H → He + energía masiva."},
+{ id:58, category:"Ciencia y Astronomía", question:"¿Qué fue el Big Bang?", answer:"El modelo cosmológico estándar describe el inicio del universo hace <strong>~13.800 millones de años</strong> como un estado extremadamente caliente y denso que comenzó a expandirse. No fue una explosión en el espacio, sino la expansión del propio espacio-tiempo desde un estado singular.", hint:"Origen del universo hace 13.800 millones de años."},
+{ id:59, category:"Ciencia y Astronomía", question:"¿Qué es la relatividad especial de Einstein?", answer:"Teoría de 1905 con dos postulados: las leyes de la física son iguales en todos los marcos inerciales, y la <strong>velocidad de la luz (c) es constante</strong> en el vacío para todos los observadores. Sus consecuencias: dilatación del tiempo, contracción de la longitud y E=mc².", hint:"c es constante; E=mc²; tiempo se dilata."},
+{ id:60, category:"Ciencia y Astronomía", question:"¿Qué es el ciclo de vida de una estrella masiva?", answer:"Comienza como una nebulosa de gas → nube molecular → protoestrella → secuencia principal (fusión de H) → supergigante roja → <strong>supernova</strong> → dependiendo de la masa queda una estrella de neutrones o un agujero negro.", hint:"Nebulosa → secuencia principal → supernova → neutrones/agujero negro."},
+{ id:61, category:"Ciencia y Astronomía", question:"¿Qué es la radiación cósmica de fondo (CMB)?", answer:"Es la <strong>radiación térmica remanente del Big Bang</strong>, emitida ~380.000 años después cuando el universo se enfrió lo suficiente para que protones y electrones formaran átomos neutros. Se observa uniformemente en todo el cielo a ~2.7 Kelvin (-270 °C).", hint:"Eco de luz del Big Bang, visible en microondas."},
+{ id:62, category:"Ciencia y Astronomía", question:"¿Cuántos planetas tiene el Sistema Solar y cuáles son?", answer:"El Sistema Solar tiene <strong>8 planetas</strong>: Mercurio, Venus, Tierra, Marte (terrestres/interiores), Júpiter, Saturno (gigantes gaseosos), Urano y Neptuno (gigantes helados). Plutón fue reclasificado como planeta enano por la IAU en 2006.", hint:"8 planetas: 4 terrestres + 2 gaseosos + 2 helados."},
+{ id:63, category:"Ciencia y Astronomía", question:"¿Qué es una supernova?", answer:"Explosión estelar colosal que ocurre al final de la vida de estrellas masivas (Tipo II) o cuando una enana blanca en un sistema binario acumula masa hasta superar el límite de Chandrasekhar (Tipo Ia). Por unos días <strong>supera en brillo a toda una galaxia</strong>.", hint:"Explosión estelar tan brillante como una galaxia entera."},
+{ id:64, category:"Ciencia y Astronomía", question:"¿Qué es el principio de incertidumbre de Heisenberg?", answer:"Principio cuántico que afirma que es imposible conocer simultáneamente con precisión arbitraria la <strong>posición y el momento lineal</strong> de una partícula. La incertidumbre en posición (Δx) multiplicada por la de momento (Δp) es siempre ≥ ℏ/2. No es un límite tecnológico sino fundamental.", hint:"No puedes conocer a la vez posición y velocidad exactas."},
+{ id:65, category:"Ciencia y Astronomía", question:"¿Qué es la Vía Láctea?", answer:"Es nuestra <strong>galaxia espiral barrada</strong> que contiene entre 200 y 400 mil millones de estrellas. Tiene unos 100.000 años luz de diámetro. El Sol orbita su centro (donde habita un agujero negro supermasivo, Sagitario A*) a ~26.000 años luz de distancia, tardando ~225 millones de años en una vuelta.", hint:"Nuestra galaxia: espiral barrada, ~250 mil millones de estrellas."},
+{ id:66, category:"Ciencia y Astronomía", question:"¿Qué es la segunda ley de la termodinámica?", answer:"Establece que la <strong>entropía total de un sistema aislado nunca disminuye</strong>. Los procesos naturales tienden al desorden; el calor fluye espontáneamente del objeto caliente al frío, nunca al revés. Explica la dirección del tiempo y la imposibilidad de un motor con 100% de eficiencia.", hint:"La entropía siempre aumenta; el desorden crece."},
+{ id:67, category:"Ciencia y Astronomía", question:"¿Qué son las ondas gravitacionales?", answer:"Perturbaciones del espacio-tiempo predichas por Einstein en 1916 y detectadas por primera vez en 2015 por LIGO. Son producidas por eventos catastróficos como <strong>fusión de agujeros negros o estrellas de neutrones</strong>. Viajan a la velocidad de la luz.", hint:"Ondas en el tejido del espacio-tiempo detectadas por LIGO."},
+{ id:68, category:"Ciencia y Astronomía", question:"¿Qué es el número de Avogadro?", answer:"Es el número de partículas (átomos, moléculas, iones) en un <strong>mol de sustancia</strong>: aproximadamente <strong>6.022 × 10²³</strong> partículas. Definido exactamente como 6.02214076 × 10²³ mol⁻¹. Es fundamental en química para relacionar la escala atómica con la escala macroscópica.", hint:"6.022 × 10²³ partículas por mol."},
+{ id:69, category:"Ciencia y Astronomía", question:"¿Qué es la tabla periódica de los elementos?", answer:"Organización de los <strong>118 elementos químicos conocidos</strong> ordenados por número atómico (protones), con propiedades que se repiten periódicamente por columnas (grupos). Fue propuesta por Mendeleev en 1869. Los grupos verticales comparten propiedades químicas similares.", hint:"118 elementos ordenados por número atómico."},
+{ id:70, category:"Ciencia y Astronomía", question:"¿Qué es un exoplaneta?", answer:"Planeta que orbita una estrella fuera de nuestro Sistema Solar. El primero confirmado fue detectado en 1992. La NASA ha confirmado más de <strong>5.500 exoplanetas</strong>. Se detectan principalmente por el método de tránsito (la estrella se oscurece levemente) y la velocidad radial.", hint:"Planeta fuera de nuestro Sistema Solar; >5.500 confirmados."},
+{ id:71, category:"Ciencia y Astronomía", question:"¿Qué es la velocidad de escape?", answer:"La <strong>velocidad mínima</strong> que necesita un objeto para escapar del campo gravitatorio de un cuerpo celeste sin propulsión adicional. En la Tierra es ~11.2 km/s. En un agujero negro es mayor que c (la velocidad de la luz), razón por la que nada puede escapar.", hint:"Tierra: 11.2 km/s. Agujeros negros: > c."},
+{ id:72, category:"Ciencia y Astronomía", question:"¿Qué son los quarks?", answer:"Partículas elementales fundamentales que conforman los hadrones (protones y neutrones). Existen seis tipos o '<strong>sabores</strong>': up, down, charm, strange, top y bottom. Los protones tienen 2 quarks up + 1 down; los neutrones tienen 1 up + 2 down. Nunca se observan aislados.", hint:"6 sabores de quarks forman protones y neutrones."},
+{ id:73, category:"Ciencia y Astronomía", question:"¿Qué es la fuerza gravitacional según Newton?", answer:"Newton describió la gravedad como una fuerza de atracción mutua entre dos masas, con magnitud proporcional al <strong>producto de sus masas e inversamente proporcional al cuadrado de la distancia</strong>: F = G·m₁·m₂/r². G es la constante de gravitación universal (6.674×10⁻¹¹ N·m²/kg²).", hint:"F = G·m₁·m₂/r² — inversamente proporcional a r²."},
+{ id:74, category:"Ciencia y Astronomía", question:"¿Qué es la bioluminiscencia?", answer:"Producción y emisión de <strong>luz fría por organismos vivos</strong> mediante reacciones químicas (luciferina + luciferasa + O₂). Se encuentra en luciérnagas, peces de profundidad, medusas y plancton marino. A diferencia de la incandescencia, no produce calor significativo.", hint:"Luz producida por organismos vivos mediante química."},
+{ id:75, category:"Ciencia y Astronomía", question:"¿Qué es la fotosíntesis?", answer:"Proceso bioquímico en el que plantas, algas y cianobacterias convierten <strong>CO₂ + H₂O + luz solar → glucosa + O₂</strong> usando clorofila. Ocurre en los cloroplastos. Es la base de casi toda la cadena alimentaria y la principal fuente del oxígeno atmosférico terrestre.", hint:"CO₂ + H₂O + luz → glucosa + O₂."},
+
+/* ══════════════════════ GEOGRAFÍA E HISTORIA (76–100) ════════════ */
+{ id:76, category:"Geografía e Historia", question:"¿Cuál es la capital de Australia?", answer:"La capital de Australia es <strong>Canberra</strong>, no Sídney ni Melbourne. Fue elegida como compromiso entre las dos ciudades rivales y construida específicamente como capital federal, inaugurada en 1913. La sede del Parlamento australiano se ubica allí.", hint:"No es Sídney ni Melbourne. Es una ciudad planificada."},
+{ id:77, category:"Geografía e Historia", question:"¿En qué año cayó el Muro de Berlín?", answer:"El Muro de Berlín cayó el <strong>9 de noviembre de 1989</strong>. Fue construido en 1961 por la RDA (Alemania Oriental) para detener la emigración hacia el Oeste. Su caída marcó el inicio de la reunificación alemana (1990) y simbolizó el fin de la Guerra Fría.", hint:"1989 — símbolo del fin de la Guerra Fría."},
+{ id:78, category:"Geografía e Historia", question:"¿Qué es el río más largo del mundo?", answer:"El <strong>Nilo</strong> y el <strong>Amazonas</strong> compiten por este título según la metodología de medición. Históricamente se consideró al Nilo (6.650 km). Estudios recientes atribuyen más longitud al Amazonas (hasta 6.992 km). En cuanto a caudal de agua, el Amazonas es claramente el mayor.", hint:"Nilo (longitud histórica) vs. Amazonas (caudal y posiblemente longitud)."},
+{ id:79, category:"Geografía e Historia", question:"¿Cuáles son los cinco continentes olímpicos y a qué regiones corresponden?", answer:"Las cinco regiones son <strong>África, América, Asia, Europa y Oceanía</strong>, representadas por los cinco anillos olímpicos. El símbolo fue diseñado por Pierre de Coubertin en 1913. Los anillos son azul, amarillo, negro, verde y rojo sobre fondo blanco.", hint:"África, América, Asia, Europa, Oceanía."},
+{ id:80, category:"Geografía e Historia", question:"¿Cuándo y dónde ocurrió la Primera Revolución Industrial?", answer:"Comenzó en <strong>Gran Bretaña hacia 1760–1840</strong>, iniciándose con la mecanización de la industria textil y la máquina de vapor de James Watt. Se caracterizó por la transición de la producción artesanal a la fabril, el uso del carbón y el desarrollo del ferrocarril.", hint:"Gran Bretaña, 1760–1840, máquina de vapor."},
+{ id:81, category:"Geografía e Historia", question:"¿Qué es el Monte Everest y dónde está?", answer:"El <strong>Monte Everest</strong> es la montaña más alta del mundo con 8.848,86 metros sobre el nivel del mar (medición oficial 2020). Se ubica en los Himalayas, en la frontera entre Nepal y el Tíbet (China). Edmund Hillary y Tenzing Norgay lo escalaron por primera vez en 1953.", hint:"8.848 m, Himalayas, Nepal–Tíbet. Primera cima: 1953."},
+{ id:82, category:"Geografía e Historia", question:"¿Cuántos países forman la Unión Europea (2024)?", answer:"La Unión Europea está formada por <strong>27 países miembros</strong> desde que el Reino Unido completó el Brexit el 31 de enero de 2020. La UE tiene su sede principal en Bruselas (Bélgica) y en Estrasburgo (Parlamento Europeo, Francia).", hint:"27 estados miembros (tras el Brexit del Reino Unido)."},
+{ id:83, category:"Geografía e Historia", question:"¿Qué civilización construyó las pirámides de Giza?", answer:"Las pirámides de Giza fueron construidas por la <strong>civilización del Antiguo Egipto</strong>, durante el Imperio Antiguo (~2560–2510 a.C.). La Gran Pirámide fue erigida para el faraón Khufu (Keops). Se cree que fueron construidas por trabajadores asalariados, no esclavos.", hint:"Antiguo Egipto, faraón Khufu, ~2560 a.C."},
+{ id:84, category:"Geografía e Historia", question:"¿Cuál es el océano más grande del mundo?", answer:"El <strong>Océano Pacífico</strong> es el más grande y profundo del mundo, con una superficie de aproximadamente 165 millones de km². Cubre más área que todos los continentes juntos. Contiene la fosa de las Marianas, el punto más profundo de la Tierra (~11.000 m).", hint:"Pacífico: más grande que todos los continentes juntos."},
+{ id:85, category:"Geografía e Historia", question:"¿Qué fue la Revolución Francesa?", answer:"Período de transformación radical en Francia (1789–1799) que abolió la monarquía absoluta y el sistema feudal. Sus causas: crisis económica, desigualdad social y las ideas ilustradas. Sus principios: <strong>Libertad, Igualdad, Fraternidad</strong>. Culminó con el ascenso de Napoleón Bonaparte.", hint:"1789–1799, fin del absolutismo, Libertad-Igualdad-Fraternidad."},
+{ id:86, category:"Geografía e Historia", question:"¿Cuál es el país más grande del mundo por superficie?", answer:"<strong>Rusia</strong> es el país más grande del mundo con ~17.1 millones de km², abarcando 11 husos horarios y partes de Europa y Asia. Le siguen Canadá (9.9M km²), Estados Unidos (9.8M km²) y China (9.6M km²). Juntos representan más de un tercio de la superficie terrestre.", hint:"Rusia: 17.1 millones de km², 11 husos horarios."},
+{ id:87, category:"Geografía e Historia", question:"¿Cuándo comenzó y terminó la Segunda Guerra Mundial?", answer:"Comenzó el <strong>1 de septiembre de 1939</strong> con la invasión nazi de Polonia y terminó el <strong>2 de septiembre de 1945</strong> con la rendición de Japón. Fue el conflicto armado más destructivo de la historia, con entre 70 y 85 millones de muertos.", hint:"1939–1945. El mayor conflicto armado de la historia."},
+{ id:88, category:"Geografía e Historia", question:"¿Qué es el Desierto del Sahara y cuánto ocupa?", answer:"El <strong>Sahara</strong> es el desierto cálido más grande del mundo, con ~9.2 millones de km², cubriendo gran parte del norte de África desde el Atlántico hasta el Mar Rojo. Solo lo superan la Antártida (~14.2M km²) y el Ártico en términos de desiertos en general.", hint:"Mayor desierto cálido del mundo: 9.2M km², norte de África."},
+{ id:89, category:"Geografía e Historia", question:"¿Cuándo llegó el hombre a la Luna y quiénes fueron los primeros?", answer:"El <strong>20 de julio de 1969</strong>, durante la misión Apollo 11, <strong>Neil Armstrong y Buzz Aldrin</strong> se convirtieron en los primeros seres humanos en pisar la Luna. Michael Collins permaneció en órbita lunar. Armstrong pronunció su famosa frase al pisar la superficie.", hint:"20 julio 1969, Apollo 11, Armstrong y Aldrin."},
+{ id:90, category:"Geografía e Historia", question:"¿Qué es el Canal de Panamá y cuándo se inauguró?", answer:"El Canal de Panamá es una vía artificial de 80 km que une el <strong>Océano Atlántico con el Pacífico</strong> a través del istmo de Panamá. Fue inaugurado el <strong>15 de agosto de 1914</strong> por Estados Unidos. Desde 1999 es administrado por Panamá. Se expandió en 2016 con esclusas más grandes.", hint:"Une Atlántico y Pacífico, inaugurado 1914, administrado por Panamá desde 1999."},
+{ id:91, category:"Geografía e Historia", question:"¿Cuál es la montaña más alta de América?", answer:"El <strong>Aconcagua</strong>, ubicado en los Andes argentinos (provincia de Mendoza, frontera con Chile), con 6.961 metros sobre el nivel del mar. Es el punto más alto del hemisferio occidental y del hemisferio sur. También es el pico más alto fuera de Asia.", hint:"Aconcagua, 6.961 m, Andes argentinos."},
+{ id:92, category:"Geografía e Historia", question:"¿Qué fue el Imperio Romano?", answer:"Estado que dominó el Mediterráneo y gran parte de Europa durante siglos. Se convirtió en Imperio en 27 a.C. con <strong>Augusto</strong>. El Imperio Romano de Occidente cayó en 476 d.C.; el de Oriente (Bizancio) continuó hasta 1453. Dejó un legado en derecho, idiomas, arquitectura y cultura occidental.", hint:"27 a.C.–476 d.C. Occidente; 1453 Oriente. Legado gigantesco."},
+{ id:93, category:"Geografía e Historia", question:"¿Qué río atraviesa el corazón de Europa y desemboca en el Mar Negro?", answer:"El <strong>Danubio</strong>, con 2.860 km de longitud, es el segundo río más largo de Europa (tras el Volga). Nace en Alemania y atraviesa o bordea 10 países (Alemania, Austria, Eslovaquia, Hungría, Croacia, Serbia, Rumanía, Bulgaria, Moldavia, Ucrania) antes de desembocar en el Mar Negro.", hint:"Danubio: 2.860 km, 10 países, desemboca en Mar Negro."},
+{ id:94, category:"Geografía e Historia", question:"¿Cuándo ocurrió la Revolución Rusa?", answer:"La Revolución de Octubre de <strong>1917</strong> derrocó al gobierno provisional ruso. Los bolcheviques liderados por <strong>Lenin</strong> tomaron el poder. Esto llevó a la creación de la URSS (1922), el primer estado socialista del mundo, que existió hasta 1991.", hint:"1917, Lenin y los bolcheviques, inicio de la URSS."},
+{ id:95, category:"Geografía e Historia", question:"¿Cuál es el lago más profundo del mundo?", answer:"El <strong>Lago Baikal</strong>, en Siberia (Rusia), con una profundidad máxima de 1.642 metros. Es también el lago de agua dulce más voluminoso del planeta, conteniendo aproximadamente el 20% de toda el agua dulce superficial del mundo. Tiene 25 millones de años de antigüedad.", hint:"Baikal, Siberia, 1.642 m de profundidad, 20% del agua dulce mundial."},
+{ id:96, category:"Geografía e Historia", question:"¿Qué civilizaciones precolombinas existían en América antes de la llegada europea?", answer:"Entre las más destacadas: los <strong>Aztecas</strong> (México, capital Tenochtitlán), los <strong>Incas</strong> (Andes, capital Cusco) y los <strong>Mayas</strong> (Mesoamérica, ciudades-estado). También existían los Olmecas, Zapotecas, Toltecas y múltiples culturas en Norteamérica y Sudamérica.", hint:"Aztecas (México), Incas (Andes), Mayas (Mesoamérica)."},
+{ id:97, category:"Geografía e Historia", question:"¿Cuál es la ciudad más poblada del mundo (2024)?", answer:"<strong>Tokio</strong> (Japón) es consistentemente la aglomeración urbana más grande del mundo, con aproximadamente 37–38 millones de personas en su área metropolitana. La ciudad de Tokio propiamente dicha tiene unos 14 millones. Le siguen Delhi y Shanghái.", hint:"Tokio: ~37 millones de personas en área metropolitana."},
+{ id:98, category:"Geografía e Historia", question:"¿Qué fue la Ruta de la Seda?", answer:"Red de rutas comerciales que conectó China con el Mediterráneo y Europa durante más de 1.500 años, desde ~130 a.C. hasta el siglo XV. Transportaba seda, especias, oro y más importante aún, <strong>ideas, religiones, tecnologías y epidemias</strong> entre Oriente y Occidente.", hint:"Rutas comerciales China–Mediterráneo, 130 a.C. al siglo XV."},
+{ id:99, category:"Geografía e Historia", question:"¿Qué es el Río Amazonas y por qué es importante?", answer:"El Amazonas es el río con el <strong>mayor caudal del mundo</strong> (~20% del agua dulce fluvial del planeta) y posiblemente el más largo. Traversa Sudamérica y desemboca en el Atlántico. La Cuenca Amazónica alberga el mayor bosque tropical del mundo y una biodiversidad extraordinaria.", hint:"Mayor caudal del mundo, pulmón verde del planeta."},
+{ id:100, category:"Geografía e Historia", question:"¿Cuándo y dónde ocurrió el Renacimiento?", answer:"El Renacimiento fue un movimiento cultural e intelectual que comenzó en <strong>Italia (~siglo XIV) y se extendió a Europa hasta el siglo XVII</strong>. Representó el resurgimiento del clasicismo grecolatino, el humanismo, las artes (Leonardo, Miguel Ángel, Rafael) y sentó bases del pensamiento científico moderno.", hint:"Italia, siglos XIV–XVII, humanismo, Leonardo, Miguel Ángel."}
+
+]; /* END ALL_CARDS */
+
+/* ─────────────────────────────────────────────────────────────────
+   STATE
+───────────────────────────────────────────────────────────────── */
+let state = {
+  deck:        [...ALL_CARDS],   // active filtered+shuffled deck
+  cursor:      0,                // index in deck
+  statuses:    {},               // { id: 'learned'|'review' }
+  isFlipped:   false,
+  activeFilter:'all',            // 'all'|'learned'|'review'
+  activeSearch:'',
+  activeCategory:'all'
+};
+
+/* ─────────────────────────────────────────────────────────────────
+   LOCALSTORAGE
+───────────────────────────────────────────────────────────────── */
+const LS_KEY = 'flashcards_statuses_v1';
+
+function saveState() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state.statuses)); } catch(e){}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) state.statuses = JSON.parse(raw);
+  } catch(e) {}
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FILTER + SEARCH + SHUFFLE
+───────────────────────────────────────────────────────────────── */
+function rebuildDeck() {
+  let cards = ALL_CARDS.filter(c => {
+    const matchCat  = state.activeCategory === 'all' || c.category === state.activeCategory;
+    const matchSearch = !state.activeSearch ||
+      c.question.toLowerCase().includes(state.activeSearch.toLowerCase()) ||
+      c.answer.toLowerCase().includes(state.activeSearch.toLowerCase());
+    const status = state.statuses[c.id];
+    const matchFilter = state.activeFilter === 'all' ||
+      (state.activeFilter === 'learned' && status === 'learned') ||
+      (state.activeFilter === 'review'  && status === 'review');
+    return matchCat && matchSearch && matchFilter;
+  });
+  state.deck   = cards;
+  state.cursor = 0;
+  state.isFlipped = false;
+  renderCard();
+  updateStats();
+}
+
+function setFilter(f) {
+  state.activeFilter = f;
+  ['flt-all','flt-learned','flt-review'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  document.getElementById('flt-' + f).classList.add('active');
+  rebuildDeck();
+}
+
+function shuffleDeck() {
+  const arr = [...state.deck];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  state.deck   = arr;
+  state.cursor = 0;
+  state.isFlipped = false;
+  renderCard();
+  showToast('⇄ Baraja mezclada', '');
+}
+
+document.getElementById('search-input').addEventListener('input', function() {
+  state.activeSearch = this.value.trim();
+  rebuildDeck();
+});
+
+document.getElementById('cat-filter').addEventListener('change', function() {
+  state.activeCategory = this.value;
+  rebuildDeck();
+});
+
+/* ─────────────────────────────────────────────────────────────────
+   RENDER CARD
+───────────────────────────────────────────────────────────────── */
+const CAT_CLASS = {
+  'Desarrollo Web':       'cat-web',
+  'Ciencia Computacional':'cat-cs',
+  'Ciencia y Astronomía': 'cat-sci',
+  'Geografía e Historia': 'cat-geo'
+};
+
+function renderCard() {
+  const flipCard = document.getElementById('flip-card');
+  const scene    = document.getElementById('flip-scene');
+
+  // Un-flip
+  flipCard.classList.remove('is-flipped');
+  state.isFlipped = false;
+
+  const deck = state.deck;
+
+  // Update counter
+  document.getElementById('card-counter').textContent =
+    deck.length === 0
+      ? 'Sin resultados'
+      : `Tarjeta ${state.cursor + 1} de ${deck.length}`;
+
+  // Nav buttons
+  document.getElementById('btn-prev').disabled = state.cursor <= 0;
+  document.getElementById('btn-next').disabled = state.cursor >= deck.length - 1;
+
+  if (deck.length === 0) {
+    // Show empty state
+    scene.innerHTML = `
+      <div class="empty-card">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <p>Sin tarjetas con estos filtros</p>
+        <button class="btn btn-sm" onclick="setFilter('all');document.getElementById('search-input').value='';state.activeSearch='';state.activeCategory='all';document.getElementById('cat-filter').value='all';">Limpiar filtros</button>
+      </div>`;
+    return;
+  }
+
+  // Restore flip scene structure if needed
+  if (!document.getElementById('flip-card')) {
+    scene.innerHTML = `
+      <div class="flip-card" id="flip-card">
+        <div class="flip-face flip-front" id="card-front">
+          <span class="card-category-badge" id="front-cat"></span>
+          <span class="card-id-badge" id="front-id"></span>
+          <p class="card-question" id="front-question"></p>
+          <p class="card-hint" id="front-hint"></p>
+          <span class="card-status-ribbon" id="front-ribbon" style="display:none"></span>
+          <span class="tap-cue">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            Toca para voltear
+          </span>
+        </div>
+        <div class="flip-face flip-back" id="card-back">
+          <div class="flip-back-decoration"></div>
+          <p class="answer-label">Respuesta</p>
+          <p class="card-answer" id="back-answer"></p>
+        </div>
+      </div>`;
+    document.getElementById('flip-card').addEventListener('click', function(){flipCard_click();}); // reattach would be done by onclick on scene
+  }
+
+  const card = deck[state.cursor];
+  const status = state.statuses[card.id];
+
+  document.getElementById('front-cat').textContent  = card.category;
+  document.getElementById('front-cat').className    = 'card-category-badge ' + (CAT_CLASS[card.category] || '');
+  document.getElementById('front-id').textContent   = '#' + String(card.id).padStart(3,'0');
+  document.getElementById('front-question').textContent = card.question;
+  document.getElementById('front-hint').textContent = card.hint ? '💡 ' + card.hint : '';
+
+  const ribbon = document.getElementById('front-ribbon');
+  if (status === 'learned') {
+    ribbon.style.display = ''; ribbon.textContent = '✅ Aprendida';
+    ribbon.className = 'card-status-ribbon ribbon-learned';
+  } else if (status === 'review') {
+    ribbon.style.display = ''; ribbon.textContent = '🔁 Repasar';
+    ribbon.className = 'card-status-ribbon ribbon-review';
+  } else {
+    ribbon.style.display = 'none';
+  }
+
+  document.getElementById('back-answer').innerHTML = card.answer;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FLIP
+───────────────────────────────────────────────────────────────── */
+function flipCard() {
+  if (state.deck.length === 0) return;
+  const fc = document.getElementById('flip-card');
+  if (!fc) return;
+  state.isFlipped = !state.isFlipped;
+  fc.classList.toggle('is-flipped', state.isFlipped);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   NAVIGATE
+───────────────────────────────────────────────────────────────── */
+function navigate(dir) {
+  const newIdx = state.cursor + dir;
+  if (newIdx < 0 || newIdx >= state.deck.length) return;
+  state.cursor = newIdx;
+  state.isFlipped = false;
+  renderCard();
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   MARK CARD
+───────────────────────────────────────────────────────────────── */
+function markCard(status) {
+  if (state.deck.length === 0) return;
+  const card = state.deck[state.cursor];
+  const prev = state.statuses[card.id];
+
+  if (prev === status) {
+    // Toggle off
+    delete state.statuses[card.id];
+    showToast('↩ Marcado retirado', '');
+  } else {
+    state.statuses[card.id] = status;
+    if (status === 'learned') showToast('✅ ¡Tarjeta aprendida!', 'green');
+    else showToast('🔁 Marcada para repasar', 'red');
+  }
+
+  saveState();
+  updateStats();
+  renderCard();
+  renderCatalog();
+
+  // Auto-advance after 400ms
+  if (state.cursor < state.deck.length - 1) {
+    setTimeout(() => { navigate(1); }, 400);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   STATS
+───────────────────────────────────────────────────────────────── */
+function updateStats() {
+  const total   = ALL_CARDS.length;
+  const learned = Object.values(state.statuses).filter(s => s === 'learned').length;
+  const review  = Object.values(state.statuses).filter(s => s === 'review').length;
+  const pct     = Math.round((learned / total) * 100);
+
+  document.getElementById('stat-total').textContent   = total;
+  document.getElementById('stat-learned').textContent = learned;
+  document.getElementById('stat-review').textContent  = review;
+  document.getElementById('stat-pct').textContent     = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${learned} de ${total} tarjetas aprendidas`;
+  document.getElementById('topbar-progress').textContent = pct + '% aprendido';
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   CATALOG
+───────────────────────────────────────────────────────────────── */
+function renderCatalog() {
+  const body = document.getElementById('catalog-body');
+  const categories = [...new Set(ALL_CARDS.map(c => c.category))];
+  let html = '';
+  categories.forEach(cat => {
+    html += `<div class="catalog-category-group">
+      <div class="catalog-cat-header">${cat}</div>`;
+    ALL_CARDS.filter(c => c.category === cat).forEach(c => {
+      const status = state.statuses[c.id];
+      const cls = status === 'learned' ? 'is-learned' : status === 'review' ? 'is-review' : '';
+      html += `<div class="catalog-item ${cls}" onclick="jumpToCard(${c.id})">
+        <span class="catalog-item-num">#${String(c.id).padStart(3,'0')}</span>
+        <span class="catalog-item-q">${c.question}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  body.innerHTML = html;
+}
+
+function jumpToCard(id) {
+  // Reset all filters and jump to this card
+  state.activeFilter   = 'all';
+  state.activeSearch   = '';
+  state.activeCategory = 'all';
+  document.getElementById('search-input').value = '';
+  document.getElementById('cat-filter').value   = 'all';
+  ['flt-all','flt-learned','flt-review'].forEach(el => {
+    const e = document.getElementById(el);
+    if(e) e.classList.remove('active');
+  });
+  document.getElementById('flt-all').classList.add('active');
+
+  state.deck   = [...ALL_CARDS];
+  const idx    = state.deck.findIndex(c => c.id === id);
+  state.cursor = idx >= 0 ? idx : 0;
+  state.isFlipped = false;
+
+  // Close catalog
+  document.getElementById('catalog').removeAttribute('open');
+
+  renderCard();
+  updateStats();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast ' + (type || '');
+  clearTimeout(toastTimer);
+  // Force reflow
+  t.offsetHeight;
+  t.classList.add('show');
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   KEYBOARD SHORTCUTS
+───────────────────────────────────────────────────────────────── */
+document.addEventListener('keydown', function(e) {
+  const tag = document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+  switch(e.key) {
+    case ' ':
+    case 'Enter':
+      e.preventDefault();
+      flipCard();
+      break;
+    case 'ArrowLeft':
+      e.preventDefault();
+      navigate(-1);
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      navigate(1);
+      break;
+    case 'l':
+    case 'L':
+      markCard('learned');
+      break;
+    case 'r':
+    case 'R':
+      markCard('review');
+      break;
+  }
+});
+
+/* ─────────────────────────────────────────────────────────────────
+   SWIPE SUPPORT (touch)
+───────────────────────────────────────────────────────────────── */
+let touchStartX = 0;
+const scene = document.getElementById('flip-scene');
+scene.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive:true });
+scene.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(dx) > 60) {
+    // Swipe — navigate
+    navigate(dx < 0 ? 1 : -1);
+  }
+}, { passive:true });
+
+/* ─────────────────────────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────────────────────────── */
+loadState();
+rebuildDeck();
+renderCatalog();
+
+</script>
+</body>
+</html>
