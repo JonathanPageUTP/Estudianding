@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Estudio · ISO/IEC 27001:2022 en el Sector Público — Caso ANSDP</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<header class="topbar">
+  <span class="topbar-title">Guía de estudio · ISO 27001:2022 — ANSDP</span>
+  <div class="topbar-pills">
+    <span class="topbar-pill">UTP · Seguridad de la Información</span>
+    <span class="topbar-pill">20 diapositivas</span>
+    <a href="#autoevaluacion" class="topbar-pill">Autoevaluación ↓</a>
+  </div>
+</header>
+
+<nav class="nav-pills" aria-label="Navegación de secciones">
+  <a class="nav-pill" href="#intro">Introducción</a>
+  <a class="nav-pill" href="#alcance">Alcance</a>
+  <a class="nav-pill" href="#gobernanza">Gobernanza</a>
+  <a class="nav-pill" href="#activos">Activos &amp; RACI</a>
+  <a class="nav-pill" href="#riesgos">Riesgos</a>
+  <a class="nav-pill" href="#controles">Controles</a>
+  <a class="nav-pill" href="#mantenimiento">Mantenimiento</a>
+  <a class="nav-pill" href="#conclusiones">Conclusiones</a>
+  <a class="nav-pill" href="#flashcards">Flashcards</a>
+  <a class="nav-pill" href="#autoevaluacion">Autoevaluación</a>
+</nav>
+
+<header class="hero">
+  <span class="hero-badge">Material de repaso para la exposición</span>
+  <h1>ISO/IEC 27001:2022 <span>en el Sector Público</span></h1>
+  <p>Evaluación de riesgos, controles operativos y política de mantenimiento de sistemas — Caso ANSDP. Universidad Tecnológica de Panamá · Seguridad en los Sistemas de Información.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>8</strong><span>Secciones</span></div>
+    <div class="hero-stat"><strong>20</strong><span>Diapositivas</span></div>
+    <div class="hero-stat"><strong>8</strong><span>Controles Grupo 5</span></div>
+    <div class="hero-stat"><strong>5</strong><span>Integrantes</span></div>
+  </div>
+</header>
+
+<main class="page" style="max-width:1100px;">
+
+  <!-- ============ 1. INTRODUCCIÓN ============ -->
+  <section id="intro" class="section" style="padding-top:8px;">
+    <span class="section-label">01 · Introducción y contexto institucional</span>
+    <h2 class="section-title">¿Qué es la ANSDP y por qué necesita un SGSI?</h2>
+
+    <article class="card card-elevated stripe-navy">
+      <p>La <strong>Autoridad Nacional de Servicios Digitales Públicos (ANSDP)</strong> es una institución pública ficticia encargada de administrar trámites digitales ciudadanos: emisión de certificados, gestión de solicitudes, expedientes digitales y atención en línea.</p>
+      <p class="mt-sm">Al procesar información personal y documentación sensible, requiere un <strong>Sistema de Gestión de Seguridad de la Información (SGSI)</strong> que proteja la confidencialidad, integridad y disponibilidad de sus activos.</p>
+      <p class="mt-sm">El proyecto aplica la metodología de <strong>ISO/IEC 27005</strong> e <strong>ISO 31000</strong> para la evaluación de riesgos, y controles de <strong>ISO/IEC 27001</strong> e <strong>ISO/IEC 27002</strong>, con foco en seguridad de las operaciones y mantenimiento de sistemas.</p>
+    </article>
+
+    <div class="benefits mt-lg">
+      <div class="benefit-chip">
+        <span class="bi">🔐</span>
+        <div class="benefit-chip-text"><strong>CIA</strong><span>Confidencialidad · Integridad · Disponibilidad</span></div>
+      </div>
+      <div class="benefit-chip">
+        <span class="bi">📊</span>
+        <div class="benefit-chip-text"><strong>ISO 27005</strong><span>Metodología de gestión de riesgos</span></div>
+      </div>
+      <div class="benefit-chip">
+        <span class="bi">🧭</span>
+        <div class="benefit-chip-text"><strong>ISO 31000</strong><span>Marco general de gestión de riesgos</span></div>
+      </div>
+    </div>
+
+    <div class="grid-3 mt-lg">
+      <article class="card stripe-teal">
+        <h3 class="card-title">Contexto interno</h3>
+        <p>Grandes volúmenes de datos personales (nombres, cédulas, direcciones, expedientes). Sistemas web, servidores, bases de datos, red institucional, personal técnico/administrativo y procesos de atención ciudadana.</p>
+      </article>
+      <article class="card stripe-red">
+        <h3 class="card-title">Contexto externo</h3>
+        <p>Exposición a ciberataques, malware, suplantación de identidad, accesos no autorizados y fuga de información. Debe cumplir la <strong>Ley 81 de 2019</strong> y el <strong>Decreto Ejecutivo 285 de 2021</strong> sobre protección de datos personales en Panamá.</p>
+      </article>
+      <article class="card stripe-violet">
+        <h3 class="card-title">Partes interesadas</h3>
+        <p>Ciudadanos, funcionarios internos, dirección general, departamento de tecnología, unidad de seguridad, proveedores tecnológicos, entidades fiscalizadoras y autoridades de protección de datos.</p>
+      </article>
+    </div>
+
+    <div class="memory-box mt-lg">
+      <h4>🧠 Para memorizar</h4>
+      <p><strong>CIA</strong> = Confidencialidad, Integridad, Disponibilidad. Es el objetivo central de <em>todo</em> el SGSI — repítelo antes de responder cualquier pregunta sobre "por qué" la ANSDP necesita seguridad.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. ALCANCE ============ -->
+  <section id="alcance" class="section">
+    <span class="section-label">02 · Alcance del SGSI</span>
+    <h2 class="section-title">Alcance y partes interesadas</h2>
+    <p class="mb-md" style="margin-bottom:20px;">El SGSI se aplica a todos los procesos tecnológicos y administrativos de la gestión de trámites digitales ciudadanos de la ANSDP, protegiendo la confidencialidad, integridad y disponibilidad de la información bajo su custodia.</p>
+
+    <div class="scope-grid">
+      <div class="scope-col inc">
+        <h4>Incluye</h4>
+        <ul>
+          <li>Sistemas web de atención ciudadana</li>
+          <li>Bases de datos con información personal</li>
+          <li>Servidores institucionales</li>
+          <li>Personal de tecnología y administrativo con acceso a datos ciudadanos</li>
+          <li>Procesos de respaldo, acceso, almacenamiento y recuperación de información</li>
+        </ul>
+      </div>
+      <div class="scope-col exc">
+        <h4>No incluye</h4>
+        <ul>
+          <li>Procesos manuales externos que no estén conectados con los sistemas digitales de la institución</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. GOBERNANZA ============ -->
+  <section id="gobernanza" class="section">
+    <span class="section-label">03 · Estructura organizacional y arquitectura</span>
+    <h2 class="section-title">Gobernanza y arquitectura tecnológica</h2>
+
+    <p style="margin-bottom:16px;">La seguridad de la información se ubica como una función transversal. La Dirección General mantiene la responsabilidad final del SGSI; el Comité de Seguridad coordina decisiones sobre riesgos, políticas y continuidad; el Departamento de Tecnología y la Unidad de Seguridad ejecutan las medidas técnicas.</p>
+
+    <div class="roles-grid">
+      <div class="role-row"><span class="role-icon">🏛️</span><div><div class="role-name">Dirección General</div><div class="role-desc">Responsabilidad final del SGSI.</div></div></div>
+      <div class="role-row"><span class="role-icon">🛡️</span><div><div class="role-name">Comité de Seguridad de la Información</div><div class="role-desc">Coordina decisiones sobre riesgos, políticas y continuidad.</div></div></div>
+      <div class="role-row"><span class="role-icon">⚙️</span><div><div class="role-name">Dirección de Operaciones Digitales</div><div class="role-desc">Supervisa Departamento de Tecnología y Dirección Administrativa.</div></div></div>
+      <div class="role-row"><span class="role-icon">💻</span><div><div class="role-name">Departamento de Tecnología</div><div class="role-desc">Desarrollo y Aplicaciones · Infraestructura y Redes.</div></div></div>
+      <div class="role-row"><span class="role-icon">🔍</span><div><div class="role-name">Unidad de Seguridad y Ciberseguridad</div><div class="role-desc">Ejecuta las medidas técnicas de seguridad.</div></div></div>
+      <div class="role-row"><span class="role-icon">📁</span><div><div class="role-name">Dirección Administrativa</div><div class="role-desc">Soporte Técnico y Mantenimiento · Gestión Documental y Datos.</div></div></div>
+    </div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:16px;">Arquitectura tecnológica propuesta</h3>
+    <p style="margin-bottom:16px;">Separación en 4 zonas — permite aplicar controles de segmentación, monitoreo, respaldos, autenticación y mantenimiento controlado.</p>
+
+    <div class="grid-2">
+      <article class="card card-teal">
+        <h4 class="card-title">Zona de usuarios</h4>
+        <p>Ciudadanos (navegador/móvil) · Funcionarios (red institucional)</p>
+      </article>
+      <article class="card card-amber">
+        <h4 class="card-title">Zona perimetral</h4>
+        <p>Internet / VPN / TLS · Firewall / WAF / Segmentación</p>
+      </article>
+      <article class="card card-violet">
+        <h4 class="card-title">Zona de aplicaciones</h4>
+        <p>Portal web de trámites · Servidor de aplicaciones · Servicio de autenticación · Mesa de ayuda en línea</p>
+      </article>
+      <article class="card card-navy">
+        <h4 class="card-title">Zona de datos y continuidad</h4>
+        <p>Base de datos ciudadana · Repositorio de expedientes · Sistema de logs y monitoreo · Sistema de respaldos</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 4. ACTIVOS Y RACI ============ -->
+  <section id="activos" class="section">
+    <span class="section-label">04 · Inventario de activos y matriz RACI</span>
+    <h2 class="section-title">Activos tecnológicos y responsabilidades</h2>
+
+    <h3 style="margin-bottom:12px;">Inventario de activos tecnológicos</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Activo</th><th>Tipo</th><th>Criticidad</th><th>Justificación</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Activo">Portal web de trámites</td><td data-label="Tipo">Software/servicio</td><td data-label="Criticidad"><span class="tag tag-amber">Alta</span></td><td data-label="Justificación">Canal principal de atención pública.</td></tr>
+          <tr><td data-label="Activo">Base de datos ciudadana</td><td data-label="Tipo">Información/software</td><td data-label="Criticidad"><span class="tag tag-red">Crítica</span></td><td data-label="Justificación">Contiene información personal y datos sensibles.</td></tr>
+          <tr><td data-label="Activo">Servidor de aplicaciones</td><td data-label="Tipo">Hardware/software</td><td data-label="Criticidad"><span class="tag tag-amber">Alta</span></td><td data-label="Justificación">Su falla afecta la continuidad del servicio.</td></tr>
+          <tr><td data-label="Activo">Servidor de autenticación</td><td data-label="Tipo">Servicio</td><td data-label="Criticidad"><span class="tag tag-red">Crítica</span></td><td data-label="Justificación">Controla el acceso a expedientes y sistemas.</td></tr>
+          <tr><td data-label="Activo">Repositorio de expedientes digitales</td><td data-label="Tipo">Información</td><td data-label="Criticidad"><span class="tag tag-red">Crítica</span></td><td data-label="Justificación">Documentos personales y evidencias oficiales.</td></tr>
+          <tr><td data-label="Activo">Sistema de respaldos</td><td data-label="Tipo">Servicio</td><td data-label="Criticidad"><span class="tag tag-red">Crítica</span></td><td data-label="Justificación">Permite recuperación ante fallas o ransomware.</td></tr>
+          <tr><td data-label="Activo">Firewall / WAF</td><td data-label="Tipo">Hardware/software</td><td data-label="Criticidad"><span class="tag tag-amber">Alta</span></td><td data-label="Justificación">Reduce exposición a ataques externos.</td></tr>
+          <tr><td data-label="Activo">Sistema de logs y monitoreo</td><td data-label="Tipo">Software/servicio</td><td data-label="Criticidad"><span class="tag tag-amber">Alta</span></td><td data-label="Justificación">Facilita detección e investigación de incidentes.</td></tr>
+          <tr><td data-label="Activo">Estaciones de trabajo administrativas</td><td data-label="Tipo">Hardware</td><td data-label="Criticidad"><span class="tag tag-gray">Media</span></td><td data-label="Justificación">Punto inicial de malware o phishing.</td></tr>
+          <tr><td data-label="Activo">Servicio de atención en línea</td><td data-label="Tipo">Software/servicio</td><td data-label="Criticidad"><span class="tag tag-gray">Media</span></td><td data-label="Justificación">Afecta percepción ciudadana y continuidad.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Matriz RACI — mantenimiento de sistemas</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Actividad</th><th>Dir. Gral.</th><th>Jefe TI</th><th>Of. Seguridad</th><th>Infraest.</th><th>DBA</th><th>Desarrollo</th><th>Soporte</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Actividad">Aprobar política de mantenimiento</td><td data-label="Dir. Gral.">A</td><td data-label="Jefe TI">R</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">C</td><td data-label="DBA">C</td><td data-label="Desarrollo">C</td><td data-label="Soporte">I</td></tr>
+          <tr><td data-label="Actividad">Planificar mantenimientos programados</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A/R</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">R</td><td data-label="DBA">R</td><td data-label="Desarrollo">C</td><td data-label="Soporte">C</td></tr>
+          <tr><td data-label="Actividad">Aplicar parches del sistema operativo</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">R</td><td data-label="DBA">C</td><td data-label="Desarrollo">I</td><td data-label="Soporte">C</td></tr>
+          <tr><td data-label="Actividad">Mantener base de datos y respaldos</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">C</td><td data-label="DBA">R</td><td data-label="Desarrollo">I</td><td data-label="Soporte">I</td></tr>
+          <tr><td data-label="Actividad">Revisar logs y alertas operativas</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A</td><td data-label="Of. Seguridad">R</td><td data-label="Infraest.">C</td><td data-label="DBA">C</td><td data-label="Desarrollo">I</td><td data-label="Soporte">C</td></tr>
+          <tr><td data-label="Actividad">Registrar evidencias de mantenimiento</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">R</td><td data-label="DBA">R</td><td data-label="Desarrollo">R</td><td data-label="Soporte">R</td></tr>
+          <tr><td data-label="Actividad">Autorizar cambios en producción</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">R</td><td data-label="DBA">C</td><td data-label="Desarrollo">R</td><td data-label="Soporte">I</td></tr>
+          <tr><td data-label="Actividad">Comunicar ventana de mantenimiento</td><td data-label="Dir. Gral.">I</td><td data-label="Jefe TI">A</td><td data-label="Of. Seguridad">C</td><td data-label="Infraest.">R</td><td data-label="DBA">C</td><td data-label="Desarrollo">C</td><td data-label="Soporte">R</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2 mt-md" style="margin-top:16px;">
+      <div class="def-row"><div class="def-term">R</div><div class="def-desc">Responsable de ejecutar</div></div>
+      <div class="def-row"><div class="def-term">A</div><div class="def-desc">Aprobador</div></div>
+      <div class="def-row"><div class="def-term">C</div><div class="def-desc">Consultado</div></div>
+      <div class="def-row"><div class="def-term">I</div><div class="def-desc">Informado</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 5. RIESGOS ============ -->
+  <section id="riesgos" class="section">
+    <span class="section-label">05 · Metodología y matriz de evaluación de riesgos</span>
+    <h2 class="section-title">Gestión de riesgos</h2>
+    <p style="margin-bottom:20px;">Enfoque basado en activos, alineado con ISO/IEC 27005 (gestión de riesgos de seguridad de la información) e ISO 31000 (guía general de gestión de riesgos).</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="color:#1D3557"></div>
+        <div class="tl-month">1 · IDENTIFICACIÓN</div>
+        <div class="tl-name">Reconocer activos, amenazas, vulnerabilidades y propietarios</div>
+        <div class="tl-desc">Inventario de activos y escenarios de riesgo.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:#00A896"></div>
+        <div class="tl-month">2 · ANÁLISIS</div>
+        <div class="tl-name">Asignar probabilidad e impacto (escala 1 a 5)</div>
+        <div class="tl-desc">Riesgo inherente = probabilidad × impacto.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:#7C3AED"></div>
+        <div class="tl-month">3 · EVALUACIÓN</div>
+        <div class="tl-name">Comparar el nivel de riesgo con criterios de aceptación</div>
+        <div class="tl-desc">Priorización: bajo, medio, alto y crítico.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:#F5A623"></div>
+        <div class="tl-month">4 · TRATAMIENTO</div>
+        <div class="tl-name">Definir controles, responsables y planes mitigantes</div>
+        <div class="tl-desc">Controles ISO, checklist y plan de mantenimiento.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="color:#EF4444"></div>
+        <div class="tl-month">5 · MONITOREO</div>
+        <div class="tl-name">Revisar efectividad del control y riesgo residual</div>
+        <div class="tl-desc">Indicadores, evidencias y revisión periódica.</div>
+      </div>
+    </div>
+
+    <div class="memory-box mt-lg">
+      <h4>🧠 Fórmula clave</h4>
+      <p>Escala de probabilidad e impacto: 1 a 5. <strong>Riesgo inherente = probabilidad × impacto.</strong> El control aplicado reduce el riesgo inherente al <strong>riesgo residual</strong>.</p>
+    </div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Matriz de riesgos — resumen prioritario</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Activo crítico</th><th>Amenaza principal</th><th>Riesgo inherente</th><th>Control propuesto</th><th>Riesgo residual</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Activo">Portal web de trámites</td><td data-label="Amenaza">Explotación de vulnerabilidades web</td><td data-label="Inherente"><span class="tag tag-red">Crítico</span></td><td data-label="Control">Actualización, monitoreo, revisión de logs y pruebas antes de producción.</td><td data-label="Residual"><span class="tag tag-amber">Medio</span></td></tr>
+          <tr><td data-label="Activo">Base de datos ciudadana</td><td data-label="Amenaza">Acceso no autorizado o fuga de datos</td><td data-label="Inherente"><span class="tag tag-red">Crítico</span></td><td data-label="Control">Cifrado, respaldos, auditoría y revisión de privilegios.</td><td data-label="Residual"><span class="tag tag-teal">Bajo</span></td></tr>
+          <tr><td data-label="Activo">Servidor de aplicaciones</td><td data-label="Amenaza">Malware o explotación remota</td><td data-label="Inherente"><span class="tag tag-red">Alto/Crítico</span></td><td data-label="Control">Hardening, parches y mantenimiento programado.</td><td data-label="Residual"><span class="tag tag-amber">Medio</span></td></tr>
+          <tr><td data-label="Activo">Sistema de respaldos</td><td data-label="Amenaza">Falla de restauración ante ransomware</td><td data-label="Inherente"><span class="tag tag-red">Alto/Crítico</span></td><td data-label="Control">Regla 3-2-1, copia offline y pruebas de restauración.</td><td data-label="Residual"><span class="tag tag-teal">Bajo</span></td></tr>
+          <tr><td data-label="Activo">Sistema de logs y monitoreo</td><td data-label="Amenaza">No detección de actividad anómala</td><td data-label="Inherente"><span class="tag tag-amber">Alto</span></td><td data-label="Control">Centralización de logs, alertas y retención mínima.</td><td data-label="Residual"><span class="tag tag-amber">Medio</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm text-muted mt-sm" style="margin-top:8px;">La matriz de riesgos completa se entrega en archivo Excel adjunto.</p>
+  </section>
+
+  <!-- ============ 6. CONTROLES ============ -->
+  <section id="controles" class="section">
+    <span class="section-label">06 · Controles de seguridad del Grupo No. 5</span>
+    <h2 class="section-title">8 controles operativos y de mantenimiento</h2>
+    <p style="margin-bottom:20px;">Enfocados en seguridad de las operaciones y mantenimiento de sistemas, seleccionados de ISO/IEC 27001 e ISO/IEC 27002.</p>
+
+    <div class="benefits">
+      <div class="benefit-chip"><span class="bi">🔎</span><div class="benefit-chip-text"><strong>Gestión de vulnerabilidades técnicas</strong><span>Escaneo mensual de servidores, portal y estaciones administrativas.</span></div></div>
+      <div class="benefit-chip"><span class="bi">🧩</span><div class="benefit-chip-text"><strong>Gestión de configuración</strong><span>Baseline para servidores, firewall, bases de datos y aplicaciones.</span></div></div>
+      <div class="benefit-chip"><span class="bi">💾</span><div class="benefit-chip-text"><strong>Copias de seguridad</strong><span>Backups diarios y prueba trimestral de restauración.</span></div></div>
+      <div class="benefit-chip"><span class="bi">📜</span><div class="benefit-chip-text"><strong>Registro de eventos</strong><span>Logs de acceso, cambios, errores y autenticación.</span></div></div>
+      <div class="benefit-chip"><span class="bi">📡</span><div class="benefit-chip-text"><strong>Monitoreo de actividades</strong><span>Alertas por caídas, accesos fallidos y uso anormal.</span></div></div>
+      <div class="benefit-chip"><span class="bi">🚫</span><div class="benefit-chip-text"><strong>Instalación controlada de software</strong><span>Restricción de instalación en servidores y estaciones.</span></div></div>
+      <div class="benefit-chip"><span class="bi">🔄</span><div class="benefit-chip-text"><strong>Gestión de cambios</strong><span>Cambios con aprobación, pruebas y plan de reversa.</span></div></div>
+      <div class="benefit-chip"><span class="bi">🛠️</span><div class="benefit-chip-text"><strong>Mantenimiento de equipos y sistemas</strong><span>Mantenimiento preventivo, correctivo, adaptativo y evolutivo.</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 7. MANTENIMIENTO ============ -->
+  <section id="mantenimiento" class="section">
+    <span class="section-label">07 · Checklist y política de mantenimiento de sistemas</span>
+    <h2 class="section-title">Mantenimiento de sistemas</h2>
+
+    <h3 style="margin-bottom:12px;">Checklist de mantenimiento preventivo</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Verificación</th><th>Frecuencia</th><th>Responsable</th></tr></thead>
+        <tbody>
+          <tr><td data-label="#">1</td><td data-label="Verificación">Servidores institucionales operativos</td><td data-label="Frecuencia"><span class="tag tag-teal">Diaria</span></td><td data-label="Responsable">Administrador de Sistemas</td></tr>
+          <tr><td data-label="#">2</td><td data-label="Verificación">Funcionamiento del portal ciudadano</td><td data-label="Frecuencia"><span class="tag tag-teal">Diaria</span></td><td data-label="Responsable">Administrador de Aplicaciones</td></tr>
+          <tr><td data-label="#">3</td><td data-label="Verificación">Ejecución correcta de respaldos</td><td data-label="Frecuencia"><span class="tag tag-teal">Diaria</span></td><td data-label="Responsable">Administrador de Sistemas</td></tr>
+          <tr><td data-label="#">4</td><td data-label="Verificación">Registros de errores, accesos fallidos o eventos sospechosos</td><td data-label="Frecuencia"><span class="tag tag-teal">Diaria</span></td><td data-label="Responsable">Analista de Seguridad</td></tr>
+          <tr><td data-label="#">5</td><td data-label="Verificación">Disponibilidad e integridad de la base de datos ciudadana</td><td data-label="Frecuencia"><span class="tag tag-amber">Semanal</span></td><td data-label="Responsable">Administrador de Base de Datos</td></tr>
+          <tr><td data-label="#">6</td><td data-label="Verificación">Actualizaciones o parches pendientes</td><td data-label="Frecuencia"><span class="tag tag-amber">Semanal</span></td><td data-label="Responsable">Administrador de Sistemas</td></tr>
+          <tr><td data-label="#">7</td><td data-label="Verificación">Prueba de restauración de información crítica</td><td data-label="Frecuencia"><span class="tag tag-violet">Mensual</span></td><td data-label="Responsable">Adm. de Sistemas / DBA</td></tr>
+          <tr><td data-label="#">8</td><td data-label="Verificación">Cuentas de usuarios, permisos y accesos administrativos</td><td data-label="Frecuencia"><span class="tag tag-violet">Mensual</span></td><td data-label="Responsable">Seguridad de la Información</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-sm text-muted mt-sm" style="margin-top:8px;">Evidencia: bitácoras, reportes de disponibilidad, logs, reporte DBA y actas de restauración según cada actividad.</p>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Checklist de mantenimiento correctivo / urgencia</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>#</th><th>Verificación</th><th>Momento</th><th>Responsable</th></tr></thead>
+        <tbody>
+          <tr><td data-label="#">1</td><td data-label="Verificación">Registro de la falla o incidente en la mesa de ayuda</td><td data-label="Momento">Al detectar</td><td data-label="Responsable">Mesa de Ayuda</td></tr>
+          <tr><td data-label="#">2</td><td data-label="Verificación">Identificación del activo afectado</td><td data-label="Momento">Inmediato</td><td data-label="Responsable">Administrador de Sistemas</td></tr>
+          <tr><td data-label="#">3</td><td data-label="Verificación">Clasificación del nivel de impacto</td><td data-label="Momento">Inmediato</td><td data-label="Responsable">Analista de Seguridad</td></tr>
+          <tr><td data-label="#">4</td><td data-label="Verificación">Revisión de logs para determinar la causa</td><td data-label="Momento">Durante atención</td><td data-label="Responsable">Analista de Seguridad / TI</td></tr>
+          <tr><td data-label="#">5</td><td data-label="Verificación">Acción de contención aplicada</td><td data-label="Momento">Durante atención</td><td data-label="Responsable">Seguridad de la Información / TI</td></tr>
+          <tr><td data-label="#">6</td><td data-label="Verificación">Verificación de respaldos recientes</td><td data-label="Momento">Antes de restaurar</td><td data-label="Responsable">Adm. de Sistemas / DBA</td></tr>
+          <tr><td data-label="#">7</td><td data-label="Verificación">Validación de funcionamiento tras la corrección</td><td data-label="Momento">Post-intervención</td><td data-label="Responsable">Adm. de Aplicaciones / QA</td></tr>
+          <tr><td data-label="#">8</td><td data-label="Verificación">Documentación de causa raíz y acciones correctivas</td><td data-label="Momento">Cierre del caso</td><td data-label="Responsable">Responsable asignado</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Política de mantenimiento de sistemas</h3>
+    <div class="grid-2">
+      <div class="callout callout-navy">
+        <h4>Objetivo</h4>
+        <p>Establecer principios, responsabilidades y procedimientos para el mantenimiento preventivo, correctivo, adaptativo y evolutivo de los sistemas de la ANSDP.</p>
+      </div>
+      <div class="callout callout-teal">
+        <h4>Alcance</h4>
+        <p>Servidores, bases de datos, aplicaciones web, estaciones administrativas, red institucional, firewall, autenticación, respaldos, expedientes y atención en línea del SGSI.</p>
+      </div>
+    </div>
+    <article class="card mt-md" style="margin-top:16px;">
+      <h4 class="card-title">Principios</h4>
+      <ul style="padding-left:18px; color:var(--ink2); font-size:13.5px; line-height:1.8;">
+        <li>Todo mantenimiento debe estar autorizado, planificado, documentado y asociado a un responsable.</li>
+        <li>Los mantenimientos en producción requieren ventana de mantenimiento, pruebas previas y plan de reversa.</li>
+        <li>Debe preservarse la confidencialidad de los datos y limitar el acceso al personal autorizado.</li>
+        <li>Los cambios se registran en bitácora o sistema de tickets.</li>
+        <li>Debe verificarse la existencia de respaldos antes de cambios críticos.</li>
+        <li>Las evidencias se conservan para auditoría y mejora continua.</li>
+      </ul>
+    </article>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Tipos de mantenimiento</h3>
+    <div class="pdca-grid">
+      <div class="pdca-block plan" data-letter="P">
+        <div class="pdca-letter">Preventivo</div>
+        <div class="pdca-word">Evitar fallas</div>
+        <ul class="pdca-list">
+          <li>Acciones programadas para evitar fallas o incidentes.</li>
+          <li>Ejemplo ANSDP: aplicación mensual de parches y revisión de logs.</li>
+        </ul>
+      </div>
+      <div class="pdca-block do" data-letter="C">
+        <div class="pdca-letter">Correctivo</div>
+        <div class="pdca-word">Corregir fallas</div>
+        <ul class="pdca-list">
+          <li>Acciones realizadas para corregir fallas detectadas.</li>
+          <li>Ejemplo ANSDP: corrección de caída del portal o restauración de servicio.</li>
+        </ul>
+      </div>
+      <div class="pdca-block check" data-letter="A">
+        <div class="pdca-letter">Adaptativo</div>
+        <div class="pdca-word">Ajustar al cambio</div>
+        <ul class="pdca-list">
+          <li>Ajustes por cambios en plataforma, normativa o infraestructura.</li>
+          <li>Ejemplo ANSDP: actualización por nueva regulación de datos personales.</li>
+        </ul>
+      </div>
+      <div class="pdca-block act" data-letter="E">
+        <div class="pdca-letter">Evolutivo</div>
+        <div class="pdca-word">Mejorar el sistema</div>
+        <ul class="pdca-list">
+          <li>Mejoras funcionales o de seguridad al sistema.</li>
+          <li>Ejemplo ANSDP: implementación de MFA o mejora del monitoreo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Procedimiento general de mantenimiento</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-month">01</div><div class="tl-name">Registrar la solicitud: activo, motivo, criticidad y responsable</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#00A896"></div><div class="tl-month">02</div><div class="tl-name">Evaluar impacto sobre usuarios, servicios, datos personales y continuidad</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#7C3AED"></div><div class="tl-month">03</div><div class="tl-name">Aprobar la ventana de mantenimiento y comunicarla a las áreas afectadas</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#F5A623"></div><div class="tl-month">04</div><div class="tl-name">Verificar respaldo actualizado y definir plan de reversa</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#EF4444"></div><div class="tl-month">05</div><div class="tl-name">Ejecutar el mantenimiento conforme al checklist correspondiente</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#1D3557"></div><div class="tl-month">06</div><div class="tl-name">Realizar pruebas funcionales, de seguridad y disponibilidad</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#00A896"></div><div class="tl-month">07</div><div class="tl-name">Documentar resultados, evidencias, incidencias y acciones pendientes</div></div>
+      <div class="tl-item"><div class="tl-dot" style="color:#7C3AED"></div><div class="tl-month">08</div><div class="tl-name">Cerrar el ticket o acta con validación del responsable</div></div>
+    </div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Roles y responsabilidades</h3>
+    <div class="roles-grid">
+      <div class="role-row"><span class="role-icon">🏛️</span><div><div class="role-name">Dirección General</div><div class="role-desc">Aprobar recursos y respaldar la aplicación de la política.</div></div></div>
+      <div class="role-row"><span class="role-icon">🛡️</span><div><div class="role-name">Comité de Seguridad</div><div class="role-desc">Revisar cumplimiento, riesgos y acciones de mejora.</div></div></div>
+      <div class="role-row"><span class="role-icon">👔</span><div><div class="role-name">Jefe de TI</div><div class="role-desc">Planificar y autorizar mantenimientos tecnológicos.</div></div></div>
+      <div class="role-row"><span class="role-icon">🔐</span><div><div class="role-name">Oficial de Seguridad</div><div class="role-desc">Verificar que los mantenimientos cumplan controles de seguridad.</div></div></div>
+      <div class="role-row"><span class="role-icon">🖥️</span><div><div class="role-name">Infraestructura TI</div><div class="role-desc">Aplicar parches, hardening, respaldos y mantenimiento de servidores.</div></div></div>
+      <div class="role-row"><span class="role-icon">🗄️</span><div><div class="role-name">DBA</div><div class="role-desc">Mantener bases de datos, respaldos, integridad y restauración de datos.</div></div></div>
+      <div class="role-row"><span class="role-icon">👨‍💻</span><div><div class="role-name">Desarrollo</div><div class="role-desc">Corregir vulnerabilidades y aplicar cambios en aplicaciones.</div></div></div>
+      <div class="role-row"><span class="role-icon">🎧</span><div><div class="role-name">Soporte Técnico</div><div class="role-desc">Atender estaciones de trabajo, tickets y evidencias de usuario final.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 8. CONCLUSIONES ============ -->
+  <section id="conclusiones" class="section">
+    <span class="section-label">08 · Cierre</span>
+    <h2 class="section-title">Conclusiones y referencias</h2>
+
+    <div class="alert alert-info"><span class="alert-icon">1️⃣</span><span>La ANSDP, al manejar información personal y expedientes digitales, requiere un SGSI que priorice la confidencialidad, integridad y disponibilidad de los datos ciudadanos.</span></div>
+    <div class="alert alert-warning mt-sm" style="margin-top:10px;"><span class="alert-icon">2️⃣</span><span>La evaluación de riesgos identifica activos críticos: base de datos ciudadana, portal web, sistema de respaldos, servidor de autenticación y repositorio de expedientes.</span></div>
+    <div class="alert alert-info mt-sm" style="margin-top:10px;"><span class="alert-icon">3️⃣</span><span>Para el Grupo No. 5, los controles más relevantes se relacionan con seguridad en las operaciones, mantenimiento de sistemas, gestión de cambios, monitoreo, registros, respaldos y gestión de vulnerabilidades.</span></div>
+    <div class="alert alert-success mt-sm" style="margin-top:10px;"><span class="alert-icon">4️⃣</span><span>La política de mantenimiento y el checklist propuesto convierten los controles en actividades verificables, con responsables, frecuencia y evidencias.</span></div>
+    <div class="alert alert-warning mt-sm" style="margin-top:10px;"><span class="alert-icon">5️⃣</span><span>El plan de contingencia complementa el SGSI al definir acciones de recuperación ante incidentes tecnológicos.</span></div>
+
+    <h3 class="mt-xl" style="margin-top:32px; margin-bottom:12px;">Referencias bibliográficas</h3>
+    <article class="card">
+      <ul style="padding-left:18px; color:var(--ink2); font-size:13px; line-height:1.9;">
+        <li>Asamblea Nacional de Panamá, Unidad de Seguridad Informática. (2023). Manual de procedimientos administrativos: Unidad de Seguridad Informática.</li>
+        <li>Asamblea Nacional de Panamá. (2019). Ley No. 81 de 26 de marzo de 2019, sobre protección de datos personales. Gaceta Oficial Digital No. 28743-A.</li>
+        <li>International Organization for Standardization. (2018). ISO 31000:2018 Risk management — Guidelines.</li>
+        <li>International Organization for Standardization. (2022). ISO/IEC 27001:2022 Information security management systems — Requirements.</li>
+        <li>International Organization for Standardization. (2022). ISO/IEC 27002:2022 Information security controls.</li>
+        <li>International Organization for Standardization. (2022). ISO/IEC 27005:2022 Guidance on managing information security risks.</li>
+        <li>Ministerio de Gobierno de Panamá. (2021). Decreto Ejecutivo No. 285 de 28 de mayo de 2021, que reglamenta la Ley 81 de 2019.</li>
+        <li>Swanson, M., Bowen, P., Phillips, A., Gallup, D., &amp; Lynes, D. (2010). Contingency Planning Guide for Federal Information Systems (NIST SP 800-34 Rev. 1).</li>
+        <li>Nelson, A., et al. (2025). Incident Response Recommendations and Considerations for Cybersecurity Risk Management (NIST SP 800-61 Rev. 3).</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- ============ FLASHCARDS ============ -->
+  <section id="flashcards" class="section">
+    <span class="section-label">Repaso rápido</span>
+    <h2 class="section-title">Tarjetas de memoria</h2>
+    <p style="margin-bottom:20px;">Toca cada pregunta para revelar la respuesta. Ideal para repasar justo antes de exponer.</p>
+
+    <div class="flashcards-grid">
+      <details class="flashcard"><summary>¿Qué significa CIA en seguridad de la información?</summary><div class="flashcard-answer">Confidencialidad, Integridad y Disponibilidad: el objetivo central del SGSI.</div></details>
+      <details class="flashcard"><summary>¿Qué es la ANSDP?</summary><div class="flashcard-answer">Una institución pública ficticia que administra trámites digitales ciudadanos: certificados, solicitudes, expedientes digitales y atención en línea.</div></details>
+      <details class="flashcard"><summary>¿Qué normas se usan para evaluar riesgos?</summary><div class="flashcard-answer">ISO/IEC 27005 (gestión de riesgos de seguridad de la información) e ISO 31000 (marco general de gestión de riesgos).</div></details>
+      <details class="flashcard"><summary>¿Qué normas de controles se aplican?</summary><div class="flashcard-answer">ISO/IEC 27001 (requisitos del SGSI) e ISO/IEC 27002 (controles de seguridad de la información).</div></details>
+      <details class="flashcard"><summary>¿Cuál es la fórmula del riesgo inherente?</summary><div class="flashcard-answer">Riesgo inherente = Probabilidad × Impacto, en una escala de 1 a 5. El control aplicado lo reduce al riesgo residual.</div></details>
+      <details class="flashcard"><summary>¿Cuáles son las 5 etapas de la metodología de riesgo?</summary><div class="flashcard-answer">Identificación → Análisis → Evaluación → Tratamiento → Monitoreo.</div></details>
+      <details class="flashcard"><summary>¿Cuáles son los activos críticos identificados?</summary><div class="flashcard-answer">Base de datos ciudadana, portal web de trámites, sistema de respaldos, servidor de autenticación y repositorio de expedientes.</div></details>
+      <details class="flashcard"><summary>¿Qué significan las letras de la matriz RACI?</summary><div class="flashcard-answer">R = Responsable de ejecutar · A = Aprobador · C = Consultado · I = Informado.</div></details>
+      <details class="flashcard"><summary>¿Cuáles son las 4 zonas de la arquitectura tecnológica?</summary><div class="flashcard-answer">Zona de usuarios, zona perimetral, zona de aplicaciones y zona de datos y continuidad.</div></details>
+      <details class="flashcard"><summary>¿Cuáles son los 4 tipos de mantenimiento?</summary><div class="flashcard-answer">Preventivo, correctivo, adaptativo y evolutivo.</div></details>
+      <details class="flashcard"><summary>¿Qué leyes panameñas de protección de datos aplican?</summary><div class="flashcard-answer">Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021 sobre protección de datos personales en Panamá.</div></details>
+      <details class="flashcard"><summary>¿Qué es la regla 3-2-1?</summary><div class="flashcard-answer">Estrategia de respaldos mencionada como control ante fallas de restauración por ransomware: copias múltiples, medios distintos y una copia offline.</div></details>
+      <details class="flashcard"><summary>¿Qué requiere todo mantenimiento en producción?</summary><div class="flashcard-answer">Ventana de mantenimiento, pruebas previas y un plan de reversa, además de verificar respaldos antes de cambios críticos.</div></details>
+      <details class="flashcard"><summary>¿Qué controles conforman el Grupo No. 5?</summary><div class="flashcard-answer">Gestión de vulnerabilidades técnicas, gestión de configuración, copias de seguridad, registro de eventos, monitoreo de actividades, instalación controlada de software, gestión de cambios y mantenimiento de equipos y sistemas.</div></details>
+    </div>
+  </section>
+
+  <!-- ============ AUTOEVALUACIÓN ============ -->
+  <section id="autoevaluacion" class="section">
+    <span class="section-label">Antes de exponer</span>
+    <h2 class="section-title">Autoevaluación de dominio</h2>
+    <p style="margin-bottom:20px;">Marca cada punto cuando puedas explicarlo sin mirar tus notas.</p>
+
+    <div class="self-check-list" id="checkList">
+      <div class="self-check-item"><input type="checkbox" id="sc1"><label for="sc1">Puedo explicar qué es la ANSDP y por qué necesita un SGSI.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc2"><label for="sc2">Puedo explicar el alcance del SGSI: qué incluye y qué no incluye.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc3"><label for="sc3">Puedo describir la estructura organizacional y las 4 zonas de la arquitectura tecnológica.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc4"><label for="sc4">Puedo mencionar 3 activos críticos y su justificación.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc5"><label for="sc5">Puedo explicar la matriz RACI y qué significa cada letra (R, A, C, I).</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc6"><label for="sc6">Puedo explicar las 5 etapas de la metodología de riesgos y la fórmula del riesgo inherente.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc7"><label for="sc7">Puedo nombrar los 8 controles del Grupo No. 5.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc8"><label for="sc8">Puedo diferenciar mantenimiento preventivo, correctivo, adaptativo y evolutivo, con un ejemplo de cada uno.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc9"><label for="sc9">Puedo explicar los principios de la política de mantenimiento de sistemas.</label></div>
+      <div class="self-check-item"><input type="checkbox" id="sc10"><label for="sc10">Puedo resumir las 5 conclusiones principales en menos de un minuto.</label></div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="text-align:center; padding:32px 20px 60px; color:var(--ink3); font-size:12px;">
+  ISO 27001:2022 en el Sector Público — Caso ANSDP · Guía de estudio generada a partir de la presentación original ·
+  <a href="#intro">Volver al inicio ↑</a>
+</footer>
+
+<div class="study-progress-fab" id="progressFab"><strong id="progressCount">0/10</strong><span>dominado</span></div>
+
+<script>
+  // Barra de progreso de scroll
+  const progressBar = document.getElementById('progressBar');
+  function updateScrollProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateScrollProgress);
+  updateScrollProgress();
+
+  // Resaltar pill activa según sección visible
+  const sections = document.querySelectorAll('main section[id]');
+  const pills = document.querySelectorAll('.nav-pill');
+  function updateActivePill() {
+    let currentId = '';
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom > 120) currentId = sec.id;
+    });
+    pills.forEach(p => {
+      p.classList.toggle('active', p.getAttribute('href') === '#' + currentId);
+    });
+  }
+  window.addEventListener('scroll', updateActivePill);
+  updateActivePill();
+
+  // Contador de autoevaluación
+  const checkboxes = document.querySelectorAll('#checkList input[type="checkbox"]');
+  const progressCount = document.getElementById('progressCount');
+  const progressFab = document.getElementById('progressFab');
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(c => c.checked).length;
+    progressCount.textContent = done + '/' + total;
+    progressFab.classList.toggle('complete', done === total);
+  }
+  checkboxes.forEach(c => c.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+
+</body>
+</html>
