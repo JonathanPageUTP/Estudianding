@@ -1822,3 +1822,258 @@ mark.navy   { background: var(--navy-bg);    color: var(--navy); }
 @media print {
   .study-progress-fab { display: none !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   28. MODO TELEPROMPTER / TARJETAS DE ESTUDIO DE GUION
+   Añadir este bloque al final de styles.css
+   Estructura HTML esperada:
+
+   <main class="teleprompter">
+     <section class="script-slide" id="slide-1">
+       <span class="script-slide-eyebrow">Diapositiva 01</span>
+       <h2 class="script-slide-title">Título…</h2>
+       <div class="script-body">…guion a leer en voz alta…</div>
+       <details class="memory-alert">
+         <summary>Alertas de memoria</summary>
+         <div class="memory-alert-content"><ul><li>…</li></ul></div>
+       </details>
+     </section>
+   </main>
+   <nav class="script-navbar">…</nav>
+ ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Contenedor general ──────────────────────────────────────────────── */
+.teleprompter {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Tarjeta de diapositiva ───────────────────────────────────────────── */
+.script-slide {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 44px 48px;
+  box-shadow: var(--shadow-sm);
+  scroll-margin-top: 24px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.script-slide.is-done {
+  border-left-color: var(--accent2);
+}
+
+.script-slide-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background: var(--accent-bg);
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+
+.script-slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.6vw, 34px);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.25;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed var(--line);
+}
+
+/* ── Cuerpo del guion — tipografía grande tipo teleprompter ──────────── */
+.script-body {
+  font-family: var(--font-body);
+  font-size: 21px;
+  line-height: 1.85;
+  color: var(--ink);
+  letter-spacing: .1px;
+}
+.script-body p { color: var(--ink); margin-bottom: 18px; font-size: inherit; line-height: inherit; }
+.script-body p:last-child { margin-bottom: 0; }
+.script-body strong { color: var(--navy); font-weight: 700; }
+.script-body em.script-pause {
+  font-style: normal;
+  color: var(--ink3);
+  font-size: 15px;
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px dashed var(--gray300);
+  border-radius: 100px;
+  margin: 0 2px;
+}
+
+/* Modo enfoque: aumenta aún más el tamaño para leer a distancia */
+body.focus-mode .script-body   { font-size: 27px; line-height: 2; }
+body.focus-mode .script-slide  { padding: 56px 60px; }
+body.focus-mode .script-slide-title { font-size: clamp(28px, 4.2vw, 40px); }
+
+/* ── Alertas de memoria (details/summary) — look diferenciado ─────────── */
+.memory-alert {
+  margin-top: 30px;
+  background: var(--amber-bg);
+  border: 1.5px dashed var(--amber2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.memory-alert + .memory-alert { margin-top: 14px; }
+.memory-alert summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 48px 14px 46px;
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--act-dark);
+  transition: background var(--transition);
+}
+.memory-alert summary:hover { background: rgba(245,166,35,.12); }
+.memory-alert summary::-webkit-details-marker { display: none; }
+.memory-alert summary::before {
+  content: '🧠';
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+}
+.memory-alert summary::after {
+  content: '+';
+  position: absolute;
+  right: 18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--amber2);
+  transition: transform .25s ease;
+}
+.memory-alert[open] { border-style: solid; box-shadow: var(--shadow-sm); }
+.memory-alert[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+.memory-alert-content {
+  padding: 4px 22px 20px 46px;
+  border-top: 1px dashed rgba(245,166,35,.4);
+}
+.memory-alert-content ul { padding-left: 18px; }
+.memory-alert-content li {
+  font-size: 14.5px;
+  color: var(--ink2);
+  line-height: 1.75;
+  margin-bottom: 7px;
+}
+.memory-alert-content li:last-child { margin-bottom: 0; }
+.memory-alert-content li strong { color: var(--act-dark); }
+
+/* Variante "palabras clave" (verde/teal) para diferenciar de alertas ámbar */
+.memory-alert.keywords {
+  background: var(--accent-bg);
+  border-color: var(--accent2);
+}
+.memory-alert.keywords summary { color: var(--navy); }
+.memory-alert.keywords summary::before { content: '🔑'; }
+.memory-alert.keywords summary::after { color: var(--accent2); }
+.memory-alert.keywords .memory-alert-content { border-top-color: rgba(0,168,150,.35); }
+.memory-alert.keywords .memory-alert-content li strong { color: var(--accent2); }
+
+/* Chips de palabras clave dentro de la alerta */
+.keyword-chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--navy);
+  background: var(--white);
+  border: 1px solid var(--accent2);
+  border-radius: 100px;
+  padding: 3px 12px;
+  margin: 3px 5px 3px 0;
+}
+
+/* Checklist de "ya ensayé esta diapositiva" dentro de la tarjeta */
+.script-slide .slide-self-check { margin-top: 24px; }
+
+/* ── Barra de navegación fija (modo ensayo) ──────────────────────────── */
+.script-navbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 700;
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -6px 24px rgba(15,35,71,.10);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.script-navbar-group { display: flex; align-items: center; gap: 10px; }
+.script-navbar-counter {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink3);
+  min-width: 64px;
+  text-align: center;
+}
+.script-navbar-btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--navy);
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.script-navbar-btn:hover { background: var(--gray100); }
+.script-navbar-btn:disabled { opacity: .4; cursor: not-allowed; }
+.script-navbar-btn.primary { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.script-navbar-btn.primary:hover { background: var(--navy2); }
+.script-navbar-btn.toggle-active { background: var(--amber); border-color: var(--amber); color: var(--navy); }
+
+/* Barra de progreso de ensayo, arriba de la página */
+.rehearsal-progress-wrap {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--gray200);
+  z-index: 800;
+}
+.rehearsal-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .2s ease;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .teleprompter          { padding: var(--space-lg) var(--space-md) 150px; gap: 28px; }
+  .script-slide          { padding: 28px 22px; }
+  .script-body           { font-size: 18px; line-height: 1.75; }
+  body.focus-mode .script-body { font-size: 22px; line-height: 1.85; }
+  body.focus-mode .script-slide { padding: 32px 24px; }
+  .script-slide-title    { font-size: clamp(20px, 6vw, 26px); margin-bottom: 20px; padding-bottom: 16px; }
+  .memory-alert summary  { padding: 12px 40px 12px 40px; font-size: 12px; }
+  .script-navbar         { padding: 10px 14px; flex-wrap: wrap; }
+  .script-navbar-btn     { padding: 8px 12px; font-size: 12px; }
+}
+
+@media print {
+  .script-navbar, .rehearsal-progress-wrap { display: none !important; }
+  .teleprompter { padding-bottom: 0; }
+}

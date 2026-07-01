@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guion de ensayo — ISO 27001:2022 en el Sector Público</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="teleprompter-extra.css">
+</head>
+<body>
+
+<!-- Barra de progreso de lectura -->
+<div class="rehearsal-progress-wrap">
+  <div class="rehearsal-progress-bar" id="progressBar"></div>
+</div>
+
+<main class="teleprompter">
+
+  <!-- Encabezado de la herramienta -->
+  <header class="container-narrow text-center">
+    <span class="section-label">Herramienta de ensayo · Modo teleprompter</span>
+    <h1 class="section-title">Guion para exponer: Gobernanza y Activos del SGSI</h1>
+    <p class="text-muted">ISO 27001:2022 en el Sector Público — ANSDP · 4 diapositivas · Lee cada bloque en voz alta, luego ábrelo sin ver el texto y repásalo con las alertas de memoria.</p>
+  </header>
+
+  <!-- ══════════════════════════ DIAPOSITIVA 1 ══════════════════════════ -->
+  <section class="script-slide" id="slide-1" data-slide="1">
+    <span class="script-slide-eyebrow">Diapositiva 1 · 03 — Gobernanza</span>
+    <h2 class="script-slide-title">Estructura organizacional</h2>
+
+    <div class="script-body">
+      <p>Empecemos por la gobernanza de la seguridad de la información. Lo primero que quiero que quede claro es esto: la seguridad no es tarea exclusiva del área de tecnología, la diseñamos como <strong>una función transversal</strong> que atraviesa toda la organización. <em class="script-pause">[pausa]</em></p>
+
+      <p>En la cúspide de esta estructura está la <strong>Dirección General</strong>, que mantiene la responsabilidad final sobre el Sistema de Gestión de Seguridad de la Información, el SGSI. Justo debajo, el <strong>Comité de Seguridad de la Información</strong> actúa como el órgano de coordinación: es quien toma las decisiones sobre riesgos, políticas y continuidad del negocio.</p>
+
+      <p>De ese comité se desprenden cuatro áreas: la Dirección de Operaciones Digitales, el Departamento de Tecnología, la Unidad de Seguridad y Ciberseguridad, y la Dirección Administrativa. <em class="script-pause">[pausa]</em> Quiero detenerme en el <strong>Departamento de Tecnología</strong>, porque es el que ejecuta las medidas técnicas del día a día. Se organiza en cuatro frentes: desarrollo y aplicaciones, infraestructura y redes, soporte técnico y mantenimiento, y gestión documental y datos.</p>
+
+      <p>En resumen: <strong>la Dirección General decide y responde, el Comité coordina, y Tecnología junto con la Unidad de Seguridad ejecutan.</strong></p>
+    </div>
+
+    <details class="memory-alert keywords">
+      <summary>Palabras clave de apoyo</summary>
+      <div class="memory-alert-content">
+        <span class="keyword-chip">función transversal</span>
+        <span class="keyword-chip">Dirección General → responsabilidad final</span>
+        <span class="keyword-chip">Comité de Seguridad → coordina</span>
+        <span class="keyword-chip">4 áreas debajo del Comité</span>
+        <span class="keyword-chip">Tecnología → 4 sub-áreas</span>
+        <span class="keyword-chip">decide / coordina / ejecuta</span>
+      </div>
+    </details>
+
+    <details class="memory-alert">
+      <summary>Alertas de memoria</summary>
+      <div class="memory-alert-content">
+        <ul>
+          <li><strong>No confundas el orden:</strong> primero Dirección General, luego Comité de Seguridad, y solo después las 4 áreas.</li>
+          <li>Las 4 áreas bajo el Comité son: Operaciones Digitales, Tecnología, Seguridad y Ciberseguridad, Administrativa — en ese orden como aparecen en el organigrama.</li>
+          <li>Las 4 sub-áreas de Tecnología son: Desarrollo y Aplicaciones, Infraestructura y Redes, Soporte Técnico y Mantenimiento, Gestión Documental y Datos.</li>
+          <li>Cierra siempre con la frase resumen de "decide / coordina / ejecuta": es el gancho que conecta con la siguiente diapositiva.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="self-check-item slide-self-check">
+      <input type="checkbox" id="check-1" class="slide-check">
+      <label for="check-1">Ya ensayé esta diapositiva sin ver el texto completo.</label>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DIAPOSITIVA 2 ══════════════════════════ -->
+  <section class="script-slide" id="slide-2" data-slide="2">
+    <span class="script-slide-eyebrow">Diapositiva 2 · 03 — Gobernanza</span>
+    <h2 class="script-slide-title">Arquitectura tecnológica propuesta</h2>
+
+    <div class="script-body">
+      <p>Pasemos ahora a la arquitectura tecnológica que proponemos. La idea central es separar el ecosistema en <strong>cuatro zonas</strong>, y esta separación es justamente lo que nos permite aplicar controles de segmentación, monitoreo, respaldos, autenticación y mantenimiento de forma controlada. <em class="script-pause">[pausa]</em></p>
+
+      <p>La primera es la <strong>zona de usuarios</strong>: aquí están los ciudadanos, que acceden desde su navegador o su celular, y los funcionarios, que se conectan desde la red institucional.</p>
+
+      <p>De ahí pasamos a la <strong>zona perimetral</strong>, que es la frontera de nuestra red: incluye el tráfico de internet, las conexiones VPN, el cifrado TLS, además del firewall, el WAF y la segmentación.</p>
+
+      <p>Superada esa frontera llegamos a la <strong>zona de aplicaciones</strong>, donde vive el portal web de trámites, el servidor de aplicaciones, el servicio de autenticación y la mesa de ayuda en línea. <em class="script-pause">[pausa]</em></p>
+
+      <p>Y finalmente, la <strong>zona de datos y continuidad</strong>, la más protegida de todas, que contiene la base de datos ciudadana, el repositorio de expedientes, el sistema de logs y monitoreo, y el sistema de respaldos.</p>
+
+      <p>Este diseño en capas es lo que nos permite decir: <strong>si algo falla en una zona, las demás siguen protegidas.</strong></p>
+    </div>
+
+    <details class="memory-alert keywords">
+      <summary>Palabras clave de apoyo</summary>
+      <div class="memory-alert-content">
+        <span class="keyword-chip">4 zonas en cadena</span>
+        <span class="keyword-chip">usuarios → perimetral → aplicaciones → datos</span>
+        <span class="keyword-chip">ciudadanos / funcionarios</span>
+        <span class="keyword-chip">VPN / TLS / Firewall / WAF</span>
+        <span class="keyword-chip">portal, servidor, autenticación, mesa de ayuda</span>
+        <span class="keyword-chip">BD ciudadana, expedientes, logs, respaldos</span>
+      </div>
+    </details>
+
+    <details class="memory-alert">
+      <summary>Alertas de memoria</summary>
+      <div class="memory-alert-content">
+        <ul>
+          <li>El orden de las zonas sigue el flujo del tráfico: <strong>usuarios → perimetral → aplicaciones → datos</strong>. Si te trabas, dibuja mentalmente la flecha de izquierda a derecha.</li>
+          <li>La zona perimetral tiene 2 elementos (Internet/VPN/TLS y Firewall/WAF/Segmentación), no confundirla con la zona de aplicaciones que tiene 4.</li>
+          <li>La zona de aplicaciones tiene 4 elementos: portal, servidor de aplicaciones, autenticación, mesa de ayuda.</li>
+          <li>La frase de cierre ("si algo falla en una zona, las demás siguen protegidas") es la idea de <strong>defensa en profundidad</strong>: no la olvides, es el mensaje clave de esta diapositiva.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="self-check-item slide-self-check">
+      <input type="checkbox" id="check-2" class="slide-check">
+      <label for="check-2">Ya ensayé esta diapositiva sin ver el texto completo.</label>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DIAPOSITIVA 3 ══════════════════════════ -->
+  <section class="script-slide" id="slide-3" data-slide="3">
+    <span class="script-slide-eyebrow">Diapositiva 3 · 04 — Activos</span>
+    <h2 class="script-slide-title">Inventario de activos tecnológicos</h2>
+
+    <div class="script-body">
+      <p>Ahora vamos al inventario de activos tecnológicos, que es la base de todo el análisis de riesgos. Aquí clasificamos cada activo según su tipo y, sobre todo, según su <strong>criticidad</strong>: alta, crítica o media. <em class="script-pause">[pausa]</em></p>
+
+      <p>Entre los activos <strong>críticos</strong> —los que si fallan comprometen directamente la operación o la información sensible— tenemos cuatro: la base de datos ciudadana, porque contiene información personal y datos sensibles; el servidor de autenticación, porque controla el acceso a expedientes y sistemas; el repositorio de expedientes digitales, porque guarda documentos personales y evidencias oficiales; y el sistema de respaldos, porque nos permite recuperarnos ante fallas o ataques de ransomware.</p>
+
+      <p>Luego, con criticidad <strong>alta</strong>: el portal web de trámites, que es el canal principal de atención pública; el servidor de aplicaciones, cuya falla afecta la continuidad del servicio; el firewall junto con el WAF, que reducen la exposición a ataques externos; y el sistema de logs y monitoreo, que facilita la detección e investigación de incidentes. <em class="script-pause">[pausa]</em></p>
+
+      <p>Finalmente, con criticidad <strong>media</strong>, están las estaciones de trabajo administrativas, que son un punto inicial común de malware o phishing, y el servicio de atención en línea, que afecta la percepción ciudadana y la continuidad.</p>
+
+      <p>La lógica aquí es simple: <strong>a mayor criticidad, mayor prioridad de protección.</strong></p>
+    </div>
+
+    <details class="memory-alert keywords">
+      <summary>Palabras clave de apoyo</summary>
+      <div class="memory-alert-content">
+        <span class="keyword-chip">Tipo vs. Criticidad</span>
+        <span class="keyword-chip">Crítica: BD ciudadana, autenticación, expedientes, respaldos</span>
+        <span class="keyword-chip">Alta: portal, servidor apps, firewall/WAF, logs</span>
+        <span class="keyword-chip">Media: estaciones admin, atención en línea</span>
+        <span class="keyword-chip">a mayor criticidad, mayor prioridad</span>
+      </div>
+    </details>
+
+    <details class="memory-alert">
+      <summary>Alertas de memoria</summary>
+      <div class="memory-alert-content">
+        <ul>
+          <li>Son exactamente <strong>4 activos críticos, 4 de criticidad alta y 2 de criticidad media</strong> — un total de 10. Si mencionas menos de 4 en "críticos", te faltó alguno.</li>
+          <li>Cuidado con confundir "Servidor de aplicaciones" (Alta) con "Servidor de autenticación" (Crítica): son dos activos distintos.</li>
+          <li>Cada activo va con su justificación en una frase corta — no leas la tabla, parafrasea la razón de negocio (ej. "controla el acceso" para autenticación, "recuperación ante ransomware" para respaldos).</li>
+          <li>Termina siempre con la frase gancho de criticidad vs. prioridad, conecta con la matriz RACI de la siguiente diapositiva.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="self-check-item slide-self-check">
+      <input type="checkbox" id="check-3" class="slide-check">
+      <label for="check-3">Ya ensayé esta diapositiva sin ver el texto completo.</label>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DIAPOSITIVA 4 ══════════════════════════ -->
+  <section class="script-slide" id="slide-4" data-slide="4">
+    <span class="script-slide-eyebrow">Diapositiva 4 · 04 — Activos</span>
+    <h2 class="script-slide-title">Departamento técnico y matriz RACI</h2>
+
+    <div class="script-body">
+      <p>Para cerrar esta sección, hablemos del departamento técnico y de cómo organizamos las responsabilidades mediante una <strong>matriz RACI</strong>. El departamento técnico se organiza en cinco áreas: infraestructura, desarrollo, soporte, base de datos y seguridad. <em class="script-pause">[pausa]</em></p>
+
+      <p>Para que estas áreas no se pisen entre sí, ni se dupliquen esfuerzos, usamos una matriz RACI, donde cada actividad tiene un <strong>Responsable</strong> que ejecuta, un <strong>Aprobador</strong> que autoriza, personas <strong>Consultadas</strong> y personas <strong>Informadas</strong>.</p>
+
+      <p>Por ejemplo, la política de mantenimiento la aprueba la Dirección General, pero es el Jefe de TI quien la ejecuta como responsable. La planificación de mantenimientos programados recae también en el Jefe de TI, que aquí actúa como aprobador y responsable a la vez, apoyado por infraestructura y por la base de datos. <em class="script-pause">[pausa]</em></p>
+
+      <p>Actividades más operativas, como aplicar parches del sistema operativo o mantener la base de datos y los respaldos, tienen al Jefe de TI como aprobador, pero la ejecución real la hacen infraestructura o el área de base de datos, según corresponda.</p>
+
+      <p>Y hay una actividad que quiero destacar porque es transversal: <strong>registrar evidencias de mantenimiento</strong>, donde infraestructura, base de datos, desarrollo y soporte son responsables en conjunto, porque todos dejan huella de su trabajo.</p>
+
+      <p>Esta matriz es la que nos da <strong>trazabilidad</strong> y evita que, ante un incidente, no sepamos quién debía hacer qué.</p>
+    </div>
+
+    <details class="memory-alert keywords">
+      <summary>Palabras clave de apoyo</summary>
+      <div class="memory-alert-content">
+        <span class="keyword-chip">5 áreas del depto. técnico</span>
+        <span class="keyword-chip">R = ejecuta</span>
+        <span class="keyword-chip">A = aprueba</span>
+        <span class="keyword-chip">C = consultado</span>
+        <span class="keyword-chip">I = informado</span>
+        <span class="keyword-chip">Jefe TI = A en casi todo</span>
+        <span class="keyword-chip">evidencias = actividad transversal</span>
+      </div>
+    </details>
+
+    <details class="memory-alert">
+      <summary>Alertas de memoria</summary>
+      <div class="memory-alert-content">
+        <ul>
+          <li>Recuerda el significado exacto de las siglas antes de explicarlas: <strong>R</strong>esponsable (ejecuta), <strong>A</strong>probador, <strong>C</strong>onsultado, <strong>I</strong>nformado. No inviertas R y A.</li>
+          <li>El <strong>Jefe de TI</strong> es Aprobador (A) en casi todas las actividades — es el patrón que domina la matriz. La única excepción marcada es "planificar mantenimientos programados", donde es A/R a la vez.</li>
+          <li>La Dirección General solo aparece como <strong>A</strong> en "aprobar política de mantenimiento" — en el resto solo está <strong>Informada (I)</strong>. No la menciones de más.</li>
+          <li>Usa "registrar evidencias de mantenimiento" como ejemplo destacado porque es la única actividad con <strong>4 responsables (R) simultáneos</strong>: infraestructura, DBA, desarrollo y soporte.</li>
+          <li>Cierra con la palabra <strong>trazabilidad</strong>: es el concepto que resume por qué existe la matriz.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="self-check-item slide-self-check">
+      <input type="checkbox" id="check-4" class="slide-check">
+      <label for="check-4">Ya ensayé esta diapositiva sin ver el texto completo.</label>
+    </div>
+  </section>
+
+</main>
+
+<!-- Indicador flotante de progreso de ensayo -->
+<div class="study-progress-fab" id="studyFab">
+  <span>Ensayadas:</span>
+  <strong id="fabCount">0/4</strong>
+</div>
+
+<!-- Barra de navegación fija (modo ensayo) -->
+<nav class="script-navbar">
+  <div class="script-navbar-group">
+    <button class="script-navbar-btn" id="btnPrev">← Anterior</button>
+    <span class="script-navbar-counter" id="slideCounter">1 / 4</span>
+    <button class="script-navbar-btn" id="btnNext">Siguiente →</button>
+  </div>
+  <div class="script-navbar-group">
+    <button class="script-navbar-btn" id="btnFocus">Modo enfoque</button>
+  </div>
+</nav>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.script-slide'));
+    var progressBar = document.getElementById('progressBar');
+    var slideCounter = document.getElementById('slideCounter');
+    var btnPrev = document.getElementById('btnPrev');
+    var btnNext = document.getElementById('btnNext');
+    var btnFocus = document.getElementById('btnFocus');
+    var fabCount = document.getElementById('fabCount');
+    var studyFab = document.getElementById('studyFab');
+    var currentIndex = 0;
+
+    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+    function updateCounterByScroll() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = clamp(pct, 0, 100) + '%';
+
+      var mid = scrollTop + window.innerHeight / 3;
+      var idx = 0;
+      slides.forEach(function (slide, i) {
+        if (slide.offsetTop <= mid) idx = i;
+      });
+      currentIndex = idx;
+      slideCounter.textContent = (idx + 1) + ' / ' + slides.length;
+      btnPrev.disabled = idx === 0;
+      btnNext.disabled = idx === slides.length - 1;
+    }
+
+    function goToSlide(i) {
+      i = clamp(i, 0, slides.length - 1);
+      slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    btnPrev.addEventListener('click', function () { goToSlide(currentIndex - 1); });
+    btnNext.addEventListener('click', function () { goToSlide(currentIndex + 1); });
+
+    btnFocus.addEventListener('click', function () {
+      document.body.classList.toggle('focus-mode');
+      btnFocus.classList.toggle('toggle-active');
+      btnFocus.textContent = document.body.classList.contains('focus-mode')
+        ? 'Salir de enfoque'
+        : 'Modo enfoque';
+    });
+
+    function updateFab() {
+      var checks = document.querySelectorAll('.slide-check');
+      var done = 0;
+      checks.forEach(function (c) { if (c.checked) done++; });
+      fabCount.textContent = done + '/' + checks.length;
+      studyFab.classList.toggle('complete', done === checks.length);
+    }
+
+    document.querySelectorAll('.slide-check').forEach(function (checkbox) {
+      checkbox.addEventListener('change', function () {
+        var slide = checkbox.closest('.script-slide');
+        slide.classList.toggle('is-done', checkbox.checked);
+        updateFab();
+      });
+    });
+
+    window.addEventListener('scroll', updateCounterByScroll, { passive: true });
+    window.addEventListener('resize', updateCounterByScroll);
+    updateCounterByScroll();
+    updateFab();
+  })();
+</script>
+
+</body>
+</html>
