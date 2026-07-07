@@ -2,1640 +2,748 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulacro · Vulnerabilidad en Dispositivos Perimetrales</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Simulador · Seguridad en Comercio Electrónico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0c1420;
-    --bg-soft: #101c2c;
-    --panel: #142238;
-    --panel-border: #223756;
-    --ink: #e7edf6;
-    --ink-dim: #93a5c2;
-    --accent: #34c3a6;      /* señal "permitido" */
-    --accent-soft: rgba(52,195,166,.14);
-    --alert: #ef5b6b;       /* señal "bloqueado" */
-    --alert-soft: rgba(239,91,107,.14);
-    --amber: #e8a83c;       /* zona neutra / DMZ */
-    --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --bg:#0A1220;
+    --bg-elev:#0F1B2E;
+    --card:#132238;
+    --card-2:#0F1C30;
+    --border:#223báf; /* fallback, overridden below */
+    --border:#22344E;
+    --border-soft:#1B2A40;
+    --text:#E9EEF7;
+    --text-muted:#8CA0BF;
+    --text-dim:#5E7191;
+    --red:#E5484D;
+    --red-soft:rgba(229,72,77,0.14);
+    --green:#34D399;
+    --green-soft:rgba(52,211,153,0.14);
+    --amber:#F5B942;
+    --amber-soft:rgba(245,185,66,0.14);
+    --coral:#FF7A59;
+    --radius:14px;
+    --shadow:0 8px 30px rgba(0,0,0,0.35);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(1200px 600px at 50% -10%, #17233a 0%, var(--bg) 60%);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.5;
-    padding-bottom:110px;
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,122,89,0.08), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, #08101C 100%);
+    color:var(--text);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height:100vh;
+    -webkit-font-smoothing:antialiased;
   }
-
-  /* ---------- Header / "consola de perímetro" ---------- */
-  header.console{
-    position:sticky; top:0; z-index:20;
-    background:linear-gradient(180deg, var(--bg-soft) 0%, rgba(16,28,44,.92) 100%);
-    border-bottom:1px solid var(--panel-border);
-    backdrop-filter:blur(6px);
-    padding:14px 18px 12px;
-  }
-  .console-top{
-    display:flex; align-items:center; gap:10px; margin-bottom:10px;
-  }
-  .dot-row{display:flex; gap:5px;}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);}
-  .dot:nth-child(2){background:var(--amber);box-shadow:0 0 6px var(--amber);}
-  .dot:nth-child(3){background:var(--alert);box-shadow:0 0 6px var(--alert);}
-  .console-title{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
-  }
-  h1{
-    font-size:20px;
-    margin:0 0 2px;
-    font-weight:700;
-    letter-spacing:-.01em;
-  }
-  .subtitle{
-    font-size:12.5px;
-    color:var(--ink-dim);
-    margin:0 0 12px;
-  }
-  .gauge-wrap{
-    display:flex; align-items:center; gap:10px;
-  }
-  .gauge-track{
-    flex:1; height:8px; border-radius:6px;
-    background:var(--panel);
-    border:1px solid var(--panel-border);
-    overflow:hidden;
-    position:relative;
-  }
-  .gauge-fill{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg, #1f8f7a, var(--accent));
-    transition:width .35s ease;
-    border-radius:6px;
-  }
-  .gauge-label{
-    font-family:var(--mono);
-    font-size:11.5px;
-    color:var(--ink-dim);
-    white-space:nowrap;
-    min-width:64px;
-    text-align:right;
-  }
-
-  /* ---------- Results banner ---------- */
-  #resultsBanner{
-    display:none;
-    margin:14px 18px 0;
-    border-radius:14px;
-    padding:16px 18px;
-    border:1px solid var(--panel-border);
-    background:var(--panel);
-  }
-  #resultsBanner.show{display:block;}
-  .score-big{
-    font-family:var(--mono);
-    font-size:34px;
-    font-weight:700;
-    line-height:1;
-  }
-  .score-line{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
-  .score-tag{
-    font-family:var(--mono); font-size:11px; letter-spacing:.08em;
-    color:var(--ink-dim); text-transform:uppercase;
-  }
-  .verdict{
-    margin-top:8px;
-    font-size:13.5px;
-    color:var(--ink-dim);
-  }
-
-  main{
+  .wrap{
     max-width:640px;
     margin:0 auto;
-    padding:16px 18px 8px;
-  }
-
-  /* ---------- Question card ---------- */
-  .qcard{
-    background:var(--panel);
-    border:1px solid var(--panel-border);
-    border-radius:14px;
-    padding:16px 16px 14px;
-    margin-bottom:14px;
-    transition:border-color .2s ease;
-  }
-  .qcard.answered{border-color:#2a4162;}
-  .qhead{
-    display:flex; align-items:center; gap:10px; margin-bottom:10px;
-  }
-  .qid{
-    font-family:var(--mono);
-    font-size:11px;
-    color:var(--bg);
-    background:var(--ink-dim);
-    padding:3px 7px;
-    border-radius:5px;
-    letter-spacing:.03em;
-    flex-shrink:0;
-  }
-  .qcat{
-    font-family:var(--mono);
-    font-size:10.5px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
-  }
-  .qtext{
-    font-size:15px;
-    font-weight:600;
-    margin:0 0 12px;
-    color:var(--ink);
-  }
-  .opt{
+    padding:0 18px 40px;
+    min-height:100vh;
     display:flex;
-    align-items:flex-start;
-    gap:10px;
-    width:100%;
-    text-align:left;
-    background:var(--bg-soft);
-    border:1px solid var(--panel-border);
-    color:var(--ink);
-    padding:10px 12px;
-    border-radius:10px;
-    margin-bottom:8px;
-    font-size:13.5px;
-    cursor:pointer;
-    font-family:var(--sans);
-    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+    flex-direction:column;
   }
-  .opt:last-child{margin-bottom:0;}
-  .opt:hover{border-color:#3a5a86;}
-  .opt:active{transform:scale(.99);}
-  .opt .optkey{
-    font-family:var(--mono);
+  /* ---------- HEADER ---------- */
+  header.top{
+    padding:22px 0 16px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:linear-gradient(180deg, rgba(10,18,32,0.97) 70%, rgba(10,18,32,0));
+    backdrop-filter:blur(6px);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
     font-size:11px;
-    color:var(--ink-dim);
-    border:1px solid var(--panel-border);
-    border-radius:5px;
-    width:20px;height:20px;
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--coral);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
   }
-  .opt.selected{
-    border-color:var(--amber);
-    background:rgba(232,168,60,.1);
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 3px rgba(255,122,89,0.18);}
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:26px;
+    line-height:1.15;
+    margin:8px 0 2px;
+    letter-spacing:-0.01em;
   }
-  .opt.selected .optkey{border-color:var(--amber);color:var(--amber);}
+  h1.title em{font-style:italic;color:var(--coral);font-weight:500;}
+  .subtitle{color:var(--text-muted);font-size:13.5px;margin:0 0 16px;}
 
-  .qcard.locked .opt{cursor:default;}
-  .qcard.locked .opt:hover{border-color:var(--panel-border);}
-  .opt.correct{
-    border-color:var(--accent);
-    background:var(--accent-soft);
+  /* progress / risk meter */
+  .meter-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
+  .meter-track{
+    flex:1;height:8px;border-radius:99px;background:var(--border-soft);
+    overflow:hidden;position:relative;
   }
-  .opt.correct .optkey{border-color:var(--accent);color:var(--accent);}
-  .opt.wrong{
-    border-color:var(--alert);
-    background:var(--alert-soft);
+  .meter-fill{
+    height:100%;border-radius:99px;
+    background:linear-gradient(90deg, var(--coral), var(--red));
+    width:0%;
+    transition:width .35s ease;
   }
-  .opt.wrong .optkey{border-color:var(--alert);color:var(--alert);}
+  .meter-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;color:var(--text-dim);white-space:nowrap;font-weight:600;
+  }
 
-  .explain{
-    display:none;
-    margin-top:10px;
-    padding:10px 12px;
-    border-radius:10px;
-    background:var(--bg-soft);
-    border-left:3px solid var(--amber);
-    font-size:12.5px;
-    color:var(--ink-dim);
-  }
-  .explain.show{display:block;}
-  .explain b{color:var(--ink);}
+  /* ---------- MAIN ---------- */
+  main{flex:1;display:flex;flex-direction:column;}
 
-  /* ---------- Footer / evaluate bar ---------- */
-  .evalbar{
-    position:fixed; left:0; right:0; bottom:0; z-index:30;
-    background:linear-gradient(0deg, var(--bg) 60%, rgba(12,20,32,0));
-    padding:22px 18px 16px;
+  /* start screen */
+  .panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px 20px;
+    box-shadow:var(--shadow);
   }
-  .evalbar-inner{
-    max-width:640px; margin:0 auto;
-    display:flex; gap:10px; align-items:center;
+  .start-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 22px;
   }
+  .stat-box{
+    background:var(--card-2);border:1px solid var(--border-soft);border-radius:10px;
+    padding:12px 8px;text-align:center;
+  }
+  .stat-box b{display:block;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--coral);}
+  .stat-box span{display:block;font-size:10.5px;color:var(--text-dim);margin-top:2px;line-height:1.3;}
+  .lead{color:var(--text-muted);font-size:14.5px;line-height:1.6;margin:0 0 4px;}
+  ul.rules{margin:14px 0 0;padding-left:0;list-style:none;}
+  ul.rules li{
+    font-size:13.5px;color:var(--text-muted);padding:8px 0;border-top:1px solid var(--border-soft);
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  ul.rules li:first-child{border-top:none;}
+  ul.rules li b{color:var(--text);font-weight:600;}
+  ul.rules .ic{color:var(--coral);flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:2px;}
+
   .btn{
-    border:none; border-radius:12px;
-    font-family:var(--sans);
-    font-weight:700;
-    font-size:14.5px;
-    padding:13px 18px;
-    cursor:pointer;
-    flex:1;
+    appearance:none;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:15px;
+    border-radius:11px;padding:15px 20px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:transform .12s ease, filter .12s ease, opacity .12s ease;
+    width:100%;
   }
+  .btn:active{transform:scale(0.98);}
   .btn-primary{
-    background:var(--accent);
-    color:#04211c;
+    background:linear-gradient(135deg, var(--coral), var(--red));
+    color:#160604;
   }
-  .btn-primary:disabled{
-    background:#2a3a4d; color:#5b6c81; cursor:not-allowed;
+  .btn-primary:hover{filter:brightness(1.06);}
+  .btn-ghost{
+    background:transparent;color:var(--text-muted);
+    border:1px solid var(--border);
   }
-  .btn-secondary{
-    background:var(--panel);
-    border:1px solid var(--panel-border);
-    color:var(--ink);
-    flex:0 0 auto;
+  .btn-ghost:hover{color:var(--text);border-color:var(--text-dim);}
+  .btn[disabled]{opacity:0.35;cursor:not-allowed;}
+
+  /* question card */
+  .qmeta{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;
   }
-  .pending-note{
-    font-family:var(--mono);
-    font-size:11px;
-    color:var(--ink-dim);
-    text-align:center;
-    margin-top:8px;
+  .qtopic{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--coral);background:var(--red-soft);
+    padding:4px 9px;border-radius:99px;font-weight:700;
+  }
+  .qindex{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);font-weight:600;}
+  .qtext{
+    font-family:'Fraunces',serif;font-weight:600;font-size:19px;line-height:1.4;
+    margin:4px 0 18px;
+  }
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{
+    text-align:left;
+    background:var(--card-2);
+    border:1.5px solid var(--border);
+    border-radius:11px;
+    padding:14px 14px;
+    display:flex;gap:12px;align-items:flex-start;
+    cursor:pointer;
+    font-size:14.5px;line-height:1.5;color:var(--text);
+    transition:border-color .12s ease, background .12s ease, transform .08s ease;
+  }
+  .option:hover{border-color:var(--text-dim);}
+  .option:active{transform:scale(0.995);}
+  .option .letter{
+    flex:0 0 auto;width:26px;height:26px;border-radius:8px;
+    background:var(--border-soft);color:var(--text-muted);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+  }
+  .option.selected{border-color:var(--coral);background:rgba(255,122,89,0.08);}
+  .option.selected .letter{background:var(--coral);color:#160604;}
+
+  /* result state on options (after evaluation, per-question review) */
+  .option.correct{border-color:var(--green);background:var(--green-soft);}
+  .option.correct .letter{background:var(--green);color:#062018;}
+  .option.incorrect{border-color:var(--red);background:var(--red-soft);}
+  .option.incorrect .letter{background:var(--red);color:#2b0605;}
+
+  .feedback{
+    margin-top:14px;padding:12px 14px;border-radius:10px;
+    font-size:13px;line-height:1.55;border:1px solid transparent;
+  }
+  .feedback.fb-good{background:var(--green-soft);color:var(--green);border-color:rgba(52,211,153,0.35);}
+  .feedback.fb-bad{background:var(--red-soft);color:var(--red);border-color:rgba(229,72,77,0.35);}
+
+  .nav-row{display:flex;gap:10px;margin-top:20px;}
+  .nav-row .btn{width:auto;flex:1;}
+
+  .dots{display:flex;gap:5px;flex-wrap:wrap;margin-top:16px;justify-content:center;}
+  .dots span{
+    width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .dots span.answered{background:var(--text-dim);}
+  .dots span.active{background:var(--coral);transform:scale(1.4);}
+
+  /* results screen */
+  .score-hero{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:8px 0 6px;
+  }
+  .gauge-wrap{position:relative;width:184px;height:184px;margin:6px 0 14px;}
+  .gauge-num{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+  }
+  .gauge-num b{font-family:'Fraunces',serif;font-size:44px;font-weight:700;line-height:1;}
+  .gauge-num span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:4px;letter-spacing:.05em;text-transform:uppercase;}
+  .verdict{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:99px;
+    margin-bottom:6px;
+  }
+  .verdict-good{background:var(--green-soft);color:var(--green);}
+  .verdict-mid{background:var(--amber-soft);color:var(--amber);}
+  .verdict-low{background:var(--red-soft);color:var(--red);}
+  .verdict-text{color:var(--text-muted);font-size:13.5px;max-width:380px;line-height:1.55;}
+
+  .section-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--text-dim);font-weight:700;
+    margin:26px 0 10px;display:flex;align-items:center;gap:8px;
+  }
+  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+  .topic-row{
+    display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--border-soft);
+  }
+  .topic-row:first-of-type{border-top:none;}
+  .topic-name{font-size:13px;color:var(--text-muted);flex:0 0 120px;}
+  .topic-bar{flex:1;height:6px;border-radius:99px;background:var(--border-soft);overflow:hidden;}
+  .topic-bar i{display:block;height:100%;border-radius:99px;}
+  .topic-score{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text-dim);flex:0 0 40px;text-align:right;font-weight:600;}
+
+  .review-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 16px 6px;margin-top:10px;
+  }
+  .review-q{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border-soft);}
+  .review-q:last-child{border-bottom:none;margin-bottom:6px;}
+  .review-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;}
+  .review-qtext{font-size:14px;font-weight:600;line-height:1.45;}
+  .badge{
+    flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+    padding:3px 8px;border-radius:99px;letter-spacing:.04em;white-space:nowrap;
+  }
+  .badge-ok{background:var(--green-soft);color:var(--green);}
+  .badge-bad{background:var(--red-soft);color:var(--red);}
+  .review-answer{font-size:12.5px;line-height:1.6;color:var(--text-muted);}
+  .review-answer b{color:var(--text);}
+  .review-answer .miss{color:var(--red);}
+  .review-answer .hit{color:var(--green);}
+  .explain{font-size:12px;color:var(--text-dim);margin-top:6px;font-style:italic;line-height:1.5;}
+
+  .filter-row{display:flex;gap:8px;margin:14px 0 4px;flex-wrap:wrap;}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+    padding:7px 12px;border-radius:99px;border:1px solid var(--border);
+    color:var(--text-muted);cursor:pointer;background:transparent;
+  }
+  .chip.active{background:var(--coral);color:#160604;border-color:var(--coral);}
+
+  .hidden{display:none !important;}
+
+  footer.foot{
+    text-align:center;color:var(--text-dim);font-size:11px;padding:26px 0 6px;
+    font-family:'JetBrains Mono',monospace;letter-spacing:.03em;
   }
 
-  @media (min-width:640px){
-    h1{font-size:23px;}
-    .score-big{font-size:40px;}
+  @media (min-width:520px){
+    h1.title{font-size:30px;}
+    .qtext{font-size:20px;}
   }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<header class="console">
-  <div class="console-top">
-    <div class="dot-row"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-    <span class="console-title">panel de control · perímetro</span>
-  </div>
-  <h1>Simulacro: Vulnerabilidad en Dispositivos Perimetrales</h1>
-  <p class="subtitle">Selecciona la mejor respuesta. Preguntas 1–25 de 100 · basado en el material del curso.</p>
-  <div class="gauge-wrap">
-    <div class="gauge-track"><div class="gauge-fill" id="gaugeFill"></div></div>
-    <span class="gauge-label" id="gaugeLabel">0 / 25</span>
-  </div>
-</header>
+  <header class="top">
+    <div class="eyebrow"><span class="dot"></span> DESARROLLO DE SOFTWARE IX · UTP</div>
+    <h1 class="title">Simulador · Seguridad en <em>Comercio Electrónico</em></h1>
+    <p class="subtitle" id="headerSub">100 preguntas de opción múltiple basadas en la sesión teórica</p>
+    <div class="meter-row" id="meterRow" style="display:none;">
+      <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+      <div class="meter-label" id="meterLabel">0/100</div>
+    </div>
+  </header>
 
-<div id="resultsBanner">
-  <span class="score-tag">Resultado del simulacro</span>
-  <div class="score-line">
-    <span class="score-big" id="scoreBig">0/25</span>
-    <span class="qcat" id="scorePct">0%</span>
-  </div>
-  <p class="verdict" id="scoreVerdict"></p>
-</div>
+  <main id="main">
 
-<main id="quizContainer"></main>
+    <!-- START SCREEN -->
+    <section id="screenStart" class="panel">
+      <p class="lead">Evalúa lo aprendido sobre panorama de amenazas, tríada CIA, OWASP Top 10, fraude en pagos (carding, ATO, Magecart) y Defense in Depth, tal como se presentó en la sesión teórica.</p>
+      <div class="start-stats">
+        <div class="stat-box"><b>100</b><span>Preguntas</span></div>
+        <div class="stat-box"><b>16</b><span>Temas cubiertos</span></div>
+        <div class="stat-box"><b>1</b><span>Respuesta correcta c/u</span></div>
+      </div>
+      <ul class="rules">
+        <li><span class="ic">01</span> <span>Se muestra <b>una pregunta a la vez</b>. Puedes avanzar, retroceder y cambiar tus respuestas antes de evaluar.</span></li>
+        <li><span class="ic">02</span> <span>Al llegar a la última pregunta aparece el botón <b>Evaluar</b>.</span></li>
+        <li><span class="ic">03</span> <span>Al evaluar verás tu <b>puntaje final</b>, un desglose por tema y la revisión de cada pregunta con la respuesta correcta resaltada.</span></li>
+      </ul>
+      <div style="margin-top:20px;">
+        <button class="btn btn-primary" id="btnStart">Comenzar simulador →</button>
+      </div>
+    </section>
 
-<div class="evalbar">
-  <div class="evalbar-inner">
-    <button class="btn btn-secondary" id="resetBtn" title="Reiniciar intento">↺</button>
-    <button class="btn btn-primary" id="evalBtn" disabled>Evaluar respuestas</button>
-  </div>
-  <p class="pending-note" id="pendingNote">Responde las 25 preguntas para habilitar la evaluación.</p>
+    <!-- QUIZ SCREEN -->
+    <section id="screenQuiz" class="panel hidden">
+      <div class="qmeta">
+        <span class="qtopic" id="qTopic">TEMA</span>
+        <span class="qindex" id="qIndex">1 / 100</span>
+      </div>
+      <div class="qtext" id="qText">Pregunta</div>
+      <div class="options" id="qOptions"></div>
+      <div class="feedback hidden" id="qFeedback"></div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" id="btnPrev">← Anterior</button>
+        <button class="btn btn-primary" id="btnNext">Siguiente →</button>
+      </div>
+      <button class="btn btn-primary hidden" id="btnEvaluate" style="margin-top:10px;">Evaluar examen</button>
+      <div class="dots" id="dots"></div>
+    </section>
+
+    <!-- RESULTS SCREEN -->
+    <section id="screenResults" class="hidden">
+      <div class="panel score-hero">
+        <div class="verdict" id="verdictChip">RESULTADO</div>
+        <div class="gauge-wrap">
+          <svg width="184" height="184" viewBox="0 0 184 184">
+            <circle cx="92" cy="92" r="80" fill="none" stroke="#1B2A40" stroke-width="14"/>
+            <circle id="gaugeCircle" cx="92" cy="92" r="80" fill="none" stroke="#FF7A59" stroke-width="14"
+              stroke-linecap="round" stroke-dasharray="502.4" stroke-dashoffset="502.4"
+              transform="rotate(-90 92 92)"/>
+          </svg>
+          <div class="gauge-num"><b id="scorePct">0%</b><span id="scoreFrac">0 / 100</span></div>
+        </div>
+        <p class="verdict-text" id="verdictText">—</p>
+        <div style="display:flex;gap:10px;width:100%;margin-top:20px;">
+          <button class="btn btn-ghost" id="btnRetry">Reintentar</button>
+          <button class="btn btn-primary" id="btnReview">Ver revisión ↓</button>
+        </div>
+      </div>
+
+      <div class="section-label">Desglose por tema</div>
+      <div class="panel" id="topicBreakdown"></div>
+
+      <div class="section-label" id="reviewAnchor">Revisión de preguntas</div>
+      <div class="filter-row">
+        <button class="chip active" data-filter="all">Todas</button>
+        <button class="chip" data-filter="wrong">Solo incorrectas</button>
+        <button class="chip" data-filter="right">Solo correctas</button>
+      </div>
+      <div class="review-card" id="reviewList"></div>
+    </section>
+
+  </main>
+
+  <footer class="foot">SEGURIDAD EN E-COMMERCE · DESARROLLO DE SOFTWARE IX · UTP</footer>
 </div>
 
 <script>
-/* =========================================================================
-   BANCO DE PREGUNTAS
-   Cada bloque de 25 se añade a este mismo arreglo QUESTIONS.
-   Estructura: { id, cat, q, options:[4], correct: index, explain }
-   ========================================================================= */
+/* =========================================================
+   BANCO DE 100 PREGUNTAS — basado estrictamente en el PDF
+   "Seguridad en Comercio Electrónico" (Desarrollo de Software IX, UTP)
+   Cada pregunta: { topic, q, options[4], correct(index), explain }
+   ========================================================= */
+const TOPIC_LABELS = {
+  panorama:"Panorama 2024", vat:"Vuln/Amenaza/Riesgo", cia:"Tríada CIA",
+  authn:"Auth N vs Auth Z", crypto:"Encriptación/Hashing", principios:"Principios",
+  a01:"OWASP A01", a02:"OWASP A02", a03:"OWASP A03+", carding:"Card Testing",
+  ato:"Account Takeover", magecart:"Magecart", perimetro:"DiD Perímetro",
+  aplicacion:"DiD Aplicación", identidad:"DiD Identidad", resumen:"Métricas/KPIs"
+};
+
 const QUESTIONS = [
+// ---------- PANORAMA (7) ----------
+{topic:"panorama", q:"Según el panorama de amenazas 2024, ¿qué porcentaje de sitios web e-commerce tiene alguna vulnerabilidad?", options:["73%","95%","60%","23.1%"], correct:1, explain:"El documento indica que el 95% de los sitios web tiene alguna vulnerabilidad."},
+{topic:"panorama", q:"¿Cuáles fueron las pérdidas globales por fraude online en 2023 según el documento?", options:["$28B","$41B","$4.45M","$2.5M"], correct:1, explain:"Se reportan $41B en pérdidas por fraude online (2023)."},
+{topic:"panorama", q:"¿Cuál es el promedio de tiempo para detectar una brecha de seguridad?", options:["24 horas","206 días","90 días","1 hora"], correct:1, explain:"El promedio para detectar una brecha es de 206 días."},
+{topic:"panorama", q:"¿Cuál es el costo promedio de una violación de datos según el documento?", options:["$2.5M","$4.45M","$41B","$120"], correct:1, explain:"El costo promedio de una violación de datos es de $4.45M."},
+{topic:"panorama", q:"Según los vectores de ataque principales, ¿cuál representa el mayor porcentaje?", options:["Phishing (21%)","Web Apps (22%)","Malware (18%)","Insider (15%)"], correct:1, explain:"Web Apps encabeza los vectores de ataque con 22%."},
+{topic:"panorama", q:"¿Qué incremento en ataques se observa durante Black Friday?", options:["+140%","+60%","+38%","+95%"], correct:2, explain:"El documento señala un +38% en ataques durante Black Friday."},
+{topic:"panorama", q:"Según las tendencias emergentes 2024, ¿cuánto más ataques reciben las APIs comparado con aplicaciones web?", options:["38% más","140% más","60% más","73% más"], correct:2, explain:"Se reporta 60% más ataques a APIs que a aplicaciones web."},
 
-// ---------- BLOQUE 1: PREGUNTAS 1-25 ----------
-{
-  "id":"Q01", "cat":"Fundamentos · ISO 27001",
-  "q":"Un técnico afirma: “si un sistema tiene una vulnerabilidad, entonces sufrirá un ataque”. Según la definición de vulnerabilidad basada en ISO 27001 presentada en el documento, ¿qué corrige mejor esa afirmación?",
-  "options":[
-    "Las vulnerabilidades únicamente afectan software, nunca hardware ni procesos, así que el riesgo es limitado",
-    "La vulnerabilidad y la amenaza son sinónimos, por lo que la afirmación es correcta tal cual",
-    "La vulnerabilidad es la debilidad explotable; el ataque ocurre solo si además existe una amenaza que la explote",
-    "Una vulnerabilidad solo existe si ya fue registrada con un identificador CVE"
-  ],
-  "correct":2,
-  "explain":"El documento define la vulnerabilidad como una debilidad que <b>puede ser explotada por una o más amenazas</b>; sin una amenaza que la aproveche, la debilidad no se traduce automáticamente en un incidente."
-},
-{
-  "id":"Q02", "cat":"Definiciones",
-  "q":"Una empresa migra su firewall físico a una instancia de software corriendo en AWS. Según la explicación sobre la 'naturaleza' de los dispositivos perimetrales, ¿qué es lo correcto sobre este cambio?",
-  "options":[
-    "Se convierte en un dispositivo de Edge Computing y pierde su función de seguridad",
-    "Sigue siendo un dispositivo perimetral porque lo que lo define es su función lógica y capacidad de decisión, no su forma física",
-    "Solo puede considerarse perimetral si además está embebido dentro de un router",
-    "Deja de ser un dispositivo perimetral porque ya no es hardware físico"
-  ],
-  "correct":1,
-  "explain":"El texto aclara que lo que define a un dispositivo perimetral es <b>su función lógica y su capacidad autónoma de decisión</b> en el borde de la red, sin importar si es hardware, un appliance virtual o un módulo embebido."
-},
-{
-  "id":"Q03", "cat":"Analogía castillo-foso",
-  "q":"En la analogía de la fortaleza, si un IDS detecta tráfico sospechoso pero no toma ninguna acción para detenerlo, ¿qué rol de la analogía está cumpliendo y cuál le falta?",
-  "options":[
-    "Está actuando como muralla; le falta comportarse como DMZ",
-    "Está actuando como IPS completo, no le falta nada",
-    "Está actuando como centinela que solo vigila y alerta; le falta el rol del arquero (IPS) que neutraliza activamente",
-    "Está actuando como router fronterizo; le falta filtrar paquetes"
-  ],
-  "correct":2,
-  "explain":"El documento asigna al <b>IDS el rol del centinela que detecta y alerta</b> (el 'ojo'), mientras que el <b>IPS es el arquero que neutraliza</b> (el 'brazo'); detectar sin bloquear es exactamente la función del IDS, no la del IPS."
-},
-{
-  "id":"Q04", "cat":"DMZ",
-  "q":"Una organización coloca su servidor web público directamente en la red interna, junto a las bases de datos corporativas. ¿Qué principio de diseño perimetral está ignorando?",
-  "options":[
-    "La política de contraseñas fuertes exigida por NIST SP 800-63B",
-    "La segmentación mediante DMZ, que aísla servidores de cara al público para limitar la exposición de la red principal si son comprometidos",
-    "La actualización periódica del firmware del router fronterizo",
-    "El uso de VPN para cifrar el tráfico de administradores"
-  ],
-  "correct":1,
-  "explain":"La DMZ existe precisamente para <b>alojar servidores públicos separados de la red interna</b>, de modo que si el servidor expuesto es comprometido, el daño no se extienda directamente a los sistemas críticos."
-},
-{
-  "id":"Q05", "cat":"Firewalls",
-  "q":"Según el documento, un firewall 'no piensa por sí solo, obedece una lista de quién entra y quién no'. ¿Qué implicación práctica tiene esta idea para la seguridad de una organización?",
-  "options":[
-    "Los firewalls de nueva generación ya no requieren ningún tipo de configuración de reglas",
-    "El firewall es capaz de detectar amenazas nuevas sin necesidad de reglas, gracias a su inteligencia propia",
-    "La efectividad del firewall depende directamente de que sus reglas de acceso estén bien definidas y actualizadas, ya que solo ejecuta lo que se le configura",
-    "El firewall reemplaza por completo la necesidad de un IDS/IPS"
-  ],
-  "correct":2,
-  "explain":"Si el dispositivo solo <b>obedece reglas predefinidas</b>, entonces reglas mal diseñadas o desactualizadas dejan huecos reales de seguridad, sin importar qué tan avanzado sea el hardware."
-},
-{
-  "id":"Q06", "cat":"Impacto económico",
-  "q":"Una empresa argumenta que invertir en automatización de defensas perimetrales 'no se justifica económicamente'. ¿Qué dato del informe de IBM citado en el documento contradice directamente esa postura?",
-  "options":[
-    "El costo promedio global de una brecha alcanzó los USD 4.88 millones en 2024",
-    "El 44% de los incidentes derivó en ransomware en el informe de 2025",
-    "Las organizaciones que combinan defensas perimetrales con automatización lograron un ahorro medio de USD 2.2 millones por incidente",
-    "El 36% de los routers de consumo no se actualizó en más de un año"
-  ],
-  "correct":2,
-  "explain":"El dato que responde directamente al argumento del ahorro es el <b>ahorro medio de USD 2.2 millones por incidente</b> al combinar defensas perimetrales con automatización, mostrando un retorno concreto de la inversión."
-},
-{
-  "id":"Q07", "cat":"Amenazas",
-  "q":"Un empleado con acceso legítimo a la red copia información confidencial para venderla a un competidor. ¿En qué categoría de amenaza descrita en el documento encaja este caso, y por qué es distinta de las demás amenazas listadas?",
-  "options":[
-    "Explotación de vulnerabilidades conocidas, porque aprovecha software desactualizado",
-    "Ataque de insiders, porque el atacante ya cuenta con acceso interno autorizado, a diferencia de amenazas externas como phishing o DDoS",
-    "Ataque de botnets, porque usa múltiples dispositivos comprometidos",
-    "Ataque de sniffing, porque intercepta datos en tránsito"
-  ],
-  "correct":1,
-  "explain":"El documento define los <b>ataques de insiders</b> como acciones maliciosas de empleados o personas con acceso interno; a diferencia de amenazas externas, aquí el atacante no necesita vulnerar el perímetro porque ya está dentro."
-},
-{
-  "id":"Q08", "cat":"Firmware · 'caja negra'",
-  "q":"¿Por qué el documento describe al firmware de routers y firewalls como una 'caja negra' en términos de seguridad?",
-  "options":[
-    "Porque solo funciona en dispositivos de color negro fabricados por proveedores específicos",
-    "Porque su código fuente siempre está cifrado y nadie puede auditarlo",
-    "Porque impide físicamente cualquier tipo de actualización remota",
-    "Porque, a diferencia de los sistemas operativos convencionales, puede pasar años sin recibir parches y muchos fabricantes tardan meses en responder a vulnerabilidades descubiertas"
-  ],
-  "correct":3,
-  "explain":"La 'caja negra' se refiere a que el firmware queda <b>sin actualizaciones de seguridad durante años</b>, con fabricantes lentos en parchar, dejando vulnerabilidades conocidas expuestas de forma prolongada."
-},
-{
-  "id":"Q09", "cat":"Firmware · fin de soporte",
-  "q":"Un router llega a su 'fin de soporte' y sigue en producción. Según el documento, ¿cuál es el riesgo específico que esto agrava respecto a sus componentes de firmware?",
-  "options":[
-    "El dispositivo deja de transmitir tráfico de red por completo",
-    "El fabricante asume automáticamente toda la responsabilidad legal ante cualquier incidente",
-    "Los componentes de firmware, que suelen depender de versiones desactualizadas para mantener compatibilidad, ya no recibirán corrección de las vulnerabilidades y hallazgos acumulados",
-    "El dispositivo se convierte automáticamente en un appliance virtual"
-  ],
-  "correct":2,
-  "explain":"El fin de soporte implica que el fabricante <b>deja de actualizar el dispositivo</b>, mientras sus componentes dependen de versiones desactualizadas, dejando expuestos los cientos de hallazgos y vulnerabilidades detectados por imagen de firmware."
-},
-{
-  "id":"Q10", "cat":"RCE",
-  "q":"Un formulario web no valida correctamente la entrada del usuario y permite que un atacante envíe comandos que el servidor ejecuta directamente. ¿Qué tipo de vulnerabilidad ejemplifica mejor este escenario?",
-  "options":[
-    "Secuestro de sesión por ausencia de flags de seguridad",
-    "Ejecución remota de código (RCE), habilitada por sanitización pobre de entrada, similar a la inyección SQL o de comandos",
-    "Buffer overflow basado en heap",
-    "Envenenamiento de DNS"
-  ],
-  "correct":1,
-  "explain":"El documento indica que las <b>vulnerabilidades de RCE más comunes incluyen inyección de SQL o de comandos, habilitadas por sanitización pobre de entrada</b>, exactamente el mecanismo descrito en el escenario."
-},
-{
-  "id":"Q11", "cat":"RCE",
-  "q":"¿Por qué, según el documento, la ejecución remota de código (RCE) es especialmente atractiva para los atacantes en comparación con otras técnicas?",
-  "options":[
-    "Porque requiere que la víctima haga clic en un enlace de phishing",
-    "Porque siempre requiere credenciales válidas previamente robadas",
-    "Porque permite ejecutar comandos arbitrarios sin necesidad de presencia física ni interacción directa con el sistema objetivo, lo que explica que sea la base de aproximadamente el 80% de las vulnerabilidades principales",
-    "Porque solo puede ejecutarse desde dentro de la red interna"
-  ],
-  "correct":2,
-  "explain":"El texto señala que el RCE permite <b>ganar acceso sin requerir presencia física o interacción directa</b>, y que cerca del 80% de las vulnerabilidades principales están relacionadas con este tipo de ejecución remota."
-},
-{
-  "id":"Q12", "cat":"Buffer overflow",
-  "q":"Un atacante envía datos maliciosos que sobrescriben el puntero de retorno almacenado en la memoria de una aplicación, tomando el control de la ejecución. ¿Qué tipo de buffer overflow describe mejor este mecanismo?",
-  "options":[
-    "Envenenamiento de DNS aplicado a la memoria del sistema",
-    "Ataque basado en pila (stack), la forma más común, donde se sobrescribe el puntero de retorno para transferir el control al atacante",
-    "Bypass de autenticación mediante manipulación de parámetros",
-    "Ataque basado en heap, por ser el más común y difícil de ejecutar"
-  ],
-  "correct":1,
-  "explain":"El documento describe los <b>ataques basados en pila como la forma más común</b>, donde se sobrescriben datos en la pila, incluyendo el puntero de retorno, transfiriendo el control de ejecución al atacante."
-},
-{
-  "id":"Q13", "cat":"Buffer overflow · lenguajes",
-  "q":"¿Por qué el documento señala que muchas aplicaciones heredadas de firmware escritas en C o C++ son particularmente propensas a vulnerabilidades de buffer overflow?",
-  "options":[
-    "Porque estos lenguajes no permiten definir búferes de memoria",
-    "Porque C y C++ solo se ejecutan en hardware antiguo sin memoria suficiente",
-    "Porque carecen de protecciones integradas contra buffer overflow que sí ofrecen lenguajes modernos como Java, Perl o C#",
-    "Porque siempre generan código que se ejecuta con privilegios de administrador"
-  ],
-  "correct":2,
-  "explain":"El texto indica explícitamente que estas aplicaciones heredadas <b>carecen de protecciones integradas (built-in protections)</b> frente al desbordamiento de búfer que sí existen en lenguajes más modernos."
-},
-{
-  "id":"Q14", "cat":"Ciclo de vida · zero-day",
-  "q":"Durante la ventana zero-day, ¿por qué el documento afirma que los defensores están en una posición particularmente débil?",
-  "options":[
-    "Porque los atacantes deben revelar públicamente la vulnerabilidad antes de explotarla",
-    "Porque no hay solución oficial disponible y, además, el comportamiento del ataque puede no activar firmas de amenaza conocidas ni sistemas de detección de anomalías",
-    "Porque ya existe un parche público pero nadie lo ha instalado todavía",
-    "Porque el firewall bloquea automáticamente cualquier tráfico desconocido durante esta fase"
-  ],
-  "correct":1,
-  "explain":"El documento explica que en la fase zero-day <b>no existe parche oficial</b> y que la detección es difícil porque el comportamiento del ataque <b>puede no activar firmas conocidas</b>, dejando a los defensores sin forma directa de cerrar la brecha."
-},
-{
-  "id":"Q15", "cat":"Vulnerabilidades N-day",
-  "q":"Una empresa fue comprometida explotando una vulnerabilidad que ya tenía un parche público disponible desde hacía meses. ¿Cómo clasifica el documento este tipo de caso y qué estadística lo respalda?",
-  "options":[
-    "Como un ataque zero-day, ya que ninguna vulnerabilidad con parche puede ser explotada de nuevo",
-    "Como spoofing, porque el atacante falsificó la identidad de origen",
-    "Como un ataque de sniffing, porque implica interceptación de datos en tránsito",
-    "Como una vulnerabilidad N-day; el documento señala que aproximadamente el 40% de los ataques a redes industriales explota vulnerabilidades conocidas con parches disponibles pero no remediadas"
-  ],
-  "correct":3,
-  "explain":"El documento define las <b>vulnerabilidades 'N-day'</b> como aquellas con parche disponible pero no aplicado, y cita que cerca del <b>40% de los ataques a redes industriales</b> explota justamente este tipo de brechas ya conocidas."
-},
-{
-  "id":"Q16", "cat":"Control de acceso",
-  "q":"Un usuario común descubre que, cambiando manualmente un identificador en la URL, puede ver los datos de otro usuario sin necesitar credenciales adicionales. ¿Qué categoría de falla ilustra mejor este caso?",
-  "options":[
-    "Buffer overflow basado en heap",
-    "Envenenamiento de DNS",
-    "Ataque de botnets coordinado",
-    "Fallos en el control de acceso, que ocupan el #1 del OWASP Top 10 desde 2021 y permiten escalada horizontal sin explotar vulnerabilidades técnicas complejas"
-  ],
-  "correct":3,
-  "explain":"El documento describe este tipo exacto de caso como <b>escalada horizontal</b> dentro de los fallos de control de acceso, donde el atacante accede a datos de otros usuarios sin necesitar explotar vulnerabilidades técnicas complejas."
-},
-{
-  "id":"Q17", "cat":"Bypass de autenticación",
-  "q":"Un atacante reutiliza contraseñas filtradas en una base de datos pública para intentar iniciar sesión de forma masiva en múltiples cuentas. ¿Qué variante de bypass de autenticación corresponde a esta técnica según el documento?",
-  "options":[
-    "Tokens débiles o predecibles generados con baja entropía",
-    "Manipulación de parámetros",
-    "Fuerza bruta y credential stuffing, aprovechando bases de datos filtradas como RockYou2024",
-    "Session Fixation forzando un ID conocido"
-  ],
-  "correct":2,
-  "explain":"El documento identifica esta técnica específicamente como <b>fuerza bruta y credential stuffing</b>, que aprovecha bases de datos de contraseñas filtradas como RockYou2024."
-},
-{
-  "id":"Q18", "cat":"VPN",
-  "q":"Según el documento, ¿qué idea central desafía la creencia de que una VPN garantiza por sí sola un perímetro seguro?",
-  "options":[
-    "Las VPN eliminan por completo la necesidad de autenticación multifactor",
-    "Las VPN no son perímetros absolutos: existen CVEs críticos como Ivanti Connect Secure con RCE sin autenticación y Fortinet SSL-VPN con path traversal",
-    "Las VPN nunca han sido objetivo de vulnerabilidades críticas documentadas",
-    "Las VPN solo pueden ser vulneradas mediante ataques físicos a las instalaciones"
-  ],
-  "correct":1,
-  "explain":"El documento afirma explícitamente que <b>'las VPN no son perímetros absolutos'</b> y cita CVEs críticos recientes como Ivanti Connect Secure y Fortinet SSL-VPN (CVE-2024-21762) como evidencia."
-},
-{
-  "id":"Q19", "cat":"Secuestro de sesión",
-  "q":"Un atacante intercepta el tráfico de un usuario conectado a un sitio que aún usa HTTP sin cifrar y captura su cookie de sesión activa. ¿Qué técnica de secuestro de sesión describe mejor este caso?",
-  "options":[
-    "Session Fixation, forzando un ID conocido antes del inicio de sesión",
-    "XSS para robar cookies mediante inyección de scripts",
-    "Man-in-the-Middle sobre HTTP no cifrado",
-    "Cookie Theft por ausencia de flags de seguridad exclusivamente"
-  ],
-  "correct":2,
-  "explain":"El escenario de interceptar tráfico no cifrado para capturar una cookie de sesión corresponde a la técnica de <b>Man-in-the-Middle sobre HTTP no cifrado</b>, listada entre las técnicas de secuestro de sesión."
-},
-{
-  "id":"Q20", "cat":"Credenciales",
-  "q":"El documento indica que el 81% de las brechas involucran credenciales comprometidas. Si una organización nunca ha cambiado las contraseñas por defecto de sus dispositivos perimetrales, ¿qué vector de riesgo específico está habilitando?",
-  "options":[
-    "Reutilización de contraseñas entre servicios (credential stuffing)",
-    "Almacenamiento inseguro en texto plano o MD5 sin sal",
-    "Contraseñas por defecto nunca cambiadas, que pueden ser localizadas mediante herramientas como Shodan",
-    "Tokens de sesión con baja entropía"
-  ],
-  "correct":2,
-  "explain":"El documento identifica específicamente las <b>contraseñas por defecto nunca cambiadas, localizables en Shodan</b>, como uno de los tres vectores principales relacionados con el peligro de las credenciales."
-},
-{
-  "id":"Q21", "cat":"Caso Ivanti",
-  "q":"En el caso Ivanti Connect Secure descrito en el documento, ¿cuál fue el origen técnico específico que permitió la ejecución remota de código con privilegios de root?",
-  "options":[
-    "Un ataque de fuerza bruta contra el panel administrativo del dispositivo",
-    "Un certificado SSL vencido que permitió la suplantación del servidor",
-    "Una vulnerabilidad de buffer overflow basada en heap en el kernel del sistema",
-    "El uso del módulo subprocess de Python con el parámetro shell=True, una práctica de programación básica que cualquier curso de desarrollo seguro señala como riesgosa"
-  ],
-  "correct":3,
-  "explain":"El documento señala que el origen fue <b>un error relativamente básico</b>: el uso del módulo subprocess de Python con <b>shell=True</b>, suficiente para permitir RCE con privilegios de root."
-},
-{
-  "id":"Q22", "cat":"Caso Ivanti · manipulación de evidencia",
-  "q":"Lo que el documento destaca como particularmente inquietante del caso Ivanti no es solo el malware desplegado, sino cómo los atacantes ocultaron el compromiso. ¿En qué consistió esa manipulación?",
-  "options":[
-    "Reemplazaron físicamente el hardware del dispositivo por una réplica idéntica",
-    "Modificaron la lista de exclusiones de la propia herramienta de integridad de Ivanti para que el sistema reportara un estado limpio mientras estaba comprometido",
-    "Cifraron todo el tráfico de red para evitar ser detectados por firewalls",
-    "Solicitaron certificados falsos a una autoridad certificadora comprometida"
-  ],
-  "correct":1,
-  "explain":"El documento resalta que los atacantes <b>manipularon la herramienta de integridad de Ivanti modificando su lista de exclusiones</b>, logrando que reportara un estado limpio pese a estar comprometido; esto llevó a CISA a ordenar desconexiones físicas."
-},
-{
-  "id":"Q23", "cat":"Caso Fortinet / Belsen Group",
-  "q":"El documento describe el episodio de 'Belsen Group' como un ejemplo claro de deuda técnica. ¿Qué hecho concreto ilustra esa deuda técnica en el caso de las configuraciones de FortiGate filtradas?",
-  "options":[
-    "El grupo obtuvo acceso exclusivamente mediante ingeniería social a empleados de Fortinet",
-    "Las configuraciones filtradas correspondían a ataques de 2022, pero las organizaciones habían actualizado el firmware sin rotar credenciales ni certificados, quedando expuestas tres años después",
-    "Las organizaciones afectadas no tenían firewalls FortiGate instalados en su red",
-    "Fortinet nunca lanzó un parche para la vulnerabilidad explotada por el grupo"
-  ],
-  "correct":1,
-  "explain":"El documento subraya que aunque el firmware fue actualizado, <b>nunca se rotaron credenciales ni certificados</b>, por lo que datos de ataques de 2022 seguían siendo válidos y exponían a las organizaciones tres años después."
-},
-{
-  "id":"Q24", "cat":"Caso Synnovis",
-  "q":"¿Por qué el documento utiliza el caso Synnovis para argumentar que las vulnerabilidades perimetrales van más allá de un problema técnico de laboratorio?",
-  "options":[
-    "Porque el ataque afectó únicamente a los sistemas internos de TI de Synnovis, sin impacto externo",
-    "Porque fue el primer ataque de ransomware documentado contra el sector salud a nivel mundial",
-    "Porque un dispositivo de perímetro mal configurado derivó en aproximadamente 11.000 cirugías y citas médicas canceladas en el NHS del Reino Unido",
-    "Porque el ataque solo generó pérdidas económicas sin afectar servicios reales"
-  ],
-  "correct":2,
-  "explain":"El documento usa este caso precisamente porque demuestra consecuencias tangibles fuera del ámbito técnico: <b>cerca de 11.000 cirugías y citas médicas canceladas</b> como resultado directo del compromiso de un dispositivo de perímetro."
-},
-{
-  "id":"Q25", "cat":"Tendencias 2024–2026",
-  "q":"Según el análisis del panorama 2024–2026, ¿por qué los grupos de amenaza persistente avanzada (APT) se enfocaron cada vez más en los dispositivos de perímetro en lugar de atacar directamente las redes internas?",
-  "options":[
-    "Porque los firewalls dejaron de fabricarse con capacidad de procesamiento suficiente",
-    "Porque las redes internas ya no existen en las organizaciones modernas",
-    "Porque, tras años de inversión en MFA, EDR y segmentación interna, los dispositivos de perímetro quedaron expuestos directamente a internet pero con mucho menor monitoreo que un servidor interno estándar",
-    "Porque los dispositivos de perímetro no pueden ser objeto de directivas regulatorias como la 24-01 de CISA"
-  ],
-  "correct":2,
-  "explain":"El documento explica que, al fortalecerse la seguridad interna, los atacantes se volcaron hacia dispositivos <b>expuestos a internet pero con mucho menos monitoreo que un servidor interno estándar</b>, una contradicción señalada repetidamente por investigadores."
-},
-{
-  "id":"Q26", "cat":"Definiciones · Edge Computing",
-  "q":"El documento aclara que el término 'dispositivo perimetral' es elástico según el área tecnológica. Si alguien lo define solo como 'cualquier hardware que procesa datos cerca de la fuente', ¿qué perspectiva está aplicando y por qué no es la que usa este trabajo?",
-  "options":[
-    "La perspectiva de virtualización, que considera perimetral únicamente a los appliances en la nube",
-    "La perspectiva de Edge Computing; el documento aclara que para fines de seguridad de la información se enfoca en su rol como punto de control crítico entre red interna y externa, no solo en el procesamiento cercano a la fuente",
-    "La perspectiva de ISO 27001, que define el dispositivo perimetral como una amenaza en sí misma",
-    "La perspectiva de seguridad de la información, porque coincide exactamente con la usada en el documento"
-  ],
-  "correct":1,
-  "explain":"El documento distingue explícitamente que en <b>Edge Computing</b> el término se refiere al procesamiento cercano a la fuente, mientras que para Seguridad de los Sistemas de Información el enfoque es el <b>punto de control que regula el tráfico entre red confiable y no confiable</b>."
-},
-{
-  "id":"Q27", "cat":"Objetivos de la seguridad perimetral",
-  "q":"Una organización solo se enfoca en bloquear tráfico ilegítimo, sin preocuparse por segmentar sus sistemas según el posible daño de un ataque. ¿Qué objetivo de la seguridad perimetral informática está descuidando?",
-  "options":[
-    "Extender el perímetro mediante túneles cifrados mediante VPN",
-    "Soportar los ataques externos y detectarlos para alertar sobre ellos",
-    "Filtrar y bloquear el tráfico ilegítimo",
-    "La segmentación y aseguramiento de los sistemas y servicios de acuerdo con la superficie o área de daño que hubiera recibido un ataque"
-  ],
-  "correct":3,
-  "explain":"El documento enumera como tercer objetivo la <b>segmentación y aseguramiento de sistemas y servicios según el área de daño</b> que un ataque pudiera generar, algo distinto de simplemente filtrar tráfico o detectar ataques."
-},
-{
-  "id":"Q28", "cat":"Routers fronterizos vs VPN",
-  "q":"¿Cuál es la diferencia funcional principal entre un router fronterizo y una VPN según las definiciones del documento?",
-  "options":[
-    "El router fronterizo dirige el tráfico entre red interna y externa realizando filtrado inicial de paquetes, mientras que la VPN extiende el perímetro mediante un túnel cifrado para conexiones remotas",
-    "El router fronterizo solo existe en entornos virtualizados, nunca como hardware físico",
-    "La VPN filtra paquetes en el borde de la red, mientras que el router fronterizo cifra las comunicaciones remotas",
-    "Ambos cumplen exactamente la misma función y son intercambiables en cualquier arquitectura"
-  ],
-  "correct":0,
-  "explain":"El documento describe a los <b>routers fronterizos</b> como encargados de dirigir tráfico y realizar filtrado inicial, y a la <b>VPN</b> como una extensión del perímetro mediante un túnel cifrado para usuarios remotos: funciones distintas y complementarias."
-},
-{
-  "id":"Q29", "cat":"Amenazas · DDoS",
-  "q":"Un sitio web corporativo se vuelve inaccesible tras recibir un volumen anormal de solicitudes simultáneas desde miles de direcciones distintas. ¿Qué amenaza del listado del documento describe mejor este escenario?",
-  "options":[
-    "Suplantación de identidad (spoofing)",
-    "Ataque de fuerza bruta",
-    "Ataque de sniffing",
-    "Ataque de Denegación de Servicio (DDoS), que busca abrumar la red o los servicios con tráfico malicioso hasta volverlos inaccesibles"
-  ],
-  "correct":3,
-  "explain":"El documento define el DDoS como el <b>intento de abrumar la red o los servicios con tráfico malicioso</b> para volverlos inaccesibles, justo lo descrito en el escenario."
-},
-{
-  "id":"Q30", "cat":"Amenazas · Phishing vs ingeniería social",
-  "q":"Un correo falso que simula ser del banco de la víctima busca que esta ingrese sus credenciales en un sitio clonado. ¿Cómo distingue el documento este caso frente a la ingeniería social en general?",
-  "options":[
-    "La ingeniería social requiere necesariamente acceso físico a las instalaciones",
-    "El phishing es una técnica específica que usa correos o sitios falsos para robar información, mientras que la ingeniería social es la categoría más amplia de engañar usuarios para revelar información o realizar acciones no deseadas",
-    "El phishing solo puede ocurrir por teléfono, nunca por correo electrónico",
-    "Son idénticos y el documento no hace ninguna distinción entre ambos términos"
-  ],
-  "correct":1,
-  "explain":"El documento define el <b>phishing</b> como correos o sitios falsos para robar información, mientras que la <b>ingeniería social</b> es el engaño más general a usuarios para revelar información o realizar acciones no deseadas; el phishing es un caso particular de ese engaño."
-},
-{
-  "id":"Q31", "cat":"Spoofing",
-  "q":"Un atacante falsifica su dirección IP para que el sistema de seguridad crea que el tráfico proviene de un origen confiable. ¿Qué nombre recibe esta técnica en el documento?",
-  "options":[
-    "Ataque de envenenamiento de DNS",
-    "Ataque de inyección de código",
-    "Secuestro de sesión",
-    "Suplantación de identidad (spoofing)"
-  ],
-  "correct":3,
-  "explain":"El documento define el <b>spoofing</b> como falsificar la dirección IP o identidad de origen para engañar a los sistemas de seguridad, exactamente el mecanismo descrito."
-},
-{
-  "id":"Q32", "cat":"Envenenamiento de DNS",
-  "q":"Los usuarios de una empresa son redirigidos a un sitio malicioso al intentar acceder a un dominio legítimo, sin que su navegador muestre ningún error. ¿Qué amenaza del documento corresponde a este comportamiento?",
-  "options":[
-    "Ataque de fuerza bruta contra contraseñas",
-    "Ataque de envenenamiento de DNS, que manipula la resolución de nombres de dominio para redirigir el tráfico a sitios maliciosos",
-    "Ataque físico a las instalaciones de red",
-    "Ataque de botnets, que usa una red de dispositivos comprometidos"
-  ],
-  "correct":1,
-  "explain":"El documento describe el <b>envenenamiento de DNS</b> como la manipulación de la resolución de nombres de dominio para redirigir tráfico hacia sitios maliciosos, justo el efecto observado."
-},
-{
-  "id":"Q33", "cat":"Estadísticas de firmware",
-  "q":"El documento menciona que entre cinco proveedores se encontró un promedio de 662 componentes y 2154 hallazgos por imagen de firmware. ¿Qué conclusión respalda mejor esta cifra dentro del argumento del texto?",
-  "options":[
-    "Que el firmware moderno es más seguro que los sistemas operativos convencionales",
-    "Que los hallazgos de firmware nunca incluyen vulnerabilidades reales, solo advertencias menores",
-    "Que la superficie de riesgo del firmware es amplia y acumulativa, reforzando la idea de que estos dispositivos son una 'caja negra' difícil de auditar y mantener",
-    "Que solo cinco proveedores fabrican dispositivos perimetrales en el mundo"
-  ],
-  "correct":2,
-  "explain":"La cifra de <b>662 componentes y 2154 hallazgos por imagen de firmware</b> se usa para ilustrar la magnitud de la superficie de riesgo acumulada, coherente con la idea de la 'caja negra' difícil de mantener y auditar."
-},
-{
-  "id":"Q34", "cat":"Routers de consumo",
-  "q":"El documento indica que el 36% de los routers de consumo testeados en 2020 no habían sido actualizados en más de un año. ¿Qué implicación de seguridad se deriva directamente de este dato?",
-  "options":[
-    "Que esos routers dejaron de funcionar por completo tras un año sin actualización",
-    "Que los fabricantes retiraron esos modelos del mercado inmediatamente",
-    "Que dejaron vulnerabilidades conocidas completamente expuestas durante ese periodo, al no recibir parches disponibles",
-    "Que solo afecta a routers empresariales, nunca a los de uso doméstico"
-  ],
-  "correct":2,
-  "explain":"El texto afirma que ese abandono de actualización <b>dejaba vulnerabilidades conocidas completamente expuestas</b>, un riesgo directo para cualquier red que dependiera de esos routers."
-},
-{
-  "id":"Q35", "cat":"RCE y firmware",
-  "q":"El documento afirma que aproximadamente el 66% de las vulnerabilidades principales de infraestructura de red afectan el firmware del dispositivo. ¿Por qué esta cifra refuerza la gravedad de las vulnerabilidades RCE mencionadas en el texto?",
-  "options":[
-    "Porque muestra que el firmware es inmune a la ejecución remota de código",
-    "Porque indica que el 66% de los ataques provienen exclusivamente de empleados internos",
-    "Porque demuestra que el firmware nunca puede ser parcheado una vez comprometido",
-    "Porque conecta el impacto crítico del RCE directamente con la capa más difícil de actualizar y monitorear de un dispositivo perimetral: su firmware"
-  ],
-  "correct":3,
-  "explain":"El documento vincula el impacto crítico del RCE con el hecho de que <b>cerca del 66% de las vulnerabilidades principales de infraestructura de red afectan el firmware</b>, precisamente la capa más lenta en recibir parches."
-},
-{
-  "id":"Q36", "cat":"Ciclo de vida · introducción del fallo",
-  "q":"Un desarrollador olvida validar un campo de entrada de usuario al escribir una aplicación de firmware. Según el ciclo de vida de la vulnerabilidad descrito en el documento, ¿en qué etapa se ubica este evento?",
-  "options":[
-    "Ventana zero-day",
-    "Divulgación y desarrollo del parche",
-    "Introducción del fallo, que ocurre cuando un desarrollador introduce involuntariamente un error o debilidad, como no validar la entrada del usuario",
-    "Publicación del parche"
-  ],
-  "correct":2,
-  "explain":"El documento ubica este tipo de error exactamente en la etapa de <b>introducción del fallo</b>, citando como ejemplo específico 'no validar entrada de usuario'."
-},
-{
-  "id":"Q37", "cat":"Ciclo de vida · descubrimiento",
-  "q":"Un investigador de seguridad realiza ingeniería inversa y análisis de código sobre un firewall ampliamente usado, buscando fallos desconocidos. ¿A qué etapa del ciclo de vida de la vulnerabilidad corresponde esta actividad?",
-  "options":[
-    "El retraso en la aplicación",
-    "Publicación del parche",
-    "Introducción del fallo",
-    "Descubrimiento, que puede involucrar ingeniería inversa, análisis de código o escáneres automatizados por parte de investigadores o actores maliciosos"
-  ],
-  "correct":3,
-  "explain":"El documento describe la etapa de <b>descubrimiento</b> como aquella donde investigadores o atacantes buscan sistemáticamente fallos desconocidos, frecuentemente mediante ingeniería inversa o análisis de código."
-},
-{
-  "id":"Q38", "cat":"Ciclo de vida · divulgación",
-  "q":"Una vulnerabilidad recién identificada recibe un identificador CVE y el fabricante es notificado para iniciar el desarrollo de una corrección. ¿Qué etapa del ciclo de vida describe correctamente este momento?",
-  "options":[
-    "Divulgación y desarrollo del parche",
-    "El retraso en la aplicación",
-    "Introducción del fallo",
-    "Ventana zero-day"
-  ],
-  "correct":0,
-  "explain":"El documento asocia la asignación de un <b>CVE y la notificación al fabricante</b> con el inicio de la etapa de <b>divulgación y desarrollo del parche</b>, distinta de la fase zero-day donde aún no hay parche ni CVE."
-},
-{
-  "id":"Q39", "cat":"Ventana de vulnerabilidad",
-  "q":"Según el documento, ¿por qué la 'ventana de vulnerabilidad' no termina en el momento en que se publica un parche?",
-  "options":[
-    "Porque la ventana solo se cierra cuando el atacante es identificado legalmente",
-    "Porque los parches nunca corrigen completamente la vulnerabilidad original",
-    "Porque la ventana incluye también el tiempo posterior al lanzamiento del parche mientras no todos los usuarios lo han aplicado, dejando los sistemas en riesgo hasta su instalación",
-    "Porque los fabricantes retiran los parches poco después de publicarlos"
-  ],
-  "correct":2,
-  "explain":"El documento explica que la ventana de vulnerabilidad abarca también el periodo posterior al parche mientras <b>no todos los usuarios lo han aplicado</b>, manteniendo el riesgo activo hasta la instalación efectiva."
-},
-{
-  "id":"Q40", "cat":"Fortinet · WebSocket Node.js",
-  "q":"En 2025 se identificó en el módulo WebSocket de Node.js usado por Fortinet una vulnerabilidad que permitía acceso administrativo sin autenticación previa. Según el documento, ¿qué hicieron los atacantes para mantener acceso persistente tras explotarla?",
-  "options":[
-    "Desactivaron físicamente el hardware del firewall",
-    "Falsificaron sus direcciones IP en los registros del sistema y crearon cuentas de administrador ocultas",
-    "Cifraron todo el firmware del dispositivo para impedir su restauración",
-    "Solicitaron un nuevo certificado SSL a Fortinet directamente"
-  ],
-  "correct":1,
-  "explain":"El documento indica que, tras explotar esta vulnerabilidad, los atacantes <b>falsificaron direcciones IP en los registros</b> y <b>crearon cuentas de administrador ocultas</b> para mantener acceso persistente."
-},
-{
-  "id":"Q41", "cat":"Palo Alto · CVE-2024-3400",
-  "q":"CVE-2024-3400 en PAN-OS recibió la puntuación CVSS máxima posible. Según el documento, ¿cuál fue el mecanismo técnico que permitió la inyección de comandos en este caso?",
-  "options":[
-    "La manipulación de cookies de sesión, que permitía inyectar comandos y afectó a más de 156.000 dispositivos",
-    "El uso de credenciales por defecto nunca cambiadas",
-    "La explotación de un buffer overflow basado en heap en el módulo VPN",
-    "Un ataque de fuerza bruta contra el portal de administración"
-  ],
-  "correct":0,
-  "explain":"El documento especifica que CVE-2024-3400 obtuvo CVSS 10.0 y que <b>la manipulación de cookies de sesión permitía la inyección de comandos</b>, afectando a más de 156.000 dispositivos."
-},
-{
-  "id":"Q42", "cat":"Cisco · rootkits en arranque seguro",
-  "q":"¿Por qué el documento describe como especialmente peligroso el compromiso de la cadena de arranque seguro de Cisco IOS XE mediante rootkits?",
-  "options":[
-    "Porque solo se activaban durante actualizaciones oficiales de firmware programadas",
-    "Porque requerían acceso físico directo al hardware para funcionar",
-    "Porque afectaban únicamente a dispositivos ya retirados de producción",
-    "Porque los rootkits se iniciaban antes que el propio sistema operativo, haciéndolos prácticamente invisibles para herramientas de detección convencionales"
-  ],
-  "correct":3,
-  "explain":"El documento resalta que estos rootkits <b>se iniciaban antes que el propio sistema operativo IOS XE</b>, lo que los hacía prácticamente invisibles para las herramientas de detección convencionales."
-},
-{
-  "id":"Q43", "cat":"Lateral movement",
-  "q":"Los datos de 2025 citados en el documento señalan que, una vez dentro de la red, los atacantes necesitaban apenas 29 minutos para moverse lateralmente. ¿Qué implicación estratégica tiene esta cifra para la defensa perimetral?",
-  "options":[
-    "Que el movimiento lateral solo es posible en redes sin segmentación alguna",
-    "Que basta con revisar los registros de seguridad una vez por semana",
-    "Que la ventana de reacción tras una intrusión inicial es extremadamente corta, lo que exige detección y respuesta casi inmediatas más allá del propio perímetro",
-    "Que los atacantes tardan más en moverse lateralmente que en comprometer el perímetro inicial"
-  ],
-  "correct":2,
-  "explain":"El dato de que los atacantes solo necesitaban <b>29 minutos para moverse lateralmente</b> subraya que la ventana de reacción defensiva es muy estrecha una vez vulnerado el perímetro."
-},
-{
-  "id":"Q44", "cat":"Crecimiento de zero-days",
-  "q":"El documento menciona que las vulnerabilidades de día cero crecieron un 42% respecto al período anterior. ¿Qué otro dato del mismo análisis 2024–2026 se relaciona directamente con esta tendencia?",
-  "options":[
-    "El ahorro medio de USD 2.2 millones por incidente al usar automatización",
-    "Que los grupos APT se volcaron hacia dispositivos de perímetro expuestos a internet pero con menor monitoreo que los servidores internos",
-    "El promedio de 662 componentes por imagen de firmware",
-    "El 36% de routers de consumo sin actualizar en 2020"
-  ],
-  "correct":1,
-  "explain":"El crecimiento del 42% en zero-days se enmarca en el mismo análisis donde se explica que los <b>grupos APT se desplazaron hacia dispositivos de perímetro</b> por su menor nivel de monitoreo frente a los servidores internos."
-},
-{
-  "id":"Q45", "cat":"IBM 2025 · costo y tiempo de permanencia",
-  "q":"Según los informes de IBM de 2025 citados en el documento, el tiempo medio de permanencia de un atacante dentro de una red fue de 241 días. ¿Qué significa esto en términos prácticos de seguridad?",
-  "options":[
-    "Que el 241 corresponde al número de dispositivos comprometidos por incidente",
-    "Que los atacantes son detectados de inmediato en la mayoría de los casos",
-    "Que, en promedio, un intruso puede tener acceso a sistemas, datos y comunicaciones internas durante más de ocho meses sin ser detectado",
-    "Que los ataques duran exactamente 241 días antes de causar cualquier daño"
-  ],
-  "correct":2,
-  "explain":"El documento aclara que ese tiempo medio de <b>241 días</b> representa más de ocho meses en los que <b>el intruso tiene acceso a sistemas, datos y comunicaciones internas sin ser detectado</b>."
-},
-{
-  "id":"Q46", "cat":"Recomendaciones técnicas · aislamiento de gestión",
-  "q":"Una organización expone directamente por internet las interfaces HTTPS y SSH de administración de su firewall. ¿Qué recomendación del documento está incumpliendo?",
-  "options":[
-    "Migrar todos los dispositivos físicos a appliances virtuales",
-    "Aislar interfaces de gestión, prohibiendo su exposición directa y utilizando VRF",
-    "Implementar autenticación multifactor únicamente en los servidores internos",
-    "Adoptar SBOM para auditar componentes de terceros"
-  ],
-  "correct":1,
-  "explain":"El documento recomienda explícitamente <b>aislar interfaces de gestión, prohibiendo la exposición directa de HTTPS y SSH, y usar VRF</b>, justo lo que la organización del escenario está incumpliendo."
-},
-{
-  "id":"Q47", "cat":"Telemetría out-of-band",
-  "q":"¿Por qué el documento recomienda enviar logs en tiempo real a un SIEM inmutable como parte de la telemetría out-of-band, en lugar de confiar únicamente en los registros del propio dispositivo comprometido?",
-  "options":[
-    "Porque un dispositivo comprometido puede ser manipulado para ocultar evidencia, como ocurrió en el caso Ivanti, mientras que un SIEM inmutable no puede ser alterado por el atacante",
-    "Porque el envío de logs en tiempo real reemplaza la necesidad de parchear vulnerabilidades",
-    "Porque los SIEM son obligatorios únicamente para cumplir con ISO 27001",
-    "Porque los logs locales del dispositivo siempre son más precisos que los enviados a un SIEM externo"
-  ],
-  "correct":0,
-  "explain":"La recomendación responde directamente a casos como Ivanti, donde <b>el atacante manipuló la propia herramienta de integridad del dispositivo</b>; un SIEM inmutable evita que el atacante altere la evidencia."
-},
-{
-  "id":"Q48", "cat":"Respuesta destructiva",
-  "q":"Tras confirmar que un firewall fue comprometido, un equipo de seguridad decide reinstalar el sistema desde cero y rotar todas las credenciales asociadas, en lugar de solo aplicar un parche. ¿Qué principio del documento está aplicando?",
-  "options":[
-    "La adopción de SBOM para auditar componentes de terceros",
-    "La segmentación mediante DMZ para servidores públicos",
-    "La mentalidad de respuesta destructiva ante compromisos de perímetro, asumiendo que si el dispositivo fue comprometido, las credenciales asociadas deben rotarse completamente",
-    "El principio Secure by Design exclusivamente relacionado con SELinux"
-  ],
-  "correct":2,
-  "explain":"El documento recomienda adoptar una <b>mentalidad de respuesta destructiva</b> ante compromisos de perímetro, asumiendo que las credenciales asociadas deben <b>rotarse completamente</b>, tal como hizo el equipo del escenario."
-},
-{
-  "id":"Q49", "cat":"Secure by Design · SBOM",
-  "q":"Un cliente exige a su proveedor de firewalls un documento que le permita auditar exactamente qué componentes de terceros forman parte del software que utiliza. ¿Qué exigencia del principio Secure by Design está aplicando?",
-  "options":[
-    "La directiva 24-01 de CISA sobre desconexión física de dispositivos",
-    "La exigencia de SBOM (Software Bill of Materials), cada vez más común para que los clientes auditen los componentes de terceros desplegados",
-    "La prohibición de conectar a internet dispositivos sin soporte activo del fabricante",
-    "La adopción de SELinux como sistema operativo del dispositivo"
-  ],
-  "correct":1,
-  "explain":"El documento describe la exigencia de <b>SBOM (Software Bill of Materials)</b> como una práctica cada vez más común dentro de Secure by Design, que permite a los clientes auditar los componentes de terceros en el software."
-},
-{
-  "id":"Q50", "cat":"Política CISA/NCSC",
-  "q":"Según el documento, ¿qué postura han endurecido activamente CISA y el NCSC respecto a los dispositivos de perímetro que ya alcanzaron su fin de soporte?",
-  "options":[
-    "Recomiendan reemplazarlos únicamente si sufren un ataque de día cero confirmado",
-    "Exigen que estos dispositivos se conviertan obligatoriamente en appliances virtuales",
-    "Permiten su uso indefinido siempre que se apliquen parches manuales periódicamente",
-    "Prohíben activamente conectar a internet dispositivos sin soporte activo del fabricante"
-  ],
-  "correct":3,
-  "explain":"El documento indica que CISA y el NCSC <b>prohíben activamente conectar a internet dispositivos sin soporte activo del fabricante</b>, como parte del endurecimiento de su postura frente al abandono de firmware."
-},
+// ---------- VULNERABILIDAD / AMENAZA / RIESGO (6) ----------
+{topic:"vat", q:"¿Cuál es la definición correcta de 'Vulnerabilidad' según el documento?", options:["Cualquier agente que pueda explotar una debilidad","Debilidad en un sistema que puede ser explotada","Probabilidad de que una amenaza explote una vulnerabilidad","Costo económico de un ataque"], correct:1, explain:"Vulnerabilidad se define como 'debilidad en un sistema que puede ser explotada'."},
+{topic:"vat", q:"¿Cuál es la fórmula de Riesgo presentada en el documento?", options:["Riesgo = Amenaza + Vulnerabilidad + Impacto","Riesgo = Amenaza × Vulnerabilidad × Impacto","Riesgo = Amenaza / Vulnerabilidad","Riesgo = Impacto − Vulnerabilidad"], correct:1, explain:"La fórmula presentada es Riesgo = Amenaza × Vulnerabilidad × Impacto."},
+{topic:"vat", q:"En el ejemplo de e-commerce del documento, ¿qué vulnerabilidad específica se menciona en el checkout?", options:["Falta de CAPTCHA","Checkout sin validación","Falta de HTTPS","Contraseñas débiles"], correct:1, explain:"El ejemplo describe 'Checkout sin validación → Script automatizado SQLi'."},
+{topic:"vat", q:"Según el ejemplo del documento, ¿cuál es la probabilidad estimada de compromiso de 50K tarjetas?", options:["50%","70%","94%","22%"], correct:1, explain:"El ejemplo indica 70% de probabilidad de compromiso de 50K tarjetas."},
+{topic:"vat", q:"¿Qué actores se mencionan como ejemplos de 'Amenaza'?", options:["Solo cibercriminales","Cibercriminal, Bot automatizado, Insider malicioso","Solo bots automatizados","Solo empleados"], correct:1, explain:"Los actores mencionados son Cibercriminal, Bot automatizado e Insider malicioso."},
+{topic:"vat", q:"¿Cuál es el ejemplo de vulnerabilidad de código mostrado en el documento?", options:["XSS en comentarios","SQL Injection en formulario de login sin prepared statements","CSRF en checkout","Falta de rate limiting"], correct:1, explain:"El ejemplo de código muestra SQL Injection en un login sin prepared statements."},
 
-// ---------- BLOQUE 3: PREGUNTAS 51-75 ----------
-{
-  "id":"Q51", "cat":"Debate del modelo castillo-foso",
-  "q":"El documento afirma que la analogía del perímetro como fortaleza infalible 'hoy está en debate'. ¿Cuál es la razón concreta que da el texto para este cuestionamiento?",
-  "options":[
-    "Porque las organizaciones dejaron de usar el modelo de DMZ por completo",
-    "Porque los routers fronterizos ya no existen en las redes actuales",
-    "Porque los firewalls modernos ya no pueden filtrar tráfico de red",
-    "Porque los atacantes ya no solo intentan escalar los muros, sino que usan 'caballos de Troya' como el phishing para entrar sin forzar la barrera perimetral"
-  ],
-  "correct":3,
-  "explain":"El documento señala que la analogía está en debate porque los atacantes <b>ya no solo escalan muros, sino que usan 'caballos de Troya' (phishing)</b>, evadiendo la barrera perimetral tradicional en lugar de romperla directamente."
-},
-{
-  "id":"Q52", "cat":"Ámbitos de la seguridad perimetral",
-  "q":"Una empresa refuerza el control de acceso a su centro de datos con cámaras y guardias, mientras en paralelo actualiza sus firewalls. Según el documento, ¿cómo se clasifican estas dos acciones dentro de la seguridad perimetral?",
-  "options":[
-    "Solo la actualización de firewalls cuenta como seguridad perimetral; los guardias y cámaras no forman parte de este concepto",
-    "Ambas acciones pertenecen al ámbito físico, ya que los firewalls también son hardware tangible",
-    "Ambas corresponden únicamente al ámbito informático, ya que todo control de acceso se considera digital",
-    "La seguridad perimetral se estructura en dos ámbitos: el informático, centrado en la protección de la red, y el físico, enfocado en la protección de las instalaciones; cada acción corresponde a uno de ellos"
-  ],
-  "correct":3,
-  "explain":"El documento distingue explícitamente que la seguridad perimetral se divide en <b>ámbito informático (protección de la red) y ámbito físico (protección de las instalaciones)</b>, correspondiendo cada acción del escenario a uno de ellos."
-},
-{
-  "id":"Q53", "cat":"Firewalls de nueva generación",
-  "q":"Una organización reemplaza su firewall tradicional por uno que, además de filtrar por reglas, inspecciona el contenido de los paquetes y previene intrusiones activamente. ¿Qué tipo de dispositivo describe mejor este cambio según el documento?",
-  "options":[
-    "Un sistema IDS puro, sin capacidad de bloqueo",
-    "Un router fronterizo con capacidades de VPN integradas",
-    "Un Firewall de Nueva Generación, que ha incorporado capacidades como la inspección profunda de paquetes y la prevención de intrusiones",
-    "Un appliance virtual sin ninguna capacidad adicional de análisis"
-  ],
-  "correct":2,
-  "explain":"El documento describe a los <b>Firewalls de Nueva Generación</b> como aquellos que incorporan <b>inspección profunda de paquetes y prevención de intrusiones</b>, más allá del simple filtrado por reglas."
-},
-{
-  "id":"Q54", "cat":"Costo de brechas · entorno cloud",
-  "q":"Según el Cost of a Data Breach Report 2024 de IBM citado en el documento, ¿qué diferencia existe entre el costo promedio global de una brecha y el costo en entornos de nube pública?",
-  "options":[
-    "El costo promedio global fue de USD 5.17 millones, superior al de la nube pública",
-    "El costo en la nube pública fue menor porque los proveedores cloud asumen toda la responsabilidad legal",
-    "El costo promedio global fue de USD 4.88 millones, mientras que en entornos de nube pública se elevó hasta USD 5.17 millones",
-    "No existe diferencia entre ambos entornos según el informe citado"
-  ],
-  "correct":2,
-  "explain":"El documento cita que el <b>costo promedio global alcanzó los USD 4.88 millones</b>, mientras que en <b>entornos de nube pública se elevó hasta USD 5.17 millones</b>, mostrando un riesgo económico mayor en la nube."
-},
-{
-  "id":"Q55", "cat":"Credenciales en la dark web",
-  "q":"El documento menciona que más de 15 mil millones de credenciales circulan en la dark web y que el 65% de los usuarios reutiliza contraseñas. ¿Qué riesgo combinado se deriva directamente de estos dos datos?",
-  "options:":[],
-  "options":[
-    "Que el firmware de los dispositivos se actualiza automáticamente al detectar la filtración",
-    "Que una sola filtración puede habilitar credential stuffing exitoso en múltiples servicios, ya que gran parte de los usuarios reutiliza la misma contraseña",
-    "Que los routers fronterizos dejan de ser necesarios",
-    "Que los ataques de día cero se vuelven imposibles de ejecutar"
-  ],
-  "correct":1,
-  "explain":"La combinación de <b>15 mil millones de credenciales filtradas</b> y un <b>65% de reutilización de contraseñas</b> explica por qué el credential stuffing es tan efectivo: una sola filtración compromete múltiples servicios."
-},
-{
-  "id":"Q56", "cat":"Ataques de botnets",
-  "q":"Miles de cámaras IP comprometidas son utilizadas simultáneamente para lanzar un ataque coordinado contra un mismo objetivo. ¿Qué amenaza del documento describe mejor este escenario?",
-  "options":[
-    "Bypass de autenticación mediante tokens predecibles",
-    "Ataque de envenenamiento de DNS",
-    "Ataque de insiders con acceso interno autorizado",
-    "Ataque de botnets, que usa una red de dispositivos comprometidos para lanzar ataques coordinados"
-  ],
-  "correct":3,
-  "explain":"El documento define el <b>ataque de botnets</b> como el uso de una red de dispositivos comprometidos para lanzar ataques coordinados, exactamente lo descrito en el escenario de las cámaras IP."
-},
-{
-  "id":"Q57", "cat":"Ataques a la capa de aplicación",
-  "q":"Un atacante explota una debilidad específica en la lógica de un portal de comercio electrónico, en lugar de atacar la red o el hardware que lo soporta. ¿Qué categoría de amenaza del documento corresponde a este caso?",
-  "options":[
-    "Ataques de botnets, dirigidos a redes de dispositivos comprometidos",
-    "Ataques de sniffing, dirigidos a datos en tránsito",
-    "Ataques físicos, dirigidos al hardware de red",
-    "Ataques a la capa de aplicación, dirigidos a aplicaciones web y servicios en línea"
-  ],
-  "correct":3,
-  "explain":"El documento define los <b>ataques a la capa de aplicación</b> como aquellos dirigidos específicamente a aplicaciones web y servicios en línea, distinto de ataques a la infraestructura de red o al hardware."
-},
-{
-  "id":"Q58", "cat":"Ataques físicos",
-  "q":"Un intruso ingresa sin autorización a la sala de servidores de una empresa y desconecta manualmente un router fronterizo. ¿Qué tipo de amenaza del documento describe este caso?",
-  "options":[
-    "Ataques de suplantación de identidad (spoofing)",
-    "Ataques de inyección de código",
-    "Ataques físicos, definidos como el acceso no autorizado a instalaciones o hardware de red",
-    "Ataques de día cero"
-  ],
-  "correct":2,
-  "explain":"El documento define los <b>ataques físicos</b> como el acceso no autorizado a instalaciones o hardware de red, justo el escenario de ingresar sin permiso a la sala de servidores."
-},
-{
-  "id":"Q59", "cat":"Inyección de código en aplicaciones web",
-  "q":"Un atacante inserta código malicioso en el campo de búsqueda de una aplicación web, logrando tomar control de parte de su funcionamiento. Según el documento, ¿qué nombre recibe esta técnica y en qué se diferencia de un ataque de sniffing?",
-  "options":[
-    "Es un ataque de sniffing, ya que ambos términos son sinónimos en el documento",
-    "Es un ataque de botnets, porque compromete múltiples aplicaciones a la vez",
-    "Es un ataque de spoofing, porque falsifica la identidad de origen de la aplicación",
-    "Es un ataque de inyección de código, que inyecta código malicioso en aplicaciones web para tomar el control de ellas, mientras que el sniffing solo intercepta datos en tránsito sin modificar la aplicación"
-  ],
-  "correct":3,
-  "explain":"El documento define la <b>inyección de código</b> como insertar código malicioso en aplicaciones web para tomar el control de ellas, a diferencia del <b>sniffing</b>, que solo intercepta datos en tránsito sin alterar la aplicación."
-},
-{
-  "id":"Q60", "cat":"Sniffing",
-  "q":"Un atacante conectado a la misma red Wi-Fi pública que la víctima captura pasivamente los paquetes de datos que esta envía, sin alterar ni bloquear el tráfico. ¿Qué amenaza del documento corresponde a esta acción?",
-  "options":[
-    "Ataques de día cero, que explotan vulnerabilidades desconocidas",
-    "Ataques de sniffing, que interceptan datos en tránsito para robar información sensible",
-    "Ataques de fuerza bruta, que intentan adivinar contraseñas repetidamente",
-    "Ataques de botnets, que coordinan dispositivos comprometidos"
-  ],
-  "correct":1,
-  "explain":"El documento define el <b>sniffing</b> como la interceptación de datos en tránsito para robar información sensible, coincidiendo con la captura pasiva de paquetes descrita en el escenario."
-},
-{
-  "id":"Q61", "cat":"Fuerza bruta vs credential stuffing",
-  "q":"Un atacante prueba sistemáticamente miles de combinaciones aleatorias de contraseña contra una sola cuenta, sin usar ninguna base de datos filtrada previa. ¿En qué se diferencia esto del credential stuffing descrito en el documento?",
-  "options":[
-    "La fuerza bruta requiere siempre acceso físico previo al dispositivo objetivo",
-    "El ataque descrito es fuerza bruta pura, que prueba combinaciones sin partir de credenciales reales filtradas, mientras que el credential stuffing reutiliza contraseñas ya expuestas en bases de datos filtradas como RockYou2024",
-    "El credential stuffing solo puede aplicarse a cuentas bancarias, nunca a otros servicios",
-    "No hay diferencia, ambos términos describen exactamente la misma técnica"
-  ],
-  "correct":1,
-  "explain":"El documento agrupa ambas técnicas como variantes del bypass de autenticación, pero mientras la <b>fuerza bruta</b> prueba combinaciones sistemáticamente, el <b>credential stuffing</b> aprovecha específicamente <b>bases de datos filtradas</b> como RockYou2024."
-},
-{
-  "id":"Q62", "cat":"Mitigación · Zero Trust",
-  "q":"Una organización decide que ningún usuario o dispositivo, ni siquiera los ya conectados a la red interna, tendrá acceso automático a los recursos sin verificación continua. ¿Qué estrategia de mitigación mencionada en el documento está implementando?",
-  "options":[
-    "Uso de routers fronterizos con filtrado inicial de paquetes",
-    "Segmentación mediante DMZ exclusivamente",
-    "Adopción de appliances virtuales en la nube",
-    "Zero Trust Architecture, listada entre las medidas de mitigación junto con MFA obligatorio y monitorización con SIEM"
-  ],
-  "correct":3,
-  "explain":"El documento incluye la <b>Zero Trust Architecture</b> entre las medidas de mitigación recomendadas, junto con MFA obligatorio, políticas de contraseñas fuertes y monitorización con SIEM."
-},
-{
-  "id":"Q63", "cat":"Mitigación · privilegio mínimo",
-  "q":"Un administrador configura las cuentas de los empleados para que solo tengan acceso a los recursos estrictamente necesarios para su función, y además valida cada solicitud de permisos en el servidor y no solo en el cliente. ¿Qué dos medidas de mitigación del documento está aplicando?",
-  "options":[
-    "Parcheo de CVEs en VPN y adopción de SBOM",
-    "Zero Trust Architecture y eliminación de credenciales por defecto",
-    "Principio de mínimo privilegio y verificación server-side",
-    "Tokens con alta entropía y flags HttpOnly en cookies"
-  ],
-  "correct":2,
-  "explain":"El documento lista explícitamente el <b>principio de mínimo privilegio</b> y la <b>verificación server-side</b> como medidas de mitigación, coincidiendo con ambas acciones descritas en el escenario."
-},
-{
-  "id":"Q64", "cat":"Mitigación · cookies seguras",
-  "q":"Un desarrollador configura las cookies de sesión de su aplicación con los flags HttpOnly y Secure. Según el documento, ¿qué tipo de ataque busca prevenir específicamente esta medida?",
-  "options":[
-    "Ataques físicos a las instalaciones de red",
-    "Secuestro de sesión, ya que estos flags reducen el riesgo de Cookie Theft por ausencia de protecciones de seguridad en la cookie",
-    "Ataques de envenenamiento de DNS",
-    "Ataques de fuerza bruta contra contraseñas"
-  ],
-  "correct":1,
-  "explain":"El documento vincula los <b>flags HttpOnly y Secure en cookies</b> como mitigación frente al <b>secuestro de sesión</b>, específicamente contra la técnica de Cookie Theft por ausencia de estas protecciones."
-},
-{
-  "id":"Q65", "cat":"Reducción de la superficie de ataque",
-  "q":"El documento afirma que, al definir un límite de confianza claro entre la red interna y externa, una organización 'logra reducir su superficie de ataque digital'. ¿Qué elemento de la seguridad perimetral cumple directamente esta función según el texto?",
-  "options":[
-    "El aumento del ancho de banda disponible en la red interna",
-    "La eliminación total de servidores de cara al público",
-    "La contratación de más personal de soporte técnico",
-    "El establecimiento de una frontera rígida entre la LAN confiable y las redes externas no confiables, propio del modelo de castillo y foso"
-  ],
-  "correct":3,
-  "explain":"El documento explica que el modelo de <b>castillo y foso establece una frontera rígida</b> entre la red interna confiable y las externas no confiables, y que definir ese límite de confianza es lo que <b>reduce la superficie de ataque digital</b>."
-},
-{
-  "id":"Q66", "cat":"Modelo castillo y foso",
-  "q":"Al describir la concepción original de la seguridad perimetral bajo el modelo de 'castillo y foso', ¿cuál es la idea central que el documento atribuye a este enfoque?",
-  "options":[
-    "Que todos los datos deben cifrarse únicamente dentro de la red interna",
-    "Que se establece una frontera rígida entre la red interna confiable (LAN) y las redes externas no confiables, controlando todo el tráfico que cruza ese límite",
-    "Que el perímetro debe eliminarse por completo en favor de la nube pública",
-    "Que la seguridad debe distribuirse por igual entre todos los dispositivos internos sin distinción de confianza"
-  ],
-  "correct":1,
-  "explain":"El documento describe el modelo de <b>castillo y foso</b> como el establecimiento de una <b>frontera rígida</b> entre la LAN confiable y las redes externas no confiables, con control de todo el tráfico que cruza ese límite."
-},
-{
-  "id":"Q67", "cat":"Analogía de la DMZ",
-  "q":"El documento compara la DMZ con 'las áreas comunes de edificios modernos'. ¿Qué característica de esas áreas comunes explica por qué se usa esa comparación?",
-  "options":[
-    "Que están completamente aisladas de cualquier tipo de tráfico externo",
-    "Que solo el personal de mantenimiento puede ingresar a ellas",
-    "Que los visitantes pueden interactuar en ellas sin acceder a las zonas principales o críticas del edificio",
-    "Que son las zonas más vigiladas y restringidas de todo el edificio"
-  ],
-  "correct":2,
-  "explain":"El documento explica que las áreas comunes permiten que <b>los visitantes interactúen sin acceder a las zonas principales o críticas</b>, tal como la DMZ aloja servidores públicos sin exponer la red interna."
-},
-{
-  "id":"Q68", "cat":"IDS vs IPS · acción automática",
-  "q":"Un sistema no solo identifica un patrón de tráfico malicioso, sino que además bloquea automáticamente ese tráfico sin intervención humana. Según el documento, ¿qué sistema específico se comporta así y cómo se diferencia del otro mencionado en el mismo par?",
-  "options":[
-    "Es una VPN, que cifra el tráfico en lugar de bloquearlo",
-    "Es un router fronterizo, que reemplaza tanto al IDS como al IPS",
-    "Es un IDS, ya que ambos sistemas bloquean el tráfico de la misma manera",
-    "Es un IPS, un sistema activo que no solo detecta sino que bloquea automáticamente el tráfico malicioso, a diferencia del IDS que solo monitorea y alerta"
-  ],
-  "correct":3,
-  "explain":"El documento define al <b>IPS</b> como un sistema activo que <b>bloquea automáticamente</b> el tráfico malicioso, mientras que el <b>IDS</b> únicamente monitorea y alerta a los administradores sin bloquear."
-},
-{
-  "id":"Q69", "cat":"Malware en el caso Ivanti",
-  "q":"Dentro del arsenal de malware desplegado por el grupo UNC5221 en el caso Ivanti, ¿qué diferencia funcional describe el documento entre ZIPLINE y WARPWIRE?",
-  "options":[
-    "ZIPLINE y WARPWIRE eran nombres alternativos para la misma herramienta de integridad comprometida",
-    "ZIPLINE capturaba credenciales en texto plano, mientras que WARPWIRE modificaba la lista de exclusiones de la herramienta de integridad",
-    "ZIPLINE interceptaba tráfico de red de forma pasiva y casi indetectable, mientras que WARPWIRE se encargaba de capturar credenciales en texto plano",
-    "Ambos cumplían exactamente la misma función de interceptar tráfico de red"
-  ],
-  "correct":2,
-  "explain":"El documento distingue que <b>ZIPLINE interceptaba tráfico de red de forma pasiva y prácticamente indetectable</b>, mientras que <b>WARPWIRE se encargaba de capturar credenciales en texto plano</b>."
-},
-{
-  "id":"Q70", "cat":"Atribución del ataque Ivanti",
-  "q":"Según el documento, ¿a qué actor de amenazas se atribuye la explotación de las vulnerabilidades de Ivanti Connect Secure mediante el uso de subprocess con shell=True?",
-  "options":[
-    "A un actor interno (insider) dentro de la propia empresa Ivanti",
-    "Al grupo Belsen Group, que filtró configuraciones de FortiGate",
-    "Al grupo UNC5221, atribuido a actores vinculados a China",
-    "Al grupo Qilin, responsable del ataque a Synnovis"
-  ],
-  "correct":2,
-  "explain":"El documento atribuye la explotación de estas vulnerabilidades al <b>grupo UNC5221, vinculado a actores relacionados con China</b>, quienes desplegaron un arsenal de malware a medida tras el compromiso inicial."
-},
-{
-  "id":"Q71", "cat":"Fortinet · deuda técnica general",
-  "q":"Más allá del caso Belsen Group, el documento menciona que FortiOS y FortiManager presentaron otros problemas serios en 2025. ¿Cuáles fueron esos problemas?",
-  "options":[
-    "Incompatibilidad total con appliances virtuales en la nube",
-    "Filtración exclusiva de credenciales de administradores de Fortinet",
-    "Ataques físicos documentados contra sus centros de datos",
-    "Problemas de corrupción de memoria y fallos en los mecanismos de autenticación"
-  ],
-  "correct":3,
-  "explain":"El documento indica que FortiOS y FortiManager presentaron <b>problemas de corrupción de memoria y fallos en los mecanismos de autenticación</b>, además del episodio de Belsen Group."
-},
-{
-  "id":"Q72", "cat":"Cisco · múltiples CVEs en VPN",
-  "q":"Dentro de la sección sobre vulnerabilidades en VPN, el documento menciona a Cisco junto con Ivanti y Fortinet. ¿Qué producto de Cisco se cita específicamente como afectado por múltiples CVEs?",
-  "options":[
-    "Cisco Webex, por vulnerabilidades de videoconferencia",
-    "Cisco ASA, exclusivamente por el CVE-2023-20269",
-    "Cisco IOS XE, exclusivamente por el compromiso de su cadena de arranque seguro",
-    "Cisco AnyConnect"
-  ],
-  "correct":3,
-  "explain":"El documento cita explícitamente a <b>Cisco AnyConnect</b> junto con Ivanti Connect Secure y Fortinet SSL-VPN como parte de los CVEs críticos recientes relacionados con vulnerabilidades en VPN."
-},
-{
-  "id":"Q73", "cat":"Aplicación integrada de mitigaciones",
-  "q":"Una empresa desea implementar una estrategia de mitigación completa contra bypass de autenticación y secuestro de sesión, siguiendo las recomendaciones del documento. ¿Cuál de las siguientes combinaciones refleja mejor esas recomendaciones?",
-  "options":[
-    "Migrar todos los servidores a la DMZ sin ninguna otra medida adicional",
-    "MFA obligatorio, tokens con alta entropía, flags HttpOnly y Secure en cookies, y verificación server-side",
-    "Eliminar completamente el uso de VPN y depender solo de routers fronterizos",
-    "Aumentar únicamente el ancho de banda de la red y contratar más personal de soporte"
-  ],
-  "correct":1,
-  "explain":"El documento agrupa como mitigación específica frente a estas amenazas: <b>MFA obligatorio, tokens con alta entropía, flags HttpOnly y Secure en cookies, y verificación server-side</b>, entre otras medidas."
-},
-{
-  "id":"Q74", "cat":"Ransomware en el informe IBM 2025",
-  "q":"Según los informes de IBM de 2025 citados en el documento, ¿qué proporción de los incidentes derivó en ransomware?",
-  "options":[
-    "El 81%, igual a la proporción de brechas con credenciales comprometidas",
-    "El 44% de los incidentes",
-    "El 66%, igual a la proporción de vulnerabilidades que afectan firmware",
-    "El 29%, igual al tiempo en minutos del movimiento lateral"
-  ],
-  "correct":1,
-  "explain":"El documento indica que, según los informes de IBM de 2025, <b>el 44% de los incidentes derivaron en ransomware</b>, una cifra distinta de las otras estadísticas mencionadas en el texto."
-},
-{
-  "id":"Q75", "cat":"Tesis general del documento",
-  "q":"Al cerrar el análisis del panorama 2024–2026, el documento resume el problema de fondo con una idea central. ¿Cuál es esa conclusión general?",
-  "options":[
-    "Que los ataques a dispositivos perimetrales dejaron de ocurrir a partir de 2025 gracias a Secure by Design",
-    "Que la solución definitiva es eliminar por completo los dispositivos perimetrales y depender solo de la seguridad interna",
-    "Que los dispositivos de perímetro nunca han representado un riesgo real para las organizaciones",
-    "Que durante años los dispositivos de perímetro fueron tratados como infraestructura invisible, y los eventos de 2024 a 2026 dejaron claro que esa invisibilidad tiene un precio"
-  ],
-  "correct":3,
-  "explain":"El documento concluye que <b>los dispositivos de perímetro fueron tratados como infraestructura invisible</b> durante años, y que los eventos de 2024 a 2026 <b>dejaron claro que esa invisibilidad tiene un precio</b>, siendo esta la tesis central del análisis."
-},
-// ---------- BLOQUE 4: PREGUNTAS 76-100 ----------
-{
-  "id":"Q76", "cat":"Naturaleza de los dispositivos · embebidos",
-  "q":"Un switch de red incorpora, como uno de sus módulos internos, la capacidad de filtrar contenido y actuar como firewall básico, sin ser un equipo dedicado independiente. Según el documento, ¿cómo se clasifica esta función?",
-  "options":[
-    "Es un router fronterizo exclusivamente, sin ninguna función de seguridad adicional",
-    "Es un sistema embebido dentro de otro equipo de red, donde la capacidad de protección reside como un módulo dentro de un switch o router principal",
-    "Es un appliance virtual, ya que solo existe como instancia de software en la nube",
-    "No cuenta como dispositivo perimetral porque no es una unidad física independiente"
-  ],
-  "correct":1,
-  "explain":"El documento describe este caso como una <b>función de seguridad embebida dentro de otro equipo de red</b>, donde la capacidad de protección reside como módulo dentro de un router o switch principal."
-},
-{
-  "id":"Q77", "cat":"Objetivos de la seguridad perimetral · síntesis",
-  "q":"Una organización primero identifica y alerta sobre un ataque externo, después bloquea el tráfico ilegítimo asociado, y finalmente aísla los sistemas según el daño recibido. ¿Qué relación tiene esta secuencia con los objetivos descritos en el documento?",
-  "options":[
-    "Solo corresponde a la función de una VPN, no a los objetivos generales de la seguridad perimetral",
-    "Es una secuencia incorrecta, ya que el documento indica que la segmentación siempre debe ocurrir antes que la detección",
-    "Refleja únicamente el ciclo de vida de la vulnerabilidad, no los objetivos de la seguridad perimetral",
-    "Refleja exactamente los tres objetivos de la seguridad perimetral informática: soportar y detectar ataques, filtrar tráfico ilegítimo, y segmentar sistemas según el área de daño"
-  ],
-  "correct":3,
-  "explain":"La secuencia coincide con los <b>tres objetivos</b> que el documento atribuye a la seguridad perimetral informática: soportar/detectar ataques, filtrar tráfico ilegítimo, y segmentar sistemas según el área de daño."
-},
-{
-  "id":"Q78", "cat":"Broken Access Control vs Bypass de autenticación",
-  "q":"Un usuario autenticado legítimamente accede, sin permiso, al panel de administración cambiando un parámetro en la URL. Otro atacante, sin ninguna credencial, logra iniciar sesión falsificando un token de baja entropía. ¿Cómo distingue el documento estos dos casos?",
-  "options":[
-    "Ambos corresponden a vulnerabilidades de buffer overflow según el documento",
-    "El primero es un ataque de sniffing y el segundo un ataque de spoofing",
-    "El primero es un fallo de control de acceso (autorización indebida tras una autenticación válida), mientras que el segundo es un bypass de autenticación (saltarse la verificación de identidad sin credenciales válidas)",
-    "Ambos son ejemplos del mismo fenómeno: bypass de autenticación"
-  ],
-  "correct":2,
-  "explain":"El documento distingue el <b>control de acceso</b> (verificar si un usuario autenticado tiene permiso para una acción) del <b>bypass de autenticación</b> (saltarse la verificación de identidad sin credenciales válidas): dos fallas distintas aunque relacionadas."
-},
-{
-  "id":"Q79", "cat":"CVE-2023-20269",
-  "q":"El documento cita el CVE-2023-20269 como caso real documentado dentro de una de las categorías de fallas de seguridad. ¿A qué categoría corresponde y qué fabricante se vio involucrado?",
-  "options":[
-    "Secuestro de sesión en Ivanti Connect Secure",
-    "Fallos de control de acceso en Palo Alto Networks",
-    "Bypass de autenticación en Cisco ASA",
-    "Buffer overflow basado en heap en Fortinet"
-  ],
-  "correct":2,
-  "explain":"El documento cita el <b>CVE-2023-20269 en Cisco ASA</b> como caso real documentado dentro de la categoría de <b>bypass de autenticación</b>."
-},
-{
-  "id":"Q80", "cat":"Vectores comunes en VPN",
-  "q":"Una organización configura su VPN permitiendo que parte del tráfico de los usuarios remotos salga directamente a internet sin pasar por el túnel cifrado, y además no exige autenticación multifactor para conectarse. Según el documento, ¿qué dos vectores de riesgo en VPN está combinando?",
-  "options":[
-    "Manipulación de cookies de sesión y tokens predecibles",
-    "Path traversal y corrupción de memoria",
-    "Certificados deficientes y logging insuficiente",
-    "Split tunneling mal configurado y ausencia de MFA"
-  ],
-  "correct":3,
-  "explain":"El documento lista específicamente el <b>split tunneling mal configurado</b> y la <b>ausencia de MFA</b> como vectores comunes de riesgo en VPN, junto con certificados deficientes y logging insuficiente."
-},
-{
-  "id":"Q81", "cat":"Almacenamiento inseguro de credenciales",
-  "q":"Un desarrollador guarda las contraseñas de los usuarios en la base de datos usando el algoritmo MD5 sin ningún salt adicional. ¿Qué vector de riesgo relacionado con credenciales describe mejor esta práctica según el documento?",
-  "options":[
-    "Tokens de sesión generados con baja entropía",
-    "Contraseñas por defecto nunca cambiadas",
-    "Almacenamiento inseguro, como texto plano, MD5 sin sal, o credenciales hardcodeadas en el código fuente",
-    "Reutilización entre servicios (credential stuffing)"
-  ],
-  "correct":2,
-  "explain":"El documento identifica el <b>almacenamiento inseguro</b> —incluyendo texto plano, <b>MD5 sin sal</b> o credenciales hardcodeadas— como uno de los tres vectores principales del peligro de las credenciales."
-},
-{
-  "id":"Q82", "cat":"Comparación de costos IBM 2024 vs 2025",
-  "q":"El documento cita dos cifras de costo promedio de una brecha de datos en momentos distintos: USD 4.88 millones (reporte 2024) y USD 4.44 millones (reporte 2025). ¿Qué lectura es la más consistente con el uso que el documento da a estos datos?",
-  "options":[
-    "El documento afirma que ambas cifras corresponden exclusivamente a brechas en dispositivos perimetrales de VPN",
-    "Son cifras de reportes distintos (2024 y 2025) usadas en secciones diferentes para argumentar el impacto económico de las brechas, sin que el documento las presente como una serie comparativa continua",
-    "Ambas cifras provienen del mismo informe y año, por lo que representan una contradicción del documento",
-    "La cifra de 2025 confirma que el costo de las brechas se triplicó respecto a 2024"
-  ],
-  "correct":1,
-  "explain":"El documento presenta estas cifras en secciones distintas —el reporte IBM 2024 y el análisis del panorama 2024-2026 basado en el reporte 2025— cada una para argumentar el impacto económico en su respectivo contexto, sin construir una serie comparativa explícita entre ambas."
-},
-{
-  "id":"Q83", "cat":"Tiempo de permanencia y movimiento lateral",
-  "q":"El documento menciona dos cifras temporales distintas relacionadas con atacantes dentro de una red: 29 minutos y 241 días. ¿Qué diferencia describe correctamente el documento entre ambas?",
-  "options":[
-    "Los 29 minutos corresponden al tiempo de aplicación de un parche de seguridad",
-    "Los 241 días corresponden al tiempo de movimiento lateral y los 29 minutos al tiempo total de permanencia",
-    "Ambas cifras describen exactamente el mismo fenómeno de movimiento lateral",
-    "Los 29 minutos corresponden al tiempo que tarda un atacante en moverse lateralmente tras entrar a la red, mientras que los 241 días corresponden al tiempo medio total de permanencia de un atacante sin ser detectado"
-  ],
-  "correct":3,
-  "explain":"El documento distingue que los <b>29 minutos</b> se refieren al tiempo para <b>moverse lateralmente</b> tras la intrusión, mientras que los <b>241 días</b> corresponden al <b>tiempo medio de permanencia</b> total de un atacante sin ser detectado."
-},
-{
-  "id":"Q84", "cat":"Zero-day vs N-day · síntesis",
-  "q":"Un atacante explota una falla que el fabricante desconoce por completo, mientras que otro atacante explota una falla con parche público disponible desde hace meses que la organización no instaló. ¿Cómo distingue el documento estos dos escenarios?",
-  "options":[
-    "El documento no distingue entre ambos casos y los trata como sinónimos",
-    "El primero corresponde a la ventana zero-day, donde no existe solución oficial disponible; el segundo corresponde a una vulnerabilidad N-day, donde el parche existe pero no ha sido aplicado",
-    "Ambos son ejemplos de vulnerabilidades N-day, ya que ambas fallas terminan siendo explotadas igualmente",
-    "El primero es una vulnerabilidad N-day y el segundo un ataque zero-day, en orden invertido al descrito"
-  ],
-  "correct":1,
-  "explain":"El documento distingue claramente la <b>ventana zero-day</b> (sin solución oficial disponible) de las <b>vulnerabilidades N-day</b> (con parche disponible públicamente pero no remediadas), como en el caso de las estadísticas de ICS-CERT."
-},
-{
-  "id":"Q85", "cat":"Caso Belsen Group · ventana N-day aplicada",
-  "q":"El episodio de Belsen Group, donde se filtraron configuraciones de FortiGate obtenidas en ataques de 2022 pero publicadas en 2025, ¿cómo se relaciona con el concepto de 'ventana de vulnerabilidad' descrito en el documento?",
-  "options":[
-    "Demuestra que la ventana de vulnerabilidad se cierra automáticamente después de tres años, sin necesidad de ninguna acción",
-    "No se relaciona, ya que la ventana de vulnerabilidad solo aplica a ataques zero-day",
-    "Demuestra que Fortinet nunca lanzó un parche para las vulnerabilidades explotadas en 2022",
-    "Ilustra que la ventana de vulnerabilidad puede extenderse mucho más allá de la aplicación del parche de firmware, si las credenciales y certificados comprometidos nunca se rotan"
-  ],
-  "correct":3,
-  "explain":"El caso Belsen Group ilustra que, aunque el firmware fue actualizado, la <b>ventana de vulnerabilidad persistió</b> porque nunca se rotaron <b>credenciales ni certificados</b>, dejando a las organizaciones expuestas tres años después."
-},
-{
-  "id":"Q86", "cat":"Comparación Ivanti vs Palo Alto",
-  "q":"Tanto el caso Ivanti como el caso Palo Alto (CVE-2024-3400) resultaron en compromisos críticos de dispositivos perimetrales, pero por mecanismos técnicos distintos. ¿Cuál describe correctamente esa diferencia según el documento?",
-  "options":[
-    "Ivanti fue comprometido por ataques físicos y Palo Alto por ataques de sniffing",
-    "Ivanti fue comprometido mediante manipulación de cookies de sesión, y Palo Alto mediante el uso de subprocess con shell=True",
-    "Ambos casos fueron comprometidos exactamente por la misma vulnerabilidad de buffer overflow basado en heap",
-    "Ivanti fue comprometido por el uso de subprocess de Python con shell=True permitiendo RCE con privilegios de root, mientras que Palo Alto fue comprometido mediante manipulación de cookies de sesión que permitía inyección de comandos"
-  ],
-  "correct":3,
-  "explain":"El documento describe mecanismos técnicos distintos: <b>Ivanti</b> mediante <b>subprocess con shell=True</b> (RCE con privilegios root), y <b>Palo Alto</b> mediante <b>manipulación de cookies de sesión</b> que permitía inyección de comandos."
-},
-{
-  "id":"Q87", "cat":"Directiva 24-01 de CISA",
-  "q":"Según el documento, ¿qué medida extrema ordenó CISA mediante la Directiva 24-01 en respuesta al caso Ivanti, y por qué fue necesaria esa medida en particular?",
-  "options":[
-    "Ordenó la rotación automática de certificados sin necesidad de desconectar los dispositivos",
-    "Ordenó únicamente aplicar un parche de software estándar, sin ninguna acción adicional",
-    "Ordenó la prohibición permanente de cualquier dispositivo VPN en instituciones gubernamentales",
-    "Ordenó la desconexión física de miles de dispositivos, porque el malware sobrevivía incluso a los restablecimientos de fábrica"
-  ],
-  "correct":3,
-  "explain":"El documento indica que CISA ordenó la <b>desconexión física de miles de dispositivos</b>, una medida extrema justificada porque <b>el malware sobrevivía incluso a los restablecimientos de fábrica</b>."
-},
-{
-  "id":"Q88", "cat":"Secure by Design · SELinux",
-  "q":"Ivanti y otros fabricantes comenzaron a adoptar sistemas operativos con controles más estrictos como SELinux tras los incidentes de 2024-2026. ¿Qué relación tiene esta adopción con el principio Secure by Design descrito en el documento?",
-  "options":[
-    "SELinux solo se aplica a appliances virtuales, nunca a hardware físico",
-    "SELinux reemplaza completamente la necesidad de parches de seguridad futuros",
-    "Es una de las traducciones concretas del principio Secure by Design en cambios técnicos reales, junto con la exigencia creciente de SBOM",
-    "SELinux es incompatible con el principio Secure by Design según el documento"
-  ],
-  "correct":2,
-  "explain":"El documento presenta la adopción de <b>SELinux</b> y la exigencia creciente de <b>SBOM</b> como las traducciones concretas del principio <b>Secure by Design</b> en cambios técnicos reales tras los incidentes analizados."
-},
-{
-  "id":"Q89", "cat":"Caso Synnovis · cadena de impacto",
-  "q":"El documento utiliza el caso Synnovis para argumentar una idea más amplia sobre por qué la seguridad perimetral importa. ¿Cuál es esa idea, más allá del dato de las 11.000 cirugías canceladas?",
-  "options":[
-    "Que el sector salud es inmune a los ataques de ransomware según los datos disponibles",
-    "Que un fallo técnico en un dispositivo de perímetro puede tener consecuencias humanas y sociales directas, no solo pérdidas económicas o técnicas",
-    "Que el grupo Qilin solo ataca proveedores de servicios de patología en el Reino Unido",
-    "Que las vulnerabilidades perimetrales no representan ningún riesgo real fuera de un entorno de laboratorio"
-  ],
-  "correct":1,
-  "explain":"El documento concluye que este caso demuestra que <b>un dispositivo de perímetro mal configurado tuvo consecuencias directas en la atención sanitaria de una región entera</b>, mostrando que el problema va más allá de lo técnico o económico."
-},
-{
-  "id":"Q90", "cat":"Postura regulatoria",
-  "q":"Además de prohibir la conexión de dispositivos sin soporte activo, ¿qué otras dos recomendaciones técnicas concretas señala el documento como las más repetidas en la industria tras el análisis 2024-2026?",
-  "options":[
-    "Reducir la frecuencia de actualizaciones de firmware para evitar interrupciones de servicio",
-    "Migrar todos los dispositivos físicos a la nube pública sin excepción",
-    "Aislar interfaces de gestión evitando exposición directa de HTTPS/SSH, e implementar telemetría out-of-band hacia un SIEM inmutable",
-    "Eliminar por completo el uso de firewalls y depender únicamente de IDS"
-  ],
-  "correct":2,
-  "explain":"El documento señala como recomendaciones más repetidas: <b>aislar interfaces de gestión</b> (sin exposición directa de HTTPS/SSH, usando VRF) e <b>implementar telemetría out-of-band</b> hacia un SIEM inmutable, junto con la mentalidad de respuesta destructiva."
-},
-{
-  "id":"Q91", "cat":"Relación amenaza-mitigación",
-  "q":"Una organización sufre múltiples intentos de acceso usando contraseñas filtradas en bases de datos públicas contra las cuentas de sus empleados. De las medidas de mitigación listadas en el documento, ¿cuáles serían las más directamente relevantes para este riesgo específico?",
-  "options":[
-    "Adopción exclusiva de SELinux en los servidores internos",
-    "Aislamiento de interfaces de gestión mediante VRF",
-    "Parcheo de CVEs en VPN y adopción de SBOM",
-    "MFA obligatorio y políticas de contraseñas fuertes, junto con la eliminación de credenciales por defecto"
-  ],
-  "correct":3,
-  "explain":"Frente a credenciales filtradas y reutilizadas, el documento recomienda directamente <b>MFA obligatorio</b> y <b>políticas de contraseñas fuertes</b>, medidas que mitigan justamente el riesgo de credential stuffing."
-},
-{
-  "id":"Q92", "cat":"Comparación DMZ e IDS/IPS",
-  "q":"Dentro de la analogía de la fortaleza, la DMZ representa las áreas comunes y el IDS/IPS representa a los centinelas y arqueros. ¿Qué diferencia funcional real entre DMZ e IDS/IPS refleja esta distinción según el documento?",
-  "options":[
-    "La DMZ solo existe en appliances virtuales, mientras que el IDS/IPS solo existe en hardware físico",
-    "El IDS/IPS reemplaza la necesidad de tener una DMZ en cualquier arquitectura de red",
-    "La DMZ es una medida de segmentación estructural de red, mientras que el IDS/IPS es un mecanismo activo de monitoreo y respuesta ante el tráfico",
-    "Ambos cumplen exactamente la misma función de segmentación de red"
-  ],
-  "correct":2,
-  "explain":"La DMZ es una <b>subred segmentada</b> que aísla servidores públicos, mientras que el IDS/IPS es un <b>mecanismo activo de monitoreo y bloqueo</b> del tráfico; ambos son complementarios, no equivalentes."
-},
-{
-  "id":"Q93", "cat":"Trabajo remoto como amenaza",
-  "q":"El documento afirma que las amenazas a la seguridad perimetral 'no son solo malware o hackers', sino que también provienen de otras fuentes. ¿Cuáles menciona explícitamente el texto?",
-  "options":[
-    "Los desastres naturales que afectan los centros de datos",
-    "Los ataques físicos exclusivamente, sin ninguna otra fuente adicional",
-    "El trabajo remoto y las aplicaciones que se mueven entre dispositivos conectados a la red",
-    "La falta de electricidad en las instalaciones de red"
-  ],
-  "correct":2,
-  "explain":"El documento indica explícitamente que las amenazas también provienen <b>del trabajo remoto y de aplicaciones que se mueven entre dispositivos conectados a la red</b>, no solo de malware o hackers tradicionales."
-},
-{
-  "id":"Q94", "cat":"Costo del ataque · analogía",
-  "q":"En la analogía de la fortaleza, el documento afirma que el objetivo común entre la defensa física y la digital es 'aumentar el costo del ataque' para el adversario. ¿Qué significa esto en términos prácticos según el texto?",
-  "options":[
-    "Que el objetivo es cobrar una tarifa a los atacantes que intenten vulnerar el sistema",
-    "Que el objetivo es incrementar el precio de mercado de los dispositivos de seguridad",
-    "Que el objetivo es reducir el presupuesto de seguridad de la organización",
-    "Que el objetivo es hacer que el acceso no autorizado sea más difícil y lento para el atacante, no necesariamente imposible"
-  ],
-  "correct":3,
-  "explain":"El documento aclara que aumentar el 'costo del ataque' significa <b>hacer que el acceso no autorizado sea más difícil y lento</b> para el adversario, reconociendo que ninguna defensa es absolutamente infalible."
-},
-{
-  "id":"Q95", "cat":"Importancia de la seguridad perimetral · valores protegidos",
-  "q":"El documento afirma que la seguridad perimetral protege ciertos valores que 'ya no dependen de límites físicos, sino de múltiples capas de protección'. ¿Cuáles son esos valores?",
-  "options":[
-    "La velocidad de procesamiento del firmware",
-    "Únicamente la disponibilidad de los servidores físicos",
-    "El costo total de propiedad de los dispositivos de red",
-    "La privacidad, confidencialidad e integridad de la información"
-  ],
-  "correct":3,
-  "explain":"El documento afirma que la seguridad perimetral protege la <b>privacidad, confidencialidad e integridad de la información</b>, valores que hoy dependen de múltiples capas de protección y no solo de límites físicos."
-},
-{
-  "id":"Q96", "cat":"Síntesis · Ivanti como caso más citado",
-  "q":"El documento describe el caso Ivanti Connect Secure como 'probablemente el más citado en la literatura de seguridad de estos años'. ¿Qué combinación de elementos, según el texto, explica por qué se volvió tan representativo?",
-  "options":[
-    "Que fue el primer caso de vulnerabilidad zero-day documentado en la historia de la ciberseguridad",
-    "Únicamente el alto costo económico de la brecha, sin ningún elemento técnico relevante",
-    "Un error básico de programación que permitió RCE con privilegios de root, malware a medida, manipulación de la herramienta de integridad para ocultar el compromiso, y una respuesta regulatoria extrema (Directiva 24-01)",
-    "Que afectó exclusivamente a instituciones educativas en un solo país"
-  ],
-  "correct":2,
-  "explain":"El documento atribuye la relevancia del caso a la combinación de un <b>error básico de programación</b>, malware a medida (ZIPLINE, WARPWIRE), la <b>manipulación de la herramienta de integridad</b> para ocultar el compromiso, y la respuesta regulatoria extrema de CISA."
-},
-{
-  "id":"Q97", "cat":"Comparación de escala de impacto",
-  "q":"El documento cita distintas cifras de dispositivos o registros afectados en varios casos: más de 156.000 dispositivos (Palo Alto), aproximadamente 15.000 firewalls (Belsen Group) y 15 mil millones de credenciales (dark web). ¿Qué distingue correctamente a qué corresponde cada cifra?",
-  "options":[
-    "15 mil millones corresponde a los dispositivos afectados por el caso Synnovis",
-    "156.000 corresponde a Belsen Group y 15.000 a Palo Alto Networks",
-    "Las tres cifras corresponden exclusivamente al caso Ivanti Connect Secure",
-    "156.000 dispositivos afectados por CVE-2024-3400 en PAN-OS; 15.000 configuraciones de FortiGate filtradas por Belsen Group; 15 mil millones de credenciales circulando en la dark web en general"
-  ],
-  "correct":3,
-  "explain":"El documento asocia correctamente cada cifra: <b>156.000+ dispositivos</b> con CVE-2024-3400 en PAN-OS, <b>~15.000 configuraciones FortiGate</b> con Belsen Group, y <b>15 mil millones de credenciales</b> con la circulación general en la dark web."
-},
-{
-  "id":"Q98", "cat":"Relación firmware-RCE-N-day",
-  "q":"Considerando en conjunto los datos del documento sobre firmware (66% de vulnerabilidades principales lo afectan), RCE (80% de vulnerabilidades principales) y N-day (40% de ataques industriales con parche disponible no aplicado), ¿qué patrón general revelan estas cifras combinadas?",
-  "options":[
-    "Que solo el 6% de las vulnerabilidades reportadas tiene algún impacto real en la seguridad perimetral",
-    "Que el firmware ha dejado de ser relevante frente a los ataques de ingeniería social",
-    "Que las vulnerabilidades de firmware, la ejecución remota de código y el retraso en la aplicación de parches son fenómenos independientes sin ninguna relación entre sí",
-    "Que gran parte del riesgo perimetral se concentra en el firmware, se materializa principalmente a través de RCE, y persiste porque los parches existentes con frecuencia no se aplican a tiempo"
-  ],
-  "correct":3,
-  "explain":"Las tres cifras, leídas en conjunto, muestran que el riesgo perimetral se concentra en el <b>firmware</b>, se explota mayormente vía <b>RCE</b>, y persiste por el <b>retraso en aplicar parches ya disponibles</b> (N-day), reforzando la tesis central del documento."
-},
-{
-  "id":"Q99", "cat":"Rol del Edge/Border en el modelo de confianza",
-  "q":"El documento describe el dispositivo perimetral como el punto que 'regula el flujo de información entre una red interna confiable y redes externas no confiables'. Si una organización adopta trabajo remoto masivo sin extender adecuadamente ese control de confianza, ¿qué riesgo específico mencionado en el documento se agrava?",
-  "options":[
-    "El riesgo de envenenamiento de DNS en servidores públicos de la DMZ",
-    "El riesgo de corrupción de memoria exclusivamente en Fortinet",
-    "El riesgo de ataques físicos a las instalaciones centrales",
-    "El riesgo asociado al trabajo remoto y a las aplicaciones que se mueven entre dispositivos conectados a la red, que el documento identifica como fuente de amenaza más allá del malware tradicional"
-  ],
-  "correct":3,
-  "explain":"El documento identifica explícitamente que las amenazas también provienen <b>del trabajo remoto y de aplicaciones que se mueven entre dispositivos</b>, un riesgo que se agrava si el control de confianza del perímetro no se extiende adecuadamente a esos escenarios."
-},
-{
-  "id":"Q100", "cat":"Síntesis final del documento",
-  "q":"Integrando la tesis final del documento con el ciclo de vida de la vulnerabilidad y los casos analizados (Ivanti, Fortinet, Palo Alto, Cisco, Synnovis), ¿qué conclusión general resume mejor el mensaje completo del texto?",
-  "options":[
-    "Que la seguridad perimetral es un problema resuelto definitivamente gracias a la adopción de SBOM y SELinux",
-    "Que únicamente los fabricantes son responsables de cualquier incidente de seguridad perimetral, sin ninguna responsabilidad de las organizaciones que los operan",
-    "Que los dispositivos perimetrales dejaron de ser necesarios y deben eliminarse de cualquier arquitectura de red moderna",
-    "Que el riesgo real no proviene únicamente de la existencia de vulnerabilidades técnicas, sino de años de tratar a los dispositivos de perímetro como infraestructura invisible, con parches tardíos, credenciales sin rotar y monitoreo insuficiente, lo cual tuvo consecuencias económicas y humanas concretas"
-  ],
-  "correct":3,
-  "explain":"El documento cierra con la idea de que el problema de fondo es que <b>los dispositivos de perímetro fueron tratados como infraestructura invisible</b> durante años —con parches tardíos, credenciales sin rotar y poco monitoreo— y que los casos analizados (Ivanti, Fortinet, Palo Alto, Cisco, Synnovis) demuestran que <b>esa invisibilidad tiene un precio</b> económico y humano concreto."
-}
+// ---------- TRIADA CIA (7) ----------
+{topic:"cia", q:"¿Qué pilar de la tríada CIA se refiere a 'información accesible solo a usuarios autorizados'?", options:["Integridad","Disponibilidad","Confidencialidad","Autenticación"], correct:2, explain:"Esa es la definición de Confidencialidad en el documento."},
+{topic:"cia", q:"¿Qué mecanismos se asocian a Confidencialidad?", options:["Hashing / Firmas digitales","Redundancia / Backups / Anti-DDoS","Encriptación / Control de acceso","SAST / DAST"], correct:2, explain:"Confidencialidad se asocia a Encriptación y Control de acceso."},
+{topic:"cia", q:"¿Qué mecanismos se asocian a Integridad?", options:["Encriptación / Control de acceso","Hashing / Firmas digitales","Redundancia / Backups","MFA"], correct:1, explain:"Integridad se asocia a Hashing y Firmas digitales."},
+{topic:"cia", q:"¿Qué mecanismos se asocian a Disponibilidad?", options:["Redundancia, Backups, Anti-DDoS","Hashing","Encriptación","PAM"], correct:0, explain:"Disponibilidad se asocia a Redundancia, Backups y Anti-DDoS."},
+{topic:"cia", q:"Según el impacto económico de violaciones CIA, ¿cuál es el rango de multas PCI DSS asociado a Confidencialidad?", options:["$50K–300K/mes","$5K–100K/mes","$100K–300K por hora","$2.5M fijo"], correct:1, explain:"Confidencialidad → Multas PCI DSS $5K–$100K/mes."},
+{topic:"cia", q:"¿Cuánto puede costar 1 hora de downtime en ventas perdidas según el documento?", options:["$5K–100K","$50–500","$100K–300K","$4.45M"], correct:2, explain:"1 hora de downtime equivale a $100K–$300K en ventas perdidas."},
+{topic:"cia", q:"¿Cuál de estos es un ejemplo de Integridad según el documento?", options:["Datos de tarjetas encriptados","Precios de productos sin manipular","Sitio web funcionando 24/7","Credenciales de acceso seguras"], correct:1, explain:"'Precios de productos sin manipular' es un ejemplo de Integridad."},
+
+// ---------- AUTENTICACION VS AUTORIZACION (6) ----------
+{topic:"authn", q:"¿Qué pregunta responde la Autenticación según el documento?", options:["'¿Qué puedes hacer?'","'¿Quién eres?'","'¿Dónde estás?'","'¿Cuándo accediste?'"], correct:1, explain:"Autenticación responde '¿Quién eres?'."},
+{topic:"authn", q:"¿Cuál de los siguientes factores corresponde a la categoría 'SABES'?", options:["Huella dactilar","Token hardware","Contraseña, PIN, Pregunta de seguridad","Teléfono (SMS)"], correct:2, explain:"'SABES' incluye Contraseña, PIN y Pregunta de seguridad."},
+{topic:"authn", q:"¿Qué factor de autenticación corresponde a 'ERES'?", options:["Contraseña","TOTP","Huella dactilar, Facial, Iris","Pregunta de seguridad"], correct:2, explain:"'ERES' corresponde a factores biométricos: huella, facial, iris."},
+{topic:"authn", q:"Según la tabla de roles, ¿qué permisos tiene un 'Vendedor'?", options:["Gestionar todos los pedidos","Ver sus productos, actualizar inventario, devoluciones","Ver sus pedidos y comprar","Solo generar reportes"], correct:1, explain:"El Vendedor puede ver sus productos, actualizar inventario y gestionar devoluciones."},
+{topic:"authn", q:"¿Qué pregunta responde la Autorización según el documento?", options:["'¿Quién eres?'","'¿Qué puedes hacer?'","'¿Cómo entraste?'","'¿Cuándo naciste?'"], correct:1, explain:"Autorización responde '¿Qué puedes hacer?' una vez autenticado."},
+{topic:"authn", q:"¿Qué permisos corresponden al rol 'Admin' en la tabla del documento?", options:["Ver sus pedidos y comprar","Actualizar inventario","Gestionar todos los pedidos, productos, reportes","Solo actualizar perfil"], correct:2, explain:"El Admin gestiona todos los pedidos, productos y reportes."},
+
+// ---------- ENCRIPTACION VS HASHING (6) ----------
+{topic:"crypto", q:"¿Cuál es la característica principal de la encriptación?", options:["Proceso irreversible","Proceso reversible (con clave)","Salida de longitud fija sin clave","No requiere clave"], correct:1, explain:"La encriptación es un proceso reversible: con la clave se puede volver al texto original."},
+{topic:"crypto", q:"¿Qué algoritmos se mencionan para encriptación en el documento?", options:["bcrypt / SHA-256 / Argon2","AES-256 / RSA / TLS 1.3","MD5 / SHA-1","CAPTCHA / WAF"], correct:1, explain:"Para encriptación se mencionan AES-256, RSA y TLS 1.3."},
+{topic:"crypto", q:"¿Cuál es la característica principal del hashing?", options:["Reversible con clave","Función de una vía, irreversible","Requiere descifrado con clave","Usa RSA"], correct:1, explain:"El hashing es una función de una vía (irreversible)."},
+{topic:"crypto", q:"¿Qué algoritmos se mencionan para hashing de contraseñas?", options:["AES-256 / RSA","bcrypt / SHA-256 / Argon2","TLS 1.3","DES"], correct:1, explain:"Para hashing se mencionan bcrypt, SHA-256 y Argon2."},
+{topic:"crypto", q:"¿Para qué caso de uso se recomienda la encriptación según el documento?", options:["Almacenar contraseñas","Tarjetas de crédito en DB e información personal sensible","Verificar integridad de logs","Tokens de sesión"], correct:1, explain:"La encriptación se recomienda para tarjetas de crédito e info personal sensible."},
+{topic:"crypto", q:"¿Para qué caso de uso se recomienda el hashing según el documento?", options:["Comunicación HTTPS","Almacenar contraseñas","Datos recuperables","Info personal sensible"], correct:1, explain:"El hashing se recomienda para almacenar contraseñas."},
+
+// ---------- PRINCIPIOS FUNDAMENTALES (6) ----------
+{topic:"principios", q:"¿Qué principio establece que 'si una capa falla, otras protegen'?", options:["Least Privilege","Defense in Depth","Fail Secure","Security by Design"], correct:1, explain:"Defense in Depth se basa en múltiples capas independientes."},
+{topic:"principios", q:"¿Qué principio establece 'acceso mínimo necesario'?", options:["Fail Secure","Security by Design","Least Privilege","Defense in Depth"], correct:2, explain:"Least Privilege significa dar el acceso mínimo necesario."},
+{topic:"principios", q:"¿Qué principio corresponde al ejemplo 'Error DB → Denegar acceso'?", options:["Least Privilege","Fail Secure","Security by Design","Defense in Depth"], correct:1, explain:"Fail Secure implica que un fallo lleva a un modo seguro (denegar acceso)."},
+{topic:"principios", q:"¿Qué principio implica 'threat modeling desde el inicio' y no como 'add-on posterior'?", options:["Defense in Depth","Fail Secure","Security by Design","Least Privilege"], correct:2, explain:"Security by Design incorpora la seguridad desde el diseño, no después."},
+{topic:"principios", q:"Según Least Privilege, ¿qué acceso deben tener los usuarios?", options:["Acceso total al sistema","Solo sus propios datos","Acceso a todos los servicios","Acceso administrativo por defecto"], correct:1, explain:"Los usuarios deben tener acceso solo a sus propios datos."},
+{topic:"principios", q:"¿Qué ejemplos se dan para el principio Fail Secure?", options:["Error DB → Denegar acceso","Falla auth → Logout / Red caída → Offline seguro","Ambas anteriores son ejemplos de Fail Secure","Ninguna, son ejemplos de Least Privilege"], correct:2, explain:"El documento lista Error DB, Falla de auth y Red caída como ejemplos de Fail Secure."},
+
+// ---------- OWASP A01 (6) ----------
+{topic:"a01", q:"¿Qué porcentaje de apps tienen algún tipo de Broken Access Control (A01) según el documento?", options:["70%","80%","94%","60%"], correct:2, explain:"A01 Broken Access Control tiene una prevalencia del 94%."},
+{topic:"a01", q:"¿Cuántas incidencias (Kx) se reportan para A01 Broken Access Control?", options:["202K","318K","274K","238K"], correct:1, explain:"El gráfico reporta 318K incidencias para A01."},
+{topic:"a01", q:"¿Cuál es un ejemplo de explotación de Broken Access Control mencionado en el documento?", options:["Contraseñas en texto plano","Ver pedidos ajenos cambiando IDs en la URL","Inyección SQL en login","Falta de rate limiting"], correct:1, explain:"El documento menciona ver pedidos ajenos cambiando IDs en la URL como ejemplo de BAC."},
+{topic:"a01", q:"¿Qué código se muestra como buena práctica para prevenir A01 en el documento?", options:["bcrypt.hash(pwd, 12)","Verificar propiedad del recurso (userOwnsOrder)","Prepared statements","AES-256-GCM"], correct:1, explain:"El código de ejemplo verifica la propiedad del recurso antes de permitir el acceso."},
+{topic:"a01", q:"¿Cuál es la prevalencia de A05 Security Misconfiguration según el gráfico del documento?", options:["90%","85%","75%","60%"], correct:0, explain:"A05 Security Misconfiguration tiene 90% de prevalencia."},
+{topic:"a01", q:"¿Cuál es la prevalencia de A06 Vulnerable Components según el gráfico del documento?", options:["94%","85%","70%","80%"], correct:1, explain:"A06 Vulnerable Components tiene 85% de prevalencia."},
+
+// ---------- OWASP A02 (5) ----------
+{topic:"a02", q:"¿Cuál es la prevalencia de A02 Cryptographic Failures según el documento?", options:["94%","80%","70%","60%"], correct:2, explain:"A02 Cryptographic Failures tiene 70% de prevalencia."},
+{topic:"a02", q:"¿Qué prácticas inseguras se mencionan como ejemplo de Cryptographic Failures?", options:["SQL sin prepared statements","Contraseñas en texto plano, hash MD5, HTTP sin TLS","Falta de CSP","Cookies sin httpOnly"], correct:1, explain:"El documento cita contraseñas en texto plano, hash MD5 y HTTP sin TLS."},
+{topic:"a02", q:"¿Qué rango de multas PCI DSS se asocia a Cryptographic Failures en el documento?", options:["$50K–300K/mes","$5K–100K/mes","$2.5M fijo","$100–500"], correct:1, explain:"Se indica un rango de $5K–$100K/mes en multas PCI DSS."},
+{topic:"a02", q:"¿Qué código se muestra como buena práctica para prevenir A02?", options:["userOwnsOrder()","bcrypt.hash(pwd,12) y encriptación AES-256-GCM para tarjetas","Prepared statements","CSP headers"], correct:1, explain:"El ejemplo usa bcrypt para hash de contraseña y AES-256-GCM para tarjetas."},
+{topic:"a02", q:"¿Cuál de estos es un ejemplo de vulnerabilidad A02 según el documento?", options:["Ver panel admin sin autenticación","Datos sensibles sin encriptar","Concatenación de strings en queries SQL","Scripts de terceros no verificados"], correct:1, explain:"A02 incluye datos sensibles almacenados sin encriptar."},
+
+// ---------- OWASP A03 + A04-A10 (6) ----------
+{topic:"a03", q:"¿Qué tipos de Injection se mencionan en A03 según el documento?", options:["Solo SQL Injection","SQL, NoSQL, Command, LDAP Injection","Solo XSS","Solo Command Injection"], correct:1, explain:"A03 abarca SQL, NoSQL, Command y LDAP Injection."},
+{topic:"a03", q:"¿Cuál es la prevalencia de A03 Injection según el gráfico?", options:["94%","80%","70%","60%"], correct:1, explain:"A03 Injection tiene 80% de prevalencia."},
+{topic:"a03", q:"¿Qué código se muestra como buena práctica para prevenir Injection?", options:["bcrypt.hash","Prepared statements (db.execute con placeholders)","AES-256-GCM","CSP"], correct:1, explain:"El ejemplo usa prepared statements con placeholders en la consulta."},
+{topic:"a03", q:"Según el documento, ¿cuál es un método de testing manual para Injection?", options:["SQLMap","' OR 1=1 --","Burp Suite","OWASP ZAP"], correct:1, explain:"El testing manual usa un payload como ' OR 1=1 --."},
+{topic:"a03", q:"¿A qué categoría OWASP corresponde 'Insecure Design' según el documento?", options:["A01","A02","A03","A04"], correct:3, explain:"Insecure Design corresponde a A04."},
+{topic:"a03", q:"¿A qué categoría OWASP corresponde SSRF según el documento?", options:["A07","A08","A09","A10"], correct:3, explain:"SSRF corresponde a A10 en la lista del documento."},
+
+// ---------- CARD TESTING / CARDING (8) ----------
+{topic:"carding", q:"¿Qué es Card Testing según el documento?", options:["Robo de identidad por phishing","Técnica automatizada para probar validez de tarjetas robadas con micro-transacciones","Un tipo de ataque DDoS","Phishing dirigido a ejecutivos"], correct:1, explain:"Card Testing prueba la validez de tarjetas robadas con bots y transacciones pequeñas."},
+{topic:"carding", q:"¿Cuál es el rango típico de montos usados en Card Testing?", options:["$1–5 USD","$10–50 USD","$100+ USD","$0.30–0.50 USD"], correct:0, explain:"Se realizan transacciones pequeñas de $1–$5 USD."},
+{topic:"carding", q:"¿Cuántas micro-transacciones por minuto se pueden ejecutar en un ataque de carding según el documento?", options:["10–100","100–1000","1000–5000","1–10"], correct:1, explain:"El documento indica 100–1000 micro-transacciones por minuto."},
+{topic:"carding", q:"¿Cuál es el valor de venta de una tarjeta 'fullz' (datos completos) en la dark web?", options:["$1–3","$10–50","$100+","$0.30–0.50"], correct:2, explain:"Una 'fullz' se monetiza en $100+ según el documento."},
+{topic:"carding", q:"Según las estadísticas del documento, ¿qué porcentaje de tarjetas probadas resultan válidas?", options:["65%","15–20%","73%","94%"], correct:1, explain:"El 15–20% de las tarjetas probadas resultan válidas."},
+{topic:"carding", q:"¿Qué pérdidas globales se atribuyen al card testing en 2023 según el documento?", options:["$41B","$28B","$4.45M","$2.5M"], correct:1, explain:"El documento indica $28 billones en pérdidas globales (2023)."},
+{topic:"carding", q:"¿Cuál es una técnica de mitigación de card testing mencionada en el documento?", options:["Content Security Policy","Rate limiting: máx. 3 intentos de pago / 15 min por IP","PAM","SSO"], correct:1, explain:"El rate limiting de pagos es una técnica de mitigación citada."},
+{topic:"carding", q:"¿Qué herramientas de bots se mencionan como usadas en card testing?", options:["SQLMap, Burp Suite","SentryMBA, STORM","OWASP ZAP","MutationObserver"], correct:1, explain:"El documento menciona bots como SentryMBA y STORM."},
+
+// ---------- ACCOUNT TAKEOVER (7) ----------
+{topic:"ato", q:"¿Cuál fue el aumento en ataques de Account Takeover (ATO) en 2023 según el documento?", options:["38%","22%","60%","140%"], correct:1, explain:"Se reporta un aumento de 22% en ataques ATO en 2023."},
+{topic:"ato", q:"¿Cuál es la pérdida promedio por cuenta en un ataque ATO según el documento?", options:["$28","$120","$500","$4.45M"], correct:1, explain:"La pérdida promedio por cuenta es de $120."},
+{topic:"ato", q:"¿Qué método de ATO explota que el 80% de usuarios reutilizan contraseñas?", options:["Password Spraying","Credential Stuffing","SIM Swapping","Session Hijacking"], correct:1, explain:"Credential Stuffing usa credenciales de otras brechas, aprovechando la reutilización de contraseñas (80%)."},
+{topic:"ato", q:"¿Qué método de ATO se usa para hacer bypass de 2FA por SMS?", options:["Malware","SIM Swapping","Phishing","Session Hijacking"], correct:1, explain:"SIM Swapping permite el bypass de 2FA basado en SMS."},
+{topic:"ato", q:"Según los indicadores de ATO, ¿qué categoría incluye 'login desde país diferente al habitual'?", options:["Temporal","Comportamiento","Geográfico","Dispositivo"], correct:2, explain:"'Login desde país diferente' está en la categoría Geográfico."},
+{topic:"ato", q:"¿Qué porcentaje de clientes no vuelve a comprar tras sufrir un ATO según el documento?", options:["22%","80%","67%","15%"], correct:2, explain:"El 67% de los clientes no vuelve tras un ATO."},
+{topic:"ato", q:"¿Qué indicador de ATO corresponde a 'cambio de dirección de envío, nuevos métodos de pago'?", options:["Geográfico","Temporal","Comportamiento","Dispositivo"], correct:2, explain:"Ese indicador pertenece a la categoría Comportamiento."},
+
+// ---------- MAGECART (6) ----------
+{topic:"magecart", q:"¿Qué es el Digital Skimming (Magecart) según el documento?", options:["Un ataque DDoS a servidores","Inyección de JavaScript malicioso en checkout que captura datos de tarjetas en tiempo real","SQL Injection en el login","Phishing masivo por correo"], correct:1, explain:"Magecart inyecta JS malicioso en el checkout para capturar datos de tarjetas sin interferir la transacción."},
+{topic:"magecart", q:"¿Cuántas tarjetas fueron comprometidas en el caso British Airways (2018)?", options:["40K","380K","1M","50K"], correct:1, explain:"El caso British Airways (2018) comprometió 380K tarjetas."},
+{topic:"magecart", q:"¿Cuánto tiempo estuvo activo el ataque Magecart en Newegg sin ser detectado?", options:["1 semana","1 mes","6 meses","1 año"], correct:1, explain:"El ataque en Newegg (2018) estuvo activo 1 mes sin detección."},
+{topic:"magecart", q:"¿Qué contramedida controla qué scripts están permitidos en una página?", options:["SRI","Content Security Policy (CSP)","WAF","MFA"], correct:1, explain:"CSP controla los scripts permitidos en la página."},
+{topic:"magecart", q:"¿Qué contramedida verifica el hash de los scripts externos?", options:["CSP","Subresource Integrity (SRI)","IDS","RASP"], correct:1, explain:"SRI verifica el hash de scripts externos cargados."},
+{topic:"magecart", q:"¿Cuántas tarjetas fueron comprometidas en el caso Ticketmaster (2018)?", options:["380K","40K","1M","100K"], correct:1, explain:"Ticketmaster (2018) tuvo 40K tarjetas comprometidas, activo por meses."},
+
+// ---------- DEFENSE IN DEPTH - PERIMETRO Y RED (6) ----------
+{topic:"perimetro", q:"¿Qué función cumple el Web Application Firewall (WAF) según el documento?", options:["Encriptar datos en reposo","Bloqueo de SQL Injection y XSS en el borde","Gestionar identidades privilegiadas","Hashear contraseñas"], correct:1, explain:"El WAF bloquea SQL Injection y XSS en el borde de la red."},
+{topic:"perimetro", q:"¿Cuál es el volumen típico de un ataque UDP Flood según la tabla del documento?", options:["1–50 Mpps","10–100 Gbps","10K–1M rps","100–1000/min"], correct:1, explain:"UDP Flood se ubica en 10–100 Gbps según la tabla."},
+{topic:"perimetro", q:"¿Cuánto puede durar un ataque HTTP Flood según la tabla del documento?", options:["5–30 min","10–60 min","1–6 horas","24 horas"], correct:2, explain:"HTTP Flood puede durar de 1 a 6 horas según la tabla."},
+{topic:"perimetro", q:"¿Qué volumen tiene un SYN Flood según la tabla de ataques DDoS?", options:["10–100 Gbps","1–50 Mpps","10K–1M rps","1–100 Kbps"], correct:1, explain:"SYN Flood se ubica en 1–50 Mpps según la tabla."},
+{topic:"perimetro", q:"¿Qué elemento de la Capa 1 (Perímetro y Red) incluye geoblocking de países de alto riesgo?", options:["SAST","WAF","RASP","PAM"], correct:1, explain:"El WAF incluye geoblocking de países de alto riesgo."},
+{topic:"perimetro", q:"¿Qué combinación protege contra DDoS en la Capa de Perímetro y Red?", options:["SAST / DAST","DDoS Protection + IDS/IPS","PAM + MFA","CSP + SRI"], correct:1, explain:"DDoS Protection + IDS/IPS conforman la protección contra DDoS en esa capa."},
+
+// ---------- DEFENSE IN DEPTH - APLICACION Y DATOS (6) ----------
+{topic:"aplicacion", q:"¿Qué herramientas se mencionan para SAST (análisis pre-build sobre código estático)?", options:["OWASP ZAP, Burp","SonarQube, Semgrep","Contrast Security","Sqreen, Contrast"], correct:1, explain:"SAST usa herramientas como SonarQube y Semgrep."},
+{topic:"aplicacion", q:"¿Cuándo se ejecuta el análisis DAST según el documento?", options:["Pre-build","Post-deploy (app corriendo)","Durante los tests unitarios","En producción en tiempo real"], correct:1, explain:"DAST se ejecuta post-deploy, con la aplicación corriendo."},
+{topic:"aplicacion", q:"¿Qué tipo de análisis se realiza en producción en tiempo real según la tabla?", options:["SAST","DAST","IAST","RASP"], correct:3, explain:"RASP se ejecuta en producción en tiempo real."},
+{topic:"aplicacion", q:"¿Qué tecnologías se usan para proteger datos 'en reposo'?", options:["TLS 1.3, HSTS, mTLS","AES-256-GCM, TDE, bcrypt/Argon2","Intel SGX, Memory guards","VPN/IPSec"], correct:1, explain:"Datos en reposo: AES-256-GCM, TDE, bcrypt/Argon2."},
+{topic:"aplicacion", q:"¿Qué tecnologías protegen los datos 'en tránsito' según el documento?", options:["AES-256-GCM, TDE","TLS 1.3, HSTS, mTLS, VPN/IPSec","Intel SGX","bcrypt/Argon2"], correct:1, explain:"Datos en tránsito: TLS 1.3, HSTS, mTLS, VPN/IPSec."},
+{topic:"aplicacion", q:"¿Qué tecnología protege los datos 'en uso' según el documento?", options:["TLS 1.3","AES-256-GCM","Intel SGX, Memory guards, Secure enclaves","HSTS"], correct:2, explain:"Datos en uso: Intel SGX, Memory guards, Secure enclaves."},
+
+// ---------- DEFENSE IN DEPTH - IDENTIDAD (6) ----------
+{topic:"identidad", q:"Según el Identity Risk Scoring, ¿cuántos puntos suma un 'país diferente al habitual'?", options:["+15 pts","+20 pts","+25 pts","+30 pts"], correct:3, explain:"País diferente al habitual suma +30 puntos de riesgo."},
+{topic:"identidad", q:"¿Qué acción se toma cuando el score de riesgo es mayor a 80 según el documento?", options:["Solicitar CAPTCHA","Step-up 2FA","Bloquear","Permitir sin restricción"], correct:2, explain:"Score > 80 → Bloquear, según la tabla del documento."},
+{topic:"identidad", q:"¿Qué acción corresponde a un score de riesgo entre 50–80?", options:["Bloquear","Step-up 2FA","CAPTCHA","Ninguna acción"], correct:1, explain:"Score 50–80 → Step-up 2FA, según la tabla."},
+{topic:"identidad", q:"¿Cuántos puntos suma 'dispositivo desconocido' en el Identity Risk Scoring?", options:["+30 pts","+25 pts","+20 pts","+15 pts"], correct:1, explain:"Dispositivo desconocido suma +25 puntos."},
+{topic:"identidad", q:"¿Qué es Privileged Access Management (PAM) en el contexto de Defense in Depth?", options:["Encriptación de datos sensibles","Gestión de Identidad y Acceso privilegiado","Protección contra DDoS","Análisis de código estático"], correct:1, explain:"PAM forma parte de la gestión de Identidad y Acceso (Capa 4)."},
+{topic:"identidad", q:"¿Cuál es el tiempo máximo de acceso elevado en un flujo 'Just-in-time access' según el documento?", options:["24 horas","4 horas","1 hora","90 días"], correct:1, explain:"Just-in-time access permite acceso elevado máximo 4h con flujo de aprobación."},
+
+// ---------- RESUMEN Y METRICAS CLAVE (6) ----------
+{topic:"resumen", q:"Según el documento, ¿qué decline rate de pagos sugiere posible card testing?", options:["> 2%","> 15%","> 10/min","> 80%"], correct:1, explain:"Un decline rate de pagos > 15% sugiere posible card testing."},
+{topic:"resumen", q:"¿Qué chargeback rate se considera un indicador crítico según los KPIs del documento?", options:["> 15%","> 2%","> 10%","> 24h"], correct:1, explain:"Un chargeback rate > 2% se considera un indicador crítico."},
+{topic:"resumen", q:"¿Cuál es el objetivo de tiempo de detección de brecha (MTTD) según los KPIs?", options:["< 24h","< 206 días","< 1h","< 90 días"], correct:0, explain:"El objetivo de MTTD es menor a 24h."},
+{topic:"resumen", q:"¿Cuál es el objetivo de adopción de MFA según los KPIs del documento?", options:["> 90%","> 80%","> 50%","100%"], correct:1, explain:"El objetivo de MFA adoption rate es > 80%."},
+{topic:"resumen", q:"¿Cuál es el saltRounds mínimo recomendado para bcrypt/Argon2 según el checklist?", options:["≥ 8","≥ 10","≥ 12","≥ 16"], correct:2, explain:"El checklist recomienda saltRounds ≥ 12."},
+{topic:"resumen", q:"¿Cuántos intentos máximos de login/checkout recomienda el checklist para rate limiting?", options:["1–2","3–5","10–15","20+"], correct:1, explain:"El checklist recomienda rate limiting de máx. 3–5 intentos."},
 ];
 
-/* =========================================================================
-   MOTOR DEL SIMULADOR
-   ========================================================================= */
-const state = { answers: {}, evaluated: false };
+// pad/verify length (should already be 100)
+console.assert(QUESTIONS.length===100, "Se esperaban 100 preguntas, hay "+QUESTIONS.length);
 
-const quizContainer = document.getElementById('quizContainer');
-const evalBtn = document.getElementById('evalBtn');
-const resetBtn = document.getElementById('resetBtn');
-const gaugeFill = document.getElementById('gaugeFill');
-const gaugeLabel = document.getElementById('gaugeLabel');
-const pendingNote = document.getElementById('pendingNote');
-const resultsBanner = document.getElementById('resultsBanner');
-const scoreBig = document.getElementById('scoreBig');
-const scorePct = document.getElementById('scorePct');
-const scoreVerdict = document.getElementById('scoreVerdict');
+/* =========================================================
+   ESTADO Y LÓGICA
+   ========================================================= */
+let current = 0;
+const answers = new Array(QUESTIONS.length).fill(null);
+let evaluated = false;
 
-function render(){
-  quizContainer.innerHTML = QUESTIONS.map((item, qIndex) => {
-    const optsHtml = item.options.map((opt, oIndex) => {
-      return `<button class="opt" data-q="${qIndex}" data-o="${oIndex}" type="button">
-                <span class="optkey">${String.fromCharCode(65+oIndex)}</span>
-                <span>${opt}</span>
-              </button>`;
-    }).join('');
-    return `<article class="qcard" id="card-${qIndex}">
-        <div class="qhead">
-          <span class="qid">${item.id}</span>
-          <span class="qcat">${item.cat}</span>
-        </div>
-        <p class="qtext">${item.q}</p>
-        <div class="opts">${optsHtml}</div>
-        <div class="explain" id="explain-${qIndex}"></div>
-      </article>`;
-  }).join('');
+const el = id => document.getElementById(id);
 
-  quizContainer.querySelectorAll('.opt').forEach(btn => {
-    btn.addEventListener('click', onSelect);
+const screenStart = el('screenStart');
+const screenQuiz = el('screenQuiz');
+const screenResults = el('screenResults');
+const meterRow = el('meterRow');
+const headerSub = el('headerSub');
+
+el('btnStart').addEventListener('click', () => {
+  screenStart.classList.add('hidden');
+  screenQuiz.classList.remove('hidden');
+  meterRow.style.display = 'flex';
+  headerSub.textContent = "Selecciona la mejor respuesta para cada pregunta";
+  renderDots();
+  renderQuestion();
+});
+
+function renderDots(){
+  const dots = el('dots');
+  dots.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const d = document.createElement('span');
+    if (i === current) d.classList.add('active');
+    if (answers[i] !== null) d.classList.add('answered');
+    d.addEventListener('click', () => { current = i; renderQuestion(); });
+    dots.appendChild(d);
   });
 }
 
-function onSelect(e){
-  if(state.evaluated) return;
-  const btn = e.currentTarget;
-  const q = btn.dataset.q;
-  const o = Number(btn.dataset.o);
-  state.answers[q] = o;
-
-  document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById(`card-${q}`).classList.add('answered');
-
-  updateProgress();
+function updateMeter(){
+  const answeredCount = answers.filter(a => a !== null).length;
+  el('meterFill').style.width = (answeredCount / QUESTIONS.length * 100) + '%';
+  el('meterLabel').textContent = answeredCount + '/' + QUESTIONS.length;
 }
 
-function updateProgress(){
-  const answered = Object.keys(state.answers).length;
-  const total = QUESTIONS.length;
-  gaugeFill.style.width = `${(answered/total)*100}%`;
-  gaugeLabel.textContent = `${answered} / ${total}`;
-  evalBtn.disabled = answered < total || state.evaluated;
-  pendingNote.textContent = state.evaluated
-    ? "Simulacro evaluado. Revisa el detalle en cada pregunta."
-    : (answered < total
-        ? `Responde las ${total} preguntas para habilitar la evaluación. Faltan ${total-answered}.`
-        : "Todas las preguntas respondidas. Puedes evaluar.");
+function renderQuestion(){
+  const item = QUESTIONS[current];
+  el('qTopic').textContent = TOPIC_LABELS[item.topic] || item.topic;
+  el('qIndex').textContent = (current+1) + ' / ' + QUESTIONS.length;
+  el('qText').textContent = item.q;
+
+  const optWrap = el('qOptions');
+  optWrap.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  const userAnswered = answers[current] !== null;
+
+  item.options.forEach((opt, i) => {
+    const b = document.createElement('button');
+    let cls = 'option';
+    if (userAnswered){
+      // validación inmediata: la correcta siempre se marca en verde;
+      // si el usuario eligió una incorrecta, esa se marca en rojo.
+      if (i === item.correct) cls += ' correct';
+      else if (i === answers[current]) cls += ' incorrect';
+    } else if (answers[current] === i){
+      cls += ' selected';
+    }
+    b.className = cls;
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span><span>'+opt+'</span>';
+    b.addEventListener('click', () => {
+      answers[current] = i;
+      renderQuestion();
+      updateMeter();
+      renderDots();
+    });
+    optWrap.appendChild(b);
+  });
+
+  const fb = el('qFeedback');
+  if (userAnswered){
+    const isRight = answers[current] === item.correct;
+    fb.classList.remove('hidden');
+    fb.classList.toggle('fb-good', isRight);
+    fb.classList.toggle('fb-bad', !isRight);
+    fb.textContent = isRight
+      ? '✓ Correcto — ' + item.explain
+      : '✕ Incorrecto — ' + item.explain;
+  } else {
+    fb.classList.add('hidden');
+    fb.textContent = '';
+  }
+
+  el('btnPrev').disabled = current === 0;
+  const isLast = current === QUESTIONS.length - 1;
+  el('btnNext').classList.toggle('hidden', isLast);
+  el('btnEvaluate').classList.toggle('hidden', !isLast);
+
+  updateMeter();
+  renderDots();
 }
+
+el('btnPrev').addEventListener('click', () => { if (current>0){ current--; renderQuestion(); }});
+el('btnNext').addEventListener('click', () => { if (current<QUESTIONS.length-1){ current++; renderQuestion(); }});
+el('btnEvaluate').addEventListener('click', evaluate);
 
 function evaluate(){
-  if(Object.keys(state.answers).length < QUESTIONS.length) return;
-  state.evaluated = true;
+  evaluated = true;
+  const total = QUESTIONS.length;
   let correctCount = 0;
+  const byTopic = {};
 
-  QUESTIONS.forEach((item, qIndex) => {
-    const chosen = state.answers[qIndex];
-    const card = document.getElementById(`card-${qIndex}`);
-    card.classList.add('locked');
-
-    document.querySelectorAll(`.opt[data-q="${qIndex}"]`).forEach((btn) => {
-      const oIndex = Number(btn.dataset.o);
-      if(oIndex === item.correct) btn.classList.add('correct');
-      if(oIndex === chosen && chosen !== item.correct) btn.classList.add('wrong');
-    });
-
-    if(chosen === item.correct) correctCount++;
-
-    const ex = document.getElementById(`explain-${qIndex}`);
-    ex.innerHTML = item.explain;
-    ex.classList.add('show');
+  QUESTIONS.forEach((item, i) => {
+    if (!byTopic[item.topic]) byTopic[item.topic] = {correct:0, total:0};
+    byTopic[item.topic].total++;
+    if (answers[i] === item.correct){
+      correctCount++;
+      byTopic[item.topic].correct++;
+    }
   });
 
-  const total = QUESTIONS.length;
   const pct = Math.round((correctCount/total)*100);
-  scoreBig.textContent = `${correctCount}/${total}`;
-  scorePct.textContent = `${pct}%`;
-  scoreVerdict.textContent = pct >= 80
-    ? "Perímetro sólido: dominas los conceptos clave del tema."
-    : pct >= 60
-      ? "Perímetro parcialmente cubierto: repasa las explicaciones marcadas en rojo."
-      : "Perímetro expuesto: conviene reforzar la lectura del material antes de continuar.";
-  resultsBanner.classList.add('show');
-  resultsBanner.scrollIntoView({behavior:'smooth', block:'start'});
 
-  updateProgress();
+  screenQuiz.classList.add('hidden');
+  meterRow.style.display = 'none';
+  screenResults.classList.remove('hidden');
+  headerSub.textContent = "Resultado del examen";
+
+  // gauge
+  const circumference = 2 * Math.PI * 80;
+  const offset = circumference - (pct/100)*circumference;
+  const gauge = el('gaugeCircle');
+  gauge.style.strokeDasharray = circumference;
+  gauge.style.strokeDashoffset = circumference;
+  let color = '#FF7A59';
+  let verdictClass = 'verdict-low', verdictLabel = 'A reforzar', verdictMsg = 'Repasa el panorama de amenazas, OWASP y los fraudes de pago antes de un examen real.';
+  if (pct >= 85){ color = '#34D399'; verdictClass='verdict-good'; verdictLabel='Dominio sólido'; verdictMsg = 'Tienes un dominio sólido de los conceptos de seguridad en e-commerce. Revisa los temas puntuales que fallaste.'; }
+  else if (pct >= 60){ color = '#F5B942'; verdictClass='verdict-mid'; verdictLabel='Buen avance'; verdictMsg = 'Vas por buen camino. Refuerza los temas con menor puntaje en el desglose.'; }
+  gauge.setAttribute('stroke', color);
+  setTimeout(()=>{ gauge.style.transition='stroke-dashoffset 1s ease'; gauge.style.strokeDashoffset = offset; }, 60);
+
+  el('scorePct').textContent = pct + '%';
+  el('scorePct').style.color = color;
+  el('scoreFrac').textContent = correctCount + ' / ' + total;
+  el('verdictChip').textContent = verdictLabel;
+  el('verdictChip').className = 'verdict ' + verdictClass;
+  el('verdictText').textContent = verdictMsg;
+
+  // topic breakdown
+  const bd = el('topicBreakdown');
+  bd.innerHTML = '';
+  Object.keys(TOPIC_LABELS).forEach(key => {
+    const data = byTopic[key];
+    if (!data) return;
+    const p = Math.round((data.correct/data.total)*100);
+    let barColor = '#E5484D';
+    if (p >= 80) barColor = '#34D399'; else if (p >= 50) barColor = '#F5B942';
+    const row = document.createElement('div');
+    row.className = 'topic-row';
+    row.innerHTML = `
+      <div class="topic-name">${TOPIC_LABELS[key]}</div>
+      <div class="topic-bar"><i style="width:${p}%;background:${barColor};"></i></div>
+      <div class="topic-score">${data.correct}/${data.total}</div>
+    `;
+    bd.appendChild(row);
+  });
+
+  renderReview('all');
+  el('btnRetry').onclick = resetQuiz;
+  el('btnReview').onclick = () => { el('reviewAnchor').scrollIntoView({behavior:'smooth', block:'start'}); };
 }
+
+function renderReview(filter){
+  const list = el('reviewList');
+  list.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  QUESTIONS.forEach((item, i) => {
+    const userAns = answers[i];
+    const isCorrect = userAns === item.correct;
+    if (filter === 'wrong' && isCorrect) return;
+    if (filter === 'right' && !isCorrect) return;
+
+    const div = document.createElement('div');
+    div.className = 'review-q';
+    const userText = userAns === null ? 'Sin responder' : letters[userAns] + '. ' + item.options[userAns];
+    const correctText = letters[item.correct] + '. ' + item.options[item.correct];
+
+    div.innerHTML = `
+      <div class="review-head">
+        <div class="review-qtext">${(i+1)}. ${item.q}</div>
+        <span class="badge ${isCorrect ? 'badge-ok' : 'badge-bad'}">${isCorrect ? 'CORRECTA' : 'INCORRECTA'}</span>
+      </div>
+      <div class="review-answer">
+        <div>Tu respuesta: <b class="${isCorrect ? 'hit' : 'miss'}">${userText}</b></div>
+        ${!isCorrect ? '<div>Respuesta correcta: <b class="hit">'+correctText+'</b></div>' : ''}
+        <div class="explain">${item.explain}</div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  if (list.innerHTML === '') {
+    list.innerHTML = '<p style="color:var(--text-dim);font-size:13px;padding:10px 0;">No hay preguntas en esta categoría.</p>';
+  }
+}
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    renderReview(chip.dataset.filter);
+  });
+});
 
 function resetQuiz(){
-  state.answers = {};
-  state.evaluated = false;
-  resultsBanner.classList.remove('show');
-  render();
-  updateProgress();
+  current = 0;
+  evaluated = false;
+  for (let i=0;i<answers.length;i++) answers[i] = null;
+  screenResults.classList.add('hidden');
+  screenStart.classList.remove('hidden');
+  headerSub.textContent = "100 preguntas de opción múltiple basadas en la sesión teórica";
   window.scrollTo({top:0, behavior:'smooth'});
 }
-
-evalBtn.addEventListener('click', evaluate);
-resetBtn.addEventListener('click', resetQuiz);
-
-render();
-updateProgress();
 </script>
 </body>
 </html>
