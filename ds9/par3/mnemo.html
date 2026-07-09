@@ -2,869 +2,1374 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Seguridad en E-Commerce — Guía de Memorización</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Seguridad en Comercio Electrónico — Guía de Estudio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0a0e17;
-    --bg-panel: #121a2b;
-    --bg-panel-2: #17203a;
-    --bg-panel-3: #1d2740;
-    --line: #263354;
-    --text: #e7ebf3;
-    --text-dim: #93a1b8;
-    --mint: #6ee7c0;
-    --mint-dim: #2d4a42;
-    --coral: #ff8b8b;
-    --coral-dim: #4a2b2f;
-    --lavender: #b9a6ff;
-    --lavender-dim: #2f2b4a;
-    --amber: #ffcf7d;
-    --amber-dim: #4a3d24;
-    --radius: 16px;
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-body: 'IBM Plex Sans', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --bg:#090c11;
+    --bg-2:#0e131b;
+    --card:#121822;
+    --card-2:#161e2a;
+    --border:#212b3a;
+    --border-soft:#1a222e;
+    --text:#e8ecf4;
+    --text-dim:#8f9bb3;
+    --text-faint:#556077;
+
+    --red:#ff5c68;
+    --red-dim:rgba(255,92,104,.12);
+    --green:#2ee6ac;
+    --green-dim:rgba(46,230,172,.12);
+    --amber:#ffb454;
+    --amber-dim:rgba(255,180,84,.12);
+    --blue:#5ec2ff;
+    --blue-dim:rgba(94,194,255,.12);
+    --purple:#c49bff;
+    --purple-dim:rgba(196,155,255,.12);
+
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+    --radius:14px;
   }
 
-  *{ box-sizing: border-box; }
-  html, body{
-    margin:0; padding:0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    -webkit-tap-highlight-color: transparent;
-  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
   body{
-    min-height: 100vh;
-    overflow-x: hidden;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:90px;
   }
-  ::selection{ background: var(--mint-dim); color: var(--mint); }
-
-  /* ---------- Signature: radar sweep backdrop ---------- */
-  .radar-bg{
-    position: fixed;
-    top: -40vw; right: -40vw;
-    width: 90vw; height: 90vw;
-    max-width: 700px; max-height: 700px;
-    border-radius: 50%;
-    background: conic-gradient(from 0deg, rgba(110,231,192,0.16), transparent 25%);
-    filter: blur(2px);
-    animation: spin 14s linear infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-  @keyframes spin{ to{ transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce){
-    .radar-bg{ animation: none; }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(94,194,255,.06), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(255,92,104,.05), transparent 60%);
+    pointer-events:none; z-index:0;
   }
 
-  .wrap{
-    position: relative;
-    z-index: 1;
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 0 16px 90px;
+  ::selection{ background:var(--blue-dim); color:var(--blue); }
+
+  a{color:var(--blue);}
+
+  /* ===== TOP STATUS BAR (signature terminal element) ===== */
+  .statusbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(9,12,17,.9);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  .statusbar-inner{
+    max-width:920px; margin:0 auto;
+    padding:9px 16px;
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-faint);
+    white-space:nowrap; overflow:hidden;
+  }
+  .statusbar .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 6px var(--green);
+    flex-shrink:0;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .statusbar .path{color:var(--text-dim); flex-shrink:0;}
+  .statusbar .cursor{
+    display:inline-block; width:7px; height:13px;
+    background:var(--green); margin-left:1px;
+    animation:blink 1s steps(1) infinite; flex-shrink:0;
+  }
+  @keyframes blink{ 50%{opacity:0;} }
+  .statusbar .typed{ color:var(--text-dim); overflow:hidden; text-overflow:ellipsis;}
+
+  .progresswrap{
+    height:3px; background:var(--border-soft); width:100%;
+    position:relative; overflow:hidden;
+  }
+  .progressfill{
+    height:100%;
+    background:linear-gradient(90deg, var(--blue), var(--green));
+    width:0%;
+    transition:width .5s ease;
   }
 
-  /* ---------- Header / boot sequence ---------- */
-  header.app-header{
-    padding: 28px 4px 16px;
+  /* ===== HERO ===== */
+  .hero{
+    max-width:920px; margin:0 auto;
+    padding:38px 20px 22px;
+    position:relative; z-index:1;
   }
-  .boot-line{
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--mint);
-    min-height: 16px;
-    letter-spacing: 0.02em;
-    white-space: pre;
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:var(--mono); font-size:11px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--red);
+    background:var(--red-dim);
+    border:1px solid rgba(255,92,104,.25);
+    padding:5px 10px; border-radius:100px;
+    margin-bottom:16px;
   }
-  .boot-line .cursor{
-    display:inline-block;
-    width:7px; height:13px;
-    background: var(--mint);
-    margin-left:2px;
-    animation: blink 1s step-end infinite;
-    vertical-align: -2px;
-  }
-  @keyframes blink{ 50%{ opacity:0; } }
-
+  .eyebrow::before{ content:"●"; font-size:8px; }
   h1.title{
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(28px, 8vw, 38px);
-    margin: 10px 0 4px;
-    letter-spacing: -0.01em;
+    font-family:var(--mono);
+    font-size:clamp(28px,7vw,42px);
+    font-weight:800;
+    line-height:1.12;
+    letter-spacing:-.01em;
+    margin-bottom:10px;
   }
-  h1.title span{ color: var(--mint); }
-  p.subtitle{
-    color: var(--text-dim);
-    font-size: 14px;
-    margin: 0 0 6px;
-    font-family: var(--font-mono);
+  h1.title .accent{ color:var(--green); }
+  .subtitle{
+    color:var(--text-dim); font-size:15px; max-width:60ch;
+    margin-bottom:22px;
   }
-
-  /* ---------- Tabs ---------- */
-  nav.tabs{
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    display: flex;
-    gap: 6px;
-    background: rgba(10,14,23,0.92);
-    backdrop-filter: blur(6px);
-    padding: 10px 0 12px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid var(--line);
-  }
-  .tab{
-    flex:1;
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    color: var(--text-dim);
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 13px;
-    padding: 10px 6px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all .15s ease;
-  }
-  .tab.active{
-    background: var(--mint-dim);
-    color: var(--mint);
-    border-color: var(--mint);
-  }
-  .tab:active{ transform: scale(0.97); }
-
-  .tab-panel{ display:none; animation: fadeIn .25s ease; }
-  .tab-panel.active{ display:block; }
-  @keyframes fadeIn{ from{opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
-
-  /* ---------- Accordion (Estudiar) ---------- */
-  details.acc{
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    margin-bottom: 12px;
-    overflow: hidden;
-  }
-  details.acc[open]{ border-color: var(--line); }
-  summary.acc-head{
-    list-style: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 16px;
-  }
-  summary.acc-head::-webkit-details-marker{ display:none; }
-  .acc-icon{
-    font-size: 20px;
-    width: 30px; text-align:center;
-    flex-shrink: 0;
-  }
-  .acc-chevron{
-    margin-left: auto;
-    color: var(--text-dim);
-    transition: transform .2s ease;
-    font-size: 13px;
-  }
-  details[open] .acc-chevron{ transform: rotate(90deg); color: var(--mint); }
-  .acc-body{
-    padding: 0 16px 18px;
-    color: var(--text);
-    font-size: 14.5px;
-    line-height: 1.55;
-  }
-  .acc-body h4{
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-dim);
-    margin: 16px 0 8px;
-  }
-  .acc-body h4:first-child{ margin-top: 4px; }
-  .acc-body ul{ margin: 6px 0; padding-left: 20px; }
-  .acc-body li{ margin-bottom: 4px; }
-  .stat-row{
+  .hero-meta{
     display:flex; flex-wrap:wrap; gap:8px;
-    margin: 6px 0 14px;
+    font-family:var(--mono); font-size:11px; color:var(--text-faint);
   }
-  .stat-chip{
-    background: var(--bg-panel-2);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 8px 10px;
-    flex: 1 1 40%;
-    text-align:center;
+  .hero-meta span{
+    border:1px solid var(--border); padding:4px 9px; border-radius:7px;
+    background:var(--card);
   }
-  .stat-chip b{
-    display:block;
-    font-family: var(--font-display);
-    font-size: 18px;
-    color: var(--mint);
-  }
-  .stat-chip small{ color: var(--text-dim); font-size: 10.5px; }
 
+  /* readiness gauge */
+  .gauge{
+    max-width:920px; margin:0 auto; padding:0 20px 8px;
+    position:relative; z-index:1;
+  }
+  .gauge-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .gauge-ring{
+    width:52px; height:52px; flex-shrink:0; position:relative;
+  }
+  .gauge-ring svg{ transform:rotate(-90deg); }
+  .gauge-ring .bg{ fill:none; stroke:var(--border-soft); stroke-width:5; }
+  .gauge-ring .fg{ fill:none; stroke:var(--green); stroke-width:5; stroke-linecap:round;
+    stroke-dasharray:150.7; stroke-dashoffset:150.7; transition:stroke-dashoffset .6s ease; }
+  .gauge-ring .pct{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:12px; font-weight:700; color:var(--text);
+  }
+  .gauge-text .label{ font-size:13px; font-weight:700; color:var(--text); }
+  .gauge-text .sub{ font-size:12px; color:var(--text-faint); margin-top:2px; }
+
+  /* ===== NAV PILLS ===== */
+  .navwrap{
+    max-width:920px; margin:0 auto; padding:16px 0 6px;
+    position:relative; z-index:1;
+  }
+  .navscroll{
+    display:flex; gap:8px; overflow-x:auto; padding:0 20px 6px;
+    scrollbar-width:none;
+  }
+  .navscroll::-webkit-scrollbar{ display:none; }
+  .navgrouplabel{
+    font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--text-faint); padding:0 20px; margin:14px 0 6px;
+  }
+  .pill{
+    flex-shrink:0;
+    font-family:var(--mono); font-size:12px; font-weight:600;
+    color:var(--text-dim);
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:7px 12px; border-radius:100px;
+    cursor:pointer; white-space:nowrap;
+    transition:all .15s ease;
+    display:flex; align-items:center; gap:6px;
+  }
+  .pill:hover{ border-color:var(--text-faint); color:var(--text); }
+  .pill .n{ opacity:.6; }
+  .pill.read{ color:var(--green); border-color:rgba(46,230,172,.3); background:var(--green-dim); }
+  .pill.read .n{ opacity:1; }
+
+  .toolbar{
+    max-width:920px; margin:0 auto; padding:10px 20px 0;
+    display:flex; gap:8px; justify-content:flex-end;
+    position:relative; z-index:1;
+  }
+  .btn-ghost{
+    font-family:var(--mono); font-size:11.5px; font-weight:600;
+    color:var(--text-dim); background:transparent;
+    border:1px solid var(--border); border-radius:8px;
+    padding:7px 11px; cursor:pointer;
+  }
+  .btn-ghost:hover{ color:var(--text); border-color:var(--text-faint); }
+
+  /* ===== MAIN ===== */
+  main{
+    max-width:920px; margin:0 auto; padding:18px 16px 40px;
+    position:relative; z-index:1;
+    display:flex; flex-direction:column; gap:14px;
+  }
+
+  .grouphead{
+    margin:22px 4px 2px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .grouphead .bar{ width:3px; height:18px; border-radius:2px; }
+  .grouphead h2{
+    font-family:var(--mono); font-size:13px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.06em;
+    color:var(--text-dim);
+  }
+
+  .module{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-left:3px solid var(--gc, var(--blue));
+    border-radius:var(--radius);
+    overflow:hidden;
+    scroll-margin-top:70px;
+  }
+  .module-header{
+    display:flex; align-items:center; gap:12px;
+    padding:16px 16px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .module-header:hover{ background:rgba(255,255,255,.015); }
+  .num{
+    font-family:var(--mono); font-weight:800; font-size:13px;
+    width:32px; height:32px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    background:var(--gc-dim, var(--blue-dim));
+    color:var(--gc, var(--blue));
+  }
+  .module-title{ flex:1; min-width:0; }
+  .module-title h3{ font-size:15.5px; font-weight:700; color:var(--text); }
+  .module-title .tag{
+    font-family:var(--mono); font-size:10.5px; color:var(--text-faint);
+    margin-top:2px;
+  }
+  .chev{
+    width:20px; height:20px; flex-shrink:0;
+    color:var(--text-faint);
+    transition:transform .25s ease;
+  }
+  .module.open .chev{ transform:rotate(180deg); }
+  .checkmark{
+    width:18px; height:18px; flex-shrink:0; color:var(--green); opacity:0;
+    transition:opacity .2s;
+  }
+  .module.read .checkmark{ opacity:1; }
+
+  .module-body{
+    max-height:0; overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .module-body-inner{
+    padding:0 18px 20px;
+    border-top:1px solid var(--border-soft);
+    padding-top:16px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+
+  p{ color:var(--text-dim); font-size:14.5px; }
+  strong{ color:var(--text); font-weight:700; }
+  .lead{ color:var(--text); font-size:15px; }
+
+  h4.subhead{
+    font-family:var(--mono); font-size:12px; font-weight:700;
+    color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em;
+    margin-top:4px;
+  }
+
+  ul.list{ padding-left:0; list-style:none; display:flex; flex-direction:column; gap:7px; }
+  ul.list li{
+    color:var(--text-dim); font-size:14px; padding-left:18px; position:relative;
+  }
+  ul.list li::before{
+    content:"▸"; position:absolute; left:0; color:var(--gc,var(--blue));
+  }
+
+  /* callout boxes */
+  .box{
+    border-radius:11px; padding:14px 15px;
+    border:1px solid var(--border);
+    background:var(--card-2);
+  }
+  .box-title{
+    font-family:var(--mono); font-weight:700; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.04em;
+    display:flex; align-items:center; gap:6px; margin-bottom:8px;
+  }
+  .box p, .box li{ font-size:13.5px; }
+
+  .analogy{ border-color:rgba(94,194,255,.25); background:var(--blue-dim); }
+  .analogy .box-title{ color:var(--blue); }
+
+  .mnemonic{ border-color:rgba(196,155,255,.28); background:var(--purple-dim); }
+  .mnemonic .box-title{ color:var(--purple); }
+  .mnemonic .word{
+    font-family:var(--mono); font-weight:800; font-size:20px; color:var(--text);
+    letter-spacing:.03em; margin:4px 0 8px;
+  }
+  .mnemonic .word span{ color:var(--purple); }
+
+  .stat-callout{ border-color:rgba(255,180,84,.28); background:var(--amber-dim); }
+  .stat-callout .box-title{ color:var(--amber); }
+
+  .glossary{ border-color:var(--border); background:var(--bg-2); }
+  .glossary .box-title{ color:var(--green); }
+  .gterm{ display:flex; flex-direction:column; gap:2px; padding:8px 0; border-bottom:1px solid var(--border-soft); }
+  .gterm:last-child{ border-bottom:none; padding-bottom:0; }
+  .gterm .gname{ font-family:var(--mono); font-weight:700; font-size:12.5px; color:var(--text); }
+  .gterm .gdef{ font-size:13px; color:var(--text-dim); }
+
+  /* code */
   .code{
-    font-family: var(--font-mono);
-    background: #060a12;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 12.5px;
-    color: var(--amber);
-    overflow-x:auto;
-    margin: 6px 0;
-    white-space: pre;
+    font-family:var(--mono); font-size:12.5px; line-height:1.6;
+    background:#080b10; border:1px solid var(--border);
+    border-radius:9px; padding:12px 14px; overflow-x:auto;
+    color:#9fe6c4; white-space:pre;
+  }
+  .code .cm{ color:#5b6577; }
+  .code .kw{ color:#ff8fa3; }
+  .code .st{ color:#ffd28a; }
+
+  /* stat grid */
+  .statgrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .statbox{
+    background:var(--bg-2); border:1px solid var(--border);
+    border-radius:10px; padding:11px 12px; text-align:center;
+  }
+  .statbox .v{ font-family:var(--mono); font-weight:800; font-size:19px; color:var(--gc,var(--blue)); }
+  .statbox .l{ font-size:10.5px; color:var(--text-faint); margin-top:2px; line-height:1.3; }
+
+  /* tables */
+  .tblwrap{ overflow-x:auto; border-radius:10px; border:1px solid var(--border); }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; min-width:420px; }
+  th{
+    background:var(--bg-2); color:var(--text-faint);
+    font-family:var(--mono); font-weight:700; font-size:10.5px;
+    text-transform:uppercase; letter-spacing:.04em;
+    text-align:left; padding:9px 12px; border-bottom:1px solid var(--border);
+  }
+  td{ padding:9px 12px; border-bottom:1px solid var(--border-soft); color:var(--text-dim); }
+  tr:last-child td{ border-bottom:none; }
+  td.hl{ color:var(--text); font-weight:600; }
+
+  /* pipeline / steps */
+  .steps{ display:flex; flex-direction:column; gap:0; }
+  .step{ display:flex; gap:12px; }
+  .step .sdot{
+    display:flex; flex-direction:column; align-items:center;
+    flex-shrink:0;
+  }
+  .step .scircle{
+    width:26px; height:26px; border-radius:50%;
+    background:var(--gc-dim,var(--blue-dim)); color:var(--gc,var(--blue));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:800; font-size:11px;
+    border:1px solid var(--gc,var(--blue));
+  }
+  .step .sline{ width:2px; flex:1; background:var(--border); margin:3px 0; }
+  .step:last-child .sline{ display:none; }
+  .step-body{ padding-bottom:16px; flex:1; }
+  .step-body .st-title{ font-weight:700; font-size:13.5px; color:var(--text); }
+  .step-body .st-desc{ font-size:13px; color:var(--text-dim); margin-top:2px; }
+
+  /* formula box */
+  .formula{
+    text-align:center; font-family:var(--mono); font-weight:800; font-size:16px;
+    color:var(--purple); background:var(--purple-dim);
+    border:1px solid rgba(196,155,255,.3); border-radius:10px; padding:14px;
   }
 
-  .mnemo{
-    background: linear-gradient(180deg, var(--lavender-dim), var(--bg-panel-2));
-    border: 1px solid #3a3564;
-    border-left: 3px solid var(--lavender);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-top: 10px;
-    font-size: 13.8px;
-  }
-  .mnemo .tag{
-    font-family: var(--font-mono);
-    color: var(--lavender);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display:block;
-    margin-bottom: 6px;
+  /* checklist */
+  .checklist{ display:flex; flex-direction:column; gap:6px; }
+  .cli{ display:flex; gap:9px; align-items:flex-start; font-size:13.5px; color:var(--text-dim); }
+  .cli::before{ content:"✓"; color:var(--green); font-weight:800; flex-shrink:0; }
+
+  footer{
+    max-width:920px; margin:30px auto 0; padding:20px 20px 10px;
+    text-align:center; color:var(--text-faint); font-size:12px;
+    font-family:var(--mono);
   }
 
-  .warn{
-    background: var(--coral-dim);
-    border-left: 3px solid var(--coral);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-top: 10px;
-    font-size: 13px;
-    color: #ffd6d6;
+  /* floating bottom bar (mobile) */
+  .fab{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    background:rgba(9,12,17,.92); backdrop-filter:blur(10px);
+    border-top:1px solid var(--border-soft);
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:10px;
   }
+  .fab .fabtext{ font-family:var(--mono); font-size:11px; color:var(--text-faint); flex-shrink:0; }
+  .fab .fabbar{ flex:1; height:6px; background:var(--border-soft); border-radius:100px; overflow:hidden; }
+  .fab .fabfill{ height:100%; background:linear-gradient(90deg,var(--blue),var(--green)); width:0%; transition:width .5s; border-radius:100px; }
+  .fab .fabpct{ font-family:var(--mono); font-size:12px; font-weight:700; color:var(--green); flex-shrink:0; width:38px; text-align:right; }
 
-  table.mini{
-    width:100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-    margin: 8px 0 12px;
-  }
-  table.mini th, table.mini td{
-    border-bottom: 1px solid var(--line);
-    padding: 6px 4px;
-    text-align: left;
-  }
-  table.mini th{ color: var(--text-dim); font-weight: 600; }
-  table.mini td b{ color: var(--mint); }
-
-  /* ---------- Flashcards ---------- */
-  .flash-wrap{ text-align:center; padding-top: 6px; }
-  .flash-progress{
-    font-family: var(--font-mono);
-    color: var(--text-dim);
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  .card-scene{
-    perspective: 1200px;
-    height: 300px;
-    margin-bottom: 16px;
-  }
-  .card-inner{
-    position: relative;
-    width: 100%; height: 100%;
-    transition: transform .5s cubic-bezier(.4,.2,.2,1);
-    transform-style: preserve-3d;
-    cursor: pointer;
-  }
-  .card-inner.flipped{ transform: rotateY(180deg); }
-  .card-face{
-    position:absolute; inset:0;
-    backface-visibility: hidden;
-    border-radius: var(--radius);
-    border: 1px solid var(--line);
-    padding: 22px 20px;
-    display:flex; flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-  }
-  .card-front{
-    background: linear-gradient(160deg, var(--bg-panel-2), var(--bg-panel));
-  }
-  .card-back{
-    background: linear-gradient(160deg, var(--lavender-dim), var(--bg-panel));
-    transform: rotateY(180deg);
-  }
-  .card-cat{
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    color: var(--mint);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 10px;
-  }
-  .card-q{
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.35;
-  }
-  .card-a{
-    font-size: 14px;
-    line-height: 1.5;
-    color: var(--text);
-  }
-  .card-hint{
-    margin-top: 14px;
-    font-size: 11px;
-    color: var(--text-dim);
-  }
-  .flash-controls{
-    display:flex;
-    gap: 10px;
-    justify-content:center;
-  }
-  .btn{
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 13.5px;
-    padding: 11px 18px;
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    background: var(--bg-panel);
-    color: var(--text);
-    cursor: pointer;
-    transition: transform .1s ease, border-color .15s ease;
-  }
-  .btn:active{ transform: scale(0.96); }
-  .btn.primary{ background: var(--mint-dim); color: var(--mint); border-color: var(--mint); }
-  .btn.ghost{ color: var(--text-dim); }
-
-  /* ---------- Quiz ---------- */
-  .quiz-progress{
-    font-family: var(--font-mono);
-    color: var(--text-dim);
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-  .quiz-card{
-    background: var(--bg-panel);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 20px 18px;
-  }
-  .quiz-q{
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    line-height: 1.4;
-  }
-  .quiz-opt{
-    display:block;
-    width:100%;
-    text-align:left;
-    background: var(--bg-panel-2);
-    border: 1px solid var(--line);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 14px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    margin-bottom: 9px;
-    cursor: pointer;
-    transition: all .15s ease;
-  }
-  .quiz-opt:active{ transform: scale(0.98); }
-  .quiz-opt.correct{ background: var(--mint-dim); border-color: var(--mint); color: var(--mint); }
-  .quiz-opt.wrong{ background: var(--coral-dim); border-color: var(--coral); color: #ffbaba; }
-  .quiz-opt[disabled]{ cursor: default; }
-  .quiz-explain{
-    font-size: 13px;
-    color: var(--text-dim);
-    margin: 10px 0 4px;
-    padding: 10px 12px;
-    background: var(--bg-panel-3);
-    border-radius: 8px;
-    display:none;
-  }
-  .quiz-explain.show{ display:block; }
-  .quiz-score{
-    text-align:center;
-    padding: 30px 10px;
-  }
-  .quiz-score .big{
-    font-family: var(--font-display);
-    font-size: 46px;
-    color: var(--mint);
-  }
-
-  .section-note{
-    color: var(--text-dim);
-    font-size: 13px;
-    margin: 4px 0 16px;
-    line-height: 1.5;
+  @media(min-width:640px){
+    .statgrid{ grid-template-columns:repeat(4,1fr); }
   }
 </style>
 </head>
 <body>
 
-<div class="radar-bg"></div>
+<div class="statusbar">
+  <div class="statusbar-inner">
+    <div class="dot"></div>
+    <span class="path">root@ecommerce-sec:~$</span>
+    <span class="typed" id="typedStat">cargando panorama de amenazas 2024...</span>
+    <span class="cursor"></span>
+  </div>
+  <div class="progresswrap"><div class="progressfill" id="topProgress"></div></div>
+</div>
 
-<div class="wrap">
-  <header class="app-header">
-    <div class="boot-line" id="bootLine"><span id="bootTextContent"></span><span class="cursor"></span></div>
-    <h1 class="title">SEGURIDAD<span>.exe</span></h1>
-    <p class="subtitle">// Comercio Electrónico — Desarrollo de Software IX — UTP</p>
-  </header>
+<div class="hero">
+  <div class="eyebrow">Sesión teórica · Desarrollo de Software IX</div>
+  <h1 class="title">Seguridad en <span class="accent">Comercio Electrónico</span></h1>
+  <p class="subtitle">Guía de estudio interactiva sobre protección integral de plataformas e-commerce: desde los fundamentos de la tríada CIA hasta las capas de defensa contra fraude, robo de identidad y skimming digital.</p>
+  <div class="hero-meta">
+    <span>UTP · Ing. Sistemas Computacionales</span>
+    <span>16 módulos</span>
+    <span>Método Feynman + mnemotecnia</span>
+  </div>
+</div>
 
-  <nav class="tabs">
-    <button class="tab active" data-tab="estudiar">📖 Estudiar</button>
-    <button class="tab" data-tab="flash">🃏 Tarjetas</button>
-    <button class="tab" data-tab="quiz">🎯 Quiz</button>
-  </nav>
+<div class="gauge">
+  <div class="gauge-card">
+    <div class="gauge-ring">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="bg" cx="26" cy="26" r="24"/>
+        <circle class="fg" id="gaugeFg" cx="26" cy="26" r="24"/>
+      </svg>
+      <div class="pct" id="gaugePct">0%</div>
+    </div>
+    <div class="gauge-text">
+      <div class="label">Nivel de dominio del tema</div>
+      <div class="sub" id="gaugeSub">Abre cada módulo para marcarlo como estudiado</div>
+    </div>
+  </div>
+</div>
 
-  <main>
-    <!-- ================= ESTUDIAR ================= -->
-    <section id="estudiar" class="tab-panel active">
-      <p class="section-note">Todo el contenido está agrupado en 10 bloques temáticos. Toca cada uno para expandirlo. Cada bloque incluye una <b style="color:var(--lavender)">mnemotecnia</b> para fijarlo en tu memoria.</p>
+<div class="toolbar">
+  <button class="btn-ghost" id="expandAll">Expandir todo</button>
+  <button class="btn-ghost" id="collapseAll">Colapsar todo</button>
+</div>
 
-      <details class="acc" open>
-        <summary class="acc-head"><span class="acc-icon">🏥</span>Panorama de Amenazas 2024<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <h4>El paciente E-commerce</h4>
-          <div class="stat-row">
-            <div class="stat-chip"><b>95%</b><small>sitios con vulnerabilidad</small></div>
-            <div class="stat-chip"><b>$41B</b><small>pérdidas por fraude (2023)</small></div>
-            <div class="stat-chip"><b>206d</b><small>promedio en detectar brecha</small></div>
-            <div class="stat-chip"><b>$4.45M</b><small>costo promedio de violación</small></div>
-          </div>
-          <h4>Vectores de ataque</h4>
-          <ul>
-            <li>Web Apps 22% · Phishing 21% · Malware 18%</li>
-            <li>Network 15% · Insider 12% · Mobile 8%</li>
-          </ul>
-          <h4>Industrias más atacadas</h4>
-          <table class="mini">
-            <tr><th>Industria</th><th>%</th><th>Tipo</th></tr>
-            <tr><td>E-commerce/Retail</td><td><b>23.1%</b></td><td>Web Apps</td></tr>
-            <tr><td>Fintech</td><td><b>19.7%</b></td><td>Credential Stuffing</td></tr>
-            <tr><td>Servicios</td><td><b>15.2%</b></td><td>Phishing</td></tr>
-            <tr><td>Tecnología</td><td><b>12.8%</b></td><td>Supply Chain</td></tr>
-            <tr><td>Salud</td><td><b>11.4%</b></td><td>Ransomware</td></tr>
-          </table>
-          <h4>Tendencias 2024</h4>
-          <ul>
-            <li><b>AI-Powered:</b> deepfakes y phishing con LLMs</li>
-            <li><b>Supply Chain:</b> ataques a npm/PyPI</li>
-            <li><b>API Security:</b> 60% más ataques a APIs que a apps web</li>
-            <li><b>Mobile:</b> +140% ataques a apps móviles</li>
-          </ul>
-          <div class="warn">+38% ataques en Black Friday · 73% de sitios tienen vulnerabilidades críticas</div>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            Imagina el e-commerce como un <b>paciente enfermo</b>: 95 de cada 100 pacientes (sitios) muestran síntomas (vulnerabilidades). El paciente pierde $41 mil millones de sangre (fraude global). Al médico le toma <b>206 días</b> notar la herida (detectar la brecha). Y cada cirugía de emergencia cuesta <b>$4.45 millones</b> (costo de violación de datos).
-          </div>
-        </div>
-      </details>
+<div class="navwrap">
+  <div class="navgrouplabel">Saltar a un módulo</div>
+  <div class="navscroll" id="navScroll"></div>
+</div>
 
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">🪟</span>Vulnerabilidad, Amenaza y Riesgo<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <h4>Los tres actores</h4>
-          <ul>
-            <li><b>Vulnerabilidad 🐛:</b> debilidad explotable. Ej: SQLi en login sin prepared statements.</li>
-            <li><b>Amenaza 🥷:</b> agente que puede explotarla. Ej: cibercriminal, bot, insider malicioso.</li>
-            <li><b>Riesgo ⚠️:</b> probabilidad de que la amenaza explote la vulnerabilidad.</li>
-          </ul>
-          <div class="code">Riesgo = Amenaza × Vulnerabilidad × Impacto</div>
-          <div class="warn">Ejemplo: checkout sin validación → script SQLi automatizado → 70% prob. de comprometer 50K tarjetas → $2.5M en multas PCI DSS</div>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            Piensa en una casa: la <b>ventana rota</b> es la vulnerabilidad, el <b>ladrón</b> rondando la calle es la amenaza, y el <b>riesgo</b> es la probabilidad real de que ese ladrón entre por esa ventana y se lleve algo valioso. Sin ladrón (amenaza) o sin ventana rota (vulnerabilidad), el riesgo es cero — por eso la fórmula multiplica, no suma.
-          </div>
-        </div>
-      </details>
+<main id="main"></main>
 
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">🛡️</span>Tríada CIA<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <ul>
-            <li><b>🔒 Confidencialidad:</b> solo usuarios autorizados acceden (datos de tarjetas encriptados, credenciales seguras). Mecanismos: <i>encriptación, control de acceso</i>.</li>
-            <li><b>🛡 Integridad:</b> la información no se altera sin autorización (precios sin manipular, logs inmutables). Mecanismos: <i>hashing, firmas digitales</i>.</li>
-            <li><b>⏱️ Disponibilidad:</b> los sistemas responden cuando se necesitan (24/7, APIs activas). Mecanismos: <i>redundancia, backups, anti-DDoS</i>.</li>
-          </ul>
-          <div class="warn">Impacto económico: romper confidencialidad → multas PCI $5K–$100K/mes · romper integridad → pérdidas por manipulación de precios · 1h sin disponibilidad → $100K–$300K en ventas perdidas</div>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            El <b>CID</b>, guerrero medieval, protege el castillo con tres reglas: pone un <b>candado</b> en la puerta (Confidencialidad), revisa que el <b>sello de cera</b> de cada carta esté intacto (Integridad), y mantiene a los <b>guardias despiertos las 24 horas</b> en la muralla (Disponibilidad). C-I-D = Confidencialidad, Integridad, Disponibilidad.
-          </div>
-        </div>
-      </details>
+<footer>
+  ● end of transmission — repasa, no memorices: entiende el porqué de cada capa.
+</footer>
 
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">🔑</span>Autenticación vs Autorización<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <h4>Autenticación — "¿Quién eres?"</h4>
-          <ul>
-            <li><b>Sabes:</b> contraseña, PIN, pregunta de seguridad</li>
-            <li><b>Tienes:</b> teléfono (SMS), token hardware, TOTP</li>
-            <li><b>Eres:</b> huella, facial, iris</li>
-          </ul>
-          <h4>Autorización — "¿Qué puedes hacer?"</h4>
-          <table class="mini">
-            <tr><th>Rol</th><th>Permisos</th></tr>
-            <tr><td>Cliente</td><td>ver pedidos, actualizar perfil, comprar</td></tr>
-            <tr><td>Vendedor</td><td>ver productos, inventario, devoluciones</td></tr>
-            <tr><td>Admin</td><td>gestionar todo: pedidos, productos, reportes</td></tr>
-          </table>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            Es como entrar a un <b>club nocturno</b>: en la puerta te piden tu identificación (Autenticación = <i>¿quién eres?</i>). Ya adentro, te ponen una <b>pulsera de color</b> que indica a qué zonas puedes entrar: pista general, VIP o backstage (Autorización = <i>qué puedes hacer</i>). Factores de autenticación: <b>SABES-TIENES-ERES</b>.
-          </div>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">🧊</span>Encriptación vs Hashing<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <div class="code">"4532-1234-5678-9012" → AES-256 → "A7B9C1D3..." → (con clave) → texto original</div>
-          <div class="code">"MiPassword123" → bcrypt(12) → "$2b$12$LQv3c1..." (irreversible)</div>
-          <ul>
-            <li><b>Encriptación:</b> reversible, requiere clave. AES-256 / RSA / TLS 1.3. Usada en tarjetas e info sensible.</li>
-            <li><b>Hashing:</b> irreversible, longitud fija. bcrypt / SHA-256 / Argon2. Usado en contraseñas.</li>
-          </ul>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            <b>Encriptar</b> es guardar dinero en una <b>caja fuerte con llave</b>: si tienes la clave, recuperas el dinero exacto. <b>Hashear</b> es <b>licuar una fruta</b>: nunca vuelves a tener la fruta original, solo puedes comparar el jugo resultante con otro para verificar si eran la misma fruta. Por eso las contraseñas se hashean (nunca deben "recuperarse") y las tarjetas se encriptan (a veces sí necesitas leerlas de nuevo).
-          </div>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">🏰</span>Principios Fundamentales<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <ul>
-            <li><b>Defense in Depth:</b> múltiples capas independientes (firewall + WAF + IDS)</li>
-            <li><b>Least Privilege:</b> acceso mínimo necesario (usuarios solo sus datos, apps permisos específicos)</li>
-            <li><b>Fail Secure:</b> el fallo ocurre en modo seguro (error en DB → deniega acceso; falla auth → logout)</li>
-            <li><b>Security by Design:</b> seguridad desde el diseño, no como "add-on" posterior</li>
-          </ul>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            Imagina un <b>castillo medieval</b>: tiene <b>varias murallas</b>, no solo una, así una falla no derrumba todo (Defense in Depth). Cada guardia solo tiene la <b>llave de su propia torre</b>, no del castillo entero (Least Privilege). Si el puente levadizo falla, se <b>levanta automáticamente</b> para proteger, nunca se queda abierto (Fail Secure). Y el castillo fue <b>diseñado con muros gruesos desde los planos</b>, no reforzado después de un ataque (Security by Design).
-          </div>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">💉</span>OWASP Top 3 en E-Commerce<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <ul>
-            <li><b>A01 Broken Access Control (94% apps):</b> ver pedidos ajenos cambiando IDs en la URL, acceso a panel admin sin auth, modificar precios en HTTP.
-              <div class="code">if (!userOwnsOrder(userId, orderId)) return res.status(403)</div>
-            </li>
-            <li><b>A02 Cryptographic Failures:</b> contraseñas en texto plano, hash MD5, HTTP sin TLS. Multas PCI $5K–$100K/mes.
-              <div class="code">const hash = await bcrypt.hash(pwd, 12)</div>
-            </li>
-            <li><b>A03 Injection:</b> SQL, NoSQL, Command, LDAP — control total del servidor vía inputs no sanitizados.
-              <div class="code">db.execute('SELECT * FROM users WHERE email=?', [email])</div>
-            </li>
-            <li><b>A04–A10:</b> Insecure Design · Security Misconfiguration · Vulnerable Components · Auth Failures · Integrity Failures · Logging Failures · SSRF</li>
-          </ul>
-          <div class="warn">Testing: manual (' OR 1=1 --), automatizado (SQLMap, OWASP ZAP, Burp Suite), code review (buscar concatenación de strings en queries)</div>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia — B-C-I</span>
-            <b>A01 (Broken Access):</b> alguien entra por la <b>puerta trasera sin llave</b>. <b>A02 (Cryptographic Failures):</b> las cartas secretas se envían <b>sin sobre</b>, cualquiera las lee. <b>A03 (Injection):</b> alguien pone <b>veneno en la comida</b> del restaurante (código malicioso mezclado con los ingredientes/inputs). Orden de letras: <b>B-C-I</b> (Broken, Cryptographic, Injection).
-          </div>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">💳</span>Ataques Específicos al Checkout<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <h4>Card Testing / Carding</h4>
-          <p>Bots prueban tarjetas robadas con micro-transacciones ($1–$5). Anatomía: obtención (dark web) → preparación (bots, proxies) → ejecución (100–1000 trans/min) → monetización ($1–3 básica, $100+ "fullz"). 15–20% de tarjetas probadas resultan válidas. $28B en pérdidas globales (2023).</p>
-          <h4>Account Takeover (ATO)</h4>
-          <p>+22% ataques en 2023, $120 pérdida promedio/cuenta. Métodos: credential stuffing, password spraying, session hijacking, SIM swapping, phishing, malware. Señales: geográficas, temporales, de comportamiento, de dispositivo. 67% de clientes no vuelven tras un ATO.</p>
-          <h4>Digital Skimming (Magecart)</h4>
-          <p>JavaScript malicioso inyectado en el checkout que captura tarjetas en tiempo real sin interferir la transacción. Víctimas: British Airways (380K tarjetas), Ticketmaster (40K), Newegg (1 mes sin detección). Contramedidas: CSP, Subresource Integrity (SRI), monitoreo de scripts en runtime.</p>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            <b>Card testing:</b> un ladrón prueba un manojo de llaves robadas, una por una, con movimientos pequeños ($1–5) para ver cuáles abren la puerta. <b>ATO:</b> alguien se disfraza de ti y entra a tu propia casa con una copia de tu llave. <b>Magecart:</b> es un <b>carterista invisible</b> que mete la mano en tu bolsillo (el checkout) y copia tu tarjeta sin que sientas nada — la transacción sigue funcionando normal.
-          </div>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">🧅</span>Defense in Depth — 4 Capas<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <ul>
-            <li><b>1. Perímetro y Red:</b> WAF (bloquea SQLi/XSS, rate limiting, geoblocking) + DDoS Protection/IDS-IPS (UDP Flood, SYN Flood, HTTP Flood)</li>
-            <li><b>2. Aplicación:</b> SAST (pre-build, SonarQube) · DAST (post-deploy, OWASP ZAP) · IAST (en runtime de tests) · RASP (producción, tiempo real)</li>
-            <li><b>3. Datos:</b> en reposo (AES-256-GCM, bcrypt/Argon2) · en tránsito (TLS 1.3, mTLS) · en uso (Intel SGX, secure enclaves)</li>
-            <li><b>4. Identidad (IAM):</b> SSO/OAuth/OIDC, MFA obligatorio, anomaly detection, Zero Trust, PAM con acceso just-in-time</li>
-          </ul>
-          <h4>Identity Risk Scoring</h4>
-          <table class="mini">
-            <tr><th>Score</th><th>Acción</th></tr>
-            <tr><td>&gt;80</td><td><b>Bloquear</b></td></tr>
-            <tr><td>50–80</td><td>Step-up 2FA</td></tr>
-            <tr><td>30–50</td><td>CAPTCHA</td></tr>
-          </table>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia — PADI</span>
-            Las 4 capas forman el acrónimo <b>PADI</b> (como la certificación de buceo): <b>P</b>erímetro (la muralla exterior), <b>A</b>plicación (los guardias internos revisando el código), <b>D</b>atos (el cofre del tesoro cifrado) e <b>I</b>dentidad (quién tiene permiso de "bucear" hasta el cofre). Cada capa es un anillo de una cebolla: si rompen uno, quedan tres más.
-          </div>
-        </div>
-      </details>
-
-      <details class="acc">
-        <summary class="acc-head"><span class="acc-icon">📊</span>Resumen y Métricas Clave<span class="acc-chevron">▶</span></summary>
-        <div class="acc-body">
-          <h4>KPIs críticos</h4>
-          <table class="mini">
-            <tr><th>Métrica</th><th>Umbral crítico</th></tr>
-            <tr><td>Decline rate de pagos</td><td><b>&gt;15%</b> = posible card testing</td></tr>
-            <tr><td>Chargeback rate</td><td><b>&gt;2%</b> = crítico</td></tr>
-            <tr><td>Velocidad trans/IP</td><td><b>&gt;10/min</b> = bloquear</td></tr>
-            <tr><td>MTTD (detección brecha)</td><td>objetivo <b>&lt;24h</b></td></tr>
-            <tr><td>MFA adoption rate</td><td>objetivo <b>&gt;80%</b></td></tr>
-            <tr><td>Vulnerabilidades críticas</td><td>objetivo <b>0</b></td></tr>
-            <tr><td>OWASP compliance score</td><td>objetivo <b>&gt;90%</b></td></tr>
-          </table>
-          <h4>Checklist esencial</h4>
-          <ul>
-            <li>✓ bcrypt/Argon2 (saltRounds ≥12) para contraseñas</li>
-            <li>✓ HTTPS + HSTS en toda la app</li>
-            <li>✓ Datos sensibles con AES-256 en BD</li>
-            <li>✓ Rate limiting en login y checkout</li>
-            <li>✓ MFA obligatorio con métodos de pago</li>
-            <li>✓ WAF + CSP + SRI en todas las páginas</li>
-            <li>✓ Logs de auditoría inmutables</li>
-            <li>✓ Monitoreo con HaveIBeenPwned</li>
-          </ul>
-          <div class="mnemo">
-            <span class="tag">🧠 Mnemotecnia</span>
-            Piensa en un <b>tablero de mando de auto</b>: si la aguja del "decline rate" pasa de 15%, algo se prueba mal (carding); si el "chargeback" pasa de 2%, frena; si el MTTD tarda más de 24h, vas ciego. Todo el checklist es tu <b>lista de pre-vuelo</b> antes de lanzar la tienda: sin cada casilla marcada, no despegas.
-          </div>
-        </div>
-      </details>
-    </section>
-
-    <!-- ================= FLASHCARDS ================= -->
-    <section id="flash" class="tab-panel">
-      <p class="section-note">Toca la tarjeta para voltearla. Usa los botones para avanzar, retroceder o mezclar el mazo.</p>
-      <div class="flash-wrap">
-        <div class="flash-progress" id="flashProgress">1 / 20</div>
-        <div class="card-scene">
-          <div class="card-inner" id="cardInner">
-            <div class="card-face card-front">
-              <div class="card-cat" id="cardCatFront">Categoría</div>
-              <div class="card-q" id="cardQ">Pregunta</div>
-              <div class="card-hint">Toca para voltear ↻</div>
-            </div>
-            <div class="card-face card-back">
-              <div class="card-cat" id="cardCatBack">Mnemotecnia</div>
-              <div class="card-a" id="cardA">Respuesta</div>
-            </div>
-          </div>
-        </div>
-        <div class="flash-controls">
-          <button class="btn" id="prevCard">← Anterior</button>
-          <button class="btn primary" id="shuffleCard">🔀 Mezclar</button>
-          <button class="btn" id="nextCard">Siguiente →</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= QUIZ ================= -->
-    <section id="quiz" class="tab-panel">
-      <p class="section-note">10 preguntas de opción múltiple basadas estrictamente en el contenido estudiado.</p>
-      <div class="quiz-progress" id="quizProgress">Pregunta 1 / 10</div>
-      <div class="quiz-card" id="quizCard"></div>
-    </section>
-  </main>
+<div class="fab">
+  <span class="fabtext">PROGRESO</span>
+  <div class="fabbar"><div class="fabfill" id="fabFill"></div></div>
+  <span class="fabpct" id="fabPct">0%</span>
 </div>
 
 <script>
-// ---------------- Boot sequence ----------------
-(function(){
-  const el = document.getElementById('bootTextContent');
-  const lines = [
-    "> iniciando escaneo de seguridad...",
-    "> cargando mnemotecnias...",
-    "> listo."
-  ];
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced){ el.textContent = lines.join(' '); return; }
-  let li = 0, ci = 0, out = "";
-  function tick(){
-    if(li >= lines.length) return;
-    const line = lines[li];
-    if(ci < line.length){
-      out += line[ci];
-      el.textContent = out;
-      ci++;
-      setTimeout(tick, 18);
-    } else {
-      out += "\n";
-      li++; ci = 0;
-      setTimeout(tick, 200);
+/* =========================================================
+   DATA — 16 módulos, agrupados por bloque temático
+   ========================================================= */
+const GROUPS = [
+  { key:'fund', label:'Bloque 1 · Fundamentos', color:'blue' },
+  { key:'owasp', label:'Bloque 2 · OWASP Top 10', color:'amber' },
+  { key:'ataques', label:'Bloque 3 · Ataques específicos', color:'red' },
+  { key:'defensa', label:'Bloque 4 · Defensa en profundidad', color:'green' },
+];
+
+/* Each module: id, group, title, tag(icon/topic), bodyHTML (as function returning string) */
+const MODULES = [
+{
+  id:1, group:'fund', title:'Panorama de Amenazas 2024', tag:'Contexto general',
+  body: `
+    <p class="lead">Antes de aprender a defender una tienda en línea, hay que entender <strong>qué tan expuesta está</strong>. Los números no son abstractos: son la razón por la que cada decisión de diseño en e-commerce debe pensarse con seguridad desde el principio.</p>
+
+    <div class="statgrid">
+      <div class="statbox"><div class="v">95%</div><div class="l">de sitios web tiene alguna vulnerabilidad</div></div>
+      <div class="statbox"><div class="v">$41B</div><div class="l">en pérdidas por fraude online (2023)</div></div>
+      <div class="statbox"><div class="v">206 días</div><div class="l">promedio para detectar una brecha</div></div>
+      <div class="statbox"><div class="v">$4.45M</div><div class="l">costo promedio de una violación de datos</div></div>
+    </div>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Piénsalo así</div>
+      <p>Imagina que <strong>206 días</strong> es como si un ladrón viviera dentro de tu casa durante casi 7 meses antes de que notes que faltan cosas. Ese es el tiempo que, en promedio, un atacante permanece dentro de un sistema comprometido sin ser detectado. Por eso la detección temprana (logs, monitoreo) es tan valiosa como la prevención.</p>
+    </div>
+
+    <h4 class="subhead">Vectores de ataque principales</h4>
+    <p>Los ataques no llegan por un solo camino. Se reparten así: <strong>Web Apps 22%</strong>, <strong>Phishing 21%</strong>, <strong>Malware 18%</strong>, <strong>Network 15%</strong>, <strong>Insider 12%</strong>, <strong>Mobile 8%</strong>. Es decir: casi 1 de cada 4 ataques entra directamente por fallas en la aplicación web — el terreno que un desarrollador controla más de cerca.</p>
+
+    <h4 class="subhead">Industrias más atacadas</h4>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Industria</th><th>% Ataques</th><th>Tipo principal</th></tr>
+        <tr><td class="hl">E-commerce / Retail</td><td>23.1%</td><td>Web Apps</td></tr>
+        <tr><td>Fintech</td><td>19.7%</td><td>Credential Stuffing</td></tr>
+        <tr><td>Servicios</td><td>15.2%</td><td>Phishing</td></tr>
+        <tr><td>Tecnología</td><td>12.8%</td><td>Supply Chain</td></tr>
+        <tr><td>Salud</td><td>11.4%</td><td>Ransomware</td></tr>
+      </table>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">⚠ Tendencias emergentes 2024</div>
+      <ul class="list">
+        <li><strong>AI-Powered Attacks:</strong> deepfakes y phishing automatizado con LLMs.</li>
+        <li><strong>Supply Chain:</strong> ataques a dependencias y librerías (npm, PyPI).</li>
+        <li><strong>API Security:</strong> 60% más ataques a APIs que a aplicaciones web tradicionales.</li>
+        <li><strong>Mobile Commerce:</strong> +140% en ataques a apps móviles.</li>
+      </ul>
+      <p style="margin-top:8px;">Dato clave: <strong>+38% de ataques durante Black Friday</strong>, y <strong>73% de sitios e-commerce</strong> tiene vulnerabilidades críticas sin corregir.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Brecha de seguridad (breach)</div><div class="gdef">Incidente en el que datos protegidos son accedidos, robados o expuestos sin autorización.</div></div>
+      <div class="gterm"><div class="gname">Supply chain attack</div><div class="gdef">Ataque que compromete una dependencia, librería o proveedor externo para infiltrarse indirectamente en el sistema objetivo.</div></div>
+    </div>
+  `
+},
+{
+  id:2, group:'fund', title:'Vulnerabilidad, Amenaza y Riesgo', tag:'Conceptos base',
+  body: `
+    <p class="lead">Estos tres términos se confunden todo el tiempo, pero son piezas distintas de una misma ecuación. Entenderlos bien es la base de todo el curso.</p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía de la casa</div>
+      <p>Una <strong>vulnerabilidad</strong> es una ventana sin seguro (la debilidad existe, exista o no un ladrón). Una <strong>amenaza</strong> es el ladrón que camina por tu calle buscando ventanas abiertas (el agente que podría explotarla). El <strong>riesgo</strong> es la probabilidad real de que ese ladrón, viendo esa ventana específica, decida entrar y lo que perderías si lo hace.</p>
+    </div>
+
+    <h4 class="subhead">Definiciones exactas</h4>
+    <ul class="list">
+      <li><strong>Vulnerabilidad:</strong> debilidad en un sistema que puede ser explotada. Ejemplo: SQL Injection en un formulario de login sin prepared statements.</li>
+      <li><strong>Amenaza:</strong> cualquier agente que pueda explotar una vulnerabilidad (cibercriminal, bot automatizado, insider malicioso).</li>
+      <li><strong>Riesgo:</strong> la probabilidad de que una amenaza efectivamente explote una vulnerabilidad, y el daño que eso produciría.</li>
+    </ul>
+
+    <div class="formula">Riesgo = Amenaza × Vulnerabilidad × Impacto</div>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <div class="word"><span>V</span>entana abierta + <span>A</span>sesino en la cuadra + <span>I</span>mportancia de lo que hay adentro = <span>R</span>iesgo</div>
+      <p>Si falta cualquiera de los tres factores, el riesgo cae a cero: sin ventana abierta no importa cuántos ladrones haya; sin ladrones no importa cuántas ventanas abiertas existan; y si adentro no hay nada de valor, tampoco hay riesgo real aunque existan ambas cosas.</p>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">🛒 Ejemplo aplicado a e-commerce</div>
+      <p>Checkout sin validación (<strong>vulnerabilidad</strong>) → script automatizado de SQL Injection (<strong>amenaza</strong>) → 70% de probabilidad de comprometer 50,000 tarjetas → <strong>$2.5M en multas PCI DSS</strong> (impacto). Ese es el riesgo materializado paso a paso.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Vulnerabilidad</div><div class="gdef">Debilidad en un sistema que puede ser explotada.</div></div>
+      <div class="gterm"><div class="gname">Amenaza</div><div class="gdef">Cualquier agente que pueda explotar una vulnerabilidad.</div></div>
+      <div class="gterm"><div class="gname">Riesgo</div><div class="gdef">Probabilidad de que una amenaza explote una vulnerabilidad.</div></div>
+    </div>
+  `
+},
+{
+  id:3, group:'fund', title:'Tríada CIA — Pilares de la Seguridad', tag:'Marco fundamental',
+  body: `
+    <p class="lead">Todo lo que se hace en seguridad informática persigue proteger tres propiedades. Si un ataque no rompe ninguna de las tres, en realidad no comprometió la seguridad de nada.</p>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica — Los tres guardianes</div>
+      <div class="word">🔒 El <span>Portero</span> · 🛡 El <span>Notario</span> · ⏱ El <span>Bombero</span></div>
+      <p>El <strong>Portero</strong> decide quién entra a ver algo (Confidencialidad). El <strong>Notario</strong> certifica que un documento no fue alterado (Integridad). El <strong>Bombero</strong> asegura que el edificio siga funcionando y accesible aunque haya una emergencia (Disponibilidad).</p>
+    </div>
+
+    <h4 class="subhead">🔒 Confidencialidad — "Solo quien debe, ve"</h4>
+    <p>Información accesible solo a usuarios autorizados. En e-commerce: datos de tarjetas encriptados, información personal de clientes, credenciales de acceso seguras, datos financieros internos. Se protege con <strong>encriptación</strong> y <strong>control de acceso</strong>.</p>
+
+    <h4 class="subhead">🛡 Integridad — "Nada cambia sin permiso"</h4>
+    <p>Información no alterada de manera no autorizada. En e-commerce: precios de productos sin manipular, órdenes de compra exactas, logs de auditoría inmutables, código de aplicación verificado. Se protege con <strong>hashing</strong> y <strong>firmas digitales</strong>.</p>
+
+    <h4 class="subhead">⏱ Disponibilidad — "Siempre que se necesite"</h4>
+    <p>Sistemas accesibles cuando se necesitan. En e-commerce: sitio funcionando 24/7, procesamiento de pagos activo, base de datos accesible, APIs respondiendo correctamente. Se protege con <strong>redundancia, backups y anti-DDoS</strong>.</p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 ¿Por qué separarlas?</div>
+      <p>Porque un ataque puede romper solo una y dejar las otras dos intactas. Un atacante que <strong>cambia el precio</strong> de un producto de $500 a $5 no roba ningún dato (la confidencialidad sigue intacta) y el sitio sigue funcionando (la disponibilidad también), pero rompió la <strong>integridad</strong>. Por eso cada pilar necesita su propia defensa específica.</p>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">💰 Impacto económico de violaciones CIA</div>
+      <ul class="list">
+        <li><strong>Confidencialidad</strong> rota → multas PCI DSS de $5K–$100K por mes.</li>
+        <li><strong>Integridad</strong> rota → manipulación de precios = pérdidas directas.</li>
+        <li><strong>Disponibilidad</strong> rota → 1 hora de downtime = $100K–$300K en ventas perdidas.</li>
+      </ul>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Confidencialidad</div><div class="gdef">Información accesible solo a usuarios autorizados.</div></div>
+      <div class="gterm"><div class="gname">Integridad</div><div class="gdef">Información no alterada de manera no autorizada.</div></div>
+      <div class="gterm"><div class="gname">Disponibilidad</div><div class="gdef">Sistemas accesibles cuando se necesitan.</div></div>
+    </div>
+  `
+},
+{
+  id:4, group:'fund', title:'Autenticación vs Autorización', tag:'Identidad y permisos',
+  body: `
+    <p class="lead">Son dos pasos consecutivos y muy distintos. Confundirlos es uno de los errores conceptuales más comunes al diseñar sistemas.</p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía del edificio de oficinas</div>
+      <p><strong>Autenticación</strong> es mostrar tu identificación en la recepción para probar que eres quien dices ser. <strong>Autorización</strong> es la tarjeta de acceso que determina a qué pisos puedes entrar una vez ya estás dentro. Puedes estar perfectamente autenticado (identificado) y aun así no tener autorización para entrar al piso de finanzas.</p>
+    </div>
+
+    <h4 class="subhead">🔍 Autenticación — "¿Quién eres?"</h4>
+    <p>Verifica la identidad de un usuario antes de permitir el acceso, usando tres tipos de factores:</p>
+    <ul class="list">
+      <li><strong>Lo que SABES:</strong> contraseña, PIN, pregunta de seguridad.</li>
+      <li><strong>Lo que TIENES:</strong> teléfono (SMS), token de hardware, código TOTP.</li>
+      <li><strong>Lo que ERES:</strong> huella dactilar, reconocimiento facial, iris.</li>
+    </ul>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <div class="word"><span>S</span>abes · <span>T</span>ienes · <span>E</span>res</div>
+      <p>Es tu "pasaporte digital" de tres sellos. La autenticación multifactor (MFA) fuerte combina al menos dos de estas tres categorías — nunca dos factores del mismo tipo (dos contraseñas no cuentan como MFA real).</p>
+    </div>
+
+    <h4 class="subhead">🔑 Autorización — "¿Qué puedes hacer?"</h4>
+    <p>Determina qué puede hacer un usuario <strong>ya autenticado</strong>, normalmente mediante roles:</p>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Rol</th><th>Permisos</th></tr>
+        <tr><td class="hl">Cliente</td><td>Ver sus pedidos, actualizar perfil, comprar</td></tr>
+        <tr><td class="hl">Vendedor</td><td>Ver sus productos, actualizar inventario, devoluciones</td></tr>
+        <tr><td class="hl">Admin</td><td>Gestionar todos los pedidos, productos, reportes</td></tr>
+      </table>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Autenticación</div><div class="gdef">Verificar la identidad de un usuario antes de permitir acceso.</div></div>
+      <div class="gterm"><div class="gname">Autorización</div><div class="gdef">Determinar qué puede hacer un usuario ya autenticado.</div></div>
+      <div class="gterm"><div class="gname">MFA (Multi-Factor Authentication)</div><div class="gdef">Autenticación que combina dos o más factores de distinto tipo (sabes/tienes/eres).</div></div>
+    </div>
+  `
+},
+{
+  id:5, group:'fund', title:'Encriptación vs Hashing', tag:'Criptografía aplicada',
+  body: `
+    <p class="lead">Ambas técnicas transforman datos legibles en algo ilegible, pero con un propósito y una propiedad matemática opuesta: <strong>una se puede deshacer, la otra no.</strong></p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía de la caja fuerte vs la licuadora</div>
+      <p>La <strong>encriptación</strong> es como guardar algo en una caja fuerte: con la llave correcta, puedes sacarlo exactamente como estaba. El <strong>hashing</strong> es como licuar una fruta: puedes ver el resultado (el smoothie), pero es matemáticamente imposible reconstruir la fruta original a partir de él. Por eso las contraseñas se "licúan" (hash), nunca se guardan en caja fuerte — ni el propio sistema necesita poder "verlas" de nuevo, solo comparar licuados.</p>
+    </div>
+
+    <h4 class="subhead">🔒 Encriptación — proceso reversible</h4>
+    <div class="code">Texto:  "4532-1234-5678-9012"
+  → AES-256 →  "A7B9C1D3E5F7..."
+  ← con clave ←  "4532-1234-5678-9012"</div>
+    <ul class="list">
+      <li>Requiere una clave para descifrar y los datos son recuperables.</li>
+      <li>Algoritmos: <strong>AES-256 / RSA / TLS 1.3</strong>.</li>
+      <li>Uso típico: tarjetas de crédito en base de datos, información personal sensible, comunicación por HTTPS.</li>
+    </ul>
+
+    <h4 class="subhead"># Hashing — función de una vía</h4>
+    <div class="code">Password: "MiPassword123"
+  → bcrypt(12 rounds) →
+  "$2b$12$LQv3c1..." <span class="cm">(irreversible)</span></div>
+    <ul class="list">
+      <li>Sin clave, el proceso es irreversible, y produce una salida de longitud fija.</li>
+      <li>Algoritmos: <strong>bcrypt / SHA-256 / Argon2</strong>.</li>
+      <li>Uso típico: almacenar contraseñas, verificar integridad, tokens de sesión.</li>
+    </ul>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <p><strong>"Encriptar es para leer después, hashear es para comparar después."</strong> Si algún día necesitas recuperar el dato original (número de tarjeta), usa encriptación. Si solo necesitas verificar que algo coincide (contraseña), usa hashing.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Encriptación</div><div class="gdef">Transformación reversible de datos legibles a ilegibles mediante una clave (AES-256, RSA, TLS 1.3).</div></div>
+      <div class="gterm"><div class="gname">Hashing</div><div class="gdef">Función de una vía que transforma datos en una salida irreversible de longitud fija (bcrypt, SHA-256, Argon2).</div></div>
+    </div>
+  `
+},
+{
+  id:6, group:'fund', title:'Principios Fundamentales de Seguridad', tag:'Filosofía de diseño',
+  body: `
+    <p class="lead">Cuatro principios que deberían guiar cualquier decisión de arquitectura, no solo reglas para memorizar sino formas de pensar antes de escribir código.</p>
+
+    <h4 class="subhead">Defense in Depth</h4>
+    <p><strong>Múltiples capas independientes.</strong> Si una capa falla, otras protegen: WAF + Firewall + IDS + Auth + Autorización + Auditoría, todas trabajando juntas.</p>
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía</div>
+      <p>Como un castillo medieval: no basta con un solo muro. Hay foso, muralla, puerta, guardias y torre central. Si el atacante cruza el foso, todavía debe romper la muralla.</p>
+    </div>
+
+    <h4 class="subhead">Least Privilege (mínimo privilegio)</h4>
+    <p>Acceso mínimo necesario: los usuarios solo ven sus propios datos, las apps solo tienen los permisos específicos que necesitan, los servicios acceden únicamente a los recursos mínimos indispensables.</p>
+
+    <h4 class="subhead">Fail Secure (fallo en modo seguro)</h4>
+    <p>Cuando algo se rompe, debe romperse <strong>hacia el lado seguro</strong>, no hacia el lado abierto: si la base de datos falla → denegar acceso (no permitir todo por defecto); si la autenticación falla → cerrar sesión; si la red cae → modo offline seguro.</p>
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía</div>
+      <p>Es como un elevador durante un corte de luz: no se abre de golpe dejando caer a la gente al vacío (fail-open peligroso); se detiene y bloquea las puertas (fail-secure).</p>
+    </div>
+
+    <h4 class="subhead">Security by Design</h4>
+    <p>La seguridad se piensa <strong>desde el diseño</strong>, no se agrega después como un parche: threat modeling desde el inicio, arquitectura con seguridad integrada, nunca como "add-on" posterior.</p>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <div class="word"><span>D</span>efensa · <span>L</span>ímite · <span>F</span>allo seguro · <span>D</span>iseño</div>
+      <p>"DLFD" — <strong>D</strong>efensa en capas, <strong>L</strong>ímite de privilegios, <strong>F</strong>allo seguro, <strong>D</strong>iseño con seguridad incluida desde el día uno.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Defense in Depth</div><div class="gdef">Estrategia de múltiples capas de seguridad independientes; si una falla, las demás siguen protegiendo.</div></div>
+      <div class="gterm"><div class="gname">Least Privilege</div><div class="gdef">Principio de otorgar solo el acceso mínimo necesario para cumplir una función.</div></div>
+      <div class="gterm"><div class="gname">Fail Secure</div><div class="gdef">Diseño donde, ante un fallo, el sistema se cierra en modo seguro en lugar de abrirse.</div></div>
+    </div>
+  `
+},
+{
+  id:7, group:'owasp', title:'OWASP A01 — Broken Access Control', tag:'#1 vulnerabilidad más prevalente',
+  body: `
+    <p class="lead">Es la vulnerabilidad <strong>más común de todas</strong>: 94% de las aplicaciones tiene algún tipo de control de acceso roto. Ocurre cuando el sistema no verifica correctamente si un usuario autenticado tiene permiso real sobre el recurso que está pidiendo.</p>
+
+    <div class="statgrid">
+      <div class="statbox"><div class="v">94%</div><div class="l">de apps con Broken Access Control</div></div>
+      <div class="statbox"><div class="v">318K</div><div class="l">incidencias reportadas (miles)</div></div>
+    </div>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía del hotel</div>
+      <p>Imagina un hotel donde tu llave de habitación 204 <strong>también abre</strong> la habitación 205 con solo cambiar el número en la tarjeta. El hotel verificó que tienes una llave válida (autenticación), pero nunca verificó que fuera <strong>tu</strong> habitación específica (autorización sobre el recurso). Eso es exactamente lo que pasa cuando alguien cambia un <code>orderId</code> en la URL y ve pedidos ajenos.</p>
+    </div>
+
+    <h4 class="subhead">Formas comunes de explotación</h4>
+    <ul class="list">
+      <li>Ver pedidos ajenos simplemente cambiando IDs en la URL.</li>
+      <li>Acceder al panel de administración sin autenticación.</li>
+      <li>Modificar precios directamente manipulando las peticiones HTTP.</li>
+    </ul>
+
+    <h4 class="subhead">Código vulnerable vs seguro</h4>
+    <div class="code"><span class="kw">// ✅ Verificar propiedad del recurso</span>
+if (!userOwnsOrder(userId, orderId))
+  return res.status(403).json({error:'Forbidden'})</div>
+    <p>La regla es simple pero se olvida constantemente: <strong>nunca confíes en un ID que viene del cliente</strong> sin comprobar que pertenece al usuario autenticado.</p>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <p><strong>"Autenticado no es lo mismo que dueño."</strong> Cada vez que un endpoint reciba un ID (orderId, userId, invoiceId), pregúntate: ¿estoy verificando que este usuario específico sea el dueño de este recurso específico?</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Broken Access Control (BAC)</div><div class="gdef">Falla donde el sistema no restringe correctamente lo que un usuario autenticado puede ver o hacer.</div></div>
+      <div class="gterm"><div class="gname">IDOR</div><div class="gdef">Insecure Direct Object Reference: acceder a un recurso ajeno manipulando directamente su identificador.</div></div>
+    </div>
+  `
+},
+{
+  id:8, group:'owasp', title:'OWASP A02 — Cryptographic Failures', tag:'Fallas criptográficas',
+  body: `
+    <p class="lead">Ocurre cuando datos sensibles se manejan sin la protección criptográfica adecuada — o directamente sin ninguna. No es un problema de "no tener criptografía disponible", sino de <strong>no usarla, usarla mal, o usar algoritmos obsoletos</strong>.</p>
+
+    <div class="statgrid">
+      <div class="statbox"><div class="v">70%</div><div class="l">de prevalencia en apps</div></div>
+      <div class="statbox"><div class="v">202K</div><div class="l">incidencias reportadas (miles)</div></div>
+    </div>
+
+    <h4 class="subhead">Casos típicos</h4>
+    <ul class="list">
+      <li>Contraseñas guardadas en texto plano.</li>
+      <li>Uso de hash MD5 (roto y obsoleto para seguridad).</li>
+      <li>Tráfico HTTP sin TLS (sin candado en el navegador).</li>
+      <li>Datos sensibles sin encriptar en la base de datos.</li>
+    </ul>
+
+    <div class="box stat-callout">
+      <div class="box-title">💰 Consecuencia directa</div>
+      <p>Multas PCI DSS de <strong>$5K a $100K por mes</strong> mientras el incumplimiento continúe.</p>
+    </div>
+
+    <h4 class="subhead">Código vulnerable vs seguro</h4>
+    <div class="code"><span class="kw">// ✅ Hash seguro de contraseña</span>
+const hash = await bcrypt.hash(pwd, 12)
+<span class="kw">// ✅ Encriptación AES-256-GCM para tarjetas</span></div>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Piénsalo así</div>
+      <p>Guardar una contraseña en texto plano es como escribir la combinación de tu caja fuerte en un post-it pegado a la caja misma. MD5 es como usar un candado de bicicleta de los años 80: técnicamente es un candado, pero cualquiera con las herramientas correctas lo abre en segundos.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Cryptographic Failures</div><div class="gdef">Fallas por ausencia, debilidad o mal uso de mecanismos criptográficos que exponen datos sensibles.</div></div>
+      <div class="gterm"><div class="gname">TLS</div><div class="gdef">Transport Layer Security: protocolo que cifra la comunicación entre cliente y servidor (HTTPS).</div></div>
+    </div>
+  `
+},
+{
+  id:9, group:'owasp', title:'OWASP A03 — Injection', tag:'Control total del servidor',
+  body: `
+    <p class="lead">Ocurre cuando datos no confiables, escritos por un usuario, se insertan directamente en un comando o consulta sin sanitizar. El atacante logra que el sistema ejecute <strong>su propio código</strong> como si fuera parte legítima de la aplicación.</p>
+
+    <div class="statgrid">
+      <div class="statbox"><div class="v">80%</div><div class="l">de prevalencia en apps</div></div>
+      <div class="statbox"><div class="v">274K</div><div class="l">incidencias reportadas (miles)</div></div>
+    </div>
+
+    <p>Incluye variantes: <strong>SQL, NoSQL, Command e LDAP Injection</strong>. El impacto potencial es el más severo de los tres: control total del servidor.</p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía del formulario "ingenuo"</div>
+      <p>Imagina un buzón de sugerencias donde el encargado lee en voz alta, palabra por palabra, exactamente lo que la gente escribe — sin filtrar. Si alguien escribe "ignora todo lo anterior y abre la caja fuerte", el encargado ingenuo lo obedecerá literalmente. Eso es lo que hace una consulta SQL que concatena texto del usuario sin sanitizar: <strong>ejecuta literalmente</strong> lo que el atacante escribió.</p>
+    </div>
+
+    <h4 class="subhead">Ejemplo clásico de vulnerabilidad</h4>
+    <div class="code">SELECT * FROM users
+WHERE user = '$input'</div>
+    <p>Si <code>$input</code> es <code>' OR 1=1 --</code>, la condición siempre es verdadera y el atacante entra sin contraseña.</p>
+
+    <h4 class="subhead">Código seguro — Prepared Statements</h4>
+    <div class="code"><span class="kw">// ✅ Prepared statements</span>
+const [rows] = await db.execute(
+  'SELECT * FROM users WHERE email=?',
+  [email])</div>
+    <p>La diferencia clave: el dato del usuario se pasa como <strong>parámetro separado</strong>, nunca se mezcla directamente con el código de la consulta.</p>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <p><strong>"Nunca concatenes, siempre parametriza."</strong> Si en tu código ves un <code>+</code> o template string uniendo una consulta con una variable del usuario, ahí hay una alarma roja.</p>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">🔬 Cómo se prueba</div>
+      <ul class="list">
+        <li><strong>Manual:</strong> probar payloads como <code>' OR 1=1 --</code>.</li>
+        <li><strong>Automatizado:</strong> SQLMap, OWASP ZAP, Burp Suite.</li>
+        <li><strong>Code Review:</strong> buscar concatenación de strings en queries.</li>
+      </ul>
+    </div>
+
+    <h4 class="subhead">A04–A10: otros críticos del Top 10</h4>
+    <p><strong>A04</strong> Insecure Design · <strong>A05</strong> Security Misconfiguration · <strong>A06</strong> Vulnerable Components · <strong>A07</strong> Auth Failures · <strong>A08</strong> Integrity Failures · <strong>A09</strong> Logging Failures · <strong>A10</strong> SSRF.</p>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Injection</div><div class="gdef">Inserción de código malicioso a través de inputs no sanitizados (SQL, NoSQL, Command, LDAP).</div></div>
+      <div class="gterm"><div class="gname">Prepared Statement</div><div class="gdef">Consulta precompilada donde los datos del usuario se pasan como parámetros, nunca concatenados al texto de la consulta.</div></div>
+    </div>
+  `
+},
+{
+  id:10, group:'ataques', title:'Card Testing / Carding', tag:'Fraude de pagos automatizado',
+  body: `
+    <p class="lead">Técnica automatizada donde cibercriminales prueban la validez de números de tarjetas robadas usando bots que realizan transacciones pequeñas ($1–$5 USD) en sitios e-commerce, para descubrir cuáles tarjetas siguen "vivas" antes de usarlas en compras grandes.</p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía</div>
+      <p>Es como probar 500 llaves distintas en la puerta de tu casa, una por una y muy rápido, solo para ver cuáles giran. El "ladrón" no quiere robar nada todavía en esta etapa: solo quiere saber qué llaves (tarjetas) funcionan, para venderlas o usarlas después en un robo más grande.</p>
+    </div>
+
+    <h4 class="subhead">Anatomía del ataque</h4>
+    <div class="steps">
+      <div class="step"><div class="sdot"><div class="scircle">1</div><div class="sline"></div></div><div class="step-body"><div class="st-title">Obtención de datos</div><div class="st-desc">Dark web, data breaches, skimming, phishing.</div></div></div>
+      <div class="step"><div class="sdot"><div class="scircle">2</div><div class="sline"></div></div><div class="step-body"><div class="st-title">Preparación</div><div class="st-desc">Bots (SentryMBA, STORM), proxy chains, user agents variables.</div></div></div>
+      <div class="step"><div class="sdot"><div class="scircle">3</div><div class="sline"></div></div><div class="step-body"><div class="st-title">Ejecución</div><div class="st-desc">100–1000 micro-transacciones por minuto, con rotación de IPs.</div></div></div>
+      <div class="step"><div class="sdot"><div class="scircle">4</div></div><div class="step-body"><div class="st-title">Monetización</div><div class="st-desc">$1–3 por tarjeta básica · $10–50 premium · $100+ "fullz" (identidad completa).</div></div></div>
+    </div>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <div class="word"><span>O</span>btener · <span>P</span>reparar · <span>E</span>jecutar · <span>M</span>onetizar</div>
+      <p>"OPEM": el ciclo completo de carding, siempre en ese orden — como un embudo de ventas, pero criminal.</p>
+    </div>
+
+    <h4 class="subhead">Impacto financiero</h4>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Concepto</th><th>Costo</th></tr>
+        <tr><td>Chargeback fees</td><td>$15–25 / transacción</td></tr>
+        <tr><td>Processing fees</td><td>$0.30–0.50 / intento</td></tr>
+        <tr><td>Daño reputacional</td><td>$50K–100K anuales</td></tr>
+        <tr><td>Investigación de fraude</td><td>$25–50 / caso</td></tr>
+      </table>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">⚠ Estadísticas alarmantes</div>
+      <p><strong>$28 billones</strong> en pérdidas globales (2023) · <strong>65%</strong> de sitios e-commerce sufre card testing mensualmente · <strong>15–20%</strong> de tarjetas probadas resultan válidas · picos en Black Friday, Cyber Monday y madrugadas.</p>
+    </div>
+
+    <h4 class="subhead">Técnicas de mitigación</h4>
+    <ul class="list">
+      <li><strong>Rate limiting:</strong> máx. 3 intentos de pago cada 15 min por IP.</li>
+      <li><strong>CAPTCHA inteligente:</strong> reCAPTCHA v3 cuando el risk score supera 0.7.</li>
+      <li><strong>3D Secure 2.0:</strong> autenticación adicional por el banco emisor.</li>
+      <li><strong>Device fingerprinting:</strong> user-agent, timezone, canvas hash.</li>
+      <li><strong>IP reputation:</strong> bloquear proxies, Tor, IPs con riskScore > 80.</li>
+      <li><strong>Behavioral analytics:</strong> checkoutTime menor a 30s, montos menores a $10, anomalías geográficas.</li>
+    </ul>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Card Testing / Carding</div><div class="gdef">Validación automatizada masiva de números de tarjeta robados mediante microtransacciones.</div></div>
+      <div class="gterm"><div class="gname">Fullz</div><div class="gdef">Paquete de datos de identidad completa robada (tarjeta + información personal), el más caro en el mercado negro.</div></div>
+    </div>
+  `
+},
+{
+  id:11, group:'ataques', title:'Account Takeover (ATO)', tag:'Robo de cuentas',
+  body: `
+    <p class="lead">Es cuando un atacante toma control total de la cuenta legítima de un usuario, usualmente para hacer compras fraudulentas, redimir puntos o revender el acceso.</p>
+
+    <div class="statgrid">
+      <div class="statbox"><div class="v">+22%</div><div class="l">aumento de ataques ATO en 2023</div></div>
+      <div class="statbox"><div class="v">$120</div><div class="l">pérdida promedio por cuenta</div></div>
+    </div>
+
+    <h4 class="subhead">Métodos de ataque</h4>
+    <ul class="list">
+      <li><strong>Credential Stuffing:</strong> usar credenciales filtradas de otras brechas (80% de usuarios reutiliza contraseñas).</li>
+      <li><strong>Password Spraying:</strong> probar contraseñas comunes contra muchas cuentas distintas.</li>
+      <li><strong>Session Hijacking:</strong> robar tokens de sesión JWT o cookies.</li>
+      <li><strong>SIM Swapping:</strong> bypass del 2FA por SMS suplantando la línea telefónica.</li>
+      <li><strong>Phishing:</strong> páginas falsas que capturan credenciales.</li>
+      <li><strong>Malware:</strong> keyloggers e info-stealers.</li>
+    </ul>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Piénsalo así</div>
+      <p>El <strong>Credential Stuffing</strong> funciona porque la gente reutiliza la misma llave para su casa, su carro y su oficina. Si un ladrón consigue esa llave en cualquiera de esos tres lugares, la prueba automáticamente en los otros dos — y en el 80% de los casos, ¡funciona!</p>
+    </div>
+
+    <h4 class="subhead">Indicadores de ATO</h4>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Categoría</th><th>Señales</th></tr>
+        <tr><td class="hl">Geográfico</td><td>Login desde país diferente, múltiples países en 1 hora</td></tr>
+        <tr><td class="hl">Temporal</td><td>Fuera del horario habitual, inactividad prolongada + burst</td></tr>
+        <tr><td class="hl">Comportamiento</td><td>Cambio de dirección de envío, nuevos métodos de pago, uso de puntos</td></tr>
+        <tr><td class="hl">Dispositivo</td><td>Dispositivo desconocido, VPN/proxy, múltiples fallos + éxito</td></tr>
+      </table>
+    </div>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <div class="word">"<span>G</span>ato <span>T</span>raga <span>C</span>uatro <span>D</span>ulces"</div>
+      <p><strong>G</strong>eográfico, <strong>T</strong>emporal, <strong>C</strong>omportamiento, <strong>D</strong>ispositivo: las cuatro categorías de señales que un sistema de detección de ATO debe vigilar simultáneamente.</p>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">💥 Impacto</div>
+      <p>$50–500 de pérdida por cuenta comprometida · <strong>67% de clientes no vuelve</strong> a la tienda tras sufrir un ATO · costos de investigación de $25–75 por incidente.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Account Takeover (ATO)</div><div class="gdef">Toma de control no autorizada de la cuenta de un usuario legítimo.</div></div>
+      <div class="gterm"><div class="gname">Credential Stuffing</div><div class="gdef">Uso automatizado de credenciales filtradas de otras brechas para intentar iniciar sesión en múltiples sitios.</div></div>
+    </div>
+  `
+},
+{
+  id:12, group:'ataques', title:'Digital Skimming (Magecart)', tag:'Robo de tarjetas en tiempo real',
+  body: `
+    <p class="lead">Consiste en inyectar JavaScript malicioso en la página de checkout, que captura los datos de la tarjeta en tiempo real <strong>mientras el cliente los escribe</strong> — sin interferir con la transacción normal. Es extremadamente difícil de detectar porque el sitio sigue funcionando perfecto para el usuario.</p>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía del cajero automático clonado</div>
+      <p>Es el equivalente digital de un "skimmer" físico pegado a un cajero automático: el cajero real sigue entregando dinero con normalidad, pero un dispositivo invisible copia los datos de tu tarjeta al mismo tiempo. En la web, ese "dispositivo invisible" es un script de JavaScript de terceros que fue comprometido o inyectado en el checkout.</p>
+    </div>
+
+    <h4 class="subhead">Víctimas notables</h4>
+    <ul class="list">
+      <li><strong>British Airways (2018):</strong> 380,000 tarjetas comprometidas.</li>
+      <li><strong>Ticketmaster (2018):</strong> 40,000 tarjetas, script activo durante meses.</li>
+      <li><strong>Newegg (2018):</strong> 1 mes activo sin ser detectado.</li>
+    </ul>
+
+    <div class="box stat-callout">
+      <div class="box-title">⚠ Por qué es tan peligroso</div>
+      <p>No requiere vulnerar la base de datos ni el servidor de pagos: basta con comprometer <strong>un solo script de terceros</strong> (analytics, chat widgets, ads) que se carga en la página de checkout para tener acceso silencioso a cada tarjeta ingresada.</p>
+    </div>
+
+    <h4 class="subhead">Contramedidas</h4>
+    <ul class="list">
+      <li><strong>Content Security Policy (CSP):</strong> controlar exactamente qué scripts están permitidos ejecutarse.</li>
+      <li><strong>Subresource Integrity (SRI):</strong> verificar el hash de scripts externos antes de ejecutarlos.</li>
+      <li><strong>Runtime Script Monitoring:</strong> usar MutationObserver para vigilar cambios sospechosos en el DOM.</li>
+      <li><strong>File Integrity Monitoring:</strong> detectar cambios no autorizados en archivos JS/HTML.</li>
+      <li><strong>Auditorías periódicas:</strong> revisar todos los scripts de terceros regularmente.</li>
+    </ul>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <p><strong>"Confía, pero verifica el hash."</strong> CSP dice qué scripts pueden correr; SRI verifica que esos scripts no hayan sido alterados desde la última vez que confiaste en ellos. Son complementarios, no sustitutos.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">Digital Skimming / Magecart</div><div class="gdef">Inyección de JavaScript malicioso en páginas de checkout para capturar datos de tarjetas en tiempo real.</div></div>
+      <div class="gterm"><div class="gname">CSP (Content Security Policy)</div><div class="gdef">Cabecera HTTP que restringe qué recursos (scripts, estilos) puede cargar y ejecutar una página.</div></div>
+      <div class="gterm"><div class="gname">SRI (Subresource Integrity)</div><div class="gdef">Mecanismo que verifica, mediante hash, que un recurso externo no fue modificado.</div></div>
+    </div>
+  `
+},
+{
+  id:13, group:'defensa', title:'Defense in Depth — Perímetro y Aplicación', tag:'Capas 1 y 2',
+  body: `
+    <p class="lead">Aquí empieza el modelo de defensa en capas concretas. Cada capa protege un perímetro distinto, y ninguna es suficiente por sí sola.</p>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica — PADI</div>
+      <div class="word"><span>P</span>erímetro · <span>A</span>plicación · <span>D</span>atos · <span>I</span>dentidad</div>
+      <p>Igual que la certificación de buceo PADI te enseña a revisar tu equipo en capas antes de sumergirte, este modelo revisa la seguridad en capas antes de exponer el sistema a internet: primero el borde de la red, luego el código de la app, luego los datos mismos, y finalmente quién tiene identidad para acceder.</p>
+    </div>
+
+    <h4 class="subhead">Capa 1: Perímetro y Red</h4>
+    <p><strong>🔥 Web Application Firewall (WAF)</strong> — filtra el tráfico antes de que llegue a la aplicación:</p>
+    <ul class="list">
+      <li>Bloqueo de SQL Injection y XSS en el borde.</li>
+      <li>Rate limiting avanzado por IP/usuario.</li>
+      <li>Geoblocking de países de alto riesgo.</li>
+      <li>Detección de firmas de ataques conocidos.</li>
+    </ul>
+    <p><strong>🌊 DDoS Protection + IDS/IPS</strong> — protege contra saturación del servicio:</p>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Tipo de ataque</th><th>Volumen</th><th>Duración</th></tr>
+        <tr><td>UDP Flood</td><td>10–100 Gbps</td><td>5–30 min</td></tr>
+        <tr><td>SYN Flood</td><td>1–50 Mpps</td><td>10–60 min</td></tr>
+        <tr><td>HTTP Flood</td><td>10K–1M rps</td><td>1–6 horas</td></tr>
+      </table>
+    </div>
+
+    <h4 class="subhead">Capa 2: Aplicación — SAST / DAST / IAST / RASP</h4>
+    <p>Cuatro formas de testear seguridad, cada una en un momento distinto del ciclo de vida del software:</p>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Tipo</th><th>Cuándo</th><th>Herramientas</th></tr>
+        <tr><td class="hl">SAST</td><td>Pre-build (código estático)</td><td>SonarQube, Semgrep</td></tr>
+        <tr><td class="hl">DAST</td><td>Post-deploy (app corriendo)</td><td>OWASP ZAP, Burp</td></tr>
+        <tr><td class="hl">IAST</td><td>Durante tests (runtime)</td><td>Contrast Security</td></tr>
+        <tr><td class="hl">RASP</td><td>Producción (tiempo real)</td><td>Sqreen, Contrast</td></tr>
+      </table>
+    </div>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Piénsalo así</div>
+      <p>SAST es como revisar los planos de un edificio antes de construirlo. DAST es inspeccionar el edificio ya construido, probando puertas y ventanas desde afuera. IAST es tener un inspector caminando adentro mientras se hacen pruebas. RASP es una alarma que vive dentro del edificio y reacciona en el momento mismo de un intento de intrusión, ya en producción.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">WAF</div><div class="gdef">Web Application Firewall: filtro que bloquea tráfico malicioso antes de que llegue a la aplicación.</div></div>
+      <div class="gterm"><div class="gname">SAST / DAST</div><div class="gdef">Análisis de seguridad estático (código sin ejecutar) y dinámico (aplicación en ejecución), respectivamente.</div></div>
+    </div>
+  `
+},
+{
+  id:14, group:'defensa', title:'Defense in Depth — Datos', tag:'Capa 3',
+  body: `
+    <p class="lead">La tercera capa del modelo PADI protege el dato en sí mismo, sin importar en qué "estado" se encuentre: guardado, viajando por la red, o siendo procesado activamente en memoria.</p>
+
+    <h4 class="subhead">Los tres estados del dato</h4>
+    <div class="statgrid">
+      <div class="statbox"><div class="v">En Reposo</div><div class="l">AES-256-GCM, TDE, bcrypt/Argon2</div></div>
+      <div class="statbox"><div class="v">En Tránsito</div><div class="l">TLS 1.3, HSTS, mTLS, VPN/IPSec</div></div>
+      <div class="statbox"><div class="v">En Uso</div><div class="l">Intel SGX, Memory guards, Secure enclaves</div></div>
+    </div>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Analogía del dinero</div>
+      <p>El dinero <strong>en reposo</strong> está en la caja fuerte del banco (cifrado en disco). El dinero <strong>en tránsito</strong> va en un camión blindado de un banco a otro (cifrado en la red, TLS). El dinero <strong>en uso</strong> es el que está siendo contado en la mesa de un cajero — el momento más vulnerable, y por eso requiere protecciones especiales como enclaves seguros (zonas de memoria aisladas incluso del propio sistema operativo).</p>
+    </div>
+
+    <p>Un error frecuente es proteger solo uno o dos de estos tres estados. Un sitio puede tener TLS perfecto (tránsito) pero guardar contraseñas en texto plano en la base de datos (reposo desprotegido) — la cadena de seguridad se rompe por el eslabón más débil.</p>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Regla nemotécnica</div>
+      <p><strong>"Reposo, Ruta, Ronda"</strong> — el dato descansa (reposo), viaja (en tránsito) y trabaja (en uso). Los tres momentos necesitan su propia armadura.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">TDE (Transparent Data Encryption)</div><div class="gdef">Cifrado automático de una base de datos completa a nivel de almacenamiento.</div></div>
+      <div class="gterm"><div class="gname">mTLS</div><div class="gdef">Mutual TLS: ambas partes (cliente y servidor) verifican su identidad mutuamente durante la conexión cifrada.</div></div>
+      <div class="gterm"><div class="gname">Secure Enclave</div><div class="gdef">Zona de memoria físicamente aislada donde los datos se procesan cifrados incluso mientras están "en uso".</div></div>
+    </div>
+  `
+},
+{
+  id:15, group:'defensa', title:'Defense in Depth — Identidad (IAM)', tag:'Capa 4',
+  body: `
+    <p class="lead">La última capa del modelo protege quién puede actuar dentro del sistema, especialmente cuando ese "quién" tiene privilegios elevados. Es la capa donde vive la <strong>gestión de identidad y acceso (IAM)</strong>.</p>
+
+    <h4 class="subhead">Privileged Access Management (PAM)</h4>
+    <ul class="list">
+      <li><strong>SSO / OAuth 2.0 / OIDC:</strong> autenticación federada con Google, Azure AD, Auth0.</li>
+      <li><strong>MFA obligatorio</strong> para cuentas con métodos de pago almacenados.</li>
+      <li><strong>Anomaly detection:</strong> machine learning para detectar logins anómalos por geo, tiempo o dispositivo.</li>
+      <li><strong>Step-up auth:</strong> exigir 2FA adicional para acciones sensibles (cambio de email, nuevo método de pago).</li>
+      <li><strong>Breach monitoring:</strong> usar la API de HaveIBeenPwned para detectar contraseñas ya comprometidas.</li>
+      <li><strong>Just-in-time access:</strong> acceso elevado por máximo 4 horas, con flujo de aprobación.</li>
+      <li><strong>Session recording:</strong> grabación de sesiones privilegiadas.</li>
+      <li><strong>Zero Trust:</strong> verificar usuario + dispositivo + red + permisos en <strong>cada</strong> petición, sin asumir confianza previa.</li>
+    </ul>
+
+    <h4 class="subhead">Identity Risk Scoring</h4>
+    <p>Un sistema de puntos que decide en tiempo real qué tan sospechoso es un intento de acceso:</p>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Factor</th><th>Puntos de riesgo</th></tr>
+        <tr><td>País diferente al habitual</td><td>+30 pts</td></tr>
+        <tr><td>Dispositivo desconocido</td><td>+25 pts</td></tr>
+        <tr><td>Múltiples intentos fallidos (>3)</td><td>+20 pts</td></tr>
+        <tr><td>Horario fuera de lo usual</td><td>+15 pts</td></tr>
+      </table>
+    </div>
+    <ul class="list">
+      <li><strong>Score &gt; 80</strong> → Bloquear acceso.</li>
+      <li><strong>Score 50–80</strong> → Exigir Step-up 2FA.</li>
+      <li><strong>Score 30–50</strong> → Mostrar CAPTCHA.</li>
+    </ul>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Piénsalo así</div>
+      <p>Es como un guardia de seguridad que no solo revisa tu credencial, sino que además nota si llegas a una hora rara, en un carro que nunca ha visto, y viniendo de una ciudad distinta. Ninguna señal por sí sola te hace sospechoso, pero la suma de varias señales sube tu "puntaje de riesgo" hasta que el guardia decide pedirte una segunda identificación — o simplemente no dejarte pasar.</p>
+    </div>
+
+    <div class="box stat-callout">
+      <div class="box-title">📊 Identity Governance Metrics</div>
+      <p>% de usuarios con MFA habilitado · cuentas inactivas por más de 90 días · access reviews completadas · tiempo promedio de acceso privilegiado.</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">IAM</div><div class="gdef">Identity and Access Management: disciplina de gestionar identidades digitales y sus permisos.</div></div>
+      <div class="gterm"><div class="gname">Zero Trust</div><div class="gdef">Modelo de seguridad que no confía en nada por defecto; verifica identidad, dispositivo y permisos en cada solicitud.</div></div>
+      <div class="gterm"><div class="gname">Just-in-time access</div><div class="gdef">Otorgar acceso privilegiado temporal, solo cuando se necesita y por tiempo limitado.</div></div>
+    </div>
+  `
+},
+{
+  id:16, group:'defensa', title:'Resumen — Métricas Clave y Checklist', tag:'Consolidación final',
+  body: `
+    <p class="lead">Cierre del curso: los indicadores que un equipo de seguridad realmente vigila día a día, y el checklist mínimo que cualquier plataforma e-commerce debería poder marcar en verde.</p>
+
+    <h4 class="subhead">KPIs de seguridad</h4>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Métrica</th><th>Umbral crítico</th></tr>
+        <tr><td class="hl">Decline rate de pagos</td><td>&gt;15% = posible card testing</td></tr>
+        <tr><td class="hl">Chargeback rate</td><td>&gt;2% = indicador crítico</td></tr>
+        <tr><td class="hl">Velocidad transacciones/IP</td><td>&gt;10/min = bloquear</td></tr>
+        <tr><td class="hl">Tiempo detección de brecha (MTTD)</td><td>Objetivo: &lt;24h</td></tr>
+        <tr><td class="hl">MFA adoption rate</td><td>Objetivo: &gt;80%</td></tr>
+        <tr><td class="hl">Vulnerabilidades críticas sin parche</td><td>Objetivo: 0</td></tr>
+        <tr><td class="hl">Score OWASP compliance</td><td>Objetivo: &gt;90%</td></tr>
+      </table>
+    </div>
+
+    <div class="box analogy">
+      <div class="box-title">🧠 Por qué importan estos umbrales</div>
+      <p>El <strong>MTTD de 206 días</strong> que vimos en el módulo 1 es el promedio de la industria — el objetivo real es bajarlo a menos de 24 horas. La diferencia entre esos dos números es, literalmente, la diferencia entre una brecha que cuesta miles de dólares y una que cuesta millones.</p>
+    </div>
+
+    <h4 class="subhead">Checklist de implementación mínima</h4>
+    <div class="checklist">
+      <div class="cli">Todas las contraseñas con bcrypt / Argon2 (saltRounds ≥ 12)</div>
+      <div class="cli">HTTPS en toda la aplicación (HSTS habilitado)</div>
+      <div class="cli">Datos sensibles encriptados en base de datos (AES-256)</div>
+      <div class="cli">Rate limiting en login y checkout (máx. 3–5 intentos)</div>
+      <div class="cli">MFA obligatorio para cuentas con métodos de pago</div>
+      <div class="cli">WAF configurado con reglas anti-SQLi y XSS</div>
+      <div class="cli">Content Security Policy (CSP) en todas las páginas</div>
+      <div class="cli">Subresource Integrity (SRI) para scripts externos</div>
+      <div class="cli">Logs de auditoría inmutables para acciones sensibles</div>
+      <div class="cli">Monitoreo de breaches con HaveIBeenPwned</div>
+    </div>
+
+    <div class="box mnemonic">
+      <div class="box-title">🔑 Repaso general del curso</div>
+      <p><strong>CIA</strong> (qué proteger) → <strong>Autenticación/Autorización</strong> (quién y qué puede hacer) → <strong>Encriptación/Hashing</strong> (cómo proteger el dato) → <strong>OWASP Top 3</strong> (los errores más comunes) → <strong>Ataques específicos</strong> de e-commerce (carding, ATO, skimming) → <strong>PADI</strong> (las 4 capas de defensa: Perímetro, Aplicación, Datos, Identidad).</p>
+    </div>
+
+    <div class="box glossary">
+      <div class="box-title">📖 Glosario</div>
+      <div class="gterm"><div class="gname">MTTD</div><div class="gdef">Mean Time To Detect: tiempo promedio que toma detectar una brecha de seguridad.</div></div>
+      <div class="gterm"><div class="gname">Chargeback</div><div class="gdef">Reversión forzada de un pago, iniciada por el banco emisor de la tarjeta a solicitud del cliente.</div></div>
+    </div>
+  `
+},
+];
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+const groupColor = { fund:'blue', owasp:'amber', ataques:'red', defensa:'green' };
+const groupBar   = { fund:'var(--blue)', owasp:'var(--amber)', ataques:'var(--red)', defensa:'var(--green)' };
+
+const main = document.getElementById('main');
+const navScroll = document.getElementById('navScroll');
+const readSet = new Set();
+
+GROUPS.forEach(g => {
+  const head = document.createElement('div');
+  head.className = 'grouphead';
+  head.innerHTML = `<div class="bar" style="background:${groupBar[g.key]}"></div><h2>${g.label}</h2>`;
+  main.appendChild(head);
+
+  MODULES.filter(m => m.group === g.key).forEach(m => {
+    const c = groupColor[g.key];
+    const mod = document.createElement('section');
+    mod.className = 'module';
+    mod.id = 'mod-' + m.id;
+    mod.style.setProperty('--gc', `var(--${c})`);
+    mod.style.setProperty('--gc-dim', `var(--${c}-dim)`);
+    mod.innerHTML = `
+      <div class="module-header" data-id="${m.id}">
+        <div class="num">${String(m.id).padStart(2,'0')}</div>
+        <div class="module-title">
+          <h3>${m.title}</h3>
+          <div class="tag">${m.tag}</div>
+        </div>
+        <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body" id="body-${m.id}">
+        <div class="module-body-inner">${m.body}</div>
+      </div>
+    `;
+    main.appendChild(mod);
+
+    // nav pill
+    const pill = document.createElement('div');
+    pill.className = 'pill';
+    pill.id = 'pill-' + m.id;
+    pill.style.setProperty('--gc', `var(--${c})`);
+    pill.innerHTML = `<span class="n">${String(m.id).padStart(2,'0')}</span><span>${m.title}</span>`;
+    pill.addEventListener('click', () => openModule(m.id, true));
+    navScroll.appendChild(pill);
+  });
+});
+
+function updateProgress(){
+  const pct = Math.round((readSet.size / MODULES.length) * 100);
+  document.getElementById('topProgress').style.width = pct + '%';
+  document.getElementById('fabFill').style.width = pct + '%';
+  document.getElementById('fabPct').textContent = pct + '%';
+  const circumference = 150.7;
+  document.getElementById('gaugeFg').style.strokeDashoffset = circumference - (circumference * pct/100);
+  document.getElementById('gaugePct').textContent = pct + '%';
+  const sub = document.getElementById('gaugeSub');
+  if(pct === 0) sub.textContent = 'Abre cada módulo para marcarlo como estudiado';
+  else if(pct < 50) sub.textContent = `${readSet.size} de ${MODULES.length} módulos revisados — vas bien`;
+  else if(pct < 100) sub.textContent = `${readSet.size} de ${MODULES.length} módulos revisados — ya casi`;
+  else sub.textContent = '¡Los 16 módulos revisados! Repasa el resumen final.';
+}
+
+function toggleModule(id){
+  const mod = document.getElementById('mod-' + id);
+  const body = document.getElementById('body-' + id);
+  const isOpen = mod.classList.contains('open');
+  if(isOpen){
+    body.style.maxHeight = null;
+    mod.classList.remove('open');
+  } else {
+    mod.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    if(!readSet.has(id)){
+      readSet.add(id);
+      mod.classList.add('read');
+      document.getElementById('pill-' + id).classList.add('read');
+      updateProgress();
     }
   }
-  tick();
-})();
+}
 
-// ---------------- Tabs ----------------
-const tabs = document.querySelectorAll('.tab');
-const panels = document.querySelectorAll('.tab-panel');
-tabs.forEach(t => {
-  t.addEventListener('click', () => {
-    tabs.forEach(x => x.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById(t.dataset.tab).classList.add('active');
+function openModule(id, scroll){
+  const mod = document.getElementById('mod-' + id);
+  if(!mod.classList.contains('open')) toggleModule(id);
+  if(scroll) mod.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+main.addEventListener('click', (e) => {
+  const header = e.target.closest('.module-header');
+  if(header) toggleModule(parseInt(header.dataset.id));
+});
+
+document.getElementById('expandAll').addEventListener('click', () => {
+  MODULES.forEach(m => openModule(m.id, false));
+});
+document.getElementById('collapseAll').addEventListener('click', () => {
+  MODULES.forEach(m => {
+    const mod = document.getElementById('mod-' + m.id);
+    const body = document.getElementById('body-' + m.id);
+    body.style.maxHeight = null;
+    mod.classList.remove('open');
   });
 });
 
-// ---------------- Flashcards ----------------
-const flashcards = [
-  {cat:"Fundamentos", q:"¿Qué es una Vulnerabilidad?", a:"Debilidad explotable en un sistema. Ej: SQL Injection sin prepared statements. (La ventana rota de la casa)."},
-  {cat:"Fundamentos", q:"¿Qué es una Amenaza?", a:"Cualquier agente que puede explotar una vulnerabilidad: cibercriminal, bot automatizado, insider. (El ladrón rondando)."},
-  {cat:"Fundamentos", q:"Fórmula del Riesgo", a:"Riesgo = Amenaza × Vulnerabilidad × Impacto (multiplicar, no sumar: si falta un factor, el riesgo es cero)."},
-  {cat:"Tríada CIA", q:"¿Qué significa la Tríada CIA?", a:"Confidencialidad, Integridad, Disponibilidad — el 'CID' que protege el castillo con candado, sello y guardias 24/7."},
-  {cat:"Tríada CIA", q:"Mecanismos de Confidencialidad", a:"Encriptación y control de acceso (candado en la puerta)."},
-  {cat:"Tríada CIA", q:"Mecanismos de Integridad", a:"Hashing y firmas digitales (sello de cera intacto)."},
-  {cat:"Tríada CIA", q:"Mecanismos de Disponibilidad", a:"Redundancia, backups y anti-DDoS (guardias despiertos 24/7)."},
-  {cat:"Identidad", q:"Autenticación = ?", a:"'¿Quién eres?' — verificado con Sabes / Tienes / Eres (contraseña, token, huella). Como el ID en la puerta del club."},
-  {cat:"Identidad", q:"Autorización = ?", a:"'¿Qué puedes hacer?' — permisos según rol (Cliente, Vendedor, Admin). Como la pulsera de color del club."},
-  {cat:"Cripto", q:"Encriptación vs Hashing: diferencia clave", a:"Encriptación es reversible con clave (caja fuerte). Hashing es irreversible (licuar una fruta): no se recupera, solo se compara."},
-  {cat:"Principios", q:"Los 4 principios fundamentales", a:"Defense in Depth (murallas múltiples), Least Privilege (llave por torre), Fail Secure (puente se levanta solo), Security by Design (diseñado desde los planos)."},
-  {cat:"OWASP", q:"OWASP A01", a:"Broken Access Control — 94% de apps afectadas. Ej: ver pedidos ajenos cambiando el ID en la URL (puerta trasera sin llave)."},
-  {cat:"OWASP", q:"OWASP A02", a:"Cryptographic Failures — contraseñas en texto plano, hash MD5, HTTP sin TLS (cartas sin sobre)."},
-  {cat:"OWASP", q:"OWASP A03", a:"Injection — SQL/NoSQL/Command/LDAP mediante inputs no sanitizados (veneno en la comida)."},
-  {cat:"Ataques", q:"¿Qué es Card Testing?", a:"Bots prueban tarjetas robadas con micro-transacciones de $1–$5. 15–20% resultan válidas (ladrón probando llaves)."},
-  {cat:"Ataques", q:"¿Qué es Account Takeover (ATO)?", a:"Toma de control de una cuenta ajena. +22% en 2023, $120 pérdida promedio. (Alguien entra disfrazado de ti)."},
-  {cat:"Ataques", q:"¿Qué es Magecart / Digital Skimming?", a:"JavaScript malicioso en el checkout que roba datos de tarjeta en tiempo real sin interferir la compra (carterista invisible)."},
-  {cat:"Defense in Depth", q:"Las 4 capas de Defense in Depth (PADI)", a:"Perímetro y Red, Aplicación, Datos, Identidad — como los anillos de una cebolla o la certificación de buceo PADI."},
-  {cat:"Defense in Depth", q:"Herramientas de la capa Aplicación", a:"SAST (pre-build), DAST (post-deploy), IAST (runtime de tests), RASP (producción en tiempo real)."},
-  {cat:"Métricas", q:"Umbral crítico de Chargeback rate", a:">2% se considera un indicador crítico que requiere revisión inmediata."}
-];
-let flashIndex = 0;
-let deck = [...flashcards];
-const cardInner = document.getElementById('cardInner');
-
-function renderCard(){
-  const c = deck[flashIndex];
-  document.getElementById('cardCatFront').textContent = c.cat;
-  document.getElementById('cardCatBack').textContent = "🧠 " + c.cat;
-  document.getElementById('cardQ').textContent = c.q;
-  document.getElementById('cardA').textContent = c.a;
-  document.getElementById('flashProgress').textContent = (flashIndex+1) + " / " + deck.length;
-  cardInner.classList.remove('flipped');
-}
-cardInner.addEventListener('click', () => cardInner.classList.toggle('flipped'));
-document.getElementById('nextCard').addEventListener('click', () => {
-  flashIndex = (flashIndex + 1) % deck.length;
-  renderCard();
-});
-document.getElementById('prevCard').addEventListener('click', () => {
-  flashIndex = (flashIndex - 1 + deck.length) % deck.length;
-  renderCard();
-});
-document.getElementById('shuffleCard').addEventListener('click', () => {
-  for(let i = deck.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i+1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
-  }
-  flashIndex = 0;
-  renderCard();
-});
-renderCard();
-
-// ---------------- Quiz ----------------
-const quizData = [
-  {q:"¿Cuál es la fórmula correcta del Riesgo?", options:["Amenaza + Vulnerabilidad + Impacto","Amenaza × Vulnerabilidad × Impacto","Vulnerabilidad × Impacto","Amenaza ÷ Vulnerabilidad"], correct:1, note:"Riesgo = Amenaza × Vulnerabilidad × Impacto: es multiplicación, si un factor es cero, el riesgo también lo es."},
-  {q:"¿Qué porcentaje de sitios web tiene alguna vulnerabilidad según el panorama 2024?", options:["73%","95%","23.1%","206 días"], correct:1, note:"95% de los sitios web analizados presentan alguna vulnerabilidad."},
-  {q:"¿Qué vulnerabilidad OWASP tiene 94% de prevalencia en apps de e-commerce?", options:["A02 Cryptographic Failures","A03 Injection","A01 Broken Access Control","A04 Insecure Design"], correct:2, note:"A01 Broken Access Control afecta al 94% de las aplicaciones analizadas."},
-  {q:"bcrypt se utiliza principalmente para:", options:["Encriptar tarjetas de crédito","Hashear contraseñas (irreversible)","Comprimir archivos","Firmar certificados TLS"], correct:1, note:"bcrypt es una función de hashing de una vía, ideal para contraseñas."},
-  {q:"AES-256 se usa típicamente para:", options:["Hashing de contraseñas","Encriptación reversible de datos sensibles","Autorización de roles","Rate limiting"], correct:1, note:"AES-256 es un algoritmo de encriptación reversible (con clave), usado por ejemplo en tarjetas."},
-  {q:"¿Qué garantiza el pilar de Integridad de la Tríada CIA?", options:["Que los datos sean accesibles 24/7","Que solo usuarios autorizados vean los datos","Que los precios y logs no sean alterados sin autorización","Que existan backups redundantes"], correct:2, note:"Integridad = información no alterada de manera no autorizada (precios, logs de auditoría inmutables)."},
-  {q:"En Card Testing, ¿qué rango de montos usan los bots para probar tarjetas?", options:["$100–$500","$1–$5","$1,000+","$0.01"], correct:1, note:"Los bots realizan micro-transacciones de $1–$5 USD para validar tarjetas robadas."},
-  {q:"¿Cuál es el costo promedio de una violación de datos mencionado en el panorama 2024?", options:["$41B","$4.45M","$120","$28B"], correct:1, note:"El costo promedio de una violación de datos es de $4.45M."},
-  {q:"Magecart es un ejemplo de:", options:["Account Takeover","Digital Skimming (JS malicioso en checkout)","Card Testing","Broken Access Control"], correct:1, note:"Magecart inyecta JavaScript malicioso en el checkout para robar datos de tarjeta en tiempo real."},
-  {q:"En Identity Risk Scoring, un score mayor a 80 puntos implica:", options:["Permitir acceso normal","Solicitar CAPTCHA","Bloquear el acceso","Ignorar el evento"], correct:2, note:"Score > 80 → Bloquear acceso, según el sistema de Identity Risk Scoring de la capa de Identidad."}
-];
-let quizIndex = 0;
-let quizScore = 0;
-
-function renderQuiz(){
-  const container = document.getElementById('quizCard');
-  if(quizIndex >= quizData.length){
-    document.getElementById('quizProgress').textContent = "Completado";
-    container.innerHTML = `
-      <div class="quiz-score">
-        <div>Tu puntaje</div>
-        <div class="big">${quizScore} / ${quizData.length}</div>
-        <button class="btn primary" id="restartQuiz" style="margin-top:16px;">🔁 Reintentar</button>
-      </div>`;
-    document.getElementById('restartQuiz').addEventListener('click', () => {
-      quizIndex = 0; quizScore = 0; renderQuiz();
-    });
-    return;
-  }
-  document.getElementById('quizProgress').textContent = "Pregunta " + (quizIndex+1) + " / " + quizData.length;
-  const item = quizData[quizIndex];
-  let optsHtml = item.options.map((opt, i) =>
-    `<button class="quiz-opt" data-idx="${i}">${opt}</button>`
-  ).join('');
-  container.innerHTML = `
-    <div class="quiz-q">${item.q}</div>
-    ${optsHtml}
-    <div class="quiz-explain" id="quizExplain">${item.note}</div>
-  `;
-  const buttons = container.querySelectorAll('.quiz-opt');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.dataset.idx);
-      buttons.forEach(b => b.setAttribute('disabled', 'true'));
-      if(idx === item.correct){
-        btn.classList.add('correct');
-        quizScore++;
-      } else {
-        btn.classList.add('wrong');
-        buttons[item.correct].classList.add('correct');
-      }
-      document.getElementById('quizExplain').classList.add('show');
-      const nextBtn = document.createElement('button');
-      nextBtn.className = 'btn primary';
-      nextBtn.style.marginTop = '14px';
-      nextBtn.style.width = '100%';
-      nextBtn.textContent = (quizIndex === quizData.length - 1) ? 'Ver resultado →' : 'Siguiente →';
-      nextBtn.addEventListener('click', () => {
-        quizIndex++;
-        renderQuiz();
-      });
-      container.appendChild(nextBtn);
-    });
+// re-measure open modules on resize (font loading etc.)
+window.addEventListener('resize', () => {
+  MODULES.forEach(m => {
+    const mod = document.getElementById('mod-' + m.id);
+    if(mod.classList.contains('open')){
+      const body = document.getElementById('body-' + m.id);
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
   });
+});
+
+// open first module by default
+openModule(1, false);
+
+// terminal status ticker
+const tickerLines = [
+  'cargando panorama de amenazas 2024...',
+  'analizando OWASP Top 10 para e-commerce...',
+  '73% de sitios e-commerce tiene vulnerabilidades críticas',
+  'inicializando módulo de Defense in Depth (P·A·D·I)...',
+  'MTTD promedio: 206 días — objetivo: <24h',
+  'listo para estudiar. buena suerte. 🛡',
+];
+let ti = 0;
+const typedEl = document.getElementById('typedStat');
+function cycleTicker(){
+  typedEl.style.opacity = 0;
+  setTimeout(() => {
+    typedEl.textContent = tickerLines[ti % tickerLines.length];
+    typedEl.style.opacity = 1;
+    ti++;
+  }, 300);
 }
-renderQuiz();
+typedEl.style.transition = 'opacity .3s';
+cycleTicker();
+setInterval(cycleTicker, 4200);
+
+updateProgress();
 </script>
 </body>
 </html>
