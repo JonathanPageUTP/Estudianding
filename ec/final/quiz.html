@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Quiz de Macroeconomía</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --bg-soft:#131d33;
+    --card:#1c2942;
+    --card-border: rgba(255,255,255,0.07);
+    --text:#f8fafc;
+    --text-dim:#93a1b8;
+    --accent:#f2b705;
+    --accent-dim:#c9990a;
+    --accent-ink:#241a02;
+    --correct:#2fbf71;
+    --correct-bg: rgba(47,191,113,0.16);
+    --incorrect:#f2545b;
+    --incorrect-bg: rgba(242,84,91,0.16);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(242,183,5,0.07), transparent 45%),
+      radial-gradient(circle at 90% 100%, rgba(47,191,113,0.05), transparent 40%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    padding: 0;
+  }
+  #app{
+    width:100%;
+    max-width: 480px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background: var(--bg-soft);
+    position:relative;
+    overflow-x:hidden;
+  }
+  .screen{
+    display:none;
+    flex-direction:column;
+    flex:1;
+    padding: 1.5rem 1.25rem 2rem;
+    animation: fadeIn .35s ease;
+  }
+  .screen.active{display:flex;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- START SCREEN ---------- */
+  #start-screen{justify-content:center; align-items:center; text-align:center; gap:1.4rem;}
+  .wave-wrap{width:100%; max-width:320px; opacity:0.9;}
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing: 0.18em;
+    font-size:0.72rem;
+    color: var(--accent);
+    font-weight:700;
+  }
+  #start-screen h1{
+    font-size:1.85rem;
+    line-height:1.2;
+    margin:0.2rem 0 0;
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  #start-screen p{
+    color: var(--text-dim);
+    font-size:0.98rem;
+    line-height:1.5;
+    margin:0;
+    max-width: 30rem;
+  }
+  .stat-row{
+    display:flex;
+    gap:0.75rem;
+    margin-top:0.25rem;
+  }
+  .stat-chip{
+    background: var(--card);
+    border:1px solid var(--card-border);
+    border-radius: 14px;
+    padding:0.65rem 1rem;
+    font-size:0.8rem;
+    color: var(--text-dim);
+  }
+  .stat-chip b{display:block; font-size:1.15rem; color:var(--text); font-weight:800;}
+
+  .btn-primary{
+    appearance:none;
+    border:none;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    color: var(--accent-ink);
+    font-weight:800;
+    font-size:1.05rem;
+    padding:1rem 1.5rem;
+    border-radius: 999px;
+    width:100%;
+    max-width:22rem;
+    cursor:pointer;
+    box-shadow: 0 10px 24px -8px rgba(242,183,5,0.45);
+    transition: transform .15s ease;
+  }
+  .btn-primary:active{transform:scale(0.97);}
+
+  .btn-ghost{
+    appearance:none;
+    background:transparent;
+    border:1px solid var(--card-border);
+    color:var(--text-dim);
+    font-size:0.85rem;
+    padding:0.7rem 1.2rem;
+    border-radius:999px;
+    margin-top:0.5rem;
+  }
+
+  /* ---------- QUIZ SCREEN ---------- */
+  #quiz-screen{padding-top:0;}
+  .progress-track{
+    position:sticky;
+    top:0;
+    width:100%;
+    height:6px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 999px;
+    overflow:hidden;
+    margin-top:1.25rem;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+    border-radius:999px;
+    transition: width .4s ease;
+  }
+  .meta-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin: 0.85rem 0 0.4rem;
+  }
+  #counter{
+    font-size:0.78rem;
+    font-weight:700;
+    letter-spacing:0.06em;
+    color: var(--text-dim);
+    text-transform:uppercase;
+  }
+  #score-live{
+    font-size:0.78rem;
+    font-weight:700;
+    color: var(--accent);
+  }
+  #question-text{
+    font-size:1.2rem;
+    font-weight:700;
+    line-height:1.42;
+    margin: 0.6rem 0 1.3rem;
+  }
+  #options-container{
+    display:flex;
+    flex-direction:column;
+    gap:0.7rem;
+  }
+  .option-btn{
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    width:100%;
+    text-align:left;
+    background: var(--card);
+    border:1px solid var(--card-border);
+    color: var(--text);
+    font-size:0.98rem;
+    line-height:1.35;
+    padding:0.9rem 1rem;
+    border-radius: 14px;
+    cursor:pointer;
+    transition: transform .12s ease, background .2s ease, border-color .2s ease;
+  }
+  .option-btn:active{transform:scale(0.98);}
+  .option-letter{
+    flex:0 0 auto;
+    width:1.9rem;
+    height:1.9rem;
+    border-radius:50%;
+    background: rgba(255,255,255,0.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:0.85rem;
+    color: var(--accent);
+  }
+  .option-btn.correct{
+    background: var(--correct-bg);
+    border-color: var(--correct);
+  }
+  .option-btn.correct .option-letter{background: var(--correct); color:#06210f;}
+  .option-btn.incorrect{
+    background: var(--incorrect-bg);
+    border-color: var(--incorrect);
+  }
+  .option-btn.incorrect .option-letter{background: var(--incorrect); color:#2a0708;}
+  .option-btn.disabled{pointer-events:none;}
+  .option-btn.faded{opacity:0.45;}
+
+  #next-btn-wrap{
+    margin-top:1.4rem;
+    min-height:3.2rem;
+  }
+  #next-btn{
+    display:none;
+    appearance:none;
+    border:none;
+    width:100%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight:800;
+    font-size:1rem;
+    padding:0.95rem;
+    border-radius: 999px;
+    cursor:pointer;
+    animation: fadeIn .3s ease;
+  }
+
+  /* ---------- RESULTS SCREEN ---------- */
+  #results-screen{justify-content:center; align-items:center; text-align:center; gap:1.1rem;}
+  .ring-wrap{position:relative; width:11rem; height:11rem; margin:0.5rem 0;}
+  .ring-wrap svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .ring-bg{fill:none; stroke: rgba(255,255,255,0.08); stroke-width:10;}
+  .ring-fill{fill:none; stroke: var(--accent); stroke-width:10; stroke-linecap:round; transition: stroke-dashoffset 1s ease;}
+  .ring-center{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .ring-center .pct{font-size:2.1rem; font-weight:800;}
+  .ring-center .frac{font-size:0.85rem; color:var(--text-dim); margin-top:0.15rem;}
+  #results-title{font-size:1.4rem; font-weight:800; margin:0;}
+  #results-message{color:var(--text-dim); font-size:0.95rem; line-height:1.5; max-width:24rem; margin:0;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- START SCREEN -->
+  <div id="start-screen" class="screen active">
+    <div class="wave-wrap">
+      <svg viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4,55 C 40,10 70,10 100,45 C 130,80 160,80 190,45 C 220,10 250,10 280,45 C 300,68 310,68 316,60"
+          fill="none" stroke="#f2b705" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+        <circle cx="100" cy="45" r="4.5" fill="#2fbf71"/>
+        <circle cx="190" cy="45" r="4.5" fill="#f2545b"/>
+      </svg>
+    </div>
+    <span class="eyebrow">Principios de Economía</span>
+    <h1>Quiz de Macroeconomía</h1>
+    <p>100 preguntas basadas en tus documentos: ciclo económico, comercio internacional y balanza de pagos, indicadores macroeconómicos, crecimiento y desarrollo, y tipos de cambio.</p>
+    <div class="stat-row">
+      <div class="stat-chip"><b>100</b>preguntas</div>
+      <div class="stat-chip"><b>5</b>temas</div>
+      <div class="stat-chip"><b>1</b>intento a la vez</div>
+    </div>
+    <button class="btn-primary" id="start-btn" style="margin-top:0.8rem;">Comenzar Quiz</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz-screen" class="screen">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="meta-row">
+      <span id="counter">Pregunta 1 de 100</span>
+      <span id="score-live">0 aciertos</span>
+    </div>
+    <div id="question-text"></div>
+    <div id="options-container"></div>
+    <div id="next-btn-wrap"><button id="next-btn">Siguiente pregunta →</button></div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results-screen" class="screen">
+    <div class="ring-wrap">
+      <svg viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+        <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+      </svg>
+      <div class="ring-center">
+        <div class="pct" id="results-pct">0%</div>
+        <div class="frac" id="results-frac">0/100</div>
+      </div>
+    </div>
+    <h2 id="results-title">¡Quiz completado!</h2>
+    <p id="results-message"></p>
+    <button class="btn-primary" id="restart-btn" style="margin-top:0.6rem;">Reiniciar Quiz</button>
+  </div>
+
+</div>
+
+<script>
+// =====================================================================
+// 100 PREGUNTAS - Basadas exclusivamente en los documentos proporcionados
+// =====================================================================
+const questions = [
+// ---- Ciclo Económico (1-20) ----
+{q:"¿Cuántas fases tiene el ciclo económico según el documento?", options:["2","3","4","5"], answer:"4"},
+{q:"¿Cómo se llama también la Fase 1 (Punto Inferior) del ciclo económico?", options:["Auge","Depresión","Pico","Recesión"], answer:"Depresión"},
+{q:"En la fase de Depresión, ¿cómo está el desempleo?", options:["En su punto más bajo","En su punto más alto","Estable","No se menciona"], answer:"En su punto más alto"},
+{q:"En la Depresión, ¿cómo está la producción?", options:["En su nivel más alto","En su nivel más bajo","Creciendo rápidamente","Sin cambios"], answer:"En su nivel más bajo"},
+{q:"En la Depresión, ¿qué ocurre con los precios según el documento?", options:["Suben rápidamente","Pueden ser bajos (deflación o baja inflación)","Se mantienen muy altos","No hay datos"], answer:"Pueden ser bajos (deflación o baja inflación)"},
+{q:"¿Cómo se llama también la Fase 2 del ciclo económico?", options:["Recesión","Pico","Expansión o Recuperación","Depresión"], answer:"Expansión o Recuperación"},
+{q:"En la Expansión, ¿qué pasa con el PIB?", options:["Disminuye","Aumenta","Se mantiene igual","Colapsa"], answer:"Aumenta"},
+{q:"En la Expansión, ¿qué ocurre con el desempleo?", options:["Aumenta","Se reduce","Se dispara","No cambia"], answer:"Se reduce"},
+{q:"En la Expansión, ¿qué puede aumentar a medida que crece la demanda?", options:["El desempleo","La inflación","La depresión","El déficit fiscal"], answer:"La inflación"},
+{q:"¿Cómo se llama también la Fase 3 del ciclo económico?", options:["Valle","Depresión","Pico o Auge","Recuperación"], answer:"Pico o Auge"},
+{q:"Según el documento, ¿qué caracteriza a la Recesión?", options:["Aumento del PIB por dos trimestres","Disminución del PIB por al menos dos trimestres consecutivos","Disminución de precios únicamente","Aumento sostenido del empleo"], answer:"Disminución del PIB por al menos dos trimestres consecutivos"},
+{q:"Durante la Recesión, ¿qué sucede con el desempleo?", options:["Disminuye","Aumenta","Se mantiene estable","Desaparece"], answer:"Aumenta"},
+{q:"Durante la Recesión, ¿qué pasa con la inversión empresarial?", options:["Aumenta","Disminuye","Se duplica","No cambia"], answer:"Disminuye"},
+{q:"Según el documento, ¿cuál es una de las causas de la Recesión?", options:["Estallido de burbujas económicas","Aumento sostenido del PIB","Baja inflación estable","Alta confianza del consumidor"], answer:"Estallido de burbujas económicas"},
+{q:"¿Cuál es un impacto mencionado de la Recesión?", options:["Aumento de ingresos","Reducción de ingresos y mayor incertidumbre","Menor desempleo","Mayor confianza empresarial"], answer:"Reducción de ingresos y mayor incertidumbre"},
+{q:"¿Qué política se menciona relacionada con tasas de interés y oferta monetaria?", options:["Política Fiscal","Política Monetaria","Política Demográfica","Política Social"], answer:"Política Monetaria"},
+{q:"¿Qué política se relaciona con el gasto público y los impuestos?", options:["Política Monetaria","Política Fiscal","Política Comercial","Política Cambiaria"], answer:"Política Fiscal"},
+{q:"Según los factores que influyen en el ciclo económico, ¿cuál se refiere a la creación de nuevas industrias y el aumento de productividad?", options:["Cambios Demográficos","Innovación y Tecnología","Confianza de Consumidores","Eventos Externos"], answer:"Innovación y Tecnología"},
+{q:"¿Cuál de los siguientes es un ejemplo de Evento Externo según el documento?", options:["Tasas de interés","Crisis globales, precios del petróleo, desastres naturales","Impuestos","Gasto público"], answer:"Crisis globales, precios del petróleo, desastres naturales"},
+{q:"¿Qué factor del ciclo económico incluye el crecimiento de la población y el envejecimiento?", options:["Cambios Demográficos","Política Monetaria","Innovación y Tecnología","Confianza empresarial"], answer:"Cambios Demográficos"},
+
+// ---- Comercio Internacional y Balanza de Pagos (21-45) ----
+{q:"¿Qué es el Comercio Internacional según el documento?", options:["El intercambio de bienes, servicios y capitales a través de fronteras nacionales","Solo la venta de bienes dentro de un país","El transporte de mercancías internas","La producción interna de un país"], answer:"El intercambio de bienes, servicios y capitales a través de fronteras nacionales"},
+{q:"¿Cuál es el principio fundamental que explica por qué los países comercian?", options:["Ventaja Absoluta","Ventaja Comparativa","Autarquía","Proteccionismo total"], answer:"Ventaja Comparativa"},
+{q:"Según el documento, un país tiene ventaja comparativa cuando puede producir un bien:", options:["Con el costo de oportunidad más bajo que otro país","Con más recursos naturales que otro país","Con mayor población","Sin necesidad de comerciar"], answer:"Con el costo de oportunidad más bajo que otro país"},
+{q:"¿Qué beneficio permite a las empresas aumentar su volumen de producción y reducir costos unitarios al producir para un mercado global?", options:["Barreras No Arancelarias","Economías de Escala","Cuotas de Importación","Aranceles"], answer:"Economías de Escala"},
+{q:"¿Qué beneficio del comercio internacional permite a los consumidores acceder a más variedad de bienes y servicios?", options:["Diversidad de Productos y Consumo","Aranceles","Cuotas de importación","Déficit comercial"], answer:"Diversidad de Productos y Consumo"},
+{q:"¿Qué facilita la difusión de nuevas tecnologías, ideas y métodos de producción entre países?", options:["Transferencia de Tecnología y Conocimiento","Balanza de Pagos","Cuenta de Capital","Cuenta Financiera"], answer:"Transferencia de Tecnología y Conocimiento"},
+{q:"¿Qué son los Aranceles según el documento?", options:["Límites a la cantidad importada","Impuestos aplicados a los bienes importados","Pagos a productores nacionales","Acuerdos entre países"], answer:"Impuestos aplicados a los bienes importados"},
+{q:"¿Qué son las Cuotas de Importación?", options:["Impuestos a las exportaciones","Límites a la cantidad de un bien que puede importarse en un periodo determinado","Incentivos a productores nacionales","Tratados comerciales"], answer:"Límites a la cantidad de un bien que puede importarse en un periodo determinado"},
+{q:"¿Qué son los Subsidios a la Exportación?", options:["Impuestos a bienes importados","Pagos o incentivos a productores nacionales para vender en el extranjero a precios competitivos","Barreras técnicas","Cuotas de importación"], answer:"Pagos o incentivos a productores nacionales para vender en el extranjero a precios competitivos"},
+{q:"¿Qué son las Barreras No Arancelarias?", options:["Impuestos aduaneros","Regulaciones técnicas, sanitarias o de seguridad que pueden obstaculizar el comercio","Tratados de libre comercio","Cuotas de exportación"], answer:"Regulaciones técnicas, sanitarias o de seguridad que pueden obstaculizar el comercio"},
+{q:"¿Qué son los Tratados de Libre Comercio (TLC)?", options:["Impuestos a las importaciones","Acuerdos entre países para reducir o eliminar barreras al comercio","Cuotas de producción","Subsidios internos"], answer:"Acuerdos entre países para reducir o eliminar barreras al comercio"},
+{q:"¿Qué es la Balanza de Pagos según el documento?", options:["Un registro contable de transacciones económicas entre un país y el resto del mundo","Solo el registro de exportaciones","El presupuesto del gobierno","La tasa de cambio de una moneda"], answer:"Un registro contable de transacciones económicas entre un país y el resto del mundo"},
+{q:"¿En cuántas cuentas principales se divide la Balanza de Pagos?", options:["Dos","Tres","Cuatro","Cinco"], answer:"Tres"},
+{q:"¿Qué registra la Cuenta Corriente?", options:["Solo inversiones financieras","El flujo de bienes, servicios, ingresos y transferencias unilaterales","Solo activos financieros","Solo patentes"], answer:"El flujo de bienes, servicios, ingresos y transferencias unilaterales"},
+{q:"Si un país exporta más de lo que importa, ¿qué tiene?", options:["Déficit comercial","Superávit comercial","Déficit fiscal","Inflación"], answer:"Superávit comercial"},
+{q:"¿Qué registra la Balanza de Servicios según el documento?", options:["Turismo, transporte, seguros, servicios financieros, servicios del Canal de Panamá","Solo bienes tangibles","Solo remesas","Solo inversión extranjera"], answer:"Turismo, transporte, seguros, servicios financieros, servicios del Canal de Panamá"},
+{q:"¿Qué incluye la Balanza de Rentas (Ingresos Primarios)?", options:["Remesas de trabajadores","Salarios, intereses de inversiones, dividendos","Aranceles","Cuotas de importación"], answer:"Salarios, intereses de inversiones, dividendos"},
+{q:"¿Qué incluye la Balanza de Transferencias Corrientes (Ingresos Secundarios)?", options:["Dividendos","Remesas de trabajadores, donaciones y ayuda internacional","Intereses de inversiones","Aranceles"], answer:"Remesas de trabajadores, donaciones y ayuda internacional"},
+{q:"¿Qué registra la Cuenta de Capital según el documento?", options:["Transferencias de capital no productivas y adquisición de activos no financieros no producidos (patentes, marcas)","Solo bienes tangibles","Solo servicios de turismo","Solo remesas"], answer:"Transferencias de capital no productivas y adquisición de activos no financieros no producidos (patentes, marcas)"},
+{q:"¿Qué registra la Cuenta Financiera?", options:["Solo bienes tangibles","Las transacciones de activos y pasivos financieros (inversiones)","Solo transferencias unilaterales","Solo aranceles"], answer:"Las transacciones de activos y pasivos financieros (inversiones)"},
+{q:"Según el principio de doble entrada, ¿cómo está siempre la Balanza de Pagos?", options:["En déficit","En equilibrio contable","En superávit permanente","Sin registro"], answer:"En equilibrio contable"},
+{q:"Si la Cuenta Corriente tiene un déficit, ¿cómo debe financiarse según el documento?", options:["Con un déficit en la Cuenta Financiera","Con un superávit en la Cuenta Financiera","No requiere financiamiento","Con aranceles"], answer:"Con un superávit en la Cuenta Financiera"},
+{q:"Si la Cuenta Corriente tiene un superávit, ¿qué ocurre en la Cuenta Financiera según el documento?", options:["También hay superávit","Se traduce en un déficit (el país invierte más en el extranjero o acumula reservas)","No cambia","Se elimina"], answer:"Se traduce en un déficit (el país invierte más en el extranjero o acumula reservas)"},
+{q:"¿Qué principio explica que cada transacción se registre dos veces (crédito y débito)?", options:["Principio de Ventaja Comparativa","Principio de Doble Entrada","Principio de Economías de Escala","Principio Proteccionista"], answer:"Principio de Doble Entrada"},
+{q:"Si un país importa más de lo que exporta, ¿qué tiene?", options:["Superávit comercial","Déficit comercial","Equilibrio comercial","Ventaja absoluta"], answer:"Déficit comercial"},
+
+// ---- Indicadores Macroeconómicos (46-65) ----
+{q:"¿Qué son los indicadores macroeconómicos según el documento?", options:["Datos estadísticos que muestran la salud de un país en ciertas áreas de la economía","Solo el PIB","Leyes económicas","Políticas fiscales exclusivamente"], answer:"Datos estadísticos que muestran la salud de un país en ciertas áreas de la economía"},
+{q:"¿Quiénes utilizan los indicadores macroeconómicos según el documento?", options:["Solo empresas privadas","Los gobiernos, para conocer la salud actual y futura de un país, sector o región","Solo bancos centrales","Solo los consumidores"], answer:"Los gobiernos, para conocer la salud actual y futura de un país, sector o región"},
+{q:"¿Cuál es el principal indicador macroeconómico del estudio de producción y consumo según el documento?", options:["Índice de precios al consumo","El Producto Interno Bruto (PIB)","La tasa de desempleo","El índice de confianza del consumidor"], answer:"El Producto Interno Bruto (PIB)"},
+{q:"¿Qué expresa el PIB según el documento?", options:["El valor de todos los bienes y servicios finales producidos en un país durante un periodo de tiempo","Solo el ingreso del gobierno","Solo las exportaciones","El nivel general de precios"], answer:"El valor de todos los bienes y servicios finales producidos en un país durante un periodo de tiempo"},
+{q:"¿Qué mide el Índice de precios al consumo?", options:["Los cambios en los precios de una cesta de productos, informando sobre la inflación","La producción industrial","El desempleo","Las ventas minoristas"], answer:"Los cambios en los precios de una cesta de productos, informando sobre la inflación"},
+{q:"¿Qué revela el Índice de precios de producción según el documento?", options:["El precio de los bienes a nivel mayorista y los beneficios de los productores","La tasa de mortalidad","El ingreso per cápita","El tipo de cambio"], answer:"El precio de los bienes a nivel mayorista y los beneficios de los productores"},
+{q:"¿Para qué ayuda la Tasa de desempleo según el documento?", options:["A prevenir procesos inflacionistas y conocer la realidad de la población en edad de trabajar","A medir el PIB directamente","A medir la inflación exclusivamente","A medir el comercio exterior"], answer:"A prevenir procesos inflacionistas y conocer la realidad de la población en edad de trabajar"},
+{q:"¿Qué informa el Índice de ventas minoristas según el documento?", options:["El estado de las ventas realizadas en ese sector para un periodo de un mes","El desempleo","La inflación","El tipo de cambio"], answer:"El estado de las ventas realizadas en ese sector para un periodo de un mes"},
+{q:"¿Qué revela el Índice de confianza del consumidor?", options:["El sentimiento de los consumidores hacia su potencial de gasto y el estado de la economía","El PIB exacto","La tasa de mortalidad","La balanza comercial"], answer:"El sentimiento de los consumidores hacia su potencial de gasto y el estado de la economía"},
+{q:"¿Qué refleja el Índice de Mortalidad según el documento?", options:["La cantidad de defunciones por cada mil ciudadanos en un periodo determinado","El desempleo","La inflación","El PIB"], answer:"La cantidad de defunciones por cada mil ciudadanos en un periodo determinado"},
+{q:"¿Qué estudia la Economía Agrícola?", options:["Actividades agrícolas: producción, comercialización, precios","Transacciones con el exterior","El trabajo y el desempleo","La vivienda y la educación"], answer:"Actividades agrícolas: producción, comercialización, precios"},
+{q:"¿Qué abarca la Economía Industrial según el documento?", options:["Desde la localización industrial hasta la producción y comercialización de productos industriales","Las transacciones internacionales","El bienestar social","Los agregados macroeconómicos"], answer:"Desde la localización industrial hasta la producción y comercialización de productos industriales"},
+{q:"¿Qué estudia la Economía Nacional según el documento?", options:["Los agregados macroeconómicos, como cuentas nacionales, producción e ingreso nacional","El comercio exterior","El desempleo","La vivienda"], answer:"Los agregados macroeconómicos, como cuentas nacionales, producción e ingreso nacional"},
+{q:"¿Qué estudia la Economía Internacional según el documento?", options:["Las transacciones económicas de un país con el exterior","La agricultura","La vivienda","El desempleo"], answer:"Las transacciones económicas de un país con el exterior"},
+{q:"¿Qué aborda la Economía Laboral según el documento?", options:["Todo lo relacionado con el trabajo, como el desempleo y el subempleo","La agricultura","El comercio exterior","La vivienda"], answer:"Todo lo relacionado con el trabajo, como el desempleo y el subempleo"},
+{q:"¿Qué aborda la Economía Social según el documento?", options:["Los fenómenos económicos que inciden en el bienestar de la sociedad, como educación y vivienda","Las transacciones internacionales","La producción industrial","La tasa de mortalidad"], answer:"Los fenómenos económicos que inciden en el bienestar de la sociedad, como educación y vivienda"},
+{q:"¿Qué es la Economía Política según el documento?", options:["La ciencia que estudia las leyes de la producción, distribución y consumo de bienes y servicios","La intervención del Estado en la economía","El PIB","El tipo de cambio"], answer:"La ciencia que estudia las leyes de la producción, distribución y consumo de bienes y servicios"},
+{q:"¿Qué es la Política Económica según el documento?", options:["La parte de la ciencia económica que estudia las formas y efectos de la intervención del Estado en la vida económica","Solo el estudio del PIB","Solo el estudio de la inflación","La ventaja comparativa"], answer:"La parte de la ciencia económica que estudia las formas y efectos de la intervención del Estado en la vida económica"},
+{q:"¿Cuál es el objetivo de la intervención del Estado a través de la política económica según el documento?", options:["Aumentar solo los impuestos","Lograr el desarrollo económico sustentable y mejores niveles de vida para la población","Eliminar el comercio internacional","Reducir el PIB"], answer:"Lograr el desarrollo económico sustentable y mejores niveles de vida para la población"},
+{q:"Según el documento, ¿qué hace la Economía Política a diferencia de la Política Económica?", options:["Descubre las leyes económicas que explican la realidad económica","Aplica las leyes económicas para obtener determinados objetivos","Mide el tipo de cambio","Regula el comercio exterior"], answer:"Descubre las leyes económicas que explican la realidad económica"},
+
+// ---- Macroeconomía: Crecimiento, Desarrollo y Sostenibilidad (66-80) ----
+{q:"¿Qué es el crecimiento económico según el documento?", options:["El incremento de la cantidad de bienes y servicios producidos por una economía en un periodo de tiempo","La disminución del desempleo únicamente","El aumento de impuestos","La reducción del PIB"], answer:"El incremento de la cantidad de bienes y servicios producidos por una economía en un periodo de tiempo"},
+{q:"Un crecimiento económico positivo implica según el documento:", options:["Una disminución en la productividad","Un aumento en la productividad de los factores de producción","Una caída en la inversión","Un aumento del desempleo"], answer:"Un aumento en la productividad de los factores de producción"},
+{q:"¿Cómo se puede interpretar también el crecimiento económico según el documento?", options:["Como una medida del éxito de las políticas económicas","Como un indicador demográfico únicamente","Como sinónimo de recesión","Como el tipo de cambio"], answer:"Como una medida del éxito de las políticas económicas"},
+{q:"Según el documento, ¿cuál es una de las principales fuentes de crecimiento económico?", options:["Recursos Humanos","Aranceles","Balanza de Pagos","Tipo de cambio"], answer:"Recursos Humanos"},
+{q:"¿Cuál de las siguientes es también una fuente de crecimiento económico mencionada en el documento?", options:["Formación de Capital","Cuota de importación","Subsidios a la exportación","Barreras no arancelarias"], answer:"Formación de Capital"},
+{q:"¿Qué otra fuente de crecimiento económico se menciona relacionada con la innovación?", options:["Cambio tecnológico e innovación","Balanza comercial","Tasa de desempleo","Índice de mortalidad"], answer:"Cambio tecnológico e innovación"},
+{q:"¿Cuál es otra fuente de crecimiento económico mencionada en el documento?", options:["Recursos Naturales","Política fiscal","Política monetaria","Cuenta financiera"], answer:"Recursos Naturales"},
+{q:"Según el documento, ¿con qué tiene que ver el Desarrollo Económico?", options:["Con que la población acceda a servicios de calidad en educación, salud, vivienda y necesidades básicas","Solo con el aumento del PIB","Solo con las exportaciones","Solo con la inflación"], answer:"Con que la población acceda a servicios de calidad en educación, salud, vivienda y necesidades básicas"},
+{q:"¿Qué disminuye con la importancia del desarrollo económico según el documento?", options:["La delincuencia, las protestas sociales y la inmigración","El ingreso per cápita","La esperanza de vida","El acceso a internet"], answer:"La delincuencia, las protestas sociales y la inmigración"},
+{q:"¿Cuál de los siguientes se menciona como un aspecto para medir el desarrollo económico?", options:["Esperanza de vida","Tasa de interés","Tipo de cambio","Aranceles"], answer:"Esperanza de vida"},
+{q:"¿Cuál de estos también se usa para medir el desarrollo económico según el documento?", options:["Ingreso per cápita","Balanza comercial","Cuenta de capital","Cuota de exportación"], answer:"Ingreso per cápita"},
+{q:"Según el documento, ¿qué son las bases para obtener un buen desarrollo económico?", options:["La tecnología, la educación y la investigación","Solo los aranceles","Solo la balanza de pagos","Solo el tipo de cambio"], answer:"La tecnología, la educación y la investigación"},
+{q:"¿Qué es el Desarrollo Sostenible según el documento?", options:["Aquel capaz de satisfacer las necesidades actuales sin comprometer los recursos de las futuras generaciones","El aumento continuo del PIB","La eliminación del comercio internacional","El control de la inflación únicamente"], answer:"Aquel capaz de satisfacer las necesidades actuales sin comprometer los recursos de las futuras generaciones"},
+{q:"¿Cuál es una característica del desarrollo sostenible mencionada en el documento?", options:["Promueve la autosuficiencia regional","Elimina el reciclaje","Ignora los ecosistemas","Depende exclusivamente de aranceles"], answer:"Promueve la autosuficiencia regional"},
+{q:"Según el documento, el desarrollo sostenible:", options:["Restaura los ecosistemas dañados","Aumenta la contaminación","Reduce la calidad de vida","Elimina las tecnologías limpias"], answer:"Restaura los ecosistemas dañados"},
+
+// ---- Tipos de Cambio y Mercado de Divisas (81-100) ----
+{q:"¿Qué es una divisa según el documento?", options:["La moneda de un país extranjero, como el USD, EUR o JPY","Una tasa de interés","Un impuesto aduanero","Un tratado comercial"], answer:"La moneda de un país extranjero, como el USD, EUR o JPY"},
+{q:"¿Para qué son esenciales las divisas según el documento?", options:["El comercio internacional, la inversión y el turismo","Solo la agricultura","Solo la industria","Solo la educación"], answer:"El comercio internacional, la inversión y el turismo"},
+{q:"¿Por qué los países mantienen reservas de divisas según el documento?", options:["Para realizar pagos internacionales y estabilizar su propia moneda","Para aumentar impuestos","Para eliminar el comercio","Para reducir el PIB"], answer:"Para realizar pagos internacionales y estabilizar su propia moneda"},
+{q:"¿Qué es el tipo de cambio según el documento?", options:["El precio de una moneda en términos de otra","La tasa de desempleo","El índice de precios al consumidor","La balanza comercial"], answer:"El precio de una moneda en términos de otra"},
+{q:"Si el EUR/USD es 1.08, esto significa que:", options:["1 Euro equivale a 1.08 Dólares estadounidenses","1 Dólar equivale a 1.08 Euros","El Euro se ha depreciado","No hay relación entre las monedas"], answer:"1 Euro equivale a 1.08 Dólares estadounidenses"},
+{q:"¿Qué significa que una moneda se aprecie según el documento?", options:["Que su valor aumenta en relación con otra","Que su valor disminuye","Que desaparece del mercado","Que se congela su valor"], answer:"Que su valor aumenta en relación con otra"},
+{q:"¿Qué significa que una moneda se deprecie según el documento?", options:["Que su valor aumenta","Que su valor disminuye","Que se mantiene igual","Que se elimina del mercado"], answer:"Que su valor disminuye"},
+{q:"Si el EUR/USD pasa de 1.08 a 1.10, ¿qué ocurrió con el Euro?", options:["Se depreció","Se apreció","Desapareció","No cambió"], answer:"Se apreció"},
+{q:"Si el EUR/USD baja de 1.08 a 1.05, ¿qué ocurrió con el Euro?", options:["Se apreció","Se depreció","Se mantuvo igual","Se duplicó"], answer:"Se depreció"},
+{q:"Según el documento, si un país sube sus tasas de interés, ¿qué ocurre con su moneda?", options:["Se deprecia porque nadie invierte","Se aprecia porque atrae inversores extranjeros buscando mayores rendimientos","No cambia en absoluto","Desaparece del mercado"], answer:"Se aprecia porque atrae inversores extranjeros buscando mayores rendimientos"},
+{q:"¿Qué efecto tiene un superávit comercial sobre la moneda según el documento?", options:["Tiende a apreciarla porque entran más divisas al país","Tiende a depreciarla","No tiene ningún efecto","La elimina del mercado"], answer:"Tiende a apreciarla porque entran más divisas al país"},
+{q:"¿Qué efecto tiene un déficit comercial sobre la moneda según el documento?", options:["Tiende a apreciarla","Tiende a depreciarla porque implica salida de divisas","No tiene ningún efecto","La estabiliza"], answer:"Tiende a depreciarla porque implica salida de divisas"},
+{q:"Según el documento, ¿qué ocurre con la moneda de países con alta inflación?", options:["Suele apreciarse","Suele depreciarse porque su poder adquisitivo disminuye internamente","No cambia","Se vuelve más fuerte"], answer:"Suele depreciarse porque su poder adquisitivo disminuye internamente"},
+{q:"¿Qué puede provocar la incertidumbre política o económica según el documento?", options:["Fuga de capitales y depreciación de la moneda","Apreciación garantizada de la moneda","Ningún efecto","Aumento inmediato del PIB"], answer:"Fuga de capitales y depreciación de la moneda"},
+{q:"¿Qué es la especulación en el mercado de divisas según el documento?", options:["Movimiento de grandes volúmenes de capital con base en expectativas sobre futuros movimientos de los tipos de cambio","Un impuesto aduanero","Una política fiscal","Una cuota de importación"], answer:"Movimiento de grandes volúmenes de capital con base en expectativas sobre futuros movimientos de los tipos de cambio"},
+{q:"¿Qué es el Forex según el documento?", options:["El mercado donde se intercambian las divisas","El PIB de un país","La tasa de desempleo","El índice de precios al consumidor"], answer:"El mercado donde se intercambian las divisas"},
+{q:"Según el documento, ¿cómo es el mercado Forex en términos de tamaño y liquidez?", options:["Es el mercado financiero más grande y líquido del mundo","Es un mercado pequeño y poco líquido","Solo opera en un país","Es menor que el mercado de acciones"], answer:"Es el mercado financiero más grande y líquido del mundo"},
+{q:"¿Cuántas horas al día opera el Forex, de lunes a viernes, según el documento?", options:["8 horas","12 horas","24 horas","16 horas"], answer:"24 horas"},
+{q:"Según el documento, ¿qué transacciones diarias superan los 7 billones de dólares?", options:["Las transacciones del mercado de divisas (Forex)","Solo las de bancos centrales","Solo el comercio de bienes físicos","Solo el turismo"], answer:"Las transacciones del mercado de divisas (Forex)"},
+{q:"¿Cuáles son los participantes del Forex que son los más grandes y realizan transacciones para ellos mismos y sus clientes?", options:["Bancos comerciales","Fondos de pensiones","Cooperativas de ahorro","Casas de cambio locales"], answer:"Bancos comerciales"}
+];
+
+// =====================================================================
+// LÓGICA DEL QUIZ
+// =====================================================================
+const TOTAL = questions.length; // 100
+let quizSet = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let advanceTimer = null;
+
+const startScreen = document.getElementById('start-screen');
+const quizScreen = document.getElementById('quiz-screen');
+const resultsScreen = document.getElementById('results-screen');
+const progressFill = document.getElementById('progress-fill');
+const counterEl = document.getElementById('counter');
+const scoreLiveEl = document.getElementById('score-live');
+const questionTextEl = document.getElementById('question-text');
+const optionsContainer = document.getElementById('options-container');
+const nextBtn = document.getElementById('next-btn');
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuizSet(){
+  const shuffledQuestions = shuffle(questions);
+  return shuffledQuestions.map(q => ({
+    q: q.q,
+    answer: q.answer,
+    options: shuffle(q.options)
+  }));
+}
+
+function showScreen(el){
+  [startScreen, quizScreen, resultsScreen].forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startQuiz(){
+  quizSet = buildQuizSet();
+  currentIndex = 0;
+  score = 0;
+  showScreen(quizScreen);
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  clearTimeout(advanceTimer);
+  nextBtn.style.display = 'none';
+
+  const progressPct = (currentIndex / TOTAL) * 100;
+  progressFill.style.width = progressPct + '%';
+  counterEl.textContent = 'Pregunta ' + (currentIndex + 1) + ' de ' + TOTAL;
+  scoreLiveEl.textContent = score + ' aciertos';
+
+  const current = quizSet[currentIndex];
+  questionTextEl.textContent = current.q;
+  optionsContainer.innerHTML = '';
+
+  current.options.forEach((optText, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    const letter = String.fromCharCode(65 + idx);
+    btn.innerHTML = '<span class="option-letter">' + letter + '</span><span>' + optText + '</span>';
+    btn.addEventListener('click', () => selectAnswer(optText, btn));
+    optionsContainer.appendChild(btn);
+  });
+}
+
+function selectAnswer(selectedText, btnEl){
+  if(answered) return;
+  answered = true;
+
+  const current = quizSet[currentIndex];
+  const allBtns = optionsContainer.querySelectorAll('.option-btn');
+
+  allBtns.forEach(b => {
+    b.classList.add('disabled');
+    const label = b.querySelector('span:last-child').textContent;
+    if(label === current.answer){
+      b.classList.add('correct');
+    } else if(b === btnEl){
+      b.classList.add('incorrect');
+    } else {
+      b.classList.add('faded');
+    }
+  });
+
+  if(selectedText === current.answer){
+    score++;
+    scoreLiveEl.textContent = score + ' aciertos';
+  }
+
+  nextBtn.style.display = 'block';
+  advanceTimer = setTimeout(nextQuestion, 1500);
+}
+
+nextBtn.addEventListener('click', () => {
+  clearTimeout(advanceTimer);
+  nextQuestion();
+});
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= TOTAL){
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults(){
+  showScreen(resultsScreen);
+  const pct = Math.round((score / TOTAL) * 100);
+
+  document.getElementById('results-pct').textContent = pct + '%';
+  document.getElementById('results-frac').textContent = score + '/' + TOTAL;
+
+  const circumference = 2 * Math.PI * 52;
+  const ring = document.getElementById('ring-fill');
+  ring.style.strokeDasharray = circumference;
+  const offset = circumference - (pct / 100) * circumference;
+  ring.style.strokeDashoffset = circumference;
+  requestAnimationFrame(() => { ring.style.strokeDashoffset = offset; });
+
+  let title, message;
+  if(pct >= 90){
+    title = '¡Excelente dominio!';
+    message = 'Manejas los conceptos de macroeconomía con gran precisión. ¡Sigue así!';
+  } else if(pct >= 70){
+    title = '¡Muy buen trabajo!';
+    message = 'Tienes una base sólida. Repasa los temas donde fallaste para llegar a la excelencia.';
+  } else if(pct >= 50){
+    title = 'Vas por buen camino';
+    message = 'Entiendes lo esencial, pero conviene reforzar varios conceptos clave de tus apuntes.';
+  } else {
+    title = 'Sigue practicando';
+    message = 'Es un buen punto de partida. Repasa el material y vuelve a intentarlo, ¡puedes mejorar mucho!';
+  }
+  document.getElementById('results-title').textContent = title;
+  document.getElementById('results-message').textContent = message;
+}
+
+document.getElementById('start-btn').addEventListener('click', startQuiz);
+document.getElementById('restart-btn').addEventListener('click', startQuiz);
+</script>
+</body>
+</html>
