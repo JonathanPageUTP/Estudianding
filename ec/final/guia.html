@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Guía de Memorización · Macroeconomía</title>
+<style>
+  :root{
+    --bg: #121212;
+    --bg-alt: #1a1a1a;
+    --bg-card: #1e1e1e;
+    --line: rgba(255,255,255,0.08);
+    --text: #e0e0e0;
+    --text-dim: #a3a3a3;
+    --blue: #9fd3ff;
+    --mint: #8fe3c0;
+    --yellow: #f5e08a;
+    --blue-bg: rgba(159,211,255,0.08);
+    --mint-bg: rgba(143,227,192,0.07);
+    --yellow-bg: rgba(245,224,138,0.07);
+  }
+
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+    padding-bottom: 3rem;
+    animation: fadein .6s ease-out;
+  }
+
+  @keyframes fadein{ from{opacity:0; transform: translateY(6px);} to{opacity:1; transform:none;} }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    body{ animation:none; }
+    *{ transition: none !important; animation: none !important; }
+  }
+
+  h1,h2,h3{
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    color: #f5f5f3;
+    margin: 0 0 .35em 0;
+  }
+
+  a{ color: inherit; }
+
+  /* ---------- Header ---------- */
+  header{
+    padding: 1.6rem 1.25rem 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  header .eyebrow{
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: .5rem;
+  }
+  header h1{
+    font-size: 1.55rem;
+    line-height: 1.25;
+  }
+  header p.sub{
+    color: var(--text-dim);
+    font-size: .92rem;
+    max-width: 40em;
+    margin-top: .5rem;
+  }
+
+  /* legend */
+  .legend{
+    display:flex;
+    flex-wrap: wrap;
+    gap: .9rem;
+    margin-top: 1rem;
+    font-size: .78rem;
+    color: var(--text-dim);
+  }
+  .legend span{ display:inline-flex; align-items:center; gap:.4rem; }
+  .dot{ width:.6rem; height:.6rem; border-radius:50%; display:inline-block; flex:none; }
+  .dot.blue{ background: var(--blue); }
+  .dot.mint{ background: var(--mint); }
+  .dot.yellow{ background: var(--yellow); }
+
+  /* ---------- Nav ---------- */
+  nav.topnav{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display:flex;
+    gap: .5rem;
+    overflow-x: auto;
+    padding: .7rem 1rem;
+    background: rgba(18,18,18,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
+  }
+  nav.topnav::-webkit-scrollbar{ display:none; }
+  nav.topnav a{
+    flex: none;
+    text-decoration:none;
+    font-size: .82rem;
+    color: var(--text-dim);
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    padding: .45rem .8rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  nav.topnav a:active{ background:#242424; }
+
+  /* ---------- Layout ---------- */
+  main{
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1.4rem 1.1rem 0;
+  }
+
+  section.chapter{
+    margin-bottom: 2.6rem;
+    scroll-margin-top: 4.2rem;
+  }
+  section.chapter .modulo{
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: .3rem;
+  }
+  section.chapter h2{
+    font-size: 1.32rem;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+  }
+  section.chapter > p.intro{
+    color: var(--text-dim);
+    font-size: .95rem;
+    margin: .4rem 0 1.1rem;
+  }
+
+  /* ---------- Signature diagram ---------- */
+  figure.diagram{
+    margin: 0 0 1.3rem;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: .9rem .6rem .4rem;
+  }
+  figure.diagram svg{ width:100%; height:auto; display:block; }
+  figure.diagram figcaption{
+    font-size: .75rem;
+    color: var(--text-dim);
+    text-align:center;
+    padding: .5rem 0 .3rem;
+  }
+
+  /* ---------- Collapsible chunks ---------- */
+  details.chunk{
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: .7rem;
+    overflow: hidden;
+  }
+  details.chunk summary{
+    list-style: none;
+    cursor: pointer;
+    padding: .85rem 1rem;
+    font-weight: 600;
+    font-size: .98rem;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: .6rem;
+    min-height: 1.4rem;
+  }
+  details.chunk summary::-webkit-details-marker{ display:none; }
+  details.chunk summary .ico{
+    flex:none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: .85rem;
+    color: var(--text-dim);
+    transition: transform .25s ease;
+  }
+  details.chunk[open] summary .ico{ transform: rotate(45deg); }
+  details.chunk .chunk-body{
+    padding: 0 1rem 1rem;
+    color: var(--text);
+    font-size: .93rem;
+  }
+  details.chunk .chunk-body p{ margin: .5rem 0; }
+  details.chunk .chunk-body ul{ margin: .4rem 0; padding-left: 1.2rem; }
+  details.chunk .chunk-body li{ margin-bottom: .35rem; }
+  details.chunk .chunk-body table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .88rem;
+    margin-top: .4rem;
+  }
+  details.chunk .chunk-body th, details.chunk .chunk-body td{
+    border: 1px solid var(--line);
+    padding: .5rem .55rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  details.chunk .chunk-body th{ color: var(--text-dim); font-weight:600; }
+
+  h4.sub{
+    font-family: inherit;
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--text-dim);
+    margin: .9rem 0 .3rem;
+  }
+
+  /* keyword highlight */
+  .kw{ color: var(--blue); font-weight: 600; }
+
+  /* mnemonic + analogy callouts */
+  .mnemo, .analogia{
+    border-radius: 10px;
+    padding: .7rem .85rem;
+    margin: .7rem 0 .3rem;
+    font-size: .9rem;
+  }
+  .mnemo{ background: var(--mint-bg); border-left: 3px solid var(--mint); }
+  .analogia{ background: var(--yellow-bg); border-left: 3px solid var(--yellow); }
+  .mnemo .tag, .analogia .tag{
+    display:block;
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: .3rem;
+  }
+  .mnemo .tag{ color: var(--mint); }
+  .analogia .tag{ color: var(--yellow); }
+  .mnemo strong{ color: var(--mint); }
+  .analogia strong{ color: var(--yellow); }
+
+  footer{
+    text-align:center;
+    color: var(--text-dim);
+    font-size: .75rem;
+    padding: 2rem 1.25rem 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Principios de Economía · Repaso visual</div>
+  <h1>🧠 Guía de Memorización de Macroeconomía</h1>
+  <p class="sub">Todo el contenido de tus 5 temas, agrupado en bloques pequeños, con trucos mentales y analogías para que se te quede grabado. Toca cada tarjeta para abrirla o cerrarla.</p>
+  <div class="legend">
+    <span><i class="dot blue"></i> Concepto clave</span>
+    <span><i class="dot mint"></i> Truco para recordar</span>
+    <span><i class="dot yellow"></i> Analogía</span>
+  </div>
+</header>
+
+<nav class="topnav">
+  <a href="#ciclo">🔄 Ciclo</a>
+  <a href="#comercio">🌍 Comercio</a>
+  <a href="#indicadores">📊 Indicadores</a>
+  <a href="#macro">📈 Crecimiento</a>
+  <a href="#divisas">💱 Divisas</a>
+</nav>
+
+<main>
+
+<!-- ======================================================= -->
+<!-- 1. CICLO ECONÓMICO -->
+<!-- ======================================================= -->
+<section id="ciclo" class="chapter">
+  <div class="modulo">Módulo 01</div>
+  <h2>🔄 Las 4 Fases del Ciclo Económico</h2>
+  <p class="intro">El ciclo económico son las subidas y bajadas por las que pasa la actividad de un país, una y otra vez, en <span class="kw">4 fases</span> que se repiten.</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20,175 C90,175 130,35 200,35 C270,35 310,175 380,175" fill="none" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="10" y1="190" x2="390" y2="190" stroke="#333" stroke-width="1"/>
+      <circle cx="20" cy="175" r="6" fill="#9fd3ff"/>
+      <circle cx="112" cy="100" r="6" fill="#9fd3ff"/>
+      <circle cx="200" cy="35" r="6" fill="#9fd3ff"/>
+      <circle cx="288" cy="100" r="6" fill="#9fd3ff"/>
+      <circle cx="380" cy="175" r="6" fill="#9fd3ff"/>
+      <text x="20" y="200" font-size="12" fill="#a3a3a3" text-anchor="middle">Valle</text>
+      <text x="112" y="88" font-size="12" fill="#a3a3a3" text-anchor="middle">Expansión</text>
+      <text x="200" y="24" font-size="12" fill="#e0e0e0" text-anchor="middle" font-weight="700">Pico</text>
+      <text x="288" y="88" font-size="12" fill="#a3a3a3" text-anchor="middle">Recesión</text>
+      <text x="380" y="200" font-size="12" fill="#a3a3a3" text-anchor="middle">Valle</text>
+    </svg>
+    <figcaption>La economía sube y baja como una ola, sin parar: Valle → Expansión → Pico → Recesión → Valle otra vez.</figcaption>
+  </figure>
+
+  <div class="analogia">
+    <span class="tag">💡 Piénsalo así</span>
+    La economía <strong>respira</strong>: en la Expansión "inhala" (crece, se llena de actividad) y en la Recesión "exhala" (se contrae). Nunca se queda quieta, siempre está en movimiento.
+  </div>
+
+  <div class="mnemo">
+    <span class="tag">🔑 Truco para recordar el orden</span>
+    <strong>"Vamos Escalando hasta el Pico, luego Retrocedemos"</strong> → V-E-P-R = <strong>V</strong>alle, <strong>E</strong>xpansión, <strong>P</strong>ico, <strong>R</strong>ecesión.
+  </div>
+
+  <details class="chunk">
+    <summary><span>Fase 1 · Punto Inferior o Depresión</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>La <span class="kw">Depresión</span> es el punto más bajo de la actividad económica, justo antes de que empiece la recuperación.</p>
+      <h4 class="sub">Características</h4>
+      <ul>
+        <li>El <span class="kw">desempleo</span> está en su punto más alto.</li>
+        <li>La producción está en su nivel más bajo.</li>
+        <li>Los precios pueden ser bajos (deflación o baja inflación).</li>
+        <li>La confianza es muy baja, pero empieza a estabilizarse.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Fase 2 · Expansión o Recuperación</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es el período de <span class="kw">crecimiento económico sostenido</span>.</p>
+      <h4 class="sub">Características</h4>
+      <ul>
+        <li>Aumento del PIB.</li>
+        <li>Reducción del desempleo.</li>
+        <li>Incremento de la producción industrial y las ventas.</li>
+        <li>Aumento de la inversión empresarial.</li>
+        <li>Mejora de la confianza del consumidor y de las empresas.</li>
+        <li>Posible aumento de la inflación a medida que crece la demanda.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Fase 3 · Punto Superior o Pico</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>El <span class="kw">Pico (o Auge)</span> es el punto de inflexión del ciclo: el instante en que la Expansión llega a su límite, justo antes de que comience la Recesión.</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Fase 4 · Recesión</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>La <span class="kw">Recesión</span> es el período de contracción económica significativa.</p>
+      <h4 class="sub">Características</h4>
+      <ul>
+        <li>Disminución del PIB por al menos dos trimestres consecutivos.</li>
+        <li>Aumento del desempleo.</li>
+        <li>Caída en la producción industrial y las ventas minoristas.</li>
+        <li>Disminución de la inversión empresarial.</li>
+        <li>Menor confianza del consumidor y de las empresas.</li>
+      </ul>
+      <h4 class="sub">Causas más comunes</h4>
+      <p>Estallido de burbujas económicas, crisis financieras, shocks externos (pandemias, guerras) y políticas monetarias o fiscales restrictivas.</p>
+      <h4 class="sub">Impacto</h4>
+      <p>Reducción de ingresos y mayor incertidumbre.</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Factores que influyen en el ciclo</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <ul>
+        <li><span class="kw">Política Monetaria</span>: tasas de interés y oferta monetaria (Bancos Centrales).</li>
+        <li><span class="kw">Política Fiscal</span>: gasto público e impuestos (Gobiernos).</li>
+        <li><span class="kw">Confianza</span> de consumidores y empresas: expectativas sobre el futuro económico.</li>
+        <li><span class="kw">Innovación y Tecnología</span>: creación de nuevas industrias, aumento de productividad.</li>
+        <li><span class="kw">Eventos Externos</span>: crisis globales, precios del petróleo, desastres naturales.</li>
+        <li><span class="kw">Cambios Demográficos</span>: crecimiento de la población, envejecimiento.</li>
+      </ul>
+      <div class="mnemo">
+        <span class="tag">🔑 Truco para recordar</span>
+        <strong>"Mi Familia Cree en Inventos, Eventos y Demografía"</strong> → <strong>M</strong>onetaria, <strong>F</strong>iscal, <strong>C</strong>onfianza, <strong>I</strong>nnovación, <strong>E</strong>ventos externos, <strong>D</strong>emográficos.
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================================================= -->
+<!-- 2. COMERCIO INTERNACIONAL Y BALANZA DE PAGOS -->
+<!-- ======================================================= -->
+<section id="comercio" class="chapter">
+  <div class="modulo">Módulo 02</div>
+  <h2>🌍 Comercio Internacional y Balanza de Pagos</h2>
+  <p class="intro">El <span class="kw">Comercio Internacional</span> es el intercambio de bienes, servicios y capitales a través de las fronteras. Es el motor que conecta a los países, permitiendo que se beneficien de la especialización y de las ventajas comparativas.</p>
+
+  <details class="chunk">
+    <summary><span>¿Por qué comercian los países?</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p><span class="kw">Ventaja Comparativa</span>: un país la tiene cuando produce un bien a un costo de oportunidad más bajo que otro país. No significa que sea el más eficiente en términos absolutos, sino que sacrifica menos de otros bienes para producirlo. Al especializarse y comerciar, todos los países obtienen más bienes en general.</p>
+      <p><span class="kw">Economías de Escala</span>: al producir para un mercado global, las empresas aumentan su volumen de producción y reducen sus costos unitarios.</p>
+      <p><span class="kw">Diversidad de Productos y Consumo</span>: el comercio permite a los consumidores acceder a más variedad de bienes y servicios que no se producen localmente.</p>
+      <p><span class="kw">Transferencia de Tecnología</span>: el intercambio comercial facilita la difusión de nuevas tecnologías, ideas y métodos de producción, fomentando la innovación.</p>
+      <div class="mnemo">
+        <span class="tag">🔑 Truco para recordar</span>
+        <strong>"Vamos Explorando Distintas Tierras"</strong> → <strong>V</strong>entaja comparativa, <strong>E</strong>conomías de escala, <strong>D</strong>iversidad de productos, <strong>T</strong>ransferencia de tecnología.
+      </div>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Instrumentos y políticas de comercio</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <ul>
+        <li><span class="kw">Aranceles</span>: impuestos a los bienes importados. Encarecen los productos extranjeros, protegiendo a la industria nacional, pero encareciendo el precio para el consumidor.</li>
+        <li><span class="kw">Cuotas de Importación</span>: límites a la cantidad de un bien que puede importarse en un período determinado.</li>
+        <li><span class="kw">Subsidios a la Exportación</span>: pagos o incentivos a productores nacionales para vender en el extranjero a precios más competitivos.</li>
+        <li><span class="kw">Barreras No Arancelarias</span>: regulaciones técnicas, sanitarias o de seguridad que, aunque justificadas, actúan como obstáculos al comercio.</li>
+        <li><span class="kw">Tratados de Libre Comercio (TLC)</span>: acuerdos entre países para reducir o eliminar barreras, promoviendo mayor intercambio.</li>
+      </ul>
+      <div class="mnemo">
+        <span class="tag">🔑 Truco para recordar</span>
+        <strong>"Al Cruzar, Se Bloquea el Tráfico"</strong> → <strong>A</strong>ranceles, <strong>C</strong>uotas, <strong>S</strong>ubsidios, <strong>B</strong>arreras, <strong>T</strong>LC. Como en una aduana: cada instrumento frena o filtra algo distinto del "tráfico" de mercancías.
+      </div>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>¿Qué es la Balanza de Pagos?</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es el registro contable sistemático de <span class="kw">todas las transacciones económicas</span> entre los residentes de un país y los del resto del mundo, durante un período determinado (generalmente un año).</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Las 3 cuentas principales</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>1. <span class="kw">Cuenta Corriente</span>: registra el flujo de bienes, servicios, ingresos y transferencias unilaterales. Se divide en 4 sub-balanzas:</p>
+      <ul>
+        <li><strong>Balanza Comercial (Bienes)</strong>: exportaciones e importaciones de mercancías tangibles. Exporta más de lo que importa → superávit comercial. Importa más de lo que exporta → déficit comercial.</li>
+        <li><strong>Balanza de Servicios</strong>: turismo, transporte, seguros, servicios financieros y del Canal de Panamá.</li>
+        <li><strong>Balanza de Rentas (Ingresos Primarios)</strong>: ingresos y pagos por capital y trabajo (salarios, intereses de inversiones, dividendos).</li>
+        <li><strong>Balanza de Transferencias Corrientes (Ingresos Secundarios)</strong>: transferencias sin contrapartida, como remesas, donaciones y ayuda internacional.</li>
+      </ul>
+      <p>2. <span class="kw">Cuenta de Capital</span>: transferencias de capital no productivas y adquisición o disposición de activos no financieros no producidos (patentes, marcas). Es pequeña, y a menudo se agrupa con la Cuenta Corriente en análisis simplificados.</p>
+      <p>3. <span class="kw">Cuenta Financiera</span>: registra las transacciones de activos y pasivos financieros, es decir, las inversiones.</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Doble entrada y equilibrio</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>La Balanza de Pagos siempre está, por definición, <span class="kw">en equilibrio contable</span>: cada transacción se registra dos veces, una como crédito y otra como débito.</p>
+      <p>Si la Cuenta Corriente tiene un <strong>déficit</strong> (el país gasta más en el exterior de lo que gana), ese déficit se financia con un <strong>superávit en la Cuenta Financiera</strong> (entra más inversión extranjera o préstamos).</p>
+      <p>Si la Cuenta Corriente tiene un <strong>superávit</strong> (el país gana más de lo que gasta), se traduce en un <strong>déficit en la Cuenta Financiera</strong> (el país invierte más en el extranjero o acumula reservas internacionales).</p>
+      <div class="analogia">
+        <span class="tag">💡 Piénsalo así</span>
+        Es como una <strong>balanza real</strong>: si un platillo baja (déficit corriente), el otro necesariamente sube (superávit financiero) para que todo siga en equilibrio.
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================================================= -->
+<!-- 3. INDICADORES MACROECONÓMICOS -->
+<!-- ======================================================= -->
+<section id="indicadores" class="chapter">
+  <div class="modulo">Módulo 03</div>
+  <h2>📊 Indicadores Macroeconómicos</h2>
+  <p class="intro">Son <span class="kw">datos estadísticos</span> que muestran la salud de un país en distintas áreas de la economía. Los gobiernos los usan para conocer la salud actual y futura de un país, sector o región.</p>
+
+  <div class="analogia">
+    <span class="tag">💡 Piénsalo así</span>
+    Son como un <strong>chequeo médico</strong> de la economía: el PIB es su tamaño, el IPC es su temperatura (si sube mucho, hay "fiebre" de inflación), y el desempleo es su pulso.
+  </div>
+
+  <details class="chunk">
+    <summary><span>PIB · Producto Interno Bruto</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es el <span class="kw">principal indicador</span> del estudio de producción y consumo de un país. Expresa el valor de todos los bienes y servicios finales producidos en un país durante un período (por lo general, un año), incluyendo los factores de producción propiedad de ciudadanos y de extranjeros.</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Otros indicadores de precios y empleo</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <ul>
+        <li><span class="kw">Índice de Precios al Consumo (IPC)</span>: mide los cambios en los precios de una cesta de la compra, informando sobre la posibilidad de inflación.</li>
+        <li><span class="kw">Índice de Precios de Producción (IPP)</span>: mide el precio de los bienes a nivel mayorista, mostrando la evolución de los beneficios que obtienen los productores.</li>
+        <li><span class="kw">Tasa de Desempleo</span>: ayuda a prevenir procesos inflacionistas y a conocer la realidad de la población en edad de trabajar.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Indicadores de consumo y demografía</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <ul>
+        <li><span class="kw">Índice de Ventas Minoristas</span>: informa sobre el estado de las ventas de este sector durante un mes.</li>
+        <li><span class="kw">Índice de Confianza del Consumidor</span>: revela el sentimiento de los consumidores hacia su potencial de gasto y el estado general de la economía.</li>
+        <li><span class="kw">Índice de Mortalidad</span>: refleja la cantidad de defunciones por cada mil ciudadanos en un período (habitualmente 12 meses). También se le llama tasa bruta de mortalidad.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Ramas de la economía</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <ul>
+        <li><span class="kw">Agrícola</span>: producción, comercialización y precios agrícolas.</li>
+        <li><span class="kw">Industrial</span>: desde la localización industrial hasta la producción y comercialización de productos industriales.</li>
+        <li><span class="kw">Nacional</span>: agregados macroeconómicos (cuentas nacionales, contabilidad nacional, producción e ingreso nacional).</li>
+        <li><span class="kw">Internacional</span>: transacciones económicas de un país con el exterior.</li>
+        <li><span class="kw">Laboral</span>: todo lo relacionado con el trabajo, como el desempleo y el subempleo.</li>
+        <li><span class="kw">Social</span>: fenómenos económicos que inciden en el bienestar de la sociedad (educación, vivienda).</li>
+      </ul>
+      <div class="mnemo">
+        <span class="tag">🔑 Truco para recordar</span>
+        <strong>"Agricultores Industriosos Nunca Ignoran Labores Sociales"</strong> → <strong>A</strong>grícola, <strong>I</strong>ndustrial, <strong>N</strong>acional, <strong>I</strong>nternacional, <strong>L</strong>aboral, <strong>S</strong>ocial.
+      </div>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Economía Política vs. Política Económica</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p><span class="kw">Economía Política</span>: ciencia que estudia las leyes de la producción, distribución y consumo de los bienes y servicios que satisfacen necesidades.</p>
+      <p><span class="kw">Política Económica</span>: parte de la ciencia económica que estudia las formas y efectos de la intervención del Estado en la vida económica, buscando el desarrollo económico sustentable y mejores niveles de vida para la población.</p>
+      <table>
+        <tr><th>Economía Política</th><th>Política Económica</th></tr>
+        <tr><td>Descubre las leyes económicas que explican la realidad económica.</td><td>Aplica las leyes económicas para obtener determinados objetivos.</td></tr>
+      </table>
+      <div class="analogia">
+        <span class="tag">💡 Piénsalo así</span>
+        La Economía Política es el <strong>científico</strong> que observa y descubre las leyes; la Política Económica es el <strong>ingeniero</strong> que usa esas leyes para construir algo (una política, un objetivo concreto).
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================================================= -->
+<!-- 4. MACROECONOMÍA: CRECIMIENTO, DESARROLLO Y SOSTENIBILIDAD -->
+<!-- ======================================================= -->
+<section id="macro" class="chapter">
+  <div class="modulo">Módulo 04</div>
+  <h2>📈 Crecimiento, Desarrollo y Sostenibilidad</h2>
+
+  <details class="chunk">
+    <summary><span>Crecimiento Económico</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es el <span class="kw">incremento de la cantidad de bienes y servicios</span> producidos por una economía en un período de tiempo. Cuando una economía crece, su capacidad para producir bienes y servicios se incrementó: un crecimiento positivo implica un aumento en la productividad de los factores de producción.</p>
+      <p>También se puede interpretar como una <span class="kw">medida del éxito de las políticas económicas</span>: un crecimiento elevado es un resultado deseado por las autoridades y la población.</p>
+      <h4 class="sub">Fuentes del crecimiento</h4>
+      <ul>
+        <li>Recursos Humanos</li>
+        <li>Formación de Capital</li>
+        <li>Cambio tecnológico e innovación</li>
+        <li>Recursos Naturales</li>
+      </ul>
+      <div class="mnemo">
+        <span class="tag">🔑 Truco para recordar</span>
+        <strong>"Hoy Compro Tecnología Nueva"</strong> → recursos <strong>H</strong>umanos, <strong>C</strong>apital, <strong>T</strong>ecnología, recursos <strong>N</strong>aturales.
+      </div>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Desarrollo Económico</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Tiene que ver con que la población pueda acceder a servicios de calidad en <span class="kw">educación, salud, vivienda, entretenimiento y esparcimiento</span>, y cubrir sus necesidades básicas (alimentación, vestido). El bienestar social está implícito en el desarrollo económico.</p>
+      <p>Su importancia radica en la <strong>estabilidad del entorno</strong>: disminuye la delincuencia, las protestas sociales y la inmigración, mientras dota de calidad de vida a la población, generando condiciones para la felicidad social.</p>
+      <h4 class="sub">¿Cómo se mide?</h4>
+      <ul>
+        <li><strong>Salud</strong>: esperanza de vida · tasa de mortalidad.</li>
+        <li><strong>Servicios básicos</strong>: % de viviendas con electricidad · % de acceso a agua potable.</li>
+        <li><strong>Conectividad</strong>: teléfonos por cada 1000 habitantes · % de acceso a internet.</li>
+        <li><strong>Educación e ingreso</strong>: promedio de años de estudio · ingreso per cápita.</li>
+      </ul>
+      <div class="analogia">
+        <span class="tag">💡 Piénsalo así</span>
+        Es como una <strong>canasta básica del bienestar</strong>: salud, techo, conexión y educación. Si todos esos "productos" están en la canasta de un país, hay desarrollo.
+      </div>
+      <h4 class="sub">¿Cómo se logra?</h4>
+      <p>La tecnología, la educación y la investigación son la base, porque incrementan la productividad y el ingreso per cápita. Pero no son las únicas: se necesitan <span class="kw">políticas públicas incluyentes</span> que repartan la riqueza igualitariamente, construyan bienes públicos y unan los sistemas de educación, vivienda y salud.</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Desarrollo Sostenible</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es el desarrollo capaz de <span class="kw">satisfacer las necesidades actuales sin comprometer los recursos</span> y posibilidades de las futuras generaciones. Una actividad sostenible es aquella que se puede conservar: por ejemplo, cortar árboles de un bosque asegurando su repoblación.</p>
+      <p>Su importancia radica en velar por el mejoramiento de la calidad de vida en toda actividad humana, utilizando solo lo necesario de los recursos naturales.</p>
+      <h4 class="sub">Características</h4>
+      <ul>
+        <li><strong>Uso de recursos</strong>: promueve la autosuficiencia regional, usa los recursos eficientemente y promueve el máximo de reciclaje y reutilización.</li>
+        <li><strong>Medio ambiente</strong>: reconoce la importancia de la naturaleza para el bienestar humano, busca mantener o mejorar el sistema ambiental y restaura los ecosistemas dañados.</li>
+        <li><strong>Equidad social</strong>: asegura que la actividad económica mejore la calidad de vida de todos, no solo de unos pocos selectos.</li>
+        <li><strong>Tecnología</strong>: pone su confianza en el desarrollo e implantación de tecnologías limpias.</li>
+      </ul>
+      <div class="analogia">
+        <span class="tag">💡 Piénsalo así</span>
+        Es como cuidar una <strong>casa prestada</strong> que hay que devolver en buen estado a las próximas generaciones: usas lo necesario, reparas lo que gastas y no la agotas.
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ======================================================= -->
+<!-- 5. TIPOS DE CAMBIO Y MERCADO DE DIVISAS -->
+<!-- ======================================================= -->
+<section id="divisas" class="chapter">
+  <div class="modulo">Módulo 05</div>
+  <h2>💱 Tipos de Cambio y Mercado de Divisas</h2>
+  <p class="intro">Las divisas y los tipos de cambio son el <span class="kw">corazón de la economía global</span>: permiten comprar y vender entre países, invertir más allá de las fronteras y entender cómo se conecta el mundo financieramente.</p>
+
+  <details class="chunk">
+    <summary><span>¿Qué son las divisas?</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Una <span class="kw">divisa</span> es la moneda de un país extranjero, como el Dólar (USD), el Euro (EUR) o el Yen (JPY). Son esenciales para el comercio internacional, la inversión y el turismo.</p>
+      <p>Los países mantienen <strong>reservas de divisas</strong> (sobre todo en monedas fuertes y estables) para realizar pagos internacionales y estabilizar su propia moneda.</p>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>¿Qué es el tipo de cambio?</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es, simplemente, el <span class="kw">precio de una moneda en términos de otra</span>. Si el EUR/USD es 1.08, significa que 1 Euro equivale a 1.08 Dólares.</p>
+      <p><strong>Apreciación</strong>: cuando una moneda aumenta su valor frente a otra (el EUR/USD pasa de 1.08 a 1.10).</p>
+      <p><strong>Depreciación</strong>: cuando una moneda disminuye su valor (el EUR/USD baja de 1.08 a 1.05).</p>
+      <div class="analogia">
+        <span class="tag">💡 Piénsalo así</span>
+        Es como el precio de las <strong>entradas a un concierto</strong>: si todos quieren esa moneda, su "entrada" sube de precio (se aprecia); si nadie la quiere, baja (se deprecia).
+      </div>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>Determinantes del tipo de cambio</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <ul>
+        <li><span class="kw">Tasas de Interés</span>: si suben, atraen inversores extranjeros que buscan mayor rendimiento; sube la demanda de la moneda y esta se aprecia.</li>
+        <li><span class="kw">Balanza Comercial y de Pagos</span>: un superávit comercial (exportaciones > importaciones) hace entrar más divisas y tiende a apreciar la moneda; un déficit tiende a depreciarla.</li>
+        <li><span class="kw">Inflación</span>: los países con alta inflación suelen ver su moneda depreciarse porque su poder adquisitivo baja internamente.</li>
+        <li><span class="kw">Estabilidad Política y Económica</span>: la incertidumbre asusta a los inversores, provoca fuga de capitales y deprecia la moneda.</li>
+        <li><span class="kw">Especulación</span>: grandes volúmenes de capital se mueven a diario según las expectativas de los inversores, generando o amplificando movimientos.</li>
+      </ul>
+      <div class="mnemo">
+        <span class="tag">🔑 Truco para recordar</span>
+        <strong>"Tu Banco Invierte En Euros, Especulando"</strong> → <strong>T</strong>asas de interés, <strong>B</strong>alanza comercial, <strong>I</strong>nflación, <strong>E</strong>stabilidad política, <strong>E</strong>speculación.
+      </div>
+    </div>
+  </details>
+
+  <details class="chunk">
+    <summary><span>El Mercado de Divisas (Forex)</span><span class="ico">+</span></summary>
+    <div class="chunk-body">
+      <p>Es el mercado donde se intercambian las divisas: el <span class="kw">mercado financiero más grande y líquido del mundo</span>, con transacciones que superan los 7 billones de dólares diarios. Opera 24 horas al día, de lunes a viernes, a través de una red global.</p>
+      <h4 class="sub">Participantes principales</h4>
+      <ul>
+        <li><strong>Bancos comerciales</strong>: los más grandes, realizan transacciones para ellos mismos y para sus clientes.</li>
+        <li><strong>Corporaciones multinacionales</strong>: necesitan divisas para sus operaciones globales.</li>
+        <li><strong>Bancos centrales</strong>: intervienen para influir en el tipo de cambio de su moneda.</li>
+        <li><strong>Fondos de inversión y especuladores</strong>: buscan ganancias con los movimientos de las divisas.</li>
+      </ul>
+      <div class="analogia">
+        <span class="tag">💡 Piénsalo así</span>
+        Es como un <strong>partido de fútbol</strong>: los bancos comerciales son los jugadores principales, las corporaciones son equipos que necesitan "material" (divisas) para jugar afuera, los bancos centrales son el árbitro que interviene, y los fondos/especuladores son quienes apuestan por el resultado.
+      </div>
+    </div>
+  </details>
+</section>
+
+</main>
+
+<footer>
+  Repasa cada módulo varias veces: abre las tarjetas, ciérralas, e intenta recordar el contenido antes de volver a abrirlas.
+</footer>
+
+</body>
+</html>
