@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mazo de Estudio · TradeTCG</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --bg-alt:#141f38;
+    --panel:#1a2744;
+    --panel-2:#16213d;
+    --ink:#f1f5f9;
+    --ink-dim:#93a4c3;
+    --ink-faint:#5f6f92;
+    --gold:#f2b93b;
+    --gold-soft:#fde9b8;
+    --mint:#3ddc97;
+    --cyan:#3fd0e8;
+    --violet:#a98bfa;
+    --rose:#fb7c94;
+    --line: rgba(148,163,184,0.16);
+
+    --common:#93a4c3;
+    --rare:#3fd0e8;
+    --epic:#a98bfa;
+    --legendary:#f2b93b;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(63,208,232,0.10), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 90% 10%, rgba(169,139,250,0.09), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    line-height:1.55;
+    padding-bottom:80px;
+  }
+
+  .sans{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 24px 30px;
+    text-align:center;
+  }
+  .eyebrow{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:11.5px;
+    color:var(--cyan);
+    font-weight:700;
+    margin-bottom:14px;
+  }
+  h1.title{
+    font-size:clamp(30px, 5vw, 46px);
+    margin:0 0 12px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  h1.title span{
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold) 45%, var(--mint));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .subtitle{
+    color:var(--ink-dim);
+    font-size:16.5px;
+    max-width:620px;
+    margin:0 auto;
+    font-style:italic;
+  }
+  .howto{
+    max-width:760px;
+    margin:26px auto 0;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 22px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:13.5px;
+    color:var(--ink-dim);
+  }
+  .howto b{color:var(--mint);}
+
+  /* ---------- DASHBOARD / MAPA MENTAL ---------- */
+  .dash-wrap{
+    max-width:1080px;
+    margin:36px auto 10px;
+    padding:0 24px;
+  }
+  .dash-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .dash-head h2{
+    font-size:20px;
+    margin:0;
+    color:var(--gold-soft);
+  }
+  .dash-head p{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:12.5px;
+    color:var(--ink-faint);
+  }
+  .dash-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+  }
+  @media (max-width: 900px){ .dash-grid{grid-template-columns:repeat(3, 1fr);} }
+  @media (max-width: 620px){ .dash-grid{grid-template-columns:repeat(2, 1fr);} }
+
+  .dash-card{
+    display:block;
+    text-decoration:none;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 12px 11px;
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .dash-card:hover{
+    transform:translateY(-2px);
+    background:var(--panel);
+  }
+  .dash-card .n{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:10.5px;
+    color:var(--ink-faint);
+    font-weight:700;
+    letter-spacing:.05em;
+  }
+  .dash-card .acr{
+    font-family: "Courier New", monospace;
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:.04em;
+    margin:3px 0 4px;
+  }
+  .dash-card .lbl{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:11.5px;
+    color:var(--ink-dim);
+  }
+  .dash-card.c-common .acr{color:var(--common);}
+  .dash-card.c-rare .acr{color:var(--rare);}
+  .dash-card.c-epic .acr{color:var(--epic);}
+  .dash-card.c-legendary .acr{color:var(--legendary);}
+  .dash-card.c-common{border-color:rgba(147,164,195,0.35);}
+  .dash-card.c-rare{border-color:rgba(63,208,232,0.4);}
+  .dash-card.c-epic{border-color:rgba(169,139,250,0.4);}
+  .dash-card.c-legendary{border-color:rgba(242,185,59,0.55); box-shadow:0 0 18px rgba(242,185,59,0.08);}
+
+  /* ---------- DECK / CARDS ---------- */
+  main{
+    max-width:820px;
+    margin:44px auto 0;
+    padding:0 24px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+
+  details.card{
+    background: linear-gradient(160deg, var(--panel), var(--panel-2));
+    border-radius:18px;
+    border:1.5px solid var(--line);
+    overflow:hidden;
+    scroll-margin-top:26px;
+    transition:border-color .2s ease;
+  }
+  details.card[open]{ }
+  details.card.r-common{border-color:rgba(147,164,195,0.4);}
+  details.card.r-rare{border-color:rgba(63,208,232,0.45); box-shadow:0 0 0px transparent;}
+  details.card.r-epic{border-color:rgba(169,139,250,0.45);}
+  details.card.r-legendary{border-color:rgba(242,185,59,0.6); box-shadow:0 0 30px rgba(242,185,59,0.07);}
+
+  summary.head{
+    list-style:none;
+    cursor:pointer;
+    padding:20px 24px;
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    position:relative;
+  }
+  summary.head::-webkit-details-marker{ display:none; }
+  summary.head::marker{ content:""; }
+
+  summary.head::after{
+    content:"▾";
+    position:absolute;
+    right:22px;
+    top:22px;
+    color:var(--ink-faint);
+    font-size:15px;
+    transition:transform .2s ease;
+  }
+  details[open] summary.head::after{ transform:rotate(180deg); color:var(--gold);}
+
+  .gem{
+    flex:none;
+    width:38px;height:38px;
+    border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    font-family: "Courier New", monospace;
+    font-weight:700;
+    font-size:14px;
+    margin-top:2px;
+  }
+  .r-common .gem{ background:rgba(147,164,195,0.14); color:var(--common); border:1px solid rgba(147,164,195,0.4);}
+  .r-rare .gem{ background:rgba(63,208,232,0.14); color:var(--rare); border:1px solid rgba(63,208,232,0.45);}
+  .r-epic .gem{ background:rgba(169,139,250,0.14); color:var(--epic); border:1px solid rgba(169,139,250,0.45);}
+  .r-legendary .gem{ background:rgba(242,185,59,0.16); color:var(--legendary); border:1px solid rgba(242,185,59,0.6);}
+
+  .head-text{flex:1; padding-right:26px;}
+  .rarity-tag{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-weight:700;
+    opacity:.85;
+  }
+  .r-common .rarity-tag{color:var(--common);}
+  .r-rare .rarity-tag{color:var(--rare);}
+  .r-epic .rarity-tag{color:var(--epic);}
+  .r-legendary .rarity-tag{color:var(--legendary);}
+
+  .card-title{
+    font-size:20px;
+    font-weight:700;
+    margin:5px 0 6px;
+    color:var(--ink);
+  }
+  .card-concept{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:14px;
+    color:var(--ink-dim);
+    font-style:italic;
+    line-height:1.5;
+  }
+
+  .body{
+    padding:0 24px 26px 24px;
+    border-top:1px solid var(--line);
+    padding-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .block-label{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-weight:700;
+    color:var(--ink-faint);
+    margin-bottom:9px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(242,185,59,0.11);
+    border:1px solid rgba(242,185,59,0.4);
+    color:var(--gold-soft);
+  }
+
+  .mnemo{
+    background:rgba(61,220,151,0.07);
+    border-left:3px solid var(--mint);
+    border-radius:0 10px 10px 0;
+    padding:12px 16px;
+    font-size:14.5px;
+    color:var(--ink);
+  }
+  .mnemo b{color:var(--mint);}
+
+  .script{
+    background:rgba(63,208,232,0.06);
+    border-left:3px solid var(--cyan);
+    border-radius:0 10px 10px 0;
+    padding:14px 18px;
+    font-size:15px;
+    color:var(--ink);
+    font-style:italic;
+  }
+  .script .tr{
+    display:block;
+    margin-top:10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-style:normal;
+    font-size:11.5px;
+    color:var(--cyan);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+  }
+
+  .triad{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+  }
+  @media (max-width:640px){ .triad{grid-template-columns:1fr;} }
+  .tri-item{
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 13px;
+    font-size:13.5px;
+    color:var(--ink-dim);
+  }
+  .tri-num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:20px;height:20px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--mint));
+    color:#0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight:800;
+    font-size:11px;
+    margin-right:8px;
+  }
+  .tri-item b{color:var(--ink);}
+
+  footer{
+    max-width:820px;
+    margin:50px auto 0;
+    padding:0 24px;
+    text-align:center;
+    color:var(--ink-faint);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size:12.5px;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow sans">Guía de memorización &amp; oratoria</div>
+  <h1 class="title">Mazo de Estudio: <span>TradeTCG</span></h1>
+  <p class="subtitle">12 cartas, 12 ideas, un solo pitch fluido. Cada carta contiene lo justo para que tu cerebro la retenga y tu voz la explique sin dudar.</p>
+  <div class="howto sans">
+    <b>Cómo usar esta guía:</b> repasa primero el mapa mental de abajo (la vista de pájaro de las 12 siglas). Luego abre carta por carta —haz clic en el título— y practica en voz alta el "guion de oratoria" hasta que salga natural. La rareza de cada carta (Común → Legendaria) te indica cuánto peso darle en tu presentación.
+  </div>
+</header>
+
+<div class="dash-wrap">
+  <div class="dash-head">
+    <h2>🗺️ Mapa mental — vista de pájaro</h2>
+    <p class="sans">Toca una carta para saltar a su ficha completa</p>
+  </div>
+  <div class="dash-grid">
+    <a class="dash-card c-common" href="#card-1"><div class="n">CARTA 01 · COMÚN</div><div class="acr">MPE</div><div class="lbl">Qué es TradeTCG</div></a>
+    <a class="dash-card c-rare" href="#card-2"><div class="n">CARTA 02 · RARA</div><div class="acr">CRPD</div><div class="lbl">El problema</div></a>
+    <a class="dash-card c-rare" href="#card-3"><div class="n">CARTA 03 · RARA</div><div class="acr">CAM</div><div class="lbl">Buyer personas</div></a>
+    <a class="dash-card c-epic" href="#card-4"><div class="n">CARTA 04 · ÉPICA</div><div class="acr">CLRA</div><div class="lbl">Ventaja competitiva</div></a>
+    <a class="dash-card c-epic" href="#card-5"><div class="n">CARTA 05 · ÉPICA</div><div class="acr">CVP</div><div class="lbl">Modelo de negocio</div></a>
+    <a class="dash-card c-legendary" href="#card-6"><div class="n">CARTA 06 · LEGENDARIA</div><div class="acr">100→88.8</div><div class="lbl">Ejemplo financiero</div></a>
+    <a class="dash-card c-epic" href="#card-7"><div class="n">CARTA 07 · ÉPICA</div><div class="acr">NNPSR</div><div class="lbl">Arquitectura</div></a>
+    <a class="dash-card c-rare" href="#card-8"><div class="n">CARTA 08 · RARA</div><div class="acr">BCPWEL</div><div class="lbl">Flujo de compra</div></a>
+    <a class="dash-card c-epic" href="#card-9"><div class="n">CARTA 09 · ÉPICA</div><div class="acr">YPSA</div><div class="lbl">Pasarelas de pago</div></a>
+    <a class="dash-card c-legendary" href="#card-10"><div class="n">CARTA 10 · LEGENDARIA</div><div class="acr">OPLI</div><div class="lbl">Seguridad y confianza</div></a>
+    <a class="dash-card c-rare" href="#card-11"><div class="n">CARTA 11 · RARA</div><div class="acr">VBOE</div><div class="lbl">Camino al crecimiento</div></a>
+    <a class="dash-card c-legendary" href="#card-12"><div class="n">CARTA 12 · LEGENDARIA</div><div class="acr">MCAC</div><div class="lbl">Cierre y viabilidad</div></a>
+  </div>
+</div>
+
+<main>
+
+  <!-- CARTA 1 -->
+  <details class="card r-common" id="card-1">
+    <summary class="head">
+      <div class="gem">01</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Común · Apertura</div>
+        <div class="card-title">¿Qué es TradeTCG?</div>
+        <div class="card-concept">TradeTCG es un marketplace especializado en cartas TCG, con lanzamiento en Panamá y expansión regional.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Marketplace</span>
+          <span class="chip">Cartas TCG</span>
+          <span class="chip">Panamá</span>
+          <span class="chip">C2C / B2C</span>
+          <span class="chip">Expansión regional</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Analogía:</b> imagina un Mercado Libre, pero con un experto de cartas parado en la puerta que revisa el set, la rareza y el idioma de cada carta antes de dejarla entrar. Esa es la promesa de TradeTCG frente al comercio informal.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Hoy les presento TradeTCG, un marketplace digital especializado en la compraventa de cartas coleccionables de juegos TCG. Nace en Panamá, pero está diseñado para crecer hacia el resto de la región. Conecta a compradores, coleccionistas, jugadores competitivos, vendedores independientes y tiendas especializadas."
+          <span class="tr">Transición → "¿Por qué es necesario? Se los explico con el problema que resolvemos..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span><b>Qué es:</b> marketplace C2C y B2C especializado en TCG.</div>
+          <div class="tri-item"><span class="tri-num">2</span><b>Para quién:</b> coleccionistas, jugadores, vendedores y tiendas.</div>
+          <div class="tri-item"><span class="tri-num">3</span><b>Dónde:</b> lanza en Panamá, con expansión regional progresiva.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 2 -->
+  <details class="card r-rare" id="card-2">
+    <summary class="head">
+      <div class="gem">02</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Rara · El dolor del cliente</div>
+        <div class="card-title">El problema: comercio informal</div>
+        <div class="card-concept">El comercio TCG panameño es informal: sin catálogo, reputación, pagos trazables ni disputas.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Informal</span>
+          <span class="chip">Sin catálogo</span>
+          <span class="chip">Sin reputación</span>
+          <span class="chip">Pagos no trazables</span>
+          <span class="chip">Sin disputas</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo CRPD</b> (Catálogo, Reputación, Pagos, Disputas) = 4 puertas cerradas con candado. Micro-historia: compras una carta rara por WhatsApp: no sabes si es real (sin catálogo), no sabes si el vendedor es de fiar (sin reputación), pagas a ciegas (sin trazabilidad) y si te estafan, no hay a quién reclamar (sin disputas). TradeTCG trae las 4 llaves.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Hoy, gran parte de este comercio ocurre en redes sociales y WhatsApp. Ahí no existen filtros por set o rareza, no hay historial que genere confianza entre desconocidos, los pagos son transferencias directas sin protección, y si algo sale mal, no hay a quién reclamar. Esa es exactamente la brecha que buscamos cerrar."
+          <span class="tr">Transición → "Y para entender a quién le resolvemos este problema, veamos nuestros tres perfiles de usuario..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Sin catálogo ni filtros especializados.</div>
+          <div class="tri-item"><span class="tri-num">2</span>Sin reputación ni pagos trazables.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Sin proceso estandarizado de disputa.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 3 -->
+  <details class="card r-rare" id="card-3">
+    <summary class="head">
+      <div class="gem">03</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Rara · Usuarios</div>
+        <div class="card-title">Buyer personas: Carlos, Andrea, Miguel</div>
+        <div class="card-concept">Carlos, Andrea y Miguel representan al coleccionista casual, la vendedora y el jugador competitivo.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Carlos · casual</span>
+          <span class="chip">Andrea · vendedora</span>
+          <span class="chip">Miguel · competitivo</span>
+          <span class="chip">CAM</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo CAM</b> (Carlos–Andrea–Miguel), como una cámara que toma tres fotos distintas del mismo mercado: la del comprador, la de la vendedora y la del jugador.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Definimos tres perfiles prioritarios. Carlos, de 22 años, es un coleccionista casual que completa sets de Pokémon con presupuesto limitado y necesita confianza y fotos claras. Andrea, de 28, es una vendedora semiprofesional que publica entre 50 y 100 cartas al mes y busca comisiones transparentes y pagos programados. Miguel, de 21, es un jugador competitivo de Yu-Gi-Oh! que necesita disponibilidad inmediata y envío con seguimiento antes de sus torneos."
+          <span class="tr">Transición → "Con estos tres perfiles claros, veamos por qué TradeTCG le gana a las alternativas que ya existen..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span><b>Carlos:</b> coleccionista casual — confianza y fotos claras.</div>
+          <div class="tri-item"><span class="tri-num">2</span><b>Andrea:</b> vendedora semiprofesional — comisiones y pagos programados.</div>
+          <div class="tri-item"><span class="tri-num">3</span><b>Miguel:</b> jugador competitivo — disponibilidad y envío rastreado.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 4 -->
+  <details class="card r-epic" id="card-4">
+    <summary class="head">
+      <div class="gem">04</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Épica · Diferenciación</div>
+        <div class="card-title">Ventaja frente a la competencia</div>
+        <div class="card-concept">TradeTCG gana por especialización, operación local, reputación y alianzas frente a competidores globales.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Catálogo estructurado</span>
+          <span class="chip">100% local</span>
+          <span class="chip">Reputación</span>
+          <span class="chip">Alianzas</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo CLRA</b> (Catálogo, Local, Reputación, Alianzas) suena a "es CLARA la ventaja". Cuatro letras, cuatro pilares que ninguna plataforma global replica en Panamá.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Frente a TCGplayer y Cardmarket, que son globales y sin logística local, y frente a Mercado Libre o Facebook, que no están especializados en TCG, nuestra ventaja está en cuatro pilares: un catálogo estructurado por set, rareza, idioma y condición; una operación cien por ciento local; reputación transaccional con fotos obligatorias del vendedor; y alianzas tempranas con tiendas y torneos."
+          <span class="tr">Transición → "Esta ventaja se traduce directamente en un modelo de negocio rentable, que es justo lo que veremos ahora..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Catálogo estructurado: set, rareza, idioma, condición.</div>
+          <div class="tri-item"><span class="tri-num">2</span>Operación 100% local, con soporte y logística en Panamá.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Reputación transaccional + alianzas con tiendas y torneos.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 5 -->
+  <details class="card r-epic" id="card-5">
+    <summary class="head">
+      <div class="gem">05</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Épica · Negocio</div>
+        <div class="card-title">¿Por qué es lucrativo?</div>
+        <div class="card-concept">TradeTCG gana comisión de 8–12%, visibilidad y planes premium sin necesidad de inventario propio.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">8–12% comisión</span>
+          <span class="chip">Sin inventario</span>
+          <span class="chip">Visibilidad</span>
+          <span class="chip">Planes premium</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Analogía:</b> somos como el dueño de un mercado de pulgas — no vendemos las cartas, cobramos por el puesto (comisión) y por los stands destacados (visibilidad y planes premium). <b>Acrónimo CVP</b> = Comisión, Visibilidad, Premium.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "El modelo combina transacciones C2C y B2C, y lo más importante: no necesitamos comprar inventario propio. Generamos ingresos de tres formas: una comisión variable de 8 a 12% por transacción, servicios de visibilidad para vendedores que quieren destacar sus cartas, y planes premium con analítica avanzada para tiendas."
+          <span class="tr">Transición → "Para que quede clarísimo cómo se ve esto en números reales, veamos un ejemplo concreto de una transacción..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Comisión variable 8–12% sobre ventas C2C y B2C.</div>
+          <div class="tri-item"><span class="tri-num">2</span>Servicios de visibilidad y destacados para vendedores.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Planes premium con analítica para tiendas y semi-profesionales.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 6 -->
+  <details class="card r-legendary" id="card-6">
+    <summary class="head">
+      <div class="gem">06</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Legendaria · Números que no puedes fallar</div>
+        <div class="card-title">Ejemplo financiero de una venta</div>
+        <div class="card-concept">De cada USD 100 vendidos, TradeTCG gana 8 dólares y el vendedor recibe 88.80 netos.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">USD 100.00</span>
+          <span class="chip">8% comisión</span>
+          <span class="chip">USD 3.20 procesador</span>
+          <span class="chip">USD 88.80 neto</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Cadena numérica de recibo:</b> 100 → menos 8 (nuestra comisión) → menos 3.20 (procesador) → igual 88.80 (vendedor). Memorízalo como si leyeras un ticket de compra de arriba hacia abajo, en ese orden exacto.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Tomemos una venta de 100 dólares. TradeTCG cobra el 8% de comisión, es decir, 8 dólares. El procesador de pagos cobra un costo referencial de 3.20 dólares. Al final, el vendedor recibe 88.80 dólares netos, y nuestro ingreso por esa transacción es de 8 dólares limpios. Multiplicado por un GMV proyectado de 150 a 250 mil dólares en el primer año, hablamos de ingresos estimados entre 12 y 30 mil dólares."
+          <span class="tr">Transición → "Ahora que entendemos el negocio, hablemos de cómo lo construimos técnicamente, empezando por la arquitectura..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Comprador paga <b>USD 100.00</b>.</div>
+          <div class="tri-item"><span class="tri-num">2</span>TradeTCG cobra 8% = <b>USD 8.00</b>.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Procesador cobra USD 3.20 → vendedor recibe <b>USD 88.80</b>.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 7 -->
+  <details class="card r-epic" id="card-7">
+    <summary class="head">
+      <div class="gem">07</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Épica · Tecnología</div>
+        <div class="card-title">Arquitectura tecnológica</div>
+        <div class="card-concept">Un monolito modular con Next.js, Node.js, PostgreSQL, S3 y Redis, escalable a futuro.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Next.js</span>
+          <span class="chip">Node.js</span>
+          <span class="chip">PostgreSQL</span>
+          <span class="chip">S3</span>
+          <span class="chip">Redis</span>
+          <span class="chip">Monolito modular</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Analogía de una casa:</b> Next.js es la fachada que todos ven, Node.js es la tubería interna, PostgreSQL es el sótano donde se guarda todo, S3 es el clóset de fotos, y Redis es la memoria rápida del mayordomo. Todo dentro de una sola casa (monolito modular), no un condominio de microservicios.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Elegimos un stack realista para un MVP, no una arquitectura sobredimensionada. En el frontend usamos Next.js con React y TypeScript para una experiencia mobile-first. El backend corre en Node.js. Los datos viven en PostgreSQL administrado, las fotos se guardan en Amazon S3, y Redis se usa de forma selectiva para caché y tareas asíncronas. Todo esto corre como un monolito modular, no como microservicios desde el día uno, porque eso sería prematuro y costoso."
+          <span class="tr">Transición → "Con esta base, veamos cómo se traduce en el flujo real que sigue un comprador..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span><b>Frontend:</b> Next.js + React + TypeScript, mobile-first.</div>
+          <div class="tri-item"><span class="tri-num">2</span><b>Backend y datos:</b> Node.js + PostgreSQL administrado.</div>
+          <div class="tri-item"><span class="tri-num">3</span><b>Soporte:</b> S3 para archivos y Redis para caché, todo en monolito modular.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 8 -->
+  <details class="card r-rare" id="card-8">
+    <summary class="head">
+      <div class="gem">08</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Rara · Proceso</div>
+        <div class="card-title">Flujo principal de compra</div>
+        <div class="card-concept">Seis pasos: buscar, carrito multi-vendedor, pagar, validar webhook, enviar y liberar el pago.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Buscar</span>
+          <span class="chip">Carrito</span>
+          <span class="chip">Pago</span>
+          <span class="chip">Webhook</span>
+          <span class="chip">Envío</span>
+          <span class="chip">Liberación</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo BCPWEL</b> (Buscar–Carrito–Pago–Webhook–Envío–Liberación). Imagínalo como una carrera de relevos de 6 corredores que se pasan el bastón uno a uno, en ese orden exacto, hasta cruzar la meta.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "El flujo empieza cuando el usuario busca y filtra cartas, selecciona un listado y arma un carrito multi-vendedor. Luego paga con el proveedor externo, y solo cuando el webhook se valida, se confirma el pedido y se notifica al vendedor. El envío se rastrea, y una vez vencida la ventana de reclamación, se ejecuta la transferencia programada al vendedor. Es importante aclarar que no llamamos a esto 'escrow' en términos legales, sino liberación diferida de fondos."
+          <span class="tr">Transición → "Ese pago depende de a quién elijamos como proveedor, así que hablemos de las opciones de pasarelas..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Buscar/filtrar y armar carrito multi-vendedor.</div>
+          <div class="tri-item"><span class="tri-num">2</span>Pagar y validar el webhook.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Enviar con seguimiento y liberar el pago tras la ventana de reclamación.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 9 -->
+  <details class="card r-epic" id="card-9">
+    <summary class="head">
+      <div class="gem">09</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Épica · Pagos</div>
+        <div class="card-title">Integración de pasarelas de pago</div>
+        <div class="card-concept">Comparamos Yappy, PayPal, Stripe Connect y un adquirente regional; ninguno confirma disponibilidad total.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Yappy Comercial</span>
+          <span class="chip">PayPal multiparty</span>
+          <span class="chip">Stripe Connect</span>
+          <span class="chip">Adquirente regional</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo YPSA</b> (Yappy–PayPal–Stripe–Adquirente) suena a "ya pasa": recuerda que las 4 opciones "ya pasan" por una validación pendiente antes de confirmarse.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "Evaluamos cuatro opciones. Yappy Comercial es un método local para comercios afiliados en Panamá, pero no ofrece split de pagos nativo. PayPal multiparty es una solución regional de confianza, sujeta a aprobación por país. Stripe Connect es técnicamente excelente, pero Panamá no aparece en su disponibilidad general de cuentas. Por eso, la opción principal propuesta es un adquirente o PSP regional que confirme por escrito la operación de marketplace en Panamá."
+          <span class="tr">Transición → "Ahora que el dinero está resuelto, hablemos de cómo protegemos toda esta operación con seguridad..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Yappy: local, complementario, sin split nativo.</div>
+          <div class="tri-item"><span class="tri-num">2</span>PayPal multiparty: regional, sujeto a aprobación por país.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Stripe Connect / adquirente regional: condicionados a validar disponibilidad en Panamá.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 10 -->
+  <details class="card r-legendary" id="card-10">
+    <summary class="head">
+      <div class="gem">10</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Legendaria · No se negocia</div>
+        <div class="card-title">Seguridad y confianza</div>
+        <div class="card-concept">La seguridad se apoya en OWASP Top 10:2025, PCI DSS v4.0.1, la Ley 81 y respuesta a incidentes.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">OWASP Top 10:2025</span>
+          <span class="chip">PCI DSS v4.0.1</span>
+          <span class="chip">Ley 81 de 2019</span>
+          <span class="chip">Respuesta a incidentes</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo OPLI</b> (OWASP–PCI–Ley81–Incidentes). Imagina un escudo con 4 placas de armadura, una por cada letra, protegiendo la plataforma de afuera hacia adentro.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "La confianza es el producto, no un extra. Aplicamos OWASP Top 10:2025 para controlar accesos, cifrar datos y exigir autenticación multifactor a los vendedores. Cumplimos PCI DSS v4.0.1, lo que significa que TradeTCG nunca almacena datos de tarjeta, gracias a un checkout alojado por el proveedor. Cumplimos la Ley 81 de 2019 de protección de datos personales en Panamá. Y tenemos un plan de respuesta a incidentes con tiempos definidos de detección, contención y recuperación."
+          <span class="tr">Transición → "Con la plataforma segura, hablemos ahora de cómo la vamos a hacer crecer en el mercado..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>OWASP Top 10:2025: control de acceso, cifrado y MFA.</div>
+          <div class="tri-item"><span class="tri-num">2</span>PCI DSS v4.0.1: cero datos de tarjeta almacenados.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Ley 81 de protección de datos + plan de respuesta a incidentes.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 11 -->
+  <details class="card r-rare" id="card-11">
+    <summary class="head">
+      <div class="gem">11</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Rara · Roadmap</div>
+        <div class="card-title">Camino al crecimiento</div>
+        <div class="card-concept">Cuatro fases en 12 meses: validación, beta, optimización y expansión regional medida por KPIs.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Validación</span>
+          <span class="chip">Beta Panamá</span>
+          <span class="chip">Optimización</span>
+          <span class="chip">Expansión</span>
+          <span class="chip">KPIs</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo VBOE</b> (Validación–Beta–Optimización–Expansión) → frase ancla: "Vamos Bien, Optimizamos y Expandimos", usando la inicial de cada fase en orden.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "El plan tiene cuatro fases. En los meses 1 y 2, validamos con entrevistas y una landing page, buscando 300 registros y 20 vendedores piloto. En los meses 3 y 4, lanzamos la beta en Panamá, con la meta de mil usuarios y cien órdenes. Entre los meses 5 y 8, optimizamos conversión y automatización hasta llegar a tres mil usuarios activos. Y del mes 9 al 12, evaluamos una expansión controlada hacia Costa Rica o Colombia. Todo esto lo medimos con KPIs: take rate de 8 a 12%, CAC menor a 12 dólares, recompra a 90 días mayor a 25%, y un NPS mayor a 40."
+          <span class="tr">Transición → "Y con todo esto sobre la mesa, cerremos con la razón principal por la que TradeTCG es viable..."</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>M1–2 Validación (300 registros, 20 vendedores) y M3–4 Beta Panamá (1,000 usuarios, 100 órdenes).</div>
+          <div class="tri-item"><span class="tri-num">2</span>M5–8 Optimización de conversión hasta 3,000 usuarios activos.</div>
+          <div class="tri-item"><span class="tri-num">3</span>M9–12 Expansión regional controlada, medida con KPIs (take rate, CAC, recompra, NPS).</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- CARTA 12 -->
+  <details class="card r-legendary" id="card-12">
+    <summary class="head">
+      <div class="gem">12</div>
+      <div class="head-text">
+        <div class="rarity-tag sans">Legendaria · Cierre</div>
+        <div class="card-title">Por qué TradeTCG es viable</div>
+        <div class="card-concept">TradeTCG es viable por mercado especializado, comisión sin inventario, arquitectura escalable y confianza.</div>
+      </div>
+    </summary>
+    <div class="body">
+      <div>
+        <div class="block-label">🔑 Palabras clave ancla</div>
+        <div class="chips">
+          <span class="chip">Mercado especializado</span>
+          <span class="chip">Comisión sin inventario</span>
+          <span class="chip">Arquitectura escalable</span>
+          <span class="chip">Confianza</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧠 Fórmula mnemotécnica</div>
+        <div class="mnemo"><b>Acrónimo MCAC</b> (Mercado–Comisión–Arquitectura–Confianza) → frase ancla: "Mercado Con Alta Confianza", tus cuatro argumentos finales en una sola frase.</div>
+      </div>
+      <div>
+        <div class="block-label">🎤 Guion de oratoria</div>
+        <div class="script">
+          "En conclusión, TradeTCG es viable por cuatro razones. Primero, atendemos un mercado especializado con demanda real y sin competencia local directa. Segundo, tenemos un modelo de ingresos ligero, basado en comisión, sin necesidad de inventario propio. Tercero, contamos con una arquitectura de bajo costo inicial que escala con el crecimiento. Y cuarto, la confianza —reputación, seguridad y disputas estandarizadas— es nuestro verdadero diferenciador. El siguiente paso es validar con 15 a 20 entrevistas y cotizaciones formales de pago antes de iniciar el desarrollo. Muchas gracias."
+          <span class="tr">Cierre de la presentación.</span>
+        </div>
+      </div>
+      <div>
+        <div class="block-label">🧩 Tríada (chunking)</div>
+        <div class="triad">
+          <div class="tri-item"><span class="tri-num">1</span>Mercado especializado, sin competencia local directa.</div>
+          <div class="tri-item"><span class="tri-num">2</span>Modelo de ingresos por comisión, sin inventario propio.</div>
+          <div class="tri-item"><span class="tri-num">3</span>Arquitectura escalable + confianza → próximo paso: validar con entrevistas y cotizaciones.</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+</main>
+
+<footer>
+  Guía generada a partir del documento "TradeTCG — Proyecto Final" · Desarrollo de Software IX · practica cada carta en voz alta antes de tu presentación.
+</footer>
+
+</body>
+</html>

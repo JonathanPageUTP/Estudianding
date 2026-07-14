@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeTCG · Guión de Exposición</title>
+<style>
+  :root{
+    --bg:#121212;
+    --bg-raised:#181818;
+    --bg-card:#1c1c1c;
+    --border:#2c2c2c;
+    --text:#e0e0e0;
+    --text-muted:#9a9a9a;
+    --mint:#5eead4;
+    --amber:#f5d76e;
+    --cyan:#7dd3fc;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{ -webkit-text-size-adjust:100%; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .mono{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    padding: 28px 20px 22px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #151515 0%, #121212 100%);
+    position:sticky;
+    top:0;
+    z-index:10;
+  }
+  .eyebrow-top{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin:0 0 6px;
+  }
+  h1.brand{
+    margin:0 0 4px;
+    font-size:24px;
+    line-height:1.25;
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  h1.brand .holo{
+    background:linear-gradient(90deg, var(--mint), var(--cyan) 55%, var(--amber));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .brand-sub{
+    margin:0;
+    color:var(--text-muted);
+    font-size:14.5px;
+  }
+  nav.jumplinks{
+    display:flex;
+    gap:8px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  nav.jumplinks a{
+    text-decoration:none;
+    color:var(--text);
+    background:var(--bg-raised);
+    border:1px solid var(--border);
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    white-space:nowrap;
+  }
+  nav.jumplinks a:focus-visible, a:focus-visible, button:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:2px;
+  }
+  nav.jumplinks a span{ color:var(--mint); }
+
+  main{
+    max-width:640px;
+    margin:0 auto;
+    padding:20px 16px 60px;
+  }
+
+  /* ---------- Slide Card ---------- */
+  section.slide{
+    scroll-margin-top:170px;
+    background:var(--bg-card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    margin-bottom:28px;
+    overflow:hidden;
+    position:relative;
+  }
+  section.slide::before{
+    content:"";
+    display:block;
+    height:4px;
+    width:100%;
+    background:linear-gradient(90deg, var(--mint), var(--cyan) 45%, var(--amber));
+  }
+  .slide-inner{ padding:22px 20px 26px; }
+
+  .slide-eyebrow{
+    font-size:12.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--mint);
+    margin:0 0 8px;
+    font-weight:700;
+  }
+  .slide-title{
+    font-size:22px;
+    font-weight:800;
+    line-height:1.3;
+    margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+
+  .objetivo-box{
+    background:#141d1b;
+    border:1px solid #234942;
+    border-left:3px solid var(--mint);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:22px;
+  }
+  .objetivo-label{
+    font-size:11.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--mint);
+    font-weight:700;
+    margin:0 0 6px;
+  }
+  .objetivo-box p{ margin:0; font-size:16.5px; color:var(--text); }
+
+  .section-label{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin:26px 0 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--border);
+  }
+
+  .guion p{
+    margin:0 0 14px;
+    font-size:18px;
+  }
+  .guion p:last-child{ margin-bottom:0; }
+
+  strong{
+    color:var(--mint);
+    font-weight:700;
+  }
+
+  .cue{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size:14.5px;
+    color:var(--amber);
+    background:#211c10;
+    border:1px solid #40361a;
+    border-radius:8px;
+    padding:9px 12px;
+    margin:0 0 8px;
+    display:block;
+  }
+  .cue:last-child{ margin-bottom:0; }
+  .cue::before{ content:"👁 "; }
+
+  .transicion-box{
+    margin-top:26px;
+    background:#0f1b22;
+    border:1px solid #1f3948;
+    border-left:3px solid var(--cyan);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .transicion-label{
+    font-size:11.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    font-weight:700;
+    margin:0 0 6px;
+  }
+  .transicion-box p{
+    margin:0;
+    font-size:16.5px;
+    font-style:italic;
+    color:var(--text);
+  }
+
+  footer{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 16px 40px;
+    color:var(--text-muted);
+    font-size:13px;
+    text-align:center;
+  }
+
+  @media (min-width:640px){
+    body{ font-size:19px; }
+    .slide-title{ font-size:25px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ scroll-behavior:auto !important; }
+  }
+
+  html{ scroll-behavior:smooth; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow-top mono">Guión de exposición · Proyecto Final</p>
+  <h1 class="brand">Trade<span class="holo">TCG</span></h1>
+  <p class="brand-sub">Arquitectura · Flujo de compra · Integración de pagos</p>
+  <nav class="jumplinks">
+    <a href="#arquitectura"><span>01</span> Arquitectura</a>
+    <a href="#flujo"><span>02</span> Flujo</a>
+    <a href="#pagos"><span>03</span> Pagos</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ SLIDE 1: ARQUITECTURA ============ -->
+  <section class="slide" id="arquitectura">
+    <div class="slide-inner">
+      <p class="slide-eyebrow mono">Diapositiva 01 — Arquitectura</p>
+      <h2 class="slide-title">Un monolito modular, no microservicios prematuros</h2>
+
+      <div class="objetivo-box">
+        <p class="objetivo-label">Objetivo central</p>
+        <p>La audiencia debe entender por qué <strong>elegimos deliberadamente</strong> un monolito modular sobre microservicios y Kubernetes, y que la arquitectura está lista para escalar cuando el negocio lo exija.</p>
+      </div>
+
+      <p class="section-label mono">Qué decir</p>
+      <div class="guion">
+        <p>Antes de hablar del código, hablemos de la decisión más importante que tomamos: <strong>qué no construir todavía.</strong></p>
+
+        <p>Evaluamos tres alternativas: Shopify con apps, un stack personalizado y Adobe Commerce. Elegimos <strong>stack personalizado</strong> porque el dominio TCG exige filtros, condiciones y reglas multi-vendedor muy específicas que ninguna plataforma genérica resuelve bien.</p>
+
+        <p>Pero dentro de ese stack personalizado tomamos otra decisión clave: no vamos a Kubernetes ni microservicios desde el día uno. Vamos con un <strong>monolito modular.</strong></p>
+
+        <p>¿Por qué? Porque esa complejidad, sin usuarios ni transacciones que la justifiquen, sería un costo prematuro.</p>
+
+        <p>Nuestro stack: <strong>Next.js con React y TypeScript</strong> en el frontend, pensado mobile-first. <strong>Node.js</strong> en el backend. <strong>PostgreSQL</strong> como base de datos transaccional. Redis de forma selectiva para caché y tareas asíncronas. Y Amazon S3 para todo el material visual: fotos de cartas, comprobantes, documentos.</p>
+
+        <p>Todo esto se despliega en servicios administrados: <strong>ECS Fargate o App Runner</strong> con autoescalado, detrás de un Application Load Balancer, dentro de una VPC protegida con WAF y CloudFront.</p>
+
+        <p>Y lo más importante: esta arquitectura no es una limitación, es un punto de partida. Está diseñada para <strong>evolucionar hacia servicios desacoplados</strong> cuando el volumen de usuarios lo justifique.</p>
+      </div>
+
+      <p class="section-label mono">Cues visuales</p>
+      <span class="cue">Señalar el diagrama de arquitectura de componentes (Figura 1), siguiendo el flujo de izquierda a derecha.</span>
+      <span class="cue">Detenerse en el bloque central "API Node.js — Monolito modular".</span>
+      <span class="cue">Pasar al diagrama de despliegue (Figura 2) y señalar el recuadro de la VPC AWS.</span>
+
+      <div class="transicion-box">
+        <p class="transicion-label mono">Transición</p>
+        <p>Ya vimos cómo está construida la plataforma por dentro. Ahora sigamos el camino completo que recorre una compra real, de principio a fin.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 2: FLUJO ============ -->
+  <section class="slide" id="flujo">
+    <div class="slide-inner">
+      <p class="slide-eyebrow mono">Diapositiva 02 — Flujo</p>
+      <h2 class="slide-title">El flujo principal de compra, paso a paso</h2>
+
+      <div class="objetivo-box">
+        <p class="objetivo-label">Objetivo central</p>
+        <p>La audiencia debe salir entendiendo que el flujo de compra tiene <strong>puntos de control diseñados para dar confianza</strong>: validación de stock, confirmación por webhook y liberación programada del pago.</p>
+      </div>
+
+      <p class="section-label mono">Qué decir</p>
+      <div class="guion">
+        <p>Este flujo son once pasos, pero en realidad cuenta una sola historia: cómo transformamos una búsqueda en una <strong>transacción segura</strong> para ambas partes.</p>
+
+        <p>Todo empieza cuando el usuario busca y filtra cartas por set, rareza, idioma o condición. Al seleccionar un listado, el sistema <strong>valida el stock</strong> antes de dejarlo avanzar.</p>
+
+        <p>Como es un marketplace multi-vendedor, el carrito puede tener cartas de distintos vendedores a la vez. El checkout calcula envío y comisiones de forma independiente para cada uno.</p>
+
+        <p>El pago ocurre siempre en el <strong>proveedor externo</strong>, nunca dentro de nuestra plataforma. Nosotros no tocamos datos de tarjeta.</p>
+
+        <p>Aquí hay un paso que no podemos saltarnos: el <strong>webhook validado.</strong> Solo cuando el proveedor confirma la transacción por webhook, el pedido se marca como confirmado y se notifica al vendedor.</p>
+
+        <p>El pedido sigue su curso con envío y seguimiento, hasta la recepción o el vencimiento de la ventana de reclamación.</p>
+
+        <p>Y aquí está el corazón financiero del modelo: la transferencia al vendedor no es inmediata, es <strong>programada.</strong> Se libera al confirmarse la entrega o al vencer la ventana de disputa, no antes.</p>
+
+        <p>El ciclo cierra con una reseña o, si algo salió mal, con la apertura de una disputa.</p>
+      </div>
+
+      <p class="section-label mono">Cues visuales</p>
+      <span class="cue">Recorrer el diagrama de flujo (Figura 4) de arriba hacia abajo, en el mismo orden del guión.</span>
+      <span class="cue">Detenerse y marcar con la mano el paso "Webhook validado".</span>
+      <span class="cue">Detenerse en "Transferencia programada al vendedor" antes de seguir bajando.</span>
+
+      <div class="transicion-box">
+        <p class="transicion-label mono">Transición</p>
+        <p>Ese paso de pago en el proveedor externo, y esa transferencia programada, no ocurren por accidente. Dependen de una decisión estratégica sobre cómo integramos los pagos. Vayamos a eso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 3: INTEGRACIÓN DE PAGOS ============ -->
+  <section class="slide" id="pagos">
+    <div class="slide-inner">
+      <p class="slide-eyebrow mono">Diapositiva 03 — Integración de Pagos</p>
+      <h2 class="slide-title">Decisiones condicionadas, no supuestos</h2>
+
+      <div class="objetivo-box">
+        <p class="objetivo-label">Objetivo central</p>
+        <p>La audiencia debe entender que <strong>ninguna pasarela se asume disponible sin confirmación</strong>, y cómo se distribuye el dinero en cada transacción real.</p>
+      </div>
+
+      <p class="section-label mono">Qué decir</p>
+      <div class="guion">
+        <p>En pagos, la corrección más importante de este proyecto fue dejar de asumir cosas que no estaban confirmadas.</p>
+
+        <p>Evaluamos cuatro opciones. <strong>Yappy Comercial:</strong> un método local excelente para cobrar en Panamá, pero que no asume split de pagos nativo; nosotros recibimos y liquidamos según contrato.</p>
+
+        <p><strong>PayPal</strong>, mediante su solución multiparty: pensada para plataformas y marketplaces, pero sujeta a aprobación y disponibilidad por país.</p>
+
+        <p>Una <strong>pasarela o adquirente regional:</strong> nuestra opción principal, si confirma por escrito que soporta operación de marketplace y liquidación programada.</p>
+
+        <p>Y <strong>Stripe Connect:</strong> técnicamente excelente para marketplaces, pero Panamá no aparece en su disponibilidad general de cuentas de pago. Por eso es una alternativa condicionada, no una base del proyecto.</p>
+
+        <p>Veamos el dinero en movimiento con un ejemplo real. Una venta de <strong>cien dólares.</strong> La comisión de TradeTCG es del ocho por ciento: ocho dólares. El procesador cobra un costo referencial de tres dólares con veinte centavos, que en este escenario asume el vendedor.</p>
+
+        <p>El resultado: el vendedor recibe <strong>ochenta y ocho dólares con ochenta centavos,</strong> transferidos de forma programada. TradeTCG se queda con ocho dólares de ingreso neto.</p>
+
+        <p>Una nota importante de lenguaje: este flujo nunca se describe como escrow. Es una <strong>liberación diferida de fondos,</strong> sujeta a la verificación del envío y a la ventana de reclamación.</p>
+      </div>
+
+      <p class="section-label mono">Cues visuales</p>
+      <span class="cue">Señalar la tabla comparativa de las cuatro opciones de pago.</span>
+      <span class="cue">Pasar al diagrama de flujo financiero (Figura 5) y seguir la flecha de izquierda a derecha.</span>
+      <span class="cue">Señalar los montos en orden: USD 100 → comisión USD 8.00 → neto al vendedor USD 88.80.</span>
+
+      <div class="transicion-box">
+        <p class="transicion-label mono">Cierre</p>
+        <p>Con esto cerramos el recorrido: cómo construimos la plataforma, cómo fluye una compra y cómo se mueve el dinero de forma segura. Quedo abierto a sus preguntas.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  TradeTCG · Guión de exposición para presentación oral
+</footer>
+
+</body>
+</html>
