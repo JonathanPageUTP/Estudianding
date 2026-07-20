@@ -121,7 +121,34 @@
     border-radius:999px;
     margin-top:0.5rem;
   }
-
+/* ---------- FILTRO POR TEMA ---------- */
+  .filter-wrap{
+    width:100%;
+    max-width:22rem;
+    text-align:left;
+  }
+  .filter-label{
+    display:block;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color: var(--text-dim);
+    margin-bottom:0.35rem;
+    font-weight:700;
+  }
+  #topic-filter{
+    appearance:none;
+    width:100%;
+    background: var(--card);
+    border:1px solid var(--card-border);
+    color: var(--text);
+    font-size:0.95rem;
+    font-weight:600;
+    padding:0.85rem 1rem;
+    border-radius: 14px;
+    cursor:pointer;
+  }
+  #topic-filter:focus{outline:2px solid var(--accent); outline-offset:2px;}
   /* ---------- QUIZ SCREEN ---------- */
   #quiz-screen{padding-top:0;}
   .progress-track{
@@ -216,12 +243,29 @@
   #next-btn-wrap{
     margin-top:1.4rem;
     min-height:3.2rem;
+    display:flex;
+    gap:0.7rem;
+  }
+  #prev-btn{
+    display:none;
+    appearance:none;
+    border:1px solid var(--card-border);
+    flex:0 0 auto;
+    width:35%;
+    background: transparent;
+    color: var(--text);
+    font-weight:800;
+    font-size:1rem;
+    padding:0.95rem;
+    border-radius: 999px;
+    cursor:pointer;
+    animation: fadeIn .3s ease;
   }
   #next-btn{
     display:none;
     appearance:none;
     border:none;
-    width:100%;
+    flex:1;
     background: var(--accent);
     color: var(--accent-ink);
     font-weight:800;
@@ -268,10 +312,17 @@
     <span class="eyebrow">Principios de Economía</span>
     <h1>Quiz de Macroeconomía</h1>
     <p>100 preguntas basadas en tus documentos: ciclo económico, comercio internacional y balanza de pagos, indicadores macroeconómicos, crecimiento y desarrollo, y tipos de cambio.</p>
-    <div class="stat-row">
+      <div class="stat-row">
       <div class="stat-chip"><b>100</b>preguntas</div>
       <div class="stat-chip"><b>5</b>temas</div>
       <div class="stat-chip"><b>1</b>intento a la vez</div>
+    </div>
+    <div class="filter-wrap">
+      <label class="filter-label" for="topic-filter">Filtrar por tema</label>
+      <select id="topic-filter">
+        <option value="all">Todos los temas</option>
+        <!-- Las demás opciones se rellenan automáticamente con JS -->
+      </select>
     </div>
     <button class="btn-primary" id="start-btn" style="margin-top:0.8rem;">Comenzar Quiz</button>
   </div>
@@ -285,7 +336,10 @@
     </div>
     <div id="question-text"></div>
     <div id="options-container"></div>
-    <div id="next-btn-wrap"><button id="next-btn">Siguiente pregunta →</button></div>
+     <div id="next-btn-wrap">
+      <button id="prev-btn">← Anterior</button>
+      <button id="next-btn">Siguiente pregunta →</button>
+    </div>
   </div>
 
   <!-- RESULTS SCREEN -->
@@ -422,16 +476,23 @@ const questions = [
 {q:"Según el documento, ¿qué transacciones diarias superan los 7 billones de dólares?", options:["Las transacciones del mercado de divisas (Forex)","Solo las de bancos centrales","Solo el comercio de bienes físicos","Solo el turismo"], answer:"Las transacciones del mercado de divisas (Forex)"},
 {q:"¿Cuáles son los participantes del Forex que son los más grandes y realizan transacciones para ellos mismos y sus clientes?", options:["Bancos comerciales","Fondos de pensiones","Cooperativas de ahorro","Casas de cambio locales"], answer:"Bancos comerciales"}
 ];
-
+const CATEGORIES = [
+  { name: "Ciclo Económico", start: 0, end: 20 },
+  { name: "Comercio Internacional y Balanza de Pagos", start: 20, end: 45 },
+  { name: "Indicadores Macroeconómicos", start: 45, end: 65 },
+  { name: "Crecimiento, Desarrollo y Sostenibilidad", start: 65, end: 80 },
+  { name: "Tipos de Cambio y Mercado de Divisas", start: 80, end: 100 }
+];
+CATEGORIES.forEach(cat => {
+  for (let i = cat.start; i < cat.end; i++) {
+    questions[i].cat = cat.name;
+  }
+});
 // =====================================================================
 // LÓGICA DEL QUIZ
 // =====================================================================
-const TOTAL = questions.length; // 100
 let quizSet = [];
 let currentIndex = 0;
-let score = 0;
-let answered = false;
-let advanceTimer = null;
 
 const startScreen = document.getElementById('start-screen');
 const quizScreen = document.getElementById('quiz-screen');
@@ -442,6 +503,16 @@ const scoreLiveEl = document.getElementById('score-live');
 const questionTextEl = document.getElementById('question-text');
 const optionsContainer = document.getElementById('options-container');
 const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('prev-btn');
+const topicFilter = document.getElementById('topic-filter');
+
+// Rellenar el <select> con las categorías disponibles
+CATEGORIES.forEach(cat => {
+  const opt = document.createElement('option');
+  opt.value = cat.name;
+  opt.textContent = cat.name;
+  topicFilter.appendChild(opt);
+});
 
 function shuffle(arr){
   const a = arr.slice();
@@ -452,13 +523,21 @@ function shuffle(arr){
   return a;
 }
 
-function buildQuizSet(){
-  const shuffledQuestions = shuffle(questions);
+function buildQuizSet(selectedCat){
+  const pool = (selectedCat && selectedCat !== 'all')
+    ? questions.filter(q => q.cat === selectedCat)
+    : questions;
+  const shuffledQuestions = shuffle(pool);
   return shuffledQuestions.map(q => ({
     q: q.q,
     answer: q.answer,
-    options: shuffle(q.options)
+    options: shuffle(q.options),
+    userAnswer: null // guarda la opción elegida, para restaurarla al volver
   }));
+}
+
+function getScore(){
+  return quizSet.reduce((acc, q) => acc + (q.userAnswer === q.answer ? 1 : 0), 0);
 }
 
 function showScreen(el){
@@ -467,24 +546,21 @@ function showScreen(el){
 }
 
 function startQuiz(){
-  quizSet = buildQuizSet();
+  quizSet = buildQuizSet(topicFilter.value);
   currentIndex = 0;
-  score = 0;
   showScreen(quizScreen);
   renderQuestion();
 }
 
 function renderQuestion(){
-  answered = false;
-  clearTimeout(advanceTimer);
-  nextBtn.style.display = 'none';
-
-  const progressPct = (currentIndex / TOTAL) * 100;
-  progressFill.style.width = progressPct + '%';
-  counterEl.textContent = 'Pregunta ' + (currentIndex + 1) + ' de ' + TOTAL;
-  scoreLiveEl.textContent = score + ' aciertos';
-
+  const total = quizSet.length;
   const current = quizSet[currentIndex];
+
+  const progressPct = (currentIndex / total) * 100;
+  progressFill.style.width = progressPct + '%';
+  counterEl.textContent = 'Pregunta ' + (currentIndex + 1) + ' de ' + total;
+  scoreLiveEl.textContent = getScore() + ' aciertos';
+
   questionTextEl.textContent = current.q;
   optionsContainer.innerHTML = '';
 
@@ -493,18 +569,36 @@ function renderQuestion(){
     btn.className = 'option-btn';
     const letter = String.fromCharCode(65 + idx);
     btn.innerHTML = '<span class="option-letter">' + letter + '</span><span>' + optText + '</span>';
-    btn.addEventListener('click', () => selectAnswer(optText, btn));
+
+    if(current.userAnswer !== null){
+      // Ya fue respondida antes: restauramos cómo quedó marcada
+      btn.classList.add('disabled');
+      if(optText === current.answer){
+        btn.classList.add('correct');
+      } else if(optText === current.userAnswer){
+        btn.classList.add('incorrect');
+      } else {
+        btn.classList.add('faded');
+      }
+    } else {
+      btn.addEventListener('click', () => selectAnswer(optText, btn));
+    }
+
     optionsContainer.appendChild(btn);
   });
+
+  prevBtn.style.display = currentIndex > 0 ? 'block' : 'none';
+  nextBtn.style.display = current.userAnswer !== null ? 'block' : 'none';
+  nextBtn.textContent = (currentIndex === total - 1) ? 'Ver resultados' : 'Siguiente pregunta →';
 }
 
 function selectAnswer(selectedText, btnEl){
-  if(answered) return;
-  answered = true;
-
   const current = quizSet[currentIndex];
-  const allBtns = optionsContainer.querySelectorAll('.option-btn');
+  if(current.userAnswer !== null) return; // ya respondida
 
+  current.userAnswer = selectedText;
+
+  const allBtns = optionsContainer.querySelectorAll('.option-btn');
   allBtns.forEach(b => {
     b.classList.add('disabled');
     const label = b.querySelector('span:last-child').textContent;
@@ -517,35 +611,37 @@ function selectAnswer(selectedText, btnEl){
     }
   });
 
-  if(selectedText === current.answer){
-    score++;
-    scoreLiveEl.textContent = score + ' aciertos';
-  }
-
-  nextBtn.style.display = 'block';
-  advanceTimer = setTimeout(nextQuestion, 1500);
+  scoreLiveEl.textContent = getScore() + ' aciertos';
+  nextBtn.style.display = 'block'; // el avance ahora es manual
 }
 
-nextBtn.addEventListener('click', () => {
-  clearTimeout(advanceTimer);
-  nextQuestion();
-});
+nextBtn.addEventListener('click', nextQuestion);
+prevBtn.addEventListener('click', prevQuestion);
 
 function nextQuestion(){
   currentIndex++;
-  if(currentIndex >= TOTAL){
+  if(currentIndex >= quizSet.length){
     showResults();
   } else {
     renderQuestion();
   }
 }
 
+function prevQuestion(){
+  if(currentIndex > 0){
+    currentIndex--;
+    renderQuestion();
+  }
+}
+
 function showResults(){
   showScreen(resultsScreen);
-  const pct = Math.round((score / TOTAL) * 100);
+  const total = quizSet.length;
+  const score = getScore();
+  const pct = Math.round((score / total) * 100);
 
   document.getElementById('results-pct').textContent = pct + '%';
-  document.getElementById('results-frac').textContent = score + '/' + TOTAL;
+  document.getElementById('results-frac').textContent = score + '/' + total;
 
   const circumference = 2 * Math.PI * 52;
   const ring = document.getElementById('ring-fill');
