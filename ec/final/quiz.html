@@ -669,7 +669,10 @@ function showResults(){
 }
 
 document.getElementById('start-btn').addEventListener('click', startQuiz);
-document.getElementById('restart-btn').addEventListener('click', startQuiz);
+document.getElementById('restart-btn').addEventListener('click', () => {
+  topicFilter.value = 'all'; // reinicia el filtro, como si recargaras la página
+  showScreen(startScreen);
+});
 </script>
 </body>
 </html>
