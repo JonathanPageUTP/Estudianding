@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Quiz Interactivo · Fundamentos de la Calidad de Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  /* ============ Estilos propios del quiz interactivo ============ */
+  :root{
+    --qz-radius: 16px;
+  }
+  body{ padding-bottom: 110px; }
+
+  .qz-topbar{
+    position: sticky; top: 0; z-index: 300;
+    background: var(--navy, #0F2347);
+    color: #fff;
+    padding: 10px 14px;
+  }
+  .qz-topbar-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px; flex-wrap:wrap;
+  }
+  .qz-title{
+    font-family: var(--font-display, 'Space Grotesk', sans-serif);
+    font-size: 14px;
+    font-weight:600;
+  }
+  .qz-counter{
+    font-family: var(--font-mono, monospace);
+    font-size: 12px;
+    background: rgba(255,255,255,.12);
+    padding: 4px 10px;
+    border-radius: 100px;
+    white-space:nowrap;
+  }
+  .qz-stats{
+    display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;
+  }
+  .qz-stat-chip{
+    display:flex; align-items:center; gap:6px;
+    font-size:11px; font-weight:600;
+    padding: 5px 10px;
+    border-radius: 100px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.18);
+    white-space: nowrap;
+  }
+  .qz-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .qz-dot.green{ background:#3ddc97; }
+  .qz-dot.red{ background:#ff6b6b; }
+  .qz-dot.gray{ background:rgba(255,255,255,.5); }
+
+  .qz-filter-btn{
+    margin-top:8px;
+    width:100%;
+    border:1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.08);
+    color:#fff;
+    font-family: var(--font-display, sans-serif);
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+  }
+  .qz-filter-btn.active{
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+    color: #fff;
+  }
+
+  .qz-progress-track{
+    height:5px; width:100%;
+    background: rgba(255,255,255,.15);
+    border-radius:100px;
+    overflow:hidden;
+    margin-top:10px;
+  }
+  .qz-progress-fill{
+    height:100%;
+    background: linear-gradient(90deg,#00C9A7,#FFB830);
+    width:0%;
+    transition: width .25s ease;
+  }
+
+  .qz-main{
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 18px 14px 24px;
+  }
+
+  .qz-empty{
+    text-align:center;
+    padding: 60px 20px;
+    color: var(--ink3, #6B7280);
+  }
+  .qz-empty h3{ margin-bottom:8px; }
+
+  .qz-card{
+    background: var(--white,#fff);
+    border: 1px solid var(--line,#E5E7EB);
+    border-radius: var(--qz-radius);
+    box-shadow: var(--shadow, 0 4px 24px rgba(15,35,71,.12));
+    padding: 20px 18px 18px;
+  }
+
+  .qz-badge-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom: 12px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .qz-qnum{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width: 30px; height:30px; padding:0 8px;
+    border-radius:100px;
+    background: var(--navy,#0F2347);
+    color:#fff;
+    font-family: var(--font-mono, monospace);
+    font-size:12px; font-weight:700;
+  }
+  .qz-status-tag{
+    font-size:11px; font-weight:700;
+    padding:4px 10px;
+    border-radius:100px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  .qz-status-tag.know{ background:#E6F7F5; color:#00A896; }
+  .qz-status-tag.hard{ background:#FDECEA; color:#E84855; }
+
+  .qz-question{
+    font-family: var(--font-display, sans-serif);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy,#0F2347);
+    line-height:1.4;
+    margin-bottom: 16px;
+  }
+
+  .qz-options{
+    display:flex; flex-direction:column; gap:10px;
+    margin-bottom: 14px;
+  }
+  .qz-option{
+    display:flex; align-items:flex-start; gap:10px;
+    text-align:left;
+    width:100%;
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 2px solid var(--line,#E5E7EB);
+    background: var(--gray50,#F8FAFC);
+    color: var(--ink,#111827);
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 14.5px;
+    line-height:1.45;
+    cursor:pointer;
+    transition: border-color .15s ease, background .15s ease, transform .1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .qz-option:active{ transform: scale(.98); }
+  .qz-option .qz-opt-letter{
+    flex-shrink:0;
+    width:24px; height:24px;
+    border-radius:50%;
+    background: var(--white,#fff);
+    border: 2px solid var(--gray400,#94A3B8);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700;
+    color: var(--gray600,#475569);
+  }
+  .qz-option.selected{
+    border-color: var(--navy,#0F2347);
+    background: var(--navy-bg,#E8EDF5);
+  }
+  .qz-option.correct{
+    border-color: #00A896;
+    background: #E6F7F5;
+  }
+  .qz-option.correct .qz-opt-letter{
+    background:#00A896; border-color:#00A896; color:#fff;
+  }
+  .qz-option.incorrect{
+    border-color: #E84855;
+    background: #FDECEA;
+  }
+  .qz-option.incorrect .qz-opt-letter{
+    background:#E84855; border-color:#E84855; color:#fff;
+  }
+  .qz-option[disabled]{ cursor:default; }
+  .qz-option[disabled]:active{ transform:none; }
+
+  .qz-explain{
+    display:none;
+    background: var(--amber-bg,#FEF3DC);
+    border-left: 4px solid var(--amber2,#F5A623);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: var(--ink2,#374151);
+    line-height:1.6;
+    margin-bottom: 14px;
+  }
+  .qz-explain.visible{ display:block; }
+  .qz-explain strong{ color: var(--navy,#0F2347); }
+
+  .qz-mark-row{
+    display:flex; gap:10px;
+  }
+  .qz-mark-btn{
+    flex:1;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding: 12px 10px;
+    border-radius: 12px;
+    border: 2px solid var(--line,#E5E7EB);
+    background: var(--white,#fff);
+    font-family: var(--font-display, sans-serif);
+    font-size: 13px;
+    font-weight:600;
+    color: var(--ink2,#374151);
+    cursor:pointer;
+    transition: all .15s ease;
+  }
+  .qz-mark-btn:active{ transform: scale(.97); }
+  .qz-mark-btn.know.on{
+    background:#00A896; border-color:#00A896; color:#fff;
+  }
+  .qz-mark-btn.hard.on{
+    background:#E84855; border-color:#E84855; color:#fff;
+  }
+
+  /* ---- Barra inferior fija de navegación ---- */
+  .qz-navbar{
+    position: fixed; bottom:0; left:0; right:0;
+    z-index: 300;
+    background: #fff;
+    border-top: 1px solid var(--line,#E5E7EB);
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 20px rgba(15,35,71,.1);
+  }
+  .qz-navbar-inner{
+    max-width: 640px;
+    margin: 0 auto;
+    display:flex; align-items:center; gap:10px;
+  }
+  .qz-nav-btn{
+    flex:1;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding: 13px 10px;
+    border-radius: 12px;
+    border: none;
+    font-family: var(--font-display, sans-serif);
+    font-size: 14px;
+    font-weight: 700;
+    cursor:pointer;
+    background: var(--navy,#0F2347);
+    color:#fff;
+    transition: opacity .15s ease, transform .1s ease;
+  }
+  .qz-nav-btn:active{ transform: scale(.97); }
+  .qz-nav-btn:disabled{ opacity:.35; cursor:default; }
+  .qz-nav-btn.ghost{
+    background: var(--gray100,#F1F5F9);
+    color: var(--gray700,#374151);
+  }
+  .qz-nav-center{
+    font-family: var(--font-mono, monospace);
+    font-size: 12.5px;
+    font-weight:600;
+    color: var(--ink2,#374151);
+    white-space:nowrap;
+    min-width: 56px;
+    text-align:center;
+  }
+
+  @media (max-width: 420px){
+    .qz-question{ font-size:15.5px; }
+    .qz-option{ font-size:13.5px; padding:11px 12px; }
+    .qz-nav-btn{ font-size:12.5px; padding:12px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="qz-topbar">
+  <div class="qz-topbar-row">
+    <span class="qz-title">Quiz · Calidad de Software (Unidad 1)</span>
+    <span class="qz-counter" id="qzCounter">1 / 60</span>
+  </div>
+
+  <div class="qz-stats">
+    <span class="qz-stat-chip"><span class="qz-dot green"></span> Me la sé: <strong id="statKnow">0</strong></span>
+    <span class="qz-stat-chip"><span class="qz-dot red"></span> Complicadas: <strong id="statHard">0</strong></span>
+    <span class="qz-stat-chip"><span class="qz-dot gray"></span> Sin marcar: <strong id="statNone">60</strong></span>
+  </div>
+
+  <button class="qz-filter-btn" id="filterBtn" type="button">🔴 Ver solo preguntas complicadas</button>
+
+  <div class="qz-progress-track"><div class="qz-progress-fill" id="progressFill"></div></div>
+</header>
+
+<main class="qz-main" id="qzMain">
+  <!-- El contenido de la pregunta se inyecta con JS -->
+</main>
+
+<nav class="qz-navbar">
+  <div class="qz-navbar-inner">
+    <button class="qz-nav-btn ghost" id="btnPrev" type="button">‹ Anterior</button>
+    <span class="qz-nav-center" id="navCenter">1/60</span>
+    <button class="qz-nav-btn" id="btnNext" type="button">Siguiente ›</button>
+  </div>
+</nav>
+
+<script>
+/* ============================================================
+   BANCO DE 60 PREGUNTAS
+   Fuente exclusiva: PDF "Calidad de Software - Unidad 1"
+   ============================================================ */
+const QUESTIONS = [
+{q:'La frase de la portada "La calidad nunca es un accidente; siempre es el resultado de un esfuerzo de la inteligencia" se atribuye a:',
+ options:['John Ruskin','Joseph Juran','W. Edwards Deming','Philip Presman'],
+ correct:0,
+ explain:'La portada del documento atribuye la cita a John Ruskin.'},
+
+{q:'En la etapa artesanal (antes del siglo XX), la calidad dependía exclusivamente de:',
+ options:['Los procesos estandarizados de fábrica','La habilidad del artesano','Las métricas objetivas','Los estándares ISO'],
+ correct:1,
+ explain:'"La calidad dependía exclusivamente de la habilidad del artesano. No existían procesos estandarizados."'},
+
+{q:'En el ejemplo de la etapa artesanal, el carpintero revisaba su pieza terminada, pero:',
+ options:['Documentaba todo el proceso','No documentaba ni controlaba su proceso de producción','Certificaba la pieza con una norma ISO','Aplicaba el ciclo PDCA'],
+ correct:1,
+ explain:'"Un carpintero revisaba su pieza terminada, pero no documentaba ni controlaba su proceso de producción."'},
+
+{q:'La etapa de "Control de calidad" se ubica en el periodo:',
+ options:['1920–1940','1950–1970','1980–1990','1970–actualidad'],
+ correct:0,
+ explain:'El documento indica "Control de calidad (1920–1940)".'},
+
+{q:'Con el auge de la producción en masa (1920–1940), surgió como mecanismo para detectar defectos:',
+ options:['El aseguramiento de la calidad','La inspección','La certificación ISO','El ciclo PDCA'],
+ correct:1,
+ explain:'"Surgió la inspección como mecanismo para detectar defectos."'},
+
+{q:'En el ejemplo de la etapa de control de calidad, las piezas defectuosas se separaban:',
+ options:['Al inicio de la línea de producción','En cada estación de trabajo','Al final de la línea de producción','En un laboratorio externo'],
+ correct:2,
+ explain:'"En fábricas, piezas defectuosas se separaban al final de la línea de producción."'},
+
+{q:'La etapa de "Aseguramiento de la calidad" corresponde al periodo:',
+ options:['1920–1940','1950–1970','1980–1990','1970–actualidad'],
+ correct:1,
+ explain:'El documento indica "Aseguramiento de la calidad (1950–1970)".'},
+
+{q:'¿Qué dos autores impulsaron la idea de prevenir defectos mediante la planificación y mejora de procesos (1950–1970)?',
+ options:['Deming y Juran','Presman y Ruskin','Crosby e Ishikawa','Juran y Presman'],
+ correct:0,
+ explain:'"W. Edwards Deming y Joseph Juran impulsaron la idea de prevenir defectos mediante la planificación y mejora de procesos."'},
+
+{q:'La idea central del "Aseguramiento de la calidad" era:',
+ options:['Detectar defectos únicamente en el producto final','Prevenir defectos mediante la planificación y mejora de procesos','Delegar la calidad solo al departamento de QA','Certificar productos mediante organismos externos'],
+ correct:1,
+ explain:'El aseguramiento de la calidad buscaba prevenir defectos mediante planificación y mejora de procesos.'},
+
+{q:'Como ejemplo del aseguramiento de la calidad, el documento menciona la introducción de:',
+ options:['La norma ISO/IEC 25010','El modelo CMMI','El ciclo PDCA (Plan–Do–Check–Act)','El estándar IEEE 829'],
+ correct:2,
+ explain:'"Ejemplo: Introducción del ciclo PDCA (Plan–Do–Check–Act)."'},
+
+{q:'La "Gestión de la calidad total (TQM)" corresponde al periodo:',
+ options:['1920–1940','1950–1970','1980–1990','1970–actualidad'],
+ correct:2,
+ explain:'El documento indica "Gestión de la calidad total (TQM) (1980–1990)".'},
+
+{q:'En la etapa TQM, la calidad se convierte en responsabilidad de:',
+ options:['Solo el equipo de control de calidad','Solo la gerencia','Toda la organización, con enfoque en la satisfacción del cliente','Solo el cliente final'],
+ correct:2,
+ explain:'"La calidad se convierte en responsabilidad de toda la organización, con enfoque en la satisfacción del cliente."'},
+
+{q:'La etapa "Calidad en software" abarca el periodo:',
+ options:['1920–1940','1950–1970','1980–1990','1970–actualidad'],
+ correct:3,
+ explain:'El documento indica "Calidad en software (1970–actualidad)".'},
+
+{q:'Según el documento, la industria del software adopta principios de calidad adaptados a:',
+ options:['Productos tangibles','Productos intangibles','Servicios manufacturados','Materias primas'],
+ correct:1,
+ explain:'"La industria del software adopta principios de calidad adaptados a productos intangibles."'},
+
+{q:'¿Cuál de las siguientes NO es una prioridad mencionada para la calidad en software?',
+ options:['Prevención de defectos','Métricas objetivas','Modelos de madurez (CMMI, ISO/IEC 25010)','Reducción del precio de venta'],
+ correct:3,
+ explain:'Las prioridades listadas son: prevención de defectos, métricas objetivas y modelos de madurez (CMMI, ISO/IEC 25010).'},
+
+{q:'Según Presman, la calidad de software es un "proceso eficaz de software que se aplica de manera que crea un producto útil que proporciona ___ a quienes lo producen y a quienes lo utilizan":',
+ options:['Bajo costo','Valor medible','Rapidez de entrega','Documentación completa'],
+ correct:1,
+ explain:'"...crea un producto útil que proporciona valor medible a quienes lo producen y a quienes lo utilizan." (Según Presman)'},
+
+{q:'Según la definición general del documento, la calidad de software es el grado en que un producto cumple con:',
+ options:['Solo los requisitos funcionales','Solo el presupuesto asignado','Requisitos funcionales y no funcionales, expectativas implícitas del usuario y estándares establecidos','Solo las pruebas unitarias'],
+ correct:2,
+ explain:'"La calidad de software es el grado en que un producto de software cumple con los requisitos funcionales y no funcionales, así como con las expectativas implícitas del usuario y estándares establecidos."'},
+
+{q:'Según los "puntos clave" del documento, la calidad de software:',
+ options:['Se limita únicamente a que el software funcione','También implica rendimiento, usabilidad, seguridad y mantenibilidad, entre otros','Solo se mide de forma subjetiva','Solo aplica a productos tangibles'],
+ correct:1,
+ explain:'"No se limita a \'funcionar\'; también implica rendimiento, usabilidad, seguridad, mantenibilidad, etc."'},
+
+{q:'La calidad de software se evalúa de forma:',
+ options:['Solo objetiva, mediante métricas','Solo subjetiva, mediante percepción del usuario','Objetiva (métricas) y subjetiva (percepción del usuario)','Ninguna de las anteriores'],
+ correct:2,
+ explain:'"Se evalúa de forma objetiva (métricas) y subjetiva (percepción del usuario)."'},
+
+{q:'Según el documento, la calidad del software se refiere a la capacidad de un software para:',
+ options:['Ser el más económico del mercado','Cumplir con los requisitos del usuario, funcionar eficientemente y ser fácil de mantener','Tener la mayor cantidad de funciones posibles','Ser desarrollado en el menor tiempo posible'],
+ correct:1,
+ explain:'"La calidad del software se refiere a la capacidad de un software para cumplir con los requisitos del usuario, este debe funcionar de manera eficiente y ser fácil de mantener."'},
+
+{q:'En la fase de "Requisitos" del SDLC, el rol de la calidad es asegurar:',
+ options:['Arquitectura coherente y mantenible','Claridad, completitud y trazabilidad para evitar ambigüedades','Código legible, seguro y eficiente','Configuración controlada y libre de errores'],
+ correct:1,
+ explain:'Tabla del SDLC: "Requisitos → Claridad, completitud y trazabilidad para evitar ambigüedades."'},
+
+{q:'En la fase de "Diseño" del SDLC, el rol de la calidad es lograr:',
+ options:['Verificación y validación','Arquitectura coherente y mantenible','Capacidad de corregir y adaptar','Claridad y trazabilidad de requisitos'],
+ correct:1,
+ explain:'Tabla del SDLC: "Diseño → Arquitectura coherente y mantenible."'},
+
+{q:'En la fase de "Implementación" del SDLC, el rol de la calidad busca:',
+ options:['Código legible, seguro y eficiente','Configuración controlada','Trazabilidad de requisitos','Verificación de lo esperado'],
+ correct:0,
+ explain:'Tabla del SDLC: "Implementación → Código legible, seguro y eficiente."'},
+
+{q:'En la fase de "Pruebas" del SDLC, el rol de la calidad es:',
+ options:['Arquitectura mantenible','Verificación y validación de que el software cumple lo esperado','Código seguro','Documentación de políticas'],
+ correct:1,
+ explain:'Tabla del SDLC: "Pruebas → Verificación y validación de que el software cumple lo esperado."'},
+
+{q:'En la fase de "Despliegue" del SDLC, el rol de la calidad es:',
+ options:['Configuración controlada y libre de errores','Redacción de requisitos','Diseño de arquitectura','Pruebas de aceptación del usuario'],
+ correct:0,
+ explain:'Tabla del SDLC: "Despliegue → Configuración controlada y libre de errores."'},
+
+{q:'En la fase de "Mantenimiento" del SDLC, el rol de la calidad es la capacidad de:',
+ options:['Certificar el producto','Corregir, adaptar y mejorar el software sin degradar su calidad','Documentar únicamente los cambios','Repetir las pruebas iniciales'],
+ correct:1,
+ explain:'Tabla del SDLC: "Mantenimiento → Capacidad de corregir, adaptar y mejorar el software sin degradar su calidad."'},
+
+{q:'La Gestión de la Calidad se define como el conjunto de actividades coordinadas para:',
+ options:['Vender más software','Dirigir y controlar una organización respecto a la calidad','Contratar más personal','Reducir el alcance del proyecto'],
+ correct:1,
+ explain:'"Es el conjunto de actividades coordinadas para dirigir y controlar una organización respecto a la calidad."'},
+
+{q:'La Gestión de la Calidad incluye, según el documento:',
+ options:['Planificación de la calidad, control de calidad y mejora continua','Solo pruebas de software','Solo auditorías externas','Solo certificación ISO'],
+ correct:0,
+ explain:'Incluye: planificación de la calidad (definir estándares y métricas), control de calidad (monitorear resultados) y mejora continua.'},
+
+{q:'La Documentación de la calidad se define como:',
+ options:['Un tipo de prueba automatizada','El soporte escrito que describe políticas, procedimientos, estándares y registros de calidad','Un modelo de madurez organizacional','Un organismo certificador'],
+ correct:1,
+ explain:'"Es el soporte escrito que describe políticas, procedimientos, estándares y registros de calidad."'},
+
+{q:'¿Cuál de los siguientes NO es un beneficio de la documentación de la calidad mencionado en el texto?',
+ options:['Facilita auditorías','Garantiza la repetibilidad de procesos','Asegura la trazabilidad de decisiones','Reduce el tiempo de codificación'],
+ correct:3,
+ explain:'Los beneficios listados son: facilita auditorías, garantiza la repetibilidad de procesos y asegura la trazabilidad de decisiones.'},
+
+{q:'Según el documento, un "Modelo" es un documento que:',
+ options:['Define exclusivamente el presupuesto del proyecto','Integra la mayor parte de las mejores prácticas, propone temas de administración y permite medir avances en calidad','Certifica formalmente a un organismo','Es sinónimo exacto de "Norma"'],
+ correct:1,
+ explain:'Los modelos "integran la mayor parte de las mejores prácticas... y permiten medir los avances en calidad."'},
+
+{q:'Según el documento, una "Norma" es:',
+ options:['Un conjunto de opiniones informales','Documentos que proporcionan requisitos, especificaciones, directrices o características utilizables de manera constante para garantizar la adecuación de materiales, productos, procesos y servicios','Un tipo de prueba de rendimiento','Un plan de calidad'],
+ correct:1,
+ explain:'"Documentos que proporcionan requisitos, especificaciones, directrices o características que se pueden utilizar de manera constante..."'},
+
+{q:'Un "Protocolo", según el documento, es:',
+ options:['Un conjunto formal de estándares y normas','Una única prueba funcional','Un tipo de certificación','Un modelo de madurez'],
+ correct:0,
+ explain:'"Protocolo: Conjunto formal de estándares y normas."'},
+
+{q:'Según el documento, un "Estándar" es:',
+ options:['Un informe de auditoría','Pautas que definen criterios de producción para que los procesos se efectúen de la misma forma y obtengan resultados exactos','Un documento exclusivamente legal','Una evidencia de cumplimiento'],
+ correct:1,
+ explain:'"Son aquellas pautas que hacen posible definir un conjunto de criterios de producción... de modo que proveen los medios para que los procesos se efectúen de la misma forma, obteniendo resultados exactos."'},
+
+{q:'La certificación de la calidad es un proceso mediante el cual:',
+ options:['La propia organización se autoevalúa sin supervisión','Un organismo independiente y competente evalúa si algo cumple requisitos establecidos por una norma','El cliente aprueba el producto informalmente','Se documentan únicamente los defectos encontrados'],
+ correct:1,
+ explain:'"Es un proceso mediante el cual un organismo independiente y competente evalúa si una organización, producto, proceso o sistema cumple determinados requisitos establecidos por una norma o esquema de certificación."'},
+
+{q:'En el contexto de gestión de calidad, la certificación normalmente proporciona:',
+ options:['Evidencia externa de conformidad','Una reducción de costos garantizada','Un aumento automático de ventas','La eliminación total de defectos'],
+ correct:0,
+ explain:'"La certificación normalmente proporciona evidencia externa de conformidad."'},
+
+{q:'Según la tabla de certificación de la calidad, ¿qué busca demostrar la "Auditoría"?',
+ options:['Examinar productos o artefactos','Obtener evidencia y determinar si se cumplen criterios','Reconocer la competencia de un organismo','Detectar comportamientos incorrectos'],
+ correct:1,
+ explain:'Tabla: "Auditoría → Obtener evidencia y determinar si se cumplen criterios."'},
+
+{q:'Según la tabla de certificación de la calidad, ¿qué busca demostrar la "Evaluación"?',
+ options:['Determinar características, comportamiento o grado de cumplimiento','Conformidad frente a requisitos de una norma','Examinar productos o artefactos','Reconocer formalmente la competencia de un organismo'],
+ correct:0,
+ explain:'Tabla: "Evaluación → Determinar características, comportamiento o grado de cumplimiento."'},
+
+{q:'Según la tabla de certificación de la calidad, ¿qué busca demostrar el concepto de "Pruebas"?',
+ options:['Conformidad frente a requisitos establecidos por una norma','Detectar comportamientos incorrectos o evidenciar cumplimiento de requisitos','Reconocer la competencia de un organismo','Obtener evidencia general de la organización'],
+ correct:1,
+ explain:'Tabla: "Pruebas → Detectar comportamientos incorrectos o evidenciar cumplimiento de requisitos."'},
+
+{q:'Según la tabla de certificación de la calidad, la "Inspección/revisión" busca:',
+ options:['Examinar productos o artefactos','Certificar formalmente un producto','Determinar el grado de cumplimiento estadístico','Acreditar a un organismo'],
+ correct:0,
+ explain:'Tabla: "Inspección/revisión → Examinar productos o artefactos."'},
+
+{q:'Según la tabla de certificación de la calidad, la "Acreditación" busca:',
+ options:['Detectar comportamientos incorrectos','Reconocer formalmente la competencia de un organismo para realizar determinadas actividades','Documentar procedimientos internos','Evaluar el desempeño de un empleado'],
+ correct:1,
+ explain:'Tabla: "Acreditación → Reconocer formalmente la competencia de un organismo para realizar determinadas actividades."'},
+
+{q:'La versión vigente de ISO/IEC 25010:2023 define, para el producto software:',
+ options:['6 características de calidad','7 características de calidad','9 características de calidad','12 características de calidad'],
+ correct:2,
+ explain:'"La versión vigente define 9 características de calidad del producto software."'},
+
+{q:'Según ISO, las 9 características de calidad del producto software sirven como modelo de referencia para:',
+ options:['Fijar el precio del software','Especificar, medir y evaluar la calidad durante el ciclo de vida','Elegir el lenguaje de programación','Definir el organigrama de la empresa'],
+ correct:1,
+ explain:'"ISO indica que estas características sirven como modelo de referencia para especificar, medir y evaluar la calidad durante el ciclo de vida."'},
+
+{q:'¿Cuál de las siguientes SÍ aparece entre las 9 dimensiones del diagrama ISO/IEC 25010:2023 en el documento?',
+ options:['Profitability','Marketability','Reliability','Scalability comercial'],
+ correct:2,
+ explain:'El diagrama incluye Reliability, junto con Functional Suitability, Performance Efficiency, Compatibility, Interaction Capability, Safety, Flexibility, Maintainability y Security.'},
+
+{q:'¿Cuál de las siguientes NO aparece entre las 9 dimensiones del diagrama ISO/IEC 25010:2023?',
+ options:['Security','Compatibility','Flexibility','Profitability'],
+ correct:3,
+ explain:'El diagrama del documento no incluye "Profitability" entre las 9 dimensiones de calidad del software.'},
+
+{q:'El flujo de gestión de calidad presentado en el documento sigue el orden:',
+ options:['Gestionar → Planificar → Controlar → Documentar → Mejorar','Planificar → Gestionar → Documentar → Controlar → Mejorar','Documentar → Controlar → Planificar → Gestionar → Mejorar','Controlar → Mejorar → Planificar → Gestionar → Documentar'],
+ correct:1,
+ explain:'El documento presenta el flujo: "PLANIFICAR → GESTIONAR → DOCUMENTAR → CONTROLAR → MEJORAR".'},
+
+{q:'La "Planificación de la calidad" consiste en determinar:',
+ options:['Solo el presupuesto del proyecto','Objetivos de calidad, criterios, actividades, responsables, recursos, técnicas y evidencias','Solo los defectos ya detectados','Solo el cronograma general del proyecto'],
+ correct:1,
+ explain:'"Consiste en determinar los objetivos de calidad, los criterios que deberán cumplirse, las actividades necesarias, los responsables, los recursos, las técnicas y las evidencias que permitirán alcanzar y demostrar dichos objetivos."'},
+
+{q:'Un plan de calidad puede especificar, entre otros elementos:',
+ options:['Solo el precio final del software','Estándares, prácticas, recursos, responsabilidades, actividades de prueba, inspección y auditoría','Solo el organigrama del equipo','Solo el lenguaje de programación a usar'],
+ correct:1,
+ explain:'"Un plan de calidad puede especificar estándares, prácticas, recursos, responsabilidades, actividades de prueba, inspección y auditoría, entre otros elementos."'},
+
+{q:'La "Gestión de la calidad" (dentro del flujo) comprende las actividades coordinadas mediante las cuales una organización:',
+ options:['Solo documenta sus procesos','Dirige, controla y mejora sus procesos y recursos para alcanzar los objetivos de calidad','Solo certifica productos externos','Solo capacita empleados'],
+ correct:1,
+ explain:'"La gestión de la calidad comprende las actividades coordinadas mediante las cuales una organización dirige, controla y mejora sus procesos y recursos para alcanzar los objetivos de calidad."'},
+
+{q:'Según el documento, ¿cuál es la diferencia entre planificar y gestionar la calidad?',
+ options:['Planificar es decidir cómo se alcanzará la calidad; gestionar es dirigir y coordinar los recursos y actividades para conseguirla','Son sinónimos exactos','Planificar es ejecutar pruebas; gestionar es documentarlas','Gestionar ocurre antes de planificar'],
+ correct:0,
+ explain:'"Planificar la calidad es decidir cómo se alcanzará la calidad. Gestionar la calidad es dirigir y coordinar los recursos y actividades para conseguirla."'},
+
+{q:'La "Documentación" en el flujo de gestión de calidad es el mecanismo mediante el cual una organización:',
+ options:['Solo almacena archivos sin propósito','Establece, comunica, evidencia y conserva información relacionada con la calidad','Solo genera reportes financieros','Solo capacita a nuevos empleados'],
+ correct:1,
+ explain:'"La documentación es el mecanismo mediante el cual una organización establece, comunica, evidencia y conserva información relacionada con la calidad."'},
+
+{q:'Según el documento, la frase "Documentación de calidad ≠ hacer documentos" significa que:',
+ options:['No es necesario documentar nada','La documentación tiene un propósito de comunicación y evidencia, más allá de generar papeles','Los documentos deben eliminarse tras su uso','Solo los auditores externos deben documentar'],
+ correct:1,
+ explain:'La frase resalta que la documentación de calidad va más allá de simplemente "hacer documentos".'},
+
+{q:'¿Cuál de los siguientes es un "Documento de planificación" según el documento?',
+ options:['Checklist','Plan de calidad','Reporte de defectos','Informe de auditoría'],
+ correct:1,
+ explain:'Los documentos de planificación incluyen: plan de calidad, plan de pruebas, estrategia de pruebas, criterios de aceptación y métricas y objetivos.'},
+
+{q:'¿Cuál de los siguientes es un "Documento de proceso" según el documento?',
+ options:['Plan de calidad','Casos de prueba','Procedimientos','Informes de auditoría'],
+ correct:2,
+ explain:'Los documentos de proceso incluyen: procedimientos, estándares, guías, checklists e instrucciones de trabajo.'},
+
+{q:'¿Cuál de los siguientes es una "Evidencia" según el documento?',
+ options:['Estrategia de pruebas','Reportes de defectos','Guías','Plan de pruebas'],
+ correct:1,
+ explain:'Las evidencias incluyen: casos de prueba, resultados de pruebas, reportes de defectos, informes de auditoría, revisiones, métricas y evidencias de cumplimiento.'},
+
+{q:'El "Control de la calidad (QC)" comprende actividades operativas de:',
+ options:['Solo ventas y marketing','Medición, inspección, revisión, prueba y análisis','Solo contratación de personal','Solo diseño gráfico'],
+ correct:1,
+ explain:'"El control de la calidad (QC) comprende las actividades operativas de medición, inspección, revisión, prueba y análisis utilizadas para determinar si los productos o procesos cumplen los requisitos establecidos."'},
+
+{q:'¿Cuál de las siguientes NO se menciona como actividad de control de calidad (QC) en el documento?',
+ options:['Revisiones de código','Pruebas de rendimiento','Análisis estático','Negociación de contratos'],
+ correct:3,
+ explain:'Las actividades mencionadas son: revisiones de código, inspecciones, pruebas funcionales, pruebas de rendimiento, pruebas de seguridad y análisis estático.'},
+
+{q:'La "Mejora de la calidad" es el conjunto de acciones sistemáticas orientadas a:',
+ options:['Reducir el número de empleados','Identificar oportunidades, corregir problemas y optimizar continuamente procesos y productos','Aumentar el precio del software','Eliminar toda la documentación'],
+ correct:1,
+ explain:'"La mejora de la calidad es el conjunto de acciones sistemáticas orientadas a identificar oportunidades, corregir problemas y optimizar continuamente los procesos y productos de software."'},
+
+{q:'Según el documento, ¿cuál es la diferencia entre controlar y mejorar?',
+ options:['Controlar nos permite saber cómo estamos; mejorar nos permite decidir qué hacer con esa información','Son exactamente lo mismo','Controlar ocurre después de mejorar','Mejorar reemplaza completamente al control'],
+ correct:0,
+ explain:'"Controlar nos permite saber cómo estamos. Mejorar nos permite decidir qué hacer con esa información."'},
+
+{q:'En la actividad "Trabajo en Clase" del documento, ¿cuáles son los cuatro conceptos que se pide definir y comparar?',
+ options:['Modelo, Norma, Protocolo y Estándar','Aseguramiento de la Calidad, Control de la Calidad, Validación del software y Verificación del software','Certificación, Auditoría, Evaluación y Acreditación','Planificar, Gestionar, Documentar y Controlar'],
+ correct:1,
+ explain:'El trabajo en clase pide "Definir y comprender los siguientes conceptos: Aseguramiento de la Calidad, Control de la Calidad, Validación del software, Verificación del software".'}
+];
+
+/* ============================================================
+   ESTADO DE LA APLICACIÓN (en memoria, sin almacenamiento local)
+   ============================================================ */
+const TOTAL = QUESTIONS.length; // 60
+const state = {
+  current: 0,              // índice dentro de la lista filtrada actual
+  marks: new Array(TOTAL).fill(null),   // null | 'know' | 'hard'
+  answered: new Array(TOTAL).fill(null), // índice de opción elegida, o null
+  filterHard: false
+};
+
+/* Devuelve los índices (sobre QUESTIONS) que están visibles según el filtro */
+function getVisibleIndices(){
+  if(!state.filterHard) return QUESTIONS.map((_,i)=>i);
+  return QUESTIONS.map((_,i)=>i).filter(i => state.marks[i] === 'hard');
+}
+
+const qzMain = document.getElementById('qzMain');
+const qzCounter = document.getElementById('qzCounter');
+const navCenter = document.getElementById('navCenter');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
+const filterBtn = document.getElementById('filterBtn');
+const progressFill = document.getElementById('progressFill');
+const statKnow = document.getElementById('statKnow');
+const statHard = document.getElementById('statHard');
+const statNone = document.getElementById('statNone');
+
+function updateStats(){
+  const know = state.marks.filter(m=>m==='know').length;
+  const hard = state.marks.filter(m=>m==='hard').length;
+  statKnow.textContent = know;
+  statHard.textContent = hard;
+  statNone.textContent = TOTAL - know - hard;
+}
+
+function buildOptionLetter(i){ return ['A','B','C','D'][i]; }
+
+function render(){
+  const visible = getVisibleIndices();
+
+  // Si el filtro deja la lista vacía, mostrar mensaje
+  if(visible.length === 0){
+    qzMain.innerHTML = `
+      <div class="qz-empty">
+        <h3>🎉 No tienes preguntas complicadas</h3>
+        <p>Todavía no marcaste ninguna pregunta como 🔴 "Complicada". Desactiva el filtro para ver todas las preguntas.</p>
+      </div>`;
+    qzCounter.textContent = `0 / ${TOTAL}`;
+    navCenter.textContent = `0/0`;
+    btnPrev.disabled = true;
+    btnNext.disabled = true;
+    progressFill.style.width = '0%';
+    return;
+  }
+
+  if(state.current >= visible.length) state.current = visible.length - 1;
+  if(state.current < 0) state.current = 0;
+
+  const qIndex = visible[state.current];
+  const q = QUESTIONS[qIndex];
+  const answeredIdx = state.answered[qIndex];
+  const mark = state.marks[qIndex];
+
+  qzCounter.textContent = `${qIndex+1} / ${TOTAL}`;
+  navCenter.textContent = `${state.current+1}/${visible.length}`;
+  progressFill.style.width = ((qIndex+1)/TOTAL*100) + '%';
+
+  btnPrev.disabled = state.current === 0;
+  btnNext.disabled = state.current === visible.length - 1;
+
+  const statusTagHtml = mark === 'know'
+    ? '<span class="qz-status-tag know">🟢 Me la sé</span>'
+    : mark === 'hard'
+      ? '<span class="qz-status-tag hard">🔴 Por repasar</span>'
+      : '';
+
+  let optionsHtml = '';
+  q.options.forEach((opt, i)=>{
+    let cls = 'qz-option';
+    if(answeredIdx !== null){
+      if(i === q.correct) cls += ' correct';
+      else if(i === answeredIdx) cls += ' incorrect';
+      if(i === answeredIdx) cls += ' selected';
+    }
+    optionsHtml += `
+      <button class="${cls}" data-opt="${i}" ${answeredIdx!==null ? 'disabled' : ''}>
+        <span class="qz-opt-letter">${buildOptionLetter(i)}</span>
+        <span>${opt}</span>
+      </button>`;
+  });
+
+  qzMain.innerHTML = `
+    <div class="qz-card">
+      <div class="qz-badge-row">
+        <span class="qz-qnum">#${qIndex+1}</span>
+        ${statusTagHtml}
+      </div>
+      <div class="qz-question">${q.q}</div>
+      <div class="qz-options">${optionsHtml}</div>
+      <div class="qz-explain ${answeredIdx!==null ? 'visible' : ''}" id="qzExplain">
+        <strong>Explicación:</strong> ${q.explain}
+      </div>
+      <div class="qz-mark-row">
+        <button class="qz-mark-btn know ${mark==='know'?'on':''}" id="btnKnow" type="button">🟢 Me la sé</button>
+        <button class="qz-mark-btn hard ${mark==='hard'?'on':''}" id="btnHard" type="button">🔴 Complicada</button>
+      </div>
+    </div>
+  `;
+
+  // Listeners de opciones
+  qzMain.querySelectorAll('.qz-option').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(state.answered[qIndex] !== null) return;
+      const chosen = parseInt(btn.getAttribute('data-opt'), 10);
+      state.answered[qIndex] = chosen;
+      render();
+    });
+  });
+
+  // Listeners de marcadores (toggle)
+  document.getElementById('btnKnow').addEventListener('click', ()=>{
+    state.marks[qIndex] = state.marks[qIndex] === 'know' ? null : 'know';
+    updateStats();
+    render();
+  });
+  document.getElementById('btnHard').addEventListener('click', ()=>{
+    state.marks[qIndex] = state.marks[qIndex] === 'hard' ? null : 'hard';
+    updateStats();
+    // Si estamos filtrando y esta pregunta deja de ser "hard", el índice actual puede quedar fuera de rango;
+    // render() ya corrige el índice si es necesario.
+    render();
+  });
+}
+
+btnPrev.addEventListener('click', ()=>{
+  state.current = Math.max(0, state.current - 1);
+  render();
+});
+btnNext.addEventListener('click', ()=>{
+  const visible = getVisibleIndices();
+  state.current = Math.min(visible.length - 1, state.current + 1);
+  render();
+});
+
+filterBtn.addEventListener('click', ()=>{
+  state.filterHard = !state.filterHard;
+  state.current = 0;
+  filterBtn.classList.toggle('active', state.filterHard);
+  filterBtn.textContent = state.filterHard
+    ? '✅ Ver todas las preguntas'
+    : '🔴 Ver solo preguntas complicadas';
+  render();
+});
+
+// Inicialización
+updateStats();
+render();
+</script>
+
+</body>
+</html>
