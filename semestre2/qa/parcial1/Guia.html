@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calidad de Software — Mapa de Memoria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<header class="topbar">
+  <span class="topbar-title">🎓 UTP · Calidad de Software</span>
+  <nav class="topbar-pills">
+    <a class="topbar-pill" href="#evolucion">Evolución</a>
+    <a class="topbar-pill" href="#definicion">Definición</a>
+    <a class="topbar-pill" href="#sdlc">SDLC</a>
+    <a class="topbar-pill" href="#conceptos">Conceptos</a>
+    <a class="topbar-pill" href="#certificacion">Certificación</a>
+    <a class="topbar-pill" href="#dimensiones">Dimensiones</a>
+    <a class="topbar-pill" href="#flujo">Flujo PGDCM</a>
+  </nav>
+</header>
+
+<nav class="nav-pills">
+  <a class="nav-pill" href="#evolucion">🕰️ Evolución</a>
+  <a class="nav-pill" href="#definicion">📐 Definición</a>
+  <a class="nav-pill" href="#sdlc">🔁 SDLC</a>
+  <a class="nav-pill" href="#conceptos">🧩 Conceptos</a>
+  <a class="nav-pill" href="#certificacion">🏅 Certificación</a>
+  <a class="nav-pill" href="#dimensiones">📊 Dimensiones</a>
+  <a class="nav-pill" href="#flujo">♻️ Flujo</a>
+</nav>
+
+<section class="hero">
+  <span class="hero-badge">Unidad 1 · Fundamentos</span>
+  <h1>CALIDAD <span>DE SOFTWARE</span></h1>
+  <p>"La calidad nunca es un accidente; siempre es el resultado de un esfuerzo de la inteligencia." — John Ruskin</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>5</strong><span>Etapas históricas</span></div>
+    <div class="hero-stat"><strong>9</strong><span>Características ISO/IEC 25010</span></div>
+    <div class="hero-stat"><strong>5</strong><span>Pasos del flujo de gestión</span></div>
+  </div>
+</section>
+
+<main class="page">
+
+<!-- ===================== EVOLUCIÓN HISTÓRICA ===================== -->
+<section id="evolucion" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">🕰️ Evolución histórica de la calidad</h2>
+  <p class="text-muted mt-sm">La calidad como disciplina ha evolucionado desde un enfoque puramente artesanal hasta convertirse en un componente estratégico en todas las industrias, incluida la del software.</p>
+
+  <div class="memory-box mt-md">
+    <h4>🔑 Ancla mnemotécnica — secuencia cronológica</h4>
+    <p><strong>A</strong>rtesanal → <strong>C</strong>ontrol → <strong>A</strong>seguramiento → <strong>T</strong>QM → <strong>S</strong>oftware &nbsp;=&nbsp; "<strong>A-C-A-T-S</strong>": de la mano del artesano a la ISO/IEC 25010.</p>
+  </div>
+
+  <div class="timeline mt-lg">
+
+    <div class="tl-item">
+      <div class="tl-dot" style="color:#94A3B8"></div>
+      <div class="tl-month"><span class="tag tag-gray">Antes del siglo XX</span></div>
+      <div class="tl-name">1. Etapa artesanal</div>
+      <details>
+        <summary class="text-sm text-muted cursor-pointer">¿Qué recuerdas de esta etapa? Toca para revisar 👇</summary>
+        <div class="tl-desc mt-sm">La calidad dependía <mark>exclusivamente de la habilidad del artesano</mark>. No existían procesos estandarizados, y el control se realizaba únicamente en el producto final.<br><em>Ejemplo:</em> un carpintero revisaba su pieza terminada, pero no documentaba ni controlaba su proceso de producción.</div>
+      </details>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="color:#1D3557"></div>
+      <div class="tl-month"><span class="tag tag-navy">1920–1940</span></div>
+      <div class="tl-name">2. Control de calidad</div>
+      <details>
+        <summary class="text-sm text-muted cursor-pointer">¿Qué recuerdas de esta etapa? Toca para revisar 👇</summary>
+        <div class="tl-desc mt-sm">Con el auge de la <mark class="navy">producción en masa</mark>, surgió la <strong>inspección</strong> como mecanismo para detectar defectos.<br><em>Ejemplo:</em> en fábricas, las piezas defectuosas se separaban al final de la línea de producción.</div>
+      </details>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="color:#00A896"></div>
+      <div class="tl-month"><span class="tag tag-teal">1950–1970</span></div>
+      <div class="tl-name">3. Aseguramiento de la calidad</div>
+      <details>
+        <summary class="text-sm text-muted cursor-pointer">¿Qué recuerdas de esta etapa? Toca para revisar 👇</summary>
+        <div class="tl-desc mt-sm"><strong>W. Edwards Deming</strong> y <strong>Joseph Juran</strong> impulsaron la idea de <mark class="teal">prevenir defectos</mark> mediante la planificación y mejora de procesos.<br><em>Ejemplo:</em> introducción del ciclo <strong>PDCA</strong> (Plan–Do–Check–Act).</div>
+      </details>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="color:#7C3AED"></div>
+      <div class="tl-month"><span class="tag tag-violet">1980–1990</span></div>
+      <div class="tl-name">4. Gestión de la calidad total (TQM)</div>
+      <details>
+        <summary class="text-sm text-muted cursor-pointer">¿Qué recuerdas de esta etapa? Toca para revisar 👇</summary>
+        <div class="tl-desc mt-sm">La calidad se convierte en <mark class="violet">responsabilidad de toda la organización</mark>, con enfoque en la satisfacción del cliente.</div>
+      </details>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="color:#F5A623"></div>
+      <div class="tl-month"><span class="tag tag-amber">1970–actualidad</span></div>
+      <div class="tl-name">5. Calidad en software</div>
+      <details>
+        <summary class="text-sm text-muted cursor-pointer">¿Qué recuerdas de esta etapa? Toca para revisar 👇</summary>
+        <div class="tl-desc mt-sm">La industria del software adopta principios de calidad adaptados a productos intangibles, priorizando:
+          <ul class="mt-sm">
+            <li>Prevención de defectos.</li>
+            <li>Métricas objetivas.</li>
+            <li>Modelos de madurez (<strong>CMMI</strong>, <strong>ISO/IEC 25010</strong>).</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== DEFINICIÓN ===================== -->
+<section id="definicion" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">📐 Definición de la Calidad de Software</h2>
+
+  <div class="card card-navy stripe-navy">
+    <h3 class="card-title">Según Pressman</h3>
+    <details>
+      <summary class="cursor-pointer text-sm font-semibold">Intenta recordar la definición de Pressman antes de ver la respuesta 👇</summary>
+      <p class="mt-sm">"<strong>Proceso</strong> eficaz de software que se aplica de manera que crea un <strong>producto</strong> útil que proporciona <strong>valor medible</strong> a quienes lo producen y a quienes lo utilizan."</p>
+    </details>
+  </div>
+
+  <div class="memory-box mt-md">
+    <h4>🔑 Ancla — 3 palabras clave de Pressman</h4>
+    <p><strong>PROCESO</strong> → <strong>PRODUCTO</strong> → <strong>VALOR MEDIBLE</strong>. Piensa: "un proceso hace un producto que vale para todos".</p>
+  </div>
+
+  <div class="card mt-lg">
+    <h3 class="card-title">Definición general</h3>
+    <details open>
+      <summary class="cursor-pointer text-sm font-semibold">Definición completa</summary>
+      <p class="mt-sm">La calidad de software es <mark>el grado en que un producto de software cumple con los requisitos funcionales y no funcionales</mark>, así como con las expectativas implícitas del usuario y estándares establecidos.</p>
+    </details>
+
+    <div class="divider"></div>
+
+    <h4 class="mb-2">Puntos clave</h4>
+    <div class="grid-2 mt-sm">
+      <div class="callout callout-teal">
+        <h4>No solo "funcionar"</h4>
+        <p>También implica rendimiento, usabilidad, seguridad, mantenibilidad, etc.</p>
+      </div>
+      <div class="callout callout-amber">
+        <h4>Doble evaluación</h4>
+        <p>Se evalúa de forma <strong>objetiva</strong> (métricas) y <strong>subjetiva</strong> (percepción del usuario).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROL EN EL SDLC ===================== -->
+<section id="sdlc" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">🔁 Rol de la Calidad de Software en el SDLC</h2>
+  <p class="text-muted">La calidad del software se refiere a la capacidad de un software para cumplir con los requisitos del usuario; este debe funcionar de manera eficiente y ser fácil de mantener.</p>
+
+  <div class="phases-grid mt-lg">
+
+    <div class="phase-card">
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:var(--navy-bg);color:var(--navy)">📋</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:var(--navy)">FASE 1</div>
+          <div class="phase-name">Requisitos</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>Claridad, completitud y trazabilidad para evitar ambigüedades.</p>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:var(--accent-bg);color:var(--accent2)">🏗️</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:var(--accent2)">FASE 2</div>
+          <div class="phase-name">Diseño</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>Arquitectura coherente y mantenible.</p>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:var(--violet-bg);color:var(--violet)">💻</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:var(--violet)">FASE 3</div>
+          <div class="phase-name">Implementación</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>Código legible, seguro y eficiente.</p>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:var(--amber-bg);color:var(--act-dark)">🧪</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:var(--act-dark)">FASE 4</div>
+          <div class="phase-name">Pruebas</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>Verificación y validación de que el software cumple lo esperado.</p>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:var(--red-bg);color:var(--red2)">🚀</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:var(--red2)">FASE 5</div>
+          <div class="phase-name">Despliegue</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>Configuración controlada y libre de errores.</p>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <div class="phase-card-header" onclick="togglePhase(this)">
+        <div class="phase-icon" style="background:var(--gray100);color:var(--gray600)">🔧</div>
+        <div class="phase-meta">
+          <div class="phase-month" style="color:var(--gray600)">FASE 6</div>
+          <div class="phase-name">Mantenimiento</div>
+        </div>
+        <div class="phase-toggle">⌄</div>
+      </div>
+      <div class="phase-body">
+        <p>Capacidad de corregir, adaptar y mejorar el software sin degradar su calidad.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="memory-box mt-lg">
+    <h4>🔑 Ancla — secuencia del SDLC</h4>
+    <p><strong>R</strong>equisitos → <strong>D</strong>iseño → <strong>I</strong>mplementación → <strong>P</strong>ruebas → <strong>D</strong>espliegue → <strong>M</strong>antenimiento &nbsp;=&nbsp; "<strong>RDIPDM</strong>": Rita Diseña, Implementa, Prueba, Despliega y Mantiene.</p>
+  </div>
+</section>
+
+<!-- ===================== CONCEPTOS RELACIONADOS ===================== -->
+<section id="conceptos" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">🧩 Conceptos relacionados con la Calidad de Software</h2>
+
+  <div class="qa-list">
+
+    <div class="qa-item">
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">1</span>
+        Gestión de la Calidad
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer">
+        Es el conjunto de <strong>actividades coordinadas</strong> para dirigir y controlar una organización respecto a la calidad. Incluye:
+        <ul class="mt-sm">
+          <li><strong>Planificación de la calidad</strong> (definir estándares y métricas).</li>
+          <li><strong>Control de calidad</strong> (monitorear resultados).</li>
+          <li><strong>Mejora continua</strong> (optimizar procesos y productos).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">2</span>
+        Documentación de la calidad
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer">
+        Es el <strong>soporte escrito</strong> que describe políticas, procedimientos, estándares y registros de calidad.
+        <br><br><strong>Beneficios:</strong>
+        <ul class="mt-sm">
+          <li>Facilita auditorías.</li>
+          <li>Garantiza la repetibilidad de procesos.</li>
+          <li>Asegura la trazabilidad de decisiones.</li>
+        </ul>
+        <div class="callout callout-amber mt-md"><strong>"Documentación de calidad ≠ hacer documentos"</strong></div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">3</span>
+        Modelo
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer">
+        Son aquellos documentos que integran la mayor parte de las <strong>mejores prácticas</strong>, proponen temas de administración en los que cada organización debe hacer énfasis, integran diferentes prácticas dirigidas a los procesos clave y permiten <strong>medir los avances</strong> en calidad.
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">4</span>
+        Norma
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer">
+        Documentos que proporcionan <strong>requisitos, especificaciones, directrices o características</strong> que se pueden utilizar de manera constante para garantizar que los materiales, productos, procesos y servicios sean adecuados para su finalidad.
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">5</span>
+        Protocolo
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer">
+        Conjunto <strong>formal</strong> de estándares y normas.
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <button class="qa-question" onclick="toggleQA(this)">
+        <span class="qa-q-num">6</span>
+        Estándar
+        <span class="qa-chevron">⌄</span>
+      </button>
+      <div class="qa-answer">
+        Son aquellas <strong>pautas</strong> que hacen posible definir un conjunto de criterios de producción que rigen la manera cómo se aplica la Ingeniería de Software. De modo que proveen los medios para que los procesos se efectúen de la <strong>misma forma</strong>, obteniendo resultados exactos.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="memory-box mt-lg">
+    <h4>🔑 Ancla — jerarquía de conceptos</h4>
+    <p><strong>Norma</strong> (requisito general) → se agrupa en un <strong>Protocolo</strong> (conjunto formal de normas/estándares) → un <strong>Modelo</strong> integra mejores prácticas para medir avances → un <strong>Estándar</strong> asegura que el proceso se repita igual siempre.</p>
+  </div>
+
+  <div class="mt-lg">
+    <details>
+      <summary class="cursor-pointer font-semibold text-navy">🗺️ Ejercicio de clase original: relaciona estos 4 conceptos (Aseguramiento, Control, Validación, Verificación) según Definición, Objetivo, Enfoque, Actividades, Ejemplo, Diferencia y Relaciones — toca para ver la consigna</summary>
+      <div class="card card-teal mt-md">
+        <p><strong>Trabajo en Clase.</strong> Definir y comprender: Aseguramiento de la Calidad · Control de la Calidad · Validación del software · Verificación del software.</p>
+        <p class="mt-sm">Para cada uno: Definición (¿qué significa?), Objetivo (¿qué busca conseguir?), Enfoque (¿proceso? ¿producto? ¿requisitos? ¿usuario?), Actividades (mínimo 2 concretas), Ejemplo, Diferencia (con los otros tres) y Relaciones (cómo se conecta con los otros tres). Luego, construir un esquema o mapa que explique cómo se relacionan los cuatro conceptos.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== CERTIFICACIÓN ===================== -->
+<section id="certificacion" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">🏅 Certificación de la calidad</h2>
+
+  <div class="card stripe-amber">
+    <h3 class="card-title">¿Qué es certificación?</h3>
+    <details>
+      <summary class="cursor-pointer text-sm font-semibold">Recuerda antes de revisar 👇</summary>
+      <p class="mt-sm">La <strong>certificación de la calidad</strong> es un proceso mediante el cual un <mark class="navy">organismo independiente y competente</mark> evalúa si una organización, producto, proceso o sistema cumple determinados requisitos establecidos por una norma o esquema de certificación.</p>
+      <p>En el contexto de gestión de calidad, la certificación normalmente proporciona <strong>evidencia externa de conformidad</strong>.</p>
+    </details>
+  </div>
+
+  <h3 class="mt-lg mb-2">Conceptos asociados — ¿qué busca demostrar cada uno?</h3>
+  <div class="overflow-x-auto">
+    <table class="data-table">
+      <thead>
+        <tr><th>Concepto</th><th>¿Qué busca demostrar?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Certificación</strong></td><td>Conformidad frente a requisitos establecidos por una norma/esquema.</td></tr>
+        <tr><td><strong>Auditoría</strong></td><td>Obtener evidencia y determinar si se cumplen criterios.</td></tr>
+        <tr><td><strong>Evaluación</strong></td><td>Determinar características, comportamiento o grado de cumplimiento.</td></tr>
+        <tr><td><strong>Pruebas</strong></td><td>Detectar comportamientos incorrectos o evidenciar cumplimiento de requisitos.</td></tr>
+        <tr><td><strong>Inspección/revisión</strong></td><td>Examinar productos o artefactos.</td></tr>
+        <tr><td><strong>Acreditación</strong></td><td>Reconocer formalmente la competencia de un organismo para realizar determinadas actividades.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="memory-box mt-md">
+    <h4>🔑 Ancla — CAEPIA</h4>
+    <p><strong>C</strong>ertificación, <strong>A</strong>uditoría, <strong>E</strong>valuación, <strong>P</strong>ruebas, <strong>I</strong>nspección, <strong>A</strong>creditación. De lo más formal (certificación por un organismo) a lo más operativo (probar/inspeccionar).</p>
+  </div>
+</section>
+
+<!-- ===================== DIMENSIONES ===================== -->
+<section id="dimensiones" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">📊 Dimensiones de la calidad del software</h2>
+  <p class="text-muted">Las dimensiones de la calidad son las diferentes <strong>características o atributos</strong> mediante los cuales se puede describir, analizar, evaluar y medir la calidad de un producto software.</p>
+
+  <div class="callout callout-navy mt-md">
+    <h4>ISO/IEC 25010:2023</h4>
+    <p>La versión vigente define <strong>9 características de calidad del producto software</strong>. ISO indica que estas características sirven como modelo de referencia para <strong>especificar, medir y evaluar</strong> la calidad durante el ciclo de vida.</p>
+  </div>
+
+  <details class="mt-lg">
+    <summary class="cursor-pointer font-semibold text-navy">🧠 ¿Puedes nombrar las 9 características antes de verlas? Toca para revisar</summary>
+    <div class="grid-3 mt-md">
+      <div class="benefit-chip"><span class="bi">🎯</span><div class="benefit-chip-text"><strong>Functional Suitability</strong><span>Adecuación funcional</span></div></div>
+      <div class="benefit-chip"><span class="bi">⚡</span><div class="benefit-chip-text"><strong>Performance Efficiency</strong><span>Eficiencia de desempeño</span></div></div>
+      <div class="benefit-chip"><span class="bi">🤝</span><div class="benefit-chip-text"><strong>Interaction Capability</strong><span>Capacidad de interacción</span></div></div>
+      <div class="benefit-chip"><span class="bi">🛡️</span><div class="benefit-chip-text"><strong>Safety</strong><span>Seguridad física / de uso</span></div></div>
+      <div class="benefit-chip"><span class="bi">🌀</span><div class="benefit-chip-text"><strong>Flexibility</strong><span>Flexibilidad</span></div></div>
+      <div class="benefit-chip"><span class="bi">🔄</span><div class="benefit-chip-text"><strong>Reliability</strong><span>Confiabilidad</span></div></div>
+      <div class="benefit-chip"><span class="bi">🛠️</span><div class="benefit-chip-text"><strong>Maintainability</strong><span>Mantenibilidad</span></div></div>
+      <div class="benefit-chip"><span class="bi">🔒</span><div class="benefit-chip-text"><strong>Security</strong><span>Seguridad de información</span></div></div>
+      <div class="benefit-chip"><span class="bi">🔌</span><div class="benefit-chip-text"><strong>Compatibility</strong><span>Compatibilidad</span></div></div>
+    </div>
+  </details>
+
+  <div class="memory-box mt-lg">
+    <h4>🔑 Ancla — 9 pétalos alrededor de "Software Quality"</h4>
+    <p>Imagina una flor de <strong>9 pétalos</strong> girando en sentido horario desde arriba: <em>Functional Suitability → Performance Efficiency → Interaction Capability → Safety → Flexibility → Reliability → Maintainability → Security → Compatibility</em>, y vuelve al inicio.</p>
+  </div>
+</section>
+
+<!-- ===================== FLUJO DE GESTIÓN ===================== -->
+<section id="flujo" class="fade-up">
+  <span class="s-label">Fundamentos de la calidad de software</span>
+  <h2 class="section-title">♻️ Flujo de gestión de calidad</h2>
+
+  <div class="card card-navy text-center">
+    <h3 class="text-navy" style="font-family:var(--font-mono);letter-spacing:.05em;">PLANIFICAR → GESTIONAR → DOCUMENTAR → CONTROLAR → MEJORAR</h3>
+  </div>
+
+  <div class="memory-box mt-md">
+    <h4>🔑 Ancla — acrónimo PGDCM</h4>
+    <p><strong>P</strong>ara <strong>G</strong>anar <strong>D</strong>ebes <strong>C</strong>ontrolar y <strong>M</strong>ejorar. Cada palabra clave = una etapa del flujo.</p>
+  </div>
+
+  <div class="pdca-grid mt-lg">
+    <div class="pdca-block plan" data-letter="P">
+      <div class="pdca-letter">Paso 1</div>
+      <div class="pdca-word">Planificar</div>
+      <details>
+        <summary style="color:rgba(255,255,255,.85);cursor:pointer;font-size:13px;">Toca para revisar</summary>
+        <ul class="pdca-list mt-sm">
+          <li>Determinar objetivos de calidad, criterios, actividades, responsables, recursos, técnicas y evidencias.</li>
+          <li><strong>Plan de calidad:</strong> especifica estándares, prácticas, recursos, responsabilidades, actividades de prueba, inspección y auditoría.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="pdca-block do" data-letter="G">
+      <div class="pdca-letter">Paso 2</div>
+      <div class="pdca-word">Gestionar</div>
+      <details>
+        <summary style="color:rgba(255,255,255,.85);cursor:pointer;font-size:13px;">Toca para revisar</summary>
+        <ul class="pdca-list mt-sm">
+          <li>Actividades coordinadas para dirigir, controlar y mejorar procesos y recursos.</li>
+          <li><em>Planificar</em> = decidir cómo alcanzar la calidad. <em>Gestionar</em> = dirigir y coordinar recursos para conseguirla.</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="pdca-block check" data-letter="D">
+      <div class="pdca-letter">Paso 3</div>
+      <div class="pdca-word">Documentar</div>
+      <details>
+        <summary style="color:rgba(255,255,255,.85);cursor:pointer;font-size:13px;">Toca para revisar</summary>
+        <ul class="pdca-list mt-sm">
+          <li>Mecanismo mediante el cual una organización establece, comunica, evidencia y conserva información relacionada con la calidad.</li>
+          <li>"Documentación de calidad ≠ hacer documentos".</li>
+        </ul>
+      </details>
+    </div>
+
+    <div class="pdca-block act" data-letter="C">
+      <div class="pdca-letter">Paso 4</div>
+      <div class="pdca-word">Controlar</div>
+      <details>
+        <summary style="color:rgba(255,255,255,.85);cursor:pointer;font-size:13px;">Toca para revisar</summary>
+        <ul class="pdca-list mt-sm">
+          <li><strong>QC:</strong> medición, inspección, revisión, prueba y análisis para determinar cumplimiento; genera acciones correctivas.</li>
+          <li>Revisiones de código, inspecciones, pruebas funcionales, de rendimiento, de seguridad, análisis estático…</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  <div class="card mt-lg stripe-violet">
+    <h3 class="card-title">Paso 5 — Mejorar</h3>
+    <details>
+      <summary class="cursor-pointer text-sm font-semibold">Toca para revisar</summary>
+      <p class="mt-sm">Conjunto de acciones sistemáticas orientadas a identificar oportunidades, corregir problemas y optimizar continuamente los procesos y productos de software, utilizando resultados, métricas, hallazgos y lecciones aprendidas.</p>
+      <div class="callout callout-violet mt-sm"><strong>Controlar</strong> nos permite saber cómo estamos. <strong>Mejorar</strong> nos permite decidir qué hacer con esa información.</div>
+    </details>
+  </div>
+
+  <h3 class="mt-xl mb-2">Documentar en detalle — 3 columnas</h3>
+  <p class="text-muted text-sm">Antes de expandir cada columna, intenta recordar qué documentos van en cada categoría.</p>
+  <div class="grid-3 mt-md">
+    <details class="card">
+      <summary class="cursor-pointer font-semibold text-navy">📑 Documentos de planificación</summary>
+      <ul class="mt-sm text-sm">
+        <li>Plan de calidad</li>
+        <li>Plan de pruebas</li>
+        <li>Estrategia de pruebas</li>
+        <li>Criterios de aceptación</li>
+        <li>Métricas y objetivos</li>
+      </ul>
+    </details>
+    <details class="card">
+      <summary class="cursor-pointer font-semibold text-navy">⚙️ Documentos de proceso</summary>
+      <ul class="mt-sm text-sm">
+        <li>Procedimientos</li>
+        <li>Estándares</li>
+        <li>Guías</li>
+        <li>Checklists</li>
+        <li>Instrucciones de trabajo</li>
+      </ul>
+    </details>
+    <details class="card">
+      <summary class="cursor-pointer font-semibold text-navy">📎 Evidencias</summary>
+      <ul class="mt-sm text-sm">
+        <li>Casos de prueba</li>
+        <li>Resultados de pruebas</li>
+        <li>Reportes de defectos</li>
+        <li>Informes de auditoría</li>
+        <li>Revisiones</li>
+        <li>Métricas</li>
+        <li>Evidencias de cumplimiento</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="memory-box mt-lg">
+    <h4>🔑 Ancla — 3 tipos de documentos</h4>
+    <p><strong>Planificación</strong> (antes: "¿qué haremos?") → <strong>Proceso</strong> (durante: "¿cómo lo haremos siempre igual?") → <strong>Evidencias</strong> (después: "¿qué probamos que hicimos?").</p>
+  </div>
+</section>
+
+<footer class="section text-center">
+  <p class="text-muted text-sm">Calidad de Software · UTP — Facultad de Ingeniería de Sistemas Computacionales</p>
+</footer>
+
+</main>
+
+<script>
+  // Barra de progreso de scroll
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+  });
+
+  // Q&A acordeón
+  function toggleQA(btn) {
+    const item = btn.closest('.qa-item');
+    const answer = item.querySelector('.qa-answer');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.qa-item.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.qa-answer').classList.remove('visible');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.classList.add('visible');
+    }
+  }
+
+  // Phase cards toggle
+  function togglePhase(header) {
+    const card = header.closest('.phase-card');
+    const body = card.querySelector('.phase-body');
+    const isOpen = card.classList.contains('open');
+    if (isOpen) {
+      card.classList.remove('open');
+      body.classList.remove('visible');
+    } else {
+      card.classList.add('open');
+      body.classList.add('visible');
+    }
+  }
+
+  // Fade-up al hacer scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Nav pills — resaltar activo según scroll
+  const sections = document.querySelectorAll('main section[id]');
+  const navPills = document.querySelectorAll('.nav-pill');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 120 && rect.bottom >= 120) current = sec.id;
+    });
+    navPills.forEach(p => {
+      p.classList.toggle('active', p.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
