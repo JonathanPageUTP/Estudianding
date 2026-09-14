@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1 — Fundamentos | GPI 8469</title>
+    <style id="tw-offline">
+/* Reset minimo (equivalente a Tailwind preflight, reducido) */
+*,::before,::after{box-sizing:border-box}
+h1,h2,h3,h4,h5,h6,p,blockquote,figure{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+a{color:inherit;text-decoration:inherit}
+img{display:block;max-width:100%;height:auto}
+table{border-collapse:collapse}
+/* Utilidades base */
+.absolute{position:absolute}
+.bg-blue-100{background-color:#dbeafe}
+.bg-blue-50{background-color:#eff6ff}
+.bg-blue-600{background-color:#2563eb}
+.bg-center{background-position:center}
+.bg-cover{background-size:cover}
+.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-from,transparent), var(--tw-to,transparent))}
+.bg-gray-100{background-color:#f3f4f6}
+.bg-gray-50{background-color:#f9fafb}
+.bg-green-100{background-color:#dcfce7}
+.bg-green-50{background-color:#f0fdf4}
+.bg-green-700{background-color:#15803d}
+.bg-green-900{background-color:#14532d}
+.bg-green-900\/25{background-color:rgba(20,83,45,0.25)}
+.bg-purple-50{background-color:#faf5ff}
+.bg-red-50{background-color:#fef2f2}
+.bg-white{background-color:#fff}
+.bg-white\/10{background-color:rgba(255,255,255,0.1)}
+.bg-white\/15{background-color:rgba(255,255,255,0.15)}
+.bg-yellow-100{background-color:#fef9c3}
+.bg-yellow-50{background-color:#fefce8}
+.border{border-width:1px;border-style:solid;border-color:#e5e7eb}
+.border-blue-200{border-color:#bfdbfe}
+.border-blue-300{border-color:#93c5fd}
+.border-collapse{border-collapse:collapse}
+.border-gray-100{border-color:#f3f4f6}
+.border-gray-200{border-color:#e5e7eb}
+.border-gray-300{border-color:#d1d5db}
+.border-green-200{border-color:#bbf7d0}
+.border-green-300{border-color:#86efac}
+.border-purple-200{border-color:#e9d5ff}
+.border-red-200{border-color:#fecaca}
+.border-t{border-top-width:1px;border-top-style:solid;border-top-color:#e5e7eb}
+.border-white\/20{border-color:rgba(255,255,255,0.2)}
+.border-white\/25{border-color:rgba(255,255,255,0.25)}
+.border-yellow-200{border-color:#fef08a}
+.border-yellow-300{border-color:#fde047}
+.container{width:100%}
+.flex{display:flex}
+.flex-col{flex-direction:column}
+.flex-shrink-0{flex-shrink:0}
+.flex-wrap{flex-wrap:wrap}
+.font-bold{font-weight:700}
+.font-extrabold{font-weight:800}
+.font-semibold{font-weight:600}
+.from-green-50{--tw-from:#f0fdf4}
+.gap-1{gap:0.25rem}
+.gap-2{gap:0.5rem}
+.gap-3{gap:0.75rem}
+.gap-4{gap:1rem}
+.gap-6{gap:1.5rem}
+.grid{display:grid}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.h-10{height:2.5rem}
+.h-9{height:2.25rem}
+.hidden{display:none}
+.hover\:bg-gray-200:hover{background-color:#e5e7eb}
+.hover\:bg-green-200:hover{background-color:#bbf7d0}
+.hover\:bg-green-600:hover{background-color:#16a34a}
+.hover\:bg-white\/20:hover{background-color:rgba(255,255,255,0.2)}
+.hover\:text-white:hover{color:#fff}
+.inline-block{display:inline-block}
+.inset-0{top:0;right:0;bottom:0;left:0}
+.italic{font-style:italic}
+.items-center{align-items:center}
+.items-start{align-items:flex-start}
+.justify-between{justify-content:space-between}
+.justify-center{justify-content:center}
+.justify-start{justify-content:flex-start}
+.leading-relaxed{line-height:1.625}
+.max-w-2xl{max-width:42rem}
+.mb-1{margin-bottom:0.25rem}
+.mb-2{margin-bottom:0.5rem}
+.mb-3{margin-bottom:0.75rem}
+.mb-4{margin-bottom:1rem}
+.mb-5{margin-bottom:1.25rem}
+.mb-6{margin-bottom:1.5rem}
+.mb-8{margin-bottom:2rem}
+.mt-0\.5{margin-top:0.125rem}
+.mt-1{margin-top:0.25rem}
+.mt-12{margin-top:3rem}
+.mt-4{margin-top:1rem}
+.mt-6{margin-top:1.5rem}
+.mx-auto{margin-left:auto;margin-right:auto}
+.object-contain{object-fit:contain}
+.opacity-80{opacity:.8}
+.opacity-90{opacity:.9}
+.overflow-hidden{overflow:hidden}
+.overflow-x-auto{overflow-x:auto}
+.p-0\.5{padding:0.125rem}
+.p-3{padding:0.75rem}
+.p-4{padding:1rem}
+.p-5{padding:1.25rem}
+.p-6{padding:1.5rem}
+.pt-4{padding-top:1rem}
+.px-3{padding-left:0.75rem;padding-right:0.75rem}
+.px-4{padding-left:1rem;padding-right:1rem}
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+.px-6{padding-left:1.5rem;padding-right:1.5rem}
+.py-1{padding-top:0.25rem;padding-bottom:0.25rem}
+.py-10{padding-top:2.5rem;padding-bottom:2.5rem}
+.py-2{padding-top:0.5rem;padding-bottom:0.5rem}
+.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}
+.py-20{padding-top:5rem;padding-bottom:5rem}
+.py-6{padding-top:1.5rem;padding-bottom:1.5rem}
+.relative{position:relative}
+.rounded-full{border-radius:9999px}
+.rounded-lg{border-radius:.5rem}
+.rounded-xl{border-radius:.75rem}
+.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1)}
+.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)}
+.sticky{position:sticky}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.text-3xl{font-size:1.875rem;line-height:2.25rem}
+.text-4xl{font-size:2.25rem;line-height:2.5rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-blue-700{color:#1d4ed8}
+.text-blue-800{color:#1e40af}
+.text-center{text-align:center}
+.text-gray-200{color:#e5e7eb}
+.text-gray-500{color:#6b7280}
+.text-gray-600{color:#4b5563}
+.text-gray-700{color:#374151}
+.text-gray-800{color:#1f2937}
+.text-gray-900{color:#111827}
+.text-green-200{color:#bbf7d0}
+.text-green-300{color:#86efac}
+.text-green-500{color:#22c55e}
+.text-green-600{color:#16a34a}
+.text-green-700{color:#15803d}
+.text-green-800{color:#166534}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-purple-800{color:#6b21a8}
+.text-red-800{color:#991b1b}
+.text-sm{font-size:0.875rem;line-height:1.25rem}
+.text-white{color:#fff}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-xs{font-size:0.75rem;line-height:1rem}
+.text-yellow-700{color:#a16207}
+.text-yellow-800{color:#854d0e}
+.to-white{--tw-to:#fff}
+.top-0{top:0}
+.top-\[64px\]{top:64px}
+.tracking-widest{letter-spacing:0.1em}
+.transition-colors{transition-property:color,background-color,border-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}
+.uppercase{text-transform:uppercase}
+.w-10{width:2.5rem}
+.w-40{width:10rem}
+.w-44{width:11rem}
+.w-9{width:2.25rem}
+.z-40{z-index:40}
+.z-50{z-index:50}
+.space-y-14 > * + *{margin-top:3.5rem}
+.space-y-2 > * + *{margin-top:0.5rem}
+.space-y-3 > * + *{margin-top:0.75rem}
+@media (min-width:640px){.container{max-width:640px}}
+@media (min-width:768px){.container{max-width:768px}.md\:block{display:block}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:justify-center{justify-content:center}.md\:p-8{padding:2rem}.md\:px-8{padding-left:2rem;padding-right:2rem}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-5xl{font-size:3rem;line-height:1}}
+@media (min-width:1024px){.container{max-width:1024px}.lg\:block{display:block}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; }
+        code, .mono { font-family: 'Fira Code', monospace; }
+        .header-gradient { background: linear-gradient(90deg, #005824, #007336); }
+        .quick-nav { background: #004d22; }
+        .quick-nav a { color: #86efac; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.45rem 0.7rem; border-radius: 6px; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+        .quick-nav a:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .card { background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -4px rgba(0,0,0,0.09); }
+        .card-title { display: flex; align-items: center; gap: 0.75rem; font-size: 1.4rem; font-weight: 700; color: #004d22; }
+        .section-badge { display: inline-block; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; background: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 20px; margin-bottom: 0.5rem; }
+        .animate-on-scroll { opacity: 0; transform: translateY(22px); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        .concept-card { border-radius: 12px; padding: 1rem 1.25rem; border-left: 4px solid #22c55e; background: #f0fdf4; transition: all 0.2s; }
+        .concept-card:hover { transform: translateX(4px); }
+        blockquote { border-left: 4px solid #22c55e; background: #f0fdf4; border-radius: 0 12px 12px 0; padding: 1rem 1.5rem; font-style: italic; color: #166534; }
+        .step-circle { width: 40px; height: 40px; border-radius: 50%; background: #005824; color: white; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    </style>
+<style id="m1-extra">
+.m1-badge{display:inline-block;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:20px;margin-bottom:.4rem;}
+.m1-h3{font-weight:700;color:#166534;margin:.25rem 0 .75rem;font-size:1.05rem;}
+.m1-note{font-size:.78rem;color:#6b7280;text-align:center;margin-top:.6rem;}
+.m1-btnrow{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;}
+.m1-btn{font-family:inherit;cursor:pointer;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;font-weight:600;font-size:.85rem;padding:.45rem .9rem;border-radius:9999px;transition:all .15s;}
+.m1-btn:hover{background:#dcfce7;}
+.m1-btn.active{background:#166534;color:#fff;border-color:#166534;}
+.m1-panel{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:1rem 1.25rem;font-size:.9rem;color:#374151;line-height:1.55;}
+.m1-panel h4{margin:0 0 .35rem;color:#166534;font-weight:700;font-size:1rem;}
+.m1-grid2{display:grid;grid-template-columns:1fr;gap:1rem;align-items:center;}
+@media(min-width:768px){.m1-grid2{grid-template-columns:1fr 1fr;}}
+.tc-vertex{cursor:pointer;}.tc-vertex:hover{opacity:.85;}
+.m1-case{cursor:pointer;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;background:#fff;transition:box-shadow .2s,transform .2s;}
+.m1-case:hover{box-shadow:0 8px 18px -6px rgba(0,0,0,.12);transform:translateY(-2px);}
+.m1-case-body{display:none;margin-top:.75rem;padding-top:.75rem;border-top:1px dashed #e5e7eb;font-size:.85rem;color:#374151;line-height:1.55;}
+.m1-case.open .m1-case-body{display:block;}
+.m1-case.open .m1-caret{transform:rotate(180deg);}
+.m1-caret{display:inline-block;transition:transform .2s;color:#16a34a;font-weight:700;font-size:.72rem;}
+.m1-tag{display:inline-block;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;}
+.m1-tag.ok{background:#dcfce7;color:#166534;}
+.m1-tag.bad{background:#fee2e2;color:#991b1b;}
+.m1-tag.mix{background:#fef9c3;color:#854d0e;}
+.m1-chip{display:inline-block;cursor:pointer;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;border-radius:9999px;padding:4px 12px;font-size:.8rem;font-weight:600;margin:3px;transition:all .15s;}
+.m1-chip:hover{background:#bbf7d0;}
+.m1-chip.active{background:#166534;color:#fff;border-color:#166534;}
+.cyc-marker{transition:all .2s;}
+</style>
+<style id="m1-extra2">
+.role-card{display:flex;gap:.8rem;align-items:flex-start;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:.9rem 1rem;}
+.rm-pill{display:inline-flex;align-items:center;gap:.3rem;border-radius:9999px;padding:.32rem .7rem;font-size:.8rem;font-weight:600;white-space:nowrap;}
+.rm-arrow{color:#16a34a;font-weight:800;}
+.sim-opt,.q-opt{display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:10px;padding:.7rem .9rem;margin-bottom:.5rem;font-size:.9rem;color:#374151;transition:all .15s;}
+.sim-opt:hover,.q-opt:hover{border-color:#16a34a;background:#f0fdf4;}
+.q-opt.correct{background:#dcfce7;border-color:#16a34a;color:#166534;font-weight:600;}
+.q-opt.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.q-opt:disabled{cursor:default;}
+.q-exp{font-size:.82rem;color:#374151;background:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;padding:.6rem .8rem;margin-top:.4rem;line-height:1.5;}
+.eff{display:inline-flex;align-items:center;gap:.25rem;font-size:.8rem;font-weight:600;background:#f9fafb;border:1px solid #e5e7eb;border-radius:9999px;padding:.25rem .6rem;margin:.15rem;}
+.dl-card{display:flex;gap:.9rem;align-items:flex-start;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;}
+.dl-card:hover{box-shadow:0 8px 18px -6px rgba(0,0,0,.12);transform:translateY(-2px);}
+.dl-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+</style>
+<style id="glo-css">
+.glo-grid{display:grid;grid-template-columns:1fr;gap:.6rem;}
+@media(min-width:640px){.glo-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:1024px){.glo-grid{grid-template-columns:1fr 1fr 1fr;}}
+.glo-card{cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:.8rem 1rem;transition:box-shadow .2s,transform .2s;}
+.glo-card:hover{box-shadow:0 6px 14px -6px rgba(0,0,0,.12);transform:translateY(-2px);}
+.glo-sigla{font-weight:800;color:#14532d;font-size:1rem;}
+.glo-nom{font-size:.72rem;color:#166534;font-weight:600;margin-top:.1rem;}
+.glo-meaning{display:none;font-size:.82rem;color:#6b7280;margin-top:.5rem;padding-top:.5rem;border-top:1px dashed #e5e7eb;line-height:1.45;}
+.glo-card.open .glo-meaning{display:block;}
+.glo-card.open [style*="ver significado"]{display:none;}
+</style>
+<style id="pr-css">
+#pr-btn{position:fixed;right:18px;bottom:18px;z-index:60;background:#166534;color:#fff;border:none;font-family:inherit;font-weight:700;font-size:.9rem;padding:.6rem 1.1rem;border-radius:9999px;box-shadow:0 6px 16px -4px rgba(0,0,0,.35);cursor:pointer;}
+#pr-btn:hover{background:#14532d;}
+.pr-ov{position:fixed;inset:0;z-index:9999;display:none;background:linear-gradient(135deg,#003d1c,#00461f);color:#fff;flex-direction:column;}
+.pr-ov.open{display:flex;}
+.pr-stage{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:1000px;margin:0 auto;padding:5vh 6vw;width:100%;}
+.pr-badge{display:inline-block;align-self:flex-start;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:4px 14px;border-radius:9999px;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;}
+.pr-title{font-size:clamp(1.8rem,5vw,3.4rem);font-weight:800;line-height:1.12;margin-bottom:1.2rem;}
+.pr-sub{font-size:clamp(1rem,2.5vw,1.5rem);opacity:.85;margin-bottom:1rem;}
+.pr-list{list-style:none;padding:0;margin:0;}
+.pr-list li{font-size:clamp(1.1rem,2.8vw,1.9rem);line-height:1.5;padding:.35rem 0 .35rem 1.7rem;position:relative;}
+.pr-list li::before{content:'▸';position:absolute;left:0;color:#86efac;}
+.pr-two{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.pr-col h3{font-size:clamp(1.2rem,3vw,2rem);margin-bottom:.6rem;color:#bbf7d0;}
+.pr-col ul{list-style:none;padding:0;margin:0;}
+.pr-col li{font-size:clamp(1rem,2.4vw,1.6rem);line-height:1.45;padding:.25rem 0 .25rem 1.4rem;position:relative;}
+.pr-col li::before{content:'•';position:absolute;left:0;color:#86efac;}
+.pr-bar{display:flex;align-items:center;gap:1rem;padding:1rem 6vw 1.5rem;}
+.pr-nav{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:1.4rem;width:52px;height:52px;border-radius:50%;cursor:pointer;line-height:1;}
+.pr-nav:hover{background:rgba(255,255,255,.22);}
+.pr-count{font-size:1rem;font-weight:700;min-width:74px;text-align:center;}
+.pr-close{position:absolute;top:16px;right:22px;background:none;border:none;color:#fff;font-size:1.9rem;cursor:pointer;opacity:.8;line-height:1;}
+.pr-close:hover{opacity:1;}
+.pr-prog{flex:1;height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;}
+.pr-fill{height:100%;background:#22c55e;width:0;transition:width .25s;}
+.pr-hint{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:.72rem;opacity:.55;}
+@media(max-width:640px){.pr-two{grid-template-columns:1fr;gap:1rem;}}
+</style>
+</head>
+<body class="text-gray-800">
+
+<header class="header-gradient text-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img src="UTPLOGO.png" class="h-10 w-10 object-contain bg-white rounded-full p-0.5 shadow" alt="UTP">
+            <img src="SISTEMASLOGO.png" class="h-10 w-10 object-contain rounded-full shadow" alt="FISC">
+            <div class="hidden md:block">
+                <p class="text-xs text-gray-200">GPI · Código 8469 · Grupo 1LS241</p>
+                <p class="text-sm font-bold">FISC — Universidad Tecnológica de Panamá</p>
+            </div>
+        </div>
+        <div class="text-center hidden lg:block">
+            <p class="text-xs text-green-300 uppercase tracking-widest font-bold">Módulo 1</p>
+            <h1 class="text-lg font-bold">Fundamentos de la Gerencia de Proyectos</h1>
+        </div>
+        <div class="flex gap-2">
+            <a href="Diagrama_GPI.html" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-2 rounded-lg font-semibold transition-colors">← Inicio</a>
+            <a href="Mod2_ProyectosTradicionales.html" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-2 rounded-lg font-semibold transition-colors">Mód. 2 →</a>
+        </div>
+    </div>
+</header>
+
+<nav class="quick-nav sticky top-[64px] z-40 shadow overflow-x-auto">
+    <div class="container mx-auto px-4 py-1 flex gap-1 justify-start md:justify-center">
+        <a href="#proyecto">🎯 Proyecto</a>
+        <a href="#exito">✅ Éxito/Fracaso</a>
+        <a href="#casos">📚 Casos reales</a>
+        <a href="#guias">📘 Guías</a>
+        <a href="#carrera">💼 Carrera</a>
+        <a href="#organizacion">🏢 Organización</a>
+        <a href="#ciclo">🔄 Ciclo de vida</a>
+        <a href="#ejemplo">🧩 Ejemplo</a>
+        <a href="#simulador">🎮 Simulador</a>
+        <a href="#plantillas">📥 Plantillas</a>
+        <a href="#actividades">✏️ Actividades</a>
+        <a href="#quiz">❓ Quiz</a>
+        <a href="#siglas">📖 Siglas</a>
+        <a href="#resumen">✔️ Resumen</a>
+    </div>
+</nav>
+
+<section id="intro" class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center" style="background:linear-gradient(135deg,#003d1c,#006b32);"><div class="absolute inset-0 bg-green-900/25"></div></div>
+    <div class="relative container mx-auto px-6 py-20 text-center text-white">
+        <span class="inline-block bg-white/15 border border-white/25 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">Semanas 1 – 3 · 17 Ago → 5 Sep 2026</span>
+        <h2 class="text-4xl md:text-5xl font-extrabold mb-3">Módulo 1</h2>
+        <h3 class="text-2xl md:text-3xl font-semibold mb-5 opacity-90">Fundamentos de la Gerencia de Proyectos Informáticos</h3>
+        <p class="text-base max-w-2xl mx-auto opacity-80 leading-relaxed">Qué es un proyecto, qué lo lleva al éxito o al fracaso, las guías internacionales que lo rigen y cómo se organiza dentro de una empresa.</p>
+    </div>
+</section>
+
+<main class="container mx-auto px-4 md:px-8 py-10 space-y-14">
+
+    <!-- PROYECTO -->
+    <section id="proyecto" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 1.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🎯</span>¿Qué es un proyecto?</h2>
+            <blockquote class="mb-6">Un proyecto es un esfuerzo temporal que se emprende para crear un producto, servicio o resultado único.</blockquote>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">🕒</p><p class="font-bold text-green-800 text-sm">Temporal</p><p class="text-xs text-gray-600 mt-1">Tiene inicio y fin definidos.</p></div>
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">✨</p><p class="font-bold text-blue-800 text-sm">Único</p><p class="text-xs text-gray-600 mt-1">Su resultado no es repetitivo.</p></div>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">📈</p><p class="font-bold text-yellow-800 text-sm">Progresivo</p><p class="text-xs text-gray-600 mt-1">Se detalla a medida que avanza.</p></div>
+                <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">👥</p><p class="font-bold text-purple-800 text-sm">Recursos limitados</p><p class="text-xs text-gray-600 mt-1">Personas, tiempo y presupuesto.</p></div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 text-sm text-gray-700">
+                <p><span class="font-bold">Triple restricción:</span> todo proyecto equilibra <span class="font-semibold text-green-700">alcance</span>, <span class="font-semibold text-green-700">tiempo</span> y <span class="font-semibold text-green-700">costo</span>; modificar uno afecta a los demás y a la calidad.</p>
+            </div>
+            <div class="mt-6">
+                <span class="m1-badge">Diagrama interactivo</span>
+                <h3 class="m1-h3">La triple restricción — haz clic en cada vértice</h3>
+                <div class="m1-grid2">
+                    <div style="display:flex;justify-content:center;">
+                        <svg viewBox="0 0 480 320" width="100%" style="max-width:440px;" role="img" aria-label="Triángulo de la triple restricción">
+                            <polygon points="240,66 66,262 414,262" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.5"/>
+                            <text x="240" y="184" text-anchor="middle" font-size="17" font-weight="800" fill="#166534">CALIDAD</text>
+                            <text x="240" y="204" text-anchor="middle" font-size="11" fill="#6b7280">resultado del equilibrio</text>
+                            <g class="tc-vertex" onclick="showTC('alcance')">
+                                <text x="240" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">Alcance</text>
+                                <circle cx="240" cy="66" r="27" fill="#166534"/><text x="240" y="73" text-anchor="middle" font-size="20">🎯</text>
+                            </g>
+                            <g class="tc-vertex" onclick="showTC('tiempo')">
+                                <circle cx="66" cy="262" r="27" fill="#166534"/><text x="66" y="269" text-anchor="middle" font-size="20">🕒</text>
+                                <text x="66" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">Tiempo</text>
+                            </g>
+                            <g class="tc-vertex" onclick="showTC('costo')">
+                                <circle cx="414" cy="262" r="27" fill="#166534"/><text x="414" y="269" text-anchor="middle" font-size="20">💰</text>
+                                <text x="414" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">Costo</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="m1-panel" id="tc-panel"><h4>Toca un vértice</h4>Las tres restricciones están ligadas: si cambia una, se ajustan las otras o la calidad se ve afectada. Pulsa <strong>Alcance</strong>, <strong>Tiempo</strong> o <strong>Costo</strong>.</div>
+                </div>
+            </div>
+            <div class="mt-6 p-4 bg-green-900 text-white rounded-xl text-sm">
+                <p><span class="font-bold text-green-300">Importancia en TI:</span> los proyectos informáticos habilitan la transformación digital, integran sistemas y datos, y son inversiones estratégicas con alta incertidumbre.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÉXITO / FRACASO -->
+    <section id="exito" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 1.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">✅</span>Factores de Éxito y de Fracaso</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-5 rounded-xl bg-green-50 border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-3">✅ Factores de éxito</h4>
+                    <ul class="text-sm text-gray-700 space-y-2">
+                        <li>• Objetivos y alcance bien definidos</li>
+                        <li>• Apoyo de la alta dirección</li>
+                        <li>• Involucramiento de los stakeholders</li>
+                        <li>• Equipo competente y buena comunicación</li>
+                        <li>• Gestión activa de riesgos y cambios</li>
+                    </ul>
+                </div>
+                <div class="p-5 rounded-xl bg-red-50 border border-red-200">
+                    <h4 class="font-bold text-red-800 mb-3">❌ Factores de fracaso</h4>
+                    <ul class="text-sm text-gray-700 space-y-2">
+                        <li>• Requisitos ambiguos o cambiantes</li>
+                        <li>• Estimaciones de tiempo/costo irreales</li>
+                        <li>• Falta de patrocinio o compromiso</li>
+                        <li>• Comunicación deficiente</li>
+                        <li>• Alcance sin control (<em>scope creep</em>)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- CASOS REALES -->
+    <section id="casos" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Casos reales</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📚</span>Qué nos enseñan proyectos reales de TI</h2>
+            <p class="text-sm text-gray-600 mb-6">Haz clic en cada caso para ver qué pasó y la lección. Cada uno ilustra un factor de éxito o de fracaso de la sección anterior.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="m1-case" onclick="this.classList.toggle('open')">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:700;color:#14532d;font-size:.95rem;">Healthcare.gov (EE. UU., 2013)</span>
+                        <span class="m1-tag bad">Fracaso → recuperación</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Portal nacional de seguros de salud</div>
+                    <div class="m1-case-body"><p><strong>Qué pasó:</strong> el sitio colapsó el primer día y casi nadie logró inscribirse. Plazo político inamovible, decenas de contratistas sin integrar y pruebas insuficientes.</p><p style='margin-top:.5rem;'><strong>Factor:</strong> planificación y pruebas deficientes; alcance mal integrado.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> un equipo pequeño de rescate lo estabilizó en ~2 meses priorizando, integrando y probando. Los mismos factores de éxito salvaron el proyecto.</p></div>
+                    <div style="margin-top:.6rem;"><span class="m1-caret">▼ ver detalle</span></div>
+                </div><div class="m1-case" onclick="this.classList.toggle('open')">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:700;color:#14532d;font-size:.95rem;">Aeropuerto de Denver — sistema de equipaje (años 90)</span>
+                        <span class="m1-tag bad">Fracaso</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Manejo automatizado de maletas</div>
+                    <div class="m1-case-body"><p><strong>Qué pasó:</strong> un sistema automatizado demasiado ambicioso retrasó la apertura del aeropuerto cerca de <strong>16 meses</strong> y disparó los costos. Años después se abandonó.</p><p style='margin-top:.5rem;'><strong>Factor:</strong> alcance/complejidad excesivos y riesgos no gestionados.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> dimensiona el alcance a lo viable y gestiona el riesgo desde el inicio.</p></div>
+                    <div style="margin-top:.6rem;"><span class="m1-caret">▼ ver detalle</span></div>
+                </div><div class="m1-case" onclick="this.classList.toggle('open')">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:700;color:#14532d;font-size:.95rem;">FBI — Virtual Case File (2000–2005)</span>
+                        <span class="m1-tag bad">Fracaso</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Gestión de expedientes</div>
+                    <div class="m1-case-body"><p><strong>Qué pasó:</strong> tras años de desarrollo y una inversión estimada de más de <strong>US$170 millones</strong>, el sistema se canceló sin usarse.</p><p style='margin-top:.5rem;'><strong>Factor:</strong> requisitos que cambiaban constantemente y gestión débil.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> define y estabiliza los requisitos, y controla los cambios con un proceso formal.</p></div>
+                    <div style="margin-top:.6rem;"><span class="m1-caret">▼ ver detalle</span></div>
+                </div><div class="m1-case" onclick="this.classList.toggle('open')">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:700;color:#14532d;font-size:.95rem;">e-Estonia — gobierno digital</span>
+                        <span class="m1-tag ok">Éxito</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Programa estatal de servicios en línea</div>
+                    <div class="m1-case-body"><p><strong>Qué pasó:</strong> Estonia digitalizó casi todos sus servicios públicos (identidad, salud, impuestos, votación) sobre una plataforma común, entregada por etapas durante años.</p><p style='margin-top:.5rem;'><strong>Factor:</strong> visión clara, apoyo del patrocinador (Estado) y entregas incrementales.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> objetivos claros + entregas por fases sostienen proyectos grandes de TI.</p></div>
+                    <div style="margin-top:.6rem;"><span class="m1-caret">▼ ver detalle</span></div>
+                </div>
+            </div>
+            <p class="m1-note">Cifras aproximadas según reportes públicos; se citan con fines didácticos.</p>
+        </div>
+    </section>
+
+    <!-- GUÍAS -->
+    <section id="guias" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 1.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📘</span>Guías Internacionales y Enfoques</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="concept-card"><p class="font-bold text-green-800 mb-1">📘 Guía PMBOK® (PMI)</p><p class="text-sm text-gray-700">Buenas prácticas por dominios y grupos de proceso. 7ª edición basada en principios.</p></div>
+                <div class="concept-card" style="border-color:#60a5fa; background:#eff6ff;"><p class="font-bold text-blue-800 mb-1">📗 ISO 21500 / 21502</p><p class="text-sm text-gray-700">Norma internacional con directrices para la dirección y gestión de proyectos.</p></div>
+                <div class="concept-card" style="border-color:#f59e0b; background:#fffbeb;"><p class="font-bold text-yellow-800 mb-1">📙 PRINCE2</p><p class="text-sm text-gray-700">Método estructurado por procesos y roles, muy usado en el sector público europeo.</p></div>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Tradicional vs. Ágil</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-5 rounded-xl bg-gray-50 border border-gray-200">
+                    <h4 class="font-bold text-gray-800 mb-3">🧱 Tradicional (predictivo)</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Planificación detallada por adelantado</li><li>• Fases secuenciales (cascada)</li><li>• Alcance fijo, cambios controlados</li><li>• Entrega al final · requisitos estables</li></ul>
+                </div>
+                <div class="p-5 rounded-xl bg-green-50 border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-3">⚡ Ágil (adaptativo)</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Planificación iterativa e incremental</li><li>• Ciclos cortos (sprints)</li><li>• Alcance flexible, mejora continua</li><li>• Entregas frecuentes · requisitos cambiantes</li></ul>
+                </div>
+            </div>
+
+            <h3 class="font-bold text-gray-900 mb-2 text-lg" style="margin-top:1.75rem;">🎓 Certificaciones para ser Project Manager</h3>
+            <p class="text-sm text-gray-600 mb-4">Certificaciones profesionales reconocidas en la industria. Haz clic en cada tarjeta para ir a su sitio oficial.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="https://www.pmi.org/certifications/certified-associate-capm" target="_blank" rel="noopener" style="display:flex;flex-direction:column;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;" onmouseover="this.style.boxShadow='0 8px 18px -6px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none';this.style.transform='none';">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:800;color:#14532d;font-size:1rem;">CAPM</span>
+                        <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;background:#dcfce7;color:#166534;">Inicial</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:.15rem;">Certified Associate in Project Management · PMI</div>
+                    <p style="font-size:.82rem;color:#6b7280;margin:.45rem 0 .65rem;line-height:1.45;flex:1;">Nivel inicial, sin experiencia previa. El punto de partida ideal para estudiantes.</p>
+                    <span style="font-size:.78rem;font-weight:700;color:#166534;">Sitio oficial →</span>
+                </a>
+                <a href="https://www.pmi.org/certifications/project-management-pmp" target="_blank" rel="noopener" style="display:flex;flex-direction:column;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;" onmouseover="this.style.boxShadow='0 8px 18px -6px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none';this.style.transform='none';">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:800;color:#14532d;font-size:1rem;">PMP</span>
+                        <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;background:#166534;color:#ffffff;">Profesional</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:.15rem;">Project Management Professional · PMI</div>
+                    <p style="font-size:.82rem;color:#6b7280;margin:.45rem 0 .65rem;line-height:1.45;flex:1;">La certificación más reconocida a nivel mundial. Requiere experiencia dirigiendo proyectos.</p>
+                    <span style="font-size:.78rem;font-weight:700;color:#166534;">Sitio oficial →</span>
+                </a>
+                <a href="https://www.peoplecert.org/browse-certifications/project-programme-and-portfolio-management/PRINCE2-2" target="_blank" rel="noopener" style="display:flex;flex-direction:column;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;" onmouseover="this.style.boxShadow='0 8px 18px -6px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none';this.style.transform='none';">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:800;color:#14532d;font-size:1rem;">PRINCE2</span>
+                        <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;background:#fef9c3;color:#854d0e;">Estructurado</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:.15rem;">Foundation &amp; Practitioner · PeopleCert / Axelos</div>
+                    <p style="font-size:.82rem;color:#6b7280;margin:.45rem 0 .65rem;line-height:1.45;flex:1;">Método estructurado por procesos. Muy usado en Europa y el sector público.</p>
+                    <span style="font-size:.78rem;font-weight:700;color:#166534;">Sitio oficial →</span>
+                </a>
+                <a href="https://www.pmi.org/certifications/agile-acp" target="_blank" rel="noopener" style="display:flex;flex-direction:column;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;" onmouseover="this.style.boxShadow='0 8px 18px -6px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none';this.style.transform='none';">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:800;color:#14532d;font-size:1rem;">PMI-ACP</span>
+                        <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;background:#dbeafe;color:#1e40af;">Ágil</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:.15rem;">PMI Agile Certified Practitioner · PMI</div>
+                    <p style="font-size:.82rem;color:#6b7280;margin:.45rem 0 .65rem;line-height:1.45;flex:1;">Cubre varios enfoques ágiles: Scrum, Kanban, XP y más.</p>
+                    <span style="font-size:.78rem;font-weight:700;color:#166534;">Sitio oficial →</span>
+                </a>
+                <a href="https://www.scrum.org/professional-scrum-certifications/professional-scrum-master-assessments" target="_blank" rel="noopener" style="display:flex;flex-direction:column;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;" onmouseover="this.style.boxShadow='0 8px 18px -6px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none';this.style.transform='none';">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:800;color:#14532d;font-size:1rem;">PSM</span>
+                        <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;background:#dbeafe;color:#1e40af;">Ágil</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:.15rem;">Professional Scrum Master · Scrum.org</div>
+                    <p style="font-size:.82rem;color:#6b7280;margin:.45rem 0 .65rem;line-height:1.45;flex:1;">Dominio del marco Scrum. La certificación no caduca.</p>
+                    <span style="font-size:.78rem;font-weight:700;color:#166534;">Sitio oficial →</span>
+                </a>
+                <a href="https://www.scrumalliance.org/get-certified/scrum-master-track/certified-scrummaster" target="_blank" rel="noopener" style="display:flex;flex-direction:column;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;" onmouseover="this.style.boxShadow='0 8px 18px -6px rgba(0,0,0,.12)';this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none';this.style.transform='none';">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;">
+                        <span style="font-weight:800;color:#14532d;font-size:1rem;">CSM</span>
+                        <span style="font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;background:#dbeafe;color:#1e40af;">Ágil</span>
+                    </div>
+                    <div style="font-size:.78rem;color:#166534;font-weight:600;margin-top:.15rem;">Certified ScrumMaster · Scrum Alliance</div>
+                    <p style="font-size:.82rem;color:#6b7280;margin:.45rem 0 .65rem;line-height:1.45;flex:1;">Introducción a Scrum en el rol de Scrum Master, muy difundida en la industria.</p>
+                    <span style="font-size:.78rem;font-weight:700;color:#166534;">Sitio oficial →</span>
+                </a>
+            </div>
+            <p class="m1-note" style="text-align:left;">💡 Consejo: como estudiante, la <strong>CAPM</strong> es el punto de partida natural; la <strong>PMP</strong> llega con experiencia. Los requisitos, precios y exámenes se actualizan: confirma siempre en el sitio oficial.</p>
+        </div>
+    </section>
+
+        <!-- CARRERA -->
+    <section id="carrera" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Tu futuro profesional</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">💼</span>Salidas profesionales</h2>
+            <p class="text-sm text-gray-600 mb-6">Roles a los que puedes aspirar con lo que aprendes en este curso, y la certificación que refuerza cada uno.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="carrera-roles"></div>
+
+            <h3 class="font-bold text-gray-900 mb-3 text-lg" style="margin-top:1.75rem;">🗺️ Ruta de crecimiento</h3>
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:1.1rem 1.25rem;">
+                <div style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#166534;margin-bottom:.5rem;">🧱 Ruta tradicional</div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin-bottom:1rem;"><span class="rm-pill" style="background:#e5e7eb;color:#374151;">🎓 Estudiante</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#dcfce7;color:#166534;">📗 CAPM</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#e5e7eb;color:#374151;">💼 1–3 años exp.</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#166534;color:#fff;">📘 PMP</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#dcfce7;color:#166534;">🏆 PgMP / PfMP</span></div>
+                <div style="font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#1e40af;margin-bottom:.5rem;">⚡ Ruta ágil</div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;"><span class="rm-pill" style="background:#e5e7eb;color:#374151;">🎓 Estudiante</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#dbeafe;color:#1e40af;">⚡ PSM I / CSM</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#e5e7eb;color:#374151;">🔁 Práctica Scrum</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#dbeafe;color:#1e40af;">⚡ PSM II / A-CSM</span><span class="rm-arrow">→</span><span class="rm-pill" style="background:#dbeafe;color:#1e40af;">🎯 PSPO / CSPO</span></div>
+            </div>
+            <p class="m1-note" style="text-align:left;">Ambas rutas parten del mismo lugar: <strong>tú, hoy</strong>. Empieza por la CAPM o una certificación Scrum de nivel inicial mientras estudias.</p>
+        </div>
+    </section>
+
+    <!-- ORGANIZACIÓN -->
+    <section id="organizacion" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 1.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🏢</span>La Gestión en las Organizaciones</h2>
+            <div class="mb-6 p-4 bg-green-900 text-white rounded-xl text-sm">
+                <p><span class="font-bold text-green-300">PMO — Oficina de Gestión de Proyectos:</span> estandariza procesos, define metodología, gobierna el portafolio y da soporte a la dirección de proyectos.</p>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Estructuras organizacionales</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="p-4 rounded-xl bg-blue-50 border border-blue-200"><p class="font-bold text-blue-800 mb-1">🏛️ Funcional</p><p class="text-xs text-gray-600">Autoridad en gerentes de área. El PM tiene poco poder.</p></div>
+                <div class="p-4 rounded-xl bg-green-50 border border-green-200"><p class="font-bold text-green-800 mb-1">🎯 Proyectizada</p><p class="text-xs text-gray-600">La organización gira en torno a proyectos. PM con máxima autoridad.</p></div>
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200"><p class="font-bold text-purple-800 mb-1">🔀 Matricial (mixta)</p><p class="text-xs text-gray-600">Autoridad compartida (débil, equilibrada o fuerte).</p></div>
+            </div>
+            <div class="mb-6">
+                <span class="m1-badge">Diagrama interactivo</span>
+                <h3 class="m1-h3">Autoridad del director según la estructura</h3>
+                <div class="m1-btnrow" id="org-btns">
+                    <button type="button" class="m1-btn active" onclick="showOrg('funcional',this)">🏛️ Funcional</button>
+                    <button type="button" class="m1-btn" onclick="showOrg('matricial',this)">🔀 Matricial</button>
+                    <button type="button" class="m1-btn" onclick="showOrg('proyectizada',this)">🎯 Proyectizada</button>
+                </div>
+                <div class="m1-grid2">
+                    <div style="display:flex;justify-content:center;">
+                        <svg viewBox="0 0 460 220" width="100%" style="max-width:460px;">
+                            <g id="org-funcional">
+                                <rect x="180" y="6" width="100" height="26" rx="6" fill="#166534"/><text x="230" y="23" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Dirección</text>
+                                <path d="M230,32 V48 M60,48 H400 M60,48 V64 M230,48 V64 M400,48 V64" stroke="#cbd5e1" stroke-width="1.5" fill="none"/>
+                                <rect x="15" y="64" width="90" height="26" rx="6" fill="#dcfce7" stroke="#86efac"/><text x="60" y="81" text-anchor="middle" font-size="10.5" fill="#166534" font-weight="600">Gerente A</text>
+                                <rect x="185" y="64" width="90" height="26" rx="6" fill="#dcfce7" stroke="#86efac"/><text x="230" y="81" text-anchor="middle" font-size="10.5" fill="#166534" font-weight="600">Gerente B</text>
+                                <rect x="355" y="64" width="90" height="26" rx="6" fill="#dcfce7" stroke="#86efac"/><text x="400" y="81" text-anchor="middle" font-size="10.5" fill="#166534" font-weight="600">Gerente C</text>
+                                <path d="M230,90 V150" stroke="#cbd5e1" stroke-width="1.5"/>
+                                <rect x="175" y="150" width="110" height="30" rx="6" fill="#fef9c3" stroke="#fde047"/><text x="230" y="169" text-anchor="middle" font-size="10.5" fill="#854d0e" font-weight="700">PM (coordina)</text>
+                                <text x="230" y="205" text-anchor="middle" font-size="10" fill="#6b7280">El PM depende de un gerente · autoridad baja</text>
+                            </g>
+                            <g id="org-matricial" style="display:none">
+                                <rect x="180" y="6" width="100" height="26" rx="6" fill="#166534"/><text x="230" y="23" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Dirección</text>
+                                <rect x="30" y="60" width="80" height="24" rx="5" fill="#dcfce7" stroke="#86efac"/><text x="70" y="76" text-anchor="middle" font-size="10" fill="#166534">Área A</text>
+                                <rect x="190" y="60" width="80" height="24" rx="5" fill="#dcfce7" stroke="#86efac"/><text x="230" y="76" text-anchor="middle" font-size="10" fill="#166534">Área B</text>
+                                <rect x="350" y="60" width="80" height="24" rx="5" fill="#dcfce7" stroke="#86efac"/><text x="390" y="76" text-anchor="middle" font-size="10" fill="#166534">Área C</text>
+                                <path d="M70,84 V150 M230,84 V150 M390,84 V150" stroke="#cbd5e1" stroke-width="1.5"/>
+                                <rect x="30" y="150" width="400" height="30" rx="6" fill="#16a34a" opacity="0.15"/>
+                                <rect x="150" y="150" width="160" height="30" rx="6" fill="#16a34a"/><text x="230" y="169" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">Director de Proyecto</text>
+                                <text x="230" y="205" text-anchor="middle" font-size="10" fill="#6b7280">Autoridad compartida con las áreas · media</text>
+                            </g>
+                            <g id="org-proyectizada" style="display:none">
+                                <rect x="180" y="6" width="100" height="26" rx="6" fill="#166534"/><text x="230" y="23" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">Dirección</text>
+                                <path d="M230,32 V44 M120,44 H340 M120,44 V58 M340,44 V58" stroke="#cbd5e1" stroke-width="1.5" fill="none"/>
+                                <rect x="60" y="58" width="120" height="30" rx="6" fill="#166534"/><text x="120" y="77" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">PM · Proyecto 1</text>
+                                <rect x="280" y="58" width="120" height="30" rx="6" fill="#166534"/><text x="340" y="77" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">PM · Proyecto 2</text>
+                                <path d="M120,88 V116 M340,88 V116" stroke="#cbd5e1" stroke-width="1.5"/>
+                                <g fill="#22c55e"><circle cx="92" cy="130" r="9"/><circle cx="120" cy="130" r="9"/><circle cx="148" cy="130" r="9"/><circle cx="312" cy="130" r="9"/><circle cx="340" cy="130" r="9"/><circle cx="368" cy="130" r="9"/></g>
+                                <text x="230" y="200" text-anchor="middle" font-size="10" fill="#6b7280">El equipo reporta al PM · autoridad alta</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <div>
+                        <div style="font-size:.8rem;color:#6b7280;margin-bottom:.3rem;">Autoridad del Director de Proyecto</div>
+                        <div style="background:#e5e7eb;border-radius:9999px;height:16px;overflow:hidden;">
+                            <div id="org-meter" style="height:100%;width:22%;background:linear-gradient(90deg,#22c55e,#166534);border-radius:9999px;transition:width .35s;"></div>
+                        </div>
+                        <div class="m1-panel" id="org-panel" style="margin-top:.75rem;"><h4>Funcional</h4>La autoridad está en los gerentes de área. El director de proyecto coordina, pero tiene poco poder formal y comparte los recursos.</div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Roles en los proyectos</h3>
+            <div class="space-y-2">
+                <div class="flex gap-4 items-start p-3 rounded-xl bg-gray-50 border border-gray-100"><span class="font-bold text-green-700 text-sm w-40 flex-shrink-0">👤 Patrocinador</span><p class="text-sm text-gray-700">Provee recursos y respaldo; autoriza el proyecto.</p></div>
+                <div class="flex gap-4 items-start p-3 rounded-xl bg-gray-50 border border-gray-100"><span class="font-bold text-green-700 text-sm w-40 flex-shrink-0">🧭 Director (PM)</span><p class="text-sm text-gray-700">Planifica, ejecuta y controla; responsable de los objetivos.</p></div>
+                <div class="flex gap-4 items-start p-3 rounded-xl bg-gray-50 border border-gray-100"><span class="font-bold text-green-700 text-sm w-40 flex-shrink-0">👥 Equipo</span><p class="text-sm text-gray-700">Ejecuta las actividades y produce los entregables.</p></div>
+                <div class="flex gap-4 items-start p-3 rounded-xl bg-gray-50 border border-gray-100"><span class="font-bold text-green-700 text-sm w-40 flex-shrink-0">🤝 Stakeholders</span><p class="text-sm text-gray-700">Afectan o son afectados por el proyecto.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CICLO -->
+    <section id="ciclo" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 1.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🔄</span>Ciclo de Vida del Proyecto</h2>
+            <div class="flex flex-wrap items-center gap-2 justify-center mb-6">
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">1</div><p class="text-xs text-center mt-1 text-gray-600">Inicio</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">2</div><p class="text-xs text-center mt-1 text-gray-600">Planificación</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">3</div><p class="text-xs text-center mt-1 text-gray-600">Ejecución</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">4</div><p class="text-xs text-center mt-1 text-gray-600">Monitoreo<br>y Control</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">5</div><p class="text-xs text-center mt-1 text-gray-600">Cierre</p></div>
+            </div>
+            <p class="text-sm text-gray-600 italic mb-6 text-center">El monitoreo y control acompaña a la ejecución de forma continua.</p>
+            <div class="mb-8">
+                <span class="m1-badge">Diagrama interactivo</span>
+                <h3 class="m1-h3">Explora cada fase y la curva de esfuerzo</h3>
+                <div class="m1-btnrow" id="cycle-btns">
+                    <button type="button" class="m1-btn active" onclick="showPhase(0,this)">1 · Inicio</button>
+                    <button type="button" class="m1-btn" onclick="showPhase(1,this)">2 · Planificación</button>
+                    <button type="button" class="m1-btn" onclick="showPhase(2,this)">3 · Ejecución</button>
+                    <button type="button" class="m1-btn" onclick="showPhase(3,this)">4 · Monitoreo</button>
+                    <button type="button" class="m1-btn" onclick="showPhase(4,this)">5 · Cierre</button>
+                </div>
+                <div class="m1-grid2">
+                    <div class="m1-panel" id="cycle-panel"></div>
+                    <div style="display:flex;justify-content:center;">
+                        <svg viewBox="0 0 480 220" width="100%" style="max-width:480px;">
+                            <line x1="42" y1="180" x2="466" y2="180" stroke="#9ca3af"/>
+                            <line x1="42" y1="18" x2="42" y2="180" stroke="#9ca3af"/>
+                            <text x="16" y="100" text-anchor="middle" font-size="10" fill="#6b7280" transform="rotate(-90 16 100)">Esfuerzo / costo</text>
+                            <path d="M60,172 C130,168 150,70 250,58 C300,52 330,120 430,170" fill="none" stroke="#16a34a" stroke-width="3"/>
+                            <circle class="cyc-marker" id="cyc-0" cx="60" cy="172" r="6" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                            <circle class="cyc-marker" id="cyc-1" cx="150" cy="92" r="6" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                            <circle class="cyc-marker" id="cyc-2" cx="250" cy="58" r="6" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                            <circle class="cyc-marker" id="cyc-3" cx="335" cy="108" r="6" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                            <circle class="cyc-marker" id="cyc-4" cx="430" cy="170" r="6" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                            <text x="60" y="198" text-anchor="middle" font-size="9" fill="#6b7280">Inicio</text>
+                            <text x="150" y="198" text-anchor="middle" font-size="9" fill="#6b7280">Planif.</text>
+                            <text x="250" y="198" text-anchor="middle" font-size="9" fill="#6b7280">Ejecución</text>
+                            <text x="345" y="198" text-anchor="middle" font-size="9" fill="#6b7280">Monitoreo</text>
+                            <text x="430" y="198" text-anchor="middle" font-size="9" fill="#6b7280">Cierre</text>
+                        </svg>
+                    </div>
+                </div>
+                <p class="m1-note">El esfuerzo y el gasto se concentran en la <strong>ejecución</strong>; inicio y cierre son más ligeros.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-5 rounded-xl bg-green-50 border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-3">🛠️ Ciclo de vida del proyecto</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Temporal: inicia y termina</li><li>• Produce el entregable</li><li>• Termina al entregar el producto</li></ul>
+                </div>
+                <div class="p-5 rounded-xl bg-blue-50 border border-blue-200">
+                    <h4 class="font-bold text-blue-800 mb-3">📦 Ciclo de vida del producto</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Abarca toda la vida útil del producto</li><li>• Incluye operación y mantenimiento</li><li>• Puede contener varios proyectos</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- EJEMPLO GUIADO -->
+    <section id="ejemplo" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Ejemplo guiado</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🧩</span>Un mini-proyecto de principio a fin</h2>
+            <p class="text-sm text-gray-600 mb-6">Apliquemos los conceptos del módulo a un caso concreto: <strong>&ldquo;Portal de matrícula en línea para la FISC&rdquo;</strong>.</p>
+
+            <div class="concept-card mb-5">
+                <p class="font-bold text-green-800 mb-1">🎯 Objetivo y alcance</p>
+                <p class="text-sm text-gray-700">Que los estudiantes se matriculen por internet, consulten horarios y paguen en línea. <em>Fuera de alcance (por ahora):</em> el módulo de notas y la app móvil — quedan para una fase futura.</p>
+            </div>
+
+            <h3 class="font-bold text-gray-900 mb-3 text-lg">Su triple restricción, en concreto</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                <div class="p-4 rounded-xl bg-green-50 border border-green-200"><p class="font-bold text-green-800 text-sm mb-1">🎯 Alcance</p><p class="text-xs text-gray-600">Matrícula, horarios y pagos en línea para 1 facultad.</p></div>
+                <div class="p-4 rounded-xl bg-blue-50 border border-blue-200"><p class="font-bold text-blue-800 text-sm mb-1">🕒 Tiempo</p><p class="text-xs text-gray-600">Listo antes del próximo periodo de matrícula (≈ 1 semestre).</p></div>
+                <div class="p-4 rounded-xl bg-yellow-50 border border-yellow-200"><p class="font-bold text-yellow-800 text-sm mb-1">💰 Costo</p><p class="text-xs text-gray-600">Equipo de estudiantes + servidor y pasarela de pago.</p></div>
+            </div>
+
+            <h3 class="font-bold text-gray-900 mb-2 text-lg">Interesados (haz clic para ver su interés)</h3>
+            <div style="margin-bottom:.75rem;">
+                <span class="m1-chip active" onclick="showStake('Estudiantes',this)">🎓 Estudiantes</span>
+                <span class="m1-chip" onclick="showStake('Decano',this)">🧑‍💼 Decano (patrocinador)</span>
+                <span class="m1-chip" onclick="showStake('Secretaría',this)">🗂️ Secretaría académica</span>
+                <span class="m1-chip" onclick="showStake('TI',this)">💻 Departamento de TI</span>
+                <span class="m1-chip" onclick="showStake('Docentes',this)">👩‍🏫 Docentes</span>
+            </div>
+            <div class="m1-panel" id="stake-panel" style="margin-bottom:1.25rem;"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div class="p-5 rounded-xl bg-gray-50 border border-gray-200">
+                    <h4 class="font-bold text-gray-800 mb-2">🔄 ¿En qué fase empezamos?</h4>
+                    <p class="text-sm text-gray-700">En <strong>Inicio</strong>: conformamos el equipo, identificamos stakeholders y redactamos el <strong>Acta de Constitución</strong> (lo verás en el Módulo 2).</p>
+                </div>
+                <div class="p-5 rounded-xl bg-green-50 border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-2">⚖️ ¿Tradicional o ágil?</h4>
+                    <p class="text-sm text-gray-700">Como los requisitos pueden ajustarse con la retroalimentación de los estudiantes, conviene un enfoque <strong>ágil o híbrido</strong>: entregar el portal por partes y mejorar cada iteración.</p>
+                </div>
+            </div>
+
+            <blockquote>Este es justo el tipo de proyecto que desarrollarás en equipo durante el semestre. 🚀</blockquote>
+        </div>
+    </section>
+
+        <!-- SIMULADOR -->
+    <section id="simulador" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Practica decidiendo</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🎮</span>Simulador: tú eres el Project Manager</h2>
+            <p class="text-sm text-gray-600 mb-6">Lee la situación, elige una decisión y observa cómo afecta a la triple restricción y a la calidad.</p>
+            <div id="sim-box"></div>
+        </div>
+    </section>
+
+    <!-- PLANTILLAS -->
+    <section id="plantillas" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Recursos descargables</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📥</span>Plantillas para tu proyecto</h2>
+            <p class="text-sm text-gray-600 mb-6">Formatos editables listos para usar en el proyecto grupal. Descárgalos y complétalos con tu equipo.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="Plantillas/Acta_de_Constitucion.docx" class="dl-card" download>
+                    <div class="dl-ico" style="background:#dbeafe;color:#1d4ed8;">📄</div>
+                    <div>
+                        <div style="font-weight:700;color:#14532d;">Acta de Constitución</div>
+                        <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Word · Project Charter con todos los apartados (objetivo, alcance, interesados, riesgos, firmas).</div>
+                        <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Descargar .docx →</div>
+                    </div>
+                </a>
+                <a href="Plantillas/Plantillas_Proyecto_GPI.xlsx" class="dl-card" download>
+                    <div class="dl-ico" style="background:#dcfce7;color:#166534;">📊</div>
+                    <div>
+                        <div style="font-weight:700;color:#14532d;">Cuaderno de plantillas</div>
+                        <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Excel · 5 hojas: EDT/WBS, Cronograma-Gantt, Matriz RACI, Matriz de Riesgos y Backlog Scrum.</div>
+                        <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Descargar .xlsx →</div>
+                    </div>
+                </a>
+            </div>
+            <p class="m1-note" style="text-align:left;">Cada plantilla trae una fila de ejemplo para que veas cómo se completa. Bórrala y pon tus propios datos.</p>
+        </div>
+    </section>
+
+    <!-- ACTIVIDADES -->
+    <section id="actividades" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">✏️</span>Actividades del Módulo 1</h2>
+            <div class="space-y-3">
+                <div class="flex gap-4 items-start p-4 rounded-xl border border-gray-200 bg-gray-50"><span class="w-9 h-9 rounded-full bg-green-700 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">L1</span><div><p class="font-semibold text-sm text-gray-900">Lab 1 — Caso comparativo de estructuras y roles</p><p class="text-xs text-gray-500 mt-1">Semana 2 · Miércoles · Aula 3-423</p><p class="text-xs text-gray-600 mt-1">Analiza una organización real y determina si su estructura es funcional, proyectizada o matricial, e identifica los roles del proyecto.</p></div></div>
+                <div class="flex gap-4 items-start p-4 rounded-xl border border-gray-200 bg-gray-50"><span class="w-9 h-9 rounded-full bg-green-700 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">T1</span><div><p class="font-semibold text-sm text-gray-900">Tarea 1 — Proyectos tradicionales vs. ágiles</p><p class="text-xs text-gray-500 mt-1">Semana 3 · Individual</p><p class="text-xs text-gray-600 mt-1">Investiga un caso real de proyecto de TI y elabora un cuadro comparativo entre ambos enfoques.</p></div></div>
+                <div class="flex gap-4 items-start p-4 rounded-xl border border-gray-200 bg-gray-50"><span class="w-9 h-9 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">P0</span><div><p class="font-semibold text-sm text-gray-900">Proyecto Grupal — Definición de la idea</p><p class="text-xs text-gray-500 mt-1">Semana 3 · Grupal (3–4)</p><p class="text-xs text-gray-600 mt-1">Conforma el equipo y define la idea del proyecto informático que desarrollarán todo el semestre.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+        <!-- QUIZ -->
+    <section id="quiz" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Ponte a prueba</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">❓</span>Autoevaluación del Módulo 1</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;">
+                <p class="text-sm text-gray-600" style="margin:0;">10 preguntas. Elige una opción y verás la respuesta al instante.</p>
+                <div style="display:flex;align-items:center;gap:.75rem;">
+                    <span style="font-weight:800;color:#166534;">Aciertos: <span id="quiz-score">0</span>/10</span>
+                    <button type="button" class="m1-btn" onclick="resetQuiz()">↻ Reiniciar</button>
+                </div>
+            </div>
+            <div id="quiz-box"></div>
+        </div>
+    </section>
+
+        <!-- SIGLAS -->
+    <section id="siglas" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Referencia</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📖</span>Glosario de siglas</h2>
+            <p class="text-sm text-gray-600 mb-6">Haz clic en cada sigla para ver su significado completo.</p>
+            <div class="glo-grid">
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">Backlog</div>
+                    <div class="glo-nom">Lista priorizada de trabajo pendiente</div>
+                    <div class="glo-meaning">En Scrum, el <i>Product Backlog</i> es el trabajo pendiente del producto y el <i>Sprint Backlog</i> el del sprint. Se ordena por prioridad.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">EDT / WBS</div>
+                    <div class="glo-nom">Estructura de Desglose del Trabajo · <i>Work Breakdown Structure</i></div>
+                    <div class="glo-meaning">EDT es la traducción de WBS. Descompone el proyecto en entregables y paquetes de trabajo (la regla del 100%: incluye todo el trabajo, ni más ni menos).</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">RACI</div>
+                    <div class="glo-nom"><i>Responsible, Accountable, Consulted, Informed</i></div>
+                    <div class="glo-meaning">Matriz de responsabilidades: Responsable (ejecuta), Aprobador (rinde cuentas, solo uno), Consultado e Informado.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">CPM</div>
+                    <div class="glo-nom"><i>Critical Path Method</i></div>
+                    <div class="glo-meaning">Método de la Ruta Crítica: la secuencia de actividades más larga; define la duración mínima del proyecto.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">P × I</div>
+                    <div class="glo-nom">Probabilidad × Impacto</div>
+                    <div class="glo-meaning">Fórmula para calcular el nivel de un riesgo en el análisis cualitativo.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">PMBOK</div>
+                    <div class="glo-nom"><i>Project Management Body of Knowledge</i></div>
+                    <div class="glo-meaning">Guía de fundamentos para la dirección de proyectos, publicada por el PMI.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">PMI</div>
+                    <div class="glo-nom"><i>Project Management Institute</i></div>
+                    <div class="glo-meaning">Organización que publica el PMBOK y otorga certificaciones (PMP, CAPM, PMI-ACP).</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">ISO 21500/21502</div>
+                    <div class="glo-nom"><i>International Organization for Standardization</i></div>
+                    <div class="glo-meaning">Normas internacionales de dirección y gestión de proyectos.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">PRINCE2</div>
+                    <div class="glo-nom"><i>PROjects IN Controlled Environments</i> (v2)</div>
+                    <div class="glo-meaning">Método estructurado de gestión de proyectos por procesos, muy usado en Europa.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">PMO</div>
+                    <div class="glo-nom"><i>Project Management Office</i></div>
+                    <div class="glo-meaning">Oficina de Gestión de Proyectos: estandariza la metodología y gobierna el portafolio.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">MVP</div>
+                    <div class="glo-nom"><i>Minimum Viable Product</i></div>
+                    <div class="glo-meaning">Producto Mínimo Viable: la versión más simple que ya aporta valor al usuario.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">PMP / CAPM</div>
+                    <div class="glo-nom"><i>Project Management Professional / Certified Associate in PM</i></div>
+                    <div class="glo-meaning">Certificaciones del PMI: profesional (con experiencia) e inicial (para estudiantes).</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">PSM / CSM</div>
+                    <div class="glo-nom"><i>Professional / Certified Scrum Master</i></div>
+                    <div class="glo-meaning">Certificaciones de Scrum Master (Scrum.org y Scrum Alliance).</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+                <div class="glo-card" onclick="this.classList.toggle('open')">
+                    <div class="glo-sigla">UI</div>
+                    <div class="glo-nom"><i>User Interface</i></div>
+                    <div class="glo-meaning">Interfaz de usuario: la parte visual con la que interactúa la persona.</div>
+                    <div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESUMEN -->
+    <section id="resumen" class="animate-on-scroll">
+        <div class="card p-6 md:p-8 bg-gradient-to-br from-green-50 to-white">
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-700 flex items-center justify-center text-xl text-white">✔️</span>Resumen del Módulo 1</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">Un <strong>proyecto</strong> es un esfuerzo temporal que genera un resultado único (triple restricción).</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El <strong>éxito</strong> depende de objetivos claros, stakeholders y gestión de riesgos.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm"><strong>PMBOK, ISO 21500 y PRINCE2</strong> son las guías de referencia.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">La <strong>estructura organizacional</strong> define el poder del director de proyecto.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El <strong>ciclo de vida del proyecto</strong> es distinto al del producto.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">Enfoque <strong>tradicional</strong> para requisitos estables; <strong>ágil</strong> para cambiantes.</p></div>
+            </div>
+            <div class="flex flex-wrap gap-3 justify-between pt-4 border-t border-green-200">
+                <a href="Diagrama_GPI.html" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-sm">← 🏠 Inicio del Curso</a>
+                <a href="#intro" class="px-5 py-2.5 rounded-xl bg-green-100 hover:bg-green-200 text-green-800 font-semibold text-sm">↑ Inicio del Módulo</a>
+                <a href="Mod2_ProyectosTradicionales.html" class="px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-semibold text-sm">Módulo 2 → 🧱</a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="header-gradient text-white mt-12 py-6">
+    <div class="container mx-auto px-6 text-center">
+        <p class="font-bold mb-1">GPI 8469 — Módulo 1 · Grupo 1LS241 · II Semestre 2026</p>
+        <p class="text-green-200 text-sm mb-3">Universidad Tecnológica de Panamá · FISC · Mgtr. Henry D. De Gracia R.</p>
+        <div class="flex flex-wrap justify-center gap-3 text-sm">
+            <a href="Diagrama_GPI.html" class="text-green-200 hover:text-white">🏠 Inicio</a>
+            <a href="Mod2_ProyectosTradicionales.html" class="text-green-200 hover:text-white">🧱 Mód. 2</a>
+            <a href="Mod3_ProyectosAgiles.html" class="text-green-200 hover:text-white">⚡ Mód. 3</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+<script>
+(function(){
+  function setActive(btn){ if(!btn) return; var row=btn.parentNode; row.querySelectorAll('.m1-btn').forEach(function(b){b.classList.remove('active');}); btn.classList.add('active'); }
+
+  // Triple restricción
+  var TC={
+    alcance:{t:'Alcance',d:'Qué se va a construir y qué queda fuera. Si el alcance crece sin control (<em>scope creep</em>) y no se ajustan tiempo o costo, la calidad se resiente.'},
+    tiempo:{t:'Tiempo',d:'El plazo de entrega. Acortar el tiempo suele exigir más recursos (costo) o recortar el alcance.'},
+    costo:{t:'Costo',d:'El presupuesto disponible. Reducir el costo puede obligar a recortar alcance o extender el tiempo.'}
+  };
+  window.showTC=function(k){var o=TC[k];document.getElementById('tc-panel').innerHTML='<h4>'+o.t+'</h4>'+o.d;};
+
+  // Estructuras
+  var ORG={
+    funcional:{t:'Funcional',m:22,d:'La autoridad está en los gerentes de área. El director de proyecto coordina, pero tiene poco poder formal y comparte los recursos.'},
+    matricial:{t:'Matricial (mixta)',m:55,d:'La autoridad se comparte entre los gerentes de área y el director de proyecto. Puede ser débil, equilibrada o fuerte.'},
+    proyectizada:{t:'Proyectizada',m:90,d:'La organización gira en torno a proyectos. El equipo reporta directamente al director de proyecto, que tiene la máxima autoridad.'}
+  };
+  window.showOrg=function(k,btn){
+    setActive(btn);
+    ['funcional','matricial','proyectizada'].forEach(function(id){document.getElementById('org-'+id).style.display=(id===k)?'':'none';});
+    var o=ORG[k];
+    document.getElementById('org-meter').style.width=o.m+'%';
+    document.getElementById('org-panel').innerHTML='<h4>'+o.t+'</h4>'+o.d;
+  };
+
+  // Ciclo de vida
+  var PH=[
+    {t:'1 · Inicio',d:'Se define y autoriza el proyecto: necesidad, objetivos, interesados y restricciones. <strong>Entregable clave:</strong> Acta de Constitución. Esfuerzo bajo.'},
+    {t:'2 · Planificación',d:'Se detalla el alcance, el cronograma, los costos, los riesgos, la calidad y las comunicaciones. <strong>Entregables:</strong> EDT, Gantt, presupuesto y plan de riesgos. Esfuerzo creciente.'},
+    {t:'3 · Ejecución',d:'Se construye el producto y se coordina al equipo. Aquí se consume la <strong>mayor parte</strong> del esfuerzo y del presupuesto.'},
+    {t:'4 · Monitoreo y control',d:'Acompaña a la ejecución: se compara lo real contra lo planificado y se gestionan los cambios. <strong>Entregables:</strong> informes de avance y control de cambios.'},
+    {t:'5 · Cierre',d:'Se entrega el producto, se documentan las <strong>lecciones aprendidas</strong> y se libera al equipo. Esfuerzo bajo.'}
+  ];
+  window.showPhase=function(i,btn){
+    if(!btn){ btn=document.querySelectorAll('#cycle-btns .m1-btn')[i]; }
+    setActive(btn);
+    document.getElementById('cycle-panel').innerHTML='<h4>'+PH[i].t+'</h4>'+PH[i].d;
+    for(var j=0;j<5;j++){var m=document.getElementById('cyc-'+j);if(!m)continue;
+      if(j===i){m.setAttribute('r','9');m.setAttribute('fill','#166534');}
+      else{m.setAttribute('r','6');m.setAttribute('fill','#bbf7d0');}}
+  };
+
+  // Interesados
+  var STK={
+    'Estudiantes':'Quieren matricularse rápido, sin filas y con información clara de horarios y pagos.',
+    'Decano':'Patrocina el proyecto: aporta recursos y respaldo, y espera mejorar el servicio de la facultad.',
+    'Secretaría':'Necesita que los datos de matrícula sean correctos y fáciles de administrar.',
+    'TI':'Debe garantizar seguridad, disponibilidad y mantenimiento del portal.',
+    'Docentes':'Quieren ver sus listas de estudiantes actualizadas y sin errores.'
+  };
+  window.showStake=function(k,el){
+    if(el){var row=el.parentNode; row.querySelectorAll('.m1-chip').forEach(function(c){c.classList.remove('active');}); el.classList.add('active');}
+    document.getElementById('stake-panel').innerHTML='<h4>'+(el?el.textContent.trim():k)+'</h4>'+STK[k];
+  };
+
+  // Inicializar paneles
+  showTC('alcance'); showOrg('funcional',document.querySelector('#org-btns .m1-btn')); showPhase(0,null); showStake('Estudiantes',document.querySelector('.m1-chip'));
+})();
+</script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var esc=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+
+  // ---- Carrera: roles ----
+  var ROLES=[
+    {i:'📋',r:'Analista / Coordinador de Proyectos',d:'Da seguimiento a tareas, cronograma y documentación; apoya al director de proyecto.',c:'CAPM'},
+    {i:'🧭',r:'Director / Gerente de Proyecto',d:'Planifica, dirige y controla; responsable de cumplir alcance, tiempo y costo.',c:'PMP · PRINCE2'},
+    {i:'🔄',r:'Scrum Master',d:'Facilita el marco ágil, remueve obstáculos y protege al equipo.',c:'PSM · CSM'},
+    {i:'🎯',r:'Product Owner',d:'Prioriza el backlog y maximiza el valor del producto para el cliente.',c:'PSPO · CSPO'},
+    {i:'🏢',r:'Analista de PMO',d:'Estandariza metodología, plantillas e indicadores; gobierna el portafolio.',c:'PMP · PfMP'}
+  ];
+  var cr=$('carrera-roles');
+  if(cr){cr.innerHTML=ROLES.map(function(o){return '<div class="role-card"><div style="font-size:24px;">'+o.i+'</div><div><div style="font-weight:700;color:#14532d;font-size:.95rem;">'+esc(o.r)+'</div><div style="font-size:.83rem;color:#6b7280;margin-top:.15rem;">'+esc(o.d)+'</div><div style="font-size:.72rem;font-weight:700;color:#166534;margin-top:.4rem;">Certificación: '+esc(o.c)+'</div></div></div>';}).join('');}
+
+  // ---- Simulador ----
+  var SIM=[
+    {t:'A mitad del proyecto, el cliente pide una función nueva importante.',
+     o:[{x:'La agrego sin cambiar plazo ni presupuesto',ef:{Alcance:'up',Tiempo:'eq',Costo:'eq',Calidad:'down'},l:'Más alcance con el mismo tiempo y costo suele sacrificar la calidad. Cuidado con el scope creep.'},
+        {x:'Negocio más tiempo o presupuesto',ef:{Alcance:'up',Tiempo:'up',Costo:'up',Calidad:'eq'},l:'Correcto: si crece el alcance, se ajustan tiempo y/o costo para mantener la calidad.'},
+        {x:'La evalúo con control de cambios',ef:{Alcance:'eq',Tiempo:'eq',Costo:'eq',Calidad:'eq'},l:'Muy bien: todo cambio pasa por un proceso formal antes de afectar al proyecto.'}]},
+    {t:'Vas una semana retrasado respecto al cronograma.',
+     o:[{x:'Agrego más personas al equipo',ef:{Alcance:'eq',Tiempo:'down',Costo:'up',Calidad:'eq'},l:'Puede acelerar, pero sube el costo; y más gente no siempre va más rápido (curva de aprendizaje).'},
+        {x:'Reduzco el alcance de esta entrega',ef:{Alcance:'down',Tiempo:'down',Costo:'eq',Calidad:'eq'},l:'Válido: entregar menos pero a tiempo y con calidad. Prioriza lo esencial (MVP).'},
+        {x:'Recorto las pruebas para ganar tiempo',ef:{Alcance:'eq',Tiempo:'down',Costo:'eq',Calidad:'down'},l:'Peligroso: ganar tiempo bajando la calidad genera defectos y retrabajo después.'}]},
+    {t:'Te recortan el presupuesto un 20%.',
+     o:[{x:'Recorto el alcance a lo prioritario',ef:{Alcance:'down',Tiempo:'eq',Costo:'down',Calidad:'eq'},l:'Buena decisión: menos costo ajustando el alcance y cuidando la calidad.'},
+        {x:'Extiendo el plazo para gastar menos por mes',ef:{Alcance:'eq',Tiempo:'up',Costo:'down',Calidad:'eq'},l:'Posible, pero un proyecto más largo trae otros costos y riesgos.'},
+        {x:'Mantengo todo igual',ef:{Alcance:'eq',Tiempo:'eq',Costo:'down',Calidad:'down'},l:'Riesgoso: hacer lo mismo con menos dinero casi siempre golpea la calidad.'}]}
+  ];
+  var simIdx=0;
+  var AR={up:{s:'▲ sube',c:'#ea580c'},down:{s:'▼ baja',c:'#2563eb'},eq:{s:'= igual',c:'#6b7280'}};
+  function renderSim(){
+    var sc=SIM[simIdx];
+    var opts=sc.o.map(function(o,k){return '<button type="button" class="sim-opt" onclick="simPick('+k+')">'+esc(o.x)+'</button>';}).join('');
+    $('sim-box').innerHTML='<div style="font-size:.72rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem;">Escenario '+(simIdx+1)+' de '+SIM.length+'</div>'
+      +'<div class="m1-panel" style="margin-bottom:1rem;"><strong>'+esc(sc.t)+'</strong></div>'+opts+'<div id="sim-res"></div>';
+  }
+  window.simPick=function(k){
+    var o=SIM[simIdx].o[k];
+    var chips=Object.keys(o.ef).map(function(v){var a=AR[o.ef[v]];return '<span class="eff" style="color:'+a.c+';">'+v+' '+a.s+'</span>';}).join('');
+    $('sim-res').innerHTML='<div class="m1-panel" style="margin-top:.75rem;"><h4>Consecuencia</h4><div style="margin:.25rem 0 .6rem;">'+chips+'</div>'+esc(o.l)
+      +'<div style="margin-top:.8rem;"><button type="button" class="m1-btn" onclick="simNext()">Siguiente escenario →</button></div></div>';
+  };
+  window.simNext=function(){simIdx=(simIdx+1)%SIM.length;renderSim();};
+  if($('sim-box'))renderSim();
+
+  // ---- Quiz ----
+  var QUIZ=[
+    {q:'¿Qué dos características definen a un proyecto?',o:['Es repetitivo y permanente','Es temporal y genera un resultado único','No tiene presupuesto ni plazo','Lo ejecuta una sola persona'],c:1,e:'Un proyecto es temporal (inicio y fin) y produce un resultado único.'},
+    {q:'La triple restricción de un proyecto es:',o:['Personas, procesos y tecnología','Alcance, tiempo y costo','Inicio, ejecución y cierre','Calidad, riesgo y comunicación'],c:1,e:'Alcance, tiempo y costo; al cambiar uno se afectan los demás y la calidad.'},
+    {q:'¿Cuál es un factor típico de FRACASO?',o:['Objetivos claros','Apoyo de la alta dirección','Requisitos ambiguos o cambiantes','Buena gestión de riesgos'],c:2,e:'Requisitos ambiguos o que cambian sin control: causa frecuente de fracaso.'},
+    {q:'La Guía PMBOK® es publicada por:',o:['ISO','PMI','Scrum.org','Axelos'],c:1,e:'El PMBOK lo publica el Project Management Institute (PMI).'},
+    {q:'En una estructura FUNCIONAL, la autoridad del director de proyecto es:',o:['Máxima','Media','Baja','Absoluta'],c:2,e:'En la estructura funcional el poder está en los gerentes de área; el PM tiene autoridad baja.'},
+    {q:'El Acta de Constitución se elabora en la fase de:',o:['Cierre','Ejecución','Inicio','Monitoreo'],c:2,e:'El Acta de Constitución se crea en la fase de Inicio: autoriza el proyecto.'},
+    {q:'¿Qué caracteriza al enfoque ÁGIL?',o:['Planificación total por adelantado','Entregas iterativas e incrementales','Documentación extensa y fija','Un único entregable al final'],c:1,e:'Lo ágil entrega valor por iteraciones cortas y se adapta al cambio.'},
+    {q:'El ciclo de vida del PRODUCTO se diferencia del proyecto porque:',o:['Es más corto','Incluye la operación y el mantenimiento','No tiene fases','Solo aplica en software'],c:1,e:'El ciclo del producto abarca toda su vida útil, incluida operación y mantenimiento.'},
+    {q:'¿Para qué sirve una PMO?',o:['Programar reuniones','Estandarizar y gobernar los proyectos','Reemplazar al equipo','Vender el producto'],c:1,e:'La Oficina de Gestión de Proyectos estandariza procesos y gobierna el portafolio.'},
+    {q:'En Scrum, ¿quién prioriza el Product Backlog?',o:['Scrum Master','Development Team','Product Owner','Patrocinador'],c:2,e:'El Product Owner prioriza el backlog para maximizar el valor.'}
+  ];
+  var answered={};
+  function renderQuiz(){
+    answered={};$('quiz-score').textContent='0';
+    $('quiz-box').innerHTML=QUIZ.map(function(it,qi){
+      var opts=it.o.map(function(t,oi){return '<button type="button" class="q-opt" data-q="'+qi+'" data-o="'+oi+'" onclick="quizPick('+qi+','+oi+')">'+esc(t)+'</button>';}).join('');
+      return '<div class="card" style="padding:1rem 1.15rem;margin-bottom:1rem;box-shadow:none;"><div style="font-weight:700;color:#14532d;margin-bottom:.6rem;font-size:.95rem;">'+(qi+1)+'. '+esc(it.q)+'</div>'+opts+'<div class="q-exp" id="qexp-'+qi+'" style="display:none;"></div></div>';
+    }).join('');
+  }
+  window.quizPick=function(qi,oi){
+    if(answered[qi]!==undefined)return; answered[qi]=oi;
+    var it=QUIZ[qi];
+    var btns=document.querySelectorAll('.q-opt[data-q="'+qi+'"]');
+    btns.forEach(function(b){var o=+b.getAttribute('data-o');b.disabled=true;if(o===it.c)b.classList.add('correct');if(o===oi&&oi!==it.c)b.classList.add('wrong');});
+    var exp=$('qexp-'+qi); var ok=(oi===it.c);
+    exp.style.display='block';
+    exp.innerHTML=(ok?'✅ <strong>¡Correcto!</strong> ':'❌ <strong>Incorrecto.</strong> ')+esc(it.e);
+    var sc=0;Object.keys(answered).forEach(function(k){if(answered[k]===QUIZ[k].c)sc++;});
+    $('quiz-score').textContent=sc;
+    if(Object.keys(answered).length===QUIZ.length){
+      var msg=sc>=8?'¡Excelente dominio! 🎉':sc>=6?'Vas bien, repasa lo que falló. 💪':'Repasa el módulo y vuelve a intentarlo. 📖';
+      var d=document.createElement('div');d.className='m1-panel';d.style.marginTop='.5rem';
+      d.innerHTML='<h4>Resultado final: '+sc+'/'+QUIZ.length+'</h4>'+msg;
+      $('quiz-box').appendChild(d);
+    }
+  };
+  window.resetQuiz=function(){renderQuiz();};
+  if($('quiz-box'))renderQuiz();
+})();
+</script>
+<div class="pr-ov" id="pr-ov">
+  <button class="pr-close" onclick="presClose()" aria-label="Cerrar">✕</button>
+  <div class="pr-stage"><div id="pr-slide"></div></div>
+  <div class="pr-bar">
+    <button class="pr-nav" onclick="presPrev()" aria-label="Anterior">‹</button>
+    <span class="pr-count" id="pr-count">1 / 1</span>
+    <button class="pr-nav" onclick="presNext()" aria-label="Siguiente">›</button>
+    <div class="pr-prog"><div class="pr-fill" id="pr-fill"></div></div>
+  </div>
+  <div class="pr-hint">← → o barra espaciadora para avanzar · Esc para salir</div>
+</div>
+<button id="pr-btn" onclick="present()">▶ Presentar</button>
+<script>
+(function(){
+  var SLIDES=[{"badge": "Módulo 1", "t": "Fundamentos de la Gerencia de Proyectos", "s": "GPI 8469 · Semanas 1–3"}, {"t": "¿Qué es un proyecto?", "b": ["Esfuerzo temporal: tiene inicio y fin", "Genera un resultado único", "Se elabora progresivamente", "Usa recursos limitados"]}, {"t": "La triple restricción", "b": ["Alcance — qué se hace", "Tiempo — el plazo", "Costo — el presupuesto", "Cambiar uno afecta a los demás y a la Calidad"]}, {"t": "Éxito vs. Fracaso", "two": [["✅ Éxito", ["Objetivos claros", "Apoyo de la dirección", "Stakeholders involucrados", "Gestión de riesgos"]], ["❌ Fracaso", ["Requisitos ambiguos", "Estimaciones irreales", "Poca comunicación", "Scope creep"]]]}, {"t": "Guías internacionales", "b": ["PMBOK — buenas prácticas (PMI)", "ISO 21500 / 21502 — normas", "PRINCE2 — método por procesos"]}, {"t": "Estructuras organizacionales", "b": ["Funcional — autoridad del PM baja", "Matricial — autoridad compartida", "Proyectizada — autoridad del PM alta"]}, {"t": "Roles del proyecto", "b": ["Patrocinador — autoriza y financia", "Director (PM) — planifica y dirige", "Equipo — ejecuta", "Stakeholders — afectan o son afectados"]}, {"t": "Ciclo de vida", "b": ["Inicio → Planificación → Ejecución → Monitoreo → Cierre", "El ciclo del proyecto ≠ el del producto", "El producto incluye operación y mantenimiento"]}, {"t": "Certificaciones", "b": ["CAPM — nivel inicial", "PMP — profesional", "PRINCE2", "PMI-ACP, PSM, CSM — ágiles"]}, {"t": "En resumen", "b": ["Un proyecto es temporal y único", "La triple restricción guía las decisiones", "Las guías y estructuras dan el marco", "El enfoque puede ser tradicional o ágil"]}];
+  var cur=0;
+  function render(){var s=SLIDES[cur],h='';
+    if(s.badge)h+='<div class="pr-badge">'+s.badge+'</div>';
+    h+='<h1 class="pr-title">'+s.t+'</h1>';
+    if(s.s)h+='<div class="pr-sub">'+s.s+'</div>';
+    if(s.two){h+='<div class="pr-two">';s.two.forEach(function(c){h+='<div class="pr-col"><h3>'+c[0]+'</h3><ul>'+c[1].map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';});h+='</div>';}
+    else if(s.b){h+='<ul class="pr-list">'+s.b.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>';}
+    document.getElementById('pr-slide').innerHTML=h;
+    document.getElementById('pr-count').textContent=(cur+1)+' / '+SLIDES.length;
+    document.getElementById('pr-fill').style.width=((cur+1)/SLIDES.length*100)+'%';}
+  window.present=function(){cur=0;render();document.getElementById('pr-ov').classList.add('open');document.addEventListener('keydown',key);};
+  window.presClose=function(){document.getElementById('pr-ov').classList.remove('open');document.removeEventListener('keydown',key);};
+  window.presNext=function(){if(cur<SLIDES.length-1){cur++;render();}};
+  window.presPrev=function(){if(cur>0){cur--;render();}};
+  function key(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();window.presNext();}else if(e.key==='ArrowLeft'){window.presPrev();}else if(e.key==='Escape'){window.presClose();}}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo de Vida: Proyecto vs. Producto | GPI 8469</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+    body { font-family: 'Inter', sans-serif; background:#f0fdf4; }
+    .header-gradient { background: linear-gradient(90deg, #005824, #007336); }
+    .quick-nav { background:#004d22; }
+    .quick-nav a { color:#86efac; font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em; padding:.45rem .7rem; border-radius:6px; transition:.2s; white-space:nowrap; }
+    .quick-nav a:hover { background:rgba(255,255,255,.12); color:#fff; }
+    .card { background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05); transition:.3s; }
+    .card:hover { transform:translateY(-2px); box-shadow:0 10px 20px -4px rgba(0,0,0,0.09); }
+    .card-title { display:flex; align-items:center; gap:.75rem; font-size:1.4rem; font-weight:700; color:#004d22; }
+    .badge { display:inline-block; font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; background:#dcfce7; color:#166534; padding:3px 10px; border-radius:20px; margin-bottom:.5rem; }
+    .animate-on-scroll { opacity:0; transform:translateY(22px); transition:opacity .5s, transform .5s; }
+    .animate-on-scroll.is-visible { opacity:1; transform:translateY(0); }
+    blockquote { border-left:4px solid #22c55e; background:#f0fdf4; border-radius:0 12px 12px 0; padding:1rem 1.5rem; font-style:italic; color:#166534; }
+    .step-circle { width:40px; height:40px; border-radius:50%; background:#005824; color:#fff; font-weight:800; font-size:.95rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    table.cmp { border-collapse:collapse; width:100%; }
+    table.cmp th, table.cmp td { border:1px solid #d1d5db; padding:9px 12px; font-size:.82rem; text-align:left; vertical-align:top; }
+    table.cmp th { background:#007336; color:#fff; }
+    table.cmp tr:nth-child(even) td { background:#f3f8f4; }
+</style>
+</head>
+<body class="text-gray-800">
+
+<header class="header-gradient text-white shadow-md sticky top-0 z-50">
+  <div class="container mx-auto p-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="UTPLOGO.png" class="h-10 w-10 object-contain bg-white rounded-full p-0.5 shadow" alt="UTP">
+      <img src="SISTEMASLOGO.png" class="h-10 w-10 object-contain rounded-full shadow" alt="FISC">
+      <div class="hidden md:block">
+        <p class="text-xs text-gray-200">GPI · Código 8469 · Grupo 1LS241</p>
+        <p class="text-sm font-bold">FISC — Universidad Tecnológica de Panamá</p>
+      </div>
+    </div>
+    <div class="text-center hidden lg:block">
+      <p class="text-xs text-green-300 uppercase tracking-widest font-bold">Módulo 1 · Unidad 1.1</p>
+      <h1 class="text-lg font-bold">Ciclo de Vida: Proyecto vs. Producto</h1>
+    </div>
+    <div class="flex gap-2">
+      <a href="Mod1_Fundamentos.html" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-2 rounded-lg font-semibold">← Módulo 1</a>
+      <a href="Introduccion_GPI.html" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-2 rounded-lg font-semibold">🏠 Inicio</a>
+    </div>
+  </div>
+</header>
+
+<nav class="quick-nav sticky top-[64px] z-40 shadow overflow-x-auto">
+  <div class="container mx-auto px-4 py-1 flex gap-1 justify-start md:justify-center">
+    <a href="#conceptos">🔎 Conceptos</a>
+    <a href="#proyecto">🛠️ Ciclo del proyecto</a>
+    <a href="#producto">📦 Ciclo del producto</a>
+    <a href="#comparativa">⚖️ Comparativa</a>
+    <a href="#relacion">🔗 Relación</a>
+    <a href="#ejemplo">💡 Ejemplo</a>
+    <a href="#resumen">✔️ Resumen</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="intro" class="relative overflow-hidden">
+  <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1470&q=80');"><div class="absolute inset-0 bg-green-900 bg-opacity-90"></div></div>
+  <div class="relative container mx-auto px-6 py-20 text-center text-white">
+    <span class="inline-block bg-white/15 border border-white/25 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">Módulo 1 · Fundamentos</span>
+    <h2 class="text-3xl md:text-5xl font-extrabold mb-3">Ciclo de Vida del Proyecto vs. del Producto</h2>
+    <p class="text-base max-w-2xl mx-auto opacity-85 leading-relaxed">Dos líneas de tiempo que suelen confundirse: una termina cuando se entrega el resultado; la otra acompaña al producto durante toda su vida útil.</p>
+  </div>
+</section>
+
+<main class="container mx-auto px-4 md:px-8 py-10 space-y-14">
+
+  <!-- CONCEPTOS -->
+  <section id="conceptos" class="animate-on-scroll">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="card p-6 border-t-4" style="border-color:#007336;">
+        <span class="badge">Temporal</span>
+        <h2 class="card-title mb-3"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🛠️</span>Ciclo de vida del proyecto</h2>
+        <p class="text-sm text-gray-700">Conjunto de fases por las que pasa un proyecto desde su <b>inicio hasta su cierre</b>. Es temporal: comienza cuando se autoriza el proyecto y termina cuando se entrega el producto o resultado. Sirve para <b>organizar y controlar el trabajo</b>.</p>
+      </div>
+      <div class="card p-6 border-t-4" style="border-color:#2563eb;">
+        <span class="badge" style="background:#dbeafe;color:#1e40af;">Duradero</span>
+        <h2 class="card-title mb-3" style="color:#1e3a8a;"><span class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl">📦</span>Ciclo de vida del producto</h2>
+        <p class="text-sm text-gray-700">Etapas por las que pasa un <b>producto durante toda su vida</b>, desde su concepción hasta su retiro del mercado. Incluye su uso, mantenimiento y evolución. Sirve para <b>gestionar el valor del producto en el tiempo</b>.</p>
+      </div>
+    </div>
+    <blockquote class="mt-6">Un proyecto crea el producto; el producto vive mucho más allá del proyecto que lo originó.</blockquote>
+  </section>
+
+  <!-- CICLO DEL PROYECTO -->
+  <section id="proyecto" class="animate-on-scroll">
+    <div class="card p-6 md:p-8">
+      <span class="badge">Línea de tiempo</span>
+      <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🛠️</span>Fases del ciclo de vida del proyecto</h2>
+      <div class="flex flex-wrap items-center gap-2 justify-center">
+        <div class="flex flex-col items-center gap-1 w-28"><div class="step-circle">1</div><p class="text-xs text-center mt-1 font-bold text-green-800">Inicio</p><p class="text-[11px] text-center text-gray-500">Acta de constitución</p></div>
+        <span class="text-green-500 font-bold text-xl">→</span>
+        <div class="flex flex-col items-center gap-1 w-28"><div class="step-circle">2</div><p class="text-xs text-center mt-1 font-bold text-green-800">Planificación</p><p class="text-[11px] text-center text-gray-500">Alcance, cronograma, costos</p></div>
+        <span class="text-green-500 font-bold text-xl">→</span>
+        <div class="flex flex-col items-center gap-1 w-28"><div class="step-circle">3</div><p class="text-xs text-center mt-1 font-bold text-green-800">Ejecución</p><p class="text-[11px] text-center text-gray-500">Se crean los entregables</p></div>
+        <span class="text-green-500 font-bold text-xl">→</span>
+        <div class="flex flex-col items-center gap-1 w-28"><div class="step-circle">4</div><p class="text-xs text-center mt-1 font-bold text-green-800">Monitoreo y Control</p><p class="text-[11px] text-center text-gray-500">Se mide y corrige</p></div>
+        <span class="text-green-500 font-bold text-xl">→</span>
+        <div class="flex flex-col items-center gap-1 w-28"><div class="step-circle">5</div><p class="text-xs text-center mt-1 font-bold text-green-800">Cierre</p><p class="text-[11px] text-center text-gray-500">Entrega y lecciones</p></div>
+      </div>
+      <p class="text-sm text-gray-600 italic mt-6 text-center">El monitoreo y control acompaña a la ejecución de forma continua. Al cerrar, el proyecto termina.</p>
+    </div>
+  </section>
+
+  <!-- CICLO DEL PRODUCTO -->
+  <section id="producto" class="animate-on-scroll">
+    <div class="card p-6 md:p-8">
+      <span class="badge" style="background:#dbeafe;color:#1e40af;">Línea de tiempo</span>
+      <h2 class="card-title mb-6" style="color:#1e3a8a;"><span class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-xl">📦</span>Etapas del ciclo de vida del producto</h2>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="rounded-xl p-4 text-center" style="background:#eff6ff;border:1px solid #bfdbfe;"><p class="text-2xl mb-1">💡</p><p class="text-sm font-bold text-blue-800">1. Desarrollo</p><p class="text-xs text-gray-600 mt-1">Se concibe y construye (aquí ocurre el proyecto).</p></div>
+        <div class="rounded-xl p-4 text-center" style="background:#eff6ff;border:1px solid #bfdbfe;"><p class="text-2xl mb-1">🚀</p><p class="text-sm font-bold text-blue-800">2. Introducción</p><p class="text-xs text-gray-600 mt-1">Lanzamiento al mercado.</p></div>
+        <div class="rounded-xl p-4 text-center" style="background:#eff6ff;border:1px solid #bfdbfe;"><p class="text-2xl mb-1">📈</p><p class="text-sm font-bold text-blue-800">3. Crecimiento</p><p class="text-xs text-gray-600 mt-1">Aumenta la adopción y las ventas.</p></div>
+        <div class="rounded-xl p-4 text-center" style="background:#eff6ff;border:1px solid #bfdbfe;"><p class="text-2xl mb-1">⚖️</p><p class="text-sm font-bold text-blue-800">4. Madurez</p><p class="text-xs text-gray-600 mt-1">Estabilidad, mantenimiento y mejoras.</p></div>
+        <div class="rounded-xl p-4 text-center" style="background:#fef2f2;border:1px solid #fecaca;"><p class="text-2xl mb-1">📉</p><p class="text-sm font-bold text-red-800">5. Declive / Retiro</p><p class="text-xs text-gray-600 mt-1">Se reemplaza o se da de baja.</p></div>
+      </div>
+      <p class="text-sm text-gray-600 italic mt-6 text-center">El producto sigue vivo (operación y mantenimiento) mucho después de que el proyecto terminó.</p>
+    </div>
+  </section>
+
+  <!-- COMPARATIVA -->
+  <section id="comparativa" class="animate-on-scroll">
+    <div class="text-center mb-6">
+      <span class="badge">Comparativa</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-green-900 mt-2">Diferencias clave</h2>
+    </div>
+    <div class="card p-2 overflow-x-auto">
+      <table class="cmp">
+        <thead><tr><th>Aspecto</th><th>Ciclo de vida del proyecto 🛠️</th><th>Ciclo de vida del producto 📦</th></tr></thead>
+        <tbody>
+          <tr><td><b>Duración</b></td><td>Temporal: tiene inicio y fin</td><td>Prolongada: toda la vida útil del producto</td></tr>
+          <tr><td><b>Objetivo</b></td><td>Crear y entregar el producto/resultado</td><td>Generar y sostener valor en el tiempo</td></tr>
+          <tr><td><b>Fases</b></td><td>Inicio → Planif. → Ejecución → Control → Cierre</td><td>Desarrollo → Introducción → Crecimiento → Madurez → Declive</td></tr>
+          <tr><td><b>Fin</b></td><td>Cuando se entrega el producto</td><td>Cuando el producto se retira del mercado</td></tr>
+          <tr><td><b>Incluye mantenimiento/operación</b></td><td>No (eso es operación, no proyecto)</td><td>Sí</td></tr>
+          <tr><td><b>Relación</b></td><td>Un producto puede requerir varios proyectos</td><td>Contiene uno o más proyectos a lo largo de su vida</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- RELACIÓN -->
+  <section id="relacion" class="animate-on-scroll">
+    <div class="card p-6 md:p-8">
+      <span class="badge">¿Cómo se relacionan?</span>
+      <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🔗</span>El producto contiene varios proyectos</h2>
+      <p class="text-sm text-gray-700 mb-5">A lo largo de la vida de un producto se ejecutan <b>múltiples proyectos</b>: el que lo crea y otros para mejorarlo, actualizarlo o retirarlo.</p>
+      <div class="rounded-2xl p-5" style="background:linear-gradient(90deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;">
+        <p class="text-xs font-bold uppercase tracking-widest text-blue-800 mb-3">📦 Ciclo de vida del producto</p>
+        <div class="flex flex-wrap gap-3">
+          <div class="flex-1 min-w-[130px] rounded-xl bg-green-600 text-white p-3 text-center shadow"><p class="text-xs font-bold">Proyecto 1</p><p class="text-[11px] opacity-90">Crear versión 1.0</p></div>
+          <div class="flex-1 min-w-[130px] rounded-xl bg-green-700 text-white p-3 text-center shadow"><p class="text-xs font-bold">Proyecto 2</p><p class="text-[11px] opacity-90">Nueva funcionalidad</p></div>
+          <div class="flex-1 min-w-[130px] rounded-xl bg-green-800 text-white p-3 text-center shadow"><p class="text-xs font-bold">Proyecto 3</p><p class="text-[11px] opacity-90">Migración / rediseño</p></div>
+          <div class="flex-1 min-w-[130px] rounded-xl bg-gray-500 text-white p-3 text-center shadow"><p class="text-xs font-bold">Proyecto 4</p><p class="text-[11px] opacity-90">Retiro del producto</p></div>
+        </div>
+        <div class="mt-3 h-2 rounded-full bg-blue-300 relative"><span class="absolute -top-0.5 left-0 text-[10px] text-blue-800">Introducción</span><span class="absolute -top-0.5 right-0 text-[10px] text-blue-800">Retiro</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EJEMPLO -->
+  <section id="ejemplo" class="animate-on-scroll">
+    <div class="card p-6 md:p-8 bg-gradient-to-br from-green-50 to-white">
+      <span class="badge">Ejemplo práctico</span>
+      <h2 class="card-title mb-4"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">💡</span>Una app de banca móvil</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-5 rounded-xl bg-white border border-green-200">
+          <h3 class="font-bold text-green-800 mb-2">🛠️ El proyecto</h3>
+          <p class="text-sm text-gray-700">Diseñar y construir la versión 1.0 de la app. Inicia con el acta de constitución y <b>termina cuando la app se publica</b> y se acepta el entregable.</p>
+        </div>
+        <div class="p-5 rounded-xl bg-white border border-blue-200">
+          <h3 class="font-bold text-blue-800 mb-2">📦 El producto</h3>
+          <p class="text-sm text-gray-700">La app vive años: se usa a diario, recibe mantenimiento, nuevas versiones y parches de seguridad, hasta que se reemplaza. <b>Cada mejora es un nuevo proyecto</b> dentro de su ciclo de vida.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESUMEN -->
+  <section id="resumen" class="animate-on-scroll">
+    <div class="card p-6 md:p-8">
+      <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-700 flex items-center justify-center text-xl text-white">✔️</span>Resumen</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El <b>ciclo del proyecto</b> es temporal: de inicio a cierre.</p></div>
+        <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El <b>ciclo del producto</b> abarca toda su vida útil, incluyendo operación y mantenimiento.</p></div>
+        <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El proyecto <b>crea</b> el producto; el producto <b>perdura</b> mucho más.</p></div>
+        <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">Un producto puede contener <b>varios proyectos</b> a lo largo de su vida.</p></div>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-between pt-6 mt-6 border-t border-green-200">
+        <a href="Mod1_Fundamentos.html" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-sm">← 🧭 Módulo 1</a>
+        <a href="#intro" class="px-5 py-2.5 rounded-xl bg-green-100 hover:bg-green-200 text-green-800 font-semibold text-sm">↑ Inicio</a>
+        <a href="Mod2_ProyectosTradicionales.html" class="px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-semibold text-sm">Módulo 2 → 🧱</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="header-gradient text-white mt-12 py-6">
+  <div class="container mx-auto px-6 text-center">
+    <p class="font-bold mb-1">GPI 8469 · Grupo 1LS241 · II Semestre 2026 — Módulo 1</p>
+    <p class="text-green-200 text-sm">Universidad Tecnológica de Panamá · FISC · Ing. Henry D. De Gracia R.</p>
+  </div>
+</footer>
+
+<script>
+  const ob = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');ob.unobserve(e.target);}})},{threshold:.08});
+  document.querySelectorAll('.animate-on-scroll').forEach(el=>ob.observe(el));
+</script>
+</body>
+</html>
