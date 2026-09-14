@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🧠 Cheat Sheet GPI · Módulo 1</title>
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#121822; --card:#161d29; --card2:#1c2432;
+  --border:#26303f; --text:#e7edf5; --sub:#93a2b8; --accent:#22c55e;
+  --accent-d:#0f2b1d; --red:#fb7185; --red-d:#3a1620; --blue:#60a5fa; --blue-d:#122036;
+  --purple:#c084fc; --purple-d:#241a36; --gold:#facc15;
+  --shadow:0 6px 18px -6px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+body{padding-bottom:78px;}
+h1,h2,h3,h4{margin:0;}
+.hide{display:none !important;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0d1420,#0b0f14 95%);border-bottom:1px solid var(--border);padding:10px 14px 12px;}
+.htitle{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.htitle .emoji{font-size:1.4rem;}
+.htitle h1{font-size:1.05rem;font-weight:800;letter-spacing:.2px;}
+.htitle .sub{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.searchbox{position:relative;}
+.searchbox input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:10px 34px 10px 12px;font-size:.85rem;outline:none;}
+.searchbox input:focus{border-color:var(--accent);}
+.searchbox .sicon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.9rem;pointer-events:none;}
+.searchclear{position:absolute;right:34px;top:50%;transform:translateY(-50%);color:var(--sub);background:none;border:none;font-size:1rem;display:none;padding:4px;}
+.nores{text-align:center;color:var(--sub);font-size:.85rem;padding:30px 10px;display:none;}
+
+/* QUICK INDEX CHIPS (scrollable) */
+.idxwrap{overflow-x:auto;white-space:nowrap;padding:10px 14px 4px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.idxwrap::-webkit-scrollbar{display:none;}
+.idxchip{display:inline-block;background:var(--card);border:1px solid var(--border);color:var(--sub);font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:20px;margin-right:6px;text-decoration:none;}
+.idxchip:active{background:var(--accent-d);color:var(--accent);border-color:var(--accent);}
+
+main{padding:12px 12px 20px;max-width:720px;margin:0 auto;}
+
+/* SECTION / ACCORDION */
+.section{margin-bottom:14px;scroll-margin-top:118px;}
+.sec-head{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;}
+.sec-head .emoji{font-size:1.3rem;flex-shrink:0;}
+.sec-head .ttl{flex:1;}
+.sec-head .ttl h2{font-size:.95rem;font-weight:800;}
+.sec-head .ttl p{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.sec-head .chev{color:var(--sub);transition:transform .25s;font-size:.9rem;}
+.section.open .sec-head .chev{transform:rotate(180deg);}
+.sec-body{display:none;padding:10px 2px 4px;}
+.section.open .sec-body{display:block;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+.card h3{font-size:.86rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.card p, .card li{font-size:.8rem;line-height:1.42;color:#d3dbe6;}
+.card ul{margin:4px 0 0;padding-left:0;list-style:none;}
+.card li{position:relative;padding-left:14px;margin-bottom:4px;}
+.card li:before{content:"▸";position:absolute;left:0;color:var(--accent);}
+
+/* ACRONYM BADGE */
+.acro{display:inline-flex;align-items:center;gap:6px;background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:10px;font-size:.85rem;margin:2px 0 8px;}
+.mnemo{font-size:.74rem;color:#a6e6bf;background:rgba(34,197,94,.08);border-left:3px solid var(--accent);padding:6px 9px;border-radius:0 8px 8px 0;margin-top:6px;font-style:italic;}
+
+/* COLOR TOKENS */
+.c-red{color:var(--red);font-weight:700;}
+.c-green{color:var(--accent);font-weight:700;}
+.c-blue{color:var(--blue);font-weight:700;}
+.c-purple{color:var(--purple);font-weight:700;}
+.tag{display:inline-block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:20px;margin-bottom:6px;}
+.tag-crit{background:var(--red-d);color:var(--red);}
+.tag-gold{background:var(--accent-d);color:var(--accent);}
+.tag-term{background:var(--blue-d);color:var(--blue);}
+.tag-purple{background:var(--purple-d);color:var(--purple);}
+
+/* CHUNK GRID */
+.chunk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+.chunk{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center;}
+.chunk .e{font-size:1.2rem;}
+.chunk .t{font-size:.72rem;font-weight:800;margin-top:2px;}
+.chunk .d{font-size:.64rem;color:var(--sub);margin-top:2px;line-height:1.3;}
+
+/* TABLES */
+.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:6px;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.72rem;}
+th{background:#0f2b1d;color:var(--accent);text-align:left;padding:7px 9px;font-weight:800;white-space:nowrap;position:sticky;top:0;}
+td{padding:7px 9px;border-top:1px solid var(--border);color:#d3dbe6;vertical-align:top;}
+tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+td b{color:var(--text);}
+
+/* FLOW STEPS */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:8px 0;}
+.step{background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:800;font-size:.68rem;padding:6px 9px;border-radius:20px;white-space:nowrap;}
+.arrow{color:var(--sub);font-weight:700;}
+
+/* GLOSSARY GRID */
+.glo{display:grid;grid-template-columns:1fr;gap:8px;}
+.glo .card h3{color:var(--purple);}
+
+/* FOOTER */
+footer{max-width:720px;margin:10px auto 0;padding:14px;text-align:center;color:var(--sub);font-size:.68rem;}
+
+/* BOTTOM NAV */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#0d1420;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 2px calc(6px + env(safe-area-inset-bottom));z-index:60;}
+.bnitem{display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--sub);font-size:.55rem;font-weight:700;background:none;border:none;flex:1;padding:4px 0;}
+.bnitem .e{font-size:1.05rem;}
+.bnitem.active{color:var(--accent);}
+
+/* jump-to-top */
+.top-btn{position:fixed;right:14px;bottom:66px;background:var(--accent);color:#04240f;border:none;width:38px;height:38px;border-radius:50%;font-size:1rem;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;z-index:55;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="htitle">
+    <span class="emoji">🧠</span>
+    <div>
+      <h1>Cheat Sheet · GPI Módulo 1</h1>
+      <p class="sub">Fundamentos de Gerencia de Proyectos Informáticos · resumen mnemotécnico</p>
+    </div>
+  </div>
+  <div class="searchbox">
+    <input id="search" type="text" placeholder="Buscar sigla, término o tema… (ej. PMBOK, ATC, PDES)" autocomplete="off">
+    <button class="searchclear" id="clearBtn">✕</button>
+    <span class="sicon" id="searchIcon">🔎</span>
+  </div>
+</header>
+
+<nav class="idxwrap" id="idxwrap">
+  <a class="idxchip" href="#s1">🎯 Proyecto</a>
+  <a class="idxchip" href="#s2">✅ Éxito/Fracaso</a>
+  <a class="idxchip" href="#s3">📘 Guías/Enfoques</a>
+  <a class="idxchip" href="#s4">🏢 Organización</a>
+  <a class="idxchip" href="#s5">🔄 Ciclo de vida</a>
+  <a class="idxchip" href="#s6">🎓 Certificaciones</a>
+  <a class="idxchip" href="#s7">💼 Carrera</a>
+  <a class="idxchip" href="#s8">🎮 Reglas de oro</a>
+  <a class="idxchip" href="#s9">📖 Glosario</a>
+</nav>
+
+<main id="main">
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra sigla o palabra.</p>
+
+<!-- ============ SECCIÓN 1: EL PROYECTO ============ -->
+<section class="section open" id="s1" data-nav="🎯 Proyecto">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🎯</span>
+    <div class="ttl"><h2>1 · ¿Qué es un proyecto?</h2><p>Definición · características · triple restricción · importancia TI</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Definición</h3>
+      <p>Esfuerzo <span class="c-blue">temporal</span> que se emprende para crear un producto, servicio o resultado <span class="c-blue">único</span>.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🔤 Características — Acrónimo</h3>
+      <div class="acro">TUPR</div>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">🕒</div><div class="t">Temporal</div><div class="d">Inicio y fin definidos</div></div>
+        <div class="chunk"><div class="e">✨</div><div class="t">Único</div><div class="d">Resultado no repetitivo</div></div>
+        <div class="chunk"><div class="e">📈</div><div class="t">Progresivo</div><div class="d">Se detalla al avanzar (elaboración progresiva)</div></div>
+        <div class="chunk"><div class="e">👥</div><div class="t">Recursos limitados</div><div class="d">Personas, tiempo, presupuesto, tecnología</div></div>
+      </div>
+      <div class="mnemo">🟢 Regla de oro: "Todo proyecto es <b>TUPR</b>: Temporal, Único, Progresivo, con Recursos limitados."</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>⚖️ Triple restricción — Acrónimo</h3>
+      <div class="acro">ATC</div>
+      <p><span class="c-green">A</span>lcance · <span class="c-green">T</span>iempo · <span class="c-green">C</span>osto → equilibrio que determina la <b>Calidad</b>.</p>
+      <div class="mnemo">🟢 "Como una <b>Torre de Control (ATC)</b>": si mueves uno de los 3, los otros —o la calidad— se ajustan.</div>
+      <p><span class="c-red">⚠️ Error común:</span> agregar alcance sin ajustar tiempo/costo → <i>scope creep</i> y calidad ▼.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>💻 Importancia de proyectos de TI — Acrónimo</h3>
+      <div class="acro">TIIA</div>
+      <ul>
+        <li><b>T</b>ransformación digital — moderniza y da competitividad</li>
+        <li><b>I</b>nversión estratégica — alto capital, impacta sostenibilidad</li>
+        <li><b>I</b>ntegración tecnológica — conecta procesos, datos, sistemas</li>
+        <li><b>A</b>lta incertidumbre — cambios de requisitos/tecnología ⇒ riesgo</li>
+      </ul>
+      <div class="mnemo">🟢 Suena a "<b>TÍA</b>": los proyectos de TI son como una tía exigente — Transforman, Invierten, Integran y traen Alta incertidumbre.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 2: ÉXITO Y FRACASO ============ -->
+<section class="section" id="s2" data-nav="✅ Éxito/Fracaso">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">✅</span>
+    <div class="ttl"><h2>2 · Éxito y Fracaso</h2><p>Factores clave · casos reales de TI</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>✅ Factores de ÉXITO — Acrónimo</h3>
+      <div class="acro">OASEG</div>
+      <ul>
+        <li><b>O</b>bjetivos y alcance bien definidos</li>
+        <li><b>A</b>poyo de la alta dirección</li>
+        <li><b>S</b>takeholders involucrados</li>
+        <li><b>E</b>quipo competente + comunicación efectiva</li>
+        <li><b>G</b>estión activa de riesgos y cambios</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Puntos críticos</span>
+      <h3>❌ Factores de FRACASO — Acrónimo</h3>
+      <div class="acro" style="background:var(--red-d);border-color:#7f2334;color:var(--red);">FRECS</div>
+      <ul>
+        <li><span class="c-red">F</span>alta de patrocinio o compromiso</li>
+        <li><span class="c-red">R</span>equisitos ambiguos o cambiantes</li>
+        <li><span class="c-red">E</span>stimaciones de tiempo/costo irreales</li>
+        <li><span class="c-red">C</span>omunicación deficiente</li>
+        <li><span class="c-red">S</span>cope creep (alcance sin control)</li>
+      </ul>
+      <div class="mnemo">🔴 "FRECS" suena a <b>fracaso</b>: fácil de asociar a lo que NO debes hacer.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📚 Casos reales de TI</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Caso</th><th>Resultado</th><th>Factor clave</th></tr></thead>
+        <tbody>
+          <tr><td><b>Healthcare.gov</b> (2013)</td><td>❌ Fracaso → recuperado</td><td>Planificación y pruebas deficientes; plazo político fijo</td></tr>
+          <tr><td><b>Aeropuerto de Denver</b> (equipaje, 90s)</td><td>❌ Fracaso</td><td>Alcance/complejidad excesivos; riesgo no gestionado (~16 meses de atraso)</td></tr>
+          <tr><td><b>FBI Virtual Case File</b> (2000–05)</td><td>❌ Fracaso (~US$170M)</td><td>Requisitos cambiantes; gestión débil</td></tr>
+          <tr><td><b>e-Estonia</b> (gob. digital)</td><td>✅ Éxito</td><td>Visión clara + patrocinio + entregas incrementales</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 3: GUÍAS Y ENFOQUES ============ -->
+<section class="section" id="s3" data-nav="📘 Guías/Enfoques">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📘</span>
+    <div class="ttl"><h2>3 · Guías internacionales y enfoques</h2><p>PMBOK · ISO · PRINCE2 · Tradicional vs. Ágil</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <h3>📚 Las 3 guías — Acrónimo</h3>
+      <div class="acro">PIP</div>
+      <ul>
+        <li><b class="c-blue">P</b>MBOK® (PMI) — buenas prácticas por dominios/procesos, 7ª ed. por principios</li>
+        <li><b class="c-blue">I</b>SO 21500/21502 — norma internacional, neutral y global</li>
+        <li><b class="c-blue">P</b>RINCE2 — método por procesos y roles (Axelos/PeopleCert), UK/sector público</li>
+      </ul>
+      <div class="mnemo">🟢 "Guías <b>PIP</b>": PMBOK, ISO, PRINCE2 (nota que PRINCE termina en "2", como un guiño al acrónimo).</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧱⚡ Tradicional vs. Ágil</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Aspecto</th><th>🧱 Tradicional</th><th>⚡ Ágil</th></tr></thead>
+        <tbody>
+          <tr><td>Planificación</td><td>Detallada, por adelantado</td><td>Iterativa e incremental</td></tr>
+          <tr><td>Fases</td><td>Secuenciales (cascada)</td><td>Ciclos cortos (sprints)</td></tr>
+          <tr><td>Alcance</td><td>Fijo, cambios controlados</td><td>Flexible, mejora continua</td></tr>
+          <tr><td>Entrega</td><td>Al final</td><td>Frecuente, por partes</td></tr>
+          <tr><td>Ideal para</td><td>Requisitos estables</td><td>Requisitos cambiantes</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 Requisitos <b>estables</b> → tradicional. Requisitos <b>cambiantes</b> → ágil.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 4: ORGANIZACIÓN ============ -->
+<section class="section" id="s4" data-nav="🏢 Organización">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🏢</span>
+    <div class="ttl"><h2>4 · Gestión en las organizaciones</h2><p>PMO · estructuras · roles</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>🏢 PMO (Project Management Office)</h3>
+      <p>Oficina que <span class="c-blue">estandariza</span> procesos, gobierna el portafolio y da soporte a la dirección de proyectos.</p>
+      <div class="acro">MGS</div>
+      <ul>
+        <li><b>M</b>etodología — plantillas y procesos comunes</li>
+        <li><b>G</b>obernanza — supervisa portafolio, prioriza según estrategia</li>
+        <li><b>S</b>oporte — capacita, asesora, consolida histórico</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>🏛️🔀🎯 Estructuras organizacionales — Acrónimo</h3>
+      <div class="acro">FMP</div>
+      <p>De <span class="c-red">menor</span> a <span class="c-green">mayor</span> autoridad del PM, como subir una escalera:</p>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Estructura</th><th>Autoridad del PM</th><th>Clave</th></tr></thead>
+        <tbody>
+          <tr><td>🏛️ <b>F</b>uncional</td><td><span class="c-red">Baja</span></td><td>Poder en gerentes de área</td></tr>
+          <tr><td>🔀 <b>M</b>atricial</td><td>Media (débil/equilibrada/fuerte)</td><td>Autoridad compartida</td></tr>
+          <tr><td>🎯 <b>P</b>royectizada</td><td><span class="c-green">Alta</span></td><td>Equipo reporta directo al PM</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 "<b>F</b>ácil-<b>M</b>edio-<b>P</b>oderoso": F-M-P sube la autoridad del PM en ese orden.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🤝 Roles del proyecto — Acrónimo</h3>
+      <div class="acro">PDES</div>
+      <ul>
+        <li>👤 <b>P</b>atrocinador (sponsor) — provee recursos, autoriza</li>
+        <li>🧭 <b>D</b>irector de proyecto (PM) — planifica, ejecuta, controla</li>
+        <li>👥 <b>E</b>quipo — ejecuta, produce entregables</li>
+        <li>🤝 <b>S</b>takeholders — afectan o son afectados</li>
+      </ul>
+      <div class="mnemo">🟢 "Todo proyecto tiene sus <b>PDES</b>" — memorízalo casi como "pies": sin ellos, el proyecto no camina.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 5: CICLO DE VIDA ============ -->
+<section class="section" id="s5" data-nav="🔄 Ciclo de vida">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🔄</span>
+    <div class="ttl"><h2>5 · Ciclo de vida: proyecto vs. producto</h2><p>Fases · diferencias · relación</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <h3>🛠️ Ciclo del PROYECTO — Acrónimo</h3>
+      <div class="acro">IPEMC</div>
+      <div class="flow">
+        <span class="step">1 Inicio</span><span class="arrow">→</span>
+        <span class="step">2 Planif.</span><span class="arrow">→</span>
+        <span class="step">3 Ejecución</span><span class="arrow">→</span>
+        <span class="step">4 Monitoreo</span><span class="arrow">→</span>
+        <span class="step">5 Cierre</span>
+      </div>
+      <ul>
+        <li><b>I</b>nicio — Acta de Constitución, esfuerzo bajo</li>
+        <li><b>P</b>lanificación — EDT, Gantt, presupuesto, riesgos</li>
+        <li><b>E</b>jecución — mayor esfuerzo/costo, se crean entregables</li>
+        <li><b>M</b>onitoreo y control — continuo durante ejecución, mide y corrige</li>
+        <li><b>C</b>ierre — lecciones aprendidas, aceptación</li>
+      </ul>
+      <div class="mnemo">🟢 "<b>IPEMC</b>: Inicia, Planea, Ejecuta, Mide, Cierra." Esfuerzo forma una curva: bajo-alto-bajo.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📦 Ciclo del PRODUCTO — Acrónimo</h3>
+      <div class="acro">DICMR</div>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">💡</div><div class="t">Desarrollo</div><div class="d">Se concibe/construye (aquí ocurre el proyecto)</div></div>
+        <div class="chunk"><div class="e">🚀</div><div class="t">Introducción</div><div class="d">Lanzamiento al mercado</div></div>
+        <div class="chunk"><div class="e">📈</div><div class="t">Crecimiento</div><div class="d">Aumenta adopción y ventas</div></div>
+        <div class="chunk"><div class="e">⚖️</div><div class="t">Madurez</div><div class="d">Estabilidad, mantenimiento</div></div>
+        <div class="chunk"><div class="e">📉</div><div class="t">Retiro</div><div class="d">Se reemplaza o da de baja</div></div>
+      </div>
+      <div class="mnemo">🟢 "<b>DICMR</b>: Diseñas, Introduces, Creces, Maduras, Retiras."</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>⚖️ Diferencias clave</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Aspecto</th><th>🛠️ Proyecto</th><th>📦 Producto</th></tr></thead>
+        <tbody>
+          <tr><td>Duración</td><td>Temporal</td><td>Toda la vida útil</td></tr>
+          <tr><td>Objetivo</td><td>Crear/entregar</td><td>Generar y sostener valor</td></tr>
+          <tr><td>Termina cuando…</td><td>Se entrega el producto</td><td>Se retira del mercado</td></tr>
+          <tr><td>Mantenimiento</td><td class="c-red">No incluido</td><td class="c-green">Sí incluido</td></tr>
+          <tr><td>Relación</td><td colspan="2">Un producto puede requerir <b>varios proyectos</b> a lo largo de su vida</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 "El proyecto <b>crea</b>; el producto <b>perdura</b>." Un producto contiene N proyectos (crear v1.0 → mejorar → migrar → retirar).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 6: CERTIFICACIONES ============ -->
+<section class="section" id="s6" data-nav="🎓 Certificaciones">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🎓</span>
+    <div class="ttl"><h2>6 · Certificaciones para Project Manager</h2><p>Entidades · niveles · costos · ruta recomendada</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <h3>🏛️ PMI — Acrónimo</h3>
+      <div class="acro">CPA</div>
+      <p>Membresía ~US$164/año (precio "socio"). Guía: PMBOK®.</p>
+      <ul>
+        <li><b>C</b>APM — entrada, secundaria + 23h, $225/$300, vence 3 años</li>
+        <li><b>P</b>MP ⭐ — "estándar de oro", título+36m exp+35h, $445/$675, 3 años/60 PDU</li>
+        <li><b>A</b>CP (PMI-ACP) — ágil, 21h + experiencia, $435/$495, 3 años</li>
+      </ul>
+      <div class="mnemo">🟢 "El PMI te da tu <b>CPA</b>": CAPM → PMP → ACP, de entrada a experto/ágil.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🌀 Scrum y Agilidad</h3>
+      <p><span class="tag tag-term" style="margin:0 4px 0 0;">Scrum.org</span>PSM I y PSPO I — <span class="c-green">sin curso obligatorio</span>, examen online, $200, <b>no expiran</b>.</p>
+      <p><span class="tag tag-crit" style="margin:6px 4px 0 0;">Scrum Alliance</span>CSM — <span class="c-red">exige curso oficial</span> 2 días, $1,000–1,400, vigencia 2 años (~$100 renovar).</p>
+      <div class="mnemo">🟢 "Scrum.org = <b>sin</b> curso y barato; Scrum Alliance = <b>con</b> curso y caro."</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🏗️📘 SAFe y PRINCE2</h3>
+      <p>🏗️ <b>SAFe Agilist</b> (Scaled Agile) — ágil escalado, grandes organizaciones, ~$714 (renov. anual ~$195).</p>
+      <p>📘 <b>PRINCE2</b> (PeopleCert/Axelos) — método por procesos, muy usado en Europa/sector público. Foundation ~£700–1200 (no expira); Practitioner ~£900–1500 (3 años, requiere Foundation).</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🌱 Certificaciones de entrada</h3>
+      <ul>
+        <li><b>Google PM Certificate</b> (Coursera) — sin requisitos, ~$49/mes (&lt;$300), no expira</li>
+        <li><b>CompTIA Project+</b> — sin prerrequisitos, $370–390, vigencia vitalicia</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>📊 Tabla resumen de costos</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Cert.</th><th>Entidad</th><th>Nivel</th><th>Costo examen</th><th>Vigencia</th></tr></thead>
+        <tbody>
+          <tr><td>Google PM</td><td>Google/Coursera</td><td>Principiante</td><td>~$49/mes</td><td>No expira</td></tr>
+          <tr><td>Project+</td><td>CompTIA</td><td>Princ.-Interm.</td><td>$370–390</td><td>Vitalicia</td></tr>
+          <tr><td>CAPM</td><td>PMI</td><td>Entrada</td><td>$225/$300</td><td>3 años</td></tr>
+          <tr><td><b>PMP</b> ⭐</td><td>PMI</td><td>Profesional</td><td>$445/$675</td><td>3 años (60 PDU)</td></tr>
+          <tr><td>PMI-ACP</td><td>PMI</td><td>Ágil</td><td>$435/$495</td><td>3 años</td></tr>
+          <tr><td>PSM I</td><td>Scrum.org</td><td>Ágil</td><td>$200</td><td>No expira</td></tr>
+          <tr><td>PSPO I</td><td>Scrum.org</td><td>Product Owner</td><td>$200</td><td>No expira</td></tr>
+          <tr><td>CSM</td><td>Scrum Alliance</td><td>Ágil</td><td>$1,000–1,400</td><td>2 años</td></tr>
+          <tr><td>PRINCE2 F</td><td>PeopleCert</td><td>Metodología</td><td>£700–1,200</td><td>No expira</td></tr>
+          <tr><td>PRINCE2 P</td><td>PeopleCert</td><td>Metod. av.</td><td>£900–1,500</td><td>3 años</td></tr>
+          <tr><td>SAFe Agilist</td><td>Scaled Agile</td><td>Ágil escalado</td><td>~$714</td><td>1 año</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>🗺️ Ruta recomendada</h3>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">1️⃣</div><div class="t">Sin experiencia</div><div class="d">Google PM o CAPM</div></div>
+        <div class="chunk"><div class="e">2️⃣</div><div class="t">Con experiencia</div><div class="d">PMP</div></div>
+        <div class="chunk"><div class="e">3️⃣</div><div class="t">Enfoque ágil</div><div class="d">PSM I/PSPO I o PMI-ACP</div></div>
+        <div class="chunk"><div class="e">4️⃣</div><div class="t">Especialización</div><div class="d">SAFe (empresa) / PRINCE2 (público-Europa)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 7: CARRERA ============ -->
+<section class="section" id="s7" data-nav="💼 Carrera">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">💼</span>
+    <div class="ttl"><h2>7 · Salidas profesionales</h2><p>Roles y rutas de crecimiento</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <h3>💼 Roles y su certificación</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Rol</th><th>Función</th><th>Cert. asociada</th></tr></thead>
+        <tbody>
+          <tr><td>📋 Analista/Coordinador</td><td>Seguimiento de tareas y cronograma</td><td>CAPM</td></tr>
+          <tr><td>🧭 Director/Gerente PM</td><td>Planifica, dirige, controla</td><td>PMP · PRINCE2</td></tr>
+          <tr><td>🔄 Scrum Master</td><td>Facilita marco ágil, remueve obstáculos</td><td>PSM · CSM</td></tr>
+          <tr><td>🎯 Product Owner</td><td>Prioriza backlog, maximiza valor</td><td>PSPO · CSPO</td></tr>
+          <tr><td>🏢 Analista de PMO</td><td>Estandariza metodología y portafolio</td><td>PMP · PfMP</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card searchable">
+      <h3>🧱⚡ Rutas de crecimiento</h3>
+      <p><span class="c-green">🧱 Tradicional:</span> Estudiante → CAPM → 1–3 años exp. → PMP → PgMP/PfMP</p>
+      <p><span class="c-blue">⚡ Ágil:</span> Estudiante → PSM I/CSM → práctica Scrum → PSM II/A-CSM → PSPO/CSPO</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 8: REGLAS DE ORO / SIMULADOR ============ -->
+<section class="section" id="s8" data-nav="🎮 Reglas de oro">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🎮</span>
+    <div class="ttl"><h2>8 · Reglas de oro del PM</h2><p>Decisiones típicas ante cambios, atrasos y recortes</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>➕ Piden algo nuevo a mitad de proyecto</h3>
+      <p><span class="c-red">✗</span> Agregarlo sin cambiar plazo/costo → calidad ▼ (scope creep).</p>
+      <p><span class="c-green">✓</span> Negociar más tiempo/presupuesto, o evaluarlo con <b>control de cambios</b> formal.</p>
+    </div>
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>⏱️ Vas atrasado en el cronograma</h3>
+      <p><span class="c-red">✗</span> Recortar pruebas para ganar tiempo → defectos y retrabajo.</p>
+      <p><span class="c-green">✓</span> Reducir alcance de esta entrega (priorizar lo esencial, <b>MVP</b>). Agregar personas sube costo y no siempre acelera (curva de aprendizaje).</p>
+    </div>
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>💸 Te recortan el presupuesto 20%</h3>
+      <p><span class="c-red">✗</span> Mantener todo igual con menos dinero → golpea la calidad.</p>
+      <p><span class="c-green">✓</span> Recortar alcance a lo prioritario, cuidando la calidad.</p>
+    </div>
+    <div class="card searchable">
+      <div class="mnemo">🟢 Regla universal: cuando <b>Alcance</b>, <b>Tiempo</b> o <b>Costo</b> cambian, ajusta los otros dos o la <b>Calidad</b> sufrirá. Todo cambio pasa por <b>control de cambios</b>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 9: GLOSARIO ============ -->
+<section class="section" id="s9" data-nav="📖 Glosario">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📖</span>
+    <div class="ttl"><h2>9 · Glosario de siglas</h2><p>Búscalas arriba con el buscador ⤴</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body glo">
+
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>Backlog</h3><p>Lista priorizada de trabajo pendiente. <i>Product Backlog</i> (del producto) y <i>Sprint Backlog</i> (del sprint).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>EDT / WBS</h3><p><i>Work Breakdown Structure</i>. Descompone el proyecto en entregables y paquetes de trabajo. Regla del 100%: todo el trabajo, ni más ni menos.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>RACI</h3><p><i>Responsible, Accountable, Consulted, Informed</i>. Matriz de responsabilidades: Responsable (ejecuta), Aprobador (rinde cuentas, uno solo), Consultado, Informado.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>CPM</h3><p><i>Critical Path Method</i>. Ruta crítica: secuencia de actividades más larga; define la duración mínima del proyecto.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>P × I</h3><p>Probabilidad × Impacto. Fórmula del nivel de riesgo (análisis cualitativo).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>PMBOK</h3><p><i>Project Management Body of Knowledge</i>. Guía de fundamentos publicada por el PMI.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>PMI</h3><p><i>Project Management Institute</i>. Publica el PMBOK; otorga CAPM, PMP, PMI-ACP.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>ISO 21500/21502</h3><p>Normas internacionales de dirección y gestión de proyectos.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>PRINCE2</h3><p><i>PROjects IN Controlled Environments</i> (v2). Método estructurado por procesos, usado en Europa.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>PMO</h3><p><i>Project Management Office</i>. Estandariza metodología y gobierna el portafolio.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>MVP</h3><p><i>Minimum Viable Product</i>. La versión más simple que ya aporta valor.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>PMP / CAPM</h3><p>Certificaciones del PMI: profesional (con experiencia) e inicial (estudiantes).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>PSM / CSM</h3><p>Scrum Master profesional (Scrum.org) / certificado (Scrum Alliance).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>UI</h3><p><i>User Interface</i>. Interfaz visual con la que interactúa el usuario.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>TUPR</h3><p>Temporal · Único · Progresivo · Recursos limitados (características de un proyecto).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>ATC</h3><p>Alcance · Tiempo · Costo (triple restricción).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>TIIA</h3><p>Transformación · Inversión · Integración · Alta incertidumbre (importancia de TI).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>OASEG</h3><p>Objetivos · Apoyo dirección · Stakeholders · Equipo/comunicación · Gestión de riesgos (éxito).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>FRECS</h3><p>Falta patrocinio · Requisitos ambiguos · Estimaciones irreales · Comunicación deficiente · Scope creep (fracaso).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>PIP</h3><p>PMBOK · ISO 21500/21502 · PRINCE2 (guías internacionales).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>MGS</h3><p>Metodología · Gobernanza · Soporte (funciones de la PMO).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>FMP</h3><p>Funcional · Matricial · Proyectizada (estructuras, autoridad PM de menor a mayor).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>PDES</h3><p>Patrocinador · Director(PM) · Equipo · Stakeholders (roles del proyecto).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>IPEMC</h3><p>Inicio · Planificación · Ejecución · Monitoreo y control · Cierre (ciclo de vida del proyecto).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>DICMR</h3><p>Desarrollo · Introducción · Crecimiento · Madurez · Retiro (ciclo de vida del producto).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CPA</h3><p>CAPM · PMP · ACP (PMI-ACP) — certificaciones del PMI en orden.</p></div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  GPI 8469 · Grupo 1LS241 · II Semestre 2026 — Cheat Sheet generado a partir del material del curso.<br>
+  Universidad Tecnológica de Panamá · FISC
+</footer>
+
+<button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<nav class="bottomnav" id="bottomnav">
+  <button class="bnitem active" data-target="s1"><span class="e">🎯</span>Proyecto</button>
+  <button class="bnitem" data-target="s3"><span class="e">📘</span>Guías</button>
+  <button class="bnitem" data-target="s5"><span class="e">🔄</span>Ciclo</button>
+  <button class="bnitem" data-target="s6"><span class="e">🎓</span>Certif.</button>
+  <button class="bnitem" data-target="s9"><span class="e">📖</span>Glosario</button>
+</nav>
+
+<script>
+// ---------- Accordion ----------
+function toggleSec(headEl){
+  var sec = headEl.parentElement;
+  var wasOpen = sec.classList.contains('open');
+  // close all, then open target (accordion behaviour), unless already open -> just close it
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+  if(!wasOpen){ sec.classList.add('open'); }
+}
+
+// ---------- Bottom nav ----------
+document.querySelectorAll('.bnitem').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = btn.getAttribute('data-target');
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+    document.querySelectorAll('.bnitem').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// index chips: open target section on click too
+document.querySelectorAll('.idxchip').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href').substring(1);
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+  });
+});
+
+// ---------- Search / filter ----------
+var searchInput = document.getElementById('search');
+var clearBtn = document.getElementById('clearBtn');
+var noRes = document.getElementById('nores');
+
+function normalize(t){
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+searchInput.addEventListener('input', function(){
+  var q = normalize(searchInput.value.trim());
+  clearBtn.style.display = q ? 'block' : 'none';
+
+  if(!q){
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.remove('hide'); if(i===0) s.classList.add('open'); else s.classList.remove('open'); });
+    document.querySelectorAll('.card.searchable').forEach(function(c){ c.classList.remove('hide'); });
+    document.getElementById('idxwrap').classList.remove('hide');
+    noRes.style.display='none';
+    return;
+  }
+
+  document.getElementById('idxwrap').classList.add('hide');
+  var anyVisibleGlobal = false;
+
+  document.querySelectorAll('.section').forEach(function(sec){
+    var cards = sec.querySelectorAll('.card.searchable');
+    var anyVisible = false;
+    cards.forEach(function(c){
+      var txt = normalize(c.textContent);
+      if(txt.indexOf(q) !== -1){ c.classList.remove('hide'); anyVisible = true; }
+      else { c.classList.add('hide'); }
+    });
+    if(anyVisible){
+      sec.classList.remove('hide');
+      sec.classList.add('open');
+      anyVisibleGlobal = true;
+    } else {
+      sec.classList.add('hide');
+      sec.classList.remove('open');
+    }
+  });
+
+  noRes.style.display = anyVisibleGlobal ? 'none' : 'block';
+});
+
+clearBtn.addEventListener('click', function(){
+  searchInput.value = '';
+  searchInput.dispatchEvent(new Event('input'));
+  searchInput.focus();
+});
+
+// ---------- Top button + active nav on scroll ----------
+window.addEventListener('scroll', function(){
+  document.getElementById('topBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+</script>
+</body>
+</html>
