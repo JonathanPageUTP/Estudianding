@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Simulacro de Parcial · Gerencia de Recursos de TIC</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --maxw:680px;
+  --radius:14px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);line-height:1.5;min-height:100vh;
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+.hidden{display:none !important;}
+a{color:var(--cyan);}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--text);
+  padding:13px 18px;border-radius:12px;font-size:.92rem;font-weight:700;text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.btn.danger{background:var(--red-dim);border-color:#5c2a2a;color:var(--red);}
+.btn.block{width:100%;}
+.btn.sm{padding:9px 13px;font-size:.8rem;border-radius:10px;}
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+.cover{margin:22px auto 30px;}
+.paper{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:22px 20px;position:relative;overflow:hidden;
+}
+.paper::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+}
+.inst{text-align:center;font-family:var(--serif);}
+.inst .u{font-size:.95rem;font-weight:700;letter-spacing:.02em;}
+.inst .f{font-size:.78rem;color:var(--text-dim);margin-top:2px;}
+.inst .c{font-size:1.02rem;margin-top:12px;font-weight:700;color:var(--accent);}
+.inst .t{font-size:1.45rem;margin-top:4px;font-weight:700;}
+.inst .p{font-size:.8rem;color:var(--text-faint);margin-top:4px;}
+.rule{border:none;border-top:1px dashed var(--line);margin:18px 0;}
+
+.fields{display:grid;grid-template-columns:1fr;gap:10px;}
+.field label{display:block;font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-bottom:4px;letter-spacing:.03em;}
+.field input,.field select{
+  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);
+  border-radius:10px;padding:11px 12px;font-size:16px;font-family:var(--sans);
+}
+.field input:focus,.field select:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+.sec-title{font-size:.78rem;font-family:var(--mono);color:var(--accent);letter-spacing:.04em;margin-bottom:8px;}
+ol.rules{margin:0;padding-left:20px;}
+ol.rules li{font-size:.86rem;color:var(--text-dim);margin-bottom:6px;}
+ol.rules li b{color:var(--text);}
+
+.valtable{width:100%;border-collapse:collapse;font-size:.84rem;}
+.valtable td{padding:8px 4px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);}
+.valtable td:last-child{text-align:right;font-family:var(--mono);color:var(--text);white-space:nowrap;}
+.valtable tr:last-child td{border-bottom:none;font-weight:700;color:var(--text);}
+
+.resume{
+  background:var(--amber-dim);border:1px solid #5c4515;border-radius:14px;padding:14px;margin-bottom:14px;
+}
+.resume p{font-size:.86rem;color:var(--text);margin-bottom:10px;}
+.resume .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+.history{margin-top:4px;}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:.82rem;color:var(--text-dim);}
+.hist-item:last-child{border-bottom:none;}
+.hist-item b{font-family:var(--mono);color:var(--text);}
+
+/* ============================================================
+   BARRA DE EXAMEN
+   ============================================================ */
+#topbar{
+  position:sticky;top:0;z-index:50;background:rgba(10,20,16,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.tb-inner{max-width:var(--maxw);margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.timer{
+  font-family:var(--mono);font-weight:800;font-size:1.05rem;color:var(--accent);
+  background:var(--accent-dim);border-radius:10px;padding:7px 10px;min-width:84px;text-align:center;
+}
+.timer.warn{color:var(--amber);background:var(--amber-dim);}
+.timer.crit{color:var(--red);background:var(--red-dim);animation:pulse 1s infinite;}
+@keyframes pulse{50%{opacity:.6}}
+.tb-mid{flex:1;min-width:0;}
+.tb-label{font-size:.68rem;color:var(--text-faint);font-family:var(--mono);}
+.tb-prog{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:4px;}
+.tb-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .3s;}
+
+/* ============================================================
+   SECCIONES Y PREGUNTAS
+   ============================================================ */
+#exam main{padding:8px 16px 110px;}
+.part{margin-top:22px;}
+.part-head{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:12px;
+}
+.part-head h2{font-size:1rem;font-family:var(--serif);}
+.part-head h2 span{float:right;font-family:var(--mono);font-size:.78rem;color:var(--accent);margin-top:3px;}
+.part-head p{font-size:.8rem;color:var(--text-dim);margin-top:4px;}
+
+.q{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px 14px 12px;margin-bottom:10px;scroll-margin-top:80px;
+}
+.q.unanswered-flag{border-color:var(--amber);}
+.q-top{display:flex;gap:10px;align-items:flex-start;}
+.q-num{
+  font-family:var(--mono);font-size:.72rem;font-weight:800;color:var(--accent);
+  border:1px solid var(--accent-dim);background:var(--accent-dim);border-radius:8px;
+  min-width:30px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.q-text{font-size:.94rem;color:var(--text);flex:1;}
+.q-pts{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);white-space:nowrap;margin-top:4px;}
+
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  background:var(--bg);border:1px solid var(--line);border-radius:11px;
+  padding:11px 12px;font-size:.9rem;color:var(--text-dim);width:100%;
+}
+.opt .l{
+  font-family:var(--mono);font-weight:800;font-size:.75rem;color:var(--text-faint);
+  border:1px solid var(--line);border-radius:6px;min-width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.opt.sel{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.opt.sel .l{border-color:var(--accent);color:var(--accent);}
+.vf{flex-direction:row;}
+.vf .opt{justify-content:center;font-weight:700;}
+
+.defs{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px;}
+.defs li{
+  display:flex;gap:10px;background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;
+  padding:9px 11px;font-size:.85rem;color:var(--text-dim);
+}
+.defs li b{font-family:var(--mono);color:var(--cyan);min-width:18px;}
+.match-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);}
+.match-row:last-child{border-bottom:none;}
+.match-row .term{flex:1;font-size:.9rem;color:var(--text);font-weight:600;}
+.match-row select,.ord-row select{
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;
+  padding:9px 8px;font-size:16px;font-family:var(--mono);min-width:74px;
+}
+.match-row select.filled,.ord-row select.filled{border-color:var(--accent);color:var(--accent);}
+.ord-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line-soft);}
+.ord-row:last-child{border-bottom:none;}
+.ord-row .item{flex:1;font-size:.88rem;color:var(--text-dim);}
+
+textarea{
+  width:100%;min-height:150px;margin-top:12px;resize:vertical;
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:11px;
+  padding:11px 12px;font-size:16px;font-family:var(--sans);line-height:1.5;
+}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.wc{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);text-align:right;margin-top:4px;}
+
+.submit-zone{margin-top:22px;}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal{position:fixed;inset:0;background:rgba(4,9,7,.82);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:16px;}
+.modal-box{
+  width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:20px 18px calc(18px + var(--safe-b));margin-bottom:max(0px,var(--safe-b));
+}
+.modal-box h3{font-size:1.05rem;margin-bottom:8px;}
+.modal-box p{font-size:.88rem;color:var(--text-dim);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.chip{font-family:var(--mono);font-size:.72rem;background:var(--amber-dim);color:var(--amber);border:none;border-radius:20px;padding:5px 10px;}
+.modal-actions{display:flex;gap:8px;}
+.modal-actions .btn{flex:1;}
+@media (min-width:600px){.modal{align-items:center;}}
+
+/* ============================================================
+   AUTOEVALUACIÓN
+   ============================================================ */
+.sg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;}
+.sg h3{font-size:.95rem;margin-bottom:10px;}
+.sg .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.03em;margin:12px 0 5px;}
+.sg .mine{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;}
+.sg .model{background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text);}
+.rub{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line-soft);cursor:pointer;}
+.rub:last-child{border-bottom:none;}
+.rub input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;margin-top:1px;}
+.rub span{flex:1;font-size:.86rem;color:var(--text-dim);}
+.rub em{font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;}
+.sg-total{text-align:right;font-family:var(--mono);font-size:.8rem;color:var(--text);margin-top:8px;}
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+.score-card{text-align:center;padding:26px 18px;}
+.score-big{font-size:3.4rem;font-weight:800;line-height:1;font-family:var(--mono);}
+.score-big small{font-size:1.1rem;color:var(--text-faint);}
+.grade{display:inline-block;margin-top:10px;font-family:var(--serif);font-size:1.1rem;font-weight:700;padding:5px 16px;border-radius:30px;}
+.g-A{background:var(--accent-dim);color:var(--accent);}
+.g-B{background:var(--cyan-dim);color:var(--cyan);}
+.g-C{background:var(--violet-dim);color:var(--violet);}
+.g-D{background:var(--amber-dim);color:var(--amber);}
+.g-F{background:var(--red-dim);color:var(--red);}
+.score-meta{font-size:.8rem;color:var(--text-faint);margin-top:10px;}
+.bars{margin-top:6px;}
+.bar-row{margin-bottom:12px;}
+.bar-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--text-dim);margin-bottom:4px;}
+.bar-top b{font-family:var(--mono);color:var(--text);}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:99px;}
+
+.filters{display:flex;gap:6px;margin:6px 0 12px;overflow-x:auto;scrollbar-width:none;}
+.filters::-webkit-scrollbar{display:none;}
+.fbtn{flex-shrink:0;background:var(--surface);border:1px solid var(--line);color:var(--text-dim);padding:8px 13px;border-radius:30px;font-size:.78rem;font-weight:700;}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:#06140c;}
+
+.rv{background:var(--surface);border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:12px 13px;margin-bottom:9px;}
+.rv.ok{border-left-color:var(--accent);}
+.rv.bad{border-left-color:var(--red);}
+.rv.part{border-left-color:var(--amber);}
+.rv-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.rv-q{font-size:.88rem;color:var(--text);flex:1;}
+.rv-pts{font-family:var(--mono);font-size:.72rem;white-space:nowrap;}
+.rv-line{font-size:.82rem;color:var(--text-dim);margin-top:6px;}
+.rv-line b{color:var(--text);}
+.rv-exp{font-size:.8rem;color:var(--text-dim);background:var(--bg);border-radius:9px;padding:8px 10px;margin-top:8px;}
+.c-ok{color:var(--accent);}
+.c-bad{color:var(--red);}
+.c-part{color:var(--amber);}
+
+.actions{display:flex;flex-direction:column;gap:8px;margin:20px 0 40px;}
+
+footer{text-align:center;padding:10px 16px 30px;}
+footer p{font-size:.7rem;color:var(--text-faint);}
+
+@media (min-width:600px){
+  .fields{grid-template-columns:1fr 1fr;}
+  .fields .field.full{grid-column:1 / -1;}
+  .actions{flex-direction:row;}
+  .actions .btn{flex:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PORTADA
+     ============================================================ -->
+<section id="start" class="wrap cover">
+  <div id="resumeBox" class="resume hidden">
+    <p>⏸️ Tienes un intento en curso. <b id="resumeInfo"></b></p>
+    <div class="row">
+      <button class="btn primary sm" id="btnResume">Continuar intento</button>
+      <button class="btn sm" id="btnDiscard">Descartar</button>
+    </div>
+  </div>
+
+  <div class="paper">
+    <div class="inst">
+      <div class="u">UNIVERSIDAD TECNOLÓGICA DE PANAMÁ</div>
+      <div class="f">Facultad de Ingeniería de Sistemas Computacionales</div>
+      <div class="c">Gerencia de Recursos de TIC</div>
+      <div class="t">Primer Examen Parcial</div>
+      <div class="p">Simulacro · Ing. Lizmayrem Márquez · II Semestre 2026</div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="fields">
+      <div class="field"><label>NOMBRE (OPCIONAL)</label><input id="fName" type="text" autocomplete="off" placeholder="Tu nombre"></div>
+      <div class="field"><label>CÉDULA (OPCIONAL)</label><input id="fId" type="text" autocomplete="off" placeholder="8-000-0000"></div>
+      <div class="field full"><label>DURACIÓN</label>
+        <select id="fTime">
+          <option value="60">60 minutos</option>
+          <option value="90" selected>90 minutos (recomendado)</option>
+          <option value="120">120 minutos</option>
+          <option value="0">Sin límite de tiempo</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="sec-title">INDICACIONES GENERALES</div>
+    <ol class="rules">
+      <li>El examen tiene <b>5 partes</b> y vale <b>100 puntos</b>.</li>
+      <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas del material del parcial.</li>
+      <li>El tiempo empieza al presionar <b>Iniciar examen</b>. Al llegar a cero, el examen se entrega solo.</li>
+      <li>La Parte V (desarrollo) la <b>autoevalúas</b> con una rúbrica después de entregar.</li>
+      <li>Tus respuestas se guardan en este dispositivo: si recargas la página, puedes continuar.</li>
+    </ol>
+
+    <hr class="rule">
+
+    <div class="sec-title">DISTRIBUCIÓN DE PUNTOS</div>
+    <table class="valtable">
+      <tr><td>I. Verdadero o falso (10 × 2)</td><td>20 pts</td></tr>
+      <tr><td>II. Selección múltiple (15 × 2)</td><td>30 pts</td></tr>
+      <tr><td>III. Pareo (8 × 2.5)</td><td>20 pts</td></tr>
+      <tr><td>IV. Ordenamiento (2 × 5)</td><td>10 pts</td></tr>
+      <tr><td>V. Desarrollo (2 × 10)</td><td>20 pts</td></tr>
+      <tr><td>Total</td><td>100 pts</td></tr>
+    </table>
+
+    <hr class="rule">
+    <button class="btn primary block" id="btnStart">✍️ Iniciar examen</button>
+  </div>
+
+  <div class="paper" id="histBox" style="margin-top:14px;display:none;">
+    <div class="sec-title">INTENTOS ANTERIORES</div>
+    <div class="history" id="histList"></div>
+  </div>
+
+  <p style="text-align:center;margin-top:16px;"><a href="index.html">← Volver al índice del parcial</a></p>
+</section>
+
+<!-- ============================================================
+     EXAMEN
+     ============================================================ -->
+<section id="exam" class="hidden">
+  <div id="topbar">
+    <div class="tb-inner">
+      <div class="timer" id="timer">--:--</div>
+      <div class="tb-mid">
+        <div class="tb-label" id="tbLabel">0 de 0 respondidas</div>
+        <div class="tb-prog"><i id="tbProg"></i></div>
+      </div>
+      <button class="btn primary sm" id="btnSubmitTop">Entregar</button>
+    </div>
+  </div>
+  <main class="wrap" id="examBody"></main>
+</section>
+
+<!-- ============================================================
+     AUTOEVALUACIÓN (PARTE V)
+     ============================================================ -->
+<section id="selfgrade" class="wrap hidden" style="padding:22px 16px 40px;">
+  <div class="paper" style="margin-bottom:14px;">
+    <div class="sec-title">PARTE V · AUTOEVALUACIÓN</div>
+    <p style="font-size:.88rem;color:var(--text-dim);">Compara tu respuesta con la respuesta modelo y marca con honestidad los puntos que <b style="color:var(--text)">sí incluiste</b>. Cada criterio suma los puntos indicados.</p>
+  </div>
+  <div id="sgBody"></div>
+  <button class="btn primary block" id="btnFinish">📊 Ver calificación final</button>
+</section>
+
+<!-- ============================================================
+     RESULTADOS
+     ============================================================ -->
+<section id="results" class="wrap hidden" style="padding:22px 16px 0;">
+  <div class="paper score-card">
+    <div class="sec-title" id="rsWho">RESULTADO</div>
+    <div class="score-big" id="rsScore">0<small>/100</small></div>
+    <div class="grade" id="rsGrade">F</div>
+    <div class="score-meta" id="rsMeta"></div>
+  </div>
+
+  <div class="paper" style="margin-top:14px;">
+    <div class="sec-title">PUNTAJE POR PARTE</div>
+    <div class="bars" id="rsBars"></div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="sec-title">REVISIÓN DETALLADA</div>
+    <div class="filters" id="rsFilters">
+      <button class="fbtn on" data-f="all">Todas</button>
+      <button class="fbtn" data-f="bad">❌ Incorrectas</button>
+      <button class="fbtn" data-f="part">⚠️ Parciales</button>
+      <button class="fbtn" data-f="ok">✅ Correctas</button>
+    </div>
+    <div id="rsReview"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="btnRetry">🔄 Nuevo intento (otra variante)</button>
+    <a class="btn" href="guia.html">📘 Repasar en la guía</a>
+    <a class="btn" href="index.html">← Índice del parcial</a>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="modal-box">
+    <h3 id="mTitle">¿Entregar examen?</h3>
+    <p id="mText"></p>
+    <div class="chips" id="mChips"></div>
+    <div class="modal-actions">
+      <button class="btn" id="mCancel">Seguir respondiendo</button>
+      <button class="btn primary" id="mOk">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<footer><p>Simulacro generado solo a partir de los 4 PDF del Parcial 1 · UTP · FISC · uso académico.</p></footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     BANCO DE PREGUNTAS — Fuente: Unidad I - Fundamentos Básicos de
+     Adm. y Gerencia.pdf, Administración Estratégica.pdf,
+     Procesos COBIT41.pdf, GLOSARIO.pdf
+     ============================================================ */
+
+  // ---------- PARTE I: Verdadero o falso ----------
+  var VF = [
+    {s:"La eficiencia es la capacidad de alcanzar las metas que la compañía se dispuso alcanzar.", a:false, e:"Esa es la definición de <b>eficacia</b>. La eficiencia es lograr las metas con la menor cantidad posible de recursos."},
+    {s:"Las decisiones tácticas se toman cuando surge un problema no contemplado que requiere una acción inmediata.", a:true, e:"Correcto: buscan corregir el camino o hacer un ajuste de inmediato (ej. cambiar el empaque defectuoso de un producto)."},
+    {s:"Según Harvard Business Review, el 87% de los líderes piensa que su organización será más exitosa cuando sus colaboradores están empoderados para decidir.", a:true, e:"Es el dato citado en la Unidad I."},
+    {s:"Según Forrester (2020), el 41% de las organizaciones tuvo dificultades para convertir sus datos en decisiones.", a:true, e:"Es el dato citado en la Unidad I."},
+    {s:"Las habilidades técnicas están relacionadas con el análisis, la formulación de ideas y el pensamiento crítico.", a:false, e:"Eso describe a las habilidades <b>conceptuales</b>. Las técnicas se aprenden en la formación y se relacionan con funciones específicas."},
+    {s:"El EIS contempla la información general de la organización y la comprende como un todo.", a:false, e:"Eso describe al <b>MIS</b>. El EIS monitoriza variables gerenciales de un área específica."},
+    {s:"Los sistemas de procesamiento de transacciones (TPS) también se conocen como sistemas de gestión operativa.", a:true, e:"Correcto: recopilan la información de las transacciones, es decir, del funcionamiento de la organización."},
+    {s:"COBIT fue publicado por primera vez por ITGI en abril de 1996.", a:true, e:"Así lo indica el resumen de COBIT 4.1."},
+    {s:"COBIT 4.1 define 34 procesos agrupados en 5 dominios.", a:false, e:"Son 34 procesos en <b>4 dominios</b>: PO, AI, DS y ME."},
+    {s:"Toda empresa debe aplicar obligatoriamente los 34 procesos de COBIT.", a:false, e:"No es necesario aplicarlos todos; se pueden combinar según lo que necesite cada empresa."},
+    {s:"El KPI indica, después del hecho, si un proceso alcanzó sus requerimientos de negocio.", a:false, e:"Ese es el <b>KGI</b>. El KPI indica cómo se está desempeñando el proceso (si será factible alcanzar la meta)."},
+    {s:"En el nivel de madurez 3 (Definido) los procedimientos están estandarizados, documentados y difundidos mediante entrenamiento.", a:true, e:"Correcto, aunque se deja al individuo decidir si los usa."},
+    {s:"En la matriz FODA, las oportunidades y las amenazas son factores internos.", a:false, e:"Son factores <b>externos</b>. Los internos son fortalezas y debilidades."},
+    {s:"El director de proyecto intenta mantener los cambios en el mínimo.", a:true, e:"Correcto. En cambio, el director de programa espera los cambios y los apoya."},
+    {s:"El éxito de un programa se mide mediante el rendimiento agregado de sus componentes.", a:false, e:"Eso corresponde al <b>portafolio</b>. El programa se mide por ROI, nuevas capacidades y producción de beneficios."},
+    {s:"Un subproyecto es parte de un proyecto y puede ser un subcontrato.", a:true, e:"Así se define en Administración Estratégica."},
+    {s:"Un incidente tecnológico es la causa raíz desconocida de uno o más problemas recurrentes.", a:false, e:"Es al revés: el <b>problema</b> es la causa raíz de uno o más incidentes recurrentes. El incidente es una interrupción no planificada."},
+    {s:"El escalamiento vertical ocurre cuando el nivel actual no tiene la autoridad jerárquica para resolver un ticket.", a:true, e:"Correcto. El horizontal ocurre por falta de conocimiento técnico."},
+    {s:"Los requerimientos no funcionales describen las funciones o cálculos específicos que el sistema debe realizar.", a:false, e:"Eso son los requerimientos <b>funcionales</b>. Los no funcionales indican cómo debe operar (seguridad, escalabilidad, rendimiento)."},
+    {s:"La identidad organizacional se basa en tres pilares: misión, visión y valores.", a:true, e:"Es una de las etapas de la planificación estratégica."},
+    {s:"Una de las situaciones de la gestión de TI es la preocupación por reducir presupuestos en lugar de bajar costos.", a:true, e:"Aparece en la lámina \"Situación\" de Administración Estratégica."},
+    {s:"La definición de TIC citada en el material proviene del Art. 6 de la Ley 1341 de 2009.", a:true, e:"Así se cita en la Unidad I."},
+    {s:"En la gráfica RACI, el Responsable es la persona que provee autorización y direccionamiento.", a:false, e:"Eso es quien <b>rinde cuentas</b>. El Responsable es quien realiza la actividad."},
+    {s:"La IA / machine learning encabeza la lista de tecnologías, con 48% de los CIOs que la implantaron o prevén implantarla.", a:true, e:"Le siguen nube distribuida (44%), SASE (32%), edge computing (27%) y multiexperiencia (25%)."}
+  ];
+
+  // ---------- PARTE II: Selección múltiple (la primera opción es la correcta) ----------
+  var MC = [
+    {q:"¿Cuál es el orden correcto de las funciones del proceso administrativo?", o:["Planificación, organización, dirección y control","Organización, planificación, control y dirección","Planificación, dirección, organización y control","Dirección, planificación, organización y control"], e:"El proceso administrativo es Planificación → Organización → Dirección → Control (PODC)."},
+    {q:"\"Designación de cargos; comunicación, liderazgo y motivación del personal\" corresponde a la función de:", o:["Dirección","Organización","Planificación","Control"], e:"Son actividades de la <b>Dirección</b>."},
+    {q:"\"Definición de estándares para medir el desempeño y corregir desviaciones\" corresponde a:", o:["Control","Dirección","Organización","Planificación"], e:"Es la función de <b>Control</b>."},
+    {q:"Contratar un nuevo colaborador de nivel básico es un ejemplo de decisión:", o:["Operativa","Directiva","Estratégica","De peso o riesgo"], e:"Las operativas contribuyen a la gestión diaria de la empresa."},
+    {q:"La creación de los objetivos y resultados clave (OKR) es un ejemplo de decisión:", o:["Estratégica","Táctica","Operativa","Individual"], e:"Requiere planificación a fondo y muchos participantes: es <b>estratégica</b>."},
+    {q:"¿En qué paso de la toma de decisión se menciona el uso del análisis DAFO?", o:["Prever resultados y sopesar el impacto de la alternativa","Recopilar información relevante","Identificar y definir el problema","Evaluar los resultados"], e:"El DAFO ayuda a ver puntos fuertes y débiles de las alternativas para valorar cuál es más viable."},
+    {q:"¿Qué sistema procesa información intra y extra organizacional para apoyar la conducción de la empresa?", o:["DSS","TPS","EIS","MIS"], e:"Es el <b>Sistema de Soporte de Decisiones</b>."},
+    {q:"Los elementos de un SI \"vinculados con el capital y con los activos disponibles\" son los:", o:["Financieros","Materiales","Administrativos","Tecnológicos"], e:"Son los elementos <b>financieros</b>."},
+    {q:"El \"emplazamiento del sistema, su soporte físico y ubicación\" corresponde a los elementos:", o:["Materiales","Humanos","Tecnológicos","Financieros"], e:"Son los elementos <b>materiales</b>."},
+    {q:"El Gobierno de TI es el proceso mediante el cual ________ asegura el logro sostenido de los objetivos de la entidad.", o:["el consejo de administración","el director de TI","el departamento de soporte técnico","el equipo de proyecto"], e:"Lo asegura el <b>consejo de administración</b>, protegiendo el patrimonio y dando transparencia a los stakeholders."},
+    {q:"¿Cuál es el elemento central de \"Planear y organizar\"?", o:["Plan Estratégico de TI","Planes tácticos de TI","Administración del portafolio de TI","Evaluación del desempeño y la capacidad actual"], e:"El <b>Plan Estratégico de TI</b> está en el centro y lo rodean los demás procesos."},
+    {q:"Los planes tácticos de TI deben tener el detalle suficiente para:", o:["Permitir la definición de planes de proyectos","Definir la misión de la empresa","Reemplazar al plan estratégico","Establecer los valores organizacionales"], e:"Así lo indica la lámina de Planear y organizar."},
+    {q:"El éxito de un programa se mide mediante:", o:["El ROI, nuevas capacidades y producción de beneficios","La entrega en tiempo, presupuesto y especificaciones","El rendimiento agregado de los componentes","La cantidad de tareas completadas"], e:"Proyecto → tiempo/presupuesto; programa → ROI y beneficios; portafolio → rendimiento agregado."},
+    {q:"Un grupo de proyectos y/o programas (más otros trabajos) dirigido a objetivos estratégicos es un:", o:["Portafolio","Programa","Subproyecto","Plan táctico"], e:"Es el <b>portafolio de proyectos</b>."},
+    {q:"El proceso PO5.4 corresponde a:", o:["Administración de costos de TI","Proceso presupuestal","Administración de beneficios","Prioridades dentro del presupuesto de TI"], e:"PO5.4 compara los costos reales con los presupuestados y gestiona las desviaciones."},
+    {q:"¿Cuál de los siguientes NO aparece como elemento de un presupuesto tradicional de TI?", o:["Gobierno corporativo","Licencias","Consultoría","Comunicaciones"], e:"Los elementos son: consultoría, formación, licencias, mantenimiento, hardware, servicios, comunicaciones y otros o imprevistos."},
+    {q:"En los objetivos SMART, la \"T\" significa:", o:["Temporal (time-bound)","Táctico","Tecnológico","Total"], e:"Temporal: determina cuándo se hará y el tiempo de terminación."},
+    {q:"¿Cuál es la primera etapa de la planificación estratégica?", o:["Diagnóstico actual","Objetivos estratégicos","Plan de acción u operativo","Seguimiento"], e:"Se empieza con el diagnóstico actual, usando la matriz FODA."},
+    {q:"¿Qué criterio de información de COBIT se refiere a la protección de información sensitiva contra revelación no autorizada?", o:["Confidencialidad","Confiabilidad","Integridad","Cumplimiento"], e:"Ojo: <b>confiabilidad</b> es proporcionar información apropiada para que la gerencia administre la entidad."},
+    {q:"El criterio de COBIT que consiste en generar la información con el óptimo uso de los recursos es la:", o:["Eficiencia","Efectividad","Disponibilidad","Integridad"], e:"La efectividad es que la información sea relevante, oportuna y utilizable."},
+    {q:"¿Cuál NO es uno de los recursos de TI identificados en COBIT 4.1?", o:["Procesos de negocio","Aplicaciones","Información","Personas"], e:"Los 4 recursos son aplicaciones, información, infraestructura y personas."},
+    {q:"¿Qué dominio de COBIT \"recibe las soluciones y las hace utilizables por los usuarios finales\"?", o:["Entregar y Dar Soporte (DS)","Adquirir e Implementar (AI)","Planear y Organizar (PO)","Monitorear y Evaluar (ME)"], e:"DS cubre la entrega de los servicios requeridos."},
+    {q:"¿Cuántos procesos tiene el dominio Entregar y Dar Soporte (DS)?", o:["13","10","7","4"], e:"PO tiene 10, AI 7, DS 13 y ME 4."},
+    {q:"El proceso AI6 de COBIT es:", o:["Administrar cambios","Adquirir recursos de TI","Facilitar la operación y el uso","Instalar y acreditar soluciones y cambios"], e:"AI5 es adquirir recursos, AI4 facilitar la operación y AI7 instalar y acreditar."},
+    {q:"El proceso DS8 de COBIT es:", o:["Administrar la mesa de servicio y los incidentes","Administrar los problemas","Administrar la configuración","Administrar los datos"], e:"DS9 es configuración, DS10 problemas y DS11 datos."},
+    {q:"El requerimiento de control genérico PC1 es:", o:["Dueño del proceso","Reiterativo","Metas y objetivos","Desempeño del proceso"], e:"PC1 asigna un dueño para que la responsabilidad sea clara."},
+    {q:"¿En qué nivel de madurez \"es posible monitorear y medir el cumplimiento de los procedimientos\"?", o:["4 – Administrado","3 – Definido","5 – Optimizado","2 – Repetible"], e:"En el nivel 4 se mide y se toman medidas cuando los procesos no funcionan."},
+    {q:"Los controles de aplicación AC12 a AC16 son controles de:", o:["Salida de datos","Entrada de datos","Procesamiento de datos","Límites"], e:"Salida: manejo y retención, distribución, cuadre y conciliación, revisión y seguridad de reportes."},
+    {q:"El repositorio centralizado con manuales, guías y soluciones conocidas a errores de TI es la:", o:["KEDB","CMDB","Catálogo de servicios","SLA"], e:"La CMDB almacena los elementos de configuración y sus relaciones."},
+    {q:"El restablecimiento de contraseñas es un ejemplo típico de:", o:["Gestión de solicitudes de servicios","Gestión de incidentes","Gestión de problemas","Gestión de cambios"], e:"La gestión de solicitudes atiende requerimientos cotidianos de los usuarios."},
+    {q:"La productividad se define como la capacidad de producción según:", o:["La relación entre el producto y el insumo","El cumplimiento de las metas","El uso de la menor cantidad de recursos","La cantidad de empleados"], e:"Las otras opciones describen la eficacia y la eficiencia."},
+    {q:"Según el material, ¿qué hace TI ante la situación actual con el negocio?", o:["Intenta gestionar el backlog de pedidos y resolver problemas causados por recortes","Define la misión y visión de la empresa","Aprueba el presupuesto de la organización","Elimina la necesidad de planes tácticos"], e:"También: surfear las olas de cambios tecnológicos y explicar los efectos del recurso escaso."}
+  ];
+
+  // ---------- PARTE III: Pareo (se elige un set; 8 pares + 2 distractores) ----------
+  var PAREO = [
+    {title:"Sistemas de información y tipos de decisiones",
+     pairs:[
+      ["TPS","Recopila la información de las transacciones de la organización"],
+      ["EIS","Monitoriza variables gerenciales de un área específica"],
+      ["MIS","Contempla la información general de la organización como un todo"],
+      ["DSS","Procesa información intra y extra organizacional para conducir la empresa"],
+      ["Decisión directiva","Se toma en niveles ejecutivos e impacta a toda la organización"],
+      ["Decisión táctica","Acción inmediata ante un problema no contemplado"],
+      ["Decisión de peso o riesgo","Ocurre ante una situación adversa o inesperada"],
+      ["Decisión mixta","Combina dos o más tipos de decisiones"]],
+     extra:["Define la misión, visión y valores de la empresa","Mide el rendimiento agregado del portafolio"]},
+    {title:"COBIT 4.1",
+     pairs:[
+      ["PO","Estrategias y tácticas; da dirección a AI y DS"],
+      ["AI","Identifica, desarrolla o adquiere soluciones y las pasa a servicios"],
+      ["DS","Entrega los servicios y los hace utilizables por los usuarios"],
+      ["ME","Evalúa calidad y cumplimiento de los procesos de TI"],
+      ["KGI","Indica después del hecho si se alcanzaron los requerimientos"],
+      ["KPI","Indica cómo se está desempeñando un proceso"],
+      ["PC2","Definir cada proceso de forma que sea repetitivo"],
+      ["Confiabilidad","Información apropiada para que la gerencia administre la entidad"]],
+     extra:["Protección contra revelación no autorizada","Asignar un dueño a cada proceso"]},
+    {title:"Glosario de gestión de TI",
+     pairs:[
+      ["Evento","Cambio de estado relevante, como un inicio de sesión exitoso"],
+      ["Incidente","Interrupción no planificada de un servicio de TI"],
+      ["Problema","Causa raíz desconocida de incidentes recurrentes"],
+      ["CMDB","Registra los elementos de configuración y sus relaciones"],
+      ["ITIL","Mejores prácticas para la gestión de servicios de TI (ITSM)"],
+      ["ESM","Extiende prácticas de TI a RR.HH., Finanzas o Legal"],
+      ["ITOM","Supervisa rendimiento y disponibilidad de la infraestructura"],
+      ["Gestión de parches","Adquiere, prueba e instala actualizaciones de software"]],
+     extra:["Compromiso formal entre proveedor de TI y cliente","Lista de todos los servicios activos de TI"]},
+    {title:"Administración y planeación estratégica",
+     pairs:[
+      ["Proyecto","Emprendimiento temporal y único"],
+      ["Programa","Proyectos relacionados gestionados de manera coordinada"],
+      ["Portafolio","Proyectos y/o programas dirigidos a objetivos estratégicos"],
+      ["Subproyecto","Parte de un proyecto; puede ser un subcontrato"],
+      ["Misión","Propósito de la empresa"],
+      ["Visión","Proyección de la empresa a futuro"],
+      ["Valores","Criterios éticos y morales de la organización"],
+      ["Metas","Expresiones cuantitativas y con límite de tiempo de los objetivos"]],
+     extra:["Causa raíz de incidentes recurrentes","Monitoriza variables de un área específica"]}
+  ];
+
+  // ---------- PARTE IV: Ordenamiento (items en orden correcto) ----------
+  var ORD = [
+    {q:"Ordena los pasos para la toma de decisión.", items:["Identificar y definir el problema","Recopilar información relevante","Identificar y analizar las alternativas","Prever resultados y sopesar el impacto","Seleccionar una alternativa","Llevar a cabo la decisión","Revisar y monitorear","Evaluar los resultados"]},
+    {q:"Ordena los niveles del modelo genérico de madurez de COBIT, del más bajo al más alto.", items:["No existente","Inicial","Repetible","Definido","Administrado","Optimizado"]},
+    {q:"Ordena las etapas de la planificación estratégica.", items:["Diagnóstico actual","Identidad organizacional","Análisis del entorno","Objetivos estratégicos","Plan de acción u operativo","Seguimiento"]},
+    {q:"Ordena las funciones del proceso administrativo.", items:["Planificación","Organización","Dirección","Control"]},
+    {q:"Ordena los dominios de COBIT según su secuencia (planear → construir → ejecutar → monitorear).", items:["Planear y Organizar (PO)","Adquirir e Implementar (AI)","Entregar y Dar Soporte (DS)","Monitorear y Evaluar (ME)"]},
+    {q:"Ordena los grupos de controles de aplicación según el recorrido del dato (AC1 → AC18).", items:["Origen de datos / autorización","Entrada de datos","Procesamiento de datos","Salida de datos","Límites"]}
+  ];
+
+  // ---------- PARTE V: Desarrollo (rúbrica suma 10) ----------
+  var DES = [
+    {q:"Explica la diferencia entre eficacia, eficiencia y productividad, y da un ejemplo propio del área de TI que ilustre la diferencia entre ser eficaz y ser eficiente.",
+     model:"<b>Eficacia:</b> capacidad de alcanzar las metas que la compañía se dispuso alcanzar. <b>Eficiencia:</b> lograr esas metas usando la menor cantidad posible de recursos. <b>Productividad:</b> capacidad de producción según la relación entre el producto y el insumo (recursos usados para generar bienes con la calidad que buscan los clientes). Ejemplo: un equipo que entrega un sistema a tiempo es eficaz; si además lo hace sin exceder el presupuesto ni las horas planificadas, es eficiente.",
+     rubric:[["Define correctamente la eficacia (alcanzar las metas)",3],["Define correctamente la eficiencia (con el mínimo de recursos)",3],["Define la productividad como relación producto / insumo",2],["Da un ejemplo coherente que diferencia eficaz de eficiente",2]]},
+    {q:"Compara proyecto, programa y portafolio según su alcance, su manejo de los cambios y cómo se mide su éxito.",
+     model:"<b>Proyecto:</b> alcance más corto con entregables específicos; el director intenta mantener los cambios al mínimo; el éxito se mide por la entrega en tiempo, presupuesto y especificaciones. <b>Programa:</b> alcance más amplio que puede cambiar para conseguir beneficios; el director espera los cambios y los apoya; el éxito se mide por ROI, nuevas capacidades y producción de beneficios. <b>Portafolio:</b> visión del negocio que cambia con los objetivos estratégicos; los directores siguen los cambios continuamente; el éxito se mide por el rendimiento agregado de sus componentes.",
+     rubric:[["Compara correctamente el alcance de los tres",3],["Compara correctamente el manejo de los cambios",3],["Indica cómo se mide el éxito en proyecto, programa y portafolio",4]]},
+    {q:"Describe los cuatro dominios de COBIT 4.1, indica a qué área tradicional de TI equivale cada uno y cuántos procesos contiene.",
+     model:"<b>PO – Planear y Organizar</b> (planear, 10 procesos): estrategias y tácticas para que TI contribuya a los objetivos del negocio; da dirección a AI y DS. <b>AI – Adquirir e Implementar</b> (construir, 7): identificar, desarrollar o adquirir soluciones y cambios; las pasa a servicios. <b>DS – Entregar y Dar Soporte</b> (ejecutar, 13): entrega de servicios, seguridad, continuidad, soporte a usuarios, datos e instalaciones. <b>ME – Monitorear y Evaluar</b> (monitorear, 4): evalúa calidad y cumplimiento, control interno, cumplimiento regulatorio y gobierno. Total: 34 procesos.",
+     rubric:[["Nombra correctamente los 4 dominios",2],["Explica qué hace cada dominio",4],["Relaciona cada uno con planear, construir, ejecutar y monitorear",2],["Indica la cantidad de procesos (10, 7, 13, 4 = 34)",2]]},
+    {q:"Define el Gobierno de TI y explica tres de los procesos que componen \"Planear y organizar\".",
+     model:"El <b>Gobierno de TI</b> es el proceso mediante el cual el consejo de administración asegura el logro sostenido de los objetivos, la protección del patrimonio y de los intereses de los stakeholders, ofreciendo transparencia en la administración y control. Procesos de Planear y organizar: <b>Plan Estratégico de TI</b> (cómo TI contribuirá a los objetivos estratégicos, con costos y riesgos); <b>Alineación de TI con el negocio</b> (estrategias de negocio y de TI integradas); <b>Administración del valor de TI</b> (entrega efectiva y eficiente, alertas de desviación, niveles de servicio); también planes tácticos, evaluación del desempeño y capacidad actual, y administración del portafolio.",
+     rubric:[["Define el Gobierno de TI con el consejo de administración como responsable",2],["Menciona objetivos, protección del patrimonio y transparencia a stakeholders",2],["Explica correctamente un primer proceso",2],["Explica correctamente un segundo proceso",2],["Explica correctamente un tercer proceso",2]]},
+    {q:"Explica el modelo genérico de madurez de COBIT 4.1, describiendo brevemente cada nivel, e indica para qué le sirve a la administración.",
+     model:"<b>0 No existente:</b> no hay procesos reconocibles. <b>1 Inicial:</b> se reconoce el problema, enfoques ad hoc. <b>2 Repetible:</b> procedimientos similares sin entrenamiento formal; depende del individuo. <b>3 Definido:</b> estandarizados, documentados y difundidos. <b>4 Administrado:</b> se monitorea y mide el cumplimiento. <b>5 Optimizado:</b> mejor práctica, mejora continua y TI integrada. Sirve para identificar el desempeño real de la empresa, el estatus de la industria (comparación) y el objetivo de mejora.",
+     rubric:[["Nombra los 6 niveles en orden (0 a 5)",3],["Describe correctamente al menos 4 niveles",4],["Explica para qué sirve (desempeño real, industria, objetivo de mejora)",3]]},
+    {q:"Explica la matriz FODA: qué es, qué factores son internos y externos, y en qué etapa de la planificación estratégica se utiliza.",
+     model:"El <b>análisis FODA</b> (DOFA o SWOT) es una técnica para identificar fortalezas, oportunidades, debilidades y amenazas del negocio o de un proyecto; es una herramienta simple y potente para identificar oportunidades competitivas de mejora. Factores <b>internos</b>: fortalezas y debilidades. Factores <b>externos</b>: oportunidades y amenazas. Se usa en la etapa de <b>diagnóstico actual</b> (análisis interno-externo) y permite formular planes de acción cruzados.",
+     rubric:[["Define qué es el análisis FODA",3],["Clasifica correctamente los factores internos y externos",4],["Indica que se usa en el diagnóstico actual",3]]},
+    {q:"Menciona y explica cuatro razones por las que es importante el presupuesto de TI.",
+     model:"Razones del material: <b>gestión de costos</b> (controlar los gastos dentro de los límites acordados); <b>toma de decisiones</b> (prioridades y proyectos según la financiación); <b>asignación de recursos</b> (cada área con el dinero preciso); <b>financiación de proyectos</b> (actualización, deuda técnica, ciberseguridad); <b>comunicación entre equipos</b> (transparencia); <b>gestión de riesgos</b> (seguir amenazas como servicios obsoletos); <b>mejores resultados</b> (comparar gasto real vs. presupuestado).",
+     rubric:[["Primera razón correcta y explicada",2.5],["Segunda razón correcta y explicada",2.5],["Tercera razón correcta y explicada",2.5],["Cuarta razón correcta y explicada",2.5]]},
+    {q:"Explica los tipos de toma de decisiones directivas, operativas, estratégicas y tácticas, con un ejemplo de cada una.",
+     model:"<b>Directivas:</b> niveles ejecutivos, impactan a toda la organización y no son cotidianas (elegir socios inversionistas). <b>Operativas:</b> gestión diaria, las toma cualquier colaborador (contratar personal de nivel básico). <b>Estratégicas:</b> planificación a fondo, muchos participantes y tiempo (crear OKR). <b>Tácticas:</b> acción inmediata ante algo no contemplado (cambiar un empaque defectuoso).",
+     rubric:[["Explica las decisiones directivas con ejemplo",2.5],["Explica las decisiones operativas con ejemplo",2.5],["Explica las decisiones estratégicas con ejemplo",2.5],["Explica las decisiones tácticas con ejemplo",2.5]]}
+  ];
+
+  /* ============================================================
+     UTILIDADES
+     ============================================================ */
+  var STORE = "gr_parcial_sim_v1";
+  var HIST = "gr_parcial_hist_v1";
+  var LET = "ABCDEFGHIJ";
+  var $ = function(id){ return document.getElementById(id); };
+
+  function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function range(n){ var r=[]; for(var i=0;i<n;i++) r.push(i); return r; }
+  function pick(n, k){ return shuffle(range(n)).slice(0,k); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function fmt(sec){ sec=Math.max(0,Math.round(sec)); var m=Math.floor(sec/60), s=sec%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+  function r1(x){ return Math.round(x*10)/10; }
+  function load(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+  function show(id){
+    ["start","exam","selfgrade","results"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); });
+    window.scrollTo({top:0, left:0, behavior:"instant"});
+  }
+
+  /* ============================================================
+     ESTADO
+     ============================================================ */
+  var st = null;      // estado del intento
+  var tick = null;
+
+  function newAttempt(){
+    var pset = Math.floor(Math.random()*PAREO.length);
+    var P = PAREO[pset];
+    var nDefs = P.pairs.length + P.extra.length;
+    st = {
+      phase:"exam",
+      name:$("fName").value.trim(),
+      cid:$("fId").value.trim(),
+      minutes:parseInt($("fTime").value,10),
+      startAt:Date.now(),
+      endAt:0,
+      vf:pick(VF.length,10),
+      mc:pick(MC.length,15).map(function(i){ return {i:i, o:shuffle(range(MC[i].o.length))}; }),
+      pareo:{set:pset, terms:shuffle(range(P.pairs.length)), defs:shuffle(range(nDefs))},
+      ord:pick(ORD.length,2).map(function(i){ return {i:i, o:shuffle(range(ORD[i].items.length))}; }),
+      des:pick(DES.length,2),
+      ans:{vf:{}, mc:{}, pareo:{}, ord:{}, des:{}},
+      self:{},
+      submittedAt:0
+    };
+    if(st.minutes>0) st.endAt = st.startAt + st.minutes*60000;
+    save(STORE, st);
+  }
+
+  /* ============================================================
+     RENDER DEL EXAMEN
+     ============================================================ */
+  function renderExam(){
+    var h = "", n = 0;
+    var A = st.ans;
+
+    // Encabezado del alumno
+    h += '<div class="paper" style="margin-top:16px;"><div class="inst"><div class="c" style="margin-top:0">Primer Examen Parcial · Gerencia de Recursos de TIC</div>'+
+         '<div class="p">'+(st.name?esc(st.name):"Estudiante")+(st.cid?" · "+esc(st.cid):"")+' · '+(st.minutes?st.minutes+" min":"sin límite")+' · 100 pts</div></div></div>';
+
+    // PARTE I
+    h += part("I. Verdadero o falso","20 pts","Selecciona V si el enunciado es verdadero o F si es falso. Valor: 2 puntos c/u.");
+    st.vf.forEach(function(i,k){
+      n++;
+      var v = A.vf[k];
+      h += '<div class="q" id="q-vf-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+VF[i].s+'</div></div>'+
+           '<div class="opts vf">'+
+           '<button class="opt'+(v===true?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="1">Verdadero</button>'+
+           '<button class="opt'+(v===false?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="0">Falso</button>'+
+           '</div></div>';
+    });
+
+    // PARTE II
+    h += part("II. Selección múltiple","30 pts","Selecciona la única respuesta correcta. Valor: 2 puntos c/u.");
+    st.mc.forEach(function(m,k){
+      n++;
+      var Q = MC[m.i], v = A.mc[k];
+      h += '<div class="q" id="q-mc-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div class="opts">';
+      m.o.forEach(function(oi,pos){
+        h += '<button class="opt'+(v===oi?" sel":"")+'" data-t="mc" data-k="'+k+'" data-v="'+oi+'"><span class="l">'+LET[pos].toLowerCase()+'</span><span>'+Q.o[oi]+'</span></button>';
+      });
+      h += '</div></div>';
+    });
+
+    // PARTE III
+    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
+    h += part("III. Pareo · "+P.title,"20 pts","Escribe la letra de la definición que corresponde a cada concepto. Sobran 2 definiciones. Valor: 2.5 puntos c/u.");
+    h += '<div class="q" id="q-pareo"><ul class="defs">';
+    st.pareo.defs.forEach(function(di,pos){ h += '<li><b>'+LET[pos]+'</b><span>'+allDefs[di]+'</span></li>'; });
+    h += '</ul>';
+    st.pareo.terms.forEach(function(ti,k){
+      n++;
+      var v = A.pareo[k];
+      h += '<div class="match-row" id="q-pa-'+k+'"><span class="q-num">'+n+'</span><span class="term">'+P.pairs[ti][0]+'</span>'+
+           '<select data-t="pareo" data-k="'+k+'" class="'+(v!=null?"filled":"")+'"><option value="">—</option>';
+      st.pareo.defs.forEach(function(di,pos){ h += '<option value="'+di+'"'+(v===di?" selected":"")+'>'+LET[pos]+'</option>'; });
+      h += '</select></div>';
+    });
+    h += '</div>';
+
+    // PARTE IV
+    h += part("IV. Ordenamiento","10 pts","Asigna a cada elemento su posición correcta (1 = primero). Valor: 5 puntos c/u, proporcional a las posiciones correctas.");
+    st.ord.forEach(function(o,k){
+      n++;
+      var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {};
+      h += '<div class="q" id="q-ord-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div style="margin-top:8px;">';
+      o.o.forEach(function(ii){
+        h += '<div class="ord-row"><span class="item">'+Q.items[ii]+'</span><select data-t="ord" data-k="'+k+'" data-i="'+ii+'" class="'+(v[ii]!=null?"filled":"")+'"><option value="">#</option>';
+        for(var p=1;p<=N;p++) h += '<option value="'+p+'"'+(v[ii]===p?" selected":"")+'>'+p+'</option>';
+        h += '</select></div>';
+      });
+      h += '</div></div>';
+    });
+
+    // PARTE V
+    h += part("V. Desarrollo","20 pts","Responde con tus propias palabras. Se autoevalúa con rúbrica al entregar. Valor: 10 puntos c/u.");
+    st.des.forEach(function(di,k){
+      n++;
+      var v = A.des[k] || "";
+      h += '<div class="q" id="q-des-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+DES[di].q+'</div></div>'+
+           '<textarea data-t="des" data-k="'+k+'" placeholder="Escribe tu respuesta aquí…">'+esc(v)+'</textarea>'+
+           '<div class="wc" id="wc-'+k+'">'+words(v)+' palabras</div></div>';
+    });
+
+    h += '<div class="submit-zone"><button class="btn primary block" id="btnSubmitBottom">📤 Entregar examen</button></div>';
+    $("examBody").innerHTML = h;
+    $("btnSubmitBottom").addEventListener("click", askSubmit);
+    updateProgress();
+  }
+
+  function part(t, pts, desc){
+    return '<div class="part"><div class="part-head"><h2>'+t+'<span>'+pts+'</span></h2><p>'+desc+'</p></div></div>';
+  }
+  function words(s){ s=(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+
+  // Delegación de eventos en el examen
+  $("examBody").addEventListener("click", function(e){
+    var b = e.target.closest(".opt"); if(!b) return;
+    var t = b.getAttribute("data-t"), k = +b.getAttribute("data-k"), v = +b.getAttribute("data-v");
+    if(t==="vf") st.ans.vf[k] = (v===1);
+    if(t==="mc") st.ans.mc[k] = v;
+    Array.prototype.forEach.call(b.parentElement.children, function(x){ x.classList.toggle("sel", x===b); });
+    b.closest(".q").classList.remove("unanswered-flag");
+    persist(); updateProgress();
+  });
+  $("examBody").addEventListener("change", function(e){
+    var s = e.target; if(s.tagName!=="SELECT") return;
+    var t = s.getAttribute("data-t"), k = +s.getAttribute("data-k"), val = s.value===""?null:+s.value;
+    if(t==="pareo"){ if(val==null) delete st.ans.pareo[k]; else st.ans.pareo[k]=val; }
+    if(t==="ord"){
+      var i = +s.getAttribute("data-i");
+      st.ans.ord[k] = st.ans.ord[k] || {};
+      if(val==null) delete st.ans.ord[k][i]; else st.ans.ord[k][i]=val;
+    }
+    s.classList.toggle("filled", val!=null);
+    var q = s.closest(".q"); if(q) q.classList.remove("unanswered-flag");
+    persist(); updateProgress();
+  });
+  var typing;
+  $("examBody").addEventListener("input", function(e){
+    var t = e.target; if(t.tagName!=="TEXTAREA") return;
+    var k = +t.getAttribute("data-k");
+    st.ans.des[k] = t.value;
+    $("wc-"+k).textContent = words(t.value)+" palabras";
+    t.closest(".q").classList.remove("unanswered-flag");
+    clearTimeout(typing); typing = setTimeout(function(){ persist(); updateProgress(); }, 400);
+  });
+
+  function persist(){ save(STORE, st); }
+
+  /* ---------- progreso / pendientes ---------- */
+  function pending(){
+    var list = [], n = 0, A = st.ans;
+    st.vf.forEach(function(_,k){ n++; if(A.vf[k]==null) list.push({n:n,id:"q-vf-"+k}); });
+    st.mc.forEach(function(_,k){ n++; if(A.mc[k]==null) list.push({n:n,id:"q-mc-"+k}); });
+    st.pareo.terms.forEach(function(_,k){ n++; if(A.pareo[k]==null) list.push({n:n,id:"q-pa-"+k}); });
+    st.ord.forEach(function(o,k){ n++; var v=A.ord[k]||{}; if(Object.keys(v).length<ORD[o.i].items.length) list.push({n:n,id:"q-ord-"+k}); });
+    st.des.forEach(function(_,k){ n++; if(!(A.des[k]||"").trim()) list.push({n:n,id:"q-des-"+k}); });
+    return {list:list, total:n};
+  }
+  function updateProgress(){
+    var p = pending(), done = p.total - p.list.length;
+    $("tbLabel").textContent = done+" de "+p.total+" respondidas";
+    $("tbProg").style.width = (p.total?done/p.total*100:0)+"%";
+  }
+
+  /* ---------- temporizador ---------- */
+  function startTimer(){
+    clearInterval(tick);
+    var el = $("timer");
+    function upd(){
+      if(!st.endAt){ el.textContent = fmt((Date.now()-st.startAt)/1000); el.className="timer"; return; }
+      var left = (st.endAt - Date.now())/1000;
+      el.textContent = fmt(left);
+      el.className = "timer" + (left<=60?" crit":left<=600?" warn":"");
+      if(left<=0){ clearInterval(tick); submit(true); }
+    }
+    upd(); tick = setInterval(upd, 1000);
+  }
+
+  /* ---------- entrega ---------- */
+  function askSubmit(){
+    var p = pending();
+    $("mTitle").textContent = "¿Entregar examen?";
+    if(p.list.length){
+      $("mText").textContent = "Tienes "+p.list.length+" pregunta(s) sin responder. Toca un número para ir a ella.";
+      $("mChips").innerHTML = p.list.map(function(x){ return '<button class="chip" data-id="'+x.id+'">#'+x.n+'</button>'; }).join("");
+    } else {
+      $("mText").textContent = "Respondiste todas las preguntas. Una vez entregado no podrás modificar tus respuestas.";
+      $("mChips").innerHTML = "";
+    }
+    $("modal").classList.remove("hidden");
+  }
+  $("mChips").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if(!c) return;
+    $("modal").classList.add("hidden");
+    var el = $(c.getAttribute("data-id"));
+    if(el){ el.classList.add("unanswered-flag"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
+  });
+  $("mCancel").addEventListener("click", function(){ $("modal").classList.add("hidden"); });
+  $("mOk").addEventListener("click", function(){ $("modal").classList.add("hidden"); submit(false); });
+  $("btnSubmitTop").addEventListener("click", askSubmit);
+
+  function submit(auto){
+    clearInterval(tick);
+    st.phase = "selfgrade";
+    st.submittedAt = Date.now();
+    st.autoSubmitted = !!auto;
+    persist();
+    renderSelfGrade();
+    show("selfgrade");
+  }
+
+  /* ============================================================
+     AUTOEVALUACIÓN
+     ============================================================ */
+  function renderSelfGrade(){
+    var h = "";
+    if(st.autoSubmitted) h += '<div class="resume"><p>⏰ Se acabó el tiempo: el examen se entregó automáticamente.</p></div>';
+    st.des.forEach(function(di,k){
+      var D = DES[di], mine = (st.ans.des[k]||"").trim(), sel = st.self[k] || [];
+      h += '<div class="sg"><h3>Pregunta de desarrollo '+(k+1)+'</h3><div style="font-size:.88rem;color:var(--text-dim)">'+D.q+'</div>'+
+           '<div class="lbl">TU RESPUESTA</div><div class="mine">'+(mine?esc(mine):'<i>Sin respuesta.</i>')+'</div>'+
+           '<div class="lbl">RESPUESTA MODELO</div><div class="model">'+D.model+'</div>'+
+           '<div class="lbl">RÚBRICA · MARCA LO QUE SÍ INCLUISTE</div>';
+      D.rubric.forEach(function(r,ri){
+        h += '<label class="rub"><input type="checkbox" data-k="'+k+'" data-r="'+ri+'"'+(sel[ri]?" checked":"")+(mine?"":" disabled")+'><span>'+r[0]+'</span><em>+'+r[1]+'</em></label>';
+      });
+      h += '<div class="sg-total" id="sgt-'+k+'"></div></div>';
+    });
+    $("sgBody").innerHTML = h;
+    st.des.forEach(function(_,k){ updSg(k); });
+  }
+  $("sgBody").addEventListener("change", function(e){
+    var c = e.target; if(c.type!=="checkbox") return;
+    var k = +c.getAttribute("data-k"), r = +c.getAttribute("data-r");
+    st.self[k] = st.self[k] || [];
+    st.self[k][r] = c.checked;
+    updSg(k); persist();
+  });
+  function desPts(k){
+    var D = DES[st.des[k]], sel = st.self[k] || [], t = 0;
+    if(!(st.ans.des[k]||"").trim()) return 0;
+    D.rubric.forEach(function(r,ri){ if(sel[ri]) t += r[1]; });
+    return t;
+  }
+  function updSg(k){ $("sgt-"+k).textContent = desPts(k)+" / 10 pts"; }
+  $("btnFinish").addEventListener("click", function(){
+    st.phase = "results"; persist();
+    renderResults(true); show("results");
+  });
+
+  /* ============================================================
+     CALIFICACIÓN Y RESULTADOS
+     ============================================================ */
+  function grade(){
+    var A = st.ans, rv = [], n = 0;
+    var parts = {I:0, II:0, III:0, IV:0, V:0};
+
+    st.vf.forEach(function(i,k){
+      n++; var Q = VF[i], v = A.vf[k], ok = v===Q.a, pts = ok?2:0; parts.I += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.s,
+        lines:["Tu respuesta: <b>"+(v==null?"—":v?"Verdadero":"Falso")+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(Q.a?"Verdadero":"Falso")+"</b>"], exp:Q.e});
+    });
+    st.mc.forEach(function(m,k){
+      n++; var Q = MC[m.i], v = A.mc[k], ok = v===0, pts = ok?2:0; parts.II += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.q,
+        lines:["Tu respuesta: <b>"+(v==null?"—":Q.o[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+Q.o[0]+"</b>"], exp:Q.e});
+    });
+    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
+    st.pareo.terms.forEach(function(ti,k){
+      n++; var v = A.pareo[k], ok = v===ti, pts = ok?2.5:0; parts.III += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2.5, q:"Pareo: <b>"+P.pairs[ti][0]+"</b>",
+        lines:["Tu respuesta: <b>"+(v==null?"—":allDefs[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+P.pairs[ti][1]+"</b>"], exp:""});
+    });
+    st.ord.forEach(function(o,k){
+      n++; var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {}, good = 0;
+      Q.items.forEach(function(_,ii){ if(v[ii]===ii+1) good++; });
+      var pts = r1(5*good/N); parts.IV += pts;
+      var mineOrder = Q.items.map(function(it,ii){ return {it:it, p:v[ii]}; }).filter(function(x){ return x.p!=null; }).sort(function(a,b){ return a.p-b.p; }).map(function(x){ return x.p+". "+x.it; });
+      rv.push({n:n, cls:good===N?"ok":good===0?"bad":"part", pts:pts, max:5, q:Q.q,
+        lines:["Posiciones correctas: <b>"+good+" de "+N+"</b>", "Tu orden: "+(mineOrder.length?mineOrder.join(" · "):"—")],
+        exp:"Orden correcto: "+Q.items.map(function(it,ii){ return "<b>"+(ii+1)+".</b> "+it; }).join(" · ")});
+    });
+    st.des.forEach(function(di,k){
+      n++; var pts = desPts(k); parts.V += pts;
+      rv.push({n:n, cls:pts>=10?"ok":pts===0?"bad":"part", pts:pts, max:10, q:DES[di].q,
+        lines:["Autoevaluación con rúbrica"], exp:DES[di].model});
+    });
+
+    Object.keys(parts).forEach(function(p){ parts[p] = r1(parts[p]); });
+    var total = r1(parts.I+parts.II+parts.III+parts.IV+parts.V);
+    return {total:total, parts:parts, rv:rv};
+  }
+
+  function letter(s){ return s>=91?"A":s>=81?"B":s>=71?"C":s>=61?"D":"F"; }
+  var MSG = {A:"¡Excelente! Dominas el material.", B:"Muy bien. Repasa los detalles que fallaste.", C:"Bien, pero hay temas por reforzar.", D:"Aprobado por poco: repasa la guía.", F:"Necesitas repasar el material antes del parcial."};
+
+  function renderResults(addHist){
+    var g = grade(), L = letter(g.total);
+    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + "RESULTADO";
+    $("rsScore").innerHTML = g.total+"<small>/100</small>";
+    $("rsGrade").className = "grade g-"+L;
+    $("rsGrade").textContent = "Nota "+L;
+    var used = ((st.submittedAt||Date.now()) - st.startAt)/1000;
+    $("rsMeta").textContent = MSG[L]+" · Tiempo utilizado: "+fmt(used)+(st.minutes?" de "+st.minutes+":00":"")+(st.autoSubmitted?" · entregado por tiempo":"");
+
+    var defs = [["I. Verdadero o falso","I",20],["II. Selección múltiple","II",30],["III. Pareo","III",20],["IV. Ordenamiento","IV",10],["V. Desarrollo","V",20]];
+    $("rsBars").innerHTML = defs.map(function(d){
+      var v = g.parts[d[1]], pct = v/d[2]*100;
+      var col = pct>=81?"var(--accent)":pct>=61?"var(--amber)":"var(--red)";
+      return '<div class="bar-row"><div class="bar-top"><span>'+d[0]+'</span><b>'+v+' / '+d[2]+'</b></div><div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div></div>';
+    }).join("");
+
+    renderReview(g.rv, "all");
+    $("rsFilters").onclick = function(e){
+      var b = e.target.closest(".fbtn"); if(!b) return;
+      Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x===b); });
+      renderReview(g.rv, b.getAttribute("data-f"));
+    };
+
+    if(addHist && !st.saved){
+      var h = load(HIST) || [];
+      h.unshift({d:Date.now(), s:g.total, g:L});
+      save(HIST, h.slice(0,8));
+      st.saved = true; persist();
+    }
+  }
+
+  function renderReview(rv, f){
+    var list = rv.filter(function(r){ return f==="all" || r.cls===f; });
+    $("rsReview").innerHTML = list.length ? list.map(function(r){
+      var c = r.cls==="ok"?"c-ok":r.cls==="bad"?"c-bad":"c-part";
+      var icon = r.cls==="ok"?"✅":r.cls==="bad"?"❌":"⚠️";
+      return '<div class="rv '+r.cls+'"><div class="rv-top"><div class="rv-q"><b>'+r.n+'.</b> '+r.q+'</div><div class="rv-pts '+c+'">'+icon+' '+r.pts+'/'+r.max+'</div></div>'+
+        r.lines.filter(Boolean).map(function(l){ return '<div class="rv-line">'+l+'</div>'; }).join("")+
+        (r.exp?'<div class="rv-exp">💡 '+r.exp+'</div>':'')+'</div>';
+    }).join("") : '<p style="font-size:.86rem;color:var(--text-faint);padding:10px 0;">No hay preguntas en este filtro.</p>';
+  }
+
+  /* ============================================================
+     PORTADA: reanudar e historial
+     ============================================================ */
+  function renderStart(){
+    var saved = load(STORE);
+    if(saved && saved.phase && saved.phase!=="results"){
+      var info;
+      if(saved.phase==="exam") info = saved.endAt ? (saved.endAt>Date.now() ? "Quedan "+fmt((saved.endAt-Date.now())/1000)+"." : "El tiempo ya terminó; se entregará al continuar.") : "Sin límite de tiempo.";
+      else info = "Falta autoevaluar la Parte V.";
+      $("resumeInfo").textContent = info;
+      $("resumeBox").classList.remove("hidden");
+    } else {
+      $("resumeBox").classList.add("hidden");
+    }
+    var h = load(HIST) || [];
+    $("histBox").style.display = h.length ? "block" : "none";
+    $("histList").innerHTML = h.map(function(x){
+      var d = new Date(x.d);
+      return '<div class="hist-item"><span>'+d.toLocaleDateString("es-PA")+' · '+d.toLocaleTimeString("es-PA",{hour:"2-digit",minute:"2-digit"})+'</span><span><b>'+x.s+'</b> · <span class="grade g-'+x.g+'" style="margin:0;padding:2px 9px;font-size:.75rem;">'+x.g+'</span></span></div>';
+    }).join("");
+  }
+
+  $("btnStart").addEventListener("click", function(){
+    newAttempt(); renderExam(); show("exam"); startTimer();
+  });
+  $("btnResume").addEventListener("click", function(){
+    st = load(STORE); if(!st) return renderStart();
+    if(st.phase==="exam"){
+      renderExam(); show("exam");
+      if(st.endAt && st.endAt<=Date.now()) submit(true); else startTimer();
+    } else if(st.phase==="selfgrade"){ renderSelfGrade(); show("selfgrade"); }
+  });
+  $("btnDiscard").addEventListener("click", function(){ del(STORE); renderStart(); });
+  $("btnRetry").addEventListener("click", function(){
+    del(STORE); st = null; renderStart(); show("start");
+  });
+
+  // Aviso antes de salir con un examen en curso
+  window.addEventListener("beforeunload", function(e){
+    if(st && st.phase==="exam"){ persist(); e.preventDefault(); e.returnValue = ""; }
+  });
+
+  renderStart();
+})();
+</script>
+</body>
+</html>
