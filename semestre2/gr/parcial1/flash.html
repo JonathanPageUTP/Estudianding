@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Repaso GR · Parcial 1</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1>Repaso <em>GR</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Parcial 1</span>
+    </div>
+    <p class="subtitle">Gerencia de Recursos de TIC · Adm. estratégica · COBIT 4.1</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-filter="all">Todas · 80</div>
+      <div class="tab" data-filter="hard">Por repasar</div>
+      <div class="tab" data-filter="learned">Aprendidas</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 80</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     80 FLASHCARDS — Fuente: Unidad I - Fundamentos Básicos de Adm. y Gerencia.pdf,
+     Administración Estratégica.pdf, Procesos COBIT41.pdf, GLOSARIO.pdf
+  ======================================================== */
+  var CARDS = [
+    {cat:"Gerencia de TI", q:"¿Qué implica la Administración de TI?", a:"La supervisión de los <b>requerimientos empresariales</b> y la investigación de estrategias y soluciones tecnológicas adecuadas. Su enfoque es construir sistemas <b>rentables y eficientes</b>."},
+    {cat:"Gerencia de TI", q:"¿Qué hacen los gerentes de TI?", a:"Supervisan y gestionan los sistemas de TI para garantizar que estén <b>siempre disponibles</b> y funcionen de manera <b>confiable</b>. Entre sus tareas: determinar los requisitos comerciales para los sistemas de TI."},
+    {cat:"Gerencia de TI", q:"¿Cuáles son las 3 habilidades gerenciales?", a:"<b>Técnicas, Conceptuales y Humanas.</b><br><br><i>Mnemotecnia:</i> \"<b>T</b>odo <b>C</b>erebro <b>H</b>umano\" (TCH)."},
+    {cat:"Gerencia de TI", q:"¿Qué son las habilidades técnicas?", a:"Las que se aprenden durante el <b>proceso de formación</b> de cada persona; relacionadas con funciones o actividades específicas."},
+    {cat:"Gerencia de TI", q:"¿Qué son las habilidades conceptuales?", a:"Las relacionadas con el <b>análisis</b>, formulación de ideas, <b>pensamiento crítico</b> y resolución de problemas."},
+    {cat:"Gerencia de TI", q:"¿Qué son las habilidades humanas?", a:"Esenciales para quienes trabajan en gestión humana; los gerentes deben ser siempre los <b>responsables de la toma de decisiones</b>."},
+    {cat:"Gerencia de TI", q:"Menciona 4 funciones de un Gerente de TI.", a:"Planificar, organizar, controlar, desarrollar y evaluar operaciones informáticas; gestionar el <b>talento humano</b> de TI; garantizar la <b>seguridad</b> de datos y redes; mantener la <b>operatividad y disponibilidad</b> de los sistemas (también: diseñar sistemas, dirigir soporte técnico, participar en estrategias de negocio y supervisar el alineamiento)."},
+    {cat:"Gerencia de TI", q:"Menciona 6 competencias que debe desarrollar el gerente de TI.", a:"Gestión de cambios e incidentes, habilidades comunicativas, orientación al logro, actitud de servicio, manejo del tiempo, saber escuchar, <b>liderazgo</b>, negociación, motivación, <b>visión estratégica</b>, relaciones interpersonales y <b>sentido de urgencia</b>."},
+
+    {cat:"Eficacia y eficiencia", q:"¿Qué es la eficacia?", a:"Capacidad de <b>alcanzar las metas</b> que la compañía se dispuso alcanzar.<br><br><i>Truco:</i> efic<b>A</b>cia = <b>A</b>lcanzar."},
+    {cat:"Eficacia y eficiencia", q:"¿Qué es la eficiencia?", a:"Capacidad de lograr las metas usando la <b>menor cantidad posible de recursos</b>.<br><br><i>Truco:</i> efic<b>I</b>encia = pocos <b>I</b>nsumos."},
+    {cat:"Eficacia y eficiencia", q:"¿Qué es la productividad?", a:"Capacidad de producción según la <b>relación entre el producto y el insumo</b>: los recursos usados para generar bienes con la calidad que buscan los clientes."},
+
+    {cat:"Toma de decisiones", q:"¿Qué es la toma de decisiones en una empresa?", a:"El proceso mediante el cual sus integrantes <b>seleccionan, entre varias alternativas</b>, aquellas alineadas con el propósito, necesidades y objetivos de la organización."},
+    {cat:"Toma de decisiones", q:"¿Por qué es importante la toma de decisiones?", a:"Porque permite alcanzar el propósito; contribuye a la <b>productividad</b> al reducir los tiempos de reacción y abrir nuevas oportunidades. Mejores decisiones = mayor beneficio y cumplimiento de objetivos."},
+    {cat:"Toma de decisiones", q:"¿Qué reveló el estudio de Harvard Business Review?", a:"Que el <b>87%</b> de los líderes empresariales piensa que su organización será más exitosa cuando sus colaboradores están <b>empoderados</b> para tomar decisiones importantes."},
+    {cat:"Toma de decisiones", q:"¿Qué demostró el análisis de Forrester (2020)?", a:"Que el <b>41%</b> de las organizaciones evaluadas tuvo dificultades para <b>convertir sus datos en decisiones</b>."},
+    {cat:"Toma de decisiones", q:"¿Qué son las decisiones directivas? Da un ejemplo.", a:"Se toman en niveles <b>ejecutivos y directivos</b>, impactan a toda la organización y no son cotidianas.<br><br><b>Ej.:</b> decidir entre socios inversionistas o elegir a un candidato para dirigir un área."},
+    {cat:"Toma de decisiones", q:"¿Qué son las decisiones operativas? Da un ejemplo.", a:"Contribuyen a la <b>gestión diaria</b>; las toma todo tipo de colaboradores.<br><br><b>Ej.:</b> contratar un colaborador de nivel básico o actualizar el equipo tecnológico para un proyecto."},
+    {cat:"Toma de decisiones", q:"¿Qué son las decisiones estratégicas? Da un ejemplo.", a:"Requieren <b>planificación a fondo</b>, muchos participantes y bastante tiempo.<br><br><b>Ej.:</b> crear los <b>OKR</b> (objetivos y resultados clave) o un proyecto a mediano plazo que involucra varias áreas."},
+    {cat:"Toma de decisiones", q:"¿Qué son las decisiones tácticas? Da un ejemplo.", a:"Ante un problema <b>no contemplado</b> que requiere <b>acción inmediata</b> para corregir el camino.<br><br><b>Ej.:</b> ajustar una estrategia de comunicación que no funcionó o cambiar el empaque defectuoso de un producto."},
+    {cat:"Toma de decisiones", q:"¿Qué son las decisiones de peso o riesgo?", a:"Involucran a miembros de <b>todos los niveles</b> y ocurren ante una situación <b>adversa o inesperada</b>.<br><br><b>Ej.:</b> un proveedor aumenta el costo de un insumo o hay problemas con un socio estratégico."},
+    {cat:"Toma de decisiones", q:"¿Cuál es la diferencia entre decisiones grupales e individuales?", a:"<b>Grupal:</b> requiere reunión o participación de dos o más personas (ej. votar un nuevo logo). <b>Individual:</b> la resuelve una sola persona (ej. contestar a un cliente por WhatsApp)."},
+    {cat:"Toma de decisiones", q:"¿Qué son las decisiones mixtas?", a:"Las que <b>combinan dos o más</b> tipos de decisiones. Ej.: votación entre varias áreas para resolver un conflicto con un proveedor que alteró los tiempos de entrega."},
+    {cat:"Toma de decisiones", q:"¿Cuáles son los 8 pasos de la toma de decisión?", a:"1 Identificar y definir el problema · 2 Recopilar información · 3 Identificar y analizar alternativas · 4 Prever resultados e impacto · 5 Seleccionar alternativa · 6 Llevar a cabo · 7 Revisar y monitorear · 8 Evaluar resultados.<br><br><i>Mnemotecnia:</i> \"<b>IRAPS</b> y <b>LuEgo REvisa</b>\"."},
+    {cat:"Toma de decisiones", q:"¿Qué herramienta se menciona para prever resultados de las alternativas?", a:"El <b>análisis DAFO</b>, para observar los puntos fuertes y débiles de las alternativas y valorar cuál es más viable."},
+    {cat:"Toma de decisiones", q:"¿Qué se debe hacer en el último paso, \"evaluar los resultados\"?", a:"Verificar si los resultados son satisfactorios y <b>documentar todo el proceso</b>, considerando si se cumplieron las expectativas y objetivos."},
+
+    {cat:"Proceso administrativo", q:"¿Cuáles son las 4 funciones básicas de la administración?", a:"<b>Planificación, Organización, Dirección y Control</b> (proceso administrativo).<br><br><i>Mnemotecnia:</i> \"<b>P</b>rimero <b>O</b>rdeno, <b>D</b>espués <b>C</b>ontrolo\"."},
+    {cat:"Proceso administrativo", q:"¿Qué incluye la PLANIFICACIÓN?", a:"Decisión sobre los objetivos, definición de planes para alcanzarlos y programación de actividades."},
+    {cat:"Proceso administrativo", q:"¿Qué incluye la ORGANIZACIÓN?", a:"Recursos y actividades para alcanzar los objetivos, órganos y cargos, y atribución de autoridades y responsabilidad."},
+    {cat:"Proceso administrativo", q:"¿Qué incluyen la DIRECCIÓN y el CONTROL?", a:"<b>Dirección:</b> designación de cargos; comunicación, liderazgo y motivación del personal; dirección hacia los objetivos.<br><b>Control:</b> estándares para medir el desempeño; corregir desviaciones y garantizar que se realice la planeación."},
+
+    {cat:"TIC", q:"¿Cómo define la Ley 1341 de 2009 (Art. 6) a las TIC?", a:"Conjunto de recursos, herramientas, equipos, programas, aplicaciones, redes y medios que permiten la <b>compilación, procesamiento, almacenamiento y transmisión</b> de información (voz, datos, texto, video e imágenes)."},
+    {cat:"TIC", q:"Menciona 3 beneficios de las TIC.", a:"Desarrollo de la salud y educación; desarrollo de profesionales por intercambio de información; apoyo a pequeños empresarios; aprendizaje interactivo; acceso eficiente e inmediato a datos."},
+    {cat:"TIC", q:"Menciona 3 desventajas de las TIC.", a:"Dispersión de la información; falta de sistemas de catalogación; desorden del contenido; público incapaz de discernir fuentes confiables; enorme <b>exposición de la vida íntima</b>."},
+    {cat:"TIC", q:"¿Cuáles son los 4 ejes de las TIC como transformación de la economía?", a:"<b>Inversión en TIC</b> (economía digital), <b>Habilidades en TIC</b> (invertir en educación), <b>eGobierno</b> (los gobiernos lideran con el ejemplo) y <b>eComercio</b> (banda ancha y bancarización)."},
+
+    {cat:"Sistemas de información", q:"¿Qué es un sistema de información (SI)?", a:"Un conjunto ordenado de mecanismos para la <b>administración de datos e información</b>, de manera que puedan ser recuperados y procesados fácil y rápidamente."},
+    {cat:"Sistemas de información", q:"¿Cuáles son los componentes de un SI?", a:"<b>Recursos Humanos, Datos, Actividades y Recursos Informáticos.</b>"},
+    {cat:"Sistemas de información", q:"¿Qué es un TPS?", a:"<b>Sistema de Procesamiento de Transacciones</b> (o de gestión operativa): recopila la información de las transacciones de la organización, es decir, de su funcionamiento."},
+    {cat:"Sistemas de información", q:"¿Qué diferencia a un EIS de un MIS?", a:"El <b>EIS</b> (Información Ejecutiva) monitoriza variables gerenciales de un <b>área específica</b>. El <b>MIS</b> (Información Gerencial) ve la información de la organización <b>como un todo</b>."},
+    {cat:"Sistemas de información", q:"¿Qué es un DSS?", a:"<b>Sistema de Soporte de Decisiones</b>: procesa información intra y extra organizacional para apoyar la conducción de la empresa."},
+    {cat:"Sistemas de información", q:"¿Cuáles son los 5 elementos de un SI?", a:"<b>Financieros, Tecnológicos, Humanos, Materiales y Administrativos.</b><br><br><i>Mnemotecnia:</i> \"<b>F</b>ui <b>T</b>arde, <b>H</b>ice <b>M</b>ucho <b>A</b>vance\"."},
+
+    {cat:"Adm. estratégica", q:"¿Para qué es necesaria la planeación estratégica de TI?", a:"Para gestionar y dirigir todos los recursos de TI <b>en línea con la estrategia y prioridades del negocio</b>."},
+    {cat:"Adm. estratégica", q:"Menciona 3 rasgos de la relación Negocio–TI actual.", a:"Escasa credibilidad y respeto hacia TI; carencias de comunicación entre director de TI y directores de negocio; directivos de negocio que toman decisiones tecnológicas; directores de TI que no informan adecuadamente."},
+    {cat:"Adm. estratégica", q:"¿Qué error implica \"tratar a TI como un problema tecnológico\"?", a:"Que se trata a TI como un problema tecnológico <b>en lugar de un problema de negocio</b>. (Otros fallos: obsesión por la urgencia, reducir presupuestos en lugar de bajar costos.)"},
+    {cat:"Gobierno de TI", q:"¿Qué es el Gobierno de TI?", a:"El proceso mediante el cual el <b>consejo de administración</b> asegura el logro sostenido de objetivos, la <b>protección del patrimonio</b> e intereses de los stakeholders, ofreciendo <b>transparencia</b> en la administración y control."},
+    {cat:"Gobierno de TI", q:"¿Cuáles son los 6 elementos de \"Planear y organizar\"?", a:"Administración del valor de TI · Alineación de TI con el negocio · Evaluación del desempeño y capacidad actual · <b>Plan Estratégico de TI</b> (centro) · Planes tácticos de TI · Administración del portafolio de TI."},
+    {cat:"Gobierno de TI", q:"¿Qué define el Plan Estratégico de TI?", a:"En cooperación con los interesados, <b>cómo TI contribuirá a los objetivos estratégicos</b> de la empresa, junto con costos y riesgos; y cómo dará soporte a programas de inversión y servicios operativos."},
+    {cat:"Gobierno de TI", q:"¿Qué detalle deben tener los planes tácticos de TI?", a:"El <b>suficiente para permitir la definición de planes de proyectos</b>; se administran mediante el análisis de los portafolios de proyectos y servicios."},
+
+    {cat:"Portafolio", q:"Diferencia entre proyecto, programa y portafolio.", a:"<b>Proyecto:</b> emprendimiento temporal y único. <b>Programa:</b> grupo de proyectos relacionados gestionados de forma coordinada. <b>Portafolio:</b> proyectos y/o programas dirigidos a <b>objetivos estratégicos</b>."},
+    {cat:"Portafolio", q:"¿Qué es un subproyecto?", a:"<b>Parte de un proyecto</b>; pueden ser subcontratos."},
+    {cat:"Portafolio", q:"¿Cómo se mide el éxito en proyecto, programa y portafolio?", a:"<b>Proyecto:</b> entrega en tiempo, presupuesto y especificaciones. <b>Programa:</b> ROI, nuevas capacidades y beneficios. <b>Portafolio:</b> rendimiento agregado de sus componentes."},
+    {cat:"Portafolio", q:"¿Cómo trata los cambios cada director (proyecto, programa, portafolio)?", a:"El de <b>proyecto</b> intenta mantenerlos al mínimo; el de <b>programa</b> los espera y apoya; el de <b>portafolio</b> los sigue continuamente en un entorno amplio."},
+
+    {cat:"Presupuesto TI", q:"¿Qué elementos giran alrededor de la Inversión TI?", a:"<b>Prioridades del presupuesto</b>, <b>Proceso presupuestal</b>, <b>Administración del costo</b> y <b>Administración de beneficios</b> (PO5.1–PO5.5 incluye además el Marco de trabajo financiero)."},
+    {cat:"Presupuesto TI", q:"¿Qué pide PO5.4 Administración de costos de TI?", a:"Comparar los <b>costos reales con los presupuestados</b>, monitorearlos y reportarlos; ante desviaciones, identificarlas a tiempo y tomar medidas correctivas."},
+    {cat:"Presupuesto TI", q:"Menciona 4 razones por las que es importante el presupuesto de TI.", a:"Gestión de costos, toma de decisiones, asignación de recursos, financiación de proyectos, comunicación entre equipos, gestión de riesgos y mejores resultados."},
+    {cat:"Presupuesto TI", q:"¿Cuáles son los elementos de un presupuesto tradicional de TI?", a:"Consultoría, Formación, Licencias, Mantenimiento, Hardware, Servicios, Comunicaciones y Otros o imprevistos."},
+    {cat:"Presupuesto TI", q:"¿Qué tecnología encabeza la inversión de los CIOs y con qué porcentaje?", a:"<b>IA / Machine Learning con 48%</b>, seguida de nube distribuida (44%), SASE (32%), edge computing (27%) y plataforma de desarrollo multiexperiencia (25%)."},
+
+    {cat:"Planeación estratégica", q:"¿Qué permite definir la planeación estratégica?", a:"La <b>visión, misión, valores y objetivos</b> de la empresa; recurso clave para el crecimiento a corto, mediano y largo plazo."},
+    {cat:"Planeación estratégica", q:"¿Cuáles son las 6 etapas de la planificación estratégica?", a:"Diagnóstico actual → Identidad organizacional → Análisis del entorno → Objetivos estratégicos → Plan de acción u operativo → Seguimiento.<br><br><i>Mnemotecnia:</i> \"<b>DIA</b> de <b>OPS</b>\"."},
+    {cat:"Planeación estratégica", q:"¿Cuáles son los 3 pilares de la identidad organizacional?", a:"<b>Misión</b> (propósito), <b>Visión</b> (proyección a futuro) y <b>Valores</b> (criterios éticos y morales)."},
+    {cat:"Planeación estratégica", q:"¿Qué significa SMART?", a:"<b>S</b>pecific (Específico), <b>M</b>easurable (Medible), <b>A</b>ttainable (Alcanzable), <b>R</b>ealistic (Relevante/Realista), <b>T</b>ime-bound (Temporal)."},
+    {cat:"Planeación estratégica", q:"¿Qué es el análisis FODA y qué factores son internos y externos?", a:"Técnica para identificar Fortalezas, Oportunidades, Debilidades y Amenazas. <b>Internos:</b> Fortalezas y Debilidades. <b>Externos:</b> Oportunidades y Amenazas. También se llama DOFA o SWOT."},
+
+    {cat:"COBIT 4.1", q:"¿Qué es COBIT y quién lo publicó primero?", a:"Marco de trabajo y herramientas de <b>Gobierno de TI</b> que cierra la brecha entre requerimientos de control, aspectos técnicos y riesgos de negocio. Publicado por <b>ITGI en abril de 1996</b>."},
+    {cat:"COBIT 4.1", q:"¿Cuáles son los 7 criterios de información de COBIT?", a:"Efectividad, Eficiencia, Confidencialidad, Integridad, Disponibilidad, Cumplimiento y Confiabilidad."},
+    {cat:"COBIT 4.1", q:"¿Cuáles son los 4 recursos de TI en COBIT?", a:"<b>Aplicaciones, Información, Infraestructura y Personas.</b>"},
+    {cat:"COBIT 4.1", q:"¿Cuáles son los 4 dominios de COBIT y cuántos procesos tiene cada uno?", a:"<b>PO</b> Planear y Organizar (10) · <b>AI</b> Adquirir e Implementar (7) · <b>DS</b> Entregar y Dar Soporte (13) · <b>ME</b> Monitorear y Evaluar (4) = <b>34 procesos</b>."},
+    {cat:"COBIT 4.1", q:"¿Qué son PO1, PO5, AI6 y DS8?", a:"<b>PO1</b> Definir el plan estratégico de TI · <b>PO5</b> Administrar la inversión en TI · <b>AI6</b> Administrar cambios · <b>DS8</b> Administrar la mesa de servicio y los incidentes."},
+    {cat:"COBIT 4.1", q:"¿Qué son los requerimientos de control genéricos PC1–PC6?", a:"PC1 Dueño del proceso · PC2 Reiterativo · PC3 Metas y objetivos · PC4 Roles y responsabilidades · PC5 Desempeño del proceso · PC6 Políticas, planes y procedimientos."},
+    {cat:"COBIT 4.1", q:"En la gráfica RACI, ¿qué diferencia hay entre Responsable y Rinde cuentas?", a:"<b>Responsable:</b> la persona que <b>realiza</b> la actividad. <b>Rinde cuentas:</b> la persona que provee <b>autorización y direccionamiento</b>."},
+    {cat:"COBIT 4.1", q:"¿Cuáles son los 5 grupos de controles de las aplicaciones (AC1–AC18)?", a:"Origen de datos/autorización (AC1–5), Entrada (AC6–8), Procesamiento (AC9–11), Salida (AC12–16) y Límites (AC17–18)."},
+    {cat:"COBIT 4.1", q:"¿Cuáles son los 6 niveles del modelo genérico de madurez?", a:"0 No existente · 1 Inicial · 2 Repetible · 3 Definido · 4 Administrado · 5 Optimizado.<br><br><i>Mnemotecnia:</i> \"<b>N</b>o <b>I</b>nicies <b>R</b>epitiendo, <b>D</b>efine, <b>A</b>dministra y <b>O</b>ptimiza\"."},
+    {cat:"COBIT 4.1", q:"¿Qué diferencia al nivel 2 Repetible del 3 Definido?", a:"En el <b>2</b> hay procedimientos similares pero <b>sin entrenamiento ni comunicación formal</b> (depende del individuo). En el <b>3</b> están <b>estandarizados, documentados y difundidos</b> mediante entrenamiento."},
+    {cat:"COBIT 4.1", q:"¿Qué diferencia hay entre KGI y KPI?", a:"<b>KGI</b> (indicador clave de metas): indica <b>después del hecho</b> si un proceso alcanzó sus requerimientos. <b>KPI</b> (indicador clave de desempeño): indica <b>cómo se está desempeñando</b> el proceso (si será factible alcanzar la meta)."},
+
+    {cat:"Glosario", q:"Diferencia entre evento, incidente y problema tecnológico.", a:"<b>Evento:</b> cualquier cambio de estado relevante (ej. inicio de sesión). <b>Incidente:</b> interrupción no planificada o baja de calidad de un servicio. <b>Problema:</b> la <b>causa raíz</b> desconocida de incidentes recurrentes."},
+    {cat:"Glosario", q:"¿Qué es un SLA?", a:"<b>Acuerdo de Nivel de Servicios</b>: compromiso formal y documentado entre proveedor de TI y cliente que define niveles de servicio, tiempos de respuesta, penalizaciones y disponibilidad."},
+    {cat:"Glosario", q:"Diferencia entre requerimientos funcionales y no funcionales.", a:"<b>Funcionales:</b> lo que el sistema <b>hace</b> (ej. enviar correo al registrarse). <b>No funcionales:</b> <b>cómo</b> debe operar (seguridad, escalabilidad, disponibilidad, rendimiento)."},
+    {cat:"Glosario", q:"¿Qué son la KEDB y la CMDB?", a:"<b>KEDB:</b> base de datos de conocimiento con soluciones conocidas a errores. <b>CMDB:</b> base de datos de configuración con los CIs de hardware, software y personal y sus relaciones."},
+    {cat:"Glosario", q:"¿Qué diferencia hay entre escalamiento horizontal y vertical?", a:"<b>Horizontal:</b> se transfiere el ticket porque falta <b>conocimiento técnico</b>. <b>Vertical:</b> porque falta <b>autoridad jerárquica</b>."},
+    {cat:"Glosario", q:"¿Qué es ITIL?", a:"<b>Information Technology Infrastructure Library</b>: mejores prácticas internacionales para la Gestión de Servicios de TI (ITSM), alineando la tecnología con las necesidades del negocio."},
+    {cat:"Glosario", q:"¿Qué es COBIT 5 según el glosario?", a:"Marco de referencia global creado por <b>ISACA</b> para el gobierno y la gestión de las TI; maximiza el valor equilibrando beneficios, optimización de riesgos y recursos."},
+    {cat:"Glosario", q:"Diferencia entre objetivos y metas.", a:"<b>Objetivos:</b> resultados globales y de largo plazo (el \"qué\"). <b>Metas:</b> expresiones cuantitativas, específicas y con límite de tiempo que operacionalizan los objetivos."},
+    {cat:"Glosario", q:"¿Qué son ESM e ITOM?", a:"<b>ESM</b> (Gestión de Servicios Empresariales): extiende las prácticas de TI a otros departamentos (RR.HH., Finanzas, Legal). <b>ITOM</b> (Gestión de Operaciones de TI): supervisa rendimiento, aprovisionamiento y disponibilidad de la infraestructura."}
+  ];
+
+  var TOTAL = CARDS.length; // 80
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- STORAGE ---------------- */
+  var STORE_KEY = "gr_flashcards_status_v1";
+  var status = {}; // id -> "easy" | "hard"
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw) status = JSON.parse(raw) || {};
+  }catch(e){ status = {}; }
+
+  function saveStatus(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "all";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+
+  function statusIcon(s){
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+
+  function computeStats(){
+    var learned=0, hard=0;
+    CARDS.forEach(function(c){
+      var s = status[c.id];
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+    });
+    var news = TOTAL - learned - hard;
+    return {learned:learned, hard:hard, news:news};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    var pct = Math.round((st.learned / TOTAL) * 100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function buildFilteredOrder(){
+    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
+    if(filter === "all"){
+      filteredOrder = base.slice();
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
+      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
+      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
+      filteredOrder = base.filter(function(i){
+        var s = status[CARDS[i].id];
+        return s === "hard";
+      });
+      if(filteredOrder.length === 0){
+        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
+      }
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){
+      renderEmpty();
+      return;
+    }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    var s = status[c.id];
+
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(s);
+    statusBack.textContent = statusIcon(s);
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+
+    btnHard.classList.toggle("on", s === "hard");
+    btnEasy.classList.toggle("on", s === "easy");
+
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    stage.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
+        '<p>' + (filter === "learned"
+            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
+            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
+        '</p>' +
+        '<button id="emptyBack">Ver todas las tarjetas</button>' +
+      '</div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn){
+      btn.addEventListener("click", function(){
+        setFilter("all");
+      });
+    }
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    if(status[c.id] === kind){
+      delete status[c.id]; // toggle off
+    } else {
+      status[c.id] = kind;
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", status[c.id] === "hard");
+    btnEasy.classList.toggle("on", status[c.id] === "easy");
+    statusFront.textContent = statusIcon(status[c.id]);
+    statusBack.textContent = statusIcon(status[c.id]);
+    refreshStats();
+
+    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
+    if(filter !== "all"){
+      setTimeout(function(){
+        buildFilteredOrder();
+        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
+        render();
+      }, 380);
+    }
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn){
+      shuffleArray(order);
+    } else {
+      order.sort(function(a,b){return a-b;});
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+  });
+
+  // swipe gestures (left/right) on stage
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // keyboard support (desktop testing)
+  document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  buildFilteredOrder();
+  render();
+
+})();
+</script>
+</body>
+</html>

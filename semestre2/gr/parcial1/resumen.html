@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🧠 Cheat Sheet GR · Parcial 1</title>
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#121822; --card:#161d29; --card2:#1c2432;
+  --border:#26303f; --text:#e7edf5; --sub:#93a2b8; --accent:#22c55e;
+  --accent-d:#0f2b1d; --red:#fb7185; --red-d:#3a1620; --blue:#60a5fa; --blue-d:#122036;
+  --purple:#c084fc; --purple-d:#241a36; --gold:#facc15;
+  --shadow:0 6px 18px -6px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+body{padding-bottom:78px;}
+h1,h2,h3,h4{margin:0;}
+.hide{display:none !important;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0d1420,#0b0f14 95%);border-bottom:1px solid var(--border);padding:10px 14px 12px;}
+.htitle{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.htitle .emoji{font-size:1.4rem;}
+.htitle h1{font-size:1.05rem;font-weight:800;letter-spacing:.2px;}
+.htitle .sub{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.searchbox{position:relative;}
+.searchbox input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:10px 34px 10px 12px;font-size:.85rem;outline:none;}
+.searchbox input:focus{border-color:var(--accent);}
+.searchbox .sicon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.9rem;pointer-events:none;}
+.searchclear{position:absolute;right:34px;top:50%;transform:translateY(-50%);color:var(--sub);background:none;border:none;font-size:1rem;display:none;padding:4px;}
+.nores{text-align:center;color:var(--sub);font-size:.85rem;padding:30px 10px;display:none;}
+
+/* QUICK INDEX CHIPS (scrollable) */
+.idxwrap{overflow-x:auto;white-space:nowrap;padding:10px 14px 4px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.idxwrap::-webkit-scrollbar{display:none;}
+.idxchip{display:inline-block;background:var(--card);border:1px solid var(--border);color:var(--sub);font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:20px;margin-right:6px;text-decoration:none;}
+.idxchip:active{background:var(--accent-d);color:var(--accent);border-color:var(--accent);}
+
+main{padding:12px 12px 20px;max-width:720px;margin:0 auto;}
+
+/* SECTION / ACCORDION */
+.section{margin-bottom:14px;scroll-margin-top:118px;}
+.sec-head{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;}
+.sec-head .emoji{font-size:1.3rem;flex-shrink:0;}
+.sec-head .ttl{flex:1;}
+.sec-head .ttl h2{font-size:.95rem;font-weight:800;}
+.sec-head .ttl p{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.sec-head .chev{color:var(--sub);transition:transform .25s;font-size:.9rem;}
+.section.open .sec-head .chev{transform:rotate(180deg);}
+.sec-body{display:none;padding:10px 2px 4px;}
+.section.open .sec-body{display:block;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+.card h3{font-size:.86rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.card p, .card li{font-size:.8rem;line-height:1.42;color:#d3dbe6;}
+.card ul{margin:4px 0 0;padding-left:0;list-style:none;}
+.card li{position:relative;padding-left:14px;margin-bottom:4px;}
+.card li:before{content:"▸";position:absolute;left:0;color:var(--accent);}
+
+/* ACRONYM BADGE */
+.acro{display:inline-flex;align-items:center;gap:6px;background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:10px;font-size:.85rem;margin:2px 0 8px;}
+.mnemo{font-size:.74rem;color:#a6e6bf;background:rgba(34,197,94,.08);border-left:3px solid var(--accent);padding:6px 9px;border-radius:0 8px 8px 0;margin-top:6px;font-style:italic;}
+
+/* COLOR TOKENS */
+.c-red{color:var(--red);font-weight:700;}
+.c-green{color:var(--accent);font-weight:700;}
+.c-blue{color:var(--blue);font-weight:700;}
+.c-purple{color:var(--purple);font-weight:700;}
+.tag{display:inline-block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:20px;margin-bottom:6px;}
+.tag-crit{background:var(--red-d);color:var(--red);}
+.tag-gold{background:var(--accent-d);color:var(--accent);}
+.tag-term{background:var(--blue-d);color:var(--blue);}
+.tag-purple{background:var(--purple-d);color:var(--purple);}
+
+/* CHUNK GRID */
+.chunk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+.chunk{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center;}
+.chunk .e{font-size:1.2rem;}
+.chunk .t{font-size:.72rem;font-weight:800;margin-top:2px;}
+.chunk .d{font-size:.64rem;color:var(--sub);margin-top:2px;line-height:1.3;}
+
+/* TABLES */
+.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:6px;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.72rem;}
+th{background:#0f2b1d;color:var(--accent);text-align:left;padding:7px 9px;font-weight:800;white-space:nowrap;position:sticky;top:0;}
+td{padding:7px 9px;border-top:1px solid var(--border);color:#d3dbe6;vertical-align:top;}
+tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+td b{color:var(--text);}
+
+/* FLOW STEPS */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:8px 0;}
+.step{background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:800;font-size:.68rem;padding:6px 9px;border-radius:20px;white-space:nowrap;}
+.arrow{color:var(--sub);font-weight:700;}
+
+/* GLOSSARY GRID */
+.glo{display:grid;grid-template-columns:1fr;gap:8px;}
+.glo .card h3{color:var(--purple);}
+
+/* FOOTER */
+footer{max-width:720px;margin:10px auto 0;padding:14px;text-align:center;color:var(--sub);font-size:.68rem;}
+
+/* BOTTOM NAV */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#0d1420;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 2px calc(6px + env(safe-area-inset-bottom));z-index:60;}
+.bnitem{display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--sub);font-size:.55rem;font-weight:700;background:none;border:none;flex:1;padding:4px 0;}
+.bnitem .e{font-size:1.05rem;}
+.bnitem.active{color:var(--accent);}
+
+/* jump-to-top */
+.top-btn{position:fixed;right:14px;bottom:66px;background:var(--accent);color:#04240f;border:none;width:38px;height:38px;border-radius:50%;font-size:1rem;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;z-index:55;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="htitle">
+    <span class="emoji">🧠</span>
+    <div>
+      <h1>Cheat Sheet · GR Parcial 1</h1>
+      <p class="sub">Gerencia de Recursos de TIC · resumen mnemotécnico</p>
+    </div>
+  </div>
+  <div class="searchbox">
+    <input id="search" type="text" placeholder="Buscar sigla, término o tema… (ej. COBIT, SMART, KPI)" autocomplete="off">
+    <button class="searchclear" id="clearBtn">✕</button>
+    <span class="sicon" id="searchIcon">🔎</span>
+  </div>
+</header>
+
+<nav class="idxwrap" id="idxwrap">
+  <a class="idxchip" href="#s1">🧭 Gerencia</a>
+  <a class="idxchip" href="#s2">🧠 Decisiones</a>
+  <a class="idxchip" href="#s3">🔄 PODC</a>
+  <a class="idxchip" href="#s4">🖥️ TIC y SI</a>
+  <a class="idxchip" href="#s5">🏛️ Gobierno TI</a>
+  <a class="idxchip" href="#s6">💰 Presupuesto</a>
+  <a class="idxchip" href="#s7">🗺️ Planeación</a>
+  <a class="idxchip" href="#s8">🧩 COBIT</a>
+  <a class="idxchip" href="#s9">📖 Glosario</a>
+</nav>
+
+<main id="main">
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra sigla o palabra.</p>
+
+<!-- ============ SECCIÓN 1: GERENCIA ============ -->
+<section class="section open" id="s1" data-nav="🧭 Gerencia">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🧭</span>
+    <div class="ttl"><h2>1 · Administración y Gerencia de TI</h2><p>Definiciones · habilidades · funciones · eficacia vs. eficiencia</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Administración vs. Gerencia de TI</h3>
+      <p><span class="c-blue">Administración de TI:</span> supervisa requerimientos empresariales e investiga soluciones → sistemas <b>rentables y eficientes</b>.</p>
+      <p><span class="c-blue">Gerencia de TI:</span> supervisa y gestiona sistemas para que estén <b>siempre disponibles</b> y sean <b>confiables</b>.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧠 Habilidades gerenciales — Acrónimo</h3>
+      <div class="acro">TCH</div>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">⚙️</div><div class="t">Técnicas</div><div class="d">Se aprenden en la formación; actividades específicas</div></div>
+        <div class="chunk"><div class="e">💭</div><div class="t">Conceptual</div><div class="d">Análisis, ideas, pensamiento crítico, resolver problemas</div></div>
+        <div class="chunk"><div class="e">🤝</div><div class="t">Humanas</div><div class="d">Gestión humana; gerente responsable de decidir</div></div>
+      </div>
+      <div class="mnemo">🟢 "<b>T</b>odo <b>C</b>erebro <b>H</b>umano": hacer, pensar, tratar con personas.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📋 Funciones del Gerente de TI (8)</h3>
+      <ul>
+        <li>Planificar, organizar, controlar, desarrollar y evaluar operaciones y proyectos</li>
+        <li>Gestionar el talento humano (contratar, formar, asesorar)</li>
+        <li>Diseñar, desarrollar y evaluar sistemas y su manual de normas</li>
+        <li>Garantizar seguridad de datos, redes y sistemas</li>
+        <li>Dirigir y evaluar al personal, en especial soporte técnico</li>
+        <li>Mantener operatividad y disponibilidad de los SI</li>
+        <li>Participar en estrategias de negocio</li>
+        <li>Supervisar el alineamiento de los SI a procesos corporativos</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>⭐ Competencias del Gerente de TI (12)</h3>
+      <p>Gestión de cambios e incidentes · Comunicación · Orientación al logro · Actitud de servicio · Manejo del tiempo · Saber escuchar · Liderazgo · Negociación · Motivación · Visión estratégica · Relaciones interpersonales · Sentido de urgencia.</p>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🎯⚡🏭 Eficacia · Eficiencia · Productividad</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Concepto</th><th>Definición</th></tr></thead>
+        <tbody>
+          <tr><td><b>Eficacia</b></td><td>Alcanzar las metas propuestas</td></tr>
+          <tr><td><b>Eficiencia</b></td><td>Alcanzarlas con la menor cantidad de recursos</td></tr>
+          <tr><td><b>Productividad</b></td><td>Relación producto / insumo (con la calidad que buscan los clientes)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 efic<b>A</b>cia = <b>A</b>lcanzar · efic<b>I</b>encia = pocos <b>I</b>nsumos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 2: DECISIONES ============ -->
+<section class="section" id="s2" data-nav="🧠 Decisiones">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🧠</span>
+    <div class="ttl"><h2>2 · Toma de decisiones</h2><p>Definición · datos · 7 tipos · 8 pasos</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Definición</h3>
+      <p>Proceso por el cual los integrantes <span class="c-blue">seleccionan entre varias alternativas</span> las alineadas con el propósito, necesidades y objetivos de la organización.</p>
+      <p>📈 <b>87%</b> de líderes (Harvard Business Review): más éxito con colaboradores <b>empoderados</b>.<br>📉 <b>41%</b> de organizaciones (Forrester, 2020): dificultad para convertir <b>datos en decisiones</b>.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🗂️ Tipos — Acrónimo</h3>
+      <div class="acro">DOET + PGM</div>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Tipo</th><th>Clave</th><th>Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td><b>D</b>irectivas</td><td>Nivel ejecutivo, impacta a toda la org., no cotidianas</td><td>Elegir socios inversionistas</td></tr>
+          <tr><td><b>O</b>perativas</td><td>Gestión diaria; cualquier colaborador</td><td>Contratar personal básico</td></tr>
+          <tr><td><b>E</b>stratégicas</td><td>Planificación a fondo, muchos participantes, tiempo</td><td>Crear OKR</td></tr>
+          <tr><td><b>T</b>ácticas</td><td>Problema no contemplado, acción inmediata</td><td>Cambiar empaque defectuoso</td></tr>
+          <tr><td><b>P</b>eso o riesgo</td><td>Situación adversa; todos los niveles</td><td>Proveedor sube costo</td></tr>
+          <tr><td><b>G</b>rupales / individuales</td><td>2+ personas vs. una sola</td><td>Votar logo / responder WhatsApp</td></tr>
+          <tr><td><b>M</b>ixtas</td><td>Combinan 2+ tipos</td><td>Votación entre áreas por proveedor</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 "<b>DOET</b>" suena a <i>"do it"</i> (¡hazlo!) + <b>PGM</b>.</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>🪜 8 pasos — Acrónimo</h3>
+      <div class="acro">IRAPS · LRE</div>
+      <div class="flow">
+        <span class="step">1 Identificar</span><span class="arrow">→</span>
+        <span class="step">2 Recopilar</span><span class="arrow">→</span>
+        <span class="step">3 Alternativas</span><span class="arrow">→</span>
+        <span class="step">4 Prever (DAFO)</span><span class="arrow">→</span>
+        <span class="step">5 Seleccionar</span><span class="arrow">→</span>
+        <span class="step">6 Llevar a cabo</span><span class="arrow">→</span>
+        <span class="step">7 Revisar</span><span class="arrow">→</span>
+        <span class="step">8 Evaluar</span>
+      </div>
+      <div class="mnemo">🟢 "<b>IRAPS</b> y <b>LuEgo REvisa</b>": 5 pasos de pensar + 3 de actuar y verificar. Al final, <b>documentar todo</b>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 3: PODC ============ -->
+<section class="section" id="s3" data-nav="🔄 PODC">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🔄</span>
+    <div class="ttl"><h2>3 · Funciones básicas de la administración</h2><p>Proceso administrativo</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <h3>🔄 Proceso administrativo — Acrónimo</h3>
+      <div class="acro">PODC</div>
+      <ul>
+        <li><b>P</b>lanificación — objetivos, planes, programación de actividades</li>
+        <li><b>O</b>rganización — recursos y actividades, órganos y cargos, autoridad y responsabilidad</li>
+        <li><b>D</b>irección — designación de cargos, comunicación, liderazgo y motivación</li>
+        <li><b>C</b>ontrol — estándares de desempeño, corregir desviaciones</li>
+      </ul>
+      <div class="mnemo">🟢 "<b>P</b>rimero <b>O</b>rdeno, <b>D</b>espués <b>C</b>ontrolo". Da estructura a decisiones, coordinación y optimización de recursos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 4: TIC Y SI ============ -->
+<section class="section" id="s4" data-nav="🖥️ TIC y SI">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🖥️</span>
+    <div class="ttl"><h2>4 · TIC y Sistemas de Información</h2><p>Definición · pros/contras · componentes · tipos · elementos</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📡 TIC (Art. 6, Ley 1341 de 2009)</h3>
+      <p>Recursos, herramientas, equipos, programas, aplicaciones, redes y medios para <span class="c-blue">compilar, procesar, almacenar y transmitir</span> voz, datos, texto, video e imágenes.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>⚖️ TIC: beneficios, ventajas y desventajas</h3>
+      <p><span class="c-green">✓ Beneficios:</span> salud y educación, desarrollo profesional, apoyo a pequeños empresarios, aprendizaje interactivo, acceso inmediato a datos.</p>
+      <p><span class="c-green">✓ Ventajas:</span> velocidad y capacidad, conexión global, comunicación múltiple, transacciones en tiempo real.</p>
+      <p><span class="c-red">✗ Desventajas:</span> dispersión, sin catalogación, desorden del contenido, fuentes no confiables, exposición de la vida íntima.</p>
+      <p>🌍 <b>Transformación de la economía:</b> Inversión en TIC · Habilidades en TIC · eGobierno · eComercio.</p>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>🗃️ Sistema de información (SI)</h3>
+      <p>Conjunto ordenado de mecanismos para <b>administrar datos e información</b> y recuperarlos/procesarlos fácil y rápido.</p>
+      <div class="acro">HDAR</div>
+      <p>Componentes: <b>H</b>umanos · <b>D</b>atos · <b>A</b>ctividades · <b>R</b>ecursos informáticos.</p>
+      <div class="mnemo">🟢 "<b>H</b>ay <b>D</b>atos <b>A</b>quí <b>R</b>eunidos".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🖥️ Tipos de SI</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Sigla</th><th>Nombre</th><th>Clave</th></tr></thead>
+        <tbody>
+          <tr><td><b>TPS</b></td><td>Procesamiento de Transacciones</td><td>Gestión operativa; transacciones</td></tr>
+          <tr><td><b>EIS</b></td><td>Información Ejecutiva</td><td>Variables gerenciales de <b>un área</b></td></tr>
+          <tr><td><b>MIS</b></td><td>Información Gerencial</td><td>Organización <b>como un todo</b></td></tr>
+          <tr><td><b>DSS</b></td><td>Soporte de Decisiones</td><td>Info intra y extra org. para conducir</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🔴 EIS = un <b>área</b>; MIS = <b>todo</b>. No los cruces.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧩 Elementos de un SI — Acrónimo</h3>
+      <div class="acro">FTHMA</div>
+      <p><b>F</b>inancieros (capital) · <b>T</b>ecnológicos (maquinaria/procesamiento) · <b>H</b>umanos (personal) · <b>M</b>ateriales (emplazamiento físico) · <b>A</b>dministrativos (procesos, permisos, informes).</p>
+      <div class="mnemo">🟢 "<b>F</b>ui <b>T</b>arde, <b>H</b>ice <b>M</b>ucho <b>A</b>vance". Ejemplos de SI: control de calidad, BD de biblioteca, hojas de cálculo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 5: GOBIERNO DE TI ============ -->
+<section class="section" id="s5" data-nav="🏛️ Gobierno TI">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🏛️</span>
+    <div class="ttl"><h2>5 · Adm. estratégica y Gobierno de TI</h2><p>Situación actual · Gobierno · Planear y organizar · Portafolio</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Puntos críticos</span>
+      <h3>📉 Situación actual de TI</h3>
+      <ul>
+        <li>Demandas puntuales &gt; necesidades estratégicas; obsesión por plazos</li>
+        <li>Costos en aumento, desvíos por mala estimación</li>
+        <li>Escasa credibilidad de TI; poca comunicación con el negocio</li>
+        <li>Urgencia → lo importante librado a su suerte</li>
+        <li>TI como problema <b>tecnológico</b> en lugar de <b>de negocio</b></li>
+        <li>Reducir presupuestos en lugar de <b>bajar costos</b></li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>🏛️ Gobierno de TI — Acrónimo</h3>
+      <div class="acro">OPT</div>
+      <p>Proceso por el cual el <b>consejo de administración</b> asegura el logro sostenido de <b>O</b>bjetivos, protege el <b>P</b>atrimonio y ofrece <b>T</b>ransparencia a los stakeholders.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🗺️ Planear y organizar — Acrónimo</h3>
+      <div class="acro">VAEPTP</div>
+      <ul>
+        <li><b>V</b>alor de TI — entrega efectiva/eficiente, alertas de desviación, niveles de servicio</li>
+        <li><b>A</b>lineación TI–negocio — estrategias integradas</li>
+        <li><b>E</b>valuación del desempeño y capacidad actual</li>
+        <li><b>P</b>lan Estratégico de TI ⭐ (centro) — cómo TI contribuye a los objetivos</li>
+        <li><b>T</b>ácticos — detalle para definir planes de proyectos</li>
+        <li><b>P</b>ortafolio de TI — identificar, priorizar, seleccionar y controlar programas</li>
+      </ul>
+      <div class="mnemo">🟢 "<b>V</b>amos <b>A</b> <b>E</b>laborar el <b>P</b>lan, <b>T</b>odo el <b>P</b>ortafolio".</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>💼 Proyecto · Programa · Portafolio</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Aspecto</th><th>Proyecto</th><th>Programa</th><th>Portafolio</th></tr></thead>
+        <tbody>
+          <tr><td>Qué es</td><td>Temporal y único</td><td>Proyectos relacionados y coordinados</td><td>Proyectos/programas → objetivos estratégicos</td></tr>
+          <tr><td>Cambios</td><td class="c-red">Al mínimo</td><td>Los espera y apoya</td><td class="c-green">Continuos</td></tr>
+          <tr><td>Éxito</td><td>Tiempo, presupuesto, especificaciones</td><td>ROI, capacidades, beneficios</td><td>Rendimiento agregado</td></tr>
+          <tr><td>Liderazgo</td><td>Tareas y directivas</td><td>Relaciones y conflictos</td><td>Valor en decisiones</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 Muñecas rusas: Portafolio ⊃ Programa ⊃ Proyecto ⊃ <b>Subproyecto</b> (parte de un proyecto; puede ser subcontrato).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 6: PRESUPUESTO ============ -->
+<section class="section" id="s6" data-nav="💰 Presupuesto">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">💰</span>
+    <div class="ttl"><h2>6 · Inversión y presupuesto de TI</h2><p>PO5 · importancia · rubros · tendencias</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <h3>💰 Administrar la inversión TI (PO5)</h3>
+      <ul>
+        <li><b>PO5.1</b> Marco de trabajo para la administración financiera</li>
+        <li><b>PO5.2</b> Prioridades dentro del presupuesto de TI</li>
+        <li><b>PO5.3</b> Proceso presupuestal</li>
+        <li><b>PO5.4</b> Administración de costos (real vs. presupuestado)</li>
+        <li><b>PO5.5</b> Administración de beneficios</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>❓ ¿Por qué importa el presupuesto? (7)</h3>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">💲</div><div class="t">Gestión de costos</div></div>
+        <div class="chunk"><div class="e">🧠</div><div class="t">Toma de decisiones</div></div>
+        <div class="chunk"><div class="e">📦</div><div class="t">Asignación de recursos</div></div>
+        <div class="chunk"><div class="e">🚀</div><div class="t">Financiación de proyectos</div></div>
+        <div class="chunk"><div class="e">🗣️</div><div class="t">Comunicación entre equipos</div></div>
+        <div class="chunk"><div class="e">🛡️</div><div class="t">Gestión de riesgos</div></div>
+        <div class="chunk"><div class="e">📊</div><div class="t">Mejores resultados</div></div>
+      </div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧾 Rubros para elaborarlo</h3>
+      <p>Hardware · Software · Infraestructura · Seguridad de la información · Personal · Tercerización y consultoría · Mantenimiento y asistencia · Formación y educación · Proyectos de TI.</p>
+      <p><b>Presupuesto tradicional:</b> Consultoría · Formación · Licencias · Mantenimiento · Hardware · Servicios · Comunicaciones · Otros o imprevistos.</p>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Dato</span>
+      <h3>📈 ¿En qué se invierte?</h3>
+      <div class="flow">
+        <span class="step">IA/ML 48%</span><span class="step">Nube distribuida 44%</span><span class="step">SASE 32%</span><span class="step">Edge 27%</span><span class="step">Multiexperiencia 25%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 7: PLANEACIÓN ============ -->
+<section class="section" id="s7" data-nav="🗺️ Planeación">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🗺️</span>
+    <div class="ttl"><h2>7 · Planeación estratégica</h2><p>Etapas · identidad · SMART · FODA</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <h3>🪜 Etapas — Acrónimo</h3>
+      <div class="acro">DIA-OPS</div>
+      <div class="flow">
+        <span class="step">Diagnóstico (FODA)</span><span class="arrow">→</span>
+        <span class="step">Identidad (MVV)</span><span class="arrow">→</span>
+        <span class="step">Análisis del entorno</span><span class="arrow">→</span>
+        <span class="step">Objetivos (SMART)</span><span class="arrow">→</span>
+        <span class="step">Plan de acción</span><span class="arrow">→</span>
+        <span class="step">Seguimiento</span>
+      </div>
+      <p>Identidad organizacional = <b>Misión</b> (propósito) · <b>Visión</b> (futuro) · <b>Valores</b> (ética).</p>
+      <div class="mnemo">🟢 "Un <b>DIA</b> de <b>OPS</b>". La planeación define visión, misión, valores y objetivos.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🎯 SMART</h3>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">S</div><div class="t">Específico</div><div class="d">Qué harás; palabras de acción</div></div>
+        <div class="chunk"><div class="e">M</div><div class="t">Medible</div><div class="d">Métricas y datos comparables</div></div>
+        <div class="chunk"><div class="e">A</div><div class="t">Alcanzable</div><div class="d">Dentro de tu alcance, sostenible</div></div>
+        <div class="chunk"><div class="e">R</div><div class="t">Relevante</div><div class="d">Dentro de objetivos primarios</div></div>
+        <div class="chunk"><div class="e">T</div><div class="t">Temporal</div><div class="d">Cuándo y tiempo de terminación</div></div>
+      </div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🔲 FODA (DOFA / SWOT)</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th></th><th>Positivo</th><th>Negativo</th></tr></thead>
+        <tbody>
+          <tr><td><b>Interno</b></td><td class="c-green">Fortalezas</td><td class="c-red">Debilidades</td></tr>
+          <tr><td><b>Externo</b></td><td class="c-green">Oportunidades</td><td class="c-red">Amenazas</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🔴 F y D son <b>internas</b>; O y A son <b>externas</b>. Sirve para formular planes de acción cruzados.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 8: COBIT ============ -->
+<section class="section" id="s8" data-nav="🧩 COBIT">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🧩</span>
+    <div class="ttl"><h2>8 · COBIT 4.1</h2><p>Criterios · recursos · dominios · controles · madurez · KGI/KPI</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>🧩 ¿Qué es COBIT?</h3>
+      <p>Marco y herramientas de <b>Gobierno de TI</b> que cierra la brecha entre <b>control, aspectos técnicos y riesgos de negocio</b>. Publicado por <b>ITGI en abril de 1996</b>; la 4.1 enfatiza el <b>cumplimiento reglamentario</b>.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>📐 7 criterios de información</h3>
+      <div class="acro">EE-CIDCC</div>
+      <p><b>E</b>fectividad · <b>E</b>ficiencia · <b>C</b>onfidencialidad · <b>I</b>ntegridad · <b>D</b>isponibilidad · <b>C</b>umplimiento · <b>C</b>onfiabilidad</p>
+      <div class="mnemo">🟢 "<b>E</b>l <b>E</b>quipo <b>C</b>uida <b>I</b>nformación <b>D</b>e <b>C</b>lientes <b>C</b>onfiables". Vienen de requerimientos de calidad, fiduciarios y de seguridad.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧰 4 recursos de TI</h3>
+      <div class="acro">AIIP</div>
+      <p><b>A</b>plicaciones · <b>I</b>nformación · <b>I</b>nfraestructura · <b>P</b>ersonas</p>
+      <div class="mnemo">🟢 "<b>A</b>quí <b>I</b>nvertimos <b>I</b>ntensamente en <b>P</b>ersonas".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>🔁 4 dominios · 34 procesos</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Dominio</th><th>Área</th><th>#</th></tr></thead>
+        <tbody>
+          <tr><td><b>PO</b> Planear y Organizar</td><td>Planear</td><td>10</td></tr>
+          <tr><td><b>AI</b> Adquirir e Implementar</td><td>Construir</td><td>7</td></tr>
+          <tr><td><b>DS</b> Entregar y Dar Soporte</td><td>Ejecutar</td><td>13</td></tr>
+          <tr><td><b>ME</b> Monitorear y Evaluar</td><td>Monitorear</td><td>4</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 "<b>Planeo, Adquiero, Despacho, Mido</b>" · 10 + 7 + 13 + 4 = <b>34</b>. No es obligatorio aplicar los 34.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>⭐ Procesos clave (enlazan con el resto del temario)</h3>
+      <ul>
+        <li><b>PO1</b> Plan estratégico de TI · <b>PO5</b> Inversión en TI · <b>PO7</b> RR.HH. de TI · <b>PO9</b> Riesgos · <b>PO10</b> Proyectos</li>
+        <li><b>AI5</b> Adquirir recursos de TI · <b>AI6</b> Administrar cambios</li>
+        <li><b>DS1</b> Niveles de servicio · <b>DS4</b> Continuidad · <b>DS5</b> Seguridad · <b>DS8</b> Mesa de servicio e incidentes · <b>DS9</b> Configuración · <b>DS10</b> Problemas</li>
+        <li><b>ME1</b> Desempeño de TI · <b>ME4</b> Proporcionar gobierno de TI</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>🔐 Controles: PC1–PC6</h3>
+      <div class="acro">DRMRDP</div>
+      <p><b>D</b>ueño del proceso · <b>R</b>eiterativo · <b>M</b>etas y objetivos · <b>R</b>oles y responsabilidades · <b>D</b>esempeño del proceso · <b>P</b>olíticas, planes y procedimientos</p>
+      <div class="mnemo">🟢 "<b>D</b>on <b>R</b>amón <b>M</b>ide <b>R</b>esultados <b>D</b>e <b>P</b>rocesos".</div>
+      <p><b>RACI:</b> <span class="c-blue">R</span>esponsable (realiza) · <span class="c-blue">A</span> Rinde cuentas (autoriza y dirige) · <span class="c-blue">C</span>onsultado · <span class="c-blue">I</span>nformado.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧮 Controles de aplicación AC1–AC18</h3>
+      <div class="acro">OEPSL</div>
+      <p><b>O</b>rigen/autorización (AC1–5) · <b>E</b>ntrada (AC6–8) · <b>P</b>rocesamiento (AC9–11) · <b>S</b>alida (AC12–16) · <b>L</b>ímites (AC17–18)</p>
+      <div class="mnemo">🟢 El viaje del dato: nace, entra, se procesa, sale y cruza fronteras → 5-3-3-5-2.</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🪜 Modelo de madurez 0–5</h3>
+      <div class="flow">
+        <span class="step">0 No existente</span><span class="arrow">→</span>
+        <span class="step">1 Inicial</span><span class="arrow">→</span>
+        <span class="step">2 Repetible</span><span class="arrow">→</span>
+        <span class="step">3 Definido</span><span class="arrow">→</span>
+        <span class="step">4 Administrado</span><span class="arrow">→</span>
+        <span class="step">5 Optimizado</span>
+      </div>
+      <p>1 = ad hoc · 2 = similar pero <b>sin entrenamiento</b> · 3 = <b>documentado y difundido</b> · 4 = <b>se mide</b> · 5 = mejor práctica.</p>
+      <div class="mnemo">🟢 "<b>N</b>o <b>I</b>nicies <b>R</b>epitiendo, <b>D</b>efine, <b>A</b>dministra y <b>O</b>ptimiza".</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🎯 KGI vs. KPI</h3>
+      <p><span class="c-purple">KGI</span> (indicador clave de metas): <b>después</b> del hecho, ¿se alcanzó?</p>
+      <p><span class="c-purple">KPI</span> (indicador clave de desempeño): <b>cómo va</b> el proceso, ¿se podrá alcanzar?</p>
+      <div class="mnemo">🟢 <b>G</b> de <b>G</b>anaste (resultado final) · <b>P</b> de <b>P</b>roceso (mientras ocurre). Mejor pocas métricas buenas, fáciles de medir y comparables.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 9: GLOSARIO ============ -->
+<section class="section" id="s9" data-nav="📖 Glosario">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📖</span>
+    <div class="ttl"><h2>9 · Glosario y acrónimos</h2><p>Búscalos arriba con el buscador ⤴</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body glo">
+
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Estrategia</h3><p>Plan de acción unificado que define la dirección a largo plazo; conecta recursos internos con oportunidades del entorno.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Objetivos vs. Metas</h3><p>Objetivos: resultados globales de largo plazo (el "qué"). Metas: cuantitativas, específicas y con límite de tiempo.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>KPIs</h3><p>Métricas cuantificables del rendimiento, eficiencia y éxito en el cumplimiento de metas.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Activo</h3><p>Recurso tangible o intangible con valor económico que la organización posee o controla.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Evento · Incidente · Problema</h3><p>Evento: cambio de estado. Incidente: interrupción no planificada. Problema: causa raíz de incidentes recurrentes.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>SLA</h3><p>Acuerdo de Nivel de Servicios: niveles, tiempos de respuesta, penalizaciones y disponibilidad.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Req. funcionales / no funcionales</h3><p>Funcionales: lo que el sistema hace. No funcionales: cómo opera (seguridad, escalabilidad, disponibilidad, rendimiento).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>KEDB</h3><p>Base de datos de conocimiento: manuales, guías y soluciones conocidas a errores.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>CMDB</h3><p>Base de datos de configuración: CIs de hardware, software y personal con sus relaciones.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Catálogo de servicios</h3><p>Lista completa de servicios de TI activos ofrecidos a usuarios y clientes.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>COBIT 5</h3><p>Marco de ISACA para gobierno y gestión de TI: beneficios, riesgos y recursos.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>ITIL</h3><p>Information Technology Infrastructure Library: mejores prácticas para la gestión de servicios de TI (ITSM).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Escalamiento</h3><p>Horizontal: falta conocimiento técnico. Vertical: falta autoridad jerárquica.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Gestiones de TI</h3><p>Cambios (controla modificaciones) · Incidentes (restaurar rápido) · Configuración (activos controlados) · Parches (actualizaciones) · Procesos · Solicitudes · Conocimiento · Mejora continua.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>ESM / ITOM</h3><p>ESM: prácticas de TI aplicadas a otros departamentos. ITOM: operación diaria de la infraestructura.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>TPS · EIS · MIS · DSS</h3><p>Transacciones · Ejecutiva (un área) · Gerencial (todo) · Soporte de decisiones.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>KGI</h3><p>Indicador clave de metas: indica después del hecho si se alcanzaron los requerimientos.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>TCH</h3><p>Técnicas · Conceptual · Humanas (habilidades gerenciales).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>DOET + PGM</h3><p>Directivas · Operativas · Estratégicas · Tácticas + Peso/riesgo · Grupales/individuales · Mixtas.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>IRAPS · LRE</h3><p>Identificar · Recopilar · Alternativas · Prever · Seleccionar · Llevar a cabo · Revisar · Evaluar.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>PODC</h3><p>Planificación · Organización · Dirección · Control.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>HDAR / FTHMA</h3><p>Componentes del SI (Humanos, Datos, Actividades, Recursos inf.) / Elementos (Financieros, Tecnológicos, Humanos, Materiales, Administrativos).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>OPT / VAEPTP</h3><p>Gobierno de TI (Objetivos, Patrimonio, Transparencia) / Planear y organizar (Valor, Alineación, Evaluación, Plan, Tácticos, Portafolio).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>DIA-OPS</h3><p>Diagnóstico · Identidad · Análisis del entorno · Objetivos · Plan de acción · Seguimiento.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>EE-CIDCC / AIIP</h3><p>7 criterios de información COBIT / 4 recursos de TI (Aplicaciones, Información, Infraestructura, Personas).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>DRMRDP / OEPSL</h3><p>PC1–PC6 / grupos de controles de aplicación AC1–AC18.</p></div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Gerencia de Recursos de TIC · Parcial 1 · II Semestre 2026 — Cheat Sheet generado solo a partir de los PDF del parcial.<br>
+  Universidad Tecnológica de Panamá · FISC
+</footer>
+
+<button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<nav class="bottomnav" id="bottomnav">
+  <button class="bnitem active" data-target="s1"><span class="e">🧭</span>Gerencia</button>
+  <button class="bnitem" data-target="s2"><span class="e">🧠</span>Decisiones</button>
+  <button class="bnitem" data-target="s5"><span class="e">🏛️</span>Gobierno</button>
+  <button class="bnitem" data-target="s8"><span class="e">🧩</span>COBIT</button>
+  <button class="bnitem" data-target="s9"><span class="e">📖</span>Glosario</button>
+</nav>
+
+<script>
+// ---------- Accordion ----------
+function toggleSec(headEl){
+  var sec = headEl.parentElement;
+  var wasOpen = sec.classList.contains('open');
+  // close all, then open target (accordion behaviour), unless already open -> just close it
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+  if(!wasOpen){ sec.classList.add('open'); }
+}
+
+// ---------- Bottom nav ----------
+document.querySelectorAll('.bnitem').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = btn.getAttribute('data-target');
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+    document.querySelectorAll('.bnitem').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// index chips: open target section on click too
+document.querySelectorAll('.idxchip').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href').substring(1);
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+  });
+});
+
+// ---------- Search / filter ----------
+var searchInput = document.getElementById('search');
+var clearBtn = document.getElementById('clearBtn');
+var noRes = document.getElementById('nores');
+
+function normalize(t){
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+searchInput.addEventListener('input', function(){
+  var q = normalize(searchInput.value.trim());
+  clearBtn.style.display = q ? 'block' : 'none';
+
+  if(!q){
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.remove('hide'); if(i===0) s.classList.add('open'); else s.classList.remove('open'); });
+    document.querySelectorAll('.card.searchable').forEach(function(c){ c.classList.remove('hide'); });
+    document.getElementById('idxwrap').classList.remove('hide');
+    noRes.style.display='none';
+    return;
+  }
+
+  document.getElementById('idxwrap').classList.add('hide');
+  var anyVisibleGlobal = false;
+
+  document.querySelectorAll('.section').forEach(function(sec){
+    var cards = sec.querySelectorAll('.card.searchable');
+    var anyVisible = false;
+    cards.forEach(function(c){
+      var txt = normalize(c.textContent);
+      if(txt.indexOf(q) !== -1){ c.classList.remove('hide'); anyVisible = true; }
+      else { c.classList.add('hide'); }
+    });
+    if(anyVisible){
+      sec.classList.remove('hide');
+      sec.classList.add('open');
+      anyVisibleGlobal = true;
+    } else {
+      sec.classList.add('hide');
+      sec.classList.remove('open');
+    }
+  });
+
+  noRes.style.display = anyVisibleGlobal ? 'none' : 'block';
+});
+
+clearBtn.addEventListener('click', function(){
+  searchInput.value = '';
+  searchInput.dispatchEvent(new Event('input'));
+  searchInput.focus();
+});
+
+// ---------- Top button + active nav on scroll ----------
+window.addEventListener('scroll', function(){
+  document.getElementById('topBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+</script>
+</body>
+</html>
