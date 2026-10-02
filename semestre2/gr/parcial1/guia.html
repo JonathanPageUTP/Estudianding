@@ -393,6 +393,78 @@ footer p+p{margin-top:4px;}
 @media (min-width:480px){
   .glo{grid-template-columns:1fr 1fr 1fr;}
 }
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+.acc-item.open .acc-panel{max-height:1600px;}
+.tblwrap table.fit{min-width:0;}
+header{transition:box-shadow .2s;}
+.header-inner .eyebrow,.header-inner .hsub{transition:opacity .2s;}
+@media (max-width:560px){
+  /* header compacto: menos alto y aún más al hacer scroll */
+  .header-inner{padding:8px 16px 8px;}
+  .hsub{display:none;}
+  .htitle{font-size:1.05rem;}
+  .searchbox{margin-top:8px;}
+  .searchbox input{padding:9px 38px 9px 12px;font-size:16px;}
+  #searchcount{margin-top:4px;min-height:0;}
+  #searchcount:empty{display:none;}
+  header.compact .eyebrow{display:none;}
+  header.compact{box-shadow:0 6px 16px -8px rgba(0,0,0,.6);}
+  section.topic{scroll-margin-top:118px;padding:22px 0;}
+
+  .hero{padding:20px 16px 16px;}
+  .hero h1{font-size:1.32rem;}
+  .topic-title{font-size:1.06rem;line-height:1.3;}
+  .topic-kicker{line-height:1.35;}
+
+  /* flujos de pasos → línea de tiempo vertical */
+  .flow{flex-direction:column;align-items:stretch;gap:0;margin:14px 0 16px;position:relative;}
+  .flow .arrow{display:none;}
+  .flow .step{flex-direction:row;width:auto;gap:12px;align-items:center;padding:5px 0;position:relative;}
+  .flow .step:not(:last-of-type)::after{
+    content:"";position:absolute;left:14px;top:34px;bottom:-6px;width:2px;background:var(--accent-dim);
+  }
+  .flow .circ{width:30px;height:30px;font-size:.8rem;flex-shrink:0;position:relative;z-index:1;background:var(--surface-2);}
+  .flow .steplabel{font-size:.85rem;text-align:left;color:var(--text);line-height:1.3;}
+  .flow .steplabel br{display:none;}
+  .flow .steplabel span{margin-left:6px;}
+
+  /* tablas de 3+ columnas → tarjetas apiladas */
+  .tblwrap.stackwrap{overflow:visible;border:none;border-radius:0;}
+  table.stack{min-width:0;font-size:.82rem;}
+  table.stack thead{display:none;}
+  table.stack, table.stack tbody, table.stack tr, table.stack td{display:block;width:100%;}
+  table.stack tr{
+    background:var(--surface)!important;border:1px solid var(--line);border-radius:12px;
+    padding:10px 13px;margin-bottom:8px;
+  }
+  table.stack td{border:none;padding:3px 0;}
+  table.stack td:first-child{font-size:.9rem;color:var(--text);padding-bottom:5px;margin-bottom:3px;border-bottom:1px dashed var(--line-soft);}
+  table.stack td:not(:first-child)::before{
+    content:attr(data-label);display:block;font-family:var(--mono);font-size:.64rem;
+    color:var(--accent);letter-spacing:.03em;margin-bottom:1px;
+  }
+  table.stack td:empty{display:none;}
+  table.stack.codefirst td:first-child{display:inline-block;width:auto;border:none;margin:0 8px 0 0;padding:0;font-family:var(--mono);color:var(--accent);}
+  table.stack.codefirst td:nth-child(2){display:inline;width:auto;font-weight:700;color:var(--text);}
+  table.stack.codefirst td:nth-child(2)::before{display:none;}
+  table.stack.codefirst td:nth-child(3){margin-top:4px;}
+  table.stack.codefirst td:nth-child(3)::before{display:none;}
+  table.fit{font-size:.8rem;}
+  table.fit thead th{white-space:normal;}
+
+  /* tarjetas: una columna cuando el texto es largo */
+  .grid2.wide{grid-template-columns:1fr;}
+  .card .ctitle{line-height:1.3;}
+  .box{padding:12px 13px;}
+  .mnemo-word{font-size:.95rem;word-break:break-word;}
+  .mm-branches{gap:6px;}
+  .glo-item .gs{word-break:break-word;}
+  .route-row{gap:6px;}
+  footer{padding-bottom:30px;}
+}
 </style>
 </head>
 <body>
@@ -1665,5 +1737,39 @@ footer p+p{margin-top:4px;}
 })();
 </script>
 
+<script>
+/* Ajustes de distribución para móvil */
+(function(){
+  "use strict";
+  // Tablas: 3+ columnas se apilan como tarjetas; 2 columnas se ajustan al ancho
+  document.querySelectorAll('.tblwrap table').forEach(function(t){
+    var ths = Array.prototype.map.call(t.querySelectorAll('thead th'), function(th){ return th.textContent.trim(); });
+    if(ths.length >= 3){
+      t.classList.add('stack');
+      t.parentElement.classList.add('stackwrap');
+      // Si la 1ª columna es un código corto (PC1, 3, KGI, S…), código + nombre van en una línea
+      var firsts = Array.prototype.map.call(t.querySelectorAll('tbody tr td:first-child'), function(td){ return td.textContent.trim().length; });
+      if(firsts.length && Math.max.apply(null, firsts) <= 6) t.classList.add('codefirst');
+      t.querySelectorAll('tbody tr').forEach(function(tr){
+        Array.prototype.forEach.call(tr.children, function(td, i){
+          if(ths[i]) td.setAttribute('data-label', ths[i]);
+        });
+      });
+    } else {
+      t.classList.add('fit');
+    }
+  });
+  // Grids de 2 columnas con descripciones largas → 1 columna en móvil
+  document.querySelectorAll('.grid2').forEach(function(g){
+    var long = Array.prototype.some.call(g.querySelectorAll('.cdesc'), function(d){ return d.textContent.trim().length > 70; });
+    if(long) g.classList.add('wide');
+  });
+  // Header compacto al hacer scroll
+  var header = document.querySelector('header');
+  function onScroll(){ header.classList.toggle('compact', window.scrollY > 60); }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
 </body>
 </html>
