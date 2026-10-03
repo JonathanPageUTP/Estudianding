@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Resumen Express · GR Parcial 1</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.tgl{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.part-label{margin:26px 0 8px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+
+/* SECCIONES PLEGABLES */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:9px;scroll-margin-top:100px;overflow:hidden;}
+summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+summary::-webkit-details-marker{display:none;}
+summary .n{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:7px;min-width:28px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+summary h2{font-size:.92rem;flex:1;line-height:1.3;}
+summary .chev{color:var(--faint);font-size:.8rem;transition:transform .2s;}
+details[open] summary .chev{transform:rotate(180deg);}
+.body{padding:0 14px 13px;border-top:1px dashed var(--line-soft);}
+
+ul{margin:10px 0 0;padding:0;list-style:none;}
+li{position:relative;padding:3px 0 3px 15px;font-size:.85rem;color:var(--dim);}
+li::before{content:"▸";position:absolute;left:0;top:3px;color:var(--accent);font-size:.8rem;}
+li b{color:var(--text);}
+.tag{font-family:var(--mono);font-size:.68rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:6px;padding:1px 6px;margin-left:2px;white-space:nowrap;}
+.tag.c{color:var(--cyan);background:var(--cyan-dim);}
+.tag.a{color:var(--amber);background:var(--amber-dim);}
+h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;color:var(--cyan);margin:13px 0 0;}
+.key{margin-top:10px;font-size:.8rem;color:var(--text);background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+.key b{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78rem;}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;color:var(--accent);padding:6px 6px;border-bottom:1px solid var(--line);font-weight:800;}
+td{padding:6px 6px;border-bottom:1px solid var(--line-soft);color:var(--dim);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:600;}
+tr:last-child td{border-bottom:none;}
+
+.glo{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px;}
+.glo div{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--dim);}
+.glo div:last-child{border-bottom:none;}
+.glo b{color:var(--cyan);min-width:118px;flex-shrink:0;font-weight:700;}
+@media (min-width:620px){ .glo{grid-template-columns:1fr 1fr;column-gap:16px;} }
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:26px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Resumen <em>express</em></h1>
+    <button class="tgl" id="tgl">Plegar todo</button>
+  </div>
+  <nav class="chips">
+    <a href="#s1">Curso</a><a href="#s2">Gerencia</a><a href="#s4">Decisiones</a><a href="#s5">PODC</a><a href="#s6">TIC</a>
+    <a href="#s7">SI</a><a href="#s9">Glosario</a><a href="#s10">Situación TI</a><a href="#s11">Gobierno</a><a href="#s12">Portafolio</a>
+    <a href="#s13">Presupuesto</a><a href="#s14">Planeación</a><a href="#s15">COBIT</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint">Todo <b>Gerencia de Recursos de TIC.pdf</b>, en su orden, lo más corto posible. Toca un título para plegarlo.</p>
+
+<div class="part-label">UNIDAD I · FUNDAMENTOS DE ADM. Y GERENCIA</div>
+
+<details open id="s1"><summary><span class="n">1</span><h2>El curso</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Objetivo:</b> gerenciar recursos de TIC en forma <b>eficiente</b>, con metodologías, herramientas y técnicas actuales.</li>
+    <li><b>Contenido:</b> fundamentos · adm. estratégica · RR.HH. en TIC · adquisición de recursos · ética de la TI · plan de contingencias.</li>
+    <li><b>Evaluación:</b> parciales 30% · semestral 33% · tareas 12% · talleres 5% · proyectos 20%. Asistencia cuenta.</li>
+    <li><b>Moodle:</b> sustentó sin subir = <b>−25%</b> · no subió = <b>0</b>. Talleres presenciales; parcial perdido requiere constancia.</li>
+  </ul>
+</div></details>
+
+<details open id="s2"><summary><span class="n">2</span><h2>Administración y Gerencia de TI · Habilidades</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Administración de TI:</b> supervisa requerimientos e investiga soluciones → sistemas <b>rentables y eficientes</b>.</li>
+    <li><b>Gerencia de TI:</b> gestiona los sistemas para que estén <b>disponibles y confiables</b>.</li>
+    <li><b>Habilidades</b> <span class="tag">TCH</span>: <b>técnicas</b> (se aprenden en la formación) · <b>conceptuales</b> (análisis, pensamiento crítico) · <b>humanas</b> (gestión de personas; el gerente decide).</li>
+  </ul>
+</div></details>
+
+<details open id="s3"><summary><span class="n">3</span><h2>Funciones, cualidades y competencias · Eficacia vs. eficiencia</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Funciones del gerente (8):</b> planificar operaciones · talento humano · diseñar sistemas · seguridad · dirigir soporte · disponibilidad · estrategias de negocio · alineamiento.</li>
+    <li><b>Cualidades (9):</b> entrenador, desarrolla, comunica, resiste, entrena sus miedos, innova, positivo, capacita, cuida al equipo.</li>
+    <li><b>Competencias (12):</b> cambios e incidentes, comunicación, logro, servicio, tiempo, escuchar, liderazgo, negociación, motivación, visión estratégica, relaciones, urgencia.</li>
+  </ul>
+  <table>
+    <tr><th>Concepto</th><th>En una línea</th></tr>
+    <tr><td>Eficacia</td><td>Alcanzar las metas</td></tr>
+    <tr><td>Eficiencia</td><td>Alcanzarlas con el mínimo de recursos</td></tr>
+    <tr><td>Productividad</td><td>Relación producto / insumo</td></tr>
+  </table>
+</div></details>
+
+<details open id="s4"><summary><span class="n">4</span><h2>Toma de decisiones</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> elegir entre alternativas la alineada con el propósito y objetivos.</li>
+    <li><b>Importancia:</b> reduce tiempos de reacción → productividad. <b>87%</b> de líderes: empoderar (HBR) · <b>41%</b> no convierte datos en decisiones (Forrester 2020).</li>
+  </ul>
+  <table>
+    <tr><th>Tipo</th><th>Clave · ejemplo</th></tr>
+    <tr><td>Directivas</td><td>Ejecutivos, toda la org. · socios inversionistas</td></tr>
+    <tr><td>Operativas</td><td>Día a día · contratar personal básico</td></tr>
+    <tr><td>Estratégicas</td><td>Planificación a fondo · OKR</td></tr>
+    <tr><td>Tácticas</td><td>Acción inmediata · empaque defectuoso</td></tr>
+    <tr><td>Peso o riesgo</td><td>Situación adversa · proveedor sube costo</td></tr>
+    <tr><td>Grupales / indiv.</td><td>2+ personas vs. una · votar logo</td></tr>
+    <tr><td>Mixtas</td><td>Combinan tipos · votación entre áreas</td></tr>
+  </table>
+  <h3>8 PASOS <span class="tag a">IRAPS·LRE</span></h3>
+  <ul>
+    <li>Identificar → Recopilar info → Alternativas → Prever impacto (<b>DAFO</b>) → Seleccionar → Llevar a cabo → Revisar y monitorear → Evaluar y <b>documentar</b>.</li>
+  </ul>
+</div></details>
+
+<details open id="s5"><summary><span class="n">5</span><h2>Funciones básicas de la administración <span class="tag">PODC</span></h2><span class="chev">▾</span></summary><div class="body">
+  <table>
+    <tr><th>Fase</th><th>Qué hace</th></tr>
+    <tr><td>Planificación</td><td>Objetivos, planes, programación de actividades</td></tr>
+    <tr><td>Organización</td><td>Recursos, órganos y cargos, autoridad</td></tr>
+    <tr><td>Dirección</td><td>Cargos, comunicación, liderazgo, motivación</td></tr>
+    <tr><td>Control</td><td>Estándares de desempeño, corregir desviaciones</td></tr>
+  </table>
+</div></details>
+
+<details open id="s6"><summary><span class="n">6</span><h2>TIC</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Definición</b> (Art. 6, Ley 1341 de 2009): recursos, equipos, programas, redes y medios para <b>compilar, procesar, almacenar y transmitir</b> información.</li>
+    <li><b>Beneficios:</b> salud y educación · desarrollo profesional · apoyo a pequeños empresarios · aprendizaje interactivo · acceso inmediato a datos.</li>
+    <li><b>Ventajas:</b> velocidad · conexión global · comunicación múltiple · transacciones en tiempo real.</li>
+    <li><b>Desventajas:</b> dispersión · sin catalogación · desorden · fuentes no confiables · exposición de la vida íntima.</li>
+  </ul>
+</div></details>
+
+<details open id="s7"><summary><span class="n">7</span><h2>Sistemas de información (SI)</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> mecanismos ordenados para administrar datos y recuperarlos/procesarlos rápido.</li>
+    <li><b>Componentes</b> <span class="tag">HDAR</span>: humanos · datos · actividades · recursos informáticos. Diagrama: entrada → procesamiento → salida + almacenamiento + control.</li>
+    <li><b>Elementos</b> <span class="tag">FTHMA</span>: financieros · tecnológicos · humanos · materiales · administrativos.</li>
+    <li><b>Ejemplos:</b> control de calidad · base de datos de biblioteca · hojas de cálculo.</li>
+  </ul>
+  <table>
+    <tr><th>Tipo</th><th>Hace</th></tr>
+    <tr><td>TPS</td><td>Transacciones (gestión operativa)</td></tr>
+    <tr><td>EIS</td><td>Variables gerenciales de <b>un área</b></td></tr>
+    <tr><td>MIS</td><td>La organización <b>como un todo</b></td></tr>
+    <tr><td>DSS</td><td>Info intra y extra para decidir</td></tr>
+  </table>
+</div></details>
+
+<details open id="s8"><summary><span class="n">8</span><h2>Las TIC y la transformación de la economía</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Empleado del futuro:</b> expertos: 46% mejorar formación · 1,5M empleos necesarios · 4,9 empleos por puesto de alta tecnología · <b>85%</b> de emprendedores: la tecnología es clave.</li>
+    <li><b>Millennials:</b> 87% más oportunidades · 83% más fácil conseguir trabajo · 69% supera idiomas.</li>
+    <li><b>Nuevo modelo:</b> uso compartido (Airbnb, BlaBlaCar) · crowdfunding (Kickstarter +48.000) · micropagos.</li>
+    <li><b>Claves:</b> inversión en TIC · habilidades en TIC · eGobierno · eComercio.</li>
+  </ul>
+</div></details>
+
+<details open id="s9"><summary><span class="n">9</span><h2>Glosario (28 términos)</h2><span class="chev">▾</span></summary><div class="body">
+  <div class="glo">
+    <div><b>Estrategia</b><span>Dirección a largo plazo</span></div>
+    <div><b>Objetivos</b><span>El "qué", largo plazo</span></div>
+    <div><b>Metas</b><span>Cuantitativas y con fecha</span></div>
+    <div><b>KPIs</b><span>Miden rendimiento y éxito</span></div>
+    <div><b>FODA</b><span>Internos (F, D) + externos (O, A)</span></div>
+    <div><b>Activo</b><span>Recurso con valor (tangible o no)</span></div>
+    <div><b>Evento</b><span>Cambio de estado relevante</span></div>
+    <div><b>Incidente</b><span>Interrupción no planificada</span></div>
+    <div><b>Problema</b><span>Causa raíz de incidentes</span></div>
+    <div><b>SLA</b><span>Acuerdo proveedor ↔ cliente</span></div>
+    <div><b>Req. funcional</b><span>Lo que el sistema hace</span></div>
+    <div><b>Req. no funcional</b><span>Cómo opera (calidad)</span></div>
+    <div><b>KEDB</b><span>Soluciones conocidas</span></div>
+    <div><b>CMDB</b><span>Elementos de configuración (CIs)</span></div>
+    <div><b>Catálogo</b><span>Lista de servicios de TI activos</span></div>
+    <div><b>COBIT 5</b><span>ISACA · gobierno de TI</span></div>
+    <div><b>ITIL</b><span>Mejores prácticas ITSM</span></div>
+    <div><b>G. Cambios</b><span>Controla modificaciones</span></div>
+    <div><b>G. Escalamiento</b><span>Horizontal (saber) · vertical (autoridad)</span></div>
+    <div><b>G. Incidentes</b><span>Restaurar el servicio rápido</span></div>
+    <div><b>G. Configuración</b><span>Activos identificados y controlados</span></div>
+    <div><b>G. Parches</b><span>Probar e instalar actualizaciones</span></div>
+    <div><b>G. Procesos</b><span>Optimiza flujos repetibles</span></div>
+    <div><b>ESM</b><span>Prácticas de TI en otras áreas</span></div>
+    <div><b>G. Solicitudes</b><span>Pedidos cotidianos (contraseñas)</span></div>
+    <div><b>G. Conocimiento</b><span>Comparte el capital intelectual</span></div>
+    <div><b>ITOM</b><span>Operación diaria de infraestructura</span></div>
+    <div><b>Mejora continua</b><span>Optimizar con mediciones</span></div>
+  </div>
+</div></details>
+
+<div class="part-label">ADMINISTRACIÓN ESTRATÉGICA</div>
+
+<details open id="s10"><summary><span class="n">10</span><h2>Introducción y situación de TI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Planeación estratégica de TI:</b> dirige los recursos de TI <b>alineados con el negocio</b>; objetivos y planes aceptados por negocio y TI.</li>
+    <li><b>Situación actual:</b> demandas puntuales &gt; estrategia · obsesión por plazos · costos en aumento y mal estimados.</li>
+    <li><b>Negocio–TI:</b> poca credibilidad de TI · mala comunicación · el negocio decide la tecnología · TI no informa.</li>
+    <li><b>Fallos:</b> urgencia → lo importante a su suerte · TI como problema técnico y no de negocio · reducir presupuesto en vez de bajar costos.</li>
+    <li><b>TI hoy:</b> gestiona backlog, resuelve problemas por recortes, explica el recurso escaso, "surfea" cambios tecnológicos.</li>
+  </ul>
+</div></details>
+
+<details open id="s11"><summary><span class="n">11</span><h2>Gobierno de TI · Planear y organizar</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Gobierno de TI</b> <span class="tag">OPT</span>: el <b>consejo de administración</b> asegura <b>objetivos</b>, protege el <b>patrimonio</b> y da <b>transparencia</b> a los stakeholders.</li>
+  </ul>
+  <h3>PLANEAR Y ORGANIZAR <span class="tag">VAEPTP</span></h3>
+  <ul>
+    <li><b>Valor de TI:</b> entrega efectiva, alertas de desviación, niveles de servicio.</li>
+    <li><b>Alineación:</b> estrategias de negocio y TI integradas.</li>
+    <li><b>Evaluación:</b> desempeño y capacidad actual.</li>
+    <li><b>Plan estratégico</b> ⭐: cómo TI aporta a los objetivos, con costos y riesgos.</li>
+    <li><b>Tácticos:</b> detalle para definir planes de proyectos.</li>
+    <li><b>Portafolio:</b> identificar, priorizar, seleccionar y controlar programas.</li>
+  </ul>
+</div></details>
+
+<details open id="s12"><summary><span class="n">12</span><h2>Proyecto · Programa · Portafolio</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Proyecto:</b> temporal y único · <b>Programa:</b> proyectos relacionados y coordinados · <b>Portafolio:</b> proyectos/programas → objetivos estratégicos · <b>Subproyecto:</b> parte de un proyecto (subcontrato).</li>
+  </ul>
+  <table>
+    <tr><th></th><th>Proyecto</th><th>Programa</th><th>Portafolio</th></tr>
+    <tr><td>Alcance</td><td>Corto</td><td>Amplio, cambia</td><td>Visión del negocio</td></tr>
+    <tr><td>Cambios</td><td>Al mínimo</td><td>Los espera</td><td>Continuos</td></tr>
+    <tr><td>Éxito</td><td>Tiempo y presupuesto</td><td>ROI, beneficios</td><td>Rendimiento agregado</td></tr>
+    <tr><td>Liderazgo</td><td>Tareas</td><td>Relaciones</td><td>Valor en decisiones</td></tr>
+  </table>
+</div></details>
+
+<details open id="s13"><summary><span class="n">13</span><h2>Inversión y presupuesto de TI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>PO5</b> <span class="tag">MPPCB</span>: 5.1 marco financiero · 5.2 prioridades · 5.3 proceso presupuestal · 5.4 costos (real vs. presupuestado) · 5.5 beneficios.</li>
+    <li><b>Importancia (7):</b> costos · decisiones · asignación · financiación · comunicación · riesgos · resultados.</li>
+    <li><b>Rubros para elaborarlo (9):</b> hardware · software · infraestructura · seguridad · personal · tercerización · mantenimiento · formación · proyectos.</li>
+    <li><b>Tradicional (8):</b> consultoría · formación · licencias · mantenimiento · hardware · servicios · comunicaciones · imprevistos.</li>
+    <li><b>Tendencias:</b> IA/ML <b>48%</b> · nube distribuida 44% · SASE 32% · edge 27% · multiexperiencia 25%.</li>
+  </ul>
+</div></details>
+
+<details open id="s14"><summary><span class="n">14</span><h2>Planeación estratégica · SMART · FODA</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> define visión, misión, valores y objetivos; impulsa el crecimiento a corto, mediano y largo plazo.</li>
+    <li><b>Etapas</b> <span class="tag">DIA-OPS</span>: diagnóstico (FODA) → identidad (misión, visión, valores) → entorno → objetivos (SMART) → plan de acción → seguimiento.</li>
+    <li><b>SMART:</b> específico · medible · alcanzable · relevante · temporal.</li>
+    <li><b>FODA</b> (DOFA, SWOT): fortalezas y debilidades = <b>internas</b> · oportunidades y amenazas = <b>externas</b>.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">RESUMEN DE COBIT 4.1</div>
+
+<details open id="s15"><summary><span class="n">15</span><h2>COBIT 4.1: qué es, criterios, recursos, dominios</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> marco de <b>Gobierno de TI</b> que une control, técnica y riesgos de negocio. <b>ITGI, 1996</b>; la 4.1 enfatiza el cumplimiento reglamentario.</li>
+    <li><b>7 criterios</b> <span class="tag">EE-CIDCC</span>: efectividad · eficiencia · confidencialidad · integridad · disponibilidad · cumplimiento · confiabilidad.</li>
+    <li><b>4 recursos</b> <span class="tag">AIIP</span>: aplicaciones · información · infraestructura · personas.</li>
+    <li>No hay que aplicar los 34 procesos; COBIT da un <b>lenguaje común</b>.</li>
+  </ul>
+  <table>
+    <tr><th>Dominio</th><th>Equivale</th><th>#</th></tr>
+    <tr><td>PO Planear y Organizar</td><td>Planear</td><td>10</td></tr>
+    <tr><td>AI Adquirir e Implementar</td><td>Construir</td><td>7</td></tr>
+    <tr><td>DS Entregar y Dar Soporte</td><td>Ejecutar</td><td>13</td></tr>
+    <tr><td>ME Monitorear y Evaluar</td><td>Monitorear</td><td>4</td></tr>
+  </table>
+</div></details>
+
+<details open id="s16"><summary><span class="n">16</span><h2>COBIT 4.1: controles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Control:</b> políticas y estructuras que dan seguridad razonable · <b>Objetivo de control:</b> requisito mínimo por proceso.</li>
+    <li><b>PC1–PC6</b> <span class="tag">DRMRDP</span>: dueño · reiterativo · metas · roles · desempeño · políticas.</li>
+    <li><b>RACI:</b> Responsable = realiza · Rinde cuentas = autoriza · Consultado · Informado.</li>
+    <li><b>Niveles:</b> objetivos de negocio (dirección) → controles de negocio (aplicación y manuales) → servicios TI (controles generales).</li>
+    <li><b>AC1–AC18</b> <span class="tag">OEPSL</span>: origen (5) · entrada (3) · procesamiento (3) · salida (5) · límites (2).</li>
+  </ul>
+</div></details>
+
+<details open id="s17"><summary><span class="n">17</span><h2>COBIT 4.1: madurez y medición</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Generadores:</b> modelos de madurez (benchmarking) · metas de desempeño · metas de actividades. Sirve para ver: desempeño real · industria · objetivo.</li>
+  </ul>
+  <table>
+    <tr><th>Nivel</th><th>Clave</th></tr>
+    <tr><td>0 No existente</td><td>Ni se reconoce el problema</td></tr>
+    <tr><td>1 Inicial</td><td>Ad hoc, desorganizado</td></tr>
+    <tr><td>2 Repetible</td><td>Similar, sin entrenamiento</td></tr>
+    <tr><td>3 Definido</td><td>Documentado y difundido</td></tr>
+    <tr><td>4 Administrado</td><td>Se monitorea y mide</td></tr>
+    <tr><td>5 Optimizado</td><td>Mejor práctica, automatizado</td></tr>
+  </table>
+  <ul>
+    <li><b>KGI</b> = ¿se logró? (después) · <b>KPI</b> = ¿cómo va? (durante). Metas: actividad → proceso → TI → negocio.</li>
+    <li><b>Métricas efectivas:</b> pocas, fáciles de medir, comparables interna y externamente.</li>
+  </ul>
+</div></details>
+
+<details open id="s18"><summary><span class="n">18</span><h2>COBIT 4.1: los 34 procesos y el cubo</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>ME:</b> 1 desempeño · 2 control interno · 3 cumplimiento regulatorio · 4 gobierno de TI.</li>
+    <li><b>PO:</b> 1 plan estratégico · 2 arquitectura de info · 3 dirección tecnológica · 4 procesos y organización · 5 inversión · 6 comunicar dirección · 7 RR.HH. · 8 calidad · 9 riesgos · 10 proyectos.</li>
+    <li><b>AI:</b> 1 soluciones automatizadas · 2 software · 3 infraestructura · 4 operación y uso · 5 recursos de TI · 6 cambios · 7 instalar y acreditar.</li>
+    <li><b>DS:</b> 1 niveles de servicio · 2 terceros · 3 desempeño y capacidad · 4 continuidad · 5 seguridad · 6 costos · 7 entrenar usuarios · 8 mesa e incidentes · 9 configuración · 10 problemas · 11 datos · 12 ambiente físico · 13 operaciones.</li>
+    <li><b>Cubo:</b> requerimientos de negocio (7 criterios) × procesos de TI × recursos de TI.</li>
+  </ul>
+  <div class="key">🎯 <b>Lo más preguntable:</b> 10-7-13-4 = 34 · los 7 criterios · madurez 0–5 · KGI vs. KPI · RACI.</div>
+</div></details>
+
+<footer>Gerencia de Recursos de TIC · Parcial 1 · resumen de Gerencia de Recursos de TIC.pdf · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var all = document.querySelectorAll("details"), tgl = document.getElementById("tgl");
+  function label(){
+    var anyOpen = Array.prototype.some.call(all, function(d){ return d.open; });
+    tgl.textContent = anyOpen ? "Plegar todo" : "Abrir todo";
+  }
+  tgl.addEventListener("click", function(){
+    var open = tgl.textContent === "Abrir todo";
+    all.forEach(function(d){ d.open = open; });
+    label();
+  });
+  all.forEach(function(d){ d.addEventListener("toggle", label); });
+  // Al tocar un chip, abrir esa sección
+  document.querySelectorAll("nav.chips a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var d = document.querySelector(a.getAttribute("href"));
+      if(d){ d.open = true; label(); }
+    });
+  });
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>
