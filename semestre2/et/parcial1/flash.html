@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Repaso ET · Parcial 1</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+@media (max-width:560px){
+  /* ocupar exactamente la pantalla visible (descontando la barra del navegador) */
+  body{min-height:100vh;min-height:100dvh;}
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+
+  header{padding:12px 16px 6px;}
+  .brand-row h1{font-size:1.2rem;}
+  .subtitle{margin:0 0 10px;}
+  .progress-wrap{height:7px;margin-bottom:10px;}
+  .stats-row{gap:6px;margin-bottom:10px;font-size:.68rem;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .stats-row::-webkit-scrollbar{display:none;}
+  .stat-pill{padding:4px 9px;white-space:nowrap;flex-shrink:0;}
+  .tab{padding:8px 14px;font-size:.78rem;}
+
+  main{padding:8px 16px 0;min-height:0;}
+  .counter{margin-bottom:8px;}
+
+  /* la tarjeta llena todo el espacio disponible */
+  .stage{min-height:0;align-items:stretch;}
+  .card3d{height:100%;max-width:none;min-height:240px;}
+  .face{padding:50px 20px 40px;}
+  .face-tag{top:14px;left:14px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .face-status{top:12px;right:14px;}
+  .face-front .q-text{font-size:1.15rem;}
+  .face-back{justify-content:flex-start;padding-bottom:20px;}
+  .face-back .a-label{margin-top:0;}
+  .face-back .a-text{font-size:.98rem;line-height:1.5;}
+  .tap-hint{bottom:14px;}
+
+  /* botones de valoración alineados con la tarjeta */
+  .rate-row{padding:10px 0 0;gap:8px;}
+  .rate-btn{padding:12px 6px;font-size:.82rem;}
+
+  nav.controls{padding:10px 16px calc(12px + var(--safe-b));gap:8px;}
+  .nav-btn{padding:13px 6px;font-size:.88rem;}
+  .nav-btn.shuffle{flex:0 0 50px;padding:13px 0;}
+}
+@media (max-width:560px) and (max-height:700px){
+  .subtitle{display:none;}
+  .face{padding-top:44px;}
+  .face-front .q-text{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1>Repaso <em>Ética</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Parcial 1</span>
+    </div>
+    <p class="subtitle">Ética Profesional · Cuestionario de estudio del parcial</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-filter="all">Todas · 45</div>
+      <div class="tab" data-filter="hard">Por repasar</div>
+      <div class="tab" data-filter="learned">Aprendidas</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 45</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     45 FLASHCARDS — Fuente: Cuestionario Etica Profesional-Parcial 2026.pdf
+  ======================================================== */
+  var CARDS = [
+    {cat:"Conceptos", q:"¿Qué es la ética?", a:"La <b>disciplina filosófica</b> que estudia la conducta humana desde la perspectiva del <b>bien, el deber, los valores y los principios</b> que permiten determinar cómo debemos actuar.<br><br><i>Mnemotecnia:</i> \"<b>B</b>uenos <b>D</b>eberes, <b>V</b>alores y <b>P</b>rincipios\" (BDVP)."},
+    {cat:"Conceptos", q:"¿Desde qué cuatro perspectivas estudia la ética la conducta humana?", a:"Desde la perspectiva del <b>bien</b>, el <b>deber</b>, los <b>valores</b> y los <b>principios</b>."},
+    {cat:"Conceptos", q:"¿Qué es la ética profesional?", a:"El conjunto de <b>principios, valores, deberes y criterios de conducta</b> que orientan el comportamiento de una persona <b>en el ejercicio de una profesión</b>."},
+    {cat:"Conceptos", q:"¿Qué es la moral?", a:"El conjunto de <b>valores y normas</b> que orientan la conducta de una <b>persona o comunidad</b>."},
+    {cat:"Conceptos", q:"Según la comparación del cuestionario, ¿qué es la ética (frente a la moral)?", a:"La <b>reflexión crítica</b> sobre lo <b>correcto</b>, lo <b>bueno</b> y lo <b>debido</b>.<br><br><i>Truco:</i> la moral <b>se vive</b>; la ética <b>se piensa</b>."},
+    {cat:"Conceptos", q:"¿Qué es el derecho?", a:"El conjunto de <b>normas jurídicas obligatorias</b> establecidas por la <b>autoridad competente</b>."},
+    {cat:"Conceptos", q:"¿Cuál es la diferencia entre moral, ética, derecho y ética profesional?", a:"<b>Moral:</b> valores y normas de una persona o comunidad · <b>Ética:</b> reflexión crítica sobre lo correcto, bueno y debido · <b>Derecho:</b> normas jurídicas obligatorias de la autoridad competente · <b>Ética profesional:</b> aplicación de principios éticos al ejercicio de una profesión.<br><br><i>Mnemotecnia:</i> \"La moral <b>vive</b>, la ética <b>piensa</b>, el derecho <b>obliga</b> y la ética profesional <b>aplica</b>\"."},
+    {cat:"Conceptos", q:"¿La ética profesional se limita al cumplimiento de la ley?", a:"<b>No.</b> La ética no se limita a determinar qué está permitido o prohibido por la ley, sino que busca determinar cuál es la <b>manera correcta de actuar</b>."},
+    {cat:"Conceptos", q:"¿Todo lo legal es necesariamente ético?", a:"<b>No.</b> No todo lo que es legal necesariamente constituye la conducta profesional <b>más ética</b>.<br><br><i>Frase clave:</i> \"Legal ≠ ético\"."},
+
+    {cat:"Vocación", q:"¿Qué es la vocación profesional?", a:"La <b>inclinación, interés o disposición</b> que lleva a una persona a <b>escoger y desarrollar</b> determinada profesión."},
+    {cat:"Vocación", q:"¿Qué elementos comprende la vocación profesional?", a:"<b>Intereses, aptitudes, valores, motivaciones, compromiso y disposición de servicio.</b><br><br><i>Mnemotecnia:</i> \"<b>I</b>r <b>A</b> <b>V</b>er <b>M</b>i <b>C</b>arrera <b>S</b>oñada\" (IAVMCS)."},
+    {cat:"Vocación", q:"¿Por qué la vocación profesional no debe confundirse con un simple gusto?", a:"Porque una persona puede escoger una carrera por sus <b>ingresos, prestigio o posibilidades laborales</b> sin que exista una verdadera vocación."},
+    {cat:"Vocación", q:"¿En qué se manifiesta la verdadera vocación?", a:"En la disposición para <b>aprender, servir, mejorar y asumir responsabilidades</b>.<br><br><i>Mnemotecnia:</i> \"<b>ASMR</b>\" — Aprender · Servir · Mejorar · Responsabilidades."},
+    {cat:"Vocación", q:"¿Cuáles son tres razones para escoger una carrera que NO garantizan vocación?", a:"Los <b>ingresos</b>, el <b>prestigio</b> y las <b>posibilidades laborales</b>."},
+    {cat:"Vocación", q:"¿Cómo se relaciona la vocación con la ética profesional?", a:"La vocación contribuye a que el profesional comprenda que su trabajo tiene una <b>dimensión social</b> y que el ejercicio de su profesión implica <b>responsabilidad frente a otras personas y frente a la sociedad</b>."},
+
+    {cat:"Dimensiones", q:"¿Cuáles son las dos dimensiones de la profesión?", a:"La dimensión <b>personal</b> y la dimensión <b>social</b>.<br><br><i>Truco:</i> \"<b>Yo</b> + <b>Nosotros</b>\"."},
+    {cat:"Dimensiones", q:"¿Qué comprende la dimensión personal de la profesión?", a:"Permite al individuo <b>desarrollar sus capacidades</b>, alcanzar <b>realización personal</b>, obtener una <b>remuneración</b> y construir un <b>proyecto de vida</b>.<br><br><i>Mnemotecnia:</i> \"<b>C</b>on <b>R</b>ecursos <b>R</b>ealizo mi <b>P</b>royecto\" (CRRP)."},
+    {cat:"Dimensiones", q:"¿Qué comprende la dimensión social de la profesión?", a:"Permite <b>satisfacer necesidades sociales</b>, prestar <b>servicios especializados</b>, contribuir al <b>desarrollo</b>, <b>resolver problemas</b> y <b>proteger bienes e intereses</b> jurídicamente relevantes.<br><br><i>Mnemotecnia:</i> \"<b>N</b>uestra <b>S</b>ociedad <b>D</b>epende de <b>R</b>esponsables <b>P</b>rofesionales\" (NSDRP)."},
+    {cat:"Dimensiones", q:"¿Cuál es el principio fundamental relacionado con la finalidad de la profesión?", a:"La profesión debe <b>conciliar el beneficio personal con la responsabilidad social</b>."},
+    {cat:"Dimensiones", q:"¿Qué tipo de bienes e intereses protege la dimensión social de la profesión?", a:"Bienes e intereses <b>jurídicamente relevantes</b>."},
+    {cat:"Dimensiones", q:"La remuneración y el proyecto de vida, ¿a qué dimensión de la profesión pertenecen?", a:"A la dimensión <b>personal</b>."},
+    {cat:"Dimensiones", q:"Resolver problemas y prestar servicios especializados, ¿a qué dimensión de la profesión pertenecen?", a:"A la dimensión <b>social</b>."},
+
+    {cat:"Capacidad", q:"¿Qué es la capacidad profesional?", a:"El conjunto de <b>conocimientos, habilidades, competencias, experiencia y cualidades</b> necesarias para desempeñar correctamente una profesión."},
+    {cat:"Capacidad", q:"¿Cuáles son los 6 elementos principales de la capacidad profesional?", a:"1 <b>Conocimientos</b> · 2 <b>Habilidades</b> · 3 <b>Experiencia</b> · 4 <b>Actualización</b> · 5 <b>Responsabilidad</b> · 6 <b>Integridad</b>.<br><br><i>Mnemotecnia:</i> \"<b>¡CHE, ARI!</b>\" (como llamar a una amiga): C-H-E · A-R-I."},
+    {cat:"Capacidad", q:"¿Por qué puede ser una falta ética aceptar una responsabilidad sin la capacidad necesaria?", a:"Porque asumirla sin la capacidad necesaria puede <b>impedir que el servicio se preste competentemente</b>."},
+    {cat:"Capacidad", q:"Según el cuestionario, ¿cuál es realmente el problema ético de aceptar un encargo para el que no se está capacitado?", a:"El problema <b>no consiste simplemente en no saber</b>, sino en <b>asumir una responsabilidad sin adoptar las medidas necesarias</b> para actuar competentemente."},
+
+    {cat:"Derechos y deberes", q:"¿Qué relación existe entre derechos y deberes profesionales?", a:"El ejercicio profesional genera <b>simultáneamente</b> derechos y deberes. El profesional <b>no debe limitarse a reclamar sus derechos</b>, sino que debe cumplir también con las responsabilidades propias de su profesión.<br><br><i>Truco:</i> son las dos caras de la <b>misma moneda</b>."},
+    {cat:"Derechos y deberes", q:"Menciona cinco derechos profesionales.", a:"Ejercer la profesión <b>conforme a la ley</b> · recibir una <b>remuneración justa</b> · obtener <b>reconocimiento</b> por el trabajo · <b>desarrollar y actualizar</b> sus conocimientos · trabajar en <b>condiciones adecuadas</b> · ejercer con <b>independencia</b> · recibir <b>respeto y consideración</b> profesional.<br><br><i>Mnemotecnia:</i> \"Las <b>3 R</b> + <b>LACI</b>\": Remuneración, Reconocimiento, Respeto + Ley, Actualización, Condiciones, Independencia."},
+    {cat:"Derechos y deberes", q:"¿Cuántos derechos profesionales enumera el cuestionario?", a:"<b>Siete</b> (la pregunta pide mencionar cinco)."},
+    {cat:"Derechos y deberes", q:"Menciona cinco deberes profesionales.", a:"Actuar con <b>competencia</b> · actuar con <b>diligencia</b> · mantener la <b>honestidad</b> · respetar la <b>dignidad humana</b> · mantener la <b>confidencialidad</b> · evitar <b>conflictos de intereses</b> · <b>actualizar</b> los conocimientos · respetar las <b>normas</b> legales y profesionales · asumir <b>responsabilidad</b> por los propios actos · <b>tratar dignamente</b> a clientes, usuarios, compañeros y terceros."},
+    {cat:"Derechos y deberes", q:"¿Cuántos deberes profesionales enumera el cuestionario y cuál es una mnemotecnia para ellos?", a:"<b>Diez.</b><br><br><i>Mnemotecnia:</i> \"<b>C</b>omo <b>D</b>ebo: <b>H</b>onesto, <b>D</b>igno, <b>C</b>allado, sin <b>C</b>onflictos, <b>A</b>ctualizado, con <b>N</b>ormas, <b>R</b>esponsable y de buen <b>T</b>rato\"."},
+    {cat:"Derechos y deberes", q:"\"Actualizar los conocimientos\", ¿es un derecho o un deber profesional?", a:"<b>Ambos.</b> Desarrollar y actualizar sus conocimientos aparece como <b>derecho</b>, y actualizar los conocimientos aparece también como <b>deber</b>."},
+    {cat:"Derechos y deberes", q:"¿A quiénes debe tratar dignamente el profesional?", a:"A <b>clientes, usuarios, compañeros y terceros</b>."},
+
+    {cat:"Honorarios", q:"Explica la relación entre recibir honorarios y prestar un servicio profesional.", a:"El profesional tiene <b>derecho a recibir honorarios justos</b> por sus servicios, pero este derecho se relaciona con el <b>deber de prestar un servicio competente y diligente</b>."},
+    {cat:"Honorarios", q:"¿Qué son los honorarios profesionales?", a:"La <b>remuneración</b> que recibe un profesional por los <b>servicios especializados</b> que presta."},
+    {cat:"Honorarios", q:"¿Qué características deben procurar tener los honorarios profesionales?", a:"<b>Claros · transparentes · proporcionales al servicio · previamente informados</b> cuando corresponda · <b>acordes con las normas</b> aplicables.<br><br><i>Mnemotecnia:</i> \"<b>C</b>obra <b>T</b>u <b>P</b>recio <b>P</b>ero <b>A</b>cordado\" (CTPPA)."},
+    {cat:"Honorarios", q:"Menciona conductas éticamente cuestionables relacionadas con los honorarios.", a:"Cobrar por <b>servicios no realizados</b> · <b>ocultar costos</b> · <b>aprovecharse de la necesidad</b> del cliente · establecer <b>condiciones engañosas</b> · cobrar cantidades <b>manifiestamente desproporcionadas</b> cuando las normas profesionales lo impiden.<br><br><i>Truco:</i> \"Los <b>5 NO</b>\"."},
+    {cat:"Honorarios", q:"¿Cuándo es cuestionable cobrar cantidades desproporcionadas?", a:"Cuando son <b>manifiestamente desproporcionadas</b> y <b>las normas profesionales lo impiden</b>."},
+
+    {cat:"Secreto profesional", q:"¿Qué es el secreto profesional?", a:"El <b>deber de preservar la confidencialidad</b> de la información conocida por razón del ejercicio profesional. Es un elemento fundamental de la <b>relación de confianza</b> entre el profesional y quien solicita sus servicios."},
+    {cat:"Secreto profesional", q:"¿Cuáles son los elementos del secreto profesional?", a:"<b>Información + relación profesional + confianza + deber de confidencialidad.</b><br><br><i>Mnemotecnia:</i> \"<b>I</b>nformación <b>R</b>elacionada <b>C</b>on <b>D</b>iscreción\" (IRCD)."},
+    {cat:"Secreto profesional", q:"¿Qué implica el secreto profesional?", a:"<b>No divulgar</b> información indebidamente · <b>proteger documentos</b> · <b>controlar el acceso</b> a la información · <b>evitar conversaciones indiscretas</b> · <b>utilizar la información exclusivamente</b> para la finalidad profesional correspondiente."},
+    {cat:"Secreto profesional", q:"¿Cómo se aplica el secreto profesional en la era digital?", a:"No consiste solamente en no hablar de cierta información: también exige proteger <b>correos electrónicos, archivos digitales, contraseñas, bases de datos, expedientes electrónicos, fotografías, conversaciones, información en la nube y dispositivos electrónicos</b>."},
+    {cat:"Secreto profesional", q:"Un profesional comenta información confidencial de un cliente en un grupo de WhatsApp con compañeros ajenos al asunto. ¿Hay falta ética?", a:"<b>Puede existir una violación ética</b>, aunque la información <b>no haya sido publicada en redes sociales</b>."},
+    {cat:"Secreto profesional", q:"¿Basta con no hablar de la información para cumplir el secreto profesional hoy?", a:"<b>No.</b> En la era digital también hay que <b>proteger los medios digitales</b> donde está la información (correos, archivos, contraseñas, nube, dispositivos…)."},
+    {cat:"Secreto profesional", q:"¿Para qué puede usarse la información conocida en el ejercicio profesional?", a:"<b>Exclusivamente</b> para la <b>finalidad profesional</b> correspondiente."}
+  ];
+  var TOTAL = CARDS.length; // 45
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- STORAGE ---------------- */
+  var STORE_KEY = "et_flashcards_status_v1";
+  var status = {}; // id -> "easy" | "hard"
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw) status = JSON.parse(raw) || {};
+  }catch(e){ status = {}; }
+
+  function saveStatus(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "all";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+
+  function statusIcon(s){
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+
+  function computeStats(){
+    var learned=0, hard=0;
+    CARDS.forEach(function(c){
+      var s = status[c.id];
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+    });
+    var news = TOTAL - learned - hard;
+    return {learned:learned, hard:hard, news:news};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    var pct = Math.round((st.learned / TOTAL) * 100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function buildFilteredOrder(){
+    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
+    if(filter === "all"){
+      filteredOrder = base.slice();
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
+      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
+      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
+      filteredOrder = base.filter(function(i){
+        var s = status[CARDS[i].id];
+        return s === "hard";
+      });
+      if(filteredOrder.length === 0){
+        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
+      }
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){
+      renderEmpty();
+      return;
+    }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    var s = status[c.id];
+
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(s);
+    statusBack.textContent = statusIcon(s);
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+
+    btnHard.classList.toggle("on", s === "hard");
+    btnEasy.classList.toggle("on", s === "easy");
+
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    stage.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
+        '<p>' + (filter === "learned"
+            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
+            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
+        '</p>' +
+        '<button id="emptyBack">Ver todas las tarjetas</button>' +
+      '</div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn){
+      btn.addEventListener("click", function(){
+        setFilter("all");
+      });
+    }
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    if(status[c.id] === kind){
+      delete status[c.id]; // toggle off
+    } else {
+      status[c.id] = kind;
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", status[c.id] === "hard");
+    btnEasy.classList.toggle("on", status[c.id] === "easy");
+    statusFront.textContent = statusIcon(status[c.id]);
+    statusBack.textContent = statusIcon(status[c.id]);
+    refreshStats();
+
+    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
+    if(filter !== "all"){
+      setTimeout(function(){
+        buildFilteredOrder();
+        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
+        render();
+      }, 380);
+    }
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn){
+      shuffleArray(order);
+    } else {
+      order.sort(function(a,b){return a-b;});
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+  });
+
+  // swipe gestures (left/right) on stage
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // keyboard support (desktop testing)
+  document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  buildFilteredOrder();
+  render();
+
+})();
+</script>
+</body>
+</html>

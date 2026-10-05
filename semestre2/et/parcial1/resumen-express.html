@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Resumen Express · ET Parcial</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.tgl{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.part-label{margin:26px 0 8px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+
+/* SECCIONES PLEGABLES */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:9px;scroll-margin-top:100px;overflow:hidden;}
+summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+summary::-webkit-details-marker{display:none;}
+summary .n{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:7px;min-width:28px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+summary h2{font-size:.92rem;flex:1;line-height:1.3;}
+summary .chev{color:var(--faint);font-size:.8rem;transition:transform .2s;}
+details[open] summary .chev{transform:rotate(180deg);}
+.body{padding:0 14px 13px;border-top:1px dashed var(--line-soft);}
+
+ul{margin:10px 0 0;padding:0;list-style:none;}
+li{position:relative;padding:3px 0 3px 15px;font-size:.85rem;color:var(--dim);}
+li::before{content:"▸";position:absolute;left:0;top:3px;color:var(--accent);font-size:.8rem;}
+li b{color:var(--text);}
+.tag{font-family:var(--mono);font-size:.68rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:6px;padding:1px 6px;margin-left:2px;white-space:nowrap;}
+.tag.c{color:var(--cyan);background:var(--cyan-dim);}
+.tag.a{color:var(--amber);background:var(--amber-dim);}
+h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;color:var(--cyan);margin:13px 0 0;}
+.key{margin-top:10px;font-size:.8rem;color:var(--text);background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+.key b{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78rem;}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;color:var(--accent);padding:6px 6px;border-bottom:1px solid var(--line);font-weight:800;}
+td{padding:6px 6px;border-bottom:1px solid var(--line-soft);color:var(--dim);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:600;}
+tr:last-child td{border-bottom:none;}
+
+.glo{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px;}
+.glo div{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--dim);}
+.glo div:last-child{border-bottom:none;}
+.glo b{color:var(--cyan);min-width:118px;flex-shrink:0;font-weight:700;}
+@media (min-width:620px){ .glo{grid-template-columns:1fr 1fr;column-gap:16px;} }
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:26px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Resumen <em>express</em></h1>
+    <button class="tgl" id="tgl">Plegar todo</button>
+  </div>
+  <nav class="chips">
+    <a href="#s1">Curso</a><a href="#s2">Ética</a><a href="#s3">Vocación</a><a href="#s4">Dimensiones</a><a href="#s5">Capacidad</a>
+    <a href="#s6">Derechos y deberes</a><a href="#s7">Honorarios</a><a href="#s8">Secreto</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint">Todo <b>Cuestionario Etica Profesional-Parcial 2026.pdf</b>, en su orden, lo más corto posible. Toca un título para plegarlo.</p>
+
+<div class="part-label">CUESTIONARIO DE ESTUDIO · 25 PREGUNTAS</div>
+
+<details open id="s1"><summary><span class="n">1</span><h2>El curso</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Asignatura:</b> Ética Profesional y Derecho (cód. 8381) · UTP · Ingeniería de Sistemas.</li>
+    <li><b>Profesor:</b> Fernando Levy · <b>Grupo:</b> 1LS241 · II Semestre 2026.</li>
+    <li><b>Material del parcial:</b> cuestionario de estudio de <b>25 preguntas</b> con sus respuestas.</li>
+  </ul>
+</div></details>
+
+<details open id="s2"><summary><span class="n">2</span><h2>Ética y ética profesional <span class="tag">P1–P4</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Ética:</b> disciplina filosófica que estudia la conducta humana desde el <b>bien, el deber, los valores y los principios</b> <span class="tag">BDVP</span>.</li>
+    <li><b>Ética profesional:</b> principios, valores, deberes y criterios de conducta que orientan el <b>ejercicio de una profesión</b>.</li>
+  </ul>
+  <table>
+    <tr><th>Concepto</th><th>En una línea</th></tr>
+    <tr><td>Moral</td><td>Valores y normas de una persona o comunidad</td></tr>
+    <tr><td>Ética</td><td>Reflexión crítica sobre lo correcto, bueno y debido</td></tr>
+    <tr><td>Derecho</td><td>Normas jurídicas obligatorias de la autoridad competente</td></tr>
+    <tr><td>Ética profesional</td><td>Aplicación de principios éticos a una profesión</td></tr>
+  </table>
+  <div class="key">⚖️ <b>¿Se limita a la ley?</b> No: la ética busca la <b>manera correcta de actuar</b>. No todo lo legal es lo más ético.</div>
+</div></details>
+
+<details open id="s3"><summary><span class="n">3</span><h2>Vocación profesional <span class="tag">P5–P8</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> inclinación, interés o disposición para escoger y desarrollar una profesión.</li>
+    <li><b>Elementos</b> <span class="tag">IAVMCS</span>: intereses · aptitudes · valores · motivaciones · compromiso · disposición de servicio.</li>
+    <li><b>No es simple gusto:</b> se puede elegir por <b>ingresos, prestigio o empleo</b> sin vocación. La vocación se ve en <b>aprender, servir, mejorar y asumir responsabilidades</b> <span class="tag a">ASMR</span>.</li>
+    <li><b>Con la ética:</b> hace ver la <b>dimensión social</b> del trabajo y la responsabilidad frente a otros y la sociedad.</li>
+  </ul>
+</div></details>
+
+<details open id="s4"><summary><span class="n">4</span><h2>Dimensiones de la profesión <span class="tag">P9–P12</span></h2><span class="chev">▾</span></summary><div class="body">
+  <table>
+    <tr><th>Dimensión</th><th>Permite</th></tr>
+    <tr><td>Personal <span class="tag">CRRP</span></td><td>Desarrollar capacidades · realización personal · remuneración · proyecto de vida</td></tr>
+    <tr><td>Social <span class="tag">NSDRP</span></td><td>Necesidades sociales · servicios especializados · desarrollo · resolver problemas · proteger bienes e intereses jurídicamente relevantes</td></tr>
+  </table>
+  <div class="key">🎯 <b>Principio fundamental:</b> conciliar el <b>beneficio personal</b> con la <b>responsabilidad social</b>.</div>
+</div></details>
+
+<details open id="s5"><summary><span class="n">5</span><h2>Capacidad profesional <span class="tag">P13–P15</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> conocimientos, habilidades, competencias, experiencia y cualidades para desempeñar correctamente una profesión.</li>
+    <li><b>Elementos</b> <span class="tag">¡CHE, ARI!</span>: conocimientos · habilidades · experiencia · actualización · responsabilidad · integridad.</li>
+    <li><b>Falta ética:</b> aceptar sin capacidad puede impedir un servicio competente. El problema no es <b>no saber</b>, sino asumir <b>sin adoptar las medidas necesarias</b>.</li>
+  </ul>
+</div></details>
+
+<details open id="s6"><summary><span class="n">6</span><h2>Derechos y deberes <span class="tag">P16–P18</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Relación:</b> se generan <b>simultáneamente</b>; no basta con reclamar derechos, hay que cumplir responsabilidades.</li>
+  </ul>
+  <h3>7 DERECHOS <span class="tag">3R + LACI</span></h3>
+  <ul>
+    <li>Ejercer conforme a la ley · remuneración justa · reconocimiento · desarrollar y actualizar conocimientos · condiciones adecuadas · independencia · respeto y consideración.</li>
+  </ul>
+  <h3>10 DEBERES</h3>
+  <ul>
+    <li>Competencia · diligencia · honestidad · dignidad humana · confidencialidad · evitar conflictos de intereses · actualizar conocimientos · respetar normas · asumir responsabilidad · trato digno a clientes, usuarios, compañeros y terceros.</li>
+  </ul>
+</div></details>
+
+<details open id="s7"><summary><span class="n">7</span><h2>Honorarios <span class="tag">P19–P22</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué son:</b> remuneración por los servicios especializados que se prestan.</li>
+    <li><b>Relación:</b> derecho a honorarios <b>justos</b> ⇄ deber de servicio <b>competente y diligente</b>.</li>
+    <li><b>Características</b> <span class="tag">CTPPA</span>: claros · transparentes · proporcionales · previamente informados · acordes con las normas.</li>
+    <li><b>Cuestionable</b> <span class="tag a">5 NO</span>: cobrar lo no realizado · ocultar costos · aprovecharse de la necesidad · condiciones engañosas · cobros manifiestamente desproporcionados.</li>
+  </ul>
+</div></details>
+
+<details open id="s8"><summary><span class="n">8</span><h2>Secreto profesional <span class="tag">P23–P25</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> deber de preservar la confidencialidad de la información conocida por el ejercicio profesional; base de la <b>confianza</b>.</li>
+    <li><b>Elementos</b> <span class="tag">I+R+C+D</span>: información + relación profesional + confianza + deber de confidencialidad.</li>
+    <li><b>Implica</b> <span class="tag c">DPCEU</span>: no divulgar · proteger documentos · controlar acceso · evitar conversaciones indiscretas · usar solo para la finalidad profesional.</li>
+    <li><b>Era digital:</b> proteger correos, archivos, contraseñas, bases de datos, expedientes, fotos, conversaciones, nube y dispositivos.</li>
+  </ul>
+  <div class="key">📱 <b>Ejemplo WhatsApp:</b> comentar info confidencial en un grupo con compañeros ajenos al asunto <b>puede ser violación ética</b>, aunque no se publique en redes.</div>
+</div></details>
+
+<footer>Ética Profesional · Parcial · resumen de Cuestionario Etica Profesional-Parcial 2026.pdf · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var all = document.querySelectorAll("details"), tgl = document.getElementById("tgl");
+  function label(){
+    var anyOpen = Array.prototype.some.call(all, function(d){ return d.open; });
+    tgl.textContent = anyOpen ? "Plegar todo" : "Abrir todo";
+  }
+  tgl.addEventListener("click", function(){
+    var open = tgl.textContent === "Abrir todo";
+    all.forEach(function(d){ d.open = open; });
+    label();
+  });
+  all.forEach(function(d){ d.addEventListener("toggle", label); });
+  // Al tocar un chip, abrir esa sección
+  document.querySelectorAll("nav.chips a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var d = document.querySelector(a.getAttribute("href"));
+      if(d){ d.open = true; label(); }
+    });
+  });
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🧠 Cheat Sheet ET · Parcial</title>
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#121822; --card:#161d29; --card2:#1c2432;
+  --border:#26303f; --text:#e7edf5; --sub:#93a2b8; --accent:#22c55e;
+  --accent-d:#0f2b1d; --red:#fb7185; --red-d:#3a1620; --blue:#60a5fa; --blue-d:#122036;
+  --purple:#c084fc; --purple-d:#241a36; --gold:#facc15;
+  --shadow:0 6px 18px -6px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+body{padding-bottom:78px;}
+h1,h2,h3,h4{margin:0;}
+.hide{display:none !important;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0d1420,#0b0f14 95%);border-bottom:1px solid var(--border);padding:10px 14px 12px;}
+.htitle{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.htitle .emoji{font-size:1.4rem;}
+.htitle h1{font-size:1.05rem;font-weight:800;letter-spacing:.2px;}
+.htitle .sub{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.searchbox{position:relative;}
+.searchbox input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:10px 34px 10px 12px;font-size:.85rem;outline:none;}
+.searchbox input:focus{border-color:var(--accent);}
+.searchbox .sicon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.9rem;pointer-events:none;}
+.searchclear{position:absolute;right:34px;top:50%;transform:translateY(-50%);color:var(--sub);background:none;border:none;font-size:1rem;display:none;padding:4px;}
+.nores{text-align:center;color:var(--sub);font-size:.85rem;padding:30px 10px;display:none;}
+
+/* QUICK INDEX CHIPS (scrollable) */
+.idxwrap{overflow-x:auto;white-space:nowrap;padding:10px 14px 4px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.idxwrap::-webkit-scrollbar{display:none;}
+.idxchip{display:inline-block;background:var(--card);border:1px solid var(--border);color:var(--sub);font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:20px;margin-right:6px;text-decoration:none;}
+.idxchip:active{background:var(--accent-d);color:var(--accent);border-color:var(--accent);}
+
+main{padding:12px 12px 20px;max-width:720px;margin:0 auto;}
+
+/* SECTION / ACCORDION */
+.section{margin-bottom:14px;scroll-margin-top:118px;}
+.sec-head{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;}
+.sec-head .emoji{font-size:1.3rem;flex-shrink:0;}
+.sec-head .ttl{flex:1;}
+.sec-head .ttl h2{font-size:.95rem;font-weight:800;}
+.sec-head .ttl p{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.sec-head .chev{color:var(--sub);transition:transform .25s;font-size:.9rem;}
+.section.open .sec-head .chev{transform:rotate(180deg);}
+.sec-body{display:none;padding:10px 2px 4px;}
+.section.open .sec-body{display:block;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+.card h3{font-size:.86rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.card p, .card li{font-size:.8rem;line-height:1.42;color:#d3dbe6;}
+.card ul{margin:4px 0 0;padding-left:0;list-style:none;}
+.card li{position:relative;padding-left:14px;margin-bottom:4px;}
+.card li:before{content:"▸";position:absolute;left:0;color:var(--accent);}
+
+/* ACRONYM BADGE */
+.acro{display:inline-flex;align-items:center;gap:6px;background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:10px;font-size:.85rem;margin:2px 0 8px;}
+.mnemo{font-size:.74rem;color:#a6e6bf;background:rgba(34,197,94,.08);border-left:3px solid var(--accent);padding:6px 9px;border-radius:0 8px 8px 0;margin-top:6px;font-style:italic;}
+
+/* COLOR TOKENS */
+.c-red{color:var(--red);font-weight:700;}
+.c-green{color:var(--accent);font-weight:700;}
+.c-blue{color:var(--blue);font-weight:700;}
+.c-purple{color:var(--purple);font-weight:700;}
+.tag{display:inline-block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:20px;margin-bottom:6px;}
+.tag-crit{background:var(--red-d);color:var(--red);}
+.tag-gold{background:var(--accent-d);color:var(--accent);}
+.tag-term{background:var(--blue-d);color:var(--blue);}
+.tag-purple{background:var(--purple-d);color:var(--purple);}
+
+/* CHUNK GRID */
+.chunk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+.chunk{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center;}
+.chunk .e{font-size:1.2rem;}
+.chunk .t{font-size:.72rem;font-weight:800;margin-top:2px;}
+.chunk .d{font-size:.64rem;color:var(--sub);margin-top:2px;line-height:1.3;}
+
+/* TABLES */
+.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:6px;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.72rem;}
+th{background:#0f2b1d;color:var(--accent);text-align:left;padding:7px 9px;font-weight:800;white-space:nowrap;position:sticky;top:0;}
+td{padding:7px 9px;border-top:1px solid var(--border);color:#d3dbe6;vertical-align:top;}
+tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+td b{color:var(--text);}
+
+/* FLOW STEPS */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:8px 0;}
+.step{background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:800;font-size:.68rem;padding:6px 9px;border-radius:20px;white-space:nowrap;}
+.arrow{color:var(--sub);font-weight:700;}
+
+/* GLOSSARY GRID */
+.glo{display:grid;grid-template-columns:1fr;gap:8px;}
+.glo .card h3{color:var(--purple);}
+
+/* FOOTER */
+footer{max-width:720px;margin:10px auto 0;padding:14px;text-align:center;color:var(--sub);font-size:.68rem;}
+
+/* BOTTOM NAV */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#0d1420;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 2px calc(6px + env(safe-area-inset-bottom));z-index:60;}
+.bnitem{display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--sub);font-size:.55rem;font-weight:700;background:none;border:none;flex:1;padding:4px 0;}
+.bnitem .e{font-size:1.05rem;}
+.bnitem.active{color:var(--accent);}
+
+/* jump-to-top */
+.top-btn{position:fixed;right:14px;bottom:66px;background:var(--accent);color:#04240f;border:none;width:38px;height:38px;border-radius:50%;font-size:1rem;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;z-index:55;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="htitle">
+    <span class="emoji">🧠</span>
+    <div>
+      <h1>Cheat Sheet · Ética Parcial</h1>
+      <p class="sub">Ética Profesional · resumen mnemotécnico</p>
+    </div>
+  </div>
+  <div class="searchbox">
+    <input id="search" type="text" placeholder="Buscar término o tema… (ej. vocación, honorarios, secreto)" autocomplete="off">
+    <button class="searchclear" id="clearBtn">✕</button>
+    <span class="sicon" id="searchIcon">🔎</span>
+  </div>
+</header>
+
+<nav class="idxwrap" id="idxwrap">
+  <a class="idxchip" href="#s1">🧭 Ética</a>
+  <a class="idxchip" href="#s2">💡 Vocación</a>
+  <a class="idxchip" href="#s3">⚖️ Dimensiones</a>
+  <a class="idxchip" href="#s4">🛠️ Capacidad</a>
+  <a class="idxchip" href="#s5">📜 Derechos y deberes</a>
+  <a class="idxchip" href="#s6">💰 Honorarios</a>
+  <a class="idxchip" href="#s7">🔒 Secreto</a>
+  <a class="idxchip" href="#s8">📖 Glosario</a>
+</nav>
+
+<main id="main">
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra palabra.</p>
+
+<!-- ============ SECCIÓN 1: ÉTICA ============ -->
+<section class="section open" id="s1" data-nav="🧭 Ética">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🧭</span>
+    <div class="ttl"><h2>1 · Ética y ética profesional</h2><p>Preguntas 1–4 · definiciones · moral vs. ética vs. derecho · ley</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Ética</h3>
+      <p>La <span class="c-blue">disciplina filosófica</span> que estudia la conducta humana desde la perspectiva del <b>bien, el deber, los valores y los principios</b> que permiten determinar cómo debemos actuar.</p>
+      <div class="acro">BDVP</div>
+      <div class="mnemo">🟢 "<b>B</b>uenos <b>D</b>eberes, <b>V</b>alores y <b>P</b>rincipios".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Ética profesional</h3>
+      <p>Conjunto de <b>principios, valores, deberes y criterios de conducta</b> que orientan el comportamiento de una persona <span class="c-blue">en el ejercicio de una profesión</span>.</p>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🧩 Moral · Ética · Derecho · Ética profesional</h3>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">🏘️</div><div class="t">Moral</div><div class="d">Valores y normas que orientan a una persona o comunidad</div></div>
+        <div class="chunk"><div class="e">💭</div><div class="t">Ética</div><div class="d">Reflexión crítica sobre lo correcto, lo bueno y lo debido</div></div>
+        <div class="chunk"><div class="e">⚖️</div><div class="t">Derecho</div><div class="d">Normas jurídicas obligatorias de la autoridad competente</div></div>
+        <div class="chunk"><div class="e">👷</div><div class="t">Ética profesional</div><div class="d">Aplicación de principios éticos al ejercicio de una profesión</div></div>
+      </div>
+      <div class="mnemo">🟢 "La moral <b>vive</b>, la ética <b>piensa</b>, el derecho <b>obliga</b> y la ética profesional <b>aplica</b>".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>⚖️ ¿La ética profesional se limita a la ley?</h3>
+      <p><span class="c-red">No.</span> La ética no se limita a lo <b>permitido o prohibido</b> por la ley: busca determinar cuál es la <span class="c-green">manera correcta de actuar</span>.</p>
+      <div class="mnemo">🟢 "Legal ≠ ético": no todo lo legal es necesariamente la conducta profesional más ética.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 2: VOCACIÓN ============ -->
+<section class="section" id="s2" data-nav="💡 Vocación">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">💡</span>
+    <div class="ttl"><h2>2 · Vocación profesional</h2><p>Preguntas 5–8 · definición · elementos · gusto vs. vocación</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Vocación profesional</h3>
+      <p>La <span class="c-blue">inclinación, interés o disposición</span> que lleva a una persona a <b>escoger y desarrollar</b> determinada profesión.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧩 Elementos — Acrónimo</h3>
+      <div class="acro">IAVMCS</div>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">❤️</div><div class="t">Intereses</div></div>
+        <div class="chunk"><div class="e">🎯</div><div class="t">Aptitudes</div></div>
+        <div class="chunk"><div class="e">💎</div><div class="t">Valores</div></div>
+        <div class="chunk"><div class="e">🔥</div><div class="t">Motivaciones</div></div>
+        <div class="chunk"><div class="e">🤝</div><div class="t">Compromiso</div></div>
+        <div class="chunk"><div class="e">🙋</div><div class="t">Disposición de servicio</div></div>
+      </div>
+      <div class="mnemo">🟢 "<b>I</b>r <b>A</b> <b>V</b>er <b>M</b>i <b>C</b>arrera <b>S</b>oñada".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🚫 Vocación ≠ simple gusto</h3>
+      <p>Se puede escoger una carrera por sus <span class="c-red">ingresos, prestigio o posibilidades laborales</span> sin verdadera vocación.</p>
+      <p>La vocación se manifiesta en la disposición para:</p>
+      <div class="flow">
+        <span class="step">Aprender</span><span class="arrow">·</span>
+        <span class="step">Servir</span><span class="arrow">·</span>
+        <span class="step">Mejorar</span><span class="arrow">·</span>
+        <span class="step">Asumir responsabilidades</span>
+      </div>
+      <div class="mnemo">🟢 "<b>ASMR</b>": Aprender · Servir · Mejorar · Responsabilidades.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🔗 Vocación y ética profesional</h3>
+      <p>La vocación ayuda a comprender que el trabajo tiene una <b>dimensión social</b> y que ejercer la profesión implica <span class="c-green">responsabilidad frente a otras personas y frente a la sociedad</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 3: DIMENSIONES ============ -->
+<section class="section" id="s3" data-nav="⚖️ Dimensiones">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">⚖️</span>
+    <div class="ttl"><h2>3 · Dimensiones de la profesión</h2><p>Preguntas 9–12 · personal · social · principio fundamental</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <h3>👤👥 Dos dimensiones — Acrónimo</h3>
+      <div class="acro">CRRP · NSDRP</div>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Dimensión</th><th>Permite…</th></tr></thead>
+        <tbody>
+          <tr><td><b>Personal</b></td><td>Desarrollar sus <b>c</b>apacidades · alcanzar <b>r</b>ealización personal · obtener una <b>r</b>emuneración · construir un <b>p</b>royecto de vida</td></tr>
+          <tr><td><b>Social</b></td><td>Satisfacer <b>n</b>ecesidades sociales · prestar <b>s</b>ervicios especializados · contribuir al <b>d</b>esarrollo · <b>r</b>esolver problemas · <b>p</b>roteger bienes e intereses jurídicamente relevantes</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 Personal: "<b>C</b>on <b>R</b>ecursos <b>R</b>ealizo mi <b>P</b>royecto" · Social: "<b>N</b>uestra <b>S</b>ociedad <b>D</b>epende de <b>R</b>esponsables <b>P</b>rofesionales".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>🎯 Principio fundamental de la finalidad de la profesión</h3>
+      <p>La profesión debe <span class="c-green">conciliar el beneficio personal con la responsabilidad social</span>.</p>
+      <div class="mnemo">🟢 "Yo + Nosotros": las dos dimensiones en equilibrio.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 4: CAPACIDAD ============ -->
+<section class="section" id="s4" data-nav="🛠️ Capacidad">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🛠️</span>
+    <div class="ttl"><h2>4 · Capacidad profesional</h2><p>Preguntas 13–15 · definición · 6 elementos · falta ética</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Capacidad profesional</h3>
+      <p>Conjunto de <b>conocimientos, habilidades, competencias, experiencia y cualidades</b> necesarias para desempeñar correctamente una profesión.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧩 6 elementos — Acrónimo</h3>
+      <div class="acro">¡CHE, ARI!</div>
+      <div class="flow">
+        <span class="step">1 Conocimientos</span><span class="arrow">→</span>
+        <span class="step">2 Habilidades</span><span class="arrow">→</span>
+        <span class="step">3 Experiencia</span><span class="arrow">→</span>
+        <span class="step">4 Actualización</span><span class="arrow">→</span>
+        <span class="step">5 Responsabilidad</span><span class="arrow">→</span>
+        <span class="step">6 Integridad</span>
+      </div>
+      <div class="mnemo">🟢 Como llamar a una amiga: "<b>¡CHE, ARI!</b>" — C·H·E · A·R·I, en el mismo orden del cuestionario.</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Punto crítico</span>
+      <h3>⚠️ Aceptar sin capacidad = posible falta ética</h3>
+      <p>Asumir una responsabilidad sin la capacidad necesaria puede <span class="c-red">impedir que el servicio se preste competentemente</span>.</p>
+      <p>El problema <b>no</b> es simplemente no saber, sino <b>asumir la responsabilidad sin adoptar las medidas necesarias</b> para actuar competentemente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 5: DERECHOS Y DEBERES ============ -->
+<section class="section" id="s5" data-nav="📜 Derechos y deberes">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📜</span>
+    <div class="ttl"><h2>5 · Derechos y deberes profesionales</h2><p>Preguntas 16–18 · relación · 7 derechos · 10 deberes</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>🔗 Relación entre derechos y deberes</h3>
+      <p>El ejercicio profesional genera <span class="c-green">simultáneamente</span> derechos y deberes. El profesional <b>no debe limitarse a reclamar sus derechos</b>: también debe cumplir las responsabilidades propias de su profesión.</p>
+      <div class="mnemo">🟢 Dos caras de la misma moneda.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>✅ 7 derechos — Acrónimo</h3>
+      <div class="acro">3R + LACI</div>
+      <ul>
+        <li>Ejercer la profesión conforme a la <b>L</b>ey</li>
+        <li>Recibir una <b>R</b>emuneración justa</li>
+        <li>Obtener <b>R</b>econocimiento por el trabajo realizado</li>
+        <li>Desarrollar y <b>A</b>ctualizar sus conocimientos</li>
+        <li>Trabajar en <b>C</b>ondiciones adecuadas</li>
+        <li>Ejercer la profesión con <b>I</b>ndependencia</li>
+        <li>Recibir <b>R</b>espeto y consideración profesional</li>
+      </ul>
+      <div class="mnemo">🟢 Las <b>3 R</b> (Remuneración, Reconocimiento, Respeto) + <b>LACI</b>. La pregunta pide solo 5.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📋 10 deberes</h3>
+      <ul>
+        <li>Actuar con <b>competencia</b> · actuar con <b>diligencia</b></li>
+        <li>Mantener la <b>honestidad</b> · respetar la <b>dignidad humana</b></li>
+        <li>Mantener la <b>confidencialidad</b> · evitar <b>conflictos de intereses</b></li>
+        <li><b>Actualizar</b> los conocimientos · respetar las <b>normas</b> legales y profesionales</li>
+        <li>Asumir <b>responsabilidad</b> por los propios actos</li>
+        <li><b>Tratar dignamente</b> a clientes, usuarios, compañeros y terceros</li>
+      </ul>
+      <div class="mnemo">🟢 "<b>C</b>omo <b>D</b>ebo: <b>H</b>onesto, <b>D</b>igno, <b>C</b>allado, sin <b>C</b>onflictos, <b>A</b>ctualizado, con <b>N</b>ormas, <b>R</b>esponsable y de buen <b>T</b>rato".</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 6: HONORARIOS ============ -->
+<section class="section" id="s6" data-nav="💰 Honorarios">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">💰</span>
+    <div class="ttl"><h2>6 · Honorarios profesionales</h2><p>Preguntas 19–22 · relación con el servicio · características · conductas cuestionables</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Honorarios profesionales</h3>
+      <p>La <b>remuneración</b> que recibe un profesional por los <span class="c-blue">servicios especializados</span> que presta.</p>
+      <p>🔗 El <b>derecho</b> a honorarios justos se relaciona con el <b>deber</b> de prestar un servicio <span class="c-green">competente y diligente</span>.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>✅ Características — Acrónimo</h3>
+      <div class="acro">CTPPA</div>
+      <div class="flow">
+        <span class="step">Claros</span><span class="step">Transparentes</span><span class="step">Proporcionales</span><span class="step">Previamente informados</span><span class="step">Acordes con las normas</span>
+      </div>
+      <div class="mnemo">🟢 "<b>C</b>obra <b>T</b>u <b>P</b>recio, <b>P</b>ero <b>A</b>cordado".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Error común</span>
+      <h3>🚫 Conductas éticamente cuestionables</h3>
+      <ul>
+        <li>Cobrar por <b>servicios no realizados</b></li>
+        <li><b>Ocultar costos</b></li>
+        <li><b>Aprovecharse de la necesidad</b> del cliente</li>
+        <li>Establecer <b>condiciones engañosas</b></li>
+        <li>Cobrar cantidades <b>manifiestamente desproporcionadas</b> cuando las normas profesionales lo impiden</li>
+      </ul>
+      <div class="mnemo">🟢 "Los <b>5 NO</b>": fantasma · oculto · abuso · engaño · exceso.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 7: SECRETO ============ -->
+<section class="section" id="s7" data-nav="🔒 Secreto">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🔒</span>
+    <div class="ttl"><h2>7 · Secreto profesional</h2><p>Preguntas 23–25 · definición · elementos · implicaciones · era digital</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>📌 Secreto profesional</h3>
+      <p>El <b>deber de preservar la confidencialidad</b> de la información conocida por razón del ejercicio profesional. Es un elemento fundamental de la <span class="c-blue">relación de confianza</span> entre el profesional y quien solicita sus servicios.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧩 Elementos — Fórmula</h3>
+      <div class="acro">I + R + C + D</div>
+      <p><b>Información + relación profesional + confianza + deber de confidencialidad.</b></p>
+      <div class="mnemo">🟢 "<b>I</b>nformación <b>R</b>elacionada <b>C</b>on <b>D</b>iscreción".</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🛡️ Qué implica — Acrónimo</h3>
+      <div class="acro">DPCEU</div>
+      <ul>
+        <li>No <b>divulgar</b> información indebidamente</li>
+        <li><b>Proteger</b> documentos</li>
+        <li><b>Controlar</b> el acceso a la información</li>
+        <li><b>Evitar</b> conversaciones indiscretas</li>
+        <li><b>Utilizar</b> la información exclusivamente para la finalidad profesional</li>
+      </ul>
+      <div class="mnemo">🟢 "<b>D</b>ato <b>P</b>rotegido, <b>C</b>ontrolado, <b>E</b>vitando <b>U</b>sos indebidos".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Punto crítico</span>
+      <h3>📱 Secreto profesional en la era digital</h3>
+      <p>No basta con no hablar: hay que proteger <b>correos electrónicos, archivos digitales, contraseñas, bases de datos, expedientes electrónicos, fotografías, conversaciones, información en la nube y dispositivos</b>.</p>
+      <p><span class="c-red">Ejemplo:</span> comentar información confidencial de un cliente en un <b>grupo de WhatsApp</b> con compañeros ajenos al asunto <b>puede ser una violación ética</b>, aunque no se haya publicado en redes sociales.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 8: GLOSARIO ============ -->
+<section class="section" id="s8" data-nav="📖 Glosario">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📖</span>
+    <div class="ttl"><h2>8 · Glosario y acrónimos</h2><p>Búscalos arriba con el buscador ⤴</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body glo">
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Ética</h3><p>Disciplina filosófica de la conducta humana desde el bien, el deber, los valores y los principios.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Ética profesional</h3><p>Principios, valores, deberes y criterios de conducta en el ejercicio de una profesión.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Moral</h3><p>Valores y normas que orientan la conducta de una persona o comunidad.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Derecho</h3><p>Normas jurídicas obligatorias establecidas por la autoridad competente.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Vocación profesional</h3><p>Inclinación, interés o disposición para escoger y desarrollar una profesión.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Capacidad profesional</h3><p>Conocimientos, habilidades, competencias, experiencia y cualidades para desempeñar correctamente una profesión.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Honorarios profesionales</h3><p>Remuneración por los servicios especializados que presta un profesional.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Secreto profesional</h3><p>Deber de preservar la confidencialidad de la información conocida por el ejercicio profesional.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>BDVP</h3><p>Bien · Deber · Valores · Principios (definición de ética).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>IAVMCS / ASMR</h3><p>Elementos de la vocación (Intereses, Aptitudes, Valores, Motivaciones, Compromiso, Servicio) / en qué se manifiesta (Aprender, Servir, Mejorar, Responsabilidades).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CRRP / NSDRP</h3><p>Dimensión personal (Capacidades, Realización, Remuneración, Proyecto) / social (Necesidades, Servicios, Desarrollo, Resolver, Proteger).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>¡CHE, ARI!</h3><p>Conocimientos · Habilidades · Experiencia · Actualización · Responsabilidad · Integridad.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>3R + LACI</h3><p>Derechos: Remuneración, Reconocimiento, Respeto + Ley, Actualización, Condiciones, Independencia.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CTPPA</h3><p>Honorarios: Claros, Transparentes, Proporcionales, Previamente informados, Acordes con las normas.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>I+R+C+D / DPCEU</h3><p>Elementos del secreto / qué implica (no Divulgar, Proteger, Controlar, Evitar, Usar solo para lo profesional).</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Ética Profesional y Derecho · Parcial · II Semestre 2026 — Cheat Sheet generado solo a partir del cuestionario de estudio.<br>
+  Universidad Tecnológica de Panamá · Prof. Fernando Levy
+</footer>
+
+<button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<nav class="bottomnav" id="bottomnav">
+  <button class="bnitem active" data-target="s1"><span class="e">🧭</span>Ética</button>
+  <button class="bnitem" data-target="s2"><span class="e">💡</span>Vocación</button>
+  <button class="bnitem" data-target="s5"><span class="e">📜</span>Deberes</button>
+  <button class="bnitem" data-target="s7"><span class="e">🔒</span>Secreto</button>
+  <button class="bnitem" data-target="s8"><span class="e">📖</span>Glosario</button>
+</nav>
+
+<script>
+// ---------- Accordion ----------
+function toggleSec(headEl){
+  var sec = headEl.parentElement;
+  var wasOpen = sec.classList.contains('open');
+  // close all, then open target (accordion behaviour), unless already open -> just close it
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+  if(!wasOpen){ sec.classList.add('open'); }
+}
+
+// ---------- Bottom nav ----------
+document.querySelectorAll('.bnitem').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = btn.getAttribute('data-target');
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+    document.querySelectorAll('.bnitem').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// index chips: open target section on click too
+document.querySelectorAll('.idxchip').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href').substring(1);
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+  });
+});
+
+// ---------- Search / filter ----------
+var searchInput = document.getElementById('search');
+var clearBtn = document.getElementById('clearBtn');
+var noRes = document.getElementById('nores');
+
+function normalize(t){
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+searchInput.addEventListener('input', function(){
+  var q = normalize(searchInput.value.trim());
+  clearBtn.style.display = q ? 'block' : 'none';
+
+  if(!q){
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.remove('hide'); if(i===0) s.classList.add('open'); else s.classList.remove('open'); });
+    document.querySelectorAll('.card.searchable').forEach(function(c){ c.classList.remove('hide'); });
+    document.getElementById('idxwrap').classList.remove('hide');
+    noRes.style.display='none';
+    return;
+  }
+
+  document.getElementById('idxwrap').classList.add('hide');
+  var anyVisibleGlobal = false;
+
+  document.querySelectorAll('.section').forEach(function(sec){
+    var cards = sec.querySelectorAll('.card.searchable');
+    var anyVisible = false;
+    cards.forEach(function(c){
+      var txt = normalize(c.textContent);
+      if(txt.indexOf(q) !== -1){ c.classList.remove('hide'); anyVisible = true; }
+      else { c.classList.add('hide'); }
+    });
+    if(anyVisible){
+      sec.classList.remove('hide');
+      sec.classList.add('open');
+      anyVisibleGlobal = true;
+    } else {
+      sec.classList.add('hide');
+      sec.classList.remove('open');
+    }
+  });
+
+  noRes.style.display = anyVisibleGlobal ? 'none' : 'block';
+});
+
+clearBtn.addEventListener('click', function(){
+  searchInput.value = '';
+  searchInput.dispatchEvent(new Event('input'));
+  searchInput.focus();
+});
+
+// ---------- Top button + active nav on scroll ----------
+window.addEventListener('scroll', function(){
+  document.getElementById('topBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+</script>
+</body>
+</html>

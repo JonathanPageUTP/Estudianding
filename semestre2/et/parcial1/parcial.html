@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Simulacro de Parcial · Ética Profesional</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --maxw:680px;
+  --radius:14px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);line-height:1.5;min-height:100vh;
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+.hidden{display:none !important;}
+a{color:var(--cyan);}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--text);
+  padding:13px 18px;border-radius:12px;font-size:.92rem;font-weight:700;text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.btn.danger{background:var(--red-dim);border-color:#5c2a2a;color:var(--red);}
+.btn.block{width:100%;}
+.btn.sm{padding:9px 13px;font-size:.8rem;border-radius:10px;}
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+.cover{margin:22px auto 30px;}
+.paper{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:22px 20px;position:relative;overflow:hidden;
+}
+.paper::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+}
+.inst{text-align:center;font-family:var(--serif);}
+.inst .u{font-size:.95rem;font-weight:700;letter-spacing:.02em;}
+.inst .f{font-size:.78rem;color:var(--text-dim);margin-top:2px;}
+.inst .c{font-size:1.02rem;margin-top:12px;font-weight:700;color:var(--accent);}
+.inst .t{font-size:1.45rem;margin-top:4px;font-weight:700;}
+.inst .p{font-size:.8rem;color:var(--text-faint);margin-top:4px;}
+.rule{border:none;border-top:1px dashed var(--line);margin:18px 0;}
+
+.fields{display:grid;grid-template-columns:1fr;gap:10px;}
+.field label{display:block;font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-bottom:4px;letter-spacing:.03em;}
+.field input,.field select{
+  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);
+  border-radius:10px;padding:11px 12px;font-size:16px;font-family:var(--sans);
+}
+.field input:focus,.field select:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+.sec-title{font-size:.78rem;font-family:var(--mono);color:var(--accent);letter-spacing:.04em;margin-bottom:8px;}
+ol.rules{margin:0;padding-left:20px;}
+ol.rules li{font-size:.86rem;color:var(--text-dim);margin-bottom:6px;}
+ol.rules li b{color:var(--text);}
+
+.valtable{width:100%;border-collapse:collapse;font-size:.84rem;}
+.valtable td{padding:8px 4px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);}
+.valtable td:last-child{text-align:right;font-family:var(--mono);color:var(--text);white-space:nowrap;}
+.valtable tr:last-child td{border-bottom:none;font-weight:700;color:var(--text);}
+
+.resume{
+  background:var(--amber-dim);border:1px solid #5c4515;border-radius:14px;padding:14px;margin-bottom:14px;
+}
+.resume p{font-size:.86rem;color:var(--text);margin-bottom:10px;}
+.resume .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+.history{margin-top:4px;}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:.82rem;color:var(--text-dim);}
+.hist-item:last-child{border-bottom:none;}
+.hist-item b{font-family:var(--mono);color:var(--text);}
+
+/* ============================================================
+   BARRA DE EXAMEN
+   ============================================================ */
+#topbar{
+  position:sticky;top:0;z-index:50;background:rgba(10,20,16,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.tb-inner{max-width:var(--maxw);margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.timer{
+  font-family:var(--mono);font-weight:800;font-size:1.05rem;color:var(--accent);
+  background:var(--accent-dim);border-radius:10px;padding:7px 10px;min-width:84px;text-align:center;
+}
+.timer.warn{color:var(--amber);background:var(--amber-dim);}
+.timer.crit{color:var(--red);background:var(--red-dim);animation:pulse 1s infinite;}
+@keyframes pulse{50%{opacity:.6}}
+.tb-mid{flex:1;min-width:0;}
+.tb-label{font-size:.68rem;color:var(--text-faint);font-family:var(--mono);}
+.tb-prog{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:4px;}
+.tb-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .3s;}
+
+/* ============================================================
+   SECCIONES Y PREGUNTAS
+   ============================================================ */
+#exam main{padding:8px 16px 110px;}
+.part{margin-top:22px;}
+.part-head{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:12px;
+}
+.part-head h2{font-size:1rem;font-family:var(--serif);}
+.part-head h2 span{float:right;font-family:var(--mono);font-size:.78rem;color:var(--accent);margin-top:3px;}
+.part-head p{font-size:.8rem;color:var(--text-dim);margin-top:4px;}
+
+.q{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px 14px 12px;margin-bottom:10px;scroll-margin-top:80px;
+}
+.q.unanswered-flag{border-color:var(--amber);}
+.q-top{display:flex;gap:10px;align-items:flex-start;}
+.q-num{
+  font-family:var(--mono);font-size:.72rem;font-weight:800;color:var(--accent);
+  border:1px solid var(--accent-dim);background:var(--accent-dim);border-radius:8px;
+  min-width:30px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.q-text{font-size:.94rem;color:var(--text);flex:1;}
+.q-pts{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);white-space:nowrap;margin-top:4px;}
+
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  background:var(--bg);border:1px solid var(--line);border-radius:11px;
+  padding:11px 12px;font-size:.9rem;color:var(--text-dim);width:100%;
+}
+.opt .l{
+  font-family:var(--mono);font-weight:800;font-size:.75rem;color:var(--text-faint);
+  border:1px solid var(--line);border-radius:6px;min-width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.opt.sel{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.opt.sel .l{border-color:var(--accent);color:var(--accent);}
+.vf{flex-direction:row;}
+.vf .opt{justify-content:center;font-weight:700;}
+
+.defs{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px;}
+.defs li{
+  display:flex;gap:10px;background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;
+  padding:9px 11px;font-size:.85rem;color:var(--text-dim);
+}
+.defs li b{font-family:var(--mono);color:var(--cyan);min-width:18px;}
+.match-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);}
+.match-row:last-child{border-bottom:none;}
+.match-row .term{flex:1;font-size:.9rem;color:var(--text);font-weight:600;}
+.match-row select,.ord-row select{
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;
+  padding:9px 8px;font-size:16px;font-family:var(--mono);min-width:74px;
+}
+.match-row select.filled,.ord-row select.filled{border-color:var(--accent);color:var(--accent);}
+.ord-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line-soft);}
+.ord-row:last-child{border-bottom:none;}
+.ord-row .item{flex:1;font-size:.88rem;color:var(--text-dim);}
+
+textarea{
+  width:100%;min-height:150px;margin-top:12px;resize:vertical;
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:11px;
+  padding:11px 12px;font-size:16px;font-family:var(--sans);line-height:1.5;
+}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.wc{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);text-align:right;margin-top:4px;}
+
+.submit-zone{margin-top:22px;}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal{position:fixed;inset:0;background:rgba(4,9,7,.82);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:16px;}
+.modal-box{
+  width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:20px 18px calc(18px + var(--safe-b));margin-bottom:max(0px,var(--safe-b));
+}
+.modal-box h3{font-size:1.05rem;margin-bottom:8px;}
+.modal-box p{font-size:.88rem;color:var(--text-dim);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.chip{font-family:var(--mono);font-size:.72rem;background:var(--amber-dim);color:var(--amber);border:none;border-radius:20px;padding:5px 10px;}
+.modal-actions{display:flex;gap:8px;}
+.modal-actions .btn{flex:1;}
+@media (min-width:600px){.modal{align-items:center;}}
+
+/* ============================================================
+   AUTOEVALUACIÓN
+   ============================================================ */
+.sg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;}
+.sg h3{font-size:.95rem;margin-bottom:10px;}
+.sg .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.03em;margin:12px 0 5px;}
+.sg .mine{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;}
+.sg .model{background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text);}
+.rub{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line-soft);cursor:pointer;}
+.rub:last-child{border-bottom:none;}
+.rub input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;margin-top:1px;}
+.rub span{flex:1;font-size:.86rem;color:var(--text-dim);}
+.rub em{font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;}
+.sg-total{text-align:right;font-family:var(--mono);font-size:.8rem;color:var(--text);margin-top:8px;}
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+.score-card{text-align:center;padding:26px 18px;}
+.score-big{font-size:3.4rem;font-weight:800;line-height:1;font-family:var(--mono);}
+.score-big small{font-size:1.1rem;color:var(--text-faint);}
+.grade{display:inline-block;margin-top:10px;font-family:var(--serif);font-size:1.1rem;font-weight:700;padding:5px 16px;border-radius:30px;}
+.g-A{background:var(--accent-dim);color:var(--accent);}
+.g-B{background:var(--cyan-dim);color:var(--cyan);}
+.g-C{background:var(--violet-dim);color:var(--violet);}
+.g-D{background:var(--amber-dim);color:var(--amber);}
+.g-F{background:var(--red-dim);color:var(--red);}
+.score-meta{font-size:.8rem;color:var(--text-faint);margin-top:10px;}
+.bars{margin-top:6px;}
+.bar-row{margin-bottom:12px;}
+.bar-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--text-dim);margin-bottom:4px;}
+.bar-top b{font-family:var(--mono);color:var(--text);}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:99px;}
+
+.filters{display:flex;gap:6px;margin:6px 0 12px;overflow-x:auto;scrollbar-width:none;}
+.filters::-webkit-scrollbar{display:none;}
+.fbtn{flex-shrink:0;background:var(--surface);border:1px solid var(--line);color:var(--text-dim);padding:8px 13px;border-radius:30px;font-size:.78rem;font-weight:700;}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:#06140c;}
+
+.rv{background:var(--surface);border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:12px 13px;margin-bottom:9px;}
+.rv.ok{border-left-color:var(--accent);}
+.rv.bad{border-left-color:var(--red);}
+.rv.part{border-left-color:var(--amber);}
+.rv-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.rv-q{font-size:.88rem;color:var(--text);flex:1;}
+.rv-pts{font-family:var(--mono);font-size:.72rem;white-space:nowrap;}
+.rv-line{font-size:.82rem;color:var(--text-dim);margin-top:6px;}
+.rv-line b{color:var(--text);}
+.rv-exp{font-size:.8rem;color:var(--text-dim);background:var(--bg);border-radius:9px;padding:8px 10px;margin-top:8px;}
+.c-ok{color:var(--accent);}
+.c-bad{color:var(--red);}
+.c-part{color:var(--amber);}
+
+.actions{display:flex;flex-direction:column;gap:8px;margin:20px 0 40px;}
+
+footer{text-align:center;padding:10px 16px 30px;}
+footer p{font-size:.7rem;color:var(--text-faint);}
+
+@media (min-width:600px){
+  .fields{grid-template-columns:1fr 1fr;}
+  .fields .field.full{grid-column:1 / -1;}
+  .actions{flex-direction:row;}
+  .actions .btn{flex:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PORTADA
+     ============================================================ -->
+<section id="start" class="wrap cover">
+  <div id="resumeBox" class="resume hidden">
+    <p>⏸️ Tienes un intento en curso. <b id="resumeInfo"></b></p>
+    <div class="row">
+      <button class="btn primary sm" id="btnResume">Continuar intento</button>
+      <button class="btn sm" id="btnDiscard">Descartar</button>
+    </div>
+  </div>
+
+  <div class="paper">
+    <div class="inst">
+      <div class="u">UNIVERSIDAD TECNOLÓGICA DE PANAMÁ</div>
+      <div class="f">Facultad de Ingeniería de Sistemas Computacionales</div>
+      <div class="c">Ética Profesional y Derecho</div>
+      <div class="t">Examen Parcial</div>
+      <div class="p">Simulacro · Prof. Fernando Levy · II Semestre 2026</div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="fields">
+      <div class="field"><label>NOMBRE (OPCIONAL)</label><input id="fName" type="text" autocomplete="off" placeholder="Tu nombre"></div>
+      <div class="field"><label>CÉDULA (OPCIONAL)</label><input id="fId" type="text" autocomplete="off" placeholder="8-000-0000"></div>
+      <div class="field full"><label>DURACIÓN</label>
+        <select id="fTime">
+          <option value="60">60 minutos</option>
+          <option value="90" selected>90 minutos (recomendado)</option>
+          <option value="120">120 minutos</option>
+          <option value="0">Sin límite de tiempo</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="sec-title">INDICACIONES GENERALES</div>
+    <ol class="rules">
+      <li>El examen tiene <b>5 partes</b> y vale <b>100 puntos</b>.</li>
+      <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas del cuestionario de estudio.</li>
+      <li>El tiempo empieza al presionar <b>Iniciar examen</b>. Al llegar a cero, el examen se entrega solo.</li>
+      <li>La Parte V (desarrollo) la <b>autoevalúas</b> con una rúbrica después de entregar.</li>
+      <li>Tus respuestas se guardan en este dispositivo: si recargas la página, puedes continuar.</li>
+    </ol>
+
+    <hr class="rule">
+
+    <div class="sec-title">DISTRIBUCIÓN DE PUNTOS</div>
+    <table class="valtable">
+      <tr><td>I. Verdadero o falso (10 × 2)</td><td>20 pts</td></tr>
+      <tr><td>II. Selección múltiple (15 × 2)</td><td>30 pts</td></tr>
+      <tr><td>III. Pareo (8 × 2.5)</td><td>20 pts</td></tr>
+      <tr><td>IV. Ordenamiento (2 × 5)</td><td>10 pts</td></tr>
+      <tr><td>V. Desarrollo (2 × 10)</td><td>20 pts</td></tr>
+      <tr><td>Total</td><td>100 pts</td></tr>
+    </table>
+
+    <hr class="rule">
+    <button class="btn primary block" id="btnStart">✍️ Iniciar examen</button>
+  </div>
+
+  <div class="paper" id="histBox" style="margin-top:14px;display:none;">
+    <div class="sec-title">INTENTOS ANTERIORES</div>
+    <div class="history" id="histList"></div>
+  </div>
+
+  <p style="text-align:center;margin-top:16px;"><a href="index.html">← Volver al índice del parcial</a></p>
+</section>
+
+<!-- ============================================================
+     EXAMEN
+     ============================================================ -->
+<section id="exam" class="hidden">
+  <div id="topbar">
+    <div class="tb-inner">
+      <div class="timer" id="timer">--:--</div>
+      <div class="tb-mid">
+        <div class="tb-label" id="tbLabel">0 de 0 respondidas</div>
+        <div class="tb-prog"><i id="tbProg"></i></div>
+      </div>
+      <button class="btn primary sm" id="btnSubmitTop">Entregar</button>
+    </div>
+  </div>
+  <main class="wrap" id="examBody"></main>
+</section>
+
+<!-- ============================================================
+     AUTOEVALUACIÓN (PARTE V)
+     ============================================================ -->
+<section id="selfgrade" class="wrap hidden" style="padding:22px 16px 40px;">
+  <div class="paper" style="margin-bottom:14px;">
+    <div class="sec-title">PARTE V · AUTOEVALUACIÓN</div>
+    <p style="font-size:.88rem;color:var(--text-dim);">Compara tu respuesta con la respuesta modelo y marca con honestidad los puntos que <b style="color:var(--text)">sí incluiste</b>. Cada criterio suma los puntos indicados.</p>
+  </div>
+  <div id="sgBody"></div>
+  <button class="btn primary block" id="btnFinish">📊 Ver calificación final</button>
+</section>
+
+<!-- ============================================================
+     RESULTADOS
+     ============================================================ -->
+<section id="results" class="wrap hidden" style="padding:22px 16px 0;">
+  <div class="paper score-card">
+    <div class="sec-title" id="rsWho">RESULTADO</div>
+    <div class="score-big" id="rsScore">0<small>/100</small></div>
+    <div class="grade" id="rsGrade">F</div>
+    <div class="score-meta" id="rsMeta"></div>
+  </div>
+
+  <div class="paper" style="margin-top:14px;">
+    <div class="sec-title">PUNTAJE POR PARTE</div>
+    <div class="bars" id="rsBars"></div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="sec-title">REVISIÓN DETALLADA</div>
+    <div class="filters" id="rsFilters">
+      <button class="fbtn on" data-f="all">Todas</button>
+      <button class="fbtn" data-f="bad">❌ Incorrectas</button>
+      <button class="fbtn" data-f="part">⚠️ Parciales</button>
+      <button class="fbtn" data-f="ok">✅ Correctas</button>
+    </div>
+    <div id="rsReview"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="btnRetry">🔄 Nuevo intento (otra variante)</button>
+    <a class="btn" href="guia.html">📘 Repasar en la guía</a>
+    <a class="btn" href="index.html">← Índice del parcial</a>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="modal-box">
+    <h3 id="mTitle">¿Entregar examen?</h3>
+    <p id="mText"></p>
+    <div class="chips" id="mChips"></div>
+    <div class="modal-actions">
+      <button class="btn" id="mCancel">Seguir respondiendo</button>
+      <button class="btn primary" id="mOk">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<footer><p>Simulacro generado solo a partir del cuestionario de estudio del Parcial · UTP · FISC · uso académico.</p></footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     BANCO DE PREGUNTAS — Fuente: Cuestionario Etica Profesional-Parcial 2026.pdf
+     ============================================================ */
+
+  // ---------- PARTE I: Verdadero o falso ----------
+  var VF = [
+    {s:"La ética es la disciplina filosófica que estudia la conducta humana desde la perspectiva del bien, el deber, los valores y los principios.", a:true, e:"Es la definición de la pregunta 1 del cuestionario."},
+    {s:"La ética profesional es el conjunto de normas jurídicas obligatorias establecidas por la autoridad competente.", a:false, e:"Esa es la definición del <b>derecho</b>. La ética profesional es el conjunto de principios, valores, deberes y criterios de conducta que orientan el ejercicio de una profesión."},
+    {s:"La moral es el conjunto de valores y normas que orientan la conducta de una persona o comunidad.", a:true, e:"Así se define la moral en la pregunta 3."},
+    {s:"La ética es la reflexión crítica sobre lo correcto, lo bueno y lo debido.", a:true, e:"Es la definición usada al compararla con la moral, el derecho y la ética profesional."},
+    {s:"La ética profesional se limita al cumplimiento de la ley.", a:false, e:"No: la ética busca determinar la <b>manera correcta de actuar</b>, no solo lo permitido o prohibido por la ley."},
+    {s:"Todo lo que es legal constituye necesariamente la conducta profesional más ética.", a:false, e:"No todo lo legal es necesariamente la conducta más ética."},
+    {s:"La vocación profesional es la inclinación, interés o disposición que lleva a una persona a escoger y desarrollar determinada profesión.", a:true, e:"Es la definición de la pregunta 5."},
+    {s:"Escoger una carrera por sus ingresos o su prestigio demuestra siempre una verdadera vocación.", a:false, e:"Se puede escoger una carrera por ingresos, prestigio o posibilidades laborales <b>sin</b> que exista una verdadera vocación."},
+    {s:"La vocación se manifiesta en la disposición para aprender, servir, mejorar y asumir responsabilidades.", a:true, e:"Por eso no debe confundirse con un simple gusto."},
+    {s:"La vocación ayuda al profesional a comprender que su trabajo tiene una dimensión social.", a:true, e:"Y que el ejercicio de su profesión implica responsabilidad frente a otras personas y frente a la sociedad."},
+    {s:"Las dos dimensiones de la profesión son la dimensión económica y la dimensión legal.", a:false, e:"Son la dimensión <b>personal</b> y la dimensión <b>social</b>."},
+    {s:"Obtener una remuneración y construir un proyecto de vida forman parte de la dimensión social de la profesión.", a:false, e:"Forman parte de la dimensión <b>personal</b>."},
+    {s:"Proteger bienes e intereses jurídicamente relevantes forma parte de la dimensión social de la profesión.", a:true, e:"Junto con satisfacer necesidades sociales, prestar servicios especializados, contribuir al desarrollo y resolver problemas."},
+    {s:"El principio fundamental de la finalidad de la profesión es conciliar el beneficio personal con la responsabilidad social.", a:true, e:"Es la respuesta a la pregunta 12."},
+    {s:"La integridad es uno de los elementos que comprende la capacidad profesional.", a:true, e:"Los 6 elementos: conocimientos, habilidades, experiencia, actualización, responsabilidad e integridad."},
+    {s:"Según el cuestionario, el problema ético de aceptar un encargo sin capacidad consiste simplemente en no saber.", a:false, e:"El problema <b>no</b> es simplemente no saber, sino asumir la responsabilidad sin adoptar las medidas necesarias para actuar competentemente."},
+    {s:"El ejercicio profesional genera simultáneamente derechos y deberes.", a:true, e:"Por eso el profesional no debe limitarse a reclamar sus derechos."},
+    {s:"Ejercer la profesión con independencia es un derecho profesional.", a:true, e:"Aparece en la lista de derechos de la pregunta 17."},
+    {s:"Evitar conflictos de intereses es un derecho profesional.", a:false, e:"Es un <b>deber</b> profesional."},
+    {s:"Recibir una remuneración justa es un deber profesional.", a:false, e:"Es un <b>derecho</b> profesional."},
+    {s:"El derecho a recibir honorarios justos se relaciona con el deber de prestar un servicio competente y diligente.", a:true, e:"Es la relación explicada en la pregunta 19."},
+    {s:"Los honorarios profesionales son la remuneración que recibe un profesional por los servicios especializados que presta.", a:true, e:"Es la definición de la pregunta 20."},
+    {s:"Ocultar costos al cliente es una práctica aceptable siempre que el servicio se preste bien.", a:false, e:"<b>Ocultar costos</b> es una conducta éticamente cuestionable; los honorarios deben ser claros y transparentes."},
+    {s:"El secreto profesional es un elemento fundamental de la relación de confianza entre el profesional y quien solicita sus servicios.", a:true, e:"Así lo indica la pregunta 23."},
+    {s:"El secreto profesional consiste únicamente en no hablar de determinada información.", a:false, e:"También exige proteger correos, archivos, contraseñas, bases de datos, expedientes, fotografías, conversaciones, la nube y los dispositivos."},
+    {s:"Comentar información confidencial en un grupo de WhatsApp no puede ser una violación ética si la información no se publicó en redes sociales.", a:false, e:"<b>Puede</b> existir una violación ética aunque la información no haya sido publicada en redes sociales."}
+  ];
+
+  // ---------- PARTE II: Selección múltiple (la primera opción es la correcta) ----------
+  var MC = [
+    {q:"La disciplina filosófica que estudia la conducta humana desde la perspectiva del bien, el deber, los valores y los principios es:", o:["La ética","El derecho","La moral","La vocación"], e:"Es la definición de <b>ética</b> (pregunta 1)."},
+    {q:"El conjunto de principios, valores, deberes y criterios de conducta que orientan el comportamiento de una persona en el ejercicio de una profesión es:", o:["La ética profesional","La moral","La capacidad profesional","El derecho"], e:"Es la definición de <b>ética profesional</b> (pregunta 2)."},
+    {q:"\"Conjunto de normas jurídicas obligatorias establecidas por la autoridad competente\" define a:", o:["El derecho","La moral","La ética","La ética profesional"], e:"Es la definición de <b>derecho</b>."},
+    {q:"\"Conjunto de valores y normas que orientan la conducta de una persona o comunidad\" define a:", o:["La moral","El derecho","La ética profesional","La vocación"], e:"Es la definición de <b>moral</b>."},
+    {q:"La aplicación de principios éticos al ejercicio de una profesión corresponde a:", o:["La ética profesional","La moral","El derecho","La dimensión social"], e:"Así se define la ética profesional en la comparación de la pregunta 3."},
+    {q:"¿Por qué la ética profesional no se limita al cumplimiento de la ley?", o:["Porque busca determinar cuál es la manera correcta de actuar","Porque la ley no se aplica a los profesionales","Porque la ética solo trata de lo prohibido","Porque la ley y la ética son lo mismo"], e:"La ética va más allá de lo permitido o prohibido: busca la <b>manera correcta de actuar</b>."},
+    {q:"¿Cuál de los siguientes NO es un elemento de la vocación profesional?", o:["Prestigio","Aptitudes","Compromiso","Disposición de servicio"], e:"Los elementos son intereses, aptitudes, valores, motivaciones, compromiso y disposición de servicio. El prestigio es una razón que <b>no</b> garantiza vocación."},
+    {q:"La vocación profesional se manifiesta en la disposición para:", o:["Aprender, servir, mejorar y asumir responsabilidades","Ganar más, competir y ascender","Obtener prestigio y reconocimiento","Cumplir solo lo que exige la ley"], e:"Es lo que distingue la vocación de un simple gusto."},
+    {q:"¿Cuáles son las dos dimensiones de la profesión?", o:["Personal y social","Legal y moral","Económica y laboral","Individual y jurídica"], e:"La profesión tiene una dimensión <b>personal</b> y una dimensión <b>social</b>."},
+    {q:"¿Cuál de los siguientes pertenece a la dimensión personal de la profesión?", o:["Construir un proyecto de vida","Satisfacer necesidades sociales","Contribuir al desarrollo","Proteger bienes jurídicamente relevantes"], e:"La dimensión personal: desarrollar capacidades, realización personal, remuneración y proyecto de vida."},
+    {q:"¿Cuál de los siguientes pertenece a la dimensión social de la profesión?", o:["Resolver problemas","Alcanzar la realización personal","Obtener una remuneración","Desarrollar sus capacidades"], e:"La dimensión social: satisfacer necesidades sociales, prestar servicios especializados, contribuir al desarrollo, resolver problemas y proteger bienes e intereses."},
+    {q:"El principio fundamental relacionado con la finalidad de la profesión es:", o:["Conciliar el beneficio personal con la responsabilidad social","Maximizar el beneficio personal","Priorizar siempre la ley sobre la ética","Cobrar honorarios proporcionales"], e:"Es la respuesta a la pregunta 12."},
+    {q:"El conjunto de conocimientos, habilidades, competencias, experiencia y cualidades necesarias para desempeñar correctamente una profesión es:", o:["La capacidad profesional","La vocación profesional","La ética profesional","La dimensión personal"], e:"Es la definición de <b>capacidad profesional</b> (pregunta 13)."},
+    {q:"¿Cuál de los siguientes NO figura entre los elementos de la capacidad profesional?", o:["Prestigio","Actualización","Integridad","Experiencia"], e:"Los 6 elementos: conocimientos, habilidades, experiencia, actualización, responsabilidad e integridad."},
+    {q:"Aceptar una responsabilidad sin la capacidad necesaria puede ser una falta ética porque:", o:["Puede impedir que el servicio se preste competentemente","Siempre está prohibido por la ley","Reduce los honorarios del profesional","Afecta solo la dimensión personal"], e:"El problema es asumir la responsabilidad sin adoptar las medidas necesarias para actuar competentemente."},
+    {q:"Sobre la relación entre derechos y deberes profesionales, es correcto afirmar que:", o:["El ejercicio profesional genera ambos simultáneamente","Primero se cumplen los derechos y luego los deberes","Los deberes solo existen si hay contrato","Los derechos dependen únicamente de la ley"], e:"El profesional no debe limitarse a reclamar sus derechos: también debe cumplir sus responsabilidades."},
+    {q:"¿Cuál de los siguientes es un DERECHO profesional?", o:["Trabajar en condiciones adecuadas","Mantener la confidencialidad","Actuar con diligencia","Evitar conflictos de intereses"], e:"Las otras tres opciones son <b>deberes</b>."},
+    {q:"¿Cuál de los siguientes es un DEBER profesional?", o:["Asumir responsabilidad por los propios actos","Recibir una remuneración justa","Obtener reconocimiento por el trabajo realizado","Ejercer la profesión con independencia"], e:"Las otras tres opciones son <b>derechos</b>."},
+    {q:"El derecho a recibir honorarios justos se relaciona con el deber de:", o:["Prestar un servicio competente y diligente","Cobrar lo mismo que los demás profesionales","Publicar las tarifas en redes sociales","Trabajar sin contrato"], e:"Es la relación de la pregunta 19."},
+    {q:"Los honorarios profesionales son:", o:["La remuneración por los servicios especializados que presta un profesional","Un impuesto que paga el profesional","El reconocimiento social de una profesión","Un deber profesional"], e:"Es la definición de la pregunta 20."},
+    {q:"¿Cuál de las siguientes NO es una característica que deben procurar tener los honorarios?", o:["Confidenciales","Claros","Proporcionales al servicio","Acordes con las normas aplicables"], e:"Deben ser claros, transparentes, proporcionales, previamente informados cuando corresponda y acordes con las normas. Ocultarlos sería lo contrario a la transparencia."},
+    {q:"¿Cuál de las siguientes es una conducta éticamente cuestionable relacionada con los honorarios?", o:["Aprovecharse de la necesidad del cliente","Informar previamente los honorarios","Cobrar en proporción al servicio","Ajustarse a las normas aplicables"], e:"Las otras opciones son características que los honorarios <b>deben</b> tener."},
+    {q:"El deber de preservar la confidencialidad de la información conocida por razón del ejercicio profesional es:", o:["El secreto profesional","La capacidad profesional","La vocación profesional","El derecho a la independencia"], e:"Es la definición de la pregunta 23."},
+    {q:"¿Cuál es la fórmula de los elementos del secreto profesional?", o:["Información + relación profesional + confianza + deber de confidencialidad","Ley + contrato + honorarios + firma","Vocación + capacidad + experiencia + integridad","Moral + ética + derecho + profesión"], e:"Así aparece en la pregunta 24."},
+    {q:"¿Cuál de los siguientes NO es algo que implica el secreto profesional?", o:["Publicar la información si el cliente no paga","Proteger documentos","Controlar el acceso a la información","Evitar conversaciones indiscretas"], e:"El secreto implica no divulgar indebidamente, proteger documentos, controlar el acceso, evitar conversaciones indiscretas y usar la información solo para la finalidad profesional."},
+    {q:"En la era digital, el secreto profesional exige proteger:", o:["Correos, archivos, contraseñas, bases de datos, la nube y los dispositivos","Solo los documentos en papel","Solo lo que se publica en redes sociales","Únicamente las conversaciones orales"], e:"No basta con no hablar: también hay que proteger los medios digitales."}
+  ];
+
+  // ---------- PARTE III: Pareo (se elige un set; 8 pares + 2 distractores) ----------
+  var PAREO = [
+    {title:"Conceptos fundamentales",
+     pairs:[
+      ["Ética","Disciplina filosófica que estudia la conducta humana desde el bien, el deber, los valores y los principios"],
+      ["Ética profesional","Principios, valores, deberes y criterios de conducta en el ejercicio de una profesión"],
+      ["Moral","Valores y normas que orientan la conducta de una persona o comunidad"],
+      ["Derecho","Normas jurídicas obligatorias establecidas por la autoridad competente"],
+      ["Vocación profesional","Inclinación, interés o disposición para escoger y desarrollar una profesión"],
+      ["Capacidad profesional","Conocimientos, habilidades, competencias, experiencia y cualidades para desempeñar una profesión"],
+      ["Honorarios profesionales","Remuneración por los servicios especializados que se prestan"],
+      ["Secreto profesional","Deber de preservar la confidencialidad de la información conocida por el ejercicio profesional"]],
+     extra:["Conjunto de bienes jurídicamente relevantes","Reconocimiento obtenido por el trabajo realizado"]},
+    {title:"Vocación, dimensiones y capacidad",
+     pairs:[
+      ["Elementos de la vocación","Intereses, aptitudes, valores, motivaciones, compromiso y disposición de servicio"],
+      ["Simple gusto","Escoger carrera por ingresos, prestigio o posibilidades laborales"],
+      ["Manifestación de la vocación","Disposición para aprender, servir, mejorar y asumir responsabilidades"],
+      ["Dimensión personal","Desarrollar capacidades, realización personal, remuneración y proyecto de vida"],
+      ["Dimensión social","Satisfacer necesidades sociales, resolver problemas y proteger bienes e intereses"],
+      ["Principio fundamental","Conciliar el beneficio personal con la responsabilidad social"],
+      ["Elementos de la capacidad","Conocimientos, habilidades, experiencia, actualización, responsabilidad e integridad"],
+      ["Falta ética por incapacidad","Asumir una responsabilidad sin adoptar las medidas para actuar competentemente"]],
+     extra:["Cobrar por servicios no realizados","Normas jurídicas obligatorias"]},
+    {title:"Derechos, deberes y honorarios",
+     pairs:[
+      ["Derecho profesional","Ejercer la profesión con independencia"],
+      ["Deber profesional","Evitar conflictos de intereses"],
+      ["Derechos y deberes","Se generan simultáneamente en el ejercicio profesional"],
+      ["Honorarios justos","Se relacionan con el deber de prestar un servicio competente y diligente"],
+      ["Características de los honorarios","Claros, transparentes, proporcionales, previamente informados y acordes con las normas"],
+      ["Conducta cuestionable","Ocultar costos o establecer condiciones engañosas"],
+      ["Trato digno","Se debe a clientes, usuarios, compañeros y terceros"],
+      ["Cobro desproporcionado","Cuestionable cuando las normas profesionales lo impiden"]],
+     extra:["Disciplina filosófica sobre el bien y el deber","Inclinación para escoger una profesión"]},
+    {title:"Secreto profesional",
+     pairs:[
+      ["Secreto profesional","Deber de preservar la confidencialidad de la información profesional"],
+      ["Relación de confianza","Lo que el secreto profesional sostiene entre profesional y cliente"],
+      ["Elementos del secreto","Información + relación profesional + confianza + deber de confidencialidad"],
+      ["No divulgar","No revelar la información indebidamente"],
+      ["Controlar el acceso","Decidir quién puede consultar la información"],
+      ["Finalidad profesional","Único uso permitido de la información recibida"],
+      ["Era digital","Proteger correos, archivos, contraseñas, nube y dispositivos"],
+      ["Grupo de WhatsApp","Puede ser violación ética aunque no se publique en redes sociales"]],
+     extra:["Recibir una remuneración justa","Conciliar beneficio personal y responsabilidad social"]}
+  ];
+
+  // ---------- PARTE IV: Ordenamiento (items en orden correcto) ----------
+  var ORD = [
+    {q:"Ordena los elementos de la capacidad profesional tal como los enumera el cuestionario (1 a 6).", items:["Conocimientos","Habilidades","Experiencia","Actualización","Responsabilidad","Integridad"]},
+    {q:"Ordena los elementos de la fórmula del secreto profesional.", items:["Información","Relación profesional","Confianza","Deber de confidencialidad"]},
+    {q:"Ordena los conceptos tal como los compara la pregunta 3 del cuestionario.", items:["Moral","Ética","Derecho","Ética profesional"]},
+    {q:"Ordena los temas según aparecen en el cuestionario del parcial.", items:["Ética y ética profesional","Vocación profesional","Dimensiones de la profesión","Capacidad profesional","Derechos y deberes","Honorarios","Secreto profesional"]}
+  ];
+
+  // ---------- PARTE V: Desarrollo (rúbrica suma 10) ----------
+  var DES = [
+    {q:"Explica la diferencia entre moral, ética, derecho y ética profesional.",
+     model:"<b>Moral:</b> conjunto de valores y normas que orientan la conducta de una persona o comunidad. <b>Ética:</b> reflexión crítica sobre lo correcto, lo bueno y lo debido. <b>Derecho:</b> conjunto de normas jurídicas obligatorias establecidas por la autoridad competente. <b>Ética profesional:</b> aplicación de principios éticos al ejercicio de una profesión.",
+     rubric:[["Define correctamente la moral",2.5],["Define correctamente la ética",2.5],["Define correctamente el derecho (obligatorio, autoridad competente)",2.5],["Define la ética profesional como aplicación al ejercicio de una profesión",2.5]]},
+    {q:"¿La ética profesional se limita al cumplimiento de la ley? Justifica tu respuesta.",
+     model:"<b>No.</b> La ética no se limita a determinar qué está permitido o prohibido por la ley, sino que busca determinar cuál es la manera correcta de actuar. Por ello, no todo lo que es legal necesariamente constituye la conducta profesional más ética.",
+     rubric:[["Responde que no",2],["Explica que la ética busca la manera correcta de actuar",4],["Indica que no todo lo legal es necesariamente lo más ético",4]]},
+    {q:"Define la vocación profesional, menciona sus elementos y explica por qué no debe confundirse con un simple gusto.",
+     model:"La <b>vocación profesional</b> es la inclinación, interés o disposición que lleva a una persona a escoger y desarrollar determinada profesión. <b>Elementos:</b> intereses, aptitudes, valores, motivaciones, compromiso y disposición de servicio. <b>No es un simple gusto</b> porque una persona puede escoger una carrera por sus ingresos, prestigio o posibilidades laborales sin que exista una verdadera vocación; la vocación se manifiesta en la disposición para aprender, servir, mejorar y asumir responsabilidades.",
+     rubric:[["Define la vocación profesional",3],["Menciona al menos 4 de sus elementos",3],["Explica que ingresos, prestigio o posibilidades laborales no implican vocación",2],["Indica que se manifiesta en aprender, servir, mejorar y asumir responsabilidades",2]]},
+    {q:"Explica las dos dimensiones de la profesión y el principio fundamental relacionado con su finalidad.",
+     model:"<b>Dimensión personal:</b> permite al individuo desarrollar sus capacidades, alcanzar realización personal, obtener una remuneración y construir un proyecto de vida. <b>Dimensión social:</b> permite satisfacer necesidades sociales, prestar servicios especializados, contribuir al desarrollo, resolver problemas y proteger bienes e intereses jurídicamente relevantes. <b>Principio fundamental:</b> la profesión debe conciliar el beneficio personal con la responsabilidad social.",
+     rubric:[["Nombra las dos dimensiones (personal y social)",2],["Explica la dimensión personal",3],["Explica la dimensión social",3],["Enuncia el principio de conciliar beneficio personal y responsabilidad social",2]]},
+    {q:"Define la capacidad profesional, menciona sus elementos y explica por qué puede ser una falta ética aceptar una responsabilidad sin la capacidad necesaria.",
+     model:"La <b>capacidad profesional</b> es el conjunto de conocimientos, habilidades, competencias, experiencia y cualidades necesarias para desempeñar correctamente una profesión. <b>Elementos:</b> conocimientos, habilidades, experiencia, actualización, responsabilidad e integridad. Es <b>falta ética</b> porque asumir una responsabilidad sin la capacidad necesaria puede impedir que el servicio se preste competentemente; el problema no es simplemente no saber, sino asumir la responsabilidad sin adoptar las medidas necesarias para actuar competentemente.",
+     rubric:[["Define la capacidad profesional",3],["Menciona al menos 4 de los 6 elementos",3],["Explica que puede impedir un servicio competente",2],["Aclara que el problema es no adoptar las medidas necesarias, no solo no saber",2]]},
+    {q:"Explica la relación entre derechos y deberes profesionales y menciona tres derechos y tres deberes.",
+     model:"El ejercicio profesional genera <b>simultáneamente</b> derechos y deberes; el profesional no debe limitarse a reclamar sus derechos, sino cumplir también con las responsabilidades propias de su profesión. <b>Derechos:</b> ejercer conforme a la ley, remuneración justa, reconocimiento, desarrollar y actualizar conocimientos, condiciones adecuadas, independencia, respeto y consideración. <b>Deberes:</b> competencia, diligencia, honestidad, dignidad humana, confidencialidad, evitar conflictos de intereses, actualizar conocimientos, respetar normas, asumir responsabilidad, trato digno.",
+     rubric:[["Explica que se generan simultáneamente",2],["Indica que no basta con reclamar derechos",2],["Menciona tres derechos correctos",3],["Menciona tres deberes correctos",3]]},
+    {q:"Explica qué son los honorarios profesionales, su relación con el servicio, las características que deben procurar y dos conductas cuestionables.",
+     model:"Los <b>honorarios</b> son la remuneración que recibe un profesional por los servicios especializados que presta. El derecho a honorarios justos se relaciona con el <b>deber de prestar un servicio competente y diligente</b>. Deben procurar ser <b>claros, transparentes, proporcionales al servicio, previamente informados cuando corresponda y acordes con las normas</b>. Conductas cuestionables: cobrar por servicios no realizados, ocultar costos, aprovecharse de la necesidad del cliente, establecer condiciones engañosas, cobrar cantidades manifiestamente desproporcionadas cuando las normas lo impiden.",
+     rubric:[["Define los honorarios",2],["Relaciona el derecho a honorarios con el servicio competente y diligente",2],["Menciona al menos 3 características",3],["Menciona dos conductas cuestionables",3]]},
+    {q:"Explica el secreto profesional: qué es, sus elementos, qué implica y cómo se aplica en la era digital.",
+     model:"El <b>secreto profesional</b> es el deber de preservar la confidencialidad de la información conocida por razón del ejercicio profesional; es fundamental en la relación de confianza. <b>Elementos:</b> información + relación profesional + confianza + deber de confidencialidad. <b>Implica:</b> no divulgar indebidamente, proteger documentos, controlar el acceso, evitar conversaciones indiscretas y usar la información solo para la finalidad profesional. <b>Era digital:</b> proteger correos, archivos, contraseñas, bases de datos, expedientes electrónicos, fotografías, conversaciones, la nube y los dispositivos; comentar información confidencial en un grupo de WhatsApp puede ser una violación ética aunque no se publique en redes.",
+     rubric:[["Define el secreto profesional y lo vincula con la confianza",2],["Menciona los 4 elementos",2],["Menciona al menos 3 implicaciones",3],["Explica su aplicación en la era digital",3]]}
+  ];
+
+  /* ============================================================
+     UTILIDADES
+     ============================================================ */
+  var STORE = "et_parcial_sim_v1";
+  var HIST = "et_parcial_hist_v1";
+  var LET = "ABCDEFGHIJ";
+  var $ = function(id){ return document.getElementById(id); };
+
+  function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function range(n){ var r=[]; for(var i=0;i<n;i++) r.push(i); return r; }
+  function pick(n, k){ return shuffle(range(n)).slice(0,k); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function fmt(sec){ sec=Math.max(0,Math.round(sec)); var m=Math.floor(sec/60), s=sec%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+  function r1(x){ return Math.round(x*10)/10; }
+  function load(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+  function show(id){
+    ["start","exam","selfgrade","results"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); });
+    window.scrollTo({top:0, left:0, behavior:"instant"});
+  }
+
+  /* ============================================================
+     ESTADO
+     ============================================================ */
+  var st = null;      // estado del intento
+  var tick = null;
+
+  function newAttempt(){
+    var pset = Math.floor(Math.random()*PAREO.length);
+    var P = PAREO[pset];
+    var nDefs = P.pairs.length + P.extra.length;
+    st = {
+      phase:"exam",
+      name:$("fName").value.trim(),
+      cid:$("fId").value.trim(),
+      minutes:parseInt($("fTime").value,10),
+      startAt:Date.now(),
+      endAt:0,
+      vf:pick(VF.length,10),
+      mc:pick(MC.length,15).map(function(i){ return {i:i, o:shuffle(range(MC[i].o.length))}; }),
+      pareo:{set:pset, terms:shuffle(range(P.pairs.length)), defs:shuffle(range(nDefs))},
+      ord:pick(ORD.length,2).map(function(i){ return {i:i, o:shuffle(range(ORD[i].items.length))}; }),
+      des:pick(DES.length,2),
+      ans:{vf:{}, mc:{}, pareo:{}, ord:{}, des:{}},
+      self:{},
+      submittedAt:0
+    };
+    if(st.minutes>0) st.endAt = st.startAt + st.minutes*60000;
+    save(STORE, st);
+  }
+
+  /* ============================================================
+     RENDER DEL EXAMEN
+     ============================================================ */
+  function renderExam(){
+    var h = "", n = 0;
+    var A = st.ans;
+
+    // Encabezado del alumno
+    h += '<div class="paper" style="margin-top:16px;"><div class="inst"><div class="c" style="margin-top:0">Examen Parcial · Ética Profesional</div>'+
+         '<div class="p">'+(st.name?esc(st.name):"Estudiante")+(st.cid?" · "+esc(st.cid):"")+' · '+(st.minutes?st.minutes+" min":"sin límite")+' · 100 pts</div></div></div>';
+
+    // PARTE I
+    h += part("I. Verdadero o falso","20 pts","Selecciona V si el enunciado es verdadero o F si es falso. Valor: 2 puntos c/u.");
+    st.vf.forEach(function(i,k){
+      n++;
+      var v = A.vf[k];
+      h += '<div class="q" id="q-vf-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+VF[i].s+'</div></div>'+
+           '<div class="opts vf">'+
+           '<button class="opt'+(v===true?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="1">Verdadero</button>'+
+           '<button class="opt'+(v===false?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="0">Falso</button>'+
+           '</div></div>';
+    });
+
+    // PARTE II
+    h += part("II. Selección múltiple","30 pts","Selecciona la única respuesta correcta. Valor: 2 puntos c/u.");
+    st.mc.forEach(function(m,k){
+      n++;
+      var Q = MC[m.i], v = A.mc[k];
+      h += '<div class="q" id="q-mc-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div class="opts">';
+      m.o.forEach(function(oi,pos){
+        h += '<button class="opt'+(v===oi?" sel":"")+'" data-t="mc" data-k="'+k+'" data-v="'+oi+'"><span class="l">'+LET[pos].toLowerCase()+'</span><span>'+Q.o[oi]+'</span></button>';
+      });
+      h += '</div></div>';
+    });
+
+    // PARTE III
+    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
+    h += part("III. Pareo · "+P.title,"20 pts","Escribe la letra de la definición que corresponde a cada concepto. Sobran 2 definiciones. Valor: 2.5 puntos c/u.");
+    h += '<div class="q" id="q-pareo"><ul class="defs">';
+    st.pareo.defs.forEach(function(di,pos){ h += '<li><b>'+LET[pos]+'</b><span>'+allDefs[di]+'</span></li>'; });
+    h += '</ul>';
+    st.pareo.terms.forEach(function(ti,k){
+      n++;
+      var v = A.pareo[k];
+      h += '<div class="match-row" id="q-pa-'+k+'"><span class="q-num">'+n+'</span><span class="term">'+P.pairs[ti][0]+'</span>'+
+           '<select data-t="pareo" data-k="'+k+'" class="'+(v!=null?"filled":"")+'"><option value="">—</option>';
+      st.pareo.defs.forEach(function(di,pos){ h += '<option value="'+di+'"'+(v===di?" selected":"")+'>'+LET[pos]+'</option>'; });
+      h += '</select></div>';
+    });
+    h += '</div>';
+
+    // PARTE IV
+    h += part("IV. Ordenamiento","10 pts","Asigna a cada elemento su posición correcta (1 = primero). Valor: 5 puntos c/u, proporcional a las posiciones correctas.");
+    st.ord.forEach(function(o,k){
+      n++;
+      var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {};
+      h += '<div class="q" id="q-ord-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div style="margin-top:8px;">';
+      o.o.forEach(function(ii){
+        h += '<div class="ord-row"><span class="item">'+Q.items[ii]+'</span><select data-t="ord" data-k="'+k+'" data-i="'+ii+'" class="'+(v[ii]!=null?"filled":"")+'"><option value="">#</option>';
+        for(var p=1;p<=N;p++) h += '<option value="'+p+'"'+(v[ii]===p?" selected":"")+'>'+p+'</option>';
+        h += '</select></div>';
+      });
+      h += '</div></div>';
+    });
+
+    // PARTE V
+    h += part("V. Desarrollo","20 pts","Responde con tus propias palabras. Se autoevalúa con rúbrica al entregar. Valor: 10 puntos c/u.");
+    st.des.forEach(function(di,k){
+      n++;
+      var v = A.des[k] || "";
+      h += '<div class="q" id="q-des-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+DES[di].q+'</div></div>'+
+           '<textarea data-t="des" data-k="'+k+'" placeholder="Escribe tu respuesta aquí…">'+esc(v)+'</textarea>'+
+           '<div class="wc" id="wc-'+k+'">'+words(v)+' palabras</div></div>';
+    });
+
+    h += '<div class="submit-zone"><button class="btn primary block" id="btnSubmitBottom">📤 Entregar examen</button></div>';
+    $("examBody").innerHTML = h;
+    $("btnSubmitBottom").addEventListener("click", askSubmit);
+    updateProgress();
+  }
+
+  function part(t, pts, desc){
+    return '<div class="part"><div class="part-head"><h2>'+t+'<span>'+pts+'</span></h2><p>'+desc+'</p></div></div>';
+  }
+  function words(s){ s=(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+
+  // Delegación de eventos en el examen
+  $("examBody").addEventListener("click", function(e){
+    var b = e.target.closest(".opt"); if(!b) return;
+    var t = b.getAttribute("data-t"), k = +b.getAttribute("data-k"), v = +b.getAttribute("data-v");
+    if(t==="vf") st.ans.vf[k] = (v===1);
+    if(t==="mc") st.ans.mc[k] = v;
+    Array.prototype.forEach.call(b.parentElement.children, function(x){ x.classList.toggle("sel", x===b); });
+    b.closest(".q").classList.remove("unanswered-flag");
+    persist(); updateProgress();
+  });
+  $("examBody").addEventListener("change", function(e){
+    var s = e.target; if(s.tagName!=="SELECT") return;
+    var t = s.getAttribute("data-t"), k = +s.getAttribute("data-k"), val = s.value===""?null:+s.value;
+    if(t==="pareo"){ if(val==null) delete st.ans.pareo[k]; else st.ans.pareo[k]=val; }
+    if(t==="ord"){
+      var i = +s.getAttribute("data-i");
+      st.ans.ord[k] = st.ans.ord[k] || {};
+      if(val==null) delete st.ans.ord[k][i]; else st.ans.ord[k][i]=val;
+    }
+    s.classList.toggle("filled", val!=null);
+    var q = s.closest(".q"); if(q) q.classList.remove("unanswered-flag");
+    persist(); updateProgress();
+  });
+  var typing;
+  $("examBody").addEventListener("input", function(e){
+    var t = e.target; if(t.tagName!=="TEXTAREA") return;
+    var k = +t.getAttribute("data-k");
+    st.ans.des[k] = t.value;
+    $("wc-"+k).textContent = words(t.value)+" palabras";
+    t.closest(".q").classList.remove("unanswered-flag");
+    clearTimeout(typing); typing = setTimeout(function(){ persist(); updateProgress(); }, 400);
+  });
+
+  function persist(){ save(STORE, st); }
+
+  /* ---------- progreso / pendientes ---------- */
+  function pending(){
+    var list = [], n = 0, A = st.ans;
+    st.vf.forEach(function(_,k){ n++; if(A.vf[k]==null) list.push({n:n,id:"q-vf-"+k}); });
+    st.mc.forEach(function(_,k){ n++; if(A.mc[k]==null) list.push({n:n,id:"q-mc-"+k}); });
+    st.pareo.terms.forEach(function(_,k){ n++; if(A.pareo[k]==null) list.push({n:n,id:"q-pa-"+k}); });
+    st.ord.forEach(function(o,k){ n++; var v=A.ord[k]||{}; if(Object.keys(v).length<ORD[o.i].items.length) list.push({n:n,id:"q-ord-"+k}); });
+    st.des.forEach(function(_,k){ n++; if(!(A.des[k]||"").trim()) list.push({n:n,id:"q-des-"+k}); });
+    return {list:list, total:n};
+  }
+  function updateProgress(){
+    var p = pending(), done = p.total - p.list.length;
+    $("tbLabel").textContent = done+" de "+p.total+" respondidas";
+    $("tbProg").style.width = (p.total?done/p.total*100:0)+"%";
+  }
+
+  /* ---------- temporizador ---------- */
+  function startTimer(){
+    clearInterval(tick);
+    var el = $("timer");
+    function upd(){
+      if(!st.endAt){ el.textContent = fmt((Date.now()-st.startAt)/1000); el.className="timer"; return; }
+      var left = (st.endAt - Date.now())/1000;
+      el.textContent = fmt(left);
+      el.className = "timer" + (left<=60?" crit":left<=600?" warn":"");
+      if(left<=0){ clearInterval(tick); submit(true); }
+    }
+    upd(); tick = setInterval(upd, 1000);
+  }
+
+  /* ---------- entrega ---------- */
+  function askSubmit(){
+    var p = pending();
+    $("mTitle").textContent = "¿Entregar examen?";
+    if(p.list.length){
+      $("mText").textContent = "Tienes "+p.list.length+" pregunta(s) sin responder. Toca un número para ir a ella.";
+      $("mChips").innerHTML = p.list.map(function(x){ return '<button class="chip" data-id="'+x.id+'">#'+x.n+'</button>'; }).join("");
+    } else {
+      $("mText").textContent = "Respondiste todas las preguntas. Una vez entregado no podrás modificar tus respuestas.";
+      $("mChips").innerHTML = "";
+    }
+    $("modal").classList.remove("hidden");
+  }
+  $("mChips").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if(!c) return;
+    $("modal").classList.add("hidden");
+    var el = $(c.getAttribute("data-id"));
+    if(el){ el.classList.add("unanswered-flag"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
+  });
+  $("mCancel").addEventListener("click", function(){ $("modal").classList.add("hidden"); });
+  $("mOk").addEventListener("click", function(){ $("modal").classList.add("hidden"); submit(false); });
+  $("btnSubmitTop").addEventListener("click", askSubmit);
+
+  function submit(auto){
+    clearInterval(tick);
+    st.phase = "selfgrade";
+    st.submittedAt = Date.now();
+    st.autoSubmitted = !!auto;
+    persist();
+    renderSelfGrade();
+    show("selfgrade");
+  }
+
+  /* ============================================================
+     AUTOEVALUACIÓN
+     ============================================================ */
+  function renderSelfGrade(){
+    var h = "";
+    if(st.autoSubmitted) h += '<div class="resume"><p>⏰ Se acabó el tiempo: el examen se entregó automáticamente.</p></div>';
+    st.des.forEach(function(di,k){
+      var D = DES[di], mine = (st.ans.des[k]||"").trim(), sel = st.self[k] || [];
+      h += '<div class="sg"><h3>Pregunta de desarrollo '+(k+1)+'</h3><div style="font-size:.88rem;color:var(--text-dim)">'+D.q+'</div>'+
+           '<div class="lbl">TU RESPUESTA</div><div class="mine">'+(mine?esc(mine):'<i>Sin respuesta.</i>')+'</div>'+
+           '<div class="lbl">RESPUESTA MODELO</div><div class="model">'+D.model+'</div>'+
+           '<div class="lbl">RÚBRICA · MARCA LO QUE SÍ INCLUISTE</div>';
+      D.rubric.forEach(function(r,ri){
+        h += '<label class="rub"><input type="checkbox" data-k="'+k+'" data-r="'+ri+'"'+(sel[ri]?" checked":"")+(mine?"":" disabled")+'><span>'+r[0]+'</span><em>+'+r[1]+'</em></label>';
+      });
+      h += '<div class="sg-total" id="sgt-'+k+'"></div></div>';
+    });
+    $("sgBody").innerHTML = h;
+    st.des.forEach(function(_,k){ updSg(k); });
+  }
+  $("sgBody").addEventListener("change", function(e){
+    var c = e.target; if(c.type!=="checkbox") return;
+    var k = +c.getAttribute("data-k"), r = +c.getAttribute("data-r");
+    st.self[k] = st.self[k] || [];
+    st.self[k][r] = c.checked;
+    updSg(k); persist();
+  });
+  function desPts(k){
+    var D = DES[st.des[k]], sel = st.self[k] || [], t = 0;
+    if(!(st.ans.des[k]||"").trim()) return 0;
+    D.rubric.forEach(function(r,ri){ if(sel[ri]) t += r[1]; });
+    return t;
+  }
+  function updSg(k){ $("sgt-"+k).textContent = desPts(k)+" / 10 pts"; }
+  $("btnFinish").addEventListener("click", function(){
+    st.phase = "results"; persist();
+    renderResults(true); show("results");
+  });
+
+  /* ============================================================
+     CALIFICACIÓN Y RESULTADOS
+     ============================================================ */
+  function grade(){
+    var A = st.ans, rv = [], n = 0;
+    var parts = {I:0, II:0, III:0, IV:0, V:0};
+
+    st.vf.forEach(function(i,k){
+      n++; var Q = VF[i], v = A.vf[k], ok = v===Q.a, pts = ok?2:0; parts.I += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.s,
+        lines:["Tu respuesta: <b>"+(v==null?"—":v?"Verdadero":"Falso")+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(Q.a?"Verdadero":"Falso")+"</b>"], exp:Q.e});
+    });
+    st.mc.forEach(function(m,k){
+      n++; var Q = MC[m.i], v = A.mc[k], ok = v===0, pts = ok?2:0; parts.II += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.q,
+        lines:["Tu respuesta: <b>"+(v==null?"—":Q.o[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+Q.o[0]+"</b>"], exp:Q.e});
+    });
+    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
+    st.pareo.terms.forEach(function(ti,k){
+      n++; var v = A.pareo[k], ok = v===ti, pts = ok?2.5:0; parts.III += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2.5, q:"Pareo: <b>"+P.pairs[ti][0]+"</b>",
+        lines:["Tu respuesta: <b>"+(v==null?"—":allDefs[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+P.pairs[ti][1]+"</b>"], exp:""});
+    });
+    st.ord.forEach(function(o,k){
+      n++; var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {}, good = 0;
+      Q.items.forEach(function(_,ii){ if(v[ii]===ii+1) good++; });
+      var pts = r1(5*good/N); parts.IV += pts;
+      var mineOrder = Q.items.map(function(it,ii){ return {it:it, p:v[ii]}; }).filter(function(x){ return x.p!=null; }).sort(function(a,b){ return a.p-b.p; }).map(function(x){ return x.p+". "+x.it; });
+      rv.push({n:n, cls:good===N?"ok":good===0?"bad":"part", pts:pts, max:5, q:Q.q,
+        lines:["Posiciones correctas: <b>"+good+" de "+N+"</b>", "Tu orden: "+(mineOrder.length?mineOrder.join(" · "):"—")],
+        exp:"Orden correcto: "+Q.items.map(function(it,ii){ return "<b>"+(ii+1)+".</b> "+it; }).join(" · ")});
+    });
+    st.des.forEach(function(di,k){
+      n++; var pts = desPts(k); parts.V += pts;
+      rv.push({n:n, cls:pts>=10?"ok":pts===0?"bad":"part", pts:pts, max:10, q:DES[di].q,
+        lines:["Autoevaluación con rúbrica"], exp:DES[di].model});
+    });
+
+    Object.keys(parts).forEach(function(p){ parts[p] = r1(parts[p]); });
+    var total = r1(parts.I+parts.II+parts.III+parts.IV+parts.V);
+    return {total:total, parts:parts, rv:rv};
+  }
+
+  function letter(s){ return s>=91?"A":s>=81?"B":s>=71?"C":s>=61?"D":"F"; }
+  var MSG = {A:"¡Excelente! Dominas el material.", B:"Muy bien. Repasa los detalles que fallaste.", C:"Bien, pero hay temas por reforzar.", D:"Aprobado por poco: repasa la guía.", F:"Necesitas repasar el material antes del parcial."};
+
+  function renderResults(addHist){
+    var g = grade(), L = letter(g.total);
+    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + "RESULTADO";
+    $("rsScore").innerHTML = g.total+"<small>/100</small>";
+    $("rsGrade").className = "grade g-"+L;
+    $("rsGrade").textContent = "Nota "+L;
+    var used = ((st.submittedAt||Date.now()) - st.startAt)/1000;
+    $("rsMeta").textContent = MSG[L]+" · Tiempo utilizado: "+fmt(used)+(st.minutes?" de "+st.minutes+":00":"")+(st.autoSubmitted?" · entregado por tiempo":"");
+
+    var defs = [["I. Verdadero o falso","I",20],["II. Selección múltiple","II",30],["III. Pareo","III",20],["IV. Ordenamiento","IV",10],["V. Desarrollo","V",20]];
+    $("rsBars").innerHTML = defs.map(function(d){
+      var v = g.parts[d[1]], pct = v/d[2]*100;
+      var col = pct>=81?"var(--accent)":pct>=61?"var(--amber)":"var(--red)";
+      return '<div class="bar-row"><div class="bar-top"><span>'+d[0]+'</span><b>'+v+' / '+d[2]+'</b></div><div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div></div>';
+    }).join("");
+
+    renderReview(g.rv, "all");
+    $("rsFilters").onclick = function(e){
+      var b = e.target.closest(".fbtn"); if(!b) return;
+      Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x===b); });
+      renderReview(g.rv, b.getAttribute("data-f"));
+    };
+
+    if(addHist && !st.saved){
+      var h = load(HIST) || [];
+      h.unshift({d:Date.now(), s:g.total, g:L});
+      save(HIST, h.slice(0,8));
+      st.saved = true; persist();
+    }
+  }
+
+  function renderReview(rv, f){
+    var list = rv.filter(function(r){ return f==="all" || r.cls===f; });
+    $("rsReview").innerHTML = list.length ? list.map(function(r){
+      var c = r.cls==="ok"?"c-ok":r.cls==="bad"?"c-bad":"c-part";
+      var icon = r.cls==="ok"?"✅":r.cls==="bad"?"❌":"⚠️";
+      return '<div class="rv '+r.cls+'"><div class="rv-top"><div class="rv-q"><b>'+r.n+'.</b> '+r.q+'</div><div class="rv-pts '+c+'">'+icon+' '+r.pts+'/'+r.max+'</div></div>'+
+        r.lines.filter(Boolean).map(function(l){ return '<div class="rv-line">'+l+'</div>'; }).join("")+
+        (r.exp?'<div class="rv-exp">💡 '+r.exp+'</div>':'')+'</div>';
+    }).join("") : '<p style="font-size:.86rem;color:var(--text-faint);padding:10px 0;">No hay preguntas en este filtro.</p>';
+  }
+
+  /* ============================================================
+     PORTADA: reanudar e historial
+     ============================================================ */
+  function renderStart(){
+    var saved = load(STORE);
+    if(saved && saved.phase && saved.phase!=="results"){
+      var info;
+      if(saved.phase==="exam") info = saved.endAt ? (saved.endAt>Date.now() ? "Quedan "+fmt((saved.endAt-Date.now())/1000)+"." : "El tiempo ya terminó; se entregará al continuar.") : "Sin límite de tiempo.";
+      else info = "Falta autoevaluar la Parte V.";
+      $("resumeInfo").textContent = info;
+      $("resumeBox").classList.remove("hidden");
+    } else {
+      $("resumeBox").classList.add("hidden");
+    }
+    var h = load(HIST) || [];
+    $("histBox").style.display = h.length ? "block" : "none";
+    $("histList").innerHTML = h.map(function(x){
+      var d = new Date(x.d);
+      return '<div class="hist-item"><span>'+d.toLocaleDateString("es-PA")+' · '+d.toLocaleTimeString("es-PA",{hour:"2-digit",minute:"2-digit"})+'</span><span><b>'+x.s+'</b> · <span class="grade g-'+x.g+'" style="margin:0;padding:2px 9px;font-size:.75rem;">'+x.g+'</span></span></div>';
+    }).join("");
+  }
+
+  $("btnStart").addEventListener("click", function(){
+    newAttempt(); renderExam(); show("exam"); startTimer();
+  });
+  $("btnResume").addEventListener("click", function(){
+    st = load(STORE); if(!st) return renderStart();
+    if(st.phase==="exam"){
+      renderExam(); show("exam");
+      if(st.endAt && st.endAt<=Date.now()) submit(true); else startTimer();
+    } else if(st.phase==="selfgrade"){ renderSelfGrade(); show("selfgrade"); }
+  });
+  $("btnDiscard").addEventListener("click", function(){ del(STORE); renderStart(); });
+  $("btnRetry").addEventListener("click", function(){
+    del(STORE); st = null; renderStart(); show("start");
+  });
+
+  // Aviso antes de salir con un examen en curso
+  window.addEventListener("beforeunload", function(e){
+    if(st && st.phase==="exam"){ persist(); e.preventDefault(); e.returnValue = ""; }
+  });
+
+  renderStart();
+})();
+</script>
+</body>
+</html>
