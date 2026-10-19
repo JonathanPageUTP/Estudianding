@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Resumen Express · GPI Parcial 2</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.tgl{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.part-label{margin:26px 0 8px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+
+/* SECCIONES PLEGABLES */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:9px;scroll-margin-top:100px;overflow:hidden;}
+summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+summary::-webkit-details-marker{display:none;}
+summary .n{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:7px;min-width:28px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+summary h2{font-size:.92rem;flex:1;line-height:1.3;}
+summary .chev{color:var(--faint);font-size:.8rem;transition:transform .2s;}
+details[open] summary .chev{transform:rotate(180deg);}
+.body{padding:0 14px 13px;border-top:1px dashed var(--line-soft);}
+
+ul{margin:10px 0 0;padding:0;list-style:none;}
+li{position:relative;padding:3px 0 3px 15px;font-size:.85rem;color:var(--dim);}
+li::before{content:"▸";position:absolute;left:0;top:3px;color:var(--accent);font-size:.8rem;}
+li b{color:var(--text);}
+.tag{font-family:var(--mono);font-size:.68rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:6px;padding:1px 6px;margin-left:2px;white-space:nowrap;}
+.tag.c{color:var(--cyan);background:var(--cyan-dim);}
+.tag.a{color:var(--amber);background:var(--amber-dim);}
+h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;color:var(--cyan);margin:13px 0 0;}
+.key{margin-top:10px;font-size:.8rem;color:var(--text);background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+.key b{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78rem;}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;color:var(--accent);padding:6px 6px;border-bottom:1px solid var(--line);font-weight:800;}
+td{padding:6px 6px;border-bottom:1px solid var(--line-soft);color:var(--dim);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:600;}
+tr:last-child td{border-bottom:none;}
+
+.glo{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px;}
+.glo div{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--dim);}
+.glo div:last-child{border-bottom:none;}
+.glo b{color:var(--cyan);min-width:118px;flex-shrink:0;font-weight:700;}
+@media (min-width:620px){ .glo{grid-template-columns:1fr 1fr;column-gap:16px;} }
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:26px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Resumen <em>express</em></h1>
+    <button class="tgl" id="tgl">Plegar todo</button>
+  </div>
+  <nav class="chips">
+    <a href="#s1">Módulo</a><a href="#s2">Acta</a><a href="#s3">Alcance</a><a href="#s4">EDT</a><a href="#s5">Secuencia</a>
+    <a href="#s6">Duraciones</a><a href="#s7">Ruta crítica</a><a href="#s8">RACI</a><a href="#s9">Costos</a><a href="#s10">Riesgos</a><a href="#s11">Calidad</a><a href="#s12">Cierre</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint">Todo el <b>Módulo 2</b>, la plantilla del <b>Acta</b> y los <b>Labs 2, 3 y 4</b>, en su orden, lo más corto posible. Toca un título para plegarlo.</p>
+
+<div class="part-label">MÓDULO 2 · GESTIÓN DE PROYECTOS TRADICIONALES</div>
+
+<details open id="s1"><summary><span class="n">1</span><h2>El módulo</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Asignatura:</b> Gerencia de Proyectos Informáticos (cód. 8469) · UTP · FISC.</li>
+    <li><b>Profesor:</b> Mgtr. Henry D. De Gracia R. · <b>Grupo:</b> 1LS241 · II Semestre 2026.</li>
+    <li><b>Módulo 2:</b> semanas 4–10 (7 sep → 24 oct 2026) · ejemplo único: <b>Portal de matrícula en línea</b>.</li>
+    <li><b>5 grupos de proceso</b> <span class="tag">IPECC</span>: inicio · planificación · ejecución · control · cierre.</li>
+    <li><b>Labs individuales</b> sobre un <b>caso personal</b> (≠ proyecto del equipo): Lab 2 Acta · Lab 3 EDT · Lab 4 Gantt · Lab 5 RACI y presupuesto · Lab 6 riesgos.</li>
+  </ul>
+</div></details>
+
+<details open id="s2"><summary><span class="n">2</span><h2>Iniciación y Acta de Constitución <span class="tag">Lab 2</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Acta:</b> autoriza formalmente el proyecto y da al director autoridad para <b>asignar recursos</b>. Se hace en <b>Iniciación</b>.</li>
+    <li><b>Acta ≠ requerimientos:</b> el Acta es de alto nivel; los requerimientos son el detalle y van en Planificación.</li>
+    <li><b>Componentes:</b> propósito y objetivos · alcance y entregables · restricciones y supuestos · roles y stakeholders.</li>
+    <li><b>Plantilla (13):</b> info general · justificación · objetivos · alcance · entregables · interesados · requisitos · supuestos/restricciones · riesgos · presupuesto · hitos · criterios de éxito · aprobaciones.</li>
+    <li><b>SMART</b>: específico · medible · alcanzable · relevante · con plazo.</li>
+    <li><b>Restricción</b> = límite real <span class="tag a">TCA-RCN</span>; <b>supuesto</b> = dado por cierto sin confirmar → si falla, riesgo.</li>
+  </ul>
+  <table>
+    <tr><th>Poder · interés</th><th>Estrategia</th></tr>
+    <tr><td>Alto · alto</td><td>Gestionar de cerca</td></tr>
+    <tr><td>Alto · bajo</td><td>Mantener satisfechos</td></tr>
+    <tr><td>Bajo · alto</td><td>Mantener informados</td></tr>
+    <tr><td>Bajo · bajo</td><td>Monitorear con esfuerzo mínimo</td></tr>
+  </table>
+  <div class="key">🧪 <b>Lab 2:</b> ≥ 3 objetivos SMART · ≥ 5 interesados · ≥ 4 restricciones y 3 supuestos. Respaldo: biblioteca UTP, <b>B/. 12,000</b>, <b>4 meses</b>.</div>
+</div></details>
+
+<details open id="s3"><summary><span class="n">3</span><h2>Alcance</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Alcance del producto:</b> ¿qué debe hacer el sistema? · <b>del proyecto:</b> ¿qué trabajo hay que hacer para construirlo?</li>
+    <li>La EDT descompone el del <b>proyecto</b> → incluye Gestión, Pruebas, Capacitación.</li>
+    <li><b>Exclusiones</b> explícitas = defensa contra el <b>scope creep</b> («ya que estamos, ¿le agregas…?»).</li>
+    <li>Prevención: alcance escrito · exclusiones · control de cambios formal.</li>
+  </ul>
+</div></details>
+
+<details open id="s4"><summary><span class="n">4</span><h2>EDT / WBS <span class="tag">Lab 3</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Niveles:</b> proyecto → entregables → sub-entregables → <b>paquetes de trabajo</b> (se estiman y se asignan).</li>
+    <li><b>Reglas:</b> <span class="tag">100%</span> todo el trabajo, ni más ni menos · <span class="tag">8/80</span> horas por paquete · <b>sustantivos</b>, no verbos · <b>codificación</b> 1, 1.1, 1.1.1 · <b>exclusión mutua</b>.</li>
+    <li><b>Paquete</b> (sustantivo, EDT, costo) ≠ <b>actividad</b> (verbo, cronograma, duración); 2–5 actividades por paquete.</li>
+    <li><b>Entregable</b> = verificable, con duración (barra) · <b>hito</b> = duración cero (rombo ◆).</li>
+    <li>Tipo: <b>con hijos → entregable</b>; sin hijos → paquete.</li>
+    <li>Portal N2: Gestión · Análisis · Diseño · Desarrollo · Pruebas · Despliegue.</li>
+  </ul>
+  <div class="key">🧪 <b>Lab 3:</b> ≥ 3 niveles · ≥ 8 paquetes · ≥ 12 actividades · ≥ 3 hitos. Errores: actividades en la EDT, sin rama de gestión, hito con duración, sin código EDT, 2 niveles.</div>
+</div></details>
+
+<details open id="s5"><summary><span class="n">5</span><h2>Recursos y secuenciación <span class="tag">Lab 4</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>6 procesos:</b> definir · secuenciar · recursos · duraciones · desarrollar · controlar.</li>
+    <li><b>Recursos</b> <span class="tag">HHSC</span>: humano · hardware · software · comunicación.</li>
+    <li><b>Sobreasignación</b> → nivelación (puede alargar) o equilibrado (solo holgura).</li>
+    <li><b>Diagrama de red (PDM):</b> cajas = actividades, flechas = dependencias.</li>
+    <li><b>FC</b> (la más usada) · <b>CC</b> · <b>FF</b> · <b>CF</b> (rarísima). <b>Lag +</b> espera · <b>lead −</b> solapa (riesgo de retrabajo).</li>
+    <li><b>Obligatoria</b> vs. <b>discrecional</b> (aquí se gana tiempo) · <b>externa</b> vs. <b>interna</b>.</li>
+  </ul>
+</div></details>
+
+<details open id="s6"><summary><span class="n">6</span><h2>Estimar duraciones</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Técnicas</b> <span class="tag">APET</span>: analogía · paramétrica · juicio de expertos (planning poker) · tres valores (PERT).</li>
+    <li><b>PERT:</b> tₑ = (O + 4M + P) ÷ 6 → O 4, M 6, P 14 = <b>7 días</b>.</li>
+    <li><b>Esfuerzo</b> = horas-persona (costo) · <b>duración</b> = calendario (Gantt).</li>
+    <li><b>Parkinson:</b> el trabajo se expande hasta llenar el tiempo → no esconder colchón; reserva explícita (cadena crítica, Goldratt). Contrapeso: <b>Hofstadter</b>.</li>
+  </ul>
+</div></details>
+
+<details open id="s7"><summary><span class="n">7</span><h2>Gantt y ruta crítica <span class="tag">Lab 4</span></h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Gantt</b> (Henry Gantt, ~1910): barras en el tiempo, hitos ◆; no muestra dependencias ni carga. Aprobado → <b>línea base</b>.</li>
+    <li><b>Ruta crítica</b> = camino más largo, holgura 0, duración mínima.</li>
+    <li><b>Holgura</b> = IT tardío − IT temprano. Total (fin del proyecto) ≥ libre (siguiente actividad).</li>
+    <li>Adelante: IT = <b>mayor</b> FT previo · atrás: FT tardío = <b>menor</b> IT tardío siguiente.</li>
+  </ul>
+  <table>
+    <tr><th>Portal</th><th>Dato</th></tr>
+    <tr><td>Actividades</td><td>A5 · B6 · C4 · D10 · E5 · F2 (B y C dependen de A; D de B y C)</td></tr>
+    <tr><td>Ruta crítica</td><td>A → B → D → E → F = <b>28 días</b></td></tr>
+    <tr><td>Holgura de C</td><td>7 − 5 = <b>2 días</b> · +3 días → proyecto de 29</td></tr>
+  </table>
+  <div class="key">⏩ <b>Comprimir (solo ruta crítica):</b> crashing = recursos, cuesta <b>dinero</b> (ley de Brooks) · fast tracking = solapar, cuesta <b>riesgo</b> (solo dependencias discrecionales) · o negociar alcance.</div>
+</div></details>
+
+<details open id="s8"><summary><span class="n">8</span><h2>Matriz RACI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>R</b> ejecuta (varios) · <b>A</b> aprueba (uno solo) · <b>C</b> antes, doble vía · <b>I</b> después, una vía.</li>
+    <li><b>Reglas:</b> una A por fila · al menos una R · roles, no nombres · pocas C.</li>
+    <li>Revisar por <b>fila</b> (A, R, C) y por <b>columna</b> (muchas R = sobreasignación).</li>
+    <li><b>Variantes:</b> RASCI (Support) · RACI-VS (Verifies, Signs) · DACI (decisiones).</li>
+  </ul>
+</div></details>
+
+<details open id="s9"><summary><span class="n">9</span><h2>Costos y presupuesto</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Pasos:</b> cantidades → costos → agregar → línea base.</li>
+    <li><b>Tipos:</b> directos/indirectos · fijos/variables · CAPEX/OPEX.</li>
+    <li><b>Técnicas:</b> análoga · paramétrica · ascendente (la más precisa) · tres valores. ROM −25/+75 % → definitiva −5/+10 %.</li>
+    <li><b>Tarifa cargada</b> = salario + ≈ <b>32 %</b> → Dev B/.1,800 → <b>B/.14/h</b>.</li>
+    <li>Costo sale del <b>esfuerzo</b>: D = 2 dev × 10 d × 8 h = 160 h. La gestión del proyecto también cuesta.</li>
+    <li><b>Contingencia</b> (riesgos conocidos, dentro de la línea base, VME) vs. <b>gestión</b> (imprevistos, fuera, la autoriza el patrocinador).</li>
+  </ul>
+  <div class="key">💰 <b>Portal:</b> 7,068 + 700 = línea base <b>7,768</b> + 388 = presupuesto <b>8,156</b>. Personal = 87 %.</div>
+</div></details>
+
+<details open id="s10"><summary><span class="n">10</span><h2>Riesgos</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Riesgo</b> = incierto + efecto. ≠ problema (ya ocurrió) · supuesto = riesgo escondido · amenaza (−) · oportunidad (+).</li>
+    <li><b>7 procesos:</b> planificar · identificar · cualitativo · cuantitativo · planificar respuestas · implementar · monitorear.</li>
+    <li><b>Categorías</b> <span class="tag c">TGOE</span>: técnicos · gestión · organizacionales · externos.</li>
+    <li><b>Redacción:</b> debido a &lt;causa&gt;, <b>puede</b> ocurrir &lt;evento&gt;, lo que provocaría &lt;efecto&gt;.</li>
+    <li><b>P × I:</b> bajo 1–6 · medio 8–12 · alto 15–25. Impacto mayor si afecta varios objetivos.</li>
+    <li><b>Amenazas</b> <span class="tag a">EMTAE</span>: evitar · mitigar · transferir · aceptar · escalar. <b>Oportunidades:</b> explotar · mejorar · compartir · aceptar/escalar.</li>
+    <li>Dueño · disparador · residual vs. secundario · contingencia vs. respaldo.</li>
+  </ul>
+  <div class="key">⚠️ <b>Portal:</b> R1 saturación del servidor <b>4×5 = 20</b> (alto, mitigar) · R2 pasarela 3×4 = 12 · R7 hosting 2×2 = 4 (aceptar).</div>
+</div></details>
+
+<details open id="s11"><summary><span class="n">11</span><h2>Calidad</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Calidad</b> = grado en que las características cumplen los requisitos. ≠ <b>grado</b> (cantidad de funciones).</li>
+    <li><b>Procesos:</b> planificar · gestionar (<b>QA</b>, proceso, previene) · controlar (<b>QC</b>, producto, detecta).</li>
+    <li><b>Costo de calidad:</b> conformidad (prevención, evaluación) vs. no conformidad (fallas internas, externas). Corregir: ×1 requisitos → ×100 producción.</li>
+    <li><b>Métricas ISO/IEC 25010:</b> ≤ 2 s · ≥ 99.5 % · 0 vulnerabilidades altas · ≥ 70 % cobertura · ≥ 9 de 10.</li>
+    <li><b>Pareto</b> 80/20 (36 de 45 defectos) · <b>Ishikawa</b> causa raíz (6M).</li>
+    <li><b>Normas:</b> ISO 9001 (gestión) · ISO/IEC 25010 (software) · ISO 21500/21502 (proyectos) · Ley 81 de 2019 (datos).</li>
+  </ul>
+</div></details>
+
+<details open id="s12"><summary><span class="n">12</span><h2>Cierre, casos y herramientas</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Plan de comunicaciones</b> · <b>monitoreo y control</b> (plan vs. real) · <b>lecciones aprendidas</b> (en el cierre) · <b>histórico</b>.</li>
+    <li><b>Casos:</b> Ópera de Sídney (estimación) · Berlín BER (control) · NHS (alcance) · Empire State (éxito).</li>
+    <li><b>Simulador:</b> crashing ▲ costo · fast tracking ▲ riesgo · ante adelanto de entrega, lo mejor es un <b>MVP</b>.</li>
+    <li><b>Herramientas:</b> MS Project · ProjectLibre · GanttProject · Excel · Planificador Gantt (exportar CSV).</li>
+  </ul>
+</div></details>
+
+<footer>Gerencia de Proyectos Informáticos · Parcial 2 · resumen del Módulo 2, el Acta y los Labs 2–4 · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var all = document.querySelectorAll("details"), tgl = document.getElementById("tgl");
+  function label(){
+    var anyOpen = Array.prototype.some.call(all, function(d){ return d.open; });
+    tgl.textContent = anyOpen ? "Plegar todo" : "Abrir todo";
+  }
+  tgl.addEventListener("click", function(){
+    var open = tgl.textContent === "Abrir todo";
+    all.forEach(function(d){ d.open = open; });
+    label();
+  });
+  all.forEach(function(d){ d.addEventListener("toggle", label); });
+  // Al tocar un chip, abrir esa sección
+  document.querySelectorAll("nav.chips a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var d = document.querySelector(a.getAttribute("href"));
+      if(d){ d.open = true; label(); }
+    });
+  });
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>

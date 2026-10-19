@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Repaso GPI · Parcial 2</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+@media (max-width:560px){
+  /* ocupar exactamente la pantalla visible (descontando la barra del navegador) */
+  body{min-height:100vh;min-height:100dvh;}
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+
+  header{padding:12px 16px 6px;}
+  .brand-row h1{font-size:1.2rem;}
+  .subtitle{margin:0 0 10px;}
+  .progress-wrap{height:7px;margin-bottom:10px;}
+  .stats-row{gap:6px;margin-bottom:10px;font-size:.68rem;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .stats-row::-webkit-scrollbar{display:none;}
+  .stat-pill{padding:4px 9px;white-space:nowrap;flex-shrink:0;}
+  .tab{padding:8px 14px;font-size:.78rem;}
+
+  main{padding:8px 16px 0;min-height:0;}
+  .counter{margin-bottom:8px;}
+
+  /* la tarjeta llena todo el espacio disponible */
+  .stage{min-height:0;align-items:stretch;}
+  .card3d{height:100%;max-width:none;min-height:240px;}
+  .face{padding:50px 20px 40px;}
+  .face-tag{top:14px;left:14px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .face-status{top:12px;right:14px;}
+  .face-front .q-text{font-size:1.15rem;}
+  .face-back{justify-content:flex-start;padding-bottom:20px;}
+  .face-back .a-label{margin-top:0;}
+  .face-back .a-text{font-size:.98rem;line-height:1.5;}
+  .tap-hint{bottom:14px;}
+
+  /* botones de valoración alineados con la tarjeta */
+  .rate-row{padding:10px 0 0;gap:8px;}
+  .rate-btn{padding:12px 6px;font-size:.82rem;}
+
+  nav.controls{padding:10px 16px calc(12px + var(--safe-b));gap:8px;}
+  .nav-btn{padding:13px 6px;font-size:.88rem;}
+  .nav-btn.shuffle{flex:0 0 50px;padding:13px 0;}
+}
+@media (max-width:560px) and (max-height:700px){
+  .subtitle{display:none;}
+  .face{padding-top:44px;}
+  .face-front .q-text{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1>Repaso <em>GPI</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Parcial 2</span>
+    </div>
+    <p class="subtitle">Gerencia de Proyectos · Módulo 2 y Labs 2–4</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-filter="all">Todas · 73</div>
+      <div class="tab" data-filter="hard">Por repasar</div>
+      <div class="tab" data-filter="learned">Aprendidas</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 73</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     73 FLASHCARDS — Fuente: Mod2_ProyectosTradicionales.html, Acta_de_Constitucion.pdf,
+     Lab2_Acta_Constitucion.pdf, Lab3_EDT_Actividades.pdf, Lab4_Cronograma_Gantt.pdf, planificador-gantt_1.html
+  ======================================================== */
+  var CARDS = [
+    {cat:"Acta", q:"¿Cuáles son los 5 grupos de proceso?", a:"<b>Inicio · Planificación · Ejecución · Control · Cierre</b>.<br><br><i>Mnemotecnia:</i> \"<b>I</b>ngenieros <b>P</b>lanifican, <b>E</b>jecutan, <b>C</b>ontrolan y <b>C</b>ierran\"."},
+    {cat:"Acta", q:"¿Qué es el Acta de Constitución (Project Charter)?", a:"El documento que <b>autoriza formalmente</b> la existencia del proyecto y otorga al <b>director de proyecto</b> la autoridad para <b>asignar los recursos</b> de la organización. Se elabora en <b>Iniciación</b>."},
+    {cat:"Acta", q:"¿En qué se diferencia el Acta de los requerimientos?", a:"El Acta es de <b>alto nivel</b> (por qué existe, objetivos, patrocinador, director, estimaciones preliminares) y se hace en <b>Inicio</b>. Los requerimientos son el <b>detalle</b> (funcionales y no funcionales) y se recopilan en <b>Planificación</b>.<br><br><i>Frase:</i> el Acta autoriza y enmarca; los requerimientos detallan."},
+    {cat:"Acta", q:"¿Qué autoridad le otorga el Acta al director del proyecto?", a:"La autoridad para <b>asignar los recursos de la organización</b> al proyecto."},
+    {cat:"Acta", q:"¿Qué significa SMART?", a:"<b>S</b>pecific (específico) · <b>M</b>easurable (medible) · <b>A</b>chievable (alcanzable) · <b>R</b>elevant (relevante) · <b>T</b>ime-bound (con tiempo definido).<br><br><i>Ejemplo:</i> «Reducir en 40% el tiempo de matrícula antes del 30 de noviembre de 2026»."},
+    {cat:"Acta", q:"¿Cuál es la diferencia entre una restricción y un supuesto?", a:"<b>Restricción:</b> límite real (tiempo, costo, alcance, recursos, calidad, normativas).<br><b>Supuesto:</b> condición que se da por cierta <b>sin confirmar</b>; si falla, <b>se convierte en riesgo</b>."},
+    {cat:"Acta", q:"¿Cuáles son las 6 restricciones típicas desde el inicio?", a:"<b>Tiempo</b> (fecha tope) · <b>costo</b> (presupuesto aprobado) · <b>alcance</b> · <b>recursos</b> (personal y equipos) · <b>calidad</b> · <b>normativas</b> legales o técnicas.<br><br><i>Mnemotecnia:</i> TCA-RCN."},
+    {cat:"Acta", q:"Matriz poder/interés: ¿qué estrategia para cada cuadrante?", a:"Alto poder · alto interés → <b>gestionar de cerca</b>.<br>Alto poder · bajo interés → <b>mantener satisfechos</b>.<br>Bajo poder · alto interés → <b>mantener informados</b>.<br>Bajo poder · bajo interés → <b>monitorear</b> con esfuerzo mínimo."},
+    {cat:"Acta", q:"¿Cuáles son los 13 apartados de la plantilla del Acta?", a:"1 Información general · 2 Justificación · 3 Objetivos · 4 Descripción y alcance · 5 Entregables · 6 Interesados · 7 Requisitos de alto nivel · 8 Supuestos y restricciones · 9 Riesgos iniciales · 10 Presupuesto · 11 Cronograma/hitos · 12 Criterios de éxito · 13 Aprobaciones."},
+    {cat:"Acta", q:"Lab 2: ¿cuántos objetivos, interesados, restricciones y supuestos se piden como mínimo?", a:"Al menos <b>3 objetivos SMART</b>, <b>5 interesados</b> en la matriz poder/interés, <b>4 restricciones</b> y <b>3 supuestos</b>."},
+    {cat:"Acta", q:"¿Cuál es el caso de respaldo del Lab 2?", a:"Sistema web de <b>reserva y préstamo de libros</b> para la biblioteca de la UTP: presupuesto preliminar <b>B/. 12,000</b>, plazo <b>4 meses</b>, accesible desde el celular, con notificaciones de vencimiento."},
+
+    {cat:"Alcance y EDT", q:"¿Qué diferencia hay entre alcance del producto y alcance del proyecto?", a:"<b>Producto:</b> características y funciones (¿qué debe hacer el sistema?).<br><b>Proyecto:</b> todo el trabajo para entregarlo (¿qué hay que hacer para construirlo?).<br><br>La EDT descompone el alcance del <b>proyecto</b>."},
+    {cat:"Alcance y EDT", q:"¿Qué es el scope creep y cómo se previene?", a:"El <b>crecimiento silencioso del alcance</b>: «pequeños extras» sin ajustar tiempo ni presupuesto («ya que estamos, ¿le podrías agregar…?»). Se previene con <b>alcance escrito, exclusiones explícitas y control de cambios formal</b>."},
+    {cat:"Alcance y EDT", q:"¿Por qué es importante definir lo que NO incluye el alcance?", a:"Porque las <b>exclusiones</b> son tan importantes como las inclusiones: son la <b>defensa contra el scope creep</b>."},
+    {cat:"Alcance y EDT", q:"¿Cuáles son los niveles de la EDT?", a:"<b>N1</b> Proyecto → <b>N2</b> Entregables → <b>N3</b> Sub-entregables → <b>N4</b> Paquetes de trabajo (nivel más bajo)."},
+    {cat:"Alcance y EDT", q:"¿Qué es un paquete de trabajo?", a:"El <b>nivel más bajo</b> de la EDT: se puede <b>estimar en tiempo y costo</b> y <b>asignar a un responsable</b>. De cada paquete se derivan las actividades."},
+    {cat:"Alcance y EDT", q:"¿Qué dice la regla del 100%?", a:"La EDT incluye <b>TODO el trabajo</b> del proyecto, <b>ni más ni menos</b>. Los hijos suman exactamente el alcance del padre. Si algo no está en la EDT, no forma parte del proyecto."},
+    {cat:"Alcance y EDT", q:"¿Cómo se verifica la regla del 100%?", a:"Parándose en cualquier nodo y preguntando: <b>«si completo todos sus hijos, ¿el padre queda terminado?»</b> Si falta algo, se agrega; si sobra, no pertenece a esa rama."},
+    {cat:"Alcance y EDT", q:"¿Qué dice la regla 8/80?", a:"Un paquete de trabajo debería tomar entre <b>8 y 80 horas</b> (1 a 10 días). Menos = microgestión; más = no se puede estimar ni controlar.<br><br><i>Alterno:</i> ningún paquete más largo que un período de reporte."},
+    {cat:"Alcance y EDT", q:"¿La EDT se escribe con sustantivos o con verbos?", a:"Con <b>sustantivos</b> (resultados): «Modelo de base de datos», no «Diseñar la base de datos». Los verbos van en la <b>lista de actividades</b>."},
+    {cat:"Alcance y EDT", q:"¿Para qué sirve la codificación jerárquica (1, 1.1, 1.1.1)?", a:"Muestra a qué padre pertenece cada elemento y da <b>trazabilidad</b>: presupuesto → paquete → actividad → responsable. El número de segmentos indica el nivel (1.4.2 → nivel 3)."},
+    {cat:"Alcance y EDT", q:"¿Qué es la regla de la exclusión mutua?", a:"Un mismo trabajo <b>no debe aparecer en dos ramas</b> distintas, porque se contaría (y se pagaría) dos veces."},
+    {cat:"Alcance y EDT", q:"¿Cuál es la diferencia entre paquete de trabajo y actividad?", a:"<b>Paquete:</b> resultado (sustantivo), vive en la EDT, sirve para asignar responsable y estimar costo.<br><b>Actividad:</b> acción (verbo en infinitivo), vive en la lista y el cronograma, sirve para duración, secuencia y Gantt. De un paquete salen <b>2 a 5</b> actividades."},
+    {cat:"Alcance y EDT", q:"¿Cuál es la diferencia entre entregable e hito?", a:"<b>Entregable:</b> resultado verificable, <b>tiene duración</b> y criterio de aceptación (barra en el Gantt).<br><b>Hito:</b> punto de control que marca un logro, <b>duración cero</b> (rombo ◆)."},
+    {cat:"Alcance y EDT", q:"¿Por qué un hito no tiene duración?", a:"Porque <b>no representa trabajo</b>, sino el <b>instante</b> en que un trabajo terminó. No consume recursos ni presupuesto."},
+    {cat:"Alcance y EDT", q:"En la columna «Tipo» de la EDT, ¿cuándo un elemento es entregable y cuándo paquete de trabajo?", a:"Si <b>tiene hijos</b> → <b>entregable</b>. Si <b>no tiene hijos</b> → <b>paquete de trabajo</b>."},
+    {cat:"Alcance y EDT", q:"Lab 3: ¿cuáles son los mínimos de la EDT?", a:"<b>3 niveles</b>, <b>8 paquetes de trabajo</b>, <b>12 actividades</b> derivadas y <b>3 hitos</b>, todo codificado."},
+    {cat:"Alcance y EDT", q:"¿Cuáles son los 5 errores que más bajan la nota en el Lab 3?", a:"1 Poner <b>actividades en la EDT</b> · 2 Olvidar la <b>rama de gestión</b> · 3 Ponerle <b>duración al hito</b> · 4 Actividades <b>sin código EDT</b> válido · 5 EDT de <b>dos niveles</b>."},
+
+    {cat:"Cronograma", q:"¿Cuáles son los 6 procesos de la Gestión del Cronograma?", a:"1 Definir actividades · 2 Secuenciar · 3 Estimar recursos · 4 Estimar duraciones · 5 Desarrollar el cronograma · 6 Controlar."},
+    {cat:"Cronograma", q:"¿Cuáles son los 4 tipos de recurso que pide el Lab 4?", a:"<b>Humano</b>, <b>hardware</b>, <b>software</b> y <b>comunicación</b>.<br><br><i>Mnemotecnia:</i> \"<b>H</b>umanos con <b>H</b>ardware y <b>S</b>oftware se <b>C</b>omunican\"."},
+    {cat:"Cronograma", q:"¿Qué es la sobreasignación y cómo se corrige?", a:"Una persona asignada a más trabajo del que cabe en su jornada (el «desarrollador al 180 %»). Se corrige con <b>nivelación</b> (corre actividades; el proyecto puede alargarse) o <b>equilibrado</b> (solo usa la holgura; no mueve la fecha final)."},
+    {cat:"Cronograma", q:"¿Cuáles son los 4 tipos de dependencia lógica?", a:"<b>FC</b> Fin→Comienzo (la más usada) · <b>CC</b> Comienzo→Comienzo · <b>FF</b> Fin→Fin · <b>CF</b> Comienzo→Fin (rarísima)."},
+    {cat:"Cronograma", q:"Da un ejemplo de dependencia Comienzo→Fin (CF).", a:"<b>El sistema viejo se apaga cuando el nuevo arranca</b>: B no puede terminar hasta que A empiece."},
+    {cat:"Cronograma", q:"¿Qué son el adelanto (lead) y el retraso (lag)?", a:"<b>Lag (+):</b> espera obligatoria («capacitar 3 días después de desplegar» → FC + 3 d).<br><b>Lead (−):</b> la sucesora se solapa («probar cuando falte 20 % del desarrollo» → FC − 2 d). El lead acelera pero introduce riesgo de <b>retrabajo</b>."},
+    {cat:"Cronograma", q:"Dependencia obligatoria vs. discrecional", a:"<b>Obligatoria (dura):</b> impuesta por la naturaleza del trabajo (no se prueba un módulo que no existe).<br><b>Discrecional (blanda):</b> decisión del equipo; se puede cambiar y es donde se gana tiempo al comprimir."},
+    {cat:"Cronograma", q:"Dependencia externa vs. interna", a:"<b>Externa:</b> depende de algo fuera del proyecto; no la controlas (esperar el servidor del proveedor).<br><b>Interna:</b> entre actividades del proyecto; el equipo la controla."},
+    {cat:"Cronograma", q:"¿Cuáles son las 4 técnicas para estimar duraciones?", a:"<b>Analogía</b> (proyecto parecido) · <b>paramétrica</b> (cantidad × rendimiento) · <b>juicio de expertos</b> · <b>tres valores (PERT)</b>."},
+    {cat:"Cronograma", q:"¿Cuál es la fórmula PERT?", a:"<b>tₑ = (O + 4M + P) ÷ 6</b><br>O = optimista · M = más probable · P = pesimista."},
+    {cat:"Cronograma", q:"PERT: O = 4, M = 6, P = 14. ¿Cuál es la duración esperada?", a:"(4 + 24 + 14) ÷ 6 = 42 ÷ 6 = <b>7 días</b>. El pesimista empuja la estimación por encima de M."},
+    {cat:"Cronograma", q:"¿Qué es el planning poker y qué sesgo evita?", a:"Variante ágil del juicio de expertos: cada uno escribe su estimación <b>en secreto</b> y se revelan a la vez. Evita el <b>sesgo de anclaje</b>."},
+    {cat:"Cronograma", q:"¿Cuál es la diferencia entre duración y esfuerzo?", a:"<b>Esfuerzo:</b> horas-persona (40 h). <b>Duración:</b> tiempo de calendario (40 h entre 2 personas ≈ 3 días). En el Gantt va la <b>duración</b>; el esfuerzo se usa para el <b>costo</b>."},
+    {cat:"Cronograma", q:"¿Qué dice la ley de Parkinson?", a:"«El trabajo se <b>expande hasta llenar el tiempo disponible</b> para completarlo» (C. Northcote Parkinson, The Economist, 1955). Por eso el colchón escondido en cada actividad se consume."},
+    {cat:"Cronograma", q:"¿Qué se recomienda en lugar de poner colchón en cada actividad?", a:"Estimar con honestidad y, si hace falta, una <b>reserva de contingencia explícita y separada</b> al final, gestionada por el director: la <b>cadena crítica de Eliyahu Goldratt</b> (un solo buffer de proyecto)."},
+    {cat:"Cronograma", q:"¿Qué dice la ley de Hofstadter?", a:"«<b>Siempre toma más tiempo del que esperas</b>, incluso contando con la ley de Hofstadter». Es el contrapeso de Parkinson: en software se falla más por subestimar."},
+    {cat:"Cronograma", q:"¿Qué muestra y qué NO muestra el Diagrama de Gantt?", a:"<b>Muestra:</b> cuándo ocurre cada actividad, solapes, avance real vs. plan, hitos.<br><b>No muestra:</b> las dependencias (implícitas), por qué una actividad está ahí ni la carga de cada persona.<br>Lo inventó <b>Henry Gantt hacia 1910</b>."},
+    {cat:"Cronograma", q:"¿Qué es la línea base (baseline) del cronograma?", a:"El cronograma aprobado y <b>congelado</b>: la foto contra la que se mide el avance. Con cambios aprobados se re-planifica, pero la original se conserva."},
+    {cat:"Cronograma", q:"¿Qué es la ruta crítica?", a:"La <b>secuencia de actividades más larga</b>; determina la <b>duración mínima</b> del proyecto. Sus actividades tienen <b>holgura cero</b>: cualquier retraso retrasa todo el proyecto."},
+    {cat:"Cronograma", q:"¿Cómo se calcula la holgura total?", a:"<b>Holgura = Inicio más tardío − Inicio más temprano</b> (= Fin tardío − Fin temprano)."},
+    {cat:"Cronograma", q:"Holgura total vs. holgura libre", a:"<b>Total:</b> retraso posible sin mover la <b>fecha final del proyecto</b>.<br><b>Libre:</b> retraso posible sin afectar el <b>inicio temprano de la siguiente</b>. Siempre libre ≤ total."},
+    {cat:"Cronograma", q:"Pasada hacia adelante y hacia atrás: ¿mayor o menor?", a:"<b>Adelante:</b> IT = el <b>mayor</b> FT de las predecesoras; FT = IT + duración.<br><b>Atrás:</b> FT tardío = el <b>menor</b> IT tardío de las sucesoras; IT tardío = FT tardío − duración."},
+    {cat:"Cronograma", q:"Portal de matrícula: ¿cuál es la ruta crítica y cuánto dura?", a:"<b>A → B → D → E → F = 28 días</b> (Requisitos 5, Diseño 6, Desarrollo 10, Pruebas 5, Despliegue 2). El camino A → C → D → E → F suma 26 días."},
+    {cat:"Cronograma", q:"Portal: ¿cuánta holgura tiene C (Base de datos) y qué pasa si se retrasa 3 días?", a:"Holgura <b>2 días</b> (7 − 5). Con 2 días de retraso hay <b>dos rutas críticas</b>; con 3 días el proyecto pasa a <b>29 días</b> y la ruta crítica pasa por C."},
+    {cat:"Cronograma", q:"Crashing vs. fast tracking", a:"<b>Crashing (intensificación):</b> agregar recursos a actividades críticas → cuesta <b>dinero</b>.<br><b>Fast tracking (ejecución rápida):</b> solapar actividades en secuencia → cuesta <b>riesgo</b> de retrabajo; solo con dependencias discrecionales.<br>Ambas <b>solo sobre la ruta crítica</b>."},
+    {cat:"Cronograma", q:"¿Qué dice la ley de Brooks?", a:"«<b>Añadir gente a un proyecto de software atrasado lo atrasa todavía más</b>» (Fred Brooks, The Mythical Man-Month, 1975). Límite del crashing: rendimientos decrecientes."},
+    {cat:"Cronograma", q:"Además de crashing y fast tracking, ¿qué otra salida hay para no llegar a la fecha?", a:"<b>Negociar el alcance</b>: qué entregables pasan a la siguiente fase. La más honesta y la única que no cuesta dinero ni calidad."},
+    {cat:"Cronograma", q:"Planificador Gantt: ¿qué columnas reconoce al importar?", a:"<b>nombre, inicio, fin</b> (o <b>duracion</b> en días), <b>fase, responsable, avance, hito, depende</b>. Fechas 2026-10-05 o 05/10/2026. Las flechas rojas señalan dependencias que no se cumplen; hay que <b>descargar el CSV</b> porque el trabajo vive en el navegador."},
+
+    {cat:"RACI y costos", q:"¿Qué significan las letras R, A, C, I?", a:"<b>R</b> Responsible · Responsable (ejecuta; puede haber varios)<br><b>A</b> Accountable · Aprobador (rinde cuentas; uno solo)<br><b>C</b> Consulted · Consultado (antes, doble vía)<br><b>I</b> Informed · Informado (después, una vía)"},
+    {cat:"RACI y costos", q:"¿Cuáles son las 4 reglas de oro de la RACI?", a:"1 <b>Exactamente una A</b> por fila · 2 <b>Al menos una R</b> por fila · 3 <b>Roles, no nombres</b> · 4 <b>Pocas C, las I necesarias</b>."},
+    {cat:"RACI y costos", q:"¿Cuál es la diferencia real entre C e I?", a:"No es de importancia sino de <b>momento y dirección</b>: al consultado se le escucha <b>antes</b> y puede cambiar la decisión; al informado se le cuenta <b>después</b>."},
+    {cat:"RACI y costos", q:"RASCI, RACI-VS y DACI: ¿qué agrega cada una?", a:"<b>RASCI:</b> S = Support. <b>RACI-VS:</b> V = Verifies, S = Signs (entornos regulados). <b>DACI:</b> Driver, Approver, Contributors, Informed (para decisiones)."},
+    {cat:"RACI y costos", q:"¿Qué es la tarifa cargada y cuánto se suma aprox. en Panamá?", a:"Lo que una persona le cuesta realmente a la empresa: salario + cargas patronales y prestaciones ≈ <b>32 %</b> (CSS 12.25 · seguro educativo 1.50 · riesgos ≈1.05 · décimo 8.33 · vacaciones 9.09)."},
+    {cat:"RACI y costos", q:"Calcula la tarifa cargada de un desarrollador con salario B/.1,800.", a:"1,800 × 1.32 = <b>B/.2,376</b> al mes · ÷ 173 h ≈ <b>B/.13.7 → B/.14 por hora</b>."},
+    {cat:"RACI y costos", q:"¿Cuáles son las 4 técnicas de estimación de costos?", a:"<b>Análoga (top-down)</b> · <b>paramétrica</b> · <b>ascendente (bottom-up)</b>, la más precisa · <b>tres valores</b> (O + 4M + P) ÷ 6."},
+    {cat:"RACI y costos", q:"¿Qué rango tiene una estimación ROM y una definitiva?", a:"<b>ROM</b> (orden de magnitud, con el Acta): <b>−25 % a +75 %</b>.<br><b>Definitiva</b> (con EDT y cronograma): <b>−5 % a +10 %</b>."},
+    {cat:"RACI y costos", q:"Reserva de contingencia vs. reserva de gestión", a:"<b>Contingencia:</b> riesgos identificados («desconocidos conocidos»), <b>dentro</b> de la línea base, la usa el director.<br><b>Gestión:</b> imprevistos («desconocidos desconocidos»), <b>fuera</b> de la línea base, la autoriza el patrocinador vía control de cambios."},
+    {cat:"RACI y costos", q:"Portal: ¿cuáles son los tres pisos del presupuesto?", a:"Actividades <b>B/.7,068</b> + contingencia 700 = línea base <b>B/.7,768</b> + reserva de gestión 388 = presupuesto <b>B/.8,156</b>."},
+    {cat:"RACI y costos", q:"¿Por qué Desarrollo dura 10 días pero cuesta 160 horas?", a:"Porque son <b>2 desarrolladores × 10 días × 8 h</b>: el costo sale del <b>esfuerzo</b>, no de la duración."},
+
+    {cat:"Riesgos y calidad", q:"¿Qué es un riesgo según el PMBOK?", a:"Un evento o condición <b>incierta</b> que, si ocurre, tiene un <b>efecto positivo o negativo</b> sobre al menos un objetivo (alcance, tiempo, costo o calidad)."},
+    {cat:"Riesgos y calidad", q:"¿Cómo se redacta correctamente un riesgo?", a:"«Debido a <b>&lt;causa&gt;</b>, puede ocurrir <b>&lt;evento incierto&gt;</b>, lo que provocaría <b>&lt;efecto sobre un objetivo&gt;</b>.» Si no tiene «puede», probablemente es un problema o una causa."},
+    {cat:"Riesgos y calidad", q:"¿Cómo se clasifica el nivel de un riesgo con P × I?", a:"<b>Bajo 1–6</b> (aceptar/monitorear) · <b>Medio 8–12</b> (mitigar, con dueño y disparador) · <b>Alto 15–25</b> (respuesta inmediata, se reporta al patrocinador)."},
+    {cat:"Riesgos y calidad", q:"¿Cuáles son las estrategias para amenazas y para oportunidades?", a:"<b>Amenazas:</b> evitar, mitigar, transferir, aceptar, escalar.<br><b>Oportunidades:</b> explotar, mejorar, compartir, aceptar/escalar."},
+    {cat:"Riesgos y calidad", q:"Calidad vs. grado", a:"<b>Grado:</b> categoría o cantidad de funciones. <b>Calidad:</b> si lo que tiene funciona bien. Grado alto con calidad baja es <b>siempre un problema</b>; el cliente decide el grado, la calidad no se negocia."},
+    {cat:"Riesgos y calidad", q:"Aseguramiento (QA) vs. control de calidad (QC)", a:"<b>QA:</b> se enfoca en el <b>proceso</b> y <b>previene</b> (revisiones de código, estándares).<br><b>QC:</b> se enfoca en el <b>producto</b> y <b>detecta</b> (ejecutar casos de prueba, registrar defectos)."}
+  ];
+  var TOTAL = CARDS.length;
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- STORAGE ---------------- */
+  var STORE_KEY = "gpi_p2_flashcards_status_v1";
+  var status = {}; // id -> "easy" | "hard"
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw) status = JSON.parse(raw) || {};
+  }catch(e){ status = {}; }
+
+  function saveStatus(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "all";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+
+  function statusIcon(s){
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+
+  function computeStats(){
+    var learned=0, hard=0;
+    CARDS.forEach(function(c){
+      var s = status[c.id];
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+    });
+    var news = TOTAL - learned - hard;
+    return {learned:learned, hard:hard, news:news};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    var pct = Math.round((st.learned / TOTAL) * 100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function buildFilteredOrder(){
+    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
+    if(filter === "all"){
+      filteredOrder = base.slice();
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
+      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
+      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
+      filteredOrder = base.filter(function(i){
+        var s = status[CARDS[i].id];
+        return s === "hard";
+      });
+      if(filteredOrder.length === 0){
+        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
+      }
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){
+      renderEmpty();
+      return;
+    }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    var s = status[c.id];
+
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(s);
+    statusBack.textContent = statusIcon(s);
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+
+    btnHard.classList.toggle("on", s === "hard");
+    btnEasy.classList.toggle("on", s === "easy");
+
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    stage.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
+        '<p>' + (filter === "learned"
+            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
+            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
+        '</p>' +
+        '<button id="emptyBack">Ver todas las tarjetas</button>' +
+      '</div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn){
+      btn.addEventListener("click", function(){
+        setFilter("all");
+      });
+    }
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    if(status[c.id] === kind){
+      delete status[c.id]; // toggle off
+    } else {
+      status[c.id] = kind;
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", status[c.id] === "hard");
+    btnEasy.classList.toggle("on", status[c.id] === "easy");
+    statusFront.textContent = statusIcon(status[c.id]);
+    statusBack.textContent = statusIcon(status[c.id]);
+    refreshStats();
+
+    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
+    if(filter !== "all"){
+      setTimeout(function(){
+        buildFilteredOrder();
+        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
+        render();
+      }, 380);
+    }
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn){
+      shuffleArray(order);
+    } else {
+      order.sort(function(a,b){return a-b;});
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+  });
+
+  // swipe gestures (left/right) on stage
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // keyboard support (desktop testing)
+  document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  buildFilteredOrder();
+  render();
+
+})();
+</script>
+</body>
+</html>
