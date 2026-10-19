@@ -272,6 +272,50 @@ table.matrix td{cursor:pointer;}
 .pr-hint{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:.72rem;opacity:.55;}
 @media(max-width:640px){.pr-two{grid-template-columns:1fr;gap:1rem;}}
 </style>
+<style id="mobile-css">
+/* ===== Responsivo móvil ===== */
+section[id]{scroll-margin-top:124px;}
+.m-hint{display:none;}
+@media(max-width:640px){
+  main.container{padding-left:10px;padding-right:10px;}
+  .card.p-6{padding:1.1rem .95rem;}
+  .card-title{font-size:1.18rem;gap:.55rem;line-height:1.3;}
+  .card:hover,.concept-card:hover,.icase:hover,.dl-card:hover,.glo-card:hover{transform:none;}
+  [style*="padding:1rem 1.25rem"]{padding:.85rem .8rem !important;}
+  .concept-card,.ipanel,.icase,.dl-card{padding:.85rem .85rem;}
+  blockquote{padding:.8rem 1rem;}
+  .quick-nav{scrollbar-width:none;}
+  .quick-nav::-webkit-scrollbar{display:none;}
+  #pr-btn{right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));font-size:.78rem;padding:.5rem .85rem;}
+  .pr-bar{padding:1rem 5vw calc(1.5rem + env(safe-area-inset-bottom,0px));}
+
+  /* tablas de texto → tarjetas apiladas */
+  table.m-stack{min-width:0 !important;width:100% !important;}
+  table.m-stack thead{display:none;}
+  table.m-stack,table.m-stack tbody,table.m-stack tr,table.m-stack tr>*{display:block;width:100%;}
+  table.m-stack tr{background:#fff;border:1px solid #d1d5db;border-radius:10px;padding:.55rem .8rem;margin-bottom:.6rem;}
+  table.m-stack tr>*{border:none !important;text-align:left !important;padding:.2rem 0 !important;font-size:.84rem;background:transparent !important;color:#374151;}
+  table.m-stack tr>*:first-child{font-weight:700;color:#14532d;font-size:.9rem;border-bottom:1px dashed #d1d5db !important;padding-bottom:.4rem !important;margin-bottom:.25rem;}
+  table.m-stack tr>*[data-label]:not(:first-child)::before{content:attr(data-label);display:block;font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#16a34a;margin-bottom:1px;}
+  table.m-stack tr>*:empty{display:none;}
+  table.m-stack tr.m-total{background:#f0fdf4;border-color:#86efac;}
+  table.m-stack tr.m-head{display:none;}
+  table.m-stack tr.m-total>*:first-child{border-bottom:none !important;margin:0;padding-bottom:.2rem !important;}
+  table.m-stack tr>.m-short{display:inline-block;width:auto;min-width:24%;margin-right:.9rem;vertical-align:top;}
+
+  /* tablas-cuadrícula → scroll con primera columna fija */
+  .m-hint{display:block;font-size:.72rem;font-weight:600;color:#16a34a;margin:0 0 .35rem;}
+  table.m-scroll tr>*:first-child{position:sticky;left:0;z-index:1;background:#fff;box-shadow:2px 0 0 #d1d5db;}
+  table.m-scroll thead tr>*:first-child,table.m-scroll tr>th:first-child{background:#166534;}
+  table.m-scroll.zebra tbody tr:nth-child(even) td:first-child{background:#f9fafb;}
+  #risk-matrix td{min-width:0 !important;height:2.7rem !important;padding:3px !important;}
+  #risk-matrix th{padding:4px !important;}
+
+  /* diagramas SVG anchos → scroll a tamaño legible */
+  .m-svgscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .m-svgscroll>svg{min-width:var(--mw);}
+}
+</style>
 </head>
 <body class="text-gray-800">
 
@@ -2166,6 +2210,48 @@ table.matrix td{cursor:pointer;}
     $('rq-score').textContent='Aciertos: '+ok+' de '+Object.keys(done).length;};
   window.rqNext=function(){qi=(qi+1)%RQ.length;if(qi===0){ok=0;done={};$('rq-score').textContent='';}show();};
   if($('rq-panel'))show();
+})();
+</script>
+<script id="mobile-js">
+(function(){
+  "use strict";
+  function hint(before){
+    if(before.previousElementSibling && before.previousElementSibling.className==='m-hint') return;
+    var h=document.createElement('div'); h.className='m-hint'; h.textContent='↔ Desliza para ver toda la tabla';
+    before.parentNode.insertBefore(h,before);
+  }
+  function scrollBox(t){
+    var p=t.parentElement;
+    if(!/overflow-x/.test(p.className+' '+(p.getAttribute('style')||'')) && getComputedStyle(p).overflowX!=='auto'){
+      var w=document.createElement('div'); w.style.overflowX='auto'; p.insertBefore(w,t); w.appendChild(t); p=w;
+    }
+    return p;
+  }
+  document.querySelectorAll('table.matrix').forEach(function(t){
+    var heads=Array.prototype.map.call(t.querySelectorAll('thead tr:first-child > *, tr:first-child > th'),function(th){return th.textContent.replace(/\s+/g,' ').trim();});
+    var rows=t.querySelectorAll('tbody tr');
+    if(!rows.length) rows=Array.prototype.slice.call(t.querySelectorAll('tr'),1);
+    var cells=[],shortN=0;
+    Array.prototype.forEach.call(rows,function(r){Array.prototype.forEach.call(r.children,function(c,i){if(i>0){cells.push(c);if(c.textContent.trim().length<=3)shortN++;}});});
+    var grid = t.id==='raci-game' || t.id==='risk-matrix' || t.querySelector('[rowspan]') || (cells.length && shortN/cells.length>=0.5);
+    if(grid){ t.classList.add('m-scroll'); hint(scrollBox(t)); return; }
+    if(heads.length<3) return;
+    t.classList.add('m-stack');
+    Array.prototype.forEach.call(t.querySelectorAll('tbody tr'),function(r){
+      if(!r.querySelector('td')){ r.classList.add('m-head'); return; }
+      if(r.querySelector('[colspan]')) r.classList.add('m-total');
+      Array.prototype.forEach.call(r.children,function(c,i){
+        if(heads[i] && !c.hasAttribute('colspan')) c.setAttribute('data-label',heads[i]);
+        if(i>0 && c.textContent.trim().length<=7) c.classList.add('m-short');
+      });
+    });
+  });
+  document.querySelectorAll('main svg[viewBox]').forEach(function(s){
+    var vb=s.getAttribute('viewBox').split(/[\s,]+/), vw=+vb[2];
+    if(vw<420) return;
+    var w=document.createElement('div'); w.className='m-svgscroll'; w.style.setProperty('--mw',Math.min(vw,540)+'px');
+    s.parentNode.insertBefore(w,s); w.appendChild(s);
+  });
 })();
 </script>
 </body>
