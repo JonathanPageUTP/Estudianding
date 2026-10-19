@@ -98,6 +98,20 @@
         .theme-toggle .i-sun { display: none; }
         html[data-theme="dark"] .theme-toggle .i-sun { display: block; }
         html[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    
+        /* BOTONES DE NAVEGACIÓN (volver / inicio) */
+        .navc { position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); left: 16px; display: flex; gap: 8px; z-index: 10; }
+        .navc a {
+            width: 44px; height: 44px; border-radius: 50%; border: 1px solid currentColor;
+            color: inherit; display: flex; align-items: center; justify-content: center; text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); -webkit-tap-highlight-color: transparent;
+        }
+        .navc svg { width: 20px; height: 20px; }
+        .container { padding-top: 84px; }
+        @media (hover: hover) {
+            .navc a:hover { background-color: #000000; color: #ffffff; border-color: #000000; }
+            html[data-theme="dark"] .navc a:hover { background-color: #f2f2f2; color: #0e0e0e; border-color: #f2f2f2; }
+        }
     </style>
     <script>
         (function () {
@@ -109,6 +123,10 @@
     </script>
 </head>
 <body>
+    <nav class="navc" aria-label="Navegación">
+        <a href="../index.html" aria-label="Ir al inicio" title="Ir al inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5M10 21v-6h4v6"/></svg></a>
+    </nav>
+
 
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro / claro">
         <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
