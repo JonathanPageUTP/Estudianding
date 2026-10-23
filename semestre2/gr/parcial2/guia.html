@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Guía de Estudio · Gerencia de Recursos de TIC — Parcial 2</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --maxw:460px;
+  --radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--sans);
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+  color:var(--text);
+  line-height:1.55;
+  padding-bottom:92px;
+  min-height:100vh;
+}
+::selection{background:var(--accent-dim);color:var(--accent);}
+a{color:var(--cyan);}
+h1,h2,h3,h4{font-family:var(--sans);margin:0;}
+p{margin:0;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+img,svg{max-width:100%;}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+  z-index:100;transition:width .1s linear;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(10,20,16,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  padding-top:3px;
+}
+.header-inner{
+  max-width:var(--maxw);margin:0 auto;padding:12px 16px 10px;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:.68rem;color:var(--accent);
+  letter-spacing:.03em;
+}
+.htitle{font-size:1.18rem;font-weight:700;margin-top:2px;color:var(--text);}
+.hsub{font-size:.76rem;color:var(--text-faint);margin-top:2px;}
+
+.searchbox{
+  margin-top:10px;position:relative;
+}
+.searchbox input{
+  width:100%;padding:10px 38px 10px 14px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;color:var(--text);font-size:.92rem;
+  font-family:var(--sans);
+}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.searchbox input::placeholder{color:var(--text-faint);}
+.searchbox .sico{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--text-faint);pointer-events:none;font-size:.95rem;
+}
+#searchcount{
+  font-family:var(--mono);font-size:.68rem;color:var(--text-faint);
+  margin-top:6px;min-height:14px;
+}
+#searchcount b{color:var(--accent);}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  padding:26px 16px 18px;max-width:var(--maxw);margin:0 auto;
+  border-bottom:1px dashed var(--line);
+}
+.hero .tag{
+  display:inline-block;font-family:var(--mono);font-size:.68rem;
+  color:var(--accent);border:1px solid var(--accent-dim);
+  background:var(--accent-dim);padding:3px 9px;border-radius:20px;
+}
+.hero h1{font-size:1.55rem;line-height:1.28;margin-top:12px;color:var(--text);}
+.hero p{font-size:.87rem;color:var(--text-dim);margin-top:8px;}
+.hero .meta{
+  margin-top:14px;font-family:var(--mono);font-size:.68rem;color:var(--text-faint);
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+
+/* ============================================================
+   MAIN / SECTIONS
+   ============================================================ */
+main{max-width:var(--maxw);margin:0 auto;padding:6px 16px 0;}
+section.topic{
+  padding:26px 0;border-bottom:1px solid var(--line-soft);
+  scroll-margin-top:130px;
+}
+section.topic:last-child{border-bottom:none;}
+.topic-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.topic-num{
+  font-family:var(--mono);font-size:.72rem;color:var(--accent);
+  border:1px solid var(--accent-dim);border-radius:8px;
+  min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:var(--accent-dim);
+}
+.topic-title{font-size:1.15rem;font-weight:700;color:var(--text);}
+.topic-kicker{font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-top:2px;letter-spacing:.02em;}
+
+h3.sub{font-size:.98rem;font-weight:700;color:var(--text);margin:18px 0 10px;}
+h3.sub:first-child{margin-top:0;}
+
+p.body{font-size:.89rem;color:var(--text-dim);margin-bottom:10px;}
+p.body b, li b, td b{color:var(--text);}
+ul.plain{padding-left:0;margin:8px 0;}
+ul.plain li{
+  list-style:none;font-size:.87rem;color:var(--text-dim);
+  padding:6px 0 6px 20px;position:relative;
+}
+ul.plain li::before{
+  content:"—";position:absolute;left:0;color:var(--accent);
+}
+
+/* ============================================================
+   CALLOUT BOXES
+   ============================================================ */
+.box{
+  border-radius:var(--radius);padding:14px 15px;margin:14px 0;
+  border:1px solid;font-size:.85rem;
+}
+.box .blabel{
+  font-family:var(--mono);font-size:.66rem;font-weight:700;
+  letter-spacing:.04em;margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.box p{color:var(--text-dim);font-size:.85rem;}
+.box p+p{margin-top:6px;}
+
+.box.critico{background:var(--red-dim);border-color:#5c2a2a;}
+.box.critico .blabel{color:var(--red);}
+.box.termino{background:var(--cyan-dim);border-color:#1f4d5c;}
+.box.termino .blabel{color:var(--cyan);}
+.box.error{background:var(--amber-dim);border-color:#5c4515;}
+.box.error .blabel{color:var(--amber);}
+.box.mnemo{background:var(--violet-dim);border-color:#453262;}
+.box.mnemo .blabel{color:var(--violet);}
+.box.analogia{background:var(--accent-dim);border-color:#265c3a;}
+.box.analogia .blabel{color:var(--accent);}
+
+.mnemo-word{
+  font-family:var(--mono);font-weight:800;font-size:1.05rem;
+  color:var(--violet);letter-spacing:.04em;margin:2px 0 8px;
+}
+
+/* ============================================================
+   TABLES (scroll horizontal en móvil)
+   ============================================================ */
+.tblwrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:12px;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.78rem;}
+thead th{
+  background:var(--surface-2);color:var(--accent);text-align:left;
+  padding:9px 10px;font-family:var(--mono);font-weight:700;font-size:.7rem;
+  border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;
+}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);vertical-align:top;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+
+/* ============================================================
+   ACCORDION
+   ============================================================ */
+.acc{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:10px 0;background:var(--surface);}
+.acc-item + .acc-item{border-top:1px solid var(--line-soft);}
+.acc-btn{
+  width:100%;background:none;border:none;color:var(--text);
+  padding:13px 14px;display:flex;justify-content:space-between;align-items:center;
+  gap:10px;text-align:left;font-size:.87rem;font-weight:600;font-family:var(--sans);
+  cursor:pointer;
+}
+.acc-btn .tagpill{
+  font-family:var(--mono);font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:20px;
+  white-space:nowrap;
+}
+.tagpill.ok{background:var(--accent-dim);color:var(--accent);}
+.tagpill.bad{background:var(--red-dim);color:var(--red);}
+.acc-btn .chev{color:var(--text-faint);transition:transform .2s;flex-shrink:0;font-size:.8rem;}
+.acc-item.open .acc-btn .chev{transform:rotate(180deg);}
+.acc-panel{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+.acc-item.open .acc-panel{max-height:600px;}
+.acc-panel-inner{padding:0 14px 14px;font-size:.82rem;color:var(--text-dim);border-top:1px dashed var(--line-soft);padding-top:10px;}
+.acc-panel-inner p+p{margin-top:6px;}
+
+/* ============================================================
+   CARDS / GRIDS
+   ============================================================ */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.grid1{display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0;}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:12px 13px;
+}
+.card .cico{font-size:1.3rem;margin-bottom:4px;}
+.card .ctitle{font-weight:700;font-size:.83rem;color:var(--text);}
+.card .cdesc{font-size:.76rem;color:var(--text-dim);margin-top:3px;}
+
+.card-wide{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:10px 0;
+}
+.card-wide .ctop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;}
+.card-wide .cname{font-weight:800;color:var(--text);font-size:.98rem;}
+.card-wide .csub{font-family:var(--mono);font-size:.68rem;color:var(--accent);margin-bottom:6px;}
+.card-wide .ccost{font-size:1rem;font-weight:800;color:var(--accent);margin:4px 0;}
+.card-wide .cfield{font-size:.78rem;color:var(--text-dim);margin-top:3px;}
+.card-wide .cfield b{color:var(--text);}
+.pill{
+  font-family:var(--mono);font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:20px;
+}
+.pill.green{background:var(--accent-dim);color:var(--accent);}
+.pill.amber{background:var(--amber-dim);color:var(--amber);}
+.pill.cyan{background:var(--cyan-dim);color:var(--cyan);}
+.pill.red{background:var(--red-dim);color:var(--red);}
+
+/* ============================================================
+   TRIPLE RESTRICCIÓN TRIANGLE (SVG puro, sin dependencia)
+   ============================================================ */
+.tri-wrap{display:flex;justify-content:center;margin:14px 0;}
+
+/* ============================================================
+   STEP FLOW
+   ============================================================ */
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:14px 0;}
+.flow .step{
+  display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;
+}
+.flow .circ{
+  width:34px;height:34px;border-radius:50%;background:var(--accent-dim);
+  border:1px solid var(--accent);color:var(--accent);font-weight:800;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+}
+.flow .steplabel{font-size:.66rem;text-align:center;color:var(--text-dim);line-height:1.2;}
+.flow .arrow{color:var(--text-faint);font-size:1rem;}
+
+/* ============================================================
+   GLOSSARY GRID
+   ============================================================ */
+.glo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.glo-item{
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:10px 11px;cursor:pointer;
+}
+.glo-item .gs{font-family:var(--mono);font-weight:800;color:var(--cyan);font-size:.82rem;}
+.glo-item .gn{font-size:.68rem;color:var(--text-faint);margin-top:2px;line-height:1.25;}
+.glo-item .gm{
+  font-size:.74rem;color:var(--text-dim);margin-top:6px;
+  display:none;border-top:1px dashed var(--line-soft);padding-top:6px;
+}
+.glo-item.open .gm{display:block;}
+.glo-item .gtoggle{font-size:.62rem;color:var(--accent);margin-top:5px;font-family:var(--mono);}
+
+/* ============================================================
+   ROUTE / PATH
+   ============================================================ */
+.route{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;}
+.route-label{font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.03em;margin-bottom:8px;}
+.route-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px;}
+.rpill{font-family:var(--mono);font-size:.68rem;padding:4px 9px;border-radius:20px;background:var(--surface-2);color:var(--text-dim);white-space:nowrap;}
+.rpill.hi{background:var(--accent-dim);color:var(--accent);font-weight:700;}
+.rarrow{color:var(--text-faint);font-size:.8rem;}
+
+blockquote.q{
+  border-left:3px solid var(--accent);background:var(--surface);
+  border-radius:0 10px 10px 0;padding:12px 15px;margin:14px 0;
+  font-size:.85rem;font-style:italic;color:var(--text-dim);
+}
+
+/* ============================================================
+   MAPA MENTAL FINAL
+   ============================================================ */
+.mm-center{
+  background:linear-gradient(135deg,var(--accent-dim),var(--surface-2));
+  border:1px solid var(--accent);color:var(--accent);
+  border-radius:50%;width:120px;height:120px;margin:0 auto 16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  font-weight:800;font-size:.8rem;
+}
+.mm-branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.mm-branch{
+  border-radius:10px;padding:10px;font-size:.72rem;font-weight:700;text-align:center;
+  border:1px solid var(--line);
+}
+
+/* ============================================================
+   TOC OVERLAY
+   ============================================================ */
+#tocOverlay{
+  position:fixed;inset:0;background:rgba(6,12,9,.97);z-index:200;
+  display:none;overflow-y:auto;padding:20px 16px 100px;
+}
+#tocOverlay.open{display:block;}
+.toc-head{display:flex;justify-content:space-between;align-items:center;max-width:var(--maxw);margin:0 auto 18px;}
+.toc-head h2{font-size:1.05rem;color:var(--text);}
+#tocClose{
+  background:var(--surface);border:1px solid var(--line);color:var(--text);
+  width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;
+}
+.toc-list{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;gap:6px;}
+.toc-list a{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  padding:13px 14px;border-radius:10px;background:var(--surface);
+  border:1px solid var(--line);color:var(--text);font-size:.87rem;font-weight:600;
+}
+.toc-list a .tn{
+  font-family:var(--mono);font-size:.68rem;color:var(--accent);
+  border:1px solid var(--accent-dim);border-radius:6px;min-width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.toc-list a:active{background:var(--surface-2);}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+#bottomnav{
+  position:fixed;bottom:0;left:0;right:0;z-index:150;
+  display:flex;justify-content:center;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  pointer-events:none;
+}
+.navpill{
+  pointer-events:auto;
+  display:flex;gap:4px;background:rgba(16,31,25,.94);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:30px;padding:6px;
+  box-shadow:0 8px 24px -6px rgba(0,0,0,.5);
+}
+.navbtn{
+  background:none;border:none;color:var(--text-dim);font-family:var(--sans);
+  font-size:.72rem;font-weight:600;padding:9px 16px;border-radius:24px;
+  display:flex;align-items:center;gap:6px;cursor:pointer;
+}
+.navbtn.primary{background:var(--accent);color:#0a1410;}
+.navbtn .nico{font-size:.95rem;}
+
+/* ============================================================
+   SEARCH HIGHLIGHT / FILTER STATES
+   ============================================================ */
+mark.hit{background:var(--amber);color:#241a04;padding:0 2px;border-radius:3px;}
+.topic.hidden-by-search{display:none;}
+.acc-item.hidden-by-search{display:none;}
+.glo-item.hidden-by-search{display:none;}
+.card-wide.hidden-by-search{display:none;}
+
+footer{
+  max-width:var(--maxw);margin:0 auto;padding:30px 16px 20px;
+  border-top:1px dashed var(--line);text-align:center;
+}
+footer p{font-size:.72rem;color:var(--text-faint);}
+footer p+p{margin-top:4px;}
+
+@media (min-width:480px){
+  .glo{grid-template-columns:1fr 1fr 1fr;}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+.acc-item.open .acc-panel{max-height:1600px;}
+.tblwrap table.fit{min-width:0;}
+header{transition:box-shadow .2s;}
+.header-inner .eyebrow,.header-inner .hsub{transition:opacity .2s;}
+@media (max-width:560px){
+  /* header compacto: menos alto y aún más al hacer scroll */
+  .header-inner{padding:8px 16px 8px;}
+  .hsub{display:none;}
+  .htitle{font-size:1.05rem;}
+  .searchbox{margin-top:8px;}
+  .searchbox input{padding:9px 38px 9px 12px;font-size:16px;}
+  #searchcount{margin-top:4px;min-height:0;}
+  #searchcount:empty{display:none;}
+  header.compact .eyebrow{display:none;}
+  header.compact{box-shadow:0 6px 16px -8px rgba(0,0,0,.6);}
+  section.topic{scroll-margin-top:118px;padding:22px 0;}
+
+  .hero{padding:20px 16px 16px;}
+  .hero h1{font-size:1.32rem;}
+  .topic-title{font-size:1.06rem;line-height:1.3;}
+  .topic-kicker{line-height:1.35;}
+
+  /* flujos de pasos → línea de tiempo vertical */
+  .flow{flex-direction:column;align-items:stretch;gap:0;margin:14px 0 16px;position:relative;}
+  .flow .arrow{display:none;}
+  .flow .step{flex-direction:row;width:auto;gap:12px;align-items:center;padding:5px 0;position:relative;}
+  .flow .step:not(:last-of-type)::after{
+    content:"";position:absolute;left:14px;top:34px;bottom:-6px;width:2px;background:var(--accent-dim);
+  }
+  .flow .circ{width:30px;height:30px;font-size:.8rem;flex-shrink:0;position:relative;z-index:1;background:var(--surface-2);}
+  .flow .steplabel{font-size:.85rem;text-align:left;color:var(--text);line-height:1.3;}
+  .flow .steplabel br{display:none;}
+  .flow .steplabel span{margin-left:6px;}
+
+  /* tablas de 3+ columnas → tarjetas apiladas */
+  .tblwrap.stackwrap{overflow:visible;border:none;border-radius:0;}
+  table.stack{min-width:0;font-size:.82rem;}
+  table.stack thead{display:none;}
+  table.stack, table.stack tbody, table.stack tr, table.stack td{display:block;width:100%;}
+  table.stack tr{
+    background:var(--surface)!important;border:1px solid var(--line);border-radius:12px;
+    padding:10px 13px;margin-bottom:8px;
+  }
+  table.stack td{border:none;padding:3px 0;}
+  table.stack td:first-child{font-size:.9rem;color:var(--text);padding-bottom:5px;margin-bottom:3px;border-bottom:1px dashed var(--line-soft);}
+  table.stack td:not(:first-child)::before{
+    content:attr(data-label);display:block;font-family:var(--mono);font-size:.64rem;
+    color:var(--accent);letter-spacing:.03em;margin-bottom:1px;
+  }
+  table.stack td:empty{display:none;}
+  table.stack.codefirst td:first-child{display:inline-block;width:auto;border:none;margin:0 8px 0 0;padding:0;font-family:var(--mono);color:var(--accent);}
+  table.stack.codefirst td:nth-child(2){display:inline;width:auto;font-weight:700;color:var(--text);}
+  table.stack.codefirst td:nth-child(2)::before{display:none;}
+  table.stack.codefirst td:nth-child(3){margin-top:4px;}
+  table.stack.codefirst td:nth-child(3)::before{display:none;}
+  table.fit{font-size:.8rem;}
+  table.fit thead th{white-space:normal;}
+
+  /* tarjetas: una columna cuando el texto es largo */
+  .grid2.wide{grid-template-columns:1fr;}
+  .card .ctitle{line-height:1.3;}
+  .box{padding:12px 13px;}
+  .mnemo-word{font-size:.95rem;word-break:break-word;}
+  .mm-branches{gap:6px;}
+  .glo-item .gs{word-break:break-word;}
+  .route-row{gap:6px;}
+  footer{padding-bottom:30px;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">GR · Gerencia de Recursos de TIC · Parcial 2</div>
+    <div class="htitle">Guía de Estudio — Parcial 2</div>
+    <div class="hsub">RRHH en TIC · Roles y Responsabilidades de TI · Adquisición y Evaluación de Recursos</div>
+    <div class="searchbox">
+      <input type="text" id="searchInput" placeholder="Buscar un tema, término o sigla…" autocomplete="off">
+      <span class="sico">🔎</span>
+    </div>
+    <div id="searchcount"></div>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="tag">Lectura eficiente · Sin quizzes</span>
+  <h1>Todo el material del Parcial 2, organizado para memorizar rápido</h1>
+  <p>Esta guía reorganiza el contenido de los 3 PDF del parcial (Administración de RRHH en TIC, Roles y Responsabilidades para la Gestión de las TI, y Adquisición, Selección y Criterios de Evaluación de Recursos Informáticos) en bloques cortos, con mnemotecnias, analogías, tablas y cajas de énfasis. Usa el buscador o el menú inferior para saltar directo a un tema.</p>
+  <div class="meta">
+    <span>👩‍🏫 Ing. Lizmayrem Márquez</span>
+    <span>🏛️ FISC · UTP</span>
+    <span>📘 3 documentos</span>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- =========================================================
+     1. RRHH Y TI
+     ========================================================= -->
+<section class="topic" id="t-rrhh" data-title="RRHH y TI: introducción">
+  <div class="topic-head">
+    <span class="topic-num">01</span>
+    <div>
+      <div class="topic-title">Recursos humanos y TI</div>
+      <div class="topic-kicker">Introducción · gestión de recursos humanos</div>
+    </div>
+  </div>
+
+  <blockquote class="q">Recursos humanos y TI naturalmente no se complementaban. De hecho, la carencia de comprensión entre ambos departamentos fue y es todavía la más grande barrera para la participación entre las dos áreas.</blockquote>
+
+  <div class="grid1">
+    <div class="card"><div class="cico">🚧</div><div class="ctitle">El problema más común: mal reclutamiento</div><div class="cdesc">Sucede porque <b>RRHH no entiende al 100% el perfil</b> que busca y porque <b>TI no se involucra</b> en el proceso de selección.</div></div>
+    <div class="card"><div class="cico">💾</div><div class="ctitle">Lo que hoy se exige a RRHH</div><div class="cdesc">La necesidad de encontrar trabajadores calificados en empresas de TI ha obligado a RRHH a <b>gestionar y digitalizar el capital humano</b>.</div></div>
+  </div>
+
+  <h3 class="sub">🧑‍🤝‍🧑 Gestión de Recursos Humanos</h3>
+  <p class="body">Se ocupa de la <b>dimensión humana</b> de la compañía; todos los directivos deben comprender la importancia de sus políticas y actividades. Como toda organización está formada por personas, para lograr sus objetivos es esencial:</p>
+  <div class="flow">
+    <div class="step"><div class="circ">A</div><div class="steplabel">Adquirir sus servicios</div></div>
+    <div class="step"><div class="circ">D</div><div class="steplabel">Desarrollar sus habilidades</div></div>
+    <div class="step"><div class="circ">M</div><div class="steplabel">Motivarlas a más rendimiento</div></div>
+    <div class="step"><div class="circ">G</div><div class="steplabel">Garantizar su compromiso</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">ADMiGo</div>
+    <p>Trata al empleado como un <b>ADMiGo</b>: lo <b>A</b>dquieres, lo <b>D</b>esarrollas, lo <b>M</b>otivas y <b>G</b>arantizas que se quede comprometido.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     2. SITUACIÓN ACTUAL
+     ========================================================= -->
+<section class="topic" id="t-situacion" data-title="Situación actual del reclutamiento TI">
+  <div class="topic-head">
+    <span class="topic-num">02</span>
+    <div>
+      <div class="topic-title">Situación actual del reclutamiento TI</div>
+      <div class="topic-kicker">Por qué cubrir perfiles TI especializados es un reto</div>
+    </div>
+  </div>
+
+  <p class="body">Al cubrir perfiles TI <b>especializados o de alta competencia</b>, el reclutamiento se vuelve un reto y exige grandes esfuerzos, por estas razones:</p>
+  <div class="grid2">
+    <div class="card"><div class="ctitle">💬 Poca comunicación</div><div class="cdesc">entre las áreas para comprender el perfil</div></div>
+    <div class="card"><div class="ctitle">🧭 No sabe dónde buscar</div><div class="cdesc">el reclutador no sabe dónde buscar talento tech</div></div>
+    <div class="card"><div class="ctitle">🧩 No sabe qué analizar</div><div class="cdesc">qué habilidades evaluar del candidato</div></div>
+    <div class="card"><div class="ctitle">🔧 Sin conocimiento técnico</div><div class="cdesc">para una selección asertiva</div></div>
+    <div class="card"><div class="ctitle">🦄 Requerimientos irreales</div><div class="cdesc">los establece el propio equipo de TI</div></div>
+    <div class="card"><div class="ctitle">📉 Poco conocimiento del mercado</div><div class="cdesc">relacionado con el perfil solicitado</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">C · D · H · T · I · M</div>
+    <p>"<b>C</b>on <b>D</b>ificultad <b>H</b>allamos <b>T</b>alento <b>I</b>nformático en el <b>M</b>ercado": Comunicación · Dónde · Habilidades · Técnico · Irreales · Mercado.</p>
+  </div>
+  <div class="box critico">
+    <div class="blabel">⚠️ PUNTO CRÍTICO</div>
+    <p>Ojo: no toda la culpa es de RRHH. Una de las razones es que <b>el equipo de TI establece requerimientos poco realistas</b>.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     3. PROCESO DE RRHH
+     ========================================================= -->
+<section class="topic" id="t-proceso" data-title="Proceso de administración de RRHH">
+  <div class="topic-head">
+    <span class="topic-num">03</span>
+    <div>
+      <div class="topic-title">Proceso de administración de RRHH</div>
+      <div class="topic-kicker">7 pasos · el Proceso de Gestión RRHH y sus resultados</div>
+    </div>
+  </div>
+
+  <h3 class="sub">🪜 Los 7 pasos</h3>
+  <div class="flow">
+    <div class="step"><div class="circ">1</div><div class="steplabel">Planificación de recurso humano</div></div>
+    <div class="step"><div class="circ">2</div><div class="steplabel">Reclutamiento</div></div>
+    <div class="step"><div class="circ">3</div><div class="steplabel">Selección</div></div>
+    <div class="step"><div class="circ">4</div><div class="steplabel">Contratación</div></div>
+    <div class="step"><div class="circ">5</div><div class="steplabel">Orientación</div></div>
+    <div class="step"><div class="circ">6</div><div class="steplabel">Capacitación</div></div>
+    <div class="step"><div class="circ">7</div><div class="steplabel">Desarrollo de la carrera</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">PRSCOCD</div>
+    <p>"<b>P</b>ara <b>R</b>eclutar <b>S</b>é <b>C</b>laro, <b>O</b>rienta, <b>C</b>apacita y <b>D</b>esarrolla".</p>
+  </div>
+
+  <h3 class="sub">🔁 El Proceso de Gestión RRHH (diagrama)</h3>
+  <p class="body">El segundo diagrama agrupa los pasos en tres tramos; cada tramo produce un resultado. Todo el proceso está rodeado por el <b>Entorno</b>.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Tramo</th><th>Pasos</th><th>Resultado</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Planificación de RRHH → Reclutamiento → Selección</td><td>Identificación y selección de <b>empleados competentes</b></td></tr>
+      <tr><td><b>2</b></td><td>Orientación → Capacitación</td><td>Empleados <b>adaptados, competentes</b>, con habilidades y conocimientos actualizados</td></tr>
+      <tr><td><b>3</b></td><td>Evaluación de desempeño → Desarrollo de carrera ↔ Compensación y beneficios</td><td>Empleados competentes y de <b>alto rendimiento</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="box termino">
+    <div class="blabel">🔑 DETALLES DEL DIAGRAMA</div>
+    <p>De la <b>Planificación de Recursos Humanos</b> salen dos flechas: hacia el <b>Reclutamiento</b> y hacia la <b>Desvinculación</b>. Entre <b>Desarrollo de carrera</b> y <b>Compensación y beneficios</b> hay un <b>ciclo</b> (flechas en ambos sentidos).</p>
+  </div>
+  <div class="box analogia">
+    <div class="blabel">💡 ANALOGÍA</div>
+    <p>Como un equipo de fútbol: primero <b>fichas</b> jugadores buenos (tramo 1), luego los <b>adaptas</b> al estilo del club y los entrenas (tramo 2) y, por último, los <b>evalúas, haces crecer y pagas</b> para que rindan al máximo (tramo 3).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     4. RESPONSABILIDADES DE TI Y ORGANIGRAMAS
+     ========================================================= -->
+<section class="topic" id="t-organigramas" data-title="Responsabilidades de TI y organigramas">
+  <div class="topic-head">
+    <span class="topic-num">04</span>
+    <div>
+      <div class="topic-title">Responsabilidades de TI y organigramas</div>
+      <div class="topic-kicker">3 responsabilidades · empresa de tecnología · decanato · ejemplo Facebook</div>
+    </div>
+  </div>
+
+  <h3 class="sub">🌐 Responsabilidades de TI</h3>
+  <div class="grid1">
+    <div class="card"><div class="cico">💬</div><div class="ctitle">Comunicación</div><div class="cdesc">Los empleados de la empresa pueden <b>comunicarse sobre tareas rutinarias</b>.</div></div>
+    <div class="card"><div class="cico">🧩</div><div class="ctitle">Plataforma integral</div><div class="cdesc">Trabajando <b>juntos en una plataforma integral</b>.</div></div>
+    <div class="card"><div class="cico">🛠️</div><div class="ctitle">Funcionalidad</div><div class="cdesc">Para proporcionar a los equipos la <b>funcionalidad que necesitan</b> para realizar sus tareas.</div></div>
+  </div>
+
+  <h3 class="sub">🏗️ Empresa de tecnología</h3>
+  <div class="route"><div class="route-row">
+    <span class="rpill hi">CEO</span><span class="rarrow">→</span><span class="rpill">Vicepresidentes ejecutivos</span><span class="rarrow">→</span><span class="rpill">Managers</span>
+  </div></div>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Departamento</th><th>Personal</th></tr></thead>
+    <tbody>
+      <tr><td><b>Tecnología y Desarrollo</b></td><td>Desarrolladores, testers, diseñadores UX, UI</td></tr>
+      <tr><td><b>Ventas</b></td><td>Representantes de ventas B2B, B2C, atención al cliente</td></tr>
+      <tr><td><b>Operaciones</b></td><td>Administrativos, logística, soporte técnico</td></tr>
+      <tr><td><b>Recursos Humanos</b></td><td>Selección y reclutamiento, formación y beneficios</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">🏫 Departamento de Tecnología y Servicios Informáticos (Decanato)</h3>
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Redes y Mantenimiento <span class="tagpill ok">Rama 1</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>De ella depende el <b>Taller de mantenimiento de equipos</b>.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Sistemas y Servicios Informáticos <span class="tagpill ok">Rama 2</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>De ella dependen el <b>Servicio de mantenimiento de servicios informáticos</b>, los <b>Laboratorios de informática y aula virtual</b> y el <b>Servicio de comunicación y publicación de noticias</b>.</p>
+      </div></div>
+    </div>
+  </div>
+
+  <h3 class="sub">📎 Ejemplo: organigrama de Facebook</h3>
+  <p class="body">Arriba el <b>CEO &amp; Chairman</b> (Mark Zuckerberg), con el <b>COO</b> (Sheryl Sandberg) a su lado. Debajo: <b>CFO</b>, <b>CIO</b>, <b>CTO</b>, <b>CMO</b> y <b>HR</b>. Del CMO dependen el <b>CDO</b> y <b>Global mkt</b>.</p>
+</section>
+
+<!-- =========================================================
+     5. SIGLAS DE LA ALTA DIRECCIÓN
+     ========================================================= -->
+<section class="topic" id="t-siglas" data-title="Siglas en la alta dirección">
+  <div class="topic-head">
+    <span class="topic-num">05</span>
+    <div>
+      <div class="topic-title">Siglas en la alta dirección</div>
+      <div class="topic-kicker">Los 10 "Chief … Officer" de la lámina</div>
+    </div>
+  </div>
+
+  <div class="tblwrap"><table>
+    <thead><tr><th>Sigla</th><th>Chief … Officer</th><th>En español</th></tr></thead>
+    <tbody>
+      <tr><td><b>CEO</b></td><td>Executive</td><td>Director general</td></tr>
+      <tr><td><b>CFO</b></td><td>Financial</td><td>Director financiero</td></tr>
+      <tr><td><b>COO</b></td><td>Operating</td><td>Director operativo</td></tr>
+      <tr><td><b>CMO</b></td><td>Marketing</td><td>Director de mercadotecnia</td></tr>
+      <tr><td><b>CTO</b></td><td>Technical</td><td>Director de tecnologías</td></tr>
+      <tr><td><b>CIO</b></td><td>Information</td><td>Director de informática</td></tr>
+      <tr><td><b>CDO</b></td><td>Data</td><td>Director de datos masivos</td></tr>
+      <tr><td><b>CSO</b></td><td>Sustainability</td><td>Director de sustentabilidad</td></tr>
+      <tr><td><b>CCO</b></td><td>Compliance</td><td>Director de anticorrupción</td></tr>
+      <tr><td><b>CRO</b></td><td>Reputation</td><td>Director de reputación</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">C ___ O = Chief ___ Officer</div>
+    <p>La letra del medio dice el área: <b>E</b>xecutive, <b>F</b>inancial, <b>O</b>perating, <b>M</b>arketing, <b>T</b>echnical, <b>I</b>nformation, <b>D</b>ata, <b>S</b>ustainability, <b>C</b>ompliance, <b>R</b>eputation.</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ ERROR FRECUENTE</div>
+    <p>En esta lámina <b>CSO</b> es el director de <b>sustentabilidad</b>, no de seguridad. La seguridad de la información la lleva el <b>CISO</b> (Chief Information Security Officer).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     6. CIO
+     ========================================================= -->
+<section class="topic" id="t-cio" data-title="CIO (Chief Information Officer)">
+  <div class="topic-head">
+    <span class="topic-num">06</span>
+    <div>
+      <div class="topic-title">CIO · Chief Information Officer</div>
+      <div class="topic-kicker">Responsabilidades · 10 funciones · 8 características</div>
+    </div>
+  </div>
+
+  <blockquote class="q">El CIO (Chief Information Officer) es el responsable de los sistemas y de las tecnologías de la información de la empresa y, además, es el responsable de identificar y proveer las tecnologías necesarias para que los procesos de la empresa funcionen lo mejor posible.</blockquote>
+
+  <h3 class="sub">🎯 Principales responsabilidades</h3>
+  <div class="flow">
+    <div class="step"><div class="circ">V</div><div class="steplabel">Crear valor a través de la tecnología</div></div>
+    <div class="step"><div class="circ">D</div><div class="steplabel">Dirigir los recursos informáticos a los objetivos estratégicos</div></div>
+    <div class="step"><div class="circ">G</div><div class="steplabel">Garantizar sistemas bien gestionados (costo, riesgo, operación fluida)</div></div>
+  </div>
+
+  <h3 class="sub">📋 Principales funciones (10)</h3>
+  <ul class="plain">
+    <li>Gestionar el <b>personal</b> del área de informática.</li>
+    <li>Negociar las relaciones con los <b>proveedores</b>.</li>
+    <li>Supervisar la <b>arquitectura</b> de TI.</li>
+    <li>Definir las <b>políticas</b>, normas y procesos de gobernanza de las TI.</li>
+    <li>Gestionar el <b>riesgo</b> de la información.</li>
+    <li>Tomar decisiones sobre el <b>gasto e inversión</b> en TI.</li>
+    <li>Gestionar la <b>capacidad y el ciclo de vida</b> de la tecnología.</li>
+    <li>Comprender las <b>tendencias</b> tecnológicas y su aplicabilidad a los objetivos.</li>
+    <li>Comunicar la gestión de <b>incidentes</b> importantes a los ejecutivos y otras partes interesadas.</li>
+    <li>Encargarse del <b>cumplimiento</b> de normativas gubernamentales en TI (Sarbanes Oxley, GDPR, etc.).</li>
+  </ul>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">PPAP · RGC · TIC</div>
+    <p><b>P</b>ersonal, <b>P</b>roveedores, <b>A</b>rquitectura, <b>P</b>olíticas · <b>R</b>iesgo, <b>G</b>asto, <b>C</b>apacidad · <b>T</b>endencias, <b>I</b>ncidentes, <b>C</b>umplimiento. Y termina en "TIC", como la materia.</p>
+  </div>
+  <div class="box termino">
+    <div class="blabel">🔑 RESPONSABILIDAD ESTRATÉGICA</div>
+    <p>Las responsabilidades estratégicas del CIO <b>no difieren</b> de las de cualquier otro ejecutivo encargado de un área interna: <b>gestionar los recursos bajo su control para maximizar el valor</b>.</p>
+  </div>
+
+  <h3 class="sub">⭐ Principales características (8)</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Característica</th><th>Para qué</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Visión estratégica</b></td><td>Detectar las tecnologías adecuadas para el negocio que maximicen los resultados comerciales</td></tr>
+      <tr><td><b>2. Flexibilidad</b></td><td>Adaptarse a nuevos modelos de negocio</td></tr>
+      <tr><td><b>3. Capacidad de aprendizaje</b></td><td>Actualizarse en nuevas tendencias y reconocer cuáles serán útiles</td></tr>
+      <tr><td><b>4. Comunicación y liderazgo</b></td><td>Gestionar personas y comunicar a empleados y comité de dirección</td></tr>
+      <tr><td><b>5. Coordinación</b></td><td>Gestionar al personal interno y a los proveedores externos</td></tr>
+      <tr><td><b>6. Creatividad</b></td><td>Afrontar problemas y situaciones nuevas con diferentes perspectivas</td></tr>
+      <tr><td><b>7. Planificación y control</b></td><td>Cumplir con los plazos establecidos</td></tr>
+      <tr><td><b>8. Gestión financiera</b></td><td>Analizar costos y cumplir con lo presupuestado</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">VFA · 3C · P$</div>
+    <p>Un buen CIO <b>V</b>e, es <b>F</b>lexible y <b>A</b>prende; luego tiene 3 C (<b>C</b>omunicación-liderazgo, <b>C</b>oordinación, <b>C</b>reatividad); y al final <b>P</b>lanifica y cuida el <b>$</b>.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     7. CISO
+     ========================================================= -->
+<section class="topic" id="t-ciso" data-title="CISO (Chief Information Security Officer)">
+  <div class="topic-head">
+    <span class="topic-num">07</span>
+    <div>
+      <div class="topic-title">CISO · Chief Information Security Officer</div>
+      <div class="topic-kicker">Director de seguridad de la información · 9 funciones</div>
+    </div>
+  </div>
+
+  <blockquote class="q">El CISO es la persona responsable de velar por la ciberseguridad de una empresa. También podemos conocerlo como director de seguridad de la información. Se encarga de proteger la información ante posibles ciberataques y fugas de datos.</blockquote>
+  <p class="body">Garantiza la seguridad dentro de las posibilidades <b>humanas, técnicas y económicas</b> que tenga cada empresa.</p>
+
+  <h3 class="sub">📋 Principales funciones</h3>
+  <div class="grid2">
+    <div class="card"><div class="ctitle">🎯 Alinear</div><div class="cdesc">la estrategia de ciberseguridad con los objetivos de la empresa</div></div>
+    <div class="card"><div class="ctitle">📜 Normativa</div><div class="cdesc">definir la normativa de seguridad y procurar que se cumpla</div></div>
+    <div class="card"><div class="ctitle">🔍 Vulnerabilidades</div><div class="cdesc">prevenir, detectar y analizar</div></div>
+    <div class="card"><div class="ctitle">📢 Informar</div><div class="cdesc">reportar a dirección cualquier cuestión de ciberseguridad</div></div>
+    <div class="card"><div class="ctitle">🚨 Respuesta rápida</div><div class="cdesc">ante cualquier incidente de ciberseguridad</div></div>
+    <div class="card"><div class="ctitle">🎓 Formar</div><div class="cdesc">concienciar y sensibilizar a la organización</div></div>
+    <div class="card"><div class="ctitle">🛡️ Políticas</div><div class="cdesc">establecer e implementar políticas de seguridad</div></div>
+    <div class="card"><div class="ctitle">🔒 Privacidad</div><div class="cdesc">garantizar la privacidad de los datos</div></div>
+    <div class="card"><div class="ctitle">🕵️ Forense</div><div class="cdesc">descubrimiento electrónico e investigaciones forenses digitales</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">ANV · IRF · PPF</div>
+    <p>Tres grupos de tres: <b>A</b>linea, <b>N</b>orma, <b>V</b>igila · <b>I</b>nforma, <b>R</b>esponde, <b>F</b>orma · <b>P</b>olíticas, <b>P</b>rivacidad, <b>F</b>orense.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     8. CEO
+     ========================================================= -->
+<section class="topic" id="t-ceo" data-title="CEO (Chief Executive Officer)">
+  <div class="topic-head">
+    <span class="topic-num">08</span>
+    <div>
+      <div class="topic-title">CEO · Chief Executive Officer</div>
+      <div class="topic-kicker">¿Qué es? · 10 funciones</div>
+    </div>
+  </div>
+
+  <div class="grid1">
+    <div class="card"><div class="cico">👁️</div><div class="ctitle">El puesto más alto</div><div class="cdesc">Un CEO es el puesto más alto en la <b>jerarquía administrativa y de operación</b> de una empresa.</div></div>
+    <div class="card"><div class="cico">📚</div><div class="ctitle">Otros nombres</div><div class="cdesc">También se le conoce como <b>director general</b>, <b>consejero delegado</b> o <b>presidente ejecutivo</b>.</div></div>
+    <div class="card"><div class="cico">📣</div><div class="ctitle">La sigla</div><div class="cdesc">CEO significa <b>Chief Executive Officer</b>; en español, <b>director ejecutivo</b>.</div></div>
+  </div>
+
+  <h3 class="sub">📋 10 funciones de un CEO</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Verbo</th><th>Qué</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Informar</b></td><td>Objetivos, gestión y logros de la empresa</td></tr>
+      <tr><td><b>2. Planificar</b></td><td>Las estrategias</td></tr>
+      <tr><td><b>3. Motivar y asesorar</b></td><td>A los empleados</td></tr>
+      <tr><td><b>4. Tomar decisiones</b></td><td>Organizativas</td></tr>
+      <tr><td><b>5. Crear un equipo</b></td><td>De trabajo y manejarlo</td></tr>
+      <tr><td><b>6. Cuidar</b></td><td>A los clientes</td></tr>
+      <tr><td><b>7. Usar</b></td><td>El presupuesto de la empresa</td></tr>
+      <tr><td><b>8. Guiar</b></td><td>A los directivos</td></tr>
+      <tr><td><b>9. Crear</b></td><td>La estructura organizativa de la corporación</td></tr>
+      <tr><td><b>10. Fijar</b></td><td>Los objetivos</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">IPM · TCC · UGCF</div>
+    <p><b>I</b>nforma, <b>P</b>lanifica, <b>M</b>otiva · <b>T</b>oma decisiones, <b>C</b>rea equipo, <b>C</b>uida clientes · <b>U</b>sa el presupuesto, <b>G</b>uía, <b>C</b>rea estructura, <b>F</b>ija objetivos. Ojo: hay <b>dos "Crear"</b> (equipo y estructura).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     9. CTO
+     ========================================================= -->
+<section class="topic" id="t-cto" data-title="CTO (Chief Technology Officer)">
+  <div class="topic-head">
+    <span class="topic-num">09</span>
+    <div>
+      <div class="topic-title">CTO · Chief Technology Officer</div>
+      <div class="topic-kicker">Director de tecnología · 12 funciones · CIO vs. CTO</div>
+    </div>
+  </div>
+
+  <blockquote class="q">El CTO, siglas en inglés de Chief Technology Officer, o director de tecnología, es el máximo responsable del departamento técnico y tecnológico de una compañía. El puesto de CTO es crucial para el desarrollo y la implementación de las estrategias tecnológicas de la empresa.</blockquote>
+  <p class="body">Ocupa el puesto ejecutivo de más alta tecnología y lidera el departamento de tecnología o ingeniería. Desarrolla políticas y procedimientos y usa tecnología para <b>mejorar productos y servicios enfocados en los clientes externos</b>. Además desarrolla estrategias para <b>aumentar los ingresos</b> y realiza análisis de <b>costo-beneficio</b> y de <b>retorno de la inversión</b>.</p>
+
+  <h3 class="sub">📋 Funciones de un CTO (12)</h3>
+  <div class="grid2">
+    <div class="card"><div class="ctitle">🧭 Liderar la estrategia tecnológica</div></div>
+    <div class="card"><div class="ctitle">💡 Dirigir el área de Innovación</div></div>
+    <div class="card"><div class="ctitle">🔒 Proteger la información sensible</div></div>
+    <div class="card"><div class="ctitle">👥 Supervisar los equipos tecnológicos</div></div>
+    <div class="card"><div class="ctitle">🔗 Comunicación entre departamentos</div></div>
+    <div class="card"><div class="ctitle">💰 Gestionar los presupuestos del área</div></div>
+    <div class="card"><div class="ctitle">✅ Mantener estándares de calidad</div></div>
+    <div class="card"><div class="ctitle">🔎 Identificar posibles mejoras</div></div>
+    <div class="card"><div class="ctitle">📈 Sistemas escalables</div></div>
+    <div class="card"><div class="ctitle">🗂️ Gestionar proyectos tecnológicos</div></div>
+    <div class="card"><div class="ctitle">⚖️ Estar al tanto de nuevas legislaciones</div></div>
+    <div class="card"><div class="ctitle">📖 Fomentar la cultura de la información</div></div>
+  </div>
+
+  <div class="box critico">
+    <div class="blabel">⚠️ PUNTO CRÍTICO · CIO vs. CTO</div>
+    <p>El <b>CIO</b> mira <b>hacia adentro</b>: sistemas y TI para que los <b>procesos de la empresa</b> funcionen. El <b>CTO</b> mira <b>hacia afuera</b>: tecnología para mejorar <b>productos y servicios de los clientes externos</b>, aumentar ingresos y medir ROI.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     10. DPO
+     ========================================================= -->
+<section class="topic" id="t-dpo" data-title="DPO (Data Protection Officer)">
+  <div class="topic-head">
+    <span class="topic-num">10</span>
+    <div>
+      <div class="topic-title">DPO · Data Protection Officer</div>
+      <div class="topic-kicker">Delegado de Protección de Datos · 7 funciones</div>
+    </div>
+  </div>
+
+  <blockquote class="q">El Delegado de Protección de Datos es la persona encargada de garantizar el cumplimiento normativo de la normativa de protección de datos dentro de una organización.</blockquote>
+  <div class="box termino">
+    <div class="blabel">🔑 ¿DEBE SER JURISTA?</div>
+    <p>El <b>RGPD no exige</b> que el DPO sea jurista, pero <b>sí deberá contar con amplios conocimientos jurídicos</b>, en concreto en protección de datos: velará por el cumplimiento normativo de la empresa y por la <b>seguridad del tratamiento</b> de los datos.</p>
+  </div>
+
+  <h3 class="sub">📋 Funciones de un DPO</h3>
+  <ul class="plain">
+    <li><b>Informar y asesorar</b> al responsable o encargado del tratamiento y a los empleados sobre sus obligaciones.</li>
+    <li><b>Supervisar</b> el cumplimiento de lo dispuesto en la normativa.</li>
+    <li>Llevar a cabo la <b>formación y concienciación</b> del personal que trata los datos.</li>
+    <li>Llevar a cabo las <b>auditorías</b> correspondientes.</li>
+    <li>Asesorar sobre la <b>Evaluación de Impacto</b> en Protección de datos y supervisar su aplicación.</li>
+    <li><b>Cooperar</b> con las Autoridades de Control.</li>
+    <li>Actuar como <b>punto de contacto</b> de las Autoridades de Control.</li>
+  </ul>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">ISFA · ECP</div>
+    <p>Hacia adentro: <b>I</b>nforma, <b>S</b>upervisa, <b>F</b>orma, <b>A</b>udita. Hacia la autoridad: <b>E</b>valuación de impacto, <b>C</b>oopera, <b>P</b>unto de contacto.</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ ERROR FRECUENTE</div>
+    <p>No confundir al <b>DPO</b> (protección de datos personales, cumplimiento del RGPD) con el <b>CDO</b> (director de datos masivos) ni con el <b>CISO</b> (ciberseguridad).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     11. FUNCIONES Y ÁREAS DE TI
+     ========================================================= -->
+<section class="topic" id="t-areas" data-title="Funciones y áreas de TI">
+  <div class="topic-head">
+    <span class="topic-num">11</span>
+    <div>
+      <div class="topic-title">Principales funciones y puestos en el área de TI</div>
+      <div class="topic-kicker">Infraestructura · funcionalidad · gobernanza · 7 áreas</div>
+    </div>
+  </div>
+
+  <p class="body">TI <b>gestiona y potencializa los sistemas tecnológicos</b> para aportar mayor <b>valor y competitividad</b> a los servicios de una organización.</p>
+  <div class="grid1">
+    <div class="card"><div class="cico">🔌</div><div class="ctitle">Infraestructura</div><div class="cdesc">Componentes de <b>hardware, red, circuitos</b> y demás equipos necesarios para que funcione un sistema informático.</div></div>
+    <div class="card"><div class="cico">👁️</div><div class="ctitle">Funcionalidad</div><div class="cdesc">Quizás la tarea <b>más visible</b> de TI (lo que más se le asocia): crear y mantener aplicaciones operativas; desarrollar, asegurar y almacenar datos; ayudar en el uso de software y gestión de datos.</div></div>
+    <div class="card"><div class="cico">📏</div><div class="ctitle">Gobernanza</div><div class="cdesc">Implementar <b>parámetros operativos</b> y reglas sobre cómo usar la tecnología de la empresa; incluye arquitectura y redes de personas. Es parte de la <b>seguridad informática</b> y del seguro de datos.</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">I · F · G</div>
+    <p>Lo que se <b>enchufa</b> (Infraestructura), lo que se <b>ve</b> (Funcionalidad) y lo que se <b>permite</b> (Gobernanza).</p>
+  </div>
+
+  <h3 class="sub">🗃️ Áreas / puestos de TI</h3>
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Administración (ITSM) <span class="tagpill ok">Mantener y asesorar</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>La administración o gestión de las TI implica el <b>mantenimiento y reparación</b> de los sistemas, <b>asesorar</b> sobre nuevas soluciones y <b>ayudar</b> a los departamentos a instalar y usar nuevos equipos.</p>
+        <p><b>Responsabilidades:</b> mantener la infraestructura informática y digital · gestionar el almacenamiento de datos · evaluar amenazas a la infraestructura · seguimiento de contratos con clientes · cumplir estándares de calidad · renovar licencias y documentos legales · capacitar empleados · resolver problemas de software y hardware · instalar actualizaciones periódicas.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Soporte técnico <span class="tagpill ok">Asistir al personal</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>Ofrece asistencia al personal que necesita <b>acceso a los sistemas</b>; ayuda con problemas de software y hardware.</p>
+        <p><b>Responsabilidades:</b> solucionar problemas de HW y SW · registros de trabajo · reparar o reemplazar HW defectuoso · equipos de video y audioconferencias · impresoras y copiadoras · problemas de red y conectividad · <b>copia de seguridad y recuperación</b> · inventario de TI · investigar y adquirir equipos · servicios en la <b>nube</b>.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Comunicaciones <span class="tagpill ok">Distancias y remoto</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>Muchas empresas confían en métodos digitales para <b>superar grandes distancias</b>, <b>reducir problemas logísticos</b> o contactar al <b>personal remoto</b> (comunicación interna o externa).</p>
+        <p><b>Responsabilidades:</b> preparar HW y SW para conferencias · consultores técnicos para personal y administración · cuentas de usuario y protocolos de inicio de sesión · registros y copias de reuniones y fuentes de datos · cargar datos al sistema en línea · correo electrónico · llamadas y videoconferencias · soporte a usuarios de apps de comunicación.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Programación <span class="tagpill ok">In house</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>Parte de los sistemas los desarrolla la empresa misma (<b>in house</b>): los especialistas crean software según sus necesidades <b>en lugar de comprar paquetes</b>.</p>
+        <p><b>Responsabilidades:</b> aplicaciones dedicadas · bases de datos · codificar en <b>JavaScript, HTML/CSS, SQL, Python y C++</b> · convertir documentos a varios formatos · edición gráfica y visualización de datos · ayudar a desarrollar nuevas soluciones.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>El sitio web de la empresa <span class="tagpill ok">Web segura</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p><b>Responsabilidades:</b> configurar el diseño del sitio · probar y mejorar su funcionalidad · escribir e implementar el código · trabajar con escritores y diseñadores gráficos · configurar <b>canales seguros</b> para comercio electrónico y suscripciones · garantizar la <b>seguridad</b> del sitio.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Desarrollo de aplicaciones <span class="tagpill ok">Del cliente a la app</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>Diseñan nuevas aplicaciones basadas en las solicitudes de los clientes o necesidades de los consumidores.</p>
+        <p><b>Responsabilidades:</b> evaluar necesidades de los clientes · convertirlas en <b>aplicaciones viables</b> · análisis de viabilidad de actualizaciones · desarrollar el código · manuales de usuario · solución de problemas, <b>pruebas y control de calidad</b>.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Planificación de contingencia de red <span class="tagpill bad">Plan B</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p><b>Responsabilidades:</b> configurar <b>redes alternativas</b> por si la principal deja de funcionar · instalar equipos de <b>energía y redes de emergencia</b> · cooperar con expertos de la industria · <b>probar y mantener</b> regularmente las medidas · investigar y adquirir nuevas soluciones de contingencia.</p>
+      </div></div>
+    </div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">7 áreas: A · S · C · P · W · D · R</div>
+    <p><b>A</b>dministra, <b>S</b>oporta, <b>C</b>omunica, <b>P</b>rograma, publica la <b>W</b>eb, <b>D</b>esarrolla apps y tiene una <b>R</b>ed de respaldo.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     12. MATRIZ RACI
+     ========================================================= -->
+<section class="topic" id="t-raci" data-title="Matriz RACI">
+  <div class="topic-head">
+    <span class="topic-num">12</span>
+    <div>
+      <div class="topic-title">Matriz RACI</div>
+      <div class="topic-kicker">Matriz de asignación de responsabilidades</div>
+    </div>
+  </div>
+
+  <blockquote class="q">Una matriz RACI (a veces llamada Matriz de asignación de responsabilidades) es una forma de identificar los roles y responsabilidades de los equipos de tu proyecto para cualquier tarea, logro o entrega del proyecto.</blockquote>
+  <p class="body">Al seguirla puedes <b>aclarar cómo está distribuida la responsabilidad</b> y <b>reducir la confusión</b>.</p>
+
+  <div class="tblwrap"><table>
+    <thead><tr><th>Letra</th><th>Who is…</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><b>R</b></td><td>Responsible</td><td>Persona que es responsable de <b>ejecutar</b> la tarea; realiza el trabajo de forma directa</td></tr>
+      <tr><td><b>A</b></td><td>Accountable (aprobador)</td><td>Persona con <b>responsabilidad última</b>; supervisa la finalización general, aunque quizás no haga el trabajo</td></tr>
+      <tr><td><b>C</b></td><td>Consulted</td><td>Persona a la que se <b>debe consultar antes</b> de tomar una decisión o acción; revisa y da el visto bueno (puede haber varios)</td></tr>
+      <tr><td><b>I</b></td><td>Informed</td><td>Persona que debe ser informada <b>después</b> de la decisión; se le informa del progreso y finalización</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box error">
+    <div class="blabel">❌ "OJO CON EL IDIOMA"</div>
+    <p><b>Responsible</b> no es "el responsable" en el sentido de quien responde: es quien <b>ejecuta</b>. Quien responde en última instancia es el <b>Accountable</b>.</p>
+  </div>
+  <div class="box analogia">
+    <div class="blabel">💡 ANALOGÍA</div>
+    <p>En un restaurante: el <b>cocinero</b> prepara el plato (R), el <b>chef</b> responde por él (A), el <b>nutricionista</b> opina antes de cambiar el menú (C) y el <b>mesero</b> se entera del cambio después (I).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     13. MODELO DE ROLES Y DEFINICIONES
+     ========================================================= -->
+<section class="topic" id="t-modelo" data-title="Modelo de roles y definiciones">
+  <div class="topic-head">
+    <span class="topic-num">13</span>
+    <div>
+      <div class="topic-title">Roles y responsabilidades para la gestión de las TI</div>
+      <div class="topic-kicker">Junta de Andalucía · introducción · definiciones · modelo actual vs. nuevo</div>
+    </div>
+  </div>
+
+  <p class="body">Documento de <b>Manuel Narbona Sarria</b> y <b>Zenobia Jiménez Loma</b> (Servicio de Producción, Consejería de Economía y Hacienda, Junta de Andalucía). Palabras clave: organización, recursos humanos.</p>
+  <blockquote class="q">Detrás de los servicios de administración electrónica que ponemos a disposición de los ciudadanos existen personas, infraestructuras y procesos que dan soporte a dichos servicios. Sin embargo, a menudo, las personas desconocen su rol, las infraestructuras no están controladas y los procesos no están definidos.</blockquote>
+  <p class="body">Se propone una estructura organizativa de los RRHH TI <b>basada en los procesos</b> que definen la función TI, usando la definición de procesos, roles y responsabilidades de <b>COBIT e ITIL</b>.</p>
+
+  <h3 class="sub">🧭 La lógica del modelo</h3>
+  <div class="flow">
+    <div class="step"><div class="circ">1</div><div class="steplabel">Función de la organización</div></div>
+    <div class="step"><div class="circ">2</div><div class="steplabel">Procesos que la soportan</div></div>
+    <div class="step"><div class="circ">3</div><div class="steplabel">Roles y responsabilidades (surgen de modo natural)</div></div>
+  </div>
+  <div class="box termino">
+    <div class="blabel">🔑 LA PREGUNTA CLAVE</div>
+    <p>La función de una organización TI es la gestión de las TI. Los roles deben permitir responder "sí" a: <b>¿se están gestionando adecuadamente las TI en la organización?</b> Una vez definidos, los roles <b>no deberían cambiar</b> salvo cambios organizativos o tecnológicos <b>profundos</b> (solo su alcance puede modificarse).</p>
+  </div>
+  <div class="box critico">
+    <div class="blabel">⚠️ EL PROBLEMA DE PARTIDA</div>
+    <p>En la Junta de Andalucía no existía una definición de roles y responsabilidades de la función TI, por lo que la creación de nuevas estructuras TI <b>no atendía a ningún criterio estándar</b>.</p>
+  </div>
+
+  <h3 class="sub">📖 Definiciones (Tabla 1)</h3>
+  <p class="body">Se tomaron de los estándares (ISOs, ITIL, COBIT, MAGERIT…) o del Diccionario de la Real Academia Española (DRAE).</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Término</th><th>Significado</th><th>Fuente</th></tr></thead>
+    <tbody>
+      <tr><td><b>Actividad</b></td><td>Conjunto de acciones diseñadas para alcanzar un resultado particular</td><td>ITIL</td></tr>
+      <tr><td><b>Autorizar</b></td><td>Dar o reconocer a alguien facultad o derecho para hacer algo</td><td>DRAE</td></tr>
+      <tr><td><b>Función</b></td><td>La mayor unidad de actividad de negocio; agregados de más alto nivel de las actividades</td><td>DIRKS</td></tr>
+      <tr><td><b>Infraestructura TI</b></td><td>HW y SW de base, incluido el de comunicaciones, más instalaciones y locales</td><td>—</td></tr>
+      <tr><td><b>Proceso</b></td><td>Actividades relacionadas que transforman elementos de entrada en resultados</td><td>ISO 9000</td></tr>
+      <tr><td><b>Responsable</b></td><td>Persona que pone cuidado y atención en lo que hace o decide</td><td>DRAE</td></tr>
+      <tr><td><b>Rol</b></td><td>Conjunto de responsabilidades, actividades y autorizaciones</td><td>ITIL</td></tr>
+      <tr><td><b>Servicio TI</b></td><td>Uno o más sistemas TI que hacen posible un proceso de negocio</td><td>ITIL · ISO 8402:1994</td></tr>
+      <tr><td><b>Sistema de Información</b></td><td>Conjunto sistemático y formal de componentes que procesa datos para generar y gestionar información</td><td>—</td></tr>
+      <tr><td><b>Usuario</b></td><td>Persona que usa el servicio en el día a día</td><td>ITIL</td></tr>
+      <tr><td><b>Tecnologías de la Información</b></td><td>Tecnología para procesar información: HW y SW, incluidas comunicaciones, desde cualquier parte y momento</td><td>WIKI (ES)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">Rol = R + A + A</div>
+    <p>Un rol echa "<b>RAA</b>-íces": <b>R</b>esponsabilidades, <b>A</b>ctividades y <b>A</b>utorizaciones. Y del tamaño: <b>Función</b> (lo más grande) ⊃ <b>Proceso</b> ⊃ <b>Actividad</b>.</p>
+  </div>
+
+  <h3 class="sub">🔤 Acrónimos (Tabla 2)</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Acrónimo</th><th>Significado</th></tr></thead>
+    <tbody>
+      <tr><td><b>COBIT</b></td><td>Control Objectives for Information and related Technology (ISACA e IT Governance Institute)</td></tr>
+      <tr><td><b>ITIL</b></td><td>IT Infrastructure Library (United Kingdom's Office of Government Commerce)</td></tr>
+      <tr><td><b>PDCA</b></td><td>Plan-Do-Check-Act (ciclo de Deming)</td></tr>
+      <tr><td><b>RRHH · SI · TI</b></td><td>Recursos Humanos · Sistema de Información · Tecnologías de la Información</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">🆚 El modelo actual y el nuevo modelo</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Modelo actual</th><th>Nuevo modelo</th></tr></thead>
+    <tbody>
+      <tr><td>Tiene casi <b>30 años</b></td><td>Basado en metodologías, estándares y buenas prácticas consolidadas</td></tr>
+      <tr><td>Divide las TI en <b>desarrollo, explotación y sistemas</b>, además de la jefatura</td><td>La gestión se realiza en base a los <b>procesos TI</b> (COBIT e ITIL)</td></tr>
+      <tr><td>Áreas verticales</td><td>Los procesos cruzan en <b>horizontal</b> la organización; la jerarquía existente puede romperse</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- =========================================================
+     14. JERARQUÍA DE ROLES
+     ========================================================= -->
+<section class="topic" id="t-jerarquia" data-title="Jerarquía de roles">
+  <div class="topic-head">
+    <span class="topic-num">14</span>
+    <div>
+      <div class="topic-title">Jerarquía de roles</div>
+      <div class="topic-kicker">Tipos de organización 0–3 · niveles · Tabla 3</div>
+    </div>
+  </div>
+
+  <h3 class="sub">🏢 Tipos de organización (la complejidad va creciendo)</h3>
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Tipo 0 <span class="tagpill ok">Un único rol</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Tiene un <b>único rol</b> al que le corresponden todas las responsabilidades de la gestión TI. Organización muy simple.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Tipo 1 <span class="tagpill ok">Dominios COBIT</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Los roles se definen de acuerdo a los <b>dominios de COBIT</b>, porque cubren adecuadamente toda la gestión TI.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Tipo 2 <span class="tagpill ok">Intermedia</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Parecida a las habituales en la JA: un <b>servicio bajo una secretaría general técnica</b>. Tiene 2 o 3 personas de <b>Planificación, Coordinación y Control</b> (jefe de servicio y uno o dos adjuntos), un responsable de <b>operaciones</b> (explotación), uno o varios de <b>soporte</b> (microinformática), un responsable de <b>AI de Aplicaciones</b> (desarrollo) y uno de <b>AI de Infraestructura TI</b> (sistemas).</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Tipo 3 <span class="tagpill ok">Especializada</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Implica <b>más especialización</b> en ciertos roles; se desarrollan de acuerdo a <b>COBIT e ITIL</b>.</p></div></div>
+    </div>
+  </div>
+
+  <h3 class="sub">🧱 Niveles de la jerarquía</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Nivel</th><th>Contenido</th></tr></thead>
+    <tbody>
+      <tr><td><b>0</b></td><td><b>Dirección TI</b></td></tr>
+      <tr><td><b>1</b></td><td><b>Dominios de COBIT</b> (funciones de alto nivel del gobierno TI)</td></tr>
+      <tr><td><b>2</b></td><td>Procesos COBIT e ITIL <b>agrupados</b> (para servicios TI, la división entrega y soporte de ITIL, casi igual al dominio DS)</td></tr>
+      <tr><td><b>3</b></td><td>Procesos COBIT e ITIL <b>sin agrupar</b> (o agrupados cuando fue necesario)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">🧩 Nivel 1: los 4 dominios de COBIT</h3>
+  <p class="body">Corresponden a las fases de un <b>ciclo PDCA</b> relativo a la información, que usa los recursos TI: <b>Aplicaciones, Información, Infraestructura y Organización</b> (RRHH y otros elementos organizativos).</p>
+  <div class="grid2">
+    <div class="card"><div class="ctitle">PO · Planificación y Organización</div><div class="cdesc">En la Tabla 3: Planificación y Coordinación TI</div></div>
+    <div class="card"><div class="ctitle">AI · Adquisición e Implementación</div><div class="cdesc">Rebautizado: <b>Gestión de la Infraestructura TI</b></div></div>
+    <div class="card"><div class="ctitle">DS · Entrega y Soporte</div><div class="cdesc">Rebautizado: <b>Gestión de los Servicios TI</b></div></div>
+    <div class="card"><div class="ctitle">ME · Monitorización y Evaluación</div><div class="cdesc">Monitorización y Evaluación TI</div></div>
+  </div>
+
+  <h3 class="sub">📊 Tabla 3 – Jerarquía de Roles (niveles 1 → 2 → 3)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Nivel 1</th><th>Nivel 2</th><th>Nivel 3</th></tr></thead>
+    <tbody>
+      <tr><td>Planificación y Coordinación TI</td><td>Gestión de la Seguridad y del Cumplimiento Normativo</td><td>—</td></tr>
+      <tr><td>Planificación y Coordinación TI</td><td>Gestión de los Procesos, la Organización, los RRHH y de la Arquitectura de la Información</td><td>Gestión de Procesos, Organización y RRHH · Gestión de la Arquitectura de la Información</td></tr>
+      <tr><td>Planificación y Coordinación TI</td><td>Gestión de Proyectos y de la Calidad</td><td>Gestión de Proyectos · Gestión de la Calidad</td></tr>
+      <tr><td>Planificación y Coordinación TI</td><td>Gestión Estratégica y Financiera</td><td>Gestión Estratégica · Gestión Financiera</td></tr>
+      <tr><td>Gestión de Infraestructura TI</td><td>Adquisición e Implementación de Aplicaciones</td><td>—</td></tr>
+      <tr><td>Gestión de Infraestructura TI</td><td>Adquisición e Implementación de la Infraestructura HW-SW-COM</td><td>Gestión de HW y el SW base · Gestión de las Comunicaciones</td></tr>
+      <tr><td>Gestión de los Servicios TI</td><td>Gestión de la Producción</td><td>Continuidad de Servicios TI · Capacidad · Disponibilidad · Nivel de Servicio</td></tr>
+      <tr><td>Gestión de los Servicios TI</td><td>Soporte de los Servicios TI</td><td>Cambios (y revisiones) · Incidencias · Configuración · Problemas</td></tr>
+      <tr><td>Monitorización y Evaluación TI</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">SPPE · CCDN · CICP</div>
+    <p>Planificación: <b>S</b>eguridad, <b>P</b>rocesos, <b>P</b>royectos, <b>E</b>stratégica. Producción: "<b>C</b>on <b>C</b>apacidad <b>D</b>oy <b>N</b>ivel" (Continuidad, Capacidad, Disponibilidad, Nivel de servicio). Soporte: "<b>C</b>ambio <b>I</b>ncidencias, <b>C</b>onfiguro <b>P</b>roblemas".</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     15. GESTIÓN DE LA CALIDAD Y DRSEI
+     ========================================================= -->
+<section class="topic" id="t-drsei" data-title="Rol Gestión de la Calidad y niveles DRSEI">
+  <div class="topic-head">
+    <span class="topic-num">15</span>
+    <div>
+      <div class="topic-title">Rol Gestión de la Calidad · niveles de responsabilidad</div>
+      <div class="topic-kicker">Ficha de ejemplo · D R S E I · reglas · Tabla 4</div>
+    </div>
+  </div>
+
+  <h3 class="sub">🏅 Ejemplo: rol Gestión de la Calidad</h3>
+  <p class="body">Es la ficha de ejemplo; fichas similares deben redactarse <b>para cada rol</b>.</p>
+  <blockquote class="q">Aporta información relativa a las normas y procedimientos de calidad habituales en la organización, completándolos de acuerdo con los requerimientos particulares de cada proyecto. Ofrece asesoramiento sobre todos los aspectos de calidad relativos a los procesos, analizando los riesgos y determinando las medidas de control oportunas.</blockquote>
+  <div class="box termino">
+    <div class="blabel">🔑 POR QUÉ ES ESENCIAL</div>
+    <p>Garantiza que TI está dando <b>valor al negocio</b>, <b>mejora continua</b> y <b>transparencia</b> para los interesados (<b>VMT</b>).</p>
+  </div>
+  <ul class="plain">
+    <li>Identificar y comunicar <b>estándares</b>, procedimientos y buenas prácticas para los procesos clave (Sistema de Gestión de Calidad).</li>
+    <li>Elaborar y comunicar un <b>Plan General de Calidad</b> que promueva la mejora continua.</li>
+    <li>Participar en los <b>Planes de Calidad específicos</b> de cada proceso o servicio.</li>
+    <li>Definir e implantar <b>mediciones</b> del cumplimiento de los objetivos de calidad.</li>
+    <li>Planificar <b>acciones correctivas</b> examinando las <b>causas raíz</b> de los problemas.</li>
+    <li>Medir el logro de la <b>política de calidad</b> y revisarla cuando sea necesario.</li>
+    <li>Asegurar <b>tecnología, procedimientos y recursos</b> para el sistema de calidad.</li>
+    <li>Planificar, asignar recursos y monitorizar el programa de <b>auditoría de calidad interna</b>.</li>
+    <li><b>Recomendar cambios</b> en procesos y controles según las conclusiones de las auditorías.</li>
+    <li><b>Formar e involucrar</b> al usuario y al personal de aseguramiento de calidad.</li>
+    <li><b>Informar a la Dirección</b> sobre conclusiones y recomendaciones de las auditorías.</li>
+  </ul>
+
+  <h3 class="sub">🎚️ Niveles de responsabilidad (nomenclatura similar al RACI de COBIT)</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Letra</th><th>Nivel</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td><b>D</b></td><td>Director</td><td>Responsable último del rol, propietario del proceso-rol. Aprueba los trabajos que le presenta el responsable y proporciona recursos técnicos, humanos y financieros</td></tr>
+      <tr><td><b>R</b></td><td>Responsable</td><td>Debe procurar la realización de las responsabilidades del rol. Da cuenta ante el Director</td></tr>
+      <tr><td><b>S</b></td><td>Supervisor</td><td>Cuando un rol es muy complejo, se divide en grupos asignados a supervisores (sin subdividir el rol). Coordinan y ejecutan</td></tr>
+      <tr><td><b>E</b></td><td>Ejecutor</td><td>Realiza las tareas porque posee los conocimientos técnicos</td></tr>
+      <tr><td><b>I</b></td><td>Informado</td><td>Se le informa de las tareas llevadas a cabo en un proceso</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">D · R · S · E · I</div>
+    <p>"<b>D</b>irige, <b>R</b>esponde, <b>S</b>upervisa, <b>E</b>jecuta y se <b>I</b>nforma" — de arriba hacia abajo.</p>
+  </div>
+
+  <h3 class="sub">📏 Reglas</h3>
+  <div class="grid1">
+    <div class="card"><div class="cico">🚫</div><div class="ctitle">No deben existir roles sin responsable</div><div class="cdesc">Significaría que algún proceso <b>no se está ejecutando</b>. Puede pasar (no hay puesto asignable o no es prioritario), pero hay que ser consciente de que el rol está sin cubrir.</div></div>
+    <div class="card"><div class="cico">✌️</div><div class="ctitle">No deben existir roles con más de un responsable</div><div class="cdesc">Si pasa, el rol debe <b>subdividirse</b>, salvo responsables de <b>reserva</b> (vacaciones, enfermedades…).</div></div>
+    <div class="card"><div class="cico">🎩</div><div class="ctitle">Pueden existir asignaciones dobles</div><div class="cdesc">Alguien puede ser a la vez el <b>director y el responsable</b> de un proceso.</div></div>
+  </div>
+  <div class="box critico">
+    <div class="blabel">⚠️ PUNTO CRÍTICO · RACI vs. DRSEI</div>
+    <p>En <b>RACI</b> la R (Responsible) <b>ejecuta</b>. En <b>DRSEI</b> la R (Responsable) <b>procura que se haga</b> y da cuenta al Director; quien ejecuta es la <b>E</b>. La responsabilidad última: <b>A</b> en RACI, <b>D</b> en DRSEI.</p>
+  </div>
+
+  <h3 class="sub">🚦 Tabla 4: correspondencia entre roles y puestos</h3>
+  <p class="body">Cruza los <b>puestos de trabajo</b> (jefe del servicio, jefes de departamento, analistas, programadores, operadores, técnicos…) con su participación en cada rol. El personal que no representa un rol será, en general, <b>ejecutor</b>.</p>
+  <div class="grid1">
+    <div class="card"><div class="cico">🟢</div><div class="ctitle">Verde</div><div class="cdesc">Proceso definido y ejecutándose · responsabilidad asignada, comunicada y asumida.</div></div>
+    <div class="card"><div class="cico">🟠</div><div class="ctitle">Naranja</div><div class="cdesc">Proceso a medio camino.</div></div>
+    <div class="card"><div class="cico">🔴</div><div class="ctitle">Rojo</div><div class="cdesc">Proceso que no se ejecuta · responsabilidad solo asignada o planificada, no comunicada ni asumida.</div></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     16. EL CENTRO TI Y CONCLUSIÓN
+     ========================================================= -->
+<section class="topic" id="t-centro" data-title="El centro TI y conclusión">
+  <div class="topic-head">
+    <span class="topic-num">16</span>
+    <div>
+      <div class="topic-title">¿Para qué sirve el modelo? · El centro TI</div>
+      <div class="topic-kicker">Consejería · Dirección General · Servicio · conclusión</div>
+    </div>
+  </div>
+
+  <p class="body">Un modelo debe <b>reflejar la realidad</b> lo mejor posible, lo que significa que debe ser <b>completo</b>: abarcar todas las funciones de la organización TI. Sirve como herramienta para analizar si la estructura de un centro TI es correcta: basta ver si <b>todos los procesos necesarios están definidos sin ambigüedad y de modo único</b>.</p>
+
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Como Consejería <span class="tagpill ok">Gestión centralizada</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>El rol "Dirección TI" correspondería a un <b>consejero</b>; habría <b>4 secretarías generales</b> (una por dominio COBIT, nivel 1); por cada una, tantas <b>direcciones generales</b> como roles de nivel 2; los roles de nivel 3 serían <b>servicios</b>, y bajo ellos departamentos.</p>
+        <p>Ej.: la Gestión de la Calidad tendría rango de servicio en una consejería; un puesto de promoción del software libre no debería pasar de departamento.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Como Dirección General <span class="tagpill bad">No encaja</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>En la JA solo existe una dirección general TI con competencias en su propia consejería: la de <b>Sistemas de Información Económico-Financiera</b> (Economía y Hacienda). No encaja en el modelo porque hay procesos:</p>
+        <p>• <b>no definidos</b> (Gestión de los Niveles de Servicio) · • <b>duplicados</b> (Gestión de la Calidad) · • desarrollados por una <b>estructura que no corresponde</b> (la Gestión de la Seguridad la hace el Servicio de Producción).</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Como Servicio <span class="tagpill ok">Lo habitual</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p>Un servicio bajo la <b>Secretaría General Técnica</b>: un jefe, uno o dos adjuntos y <b>3 jefes de departamento</b> (Desarrollo y Mantenimiento, Sistemas y Explotación). Competente en todo lo TI de la consejería; <b>sin presupuesto propio</b> aunque decide en parte cómo se invierte. Organización de <b>nivel 2</b>.</p>
+        <p>Suelen faltar: gestión de calidad, de la seguridad y el cumplimiento normativo, la monitorización y evaluación TI.</p>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="box error">
+    <div class="blabel">📌 CONCLUSIÓN</div>
+    <p>Es necesario un <b>marco de referencia</b> para definir las estructuras de los centros TI. Si no, se seguirán creando estructuras <b>"sin ton ni son"</b>, no se podrá justificar su tamaño ni adecuar la política de personal. Muchos centros suplen la falta de personal con <b>contratación externa que en algunos casos supera el 80%</b>.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     17. APROVISIONAMIENTO DE TI
+     ========================================================= -->
+<section class="topic" id="t-aprov" data-title="Aprovisionamiento de TI">
+  <div class="topic-head">
+    <span class="topic-num">17</span>
+    <div>
+      <div class="topic-title">Aprovisionamiento de TI</div>
+      <div class="topic-kicker">Introducción · definición · categorías · estrategia de 11 pasos</div>
+    </div>
+  </div>
+
+  <p class="body">Al optimizar la asignación y utilización de los recursos informáticos, las empresas pueden <b>aumentar la productividad, reducir costes y mantener una ventaja competitiva</b>. La gestión de recursos informáticos abarca desde la gestión de activos de hardware y software hasta el despliegue eficaz de recursos humanos.</p>
+
+  <blockquote class="q">El aprovisionamiento de IT es el proceso de compra y despliegue de bienes o servicios, en este caso, software, hardware, sistemas o cualquier prestación relacionada con las tecnologías.</blockquote>
+  <div class="flow">
+    <div class="step"><div class="circ">A</div><div class="steplabel">Analizar estrategia y necesidades</div></div>
+    <div class="step"><div class="circ">S</div><div class="steplabel">Seleccionar proveedores</div></div>
+    <div class="step"><div class="circ">N</div><div class="steplabel">Negociar contratos o licencias</div></div>
+    <div class="step"><div class="circ">E</div><div class="steplabel">Ejecutar las órdenes de adquisición</div></div>
+  </div>
+
+  <div class="box termino">
+    <div class="blabel">🔑 ESTRATEGIA DE GESTIÓN DE ADQUISICIONES</div>
+    <p>Ayuda a que la infraestructura esté <b>equipada</b> con todo lo necesario, a implementar los cambios de forma <b>ágil</b>, a <b>minimizar interrupciones</b> y a ganar <b>control sobre los activos</b> tecnológicos.</p>
+  </div>
+  <div class="box critico">
+    <div class="blabel">⚠️ PUNTO CRÍTICO</div>
+    <p>A medida que las aplicaciones y el <b>Software como Servicio</b> se vuelven más accesibles en las unidades de negocio, TI puede <b>perder el control sobre el gasto y la seguridad</b> de la tecnología.</p>
+  </div>
+
+  <h3 class="sub">🗂️ Categorías de la adquisición de equipo de cómputo</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Categoría</th><th>Qué es · ejemplos</th></tr></thead>
+    <tbody>
+      <tr><td><b>Directa</b></td><td>Bienes o servicios <b>esenciales</b> usados directamente en la producción; integran la infraestructura de IT: hardware, activos fijos, servidores, licencias de software</td></tr>
+      <tr><td><b>Indirecta</b></td><td>Contribuye al <b>funcionamiento cotidiano</b>: suministros consumibles, software en la nube, gestión de servicios públicos</td></tr>
+      <tr><td><b>De servicios</b></td><td>Prestaciones particulares y <b>SaaS</b>; puede abarcar métodos directos e indirectos</td></tr>
+      <tr><td><b>De bienes</b></td><td><b>Activos físicos</b> como hardware o software empresarial</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">D · I · S · B</div>
+    <p><b>D</b>irecta <b>produce</b> (es infraestructura), <b>I</b>ndirecta <b>mantiene</b> el día a día; <b>S</b>ervicios y <b>B</b>ienes son el "qué" se compra.</p>
+  </div>
+
+  <h3 class="sub">🪜 La estrategia de aprovisionamiento de IT (11)</h3>
+  <ul class="plain">
+    <li>1. Auditar y unificar el <b>inventario</b> informático.</li>
+    <li>2. Realizar una evaluación de las <b>necesidades</b>.</li>
+    <li>3. Establecer un <b>equipo interdisciplinario</b>.</li>
+    <li>4. Definir <b>objetivos y metas</b>.</li>
+    <li>5. Planificar el <b>presupuesto</b> de IT.</li>
+    <li>6. Determinar y gestionar los <b>riesgos</b>.</li>
+    <li>7. <b>Evaluar</b> a los proveedores.</li>
+    <li>8. <b>Solicitar</b> información, presupuesto o propuesta.</li>
+    <li>9. Analizar ofertas y <b>negociar</b> los contratos.</li>
+    <li>10. Planificar la <b>implementación</b>.</li>
+    <li>11. Monitorear los <b>KPI</b> y mejorar el rendimiento.</li>
+  </ul>
+  <div class="box analogia">
+    <div class="blabel">💡 ANALOGÍA</div>
+    <p>Es como remodelar la cocina: primero ves <b>qué tienes</b> (inventario) y <b>qué te falta</b>, juntas a la familia, fijas metas y <b>presupuesto</b>, piensas qué puede salir mal, comparas <b>tiendas</b>, pides cotizaciones, negocias, planificas la obra y luego <b>revisas</b> si quedó como querías.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     18. SELECCIÓN DEL HARDWARE
+     ========================================================= -->
+<section class="topic" id="t-hw" data-title="Selección del hardware">
+  <div class="topic-head">
+    <span class="topic-num">18</span>
+    <div>
+      <div class="topic-title">Selección del hardware</div>
+      <div class="topic-kicker">Estudio previo · criterios: equipos, proveedor, precios · consideraciones generales</div>
+    </div>
+  </div>
+
+  <p class="body">La selección del modelo y capacidades del hardware debe ir de acuerdo con el <b>plan estratégico de sistemas</b> y sustentarse en un <b>estudio del departamento de sistemas</b> (características y volumen de información a sistematizar, tipos de equipos por área). Todo estudio determina una <b>configuración mínima</b> del computador y sus dispositivos anexos (unidades externas, impresoras, tarjetas, módems, backups…) y una <b>evaluación del costo aproximado</b> de la inversión.</p>
+
+  <h3 class="sub">✅ Criterios para la selección de un hardware</h3>
+  <div class="grid1">
+    <div class="card"><div class="cico">🖥️</div><div class="ctitle">Equipos</div><div class="cdesc">Configuración acorde a la <b>carga de procesamiento</b> · capacidad de crecimiento <b>vertical</b> (en el mismo equipo) y <b>horizontal</b> (con otros equipos) · fabricante de calidad y <b>prestigio mundial</b> · tiempo de <b>garantía</b> · <b>tecnología de punta</b>.</div></div>
+    <div class="card"><div class="cico">🏪</div><div class="ctitle">Proveedor</div><div class="cdesc">Reconocido <b>prestigio local</b> · soporte de mantenimiento (personal especializado, stock de repuestos) · tiempo de atención, local apropiado, comunicación rápida · <b>cartera de clientes</b> con equipos equivalentes · tiempo de <b>entrega oportuno</b>.</div></div>
+    <div class="card"><div class="cico">💲</div><div class="ctitle">Precios</div><div class="cdesc">Condiciones de <b>pago</b> · detallado por <b>componentes</b> de la configuración · <b>descuentos por volumen</b> · costo de <b>mantenimiento</b>.</div></div>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ ERROR FRECUENTE</div>
+    <p><b>Fabricante</b> = prestigio <b>mundial</b>; <b>proveedor</b> = prestigio <b>local</b>. Crecimiento <b>vertical</b> = el mismo equipo crece; <b>horizontal</b> = se agregan otros equipos.</p>
+  </div>
+
+  <h3 class="sub">📝 Consideraciones generales del software y hardware</h3>
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Solicitud de propuesta <span class="tagpill ok">El origen</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Todo sistema se origina en una <b>solicitud del usuario</b> al centro de cómputo (en el ejemplo, de PAST CORP S.A.) para satisfacer una necesidad específica.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Los parámetros <span class="tagpill ok">Por escrito</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>La solicitud se mide según los <b>objetivos y las políticas</b>, que fija el usuario (el departamento de análisis puede ayudar). Ambos deben quedar <b>establecidos por escrito</b>.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Evaluación de propuesta <span class="tagpill ok">Investigar</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Una <b>investigación previa</b> establece el tipo de software y hardware requerido; se integra la información para establecer la <b>operatividad</b> de los sistemas a adquirir.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Financiamiento <span class="tagpill ok">Bancos</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Principalmente <b>instituciones bancarias</b> mediante créditos. Los centros de cómputo de la <b>educación pública no tienen</b> fuentes de financiamiento, salvo que produzcan software para empresas privadas.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Negociación de contrato <span class="tagpill ok">Todo incluido</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Debe incluir todos los aspectos de operación del SW y HW: <b>actualizaciones, innovaciones, capacitación, asesoría técnica</b>, etc.</p></div></div>
+    </div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">EPP · SPEFN</div>
+    <p>Criterios de HW: <b>E</b>quipos, <b>P</b>roveedor, <b>P</b>recios. Consideraciones: "<b>S</b>olicito, <b>P</b>arametrizo, <b>E</b>valúo, <b>F</b>inancio y <b>N</b>egocio".</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     19. SELECCIÓN DEL SOFTWARE
+     ========================================================= -->
+<section class="topic" id="t-sw" data-title="Selección del software">
+  <div class="topic-head">
+    <span class="topic-num">19</span>
+    <div>
+      <div class="topic-title">Criterios para la selección de un software</div>
+      <div class="topic-kicker">7 criterios y lo que incluye cada uno</div>
+    </div>
+  </div>
+
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Criterio</th><th>Incluye</th></tr></thead>
+    <tbody>
+      <tr><td><b>Capacidad para realizar las tareas requeridas</b></td><td>Capacidad para las tareas que se desearán más adelante · buen diseño en pantalla · capacidad adecuada</td></tr>
+      <tr><td><b>Eficacia en el desempeño</b></td><td>Tiempos de respuesta rápidos · captura eficiente · salidas eficientes · almacenamiento de datos eficiente · respaldos eficientes</td></tr>
+      <tr><td><b>Eficiencia operativa</b></td><td>Uso de interfaces satisfactorio · menús de ayuda · interfaz flexible · retroalimentación adecuada · buena recuperación de errores</td></tr>
+      <tr><td><b>Facilidad de uso</b></td><td>Opciones de entrada · opciones para la salida · compatibilidad con otro software</td></tr>
+      <tr><td><b>Flexibilidad</b></td><td>Buena organización · programas tutoriales de calidad · respuestas adecuadas a las preguntas</td></tr>
+      <tr><td><b>Calidad de documentación</b></td><td>(sin subpuntos en la lámina)</td></tr>
+      <tr><td><b>Soporte del fabricante</b></td><td>Línea de consulta directa · boletines · actualizaciones frecuentes (a bajo costo)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">C · E · E · F · F · C · S</div>
+    <p>El software ideal es <b>C</b>apaz, <b>E</b>ficaz, <b>E</b>ficiente, <b>F</b>ácil, <b>F</b>lexible, <b>C</b>on documentación y con <b>S</b>oporte. Dos E y dos F en el medio.</p>
+  </div>
+  <div class="box critico">
+    <div class="blabel">⚠️ PUNTO CRÍTICO</div>
+    <p>En "<b>Eficacia en el desempeño</b>" todo es <b>rapidez y eficiencia</b> (respuesta, captura, salidas, almacenamiento, respaldos). En "<b>Eficiencia operativa</b>" todo es <b>interfaz y ayuda</b> (menús, retroalimentación, recuperación de errores).</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     20. BENEFICIOS Y DESAFÍOS
+     ========================================================= -->
+<section class="topic" id="t-beneficios" data-title="Beneficios y desafíos de la compra TI">
+  <div class="topic-head">
+    <span class="topic-num">20</span>
+    <div>
+      <div class="topic-title">Beneficios y desafíos de la compra TI</div>
+      <div class="topic-kicker">6 beneficios · 4 desafíos · GRC · RFP</div>
+    </div>
+  </div>
+
+  <h3 class="sub">👍 Beneficios</h3>
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Alineación estratégica <span class="tagpill ok">Objetivos</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Garantiza que las inversiones en tecnología contribuyen directamente a las metas de la organización y al crecimiento del negocio.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Gestión de riesgos <span class="tagpill ok">Confiabilidad</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Impulsa la compra de productos y servicios <b>confiables y de alta calidad</b>, reduciendo interrupciones operativas y vulnerabilidades de seguridad.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Optimización de los costos <span class="tagpill ok">Ahorro</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Negociar mejores acuerdos, aprovechar el <b>poder de compra a gran escala</b> e identificar soluciones rentables.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Relaciones con los proveedores <span class="tagpill ok">Colaboración</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Vínculos sólidos fomentan la colaboración, la innovación y condiciones favorables en el ecosistema de adquisiciones.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Toma de decisiones <span class="tagpill ok">Prioridades</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Comprender las limitaciones y oportunidades financieras permite una planificación más eficaz y decisiones informadas sobre prioridades y proyectos.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Garantía de GRC <span class="tagpill ok">Cumplimiento</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Impone el cumplimiento de <b>Gobernanza, Riesgo y Cumplimiento</b>: licencias, gestión de datos y prácticas de seguridad acatan las normas del sector.</p></div></div>
+    </div>
+  </div>
+
+  <h3 class="sub">👎 Desafíos</h3>
+  <div class="grid2">
+    <div class="card"><div class="ctitle">💰 Planificación y presupuestación</div><div class="cdesc">Sin una estrategia sólida no se puede prever el gasto; el presupuesto define las necesidades.</div></div>
+    <div class="card"><div class="ctitle">📨 Procesos RFP</div><div class="cdesc">Request for Proposal: articulan los requerimientos con los proveedores de forma transparente, estructurada y justa.</div></div>
+    <div class="card"><div class="ctitle">📋 Inventario de los activos</div><div class="cdesc">Indica el siguiente paso en la adquisición; sin él hay obstáculos en todo el ciclo de vida del HW y SW.</div></div>
+    <div class="card"><div class="ctitle">🔄 Gestión de cambios</div><div class="cdesc">Las partes acostumbradas a las prácticas existentes se resisten; se requieren estrategias de cambio.</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">ARCPDG · PRIC</div>
+    <p>Beneficios: <b>A</b>linea, <b>R</b>iesgos, <b>C</b>ostos, <b>P</b>roveedores, <b>D</b>ecisiones, <b>G</b>RC. Desafíos: "el <b>PRIC</b>e de comprar TI" — <b>P</b>lanificación, <b>R</b>FP, <b>I</b>nventario, <b>C</b>ambios.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     21. EVALUACIÓN Y SELECCIÓN DE PROVEEDORES
+     ========================================================= -->
+<section class="topic" id="t-proveedores" data-title="Evaluación y selección de proveedores">
+  <div class="topic-head">
+    <span class="topic-num">21</span>
+    <div>
+      <div class="topic-title">Evaluación y selección de proveedores</div>
+      <div class="topic-kicker">5 aspectos · criterios · proceso de evaluación · beneficios</div>
+    </div>
+  </div>
+
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>1. Perfil general del proveedor <span class="tagpill ok">Primer paso</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Prestigio, experiencia y referencias · trayectoria en la industria · capacidad de respuesta · estándares de calidad · reputación y cumplimiento normativo · <b>localización geográfica</b> (puede determinar el precio) · tamaño.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>2. Precio <span class="tagpill bad">No decide solo</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Puede ser el de principal interés y el criterio al que más valor se otorga; sin embargo, <b>por sí solo no puede ser determinante</b> en la selección.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>3. Capacidad técnica <span class="tagpill ok">Respuesta</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Cantidad de personal y turnos · disponibilidad · transporte propio o subcontratado · sistema de manufactura (planificación, gestión, procedimientos, capacitación) · credenciales, premios, <b>certificaciones ISO</b>.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>4. Tecnología e infraestructura <span class="tagpill ok">Calidad</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Usar herramientas tecnológicas aumenta la <b>calidad</b> de lo suministrado; las nuevas tecnologías dan oportunidades de negocio y competitividad.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>5. Desempeño y nivel de servicio (SLA) <span class="tagpill ok">Prevenir</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Evaluar la calidad del servicio permite <b>prevenir y mitigar riesgos</b> o fallas logísticas que generen gastos extra (p. ej. transporte).</p></div></div>
+    </div>
+  </div>
+
+  <h3 class="sub">🪜 Criterios para la selección de proveedores</h3>
+  <div class="flow">
+    <div class="step"><div class="circ">1</div><div class="steplabel">Establecer criterios de evaluación</div></div>
+    <div class="step"><div class="circ">2</div><div class="steplabel">Búsqueda de proveedores</div></div>
+    <div class="step"><div class="circ">3</div><div class="steplabel">Evaluar según los criterios</div></div>
+    <div class="step"><div class="circ">4</div><div class="steplabel">Selección de proveedores</div></div>
+  </div>
+
+  <h3 class="sub">🔁 Proceso de evaluación de un proveedor</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Paso</th><th>Idea clave</th><th>Detalle</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Criterios</b></td><td>Información objetiva</td><td>Precio, calidad, puntualidad, flexibilidad, reputación, localización y tamaño</td></tr>
+      <tr><td><b>2. Convenio</b></td><td>Contrato de confidencialidad</td><td>Transparencia y confianza: qué datos se divulgan, titularidad, período, a quién afecta</td></tr>
+      <tr><td><b>3. Lista</b></td><td>Listado corto</td><td>Analizar el mercado, pros y contras; los finalistas llenan un documento (empresa, proyecto, problema, requerimientos, condiciones)</td></tr>
+      <tr><td><b>4. Evaluar</b></td><td>Puntuación</td><td>El mejor calificado debería ser adjudicado; no descartar al 2.º y 3.º por si el primero falla</td></tr>
+      <tr><td><b>5. Decidir</b></td><td>Relaciones beneficiosas</td><td>Alinear objetivos; no presionar con condiciones y precios excesivos</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">🎁 Beneficios de evaluar al proveedor</h3>
+  <div class="route"><div class="route-row">
+    <span class="rpill hi">1 Medir el riesgo</span><span class="rpill hi">2 Proteger la reputación de la marca</span><span class="rpill hi">3 Optimizar el costo</span><span class="rpill hi">4 Homologar prácticas</span><span class="rpill hi">5 Compromiso del proveedor</span>
+  </div></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">PPCTD · EBES · CCLED</div>
+    <p>Aspectos: <b>P</b>erfil, <b>P</b>recio, <b>C</b>apacidad, <b>T</b>ecnología, <b>D</b>esempeño. Criterios: <b>E</b>stablece, <b>B</b>usca, <b>E</b>valúa, <b>S</b>elecciona. Proceso: "<b>C</b>on <b>C</b>uidado <b>L</b>isto, <b>E</b>valúo y <b>D</b>ecido".</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     22. RIESGO CON PROVEEDORES
+     ========================================================= -->
+<section class="topic" id="t-riesgos" data-title="Riesgo con proveedores y Kraljic">
+  <div class="topic-head">
+    <span class="topic-num">22</span>
+    <div>
+      <div class="topic-title">Gestión de riesgo con proveedores</div>
+      <div class="topic-kicker">Deloitte · niveles de riesgo · 6 riesgos · matriz de evaluación · Kraljic</div>
+    </div>
+  </div>
+
+  <p class="body">Es una situación latente para cualquier industria que dependa intensivamente del cumplimiento de contratos de su cadena de suministro. Según un reporte de <b>Deloitte</b>:</p>
+  <div class="grid2">
+    <div class="card"><div class="ctitle">87%</div><div class="cdesc">tuvo algún incidente de un proveedor que afectó sus operaciones</div></div>
+    <div class="card"><div class="ctitle">44%</div><div class="cdesc">solo ellos se consideran muy efectivos administrando el riesgo de terceros</div></div>
+    <div class="card"><div class="ctitle">28%</div><div class="cdesc">de quienes sufrieron incidentes enfrentó grandes interrupciones</div></div>
+    <div class="card"><div class="ctitle">11%</div><div class="cdesc">vio sus actividades completamente interrumpidas</div></div>
+  </div>
+
+  <h3 class="sub">🎚️ Definición de riesgo del proveedor</h3>
+  <div class="tblwrap"><table style="min-width:0;">
+    <thead><tr><th>Nivel</th><th>Definición</th></tr></thead>
+    <tbody>
+      <tr><td><b>Críticos</b></td><td>Afectan directamente la calidad de la oferta y existen <b>pocas (o sólo una)</b> alternativas en el mercado</td></tr>
+      <tr><td><b>Alto riesgo</b></td><td>Afectan directamente la calidad, pero <b>existen alternativas</b></td></tr>
+      <tr><td><b>Riesgo medio</b></td><td>Productos importantes, pero que <b>no forman parte de los procesos críticos</b></td></tr>
+      <tr><td><b>Bajo riesgo</b></td><td><b>No presentan impacto</b> en los requisitos de calidad</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">⚠️ Principales riesgos</h3>
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>1. Interrupción del servicio al cliente <span class="tagpill bad">La cara de la empresa</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>El proveedor se transforma en la cara de la empresa: el cliente asumirá que cualquier problema es responsabilidad de ella. Crítico en servicios financieros, energía y sector público.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>2. Violaciones a la ley y normativa <span class="tagpill bad">2–50 M USD</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Proveedor y contratante pueden asumir multas. Deloitte estima que en multinacionales las faltas de terceros llevan a multas, compensaciones y pérdidas de <b>2 a 50 millones de dólares</b>.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>3. Daño a la reputación <span class="tagpill bad">Intangible</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Daño intangible que puede desencadenar fuga de clientes y caída del valor en bolsa.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>4. Quiebre de la cadena de suministro <span class="tagpill bad">Logística</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Si la logística se rompe, afecta a otros proveedores o arriesga el producto. Preocupa a servicios profesionales, infraestructura y salud.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>5. Riesgo de fraude <span class="tagpill bad">Fraude</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Especialmente crítico en servicios al consumidor, telecomunicaciones, tecnología y manufactura.</p></div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>6. Factibilidad económica del proveedor <span class="tagpill bad">Liquidez</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner"><p>Si el tercero carece de liquidez para cumplir sus obligaciones, se arriesga la disrupción del servicio, sea sector público o privado.</p></div></div>
+    </div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">I · L · R · C · F · F</div>
+    <p><b>I</b>nterrumpe, <b>L</b>ey, <b>R</b>eputación, <b>C</b>adena, <b>F</b>raude y <b>F</b>inanzas del proveedor.</p>
+  </div>
+
+  <h3 class="sub">🧮 Matriz de evaluación y clasificación según su riesgo</h3>
+  <div class="grid1">
+    <div class="card"><div class="cico">🅰️</div><div class="ctitle">Proveedor tipo "A"</div><div class="cdesc">Proveedor <b>crítico</b>. Riesgo asociado <b>elevado</b>.</div></div>
+    <div class="card"><div class="cico">🅱️</div><div class="ctitle">Proveedor tipo "B"</div><div class="cdesc">Proveedor <b>importante</b>. Riesgo asociado <b>medio</b>.</div></div>
+    <div class="card"><div class="cico">©️</div><div class="ctitle">Proveedor tipo "C"</div><div class="cdesc">Proveedor <b>no crítico</b>. Riesgo asociado <b>bajo</b>.</div></div>
+  </div>
+  <p class="body">La <b>matriz de evaluación de proveedores</b> compara proveedores (Vendor A vs. Vendor B) por criterios como calidad, precio e impresión, con <b>puntos, ponderación, total</b> y si cumple lo obligatorio. Escala: 10 completamente cumplido · 7 mayormente · 3 parcialmente · 0 no utilizable.</p>
+
+  <h3 class="sub">🧭 Matriz de segmentación de proveedores de Kraljic</h3>
+  <p class="body">Ejes: <b>Rentabilidad</b> (vertical) y <b>Riesgo</b> (horizontal), de 1 a 10.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Cuadrante</th><th>Posición</th><th>Estrategia</th></tr></thead>
+    <tbody>
+      <tr><td><b>Apalancado</b></td><td>Alta rentabilidad · bajo riesgo</td><td>Fuente abundante de productos o servicios; sacar provecho del poder de compra</td></tr>
+      <tr><td><b>Estratégico</b></td><td>Alta rentabilidad · alto riesgo</td><td>Productos o servicios esenciales; garantizar la disponibilidad a través de fuentes nacionales o internacionales</td></tr>
+      <tr><td><b>No crítico</b></td><td>Baja rentabilidad · bajo riesgo</td><td>Productos o servicios de bajo valor; fuentes descentralizadas</td></tr>
+      <tr><td><b>Cuello de botella</b></td><td>Baja rentabilidad · alto riesgo</td><td>Esenciales con fuentes limitadas; mantener las relaciones actuales y desarrollar nuevos suministros para garantizar la entrega</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box analogia">
+    <div class="blabel">💡 ANALOGÍA</div>
+    <p>Comprar para una fiesta: el <b>refresco</b> está en todas partes y negocias precio (apalancado); el <b>pastel</b> del único pastelero bueno es clave y riesgoso (estratégico); las <b>servilletas</b> se compran donde sea (no crítico); y el <b>hielo</b> que solo vende una tienda y se acaba pronto es tu cuello de botella.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     23. GLOSARIO
+     ========================================================= -->
+<section class="topic" id="t-glosario" data-title="Glosario del parcial">
+  <div class="topic-head">
+    <span class="topic-num">23</span>
+    <div>
+      <div class="topic-title">Glosario del parcial</div>
+      <div class="topic-kicker">24 términos y siglas · toca cada tarjeta para ver la definición</div>
+    </div>
+  </div>
+
+  <div class="glo" id="glosario-grid">
+    <div class="glo-item"><div class="gs">CIO</div><div class="gn">Chief Information Officer</div><div class="gm">Responsable de los sistemas y las TI; provee la tecnología para que los procesos de la empresa funcionen lo mejor posible.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CISO</div><div class="gn">Chief Information Security Officer</div><div class="gm">Director de seguridad de la información: protege ante ciberataques y fugas de datos.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CEO</div><div class="gn">Chief Executive Officer</div><div class="gm">Puesto más alto de la jerarquía administrativa y de operación; director general, consejero delegado o presidente ejecutivo.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CTO</div><div class="gn">Chief Technology Officer</div><div class="gm">Director de tecnología: máximo responsable técnico; mejora productos para clientes externos, aumenta ingresos, analiza ROI.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">DPO</div><div class="gn">Data Protection Officer</div><div class="gm">Delegado de Protección de Datos: garantiza el cumplimiento de la normativa de protección de datos (RGPD).</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CFO · COO · CMO</div><div class="gn">Financiero · Operativo · Mercadotecnia</div><div class="gm">Chief Financial Officer, Chief Operating Officer y Chief Marketing Officer.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CDO · CSO</div><div class="gn">Datos masivos · Sustentabilidad</div><div class="gm">Chief Data Officer y Chief Sustainability Officer (en la lámina de siglas de la alta dirección).</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CCO · CRO</div><div class="gn">Anticorrupción · Reputación</div><div class="gm">Chief Compliance Officer y Chief Reputation Officer.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">ITSM</div><div class="gn">Administración de las TI</div><div class="gm">Mantenimiento y reparación de los sistemas, asesoría sobre nuevas soluciones y ayuda para instalar y usar equipos.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">In house</div><div class="gn">Desarrollo propio</div><div class="gm">Software desarrollado por la propia empresa según sus necesidades, en lugar de comprar paquetes.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">RACI</div><div class="gn">Matriz de asignación de responsabilidades</div><div class="gm">Responsible (ejecuta), Accountable (responsabilidad última), Consulted (antes), Informed (después).</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Rol</div><div class="gn">ITIL</div><div class="gm">Conjunto de responsabilidades, actividades y autorizaciones.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Proceso</div><div class="gn">ISO 9000</div><div class="gm">Conjunto de actividades relacionadas o que interactúan, que transforman elementos de entrada en resultados.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Función</div><div class="gn">DIRKS</div><div class="gm">La mayor unidad de actividad de negocio en una organización; agregados de más alto nivel de las actividades.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Servicio TI</div><div class="gn">ITIL · ISO 8402:1994</div><div class="gm">Uno o más sistemas TI que hacen posible un proceso de negocio.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">COBIT · ITIL</div><div class="gn">Marcos de referencia</div><div class="gm">Control Objectives for Information and related Technology · IT Infrastructure Library. Base del modelo de roles.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">PDCA</div><div class="gn">Ciclo de Deming</div><div class="gm">Plan-Do-Check-Act. Los 4 dominios de COBIT corresponden a sus fases.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">DRSEI</div><div class="gn">Niveles de responsabilidad</div><div class="gm">Director, Responsable, Supervisor, Ejecutor, Informado.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Aprovisionamiento</div><div class="gn">Procurement de IT</div><div class="gm">Proceso de compra y despliegue de bienes o servicios tecnológicos.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">SaaS</div><div class="gn">Software como Servicio</div><div class="gm">Forma parte de la adquisición de servicios; su accesibilidad puede hacer que TI pierda control del gasto y la seguridad.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">RFP</div><div class="gn">Request for Proposal</div><div class="gm">Solicitud de Propuestas: articula los requerimientos con los proveedores de forma transparente, estructurada y justa.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">GRC</div><div class="gn">Gobernanza, Riesgo y Cumplimiento</div><div class="gm">Requisitos que los procesos de adquisición deben imponer a licencias, datos y seguridad.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">SLA</div><div class="gn">Nivel de servicio</div><div class="gm">Desempeño y nivel de servicio del proveedor; quinto aspecto de su evaluación.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Kraljic</div><div class="gn">Matriz de segmentación</div><div class="gm">Clasifica proveedores por rentabilidad y riesgo: apalancado, estratégico, no crítico, cuello de botella.</div><div class="gtoggle">ver ▾</div></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     24. RESUMEN FINAL
+     ========================================================= -->
+<section class="topic" id="t-resumen" data-title="Resumen del Parcial 2">
+  <div class="topic-head">
+    <span class="topic-num">✔</span>
+    <div>
+      <div class="topic-title">Resumen del Parcial 2</div>
+      <div class="topic-kicker">Los puntos clave, todos juntos</div>
+    </div>
+  </div>
+
+  <div class="mm-center">🎓<br>Parcial 2<br>GR TIC</div>
+  <div class="mm-branches">
+    <div class="mm-branch" style="border-color:#265c3a;color:#4ade80;">🧑‍💼 RRHH en TIC · 7 pasos</div>
+    <div class="mm-branch" style="border-color:#1f4d5c;color:#5ecbe8;">👔 CIO · CISO · CEO · CTO · DPO</div>
+    <div class="mm-branch" style="border-color:#5c4515;color:#f5b942;">🧮 RACI · DRSEI</div>
+    <div class="mm-branch" style="border-color:#453262;color:#c9a6f0;">🗂️ Jerarquía de roles (COBIT + ITIL)</div>
+    <div class="mm-branch" style="border-color:#265c3a;color:#4ade80;">🛒 Aprovisionamiento · HW · SW</div>
+    <div class="mm-branch" style="border-color:#1f4d5c;color:#5ecbe8;">🤝 Proveedores · riesgos · Kraljic</div>
+  </div>
+
+  <ul class="plain" style="margin-top:16px;">
+    <li>La mayor barrera entre <b>RRHH y TI</b> es la falta de comprensión → mal reclutamiento. RRHH debe adquirir, desarrollar, motivar y retener (ADMG).</li>
+    <li>Proceso de RRHH: <b>planificación → reclutamiento → selección → contratación → orientación → capacitación → desarrollo de la carrera</b>.</li>
+    <li><b>CIO</b> = sistemas para los procesos internos; <b>CTO</b> = tecnología para clientes externos; <b>CISO</b> = ciberseguridad; <b>CEO</b> = puesto más alto; <b>DPO</b> = protección de datos (RGPD).</li>
+    <li>TI tiene 3 funciones (<b>infraestructura, funcionalidad, gobernanza</b>) y 7 áreas (administración, soporte, comunicaciones, programación, web, apps, contingencia de red).</li>
+    <li><b>RACI</b>: R ejecuta, A responde, C antes, I después. <b>DRSEI</b>: Director, Responsable, Supervisor, Ejecutor, Informado; ningún rol sin responsable ni con dos.</li>
+    <li>Modelo de roles: <b>función → procesos → roles</b>; tipos 0–3; niveles 0 (Dirección TI) a 3; dominios PO, AI (Infraestructura TI), DS (Servicios TI), ME.</li>
+    <li><b>Aprovisionamiento</b>: comprar y desplegar TI; categorías directa, indirecta, servicios y bienes; estrategia de 11 pasos (inventario → KPI).</li>
+    <li>Hardware: <b>equipos, proveedor, precios</b>. Software: capacidad, eficacia, eficiencia operativa, facilidad, flexibilidad, documentación, soporte.</li>
+    <li>Proveedores: perfil, precio (no decide solo), capacidad técnica, tecnología, SLA. Riesgos con datos de <b>Deloitte</b> (87/44/28/11) y la matriz de <b>Kraljic</b>.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <p><b>Gerencia de Recursos de TIC</b> · Parcial 2 · II Semestre 2026</p>
+  <p>Universidad Tecnológica de Panamá · FISC</p>
+  <p>Guía de estudio generada solo a partir de los 3 PDF del Parcial 2 — uso académico.</p>
+</footer>
+
+<!-- ============================================================
+     TOC OVERLAY
+     ============================================================ -->
+<div id="tocOverlay">
+  <div class="toc-head">
+    <h2>Índice</h2>
+    <button id="tocClose" aria-label="Cerrar índice">✕</button>
+  </div>
+  <div class="toc-list" id="tocList"></div>
+</div>
+
+<!-- ============================================================
+     BOTTOM NAV
+     ============================================================ -->
+<div id="bottomnav">
+  <div class="navpill">
+    <button class="navbtn" id="btnTop"><span class="nico">↑</span>Inicio</button>
+    <button class="navbtn primary" id="btnToc"><span class="nico">☰</span>Índice</button>
+    <button class="navbtn" id="btnSearchFocus"><span class="nico">🔎</span>Buscar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- PROGRESS BAR ---------- */
+  var progress = document.getElementById('progress');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop || document.body.scrollTop;
+    var height = (h.scrollHeight || document.body.scrollHeight) - h.clientHeight;
+    var pct = height > 0 ? (scrolled/height*100) : 0;
+    progress.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+
+  /* ---------- BUILD TOC ---------- */
+  var topics = Array.prototype.slice.call(document.querySelectorAll('section.topic'));
+  var tocList = document.getElementById('tocList');
+  topics.forEach(function(sec){
+    var num = sec.querySelector('.topic-num').textContent;
+    var title = sec.getAttribute('data-title') || sec.querySelector('.topic-title').textContent;
+    var a = document.createElement('a');
+    a.href = '#' + sec.id;
+    a.innerHTML = '<span class="tn">'+num+'</span><span>'+title+'</span>';
+    a.addEventListener('click', function(){ closeToc(); });
+    tocList.appendChild(a);
+  });
+
+  var tocOverlay = document.getElementById('tocOverlay');
+  function openToc(){ tocOverlay.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeToc(){ tocOverlay.classList.remove('open'); document.body.style.overflow=''; }
+  document.getElementById('btnToc').addEventListener('click', openToc);
+  document.getElementById('tocClose').addEventListener('click', closeToc);
+
+  document.getElementById('btnTop').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('btnSearchFocus').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+    setTimeout(function(){ document.getElementById('searchInput').focus(); }, 350);
+  });
+
+  /* ---------- ACCORDIONS (casos reales) ---------- */
+  document.querySelectorAll('.acc-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.parentElement.classList.toggle('open');
+    });
+  });
+
+  /* ---------- GLOSSARY TOGGLE ---------- */
+  document.querySelectorAll('.glo-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      item.classList.toggle('open');
+      var t = item.querySelector('.gtoggle');
+      t.textContent = item.classList.contains('open') ? 'ocultar ▴' : 'ver ▾';
+    });
+  });
+
+  /* ---------- SEARCH / FILTER ---------- */
+  var searchInput = document.getElementById('searchInput');
+  var searchCount = document.getElementById('searchcount');
+  var allTopics = topics;
+
+  function stripMarks(container){
+    container.querySelectorAll('mark.hit').forEach(function(m){
+      var parent = m.parentNode;
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    });
+  }
+
+  function highlightText(node, term){
+    if(node.nodeType === 3){
+      var idx = node.textContent.toLowerCase().indexOf(term);
+      if(idx >= 0){
+        var text = node.textContent;
+        var before = text.slice(0, idx);
+        var match = text.slice(idx, idx+term.length);
+        var after = text.slice(idx+term.length);
+        var frag = document.createDocumentFragment();
+        if(before) frag.appendChild(document.createTextNode(before));
+        var mark = document.createElement('mark');
+        mark.className = 'hit';
+        mark.textContent = match;
+        frag.appendChild(mark);
+        if(after) frag.appendChild(document.createTextNode(after));
+        node.parentNode.replaceChild(frag, node);
+        return true;
+      }
+      return false;
+    }
+    if(node.nodeType === 1 && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE'){
+      var found = false;
+      var children = Array.prototype.slice.call(node.childNodes);
+      for(var i=0;i<children.length;i++){
+        if(highlightText(children[i], term)) { found = true; break; }
+      }
+      return found;
+    }
+    return false;
+  }
+
+  var searchTimer;
+  searchInput.addEventListener('input', function(){
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(runSearch, 120);
+  });
+
+  function runSearch(){
+    var term = searchInput.value.trim().toLowerCase();
+
+    // reset
+    allTopics.forEach(function(sec){
+      stripMarks(sec);
+      sec.classList.remove('hidden-by-search');
+      sec.querySelectorAll('.acc-item, .glo-item, .card-wide').forEach(function(el){
+        el.classList.remove('hidden-by-search');
+      });
+    });
+
+    if(term.length < 2){
+      searchCount.textContent = '';
+      return;
+    }
+
+    var totalMatches = 0;
+    var sectionsMatched = 0;
+
+    allTopics.forEach(function(sec){
+      var text = sec.textContent.toLowerCase();
+      var sectionHasMatch = text.indexOf(term) >= 0;
+
+      // Granular filter for repeating item types
+      var items = sec.querySelectorAll('.acc-item, .glo-item, .card-wide');
+      var anyItemVisible = false;
+      if(items.length){
+        items.forEach(function(it){
+          var itText = it.textContent.toLowerCase();
+          if(itText.indexOf(term) >= 0){
+            anyItemVisible = true;
+            totalMatches++;
+          } else {
+            it.classList.add('hidden-by-search');
+          }
+        });
+      }
+
+      if(sectionHasMatch){
+        sectionsMatched++;
+        if(!items.length) totalMatches++;
+        // highlight first occurrence per block-level element for lightweight marking
+        sec.querySelectorAll('p, li, td, .ctitle, .cdesc, .cname, .gs, .gn').forEach(function(el){
+          highlightText(el, term);
+        });
+      } else if(!anyItemVisible){
+        sec.classList.add('hidden-by-search');
+      }
+    });
+
+    searchCount.innerHTML = sectionsMatched
+      ? '<b>'+sectionsMatched+'</b> sección(es) con coincidencias para "'+searchInput.value.trim()+'"'
+      : 'Sin resultados para "'+searchInput.value.trim()+'"';
+  }
+
+})();
+</script>
+
+<script>
+/* Ajustes de distribución para móvil */
+(function(){
+  "use strict";
+  // Tablas: 3+ columnas se apilan como tarjetas; 2 columnas se ajustan al ancho
+  document.querySelectorAll('.tblwrap table').forEach(function(t){
+    var ths = Array.prototype.map.call(t.querySelectorAll('thead th'), function(th){ return th.textContent.trim(); });
+    if(ths.length >= 3){
+      t.classList.add('stack');
+      t.parentElement.classList.add('stackwrap');
+      // Si la 1ª columna es un código corto (PC1, 3, KGI, S…), código + nombre van en una línea
+      var firsts = Array.prototype.map.call(t.querySelectorAll('tbody tr td:first-child'), function(td){ return td.textContent.trim().length; });
+      if(firsts.length && Math.max.apply(null, firsts) <= 6) t.classList.add('codefirst');
+      t.querySelectorAll('tbody tr').forEach(function(tr){
+        Array.prototype.forEach.call(tr.children, function(td, i){
+          if(ths[i]) td.setAttribute('data-label', ths[i]);
+        });
+      });
+    } else {
+      t.classList.add('fit');
+    }
+  });
+  // Grids de 2 columnas con descripciones largas → 1 columna en móvil
+  document.querySelectorAll('.grid2').forEach(function(g){
+    var long = Array.prototype.some.call(g.querySelectorAll('.cdesc'), function(d){ return d.textContent.trim().length > 70; });
+    if(long) g.classList.add('wide');
+  });
+  // Header compacto al hacer scroll
+  var header = document.querySelector('header');
+  function onScroll(){ header.classList.toggle('compact', window.scrollY > 60); }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>

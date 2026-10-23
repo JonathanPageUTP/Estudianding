@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Repaso GR · Parcial 2</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+@media (max-width:560px){
+  /* ocupar exactamente la pantalla visible (descontando la barra del navegador) */
+  body{min-height:100vh;min-height:100dvh;}
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+
+  header{padding:12px 16px 6px;}
+  .brand-row h1{font-size:1.2rem;}
+  .subtitle{margin:0 0 10px;}
+  .progress-wrap{height:7px;margin-bottom:10px;}
+  .stats-row{gap:6px;margin-bottom:10px;font-size:.68rem;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .stats-row::-webkit-scrollbar{display:none;}
+  .stat-pill{padding:4px 9px;white-space:nowrap;flex-shrink:0;}
+  .tab{padding:8px 14px;font-size:.78rem;}
+
+  main{padding:8px 16px 0;min-height:0;}
+  .counter{margin-bottom:8px;}
+
+  /* la tarjeta llena todo el espacio disponible */
+  .stage{min-height:0;align-items:stretch;}
+  .card3d{height:100%;max-width:none;min-height:240px;}
+  .face{padding:50px 20px 40px;}
+  .face-tag{top:14px;left:14px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .face-status{top:12px;right:14px;}
+  .face-front .q-text{font-size:1.15rem;}
+  .face-back{justify-content:flex-start;padding-bottom:20px;}
+  .face-back .a-label{margin-top:0;}
+  .face-back .a-text{font-size:.98rem;line-height:1.5;}
+  .tap-hint{bottom:14px;}
+
+  /* botones de valoración alineados con la tarjeta */
+  .rate-row{padding:10px 0 0;gap:8px;}
+  .rate-btn{padding:12px 6px;font-size:.82rem;}
+
+  nav.controls{padding:10px 16px calc(12px + var(--safe-b));gap:8px;}
+  .nav-btn{padding:13px 6px;font-size:.88rem;}
+  .nav-btn.shuffle{flex:0 0 50px;padding:13px 0;}
+}
+@media (max-width:560px) and (max-height:700px){
+  .subtitle{display:none;}
+  .face{padding-top:44px;}
+  .face-front .q-text{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1>Repaso <em>GR</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Parcial 2</span>
+    </div>
+    <p class="subtitle">Gerencia de Recursos de TIC · RRHH en TIC · Roles · Adquisición</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-filter="all">Todas · 89</div>
+      <div class="tab" data-filter="hard">Por repasar</div>
+      <div class="tab" data-filter="learned">Aprendidas</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 89</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     89 FLASHCARDS — Fuente: Administración RRHH en TIC.pdf,
+     Roles y Responsabilidades para la Gestión de la TI.pdf,
+     Adquisición, Selección y Criterios de Evaluación Recursos Informáticos.pdf
+  ======================================================== */
+  var CARDS = [
+    // ---------- RRHH EN TIC ----------
+    {cat:"RRHH en TIC", q:"¿Cuál es la mayor barrera entre RRHH y TI según la introducción?", a:"La <b>carencia de comprensión</b> entre ambos departamentos. Uno de los problemas más comunes que genera es el <b>mal reclutamiento</b>: RRHH no entiende al 100% el perfil que busca y TI no se involucra en el proceso de selección."},
+    {cat:"RRHH en TIC", q:"¿A qué ha obligado a RRHH la necesidad de encontrar trabajadores TI calificados?", a:"A encargarse de <b>gestionar y digitalizar el capital humano</b>."},
+    {cat:"RRHH en TIC", q:"¿De qué se ocupa la gestión de Recursos Humanos?", a:"De la <b>dimensión humana</b> de la compañía. Como toda organización está formada por personas, es esencial: <b>adquirir</b> sus servicios, <b>desarrollar</b> sus habilidades, <b>motivarlas</b> para que alcancen más rendimiento y <b>garantizar</b> que mantengan su compromiso.<br><br><i>Mnemotecnia:</i> \"ADMiGo\"."},
+    {cat:"RRHH en TIC", q:"¿Por qué reclutar perfiles TI especializados es un reto? (6 razones)", a:"1. Poca <b>comunicación</b> entre las áreas.<br>2. El reclutador no sabe <b>dónde buscar</b> talento tech.<br>3. No sabe qué <b>habilidades</b> analizar.<br>4. Sin conocimiento <b>técnico</b> para una selección asertiva.<br>5. TI establece requerimientos <b>poco realistas</b>.<br>6. Poco conocimiento del <b>mercado</b> del perfil."},
+    {cat:"RRHH en TIC", q:"¿Cuáles son los 7 pasos del proceso de administración de recursos humanos?", a:"<b>Planificación</b> de recurso humano → <b>Reclutamiento</b> → <b>Selección</b> → <b>Contratación</b> → <b>Orientación</b> → <b>Capacitación</b> → <b>Desarrollo de la carrera</b>.<br><br><i>Mnemotecnia:</i> \"Para Reclutar Sé Claro, Orienta, Capacita y Desarrolla\"."},
+    {cat:"RRHH en TIC", q:"En el diagrama \"El Proceso de Gestión RRHH\", ¿qué se obtiene después de Planificación, Reclutamiento y Selección?", a:"La <b>identificación y selección de empleados competentes</b>."},
+    {cat:"RRHH en TIC", q:"En el Proceso de Gestión RRHH, ¿qué se obtiene después de Orientación y Capacitación?", a:"<b>Empleados adaptados, competentes, con habilidades y conocimientos actualizados</b>."},
+    {cat:"RRHH en TIC", q:"En el Proceso de Gestión RRHH, ¿qué pasos llevan a \"empleados competentes y de alto rendimiento\"?", a:"<b>Evaluación de desempeño</b> → <b>Desarrollo de carrera</b> ↔ <b>Compensación y beneficios</b> (estos dos forman un ciclo)."},
+    {cat:"RRHH en TIC", q:"En el Proceso de Gestión RRHH, ¿qué otro paso sale de la Planificación además del Reclutamiento? ¿Qué rodea todo el proceso?", a:"La <b>Desvinculación</b>. Todo el proceso está rodeado por el <b>Entorno</b>."},
+    {cat:"RRHH en TIC", q:"¿Cuáles son las 3 responsabilidades de TI?", a:"1. Que los empleados puedan <b>comunicarse</b> sobre tareas rutinarias.<br>2. Que trabajen juntos en una <b>plataforma integral</b>.<br>3. Proporcionar a los equipos la <b>funcionalidad</b> que necesitan para realizar sus tareas."},
+    {cat:"RRHH en TIC", q:"Describe el organigrama de una empresa de tecnología.", a:"<b>CEO</b> → <b>Vicepresidentes ejecutivos</b> → <b>Managers</b> → 4 departamentos:<br>• Tecnología y Desarrollo: desarrolladores, testers, diseñadores UX/UI.<br>• Ventas: representantes B2B, B2C, atención al cliente.<br>• Operaciones: administrativos, logística, soporte técnico.<br>• RRHH: selección y reclutamiento, formación y beneficios."},
+    {cat:"RRHH en TIC", q:"¿Cómo se organiza el Departamento de Tecnología y Servicios Informáticos del organigrama del Decanato?", a:"Decanato → <b>Depto. de Tecnología y Servicios Informáticos</b> con dos ramas:<br>• <b>Redes y Mantenimiento</b>: taller de mantenimiento de equipos.<br>• <b>Sistemas y Servicios Informáticos</b>: servicio de mantenimiento de servicios informáticos, laboratorios de informática y aula virtual, servicio de comunicación y publicación de noticias."},
+    {cat:"Alta dirección", q:"¿Qué significan CEO, CFO y COO?", a:"<b>CEO</b>: Chief Executive Officer (director general).<br><b>CFO</b>: Chief Financial Officer (director financiero).<br><b>COO</b>: Chief Operating Officer (director operativo)."},
+    {cat:"Alta dirección", q:"¿Qué significan CMO, CTO, CIO y CDO?", a:"<b>CMO</b>: Chief Marketing Officer (mercadotecnia).<br><b>CTO</b>: Chief Technical Officer (tecnologías).<br><b>CIO</b>: Chief Information Officer (informática).<br><b>CDO</b>: Chief Data Officer (datos masivos)."},
+    {cat:"Alta dirección", q:"¿Qué significan CSO, CCO y CRO en la lámina de siglas de la alta dirección?", a:"<b>CSO</b>: Chief Sustainability Officer (sustentabilidad).<br><b>CCO</b>: Chief Compliance Officer (anticorrupción).<br><b>CRO</b>: Chief Reputation Officer (reputación).<br><br><i>Ojo:</i> la seguridad la lleva el <b>CISO</b>, no el CSO."},
+    {cat:"Alta dirección", q:"En el organigrama de ejemplo (Facebook), ¿quiénes dependen del CEO & Chairman?", a:"El <b>COO</b> y, en la línea inferior, <b>CFO, CIO, CTO, CMO y HR</b>. Del CMO dependen el <b>CDO</b> y <b>Global mkt</b>."},
+    // ---------- CIO ----------
+    {cat:"CIO", q:"¿Qué es el CIO?", a:"El <b>Chief Information Officer</b> es el responsable de los <b>sistemas y de las tecnologías de la información</b> de la empresa, y de <b>identificar y proveer</b> las tecnologías necesarias para que los <b>procesos de la empresa</b> funcionen lo mejor posible."},
+    {cat:"CIO", q:"¿Cuáles son las 3 principales responsabilidades del CIO?", a:"1. <b>Crear valor</b> para la empresa a través de la tecnología.<br>2. <b>Dirigir</b> el uso de los recursos informáticos para lograr los objetivos estratégicos.<br>3. <b>Garantizar</b> que los sistemas de TI se gestionan adecuadamente para administrar el costo, el riesgo y que las operaciones fluyan sin problemas."},
+    {cat:"CIO", q:"Menciona las 10 funciones del CIO.", a:"Gestionar el <b>personal</b> · negociar con <b>proveedores</b> · supervisar la <b>arquitectura</b> · definir <b>políticas</b> y gobernanza · gestionar el <b>riesgo</b> de la información · decidir <b>gasto e inversión</b> · gestionar <b>capacidad y ciclo de vida</b> · comprender <b>tendencias</b> · comunicar <b>incidentes</b> importantes a ejecutivos · <b>cumplimiento</b> normativo (Sarbanes Oxley, GDPR).<br><br><i>Mnemotecnia:</i> PPAP · RGC · TIC."},
+    {cat:"CIO", q:"¿En qué se parecen las responsabilidades estratégicas del CIO a las de otros ejecutivos?", a:"No difieren: como cualquier ejecutivo de un área interna, debe <b>gestionar los recursos bajo su control para maximizar el valor</b>."},
+    {cat:"CIO", q:"¿Cuáles son las 8 características del CIO?", a:"1. <b>Visión estratégica</b>.<br>2. <b>Flexibilidad</b>.<br>3. Capacidad de <b>aprendizaje</b>.<br>4. Dotes de <b>comunicación y liderazgo</b>.<br>5. Capacidad de <b>coordinación</b>.<br>6. <b>Creatividad</b>.<br>7. Capacidad de <b>planificación y control</b>.<br>8. Habilidades de <b>gestión financiera</b>."},
+    {cat:"CIO", q:"¿Qué es la \"visión estratégica\" del CIO?", a:"Saber <b>detectar las tecnologías adecuadas</b> para el negocio de la empresa y que permitirán <b>maximizar los resultados comerciales</b>."},
+    {cat:"CIO", q:"¿Para qué necesita el CIO capacidad de coordinación y habilidades de gestión financiera?", a:"<b>Coordinación:</b> para gestionar tanto al <b>personal interno</b> como a los <b>proveedores externos</b>.<br><b>Gestión financiera:</b> para analizar los <b>costos</b> de las acciones y <b>cumplir con lo presupuestado</b>."},
+    // ---------- CISO ----------
+    {cat:"CISO", q:"¿Qué es el CISO?", a:"El <b>Chief Information Security Officer</b> o <b>director de seguridad de la información</b>: vela por la <b>ciberseguridad</b>, protege la información ante <b>ciberataques y fugas de datos</b> y garantiza la seguridad dentro de las posibilidades <b>humanas, técnicas y económicas</b> de cada empresa."},
+    {cat:"CISO", q:"Menciona las funciones del CISO.", a:"Alinear la estrategia de ciberseguridad con los objetivos · definir la <b>normativa</b> de seguridad · <b>prevenir, detectar y analizar</b> vulnerabilidades · informar a dirección · <b>respuesta rápida</b> a incidentes · formar y concienciar · establecer <b>políticas</b> · garantizar la <b>privacidad</b> · descubrimiento electrónico e <b>investigaciones forenses digitales</b>."},
+    // ---------- CEO ----------
+    {cat:"CEO", q:"¿Qué es el CEO en una empresa?", a:"El <b>puesto más alto</b> en la jerarquía administrativa y de operación. También se le conoce como <b>director general, consejero delegado o presidente ejecutivo</b>. Chief Executive Officer se traduce como <b>director ejecutivo</b>."},
+    {cat:"CEO", q:"¿Cuáles son las 10 funciones de un CEO?", a:"1. <b>Informar</b> objetivos, gestión y logros.<br>2. <b>Planificar</b> las estrategias.<br>3. <b>Motivar y asesorar</b> a los empleados.<br>4. <b>Tomar decisiones</b> organizativas.<br>5. <b>Crear un equipo</b> y manejarlo.<br>6. <b>Cuidar</b> a los clientes.<br>7. <b>Usar</b> el presupuesto.<br>8. <b>Guiar</b> a los directivos.<br>9. <b>Crear</b> la estructura organizativa.<br>10. <b>Fijar</b> los objetivos."},
+    // ---------- CTO ----------
+    {cat:"CTO", q:"¿Qué es el CTO?", a:"El <b>Chief Technology Officer</b> o director de tecnología: <b>máximo responsable del departamento técnico y tecnológico</b>. Es crucial para el desarrollo e implementación de las <b>estrategias tecnológicas</b>; lidera el depto. de tecnología o ingeniería."},
+    {cat:"CTO", q:"¿Qué hace el CTO con la tecnología y con las finanzas?", a:"Desarrolla políticas y procedimientos y usa tecnología para <b>mejorar productos y servicios enfocados en los clientes externos</b>. Además desarrolla estrategias para <b>aumentar los ingresos</b> y realiza análisis de <b>costo-beneficio</b> y de <b>retorno de la inversión</b>."},
+    {cat:"CTO", q:"Menciona las funciones de un CTO.", a:"Liderar la estrategia tecnológica · dirigir <b>Innovación</b> · proteger la información sensible · supervisar los equipos · comunicación entre departamentos · gestionar presupuestos del área · mantener estándares de <b>calidad</b> · identificar mejoras · sistemas <b>escalables</b> · gestionar proyectos tecnológicos · estar al tanto de nuevas <b>legislaciones</b> · fomentar la <b>cultura de la información</b> (12)."},
+    {cat:"CTO", q:"¿Qué diferencia al CIO del CTO según el material?", a:"<b>CIO:</b> sistemas y TI para que los <b>procesos de la empresa</b> funcionen (mirada interna).<br><b>CTO:</b> tecnología para mejorar <b>productos y servicios para clientes externos</b>, aumentar ingresos, ROI."},
+    // ---------- DPO ----------
+    {cat:"DPO", q:"¿Qué es el DPO?", a:"El <b>Data Protection Officer</b> o <b>Delegado de Protección de Datos</b>: garantiza el <b>cumplimiento de la normativa de protección de datos</b> en la organización y vela por la <b>seguridad del tratamiento</b> de los datos."},
+    {cat:"DPO", q:"¿El DPO debe ser jurista?", a:"El <b>RGPD no exige</b> que sea jurista, pero <b>sí deberá contar con amplios conocimientos jurídicos</b>, en concreto en materia de protección de datos."},
+    {cat:"DPO", q:"¿Cuáles son las funciones de un DPO?", a:"<b>Informar y asesorar</b> al responsable o encargado del tratamiento y a los empleados · <b>supervisar</b> el cumplimiento · <b>formación y concienciación</b> · <b>auditorías</b> · asesorar sobre la <b>Evaluación de Impacto</b> en Protección de datos · <b>cooperar</b> con las Autoridades de Control · ser su <b>punto de contacto</b>."},
+    // ---------- FUNCIONES Y ÁREAS DE TI ----------
+    {cat:"Áreas de TI", q:"¿Cuáles son las 3 principales funciones de TI?", a:"<b>Infraestructura:</b> hardware, red, circuitos y equipos para que funcione un sistema informático.<br><b>Funcionalidad:</b> la tarea más visible; crear y mantener aplicaciones, datos y ayudar con el software.<br><b>Gobernanza:</b> parámetros operativos y reglas de uso de la tecnología (parte de la seguridad informática).<br><br>En conjunto: gestiona y potencializa los sistemas para aportar <b>valor y competitividad</b>."},
+    {cat:"Áreas de TI", q:"¿Cuál es la función de TI \"más visible\" y por qué?", a:"La <b>Funcionalidad</b>: es lo que más se asocia con TI. Se refiere a la creación y mantenimiento de <b>aplicaciones operativas</b>; desarrollar, asegurar y almacenar <b>datos</b>; y ayudar en el uso de software."},
+    {cat:"Áreas de TI", q:"¿Qué es la administración o gestión de las TI (ITSM)?", a:"Implica el <b>mantenimiento y reparación</b> de los sistemas tecnológicos, <b>asesorar</b> sobre nuevas soluciones y <b>ayudar</b> a los departamentos a instalar y utilizar nuevos equipos."},
+    {cat:"Áreas de TI", q:"Menciona 5 responsabilidades de los administradores de TI.", a:"Mantener la infraestructura · gestionar el <b>almacenamiento</b> de datos · evaluar <b>amenazas</b> · seguimiento de <b>contratos</b> con clientes · estándares de calidad · renovar <b>licencias</b> · capacitar empleados · resolver problemas de SW y HW · instalar <b>actualizaciones</b>."},
+    {cat:"Áreas de TI", q:"¿Qué hace el personal de soporte técnico?", a:"Ofrece asistencia al personal que necesita <b>acceso a los sistemas</b>. Ej.: solucionar problemas de HW y SW, registros de trabajo, reparar o reemplazar HW, equipos de videoconferencia, impresoras, problemas de red, <b>copias de seguridad</b>, inventario de TI, adquisición de equipos, servicios en la <b>nube</b>."},
+    {cat:"Áreas de TI", q:"¿Por qué las empresas necesitan el área de comunicaciones?", a:"Porque confían en métodos digitales para <b>superar grandes distancias</b>, <b>reducir problemas logísticos</b> o contactar al <b>personal remoto</b>, sea comunicación interna o externa. Ej.: cuentas de usuario e inicio de sesión, correo electrónico, videoconferencias."},
+    {cat:"Áreas de TI", q:"¿Qué significa que los sistemas se desarrollen \"in house\"?", a:"Que parte de los sistemas los <b>desarrolla la propia empresa</b>: los especialistas crean software basado en sus necesidades <b>en lugar de comprar paquetes de software</b>. Lenguajes citados: JavaScript, HTML/CSS, SQL, Python y C++."},
+    {cat:"Áreas de TI", q:"¿Qué responsabilidades tiene quien administra el sitio web de la empresa?", a:"Configurar el <b>diseño</b> · probar y mejorar la <b>funcionalidad</b> · escribir e implementar el <b>código</b> · trabajar con escritores y diseñadores gráficos · configurar <b>canales seguros</b> para comercio electrónico y suscripciones · garantizar la <b>seguridad</b> del sitio."},
+    {cat:"Áreas de TI", q:"¿Qué hace quien desarrolla aplicaciones?", a:"Evalúa las necesidades de los clientes · las <b>convierte en aplicaciones viables</b> · analiza la viabilidad de actualizaciones · desarrolla el código · elabora <b>manuales de usuario</b> · soluciona problemas, hace <b>pruebas y control de calidad</b>."},
+    {cat:"Áreas de TI", q:"¿Qué incluye la planificación de contingencia de red?", a:"Configurar <b>redes alternativas</b> si la principal falla · instalar equipos de <b>energía y redes de emergencia</b> · cooperar con expertos de la industria · <b>probar y mantener</b> regularmente las medidas · investigar y adquirir nuevas soluciones."},
+    // ---------- RACI ----------
+    {cat:"RACI", q:"¿Qué es una matriz RACI?", a:"También llamada <b>Matriz de asignación de responsabilidades</b>: identifica los <b>roles y responsabilidades</b> de los equipos para cualquier tarea, logro o entrega del proyecto. Aclara cómo se distribuye la responsabilidad y <b>reduce la confusión</b>."},
+    {cat:"RACI", q:"¿Qué significa cada letra de RACI?", a:"<b>R – Responsible:</b> ejecuta la tarea (realiza el trabajo).<br><b>A – Accountable / Aprobador:</b> responsabilidad última; supervisa la finalización, aunque quizá no haga el trabajo.<br><b>C – Consulted:</b> se le consulta <b>antes</b>; revisa y da el visto bueno (puede haber varios).<br><b>I – Informed:</b> se le informa del progreso y finalización, <b>después</b> de la decisión."},
+    {cat:"RACI", q:"¿Por qué la lámina dice \"ojo con el idioma\" en la R de RACI?", a:"Porque <b>Responsible</b> suena a \"el responsable\", pero en RACI es quien <b>ejecuta</b> la tarea. La <b>responsabilidad última</b> la tiene el <b>Accountable</b>."},
+    // ---------- ROLES Y RESPONSABILIDADES ----------
+    {cat:"Roles TI", q:"¿Qué problema plantea el resumen de \"Roles y responsabilidades para la gestión de las TI\"?", a:"Detrás de los servicios de administración electrónica hay <b>personas, infraestructuras y procesos</b>, pero a menudo las personas <b>desconocen su rol</b>, las infraestructuras <b>no están controladas</b> y los procesos <b>no están definidos</b>. Se propone una estructura de RRHH TI basada en procesos, usando <b>COBIT e ITIL</b>."},
+    {cat:"Roles TI", q:"¿Cómo surgen los roles y responsabilidades según el modelo?", a:"A partir de la <b>función</b> de la organización se definen los <b>procesos</b> necesarios; una vez definidos, surgen de modo natural los <b>roles y responsabilidades</b>. Por eso los roles no deberían cambiar salvo <b>cambios organizativos o tecnológicos profundos</b>."},
+    {cat:"Roles TI", q:"¿Qué pregunta debe poder responderse afirmativamente con el conjunto de roles?", a:"<b>¿Se están gestionando adecuadamente las TI en la organización?</b> (La función de una organización TI es la gestión de las TI.)"},
+    {cat:"Roles TI", q:"¿Qué es un rol según ITIL?", a:"Un <b>conjunto de responsabilidades, actividades y autorizaciones</b>."},
+    {cat:"Roles TI", q:"Define proceso (ISO 9000) y función (DIRKS).", a:"<b>Proceso:</b> conjunto de actividades mutuamente relacionadas o que interactúan, que <b>transforman elementos de entrada en resultados</b>.<br><b>Función:</b> la <b>mayor unidad de actividad de negocio</b>; agregados de más alto nivel de las actividades."},
+    {cat:"Roles TI", q:"Define servicio TI, infraestructura TI y usuario.", a:"<b>Servicio TI:</b> uno o más sistemas TI que hacen posible un proceso de negocio (ITIL; ISO 8402:1994).<br><b>Infraestructura TI:</b> HW y SW de base, incluido el de comunicaciones, más instalaciones y locales.<br><b>Usuario:</b> persona que usa el servicio en el día a día (ITIL)."},
+    {cat:"Roles TI", q:"¿Qué significan COBIT, ITIL y PDCA?", a:"<b>COBIT:</b> Control Objectives for Information and related Technology (ISACA e IT Governance Institute).<br><b>ITIL:</b> IT Infrastructure Library (Office of Government Commerce, Reino Unido).<br><b>PDCA:</b> Plan-Do-Check-Act (ciclo de Deming)."},
+    {cat:"Roles TI", q:"¿Cómo es el modelo actual de centro TI y qué propone el nuevo?", a:"El actual tiene casi <b>30 años</b> y divide las TI en <b>desarrollo, explotación y sistemas</b>, además de la jefatura. El nuevo gestiona en base a <b>procesos TI</b> que cruzan en <b>horizontal</b> toda la organización, pudiendo romper la jerarquía existente."},
+    {cat:"Roles TI", q:"Explica los tipos de organización 0, 1, 2 y 3.", a:"<b>Tipo 0:</b> un único rol con todas las responsabilidades.<br><b>Tipo 1:</b> roles según los <b>dominios de COBIT</b>.<br><b>Tipo 2:</b> intermedia, un servicio bajo una secretaría general técnica (planificación/coordinación/control, operaciones, soporte, AI de aplicaciones y de infraestructura).<br><b>Tipo 3:</b> más especialización, roles según <b>COBIT e ITIL</b>."},
+    {cat:"Roles TI", q:"¿Cuáles son los 4 dominios de COBIT (nivel 1) y cómo se rebautizaron?", a:"<b>PO</b> Planificación y Organización.<br><b>AI</b> Adquisición e Implementación → <b>Gestión de la Infraestructura TI</b>.<br><b>DS</b> Entrega y Soporte → <b>Gestión de los Servicios TI</b>.<br><b>ME</b> Monitorización y Evaluación.<br><br>Corresponden a las fases de un <b>ciclo PDCA</b>."},
+    {cat:"Roles TI", q:"¿Qué recursos TI usa el ciclo PDCA de los dominios COBIT?", a:"<b>Aplicaciones, Información, Infraestructura y Organización</b> (RRHH y otros elementos organizativos)."},
+    {cat:"Roles TI", q:"¿Qué contienen los niveles 2 y 3 de la jerarquía?", a:"<b>Nivel 2:</b> procesos COBIT e ITIL <b>agrupados</b> (para servicios TI se usa la división de ITIL, que coincide casi con el dominio DS).<br><b>Nivel 3:</b> procesos COBIT e ITIL <b>sin agrupar</b> (o agrupados cuando fue necesario)."},
+    {cat:"Roles TI", q:"¿Qué roles de nivel 2 cuelgan de \"Planificación y Coordinación TI\"?", a:"Gestión de la <b>Seguridad y del Cumplimiento Normativo</b> · Gestión de los <b>Procesos, la Organización, los RRHH y la Arquitectura de la Información</b> · Gestión de <b>Proyectos y de la Calidad</b> · Gestión <b>Estratégica y Financiera</b>."},
+    {cat:"Roles TI", q:"¿Qué roles de nivel 3 forman la Gestión de la Producción y el Soporte de los Servicios TI?", a:"<b>Producción:</b> Continuidad de Servicios TI · Capacidad · Disponibilidad · Nivel de Servicio.<br><b>Soporte:</b> Cambios (y revisiones) · Incidencias · Configuración · Problemas."},
+    {cat:"Roles TI", q:"¿Qué hace el rol Gestión de la Calidad y por qué es esencial?", a:"Aporta información sobre <b>normas y procedimientos de calidad</b>, completándolos según cada proyecto; asesora sobre la calidad de los procesos, <b>analiza riesgos</b> y determina <b>medidas de control</b>. Es esencial para garantizar que TI da <b>valor al negocio</b>, <b>mejora continua</b> y <b>transparencia</b>."},
+    {cat:"Roles TI", q:"Menciona 5 responsabilidades del rol Gestión de la Calidad.", a:"Identificar y comunicar estándares · elaborar un <b>Plan General de Calidad</b> · participar en planes específicos · definir <b>mediciones</b> · acciones correctivas examinando <b>causas raíz</b> · medir la política de calidad · asegurar recursos · planificar la <b>auditoría interna</b> · recomendar cambios · formar al usuario · informar a la Dirección."},
+    {cat:"Roles TI", q:"¿Cuáles son los niveles de responsabilidad D, R, S, E, I?", a:"<b>Director:</b> responsable último, propietario del proceso-rol; aprueba y da recursos técnicos, humanos y financieros.<br><b>Responsable:</b> procura que se cumplan las responsabilidades; da cuenta al Director.<br><b>Supervisor:</b> en roles complejos, coordina y ejecuta un grupo.<br><b>Ejecutor:</b> realiza las tareas (conocimientos técnicos).<br><b>Informado:</b> se le informa de las tareas."},
+    {cat:"Roles TI", q:"¿Qué 3 reglas hay al asignar responsables a los roles?", a:"1. No deben existir roles <b>sin responsable</b> (significaría un proceso sin ejecutar).<br>2. No deben existir roles con <b>más de un responsable</b> (habría que subdividirlo), salvo responsables de reserva.<br>3. Pueden existir <b>asignaciones dobles</b> (director y responsable a la vez)."},
+    {cat:"Roles TI", q:"¿Qué indican los colores de la tabla de roles y puestos?", a:"<b>Verde:</b> proceso definido y ejecutándose; responsabilidad asignada, comunicada y asumida.<br><b>Naranja:</b> a medio camino.<br><b>Rojo:</b> no se ejecuta; responsabilidad sólo asignada o planificada, no comunicada ni asumida."},
+    {cat:"Roles TI", q:"¿Cómo sería el centro TI si fuera una Consejería?", a:"\"Dirección TI\" = un <b>consejero</b>; <b>4 secretarías generales</b> (una por dominio COBIT, nivel 1); tantas <b>direcciones generales</b> como roles de nivel 2; los roles de nivel 3 serían <b>servicios</b>, y debajo, departamentos."},
+    {cat:"Roles TI", q:"¿Por qué la Dirección General de Economía y Hacienda no encaja en el modelo?", a:"Porque hay procesos <b>no definidos</b> (Gestión de los Niveles de Servicio), <b>duplicados</b> (Gestión de la Calidad) o desarrollados por una <b>estructura que no corresponde</b> (la Gestión de la Seguridad la hace el Servicio de Producción)."},
+    {cat:"Roles TI", q:"¿Cómo es un centro TI típico como Servicio en la Junta de Andalucía?", a:"Un servicio bajo la <b>Secretaría General Técnica</b>: un jefe, uno o dos adjuntos y <b>3 jefes de departamento</b> (Desarrollo y Mantenimiento, Sistemas y Explotación). Organización de <b>nivel 2</b>, sin presupuesto propio. Suelen faltar calidad, seguridad y cumplimiento normativo, monitorización y evaluación."},
+    {cat:"Roles TI", q:"¿Qué concluye el documento?", a:"Es necesario un <b>marco de referencia</b> para definir las estructuras de los centros TI; si no, se crean estructuras <b>\"sin ton ni son\"</b>, no se justifica su tamaño ni se adecua la política de personal. Algunos centros suplen la falta de personal con contratación externa que supera el <b>80%</b>."},
+    // ---------- ADQUISICIÓN ----------
+    {cat:"Adquisición", q:"¿Qué es el aprovisionamiento de TI?", a:"El <b>proceso de compra y despliegue</b> de bienes o servicios tecnológicos (software, hardware, sistemas). Incluye: <b>analizar</b> la estrategia y necesidades de TI, <b>seleccionar</b> proveedores, <b>negociar</b> contratos o licencias y <b>ejecutar</b> las órdenes de adquisición."},
+    {cat:"Adquisición", q:"¿Qué riesgo trae que las aplicaciones y el SaaS sean más accesibles para las unidades de negocio?", a:"Que los departamentos de TI pueden <b>perder el control sobre el gasto y la seguridad</b> de la tecnología. Una estrategia de gestión de adquisiciones devuelve el control sobre los activos tecnológicos."},
+    {cat:"Adquisición", q:"¿Cuáles son las 4 categorías de la adquisición de equipo de cómputo?", a:"<b>Directa:</b> bienes esenciales que integran la infraestructura (HW, activos fijos, servidores, licencias).<br><b>Indirecta:</b> operaciones cotidianas (consumibles, software en la nube, servicios públicos).<br><b>Servicios:</b> prestaciones particulares y SaaS.<br><b>Bienes:</b> activos físicos como hardware o software empresarial."},
+    {cat:"Adquisición", q:"Menciona los pasos de la estrategia de aprovisionamiento de IT.", a:"Auditar y unificar el <b>inventario</b> → evaluar <b>necesidades</b> → equipo <b>interdisciplinario</b> → objetivos y metas → <b>presupuesto</b> → <b>riesgos</b> → evaluar proveedores → solicitar información/propuesta → analizar ofertas y <b>negociar</b> → planificar la implementación → monitorear los <b>KPI</b> (11 pasos)."},
+    {cat:"Adquisición", q:"¿En qué debe basarse la selección del modelo y capacidades del hardware?", a:"En el <b>plan estratégico de sistemas</b> y en un <b>estudio del departamento de sistemas</b> (características y volumen de información). El estudio define una <b>configuración mínima</b> y los dispositivos anexos, más una <b>evaluación del costo</b> aproximado."},
+    {cat:"Adquisición", q:"¿Qué criterios de \"Equipos\" se usan para seleccionar hardware?", a:"Configuración acorde a la <b>carga de procesamiento</b> · capacidad de crecimiento <b>vertical</b> (mismo equipo) y <b>horizontal</b> (con otros equipos) · fabricante de <b>prestigio mundial</b> · tiempo de <b>garantía</b> · <b>tecnología de punta</b>."},
+    {cat:"Adquisición", q:"¿Qué características debe tener el proveedor de hardware?", a:"<b>Prestigio local</b> · soporte de mantenimiento (personal especializado, stock de repuestos) · tiempo de atención, local apropiado, comunicación rápida · <b>cartera de clientes</b> con equipos equivalentes · tiempo de <b>entrega oportuno</b>."},
+    {cat:"Adquisición", q:"¿Qué se considera en los precios del hardware?", a:"Condiciones de <b>pago</b> · detallado por <b>componentes</b> · <b>descuentos por volumen</b> · costo de <b>mantenimiento</b>."},
+    {cat:"Adquisición", q:"¿Cuáles son las consideraciones generales del software y hardware?", a:"<b>Solicitud de propuesta</b> (el usuario pide al centro de cómputo) · <b>parámetros</b>: objetivos y políticas, por escrito · <b>evaluación de propuesta</b> (investigar el SW y HW requerido) · <b>financiamiento</b> (créditos bancarios; la educación pública no tiene, salvo que produzca software) · <b>negociación de contrato</b> (actualizaciones, innovaciones, capacitación, asesoría técnica)."},
+    {cat:"Adquisición", q:"¿Cuáles son los 7 criterios para seleccionar software?", a:"1. <b>Capacidad</b> para realizar las tareas requeridas.<br>2. <b>Eficacia</b> en el desempeño.<br>3. <b>Eficiencia</b> operativa.<br>4. <b>Facilidad</b> de uso.<br>5. <b>Flexibilidad</b>.<br>6. <b>Calidad de documentación</b>.<br>7. <b>Soporte del fabricante</b>."},
+    {cat:"Adquisición", q:"¿Qué incluye el soporte del fabricante como criterio de software?", a:"<b>Línea de consulta directa</b> · <b>boletines</b> · <b>actualizaciones frecuentes</b> (a bajo costo)."},
+    {cat:"Adquisición", q:"¿Cuáles son los beneficios de la compra TI?", a:"<b>Alineación estratégica</b> con los objetivos · gestión de <b>riesgos</b> · optimización de <b>costos</b> · gestión de las relaciones con <b>proveedores</b> · toma de <b>decisiones</b> · garantía de <b>GRC</b> (Gobernanza, Riesgo y Cumplimiento)."},
+    {cat:"Adquisición", q:"¿Cuáles son los desafíos de la compra TI?", a:"<b>Planificación y presupuestación</b> de IT · procesos <b>RFP</b> (Request for Proposal: transparente, estructurada y justa) · <b>inventario</b> de los activos · <b>gestión de cambios</b> (resistencia de las partes acostumbradas a las prácticas existentes)."},
+    {cat:"Proveedores", q:"¿Qué 5 aspectos se analizan al evaluar y seleccionar proveedores?", a:"1. <b>Perfil general</b> (prestigio, trayectoria, respuesta, calidad, reputación, localización, tamaño).<br>2. <b>Precio</b> (el de más valor, pero por sí solo no determina).<br>3. <b>Capacidad técnica</b>.<br>4. <b>Tecnología e infraestructura</b>.<br>5. <b>Desempeño y nivel de servicio (SLA)</b>."},
+    {cat:"Proveedores", q:"¿Cuáles son los 5 pasos del proceso de evaluación de un proveedor?", a:"1. <b>Criterios</b> para seleccionarlos (información objetiva).<br>2. <b>Convenio o contrato de confidencialidad</b>.<br>3. <b>Lista</b> de proveedores (listado corto).<br>4. <b>Evaluar propuestas</b> (puntuación).<br>5. <b>Decidir y negociar</b> un contrato (relaciones beneficiosas)."},
+    {cat:"Proveedores", q:"¿Qué datos del reporte de Deloitte da el material sobre riesgo de proveedores?", a:"<b>87%</b> tuvo algún incidente con un proveedor que afectó sus operaciones · solo el <b>44%</b> es muy efectivo administrando el riesgo de terceros · <b>28%</b> enfrentó grandes interrupciones · <b>11%</b> vio sus actividades completamente interrumpidas."},
+    {cat:"Proveedores", q:"¿Cuáles son los 6 principales riesgos con proveedores?", a:"1. <b>Interrupción del servicio al cliente</b>.<br>2. <b>Violaciones a la ley</b> y normativa (2 a 50 millones USD).<br>3. <b>Daño a la reputación</b>.<br>4. <b>Quiebre de la cadena de suministro</b>.<br>5. <b>Fraude</b>.<br>6. <b>Factibilidad económica</b> del proveedor."},
+    {cat:"Proveedores", q:"¿Cómo se clasifican los proveedores según su riesgo (crítico, alto, medio, bajo y A/B/C)?", a:"<b>Críticos:</b> afectan la calidad y hay pocas (o una) alternativas.<br><b>Alto:</b> afectan la calidad pero hay alternativas.<br><b>Medio:</b> importantes, no críticos.<br><b>Bajo:</b> sin impacto en la calidad.<br><br>Tipo <b>A</b> crítico (riesgo elevado) · <b>B</b> importante (medio) · <b>C</b> no crítico (bajo)."},
+    {cat:"Proveedores", q:"Explica la matriz de Kraljic.", a:"Ejes: <b>Rentabilidad</b> (vertical) × <b>Riesgo</b> (horizontal).<br><b>Apalancado</b> (alta rent., bajo riesgo): fuente abundante; aprovechar el poder de compra.<br><b>Estratégico</b> (alta, alto): esenciales; garantizar disponibilidad con fuentes nacionales o internacionales.<br><b>No crítico</b> (baja, bajo): bajo valor; fuentes descentralizadas.<br><b>Cuello de botella</b> (baja, alto): esenciales con fuentes limitadas; mantener relaciones y buscar nuevos suministros."}
+  ];
+
+  var TOTAL = CARDS.length; // 89
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- STORAGE ---------------- */
+  var STORE_KEY = "gr_p2_flashcards_status_v1";
+  var status = {}; // id -> "easy" | "hard"
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw) status = JSON.parse(raw) || {};
+  }catch(e){ status = {}; }
+
+  function saveStatus(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "all";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+
+  function statusIcon(s){
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+
+  function computeStats(){
+    var learned=0, hard=0;
+    CARDS.forEach(function(c){
+      var s = status[c.id];
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+    });
+    var news = TOTAL - learned - hard;
+    return {learned:learned, hard:hard, news:news};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    var pct = Math.round((st.learned / TOTAL) * 100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function buildFilteredOrder(){
+    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
+    if(filter === "all"){
+      filteredOrder = base.slice();
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
+      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
+      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
+      filteredOrder = base.filter(function(i){
+        var s = status[CARDS[i].id];
+        return s === "hard";
+      });
+      if(filteredOrder.length === 0){
+        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
+      }
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){
+      renderEmpty();
+      return;
+    }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    var s = status[c.id];
+
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(s);
+    statusBack.textContent = statusIcon(s);
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+
+    btnHard.classList.toggle("on", s === "hard");
+    btnEasy.classList.toggle("on", s === "easy");
+
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    stage.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
+        '<p>' + (filter === "learned"
+            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
+            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
+        '</p>' +
+        '<button id="emptyBack">Ver todas las tarjetas</button>' +
+      '</div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn){
+      btn.addEventListener("click", function(){
+        setFilter("all");
+      });
+    }
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    if(status[c.id] === kind){
+      delete status[c.id]; // toggle off
+    } else {
+      status[c.id] = kind;
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", status[c.id] === "hard");
+    btnEasy.classList.toggle("on", status[c.id] === "easy");
+    statusFront.textContent = statusIcon(status[c.id]);
+    statusBack.textContent = statusIcon(status[c.id]);
+    refreshStats();
+
+    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
+    if(filter !== "all"){
+      setTimeout(function(){
+        buildFilteredOrder();
+        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
+        render();
+      }, 380);
+    }
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn){
+      shuffleArray(order);
+    } else {
+      order.sort(function(a,b){return a-b;});
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+  });
+
+  // swipe gestures (left/right) on stage
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // keyboard support (desktop testing)
+  document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  buildFilteredOrder();
+  render();
+
+})();
+</script>
+</body>
+</html>

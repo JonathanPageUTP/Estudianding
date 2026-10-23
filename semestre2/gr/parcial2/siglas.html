@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Siglas y Mnemotecnias · GR Parcial 2</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.4;padding-bottom:40px;}
+h1,h2,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.practice{
+  border:1px solid var(--line);background:var(--surface);color:var(--dim);
+  border-radius:30px;padding:8px 12px;font-size:.75rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;
+}
+.practice.on{background:var(--amber);border-color:var(--amber);color:#2a1c08;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+
+.part-label{margin:30px 0 -6px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+/* SECCIONES */
+section{margin-top:22px;scroll-margin-top:100px;}
+section h2{font-size:.72rem;font-family:var(--mono);letter-spacing:.06em;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+section h2::after{content:"";flex:1;height:1px;background:var(--line);}
+.grid{display:grid;grid-template-columns:1fr;gap:7px;}
+@media (min-width:620px){.grid{grid-template-columns:1fr 1fr;}}
+
+/* TARJETA DE SIGLA */
+.s{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:11px;align-items:flex-start;cursor:default;}
+.k{
+  font-family:var(--mono);font-weight:800;font-size:.9rem;letter-spacing:.03em;color:var(--accent);
+  background:var(--accent-dim);border-radius:8px;padding:5px 8px;flex-shrink:0;min-width:58px;text-align:center;
+}
+.k.c{color:var(--cyan);background:var(--cyan-dim);}
+.k.a{color:var(--amber);background:var(--amber-dim);}
+.k.v{color:var(--violet);background:var(--violet-dim);}
+.k.r{color:var(--red);background:var(--red-dim);}
+.b{flex:1;min-width:0;}
+.x{font-size:.84rem;color:var(--text);}
+.x b{color:var(--accent);}
+.m{font-size:.74rem;color:var(--faint);font-style:italic;margin-top:3px;}
+
+/* CONFUSIONES */
+.vs{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:.8rem;}
+.vs .l{color:var(--text);}
+.vs .r{color:var(--text);text-align:right;}
+.vs .l b,.vs .r b{font-family:var(--mono);color:var(--cyan);display:block;font-size:.82rem;}
+.vs .o{font-family:var(--mono);font-size:.68rem;color:var(--red);}
+
+/* NÚMEROS */
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+@media (min-width:620px){.nums{grid-template-columns:repeat(4,1fr);}}
+.n{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;}
+.n .v{font-family:var(--mono);font-size:1.3rem;font-weight:800;color:var(--amber);}
+.n .t{font-size:.7rem;color:var(--dim);margin-top:2px;}
+
+/* MODO PRÁCTICA */
+body.quiz .s{cursor:pointer;}
+body.quiz .s .b,body.quiz .vs .l span,body.quiz .vs .r span,body.quiz .n .t{filter:blur(6px);opacity:.5;transition:filter .2s,opacity .2s;user-select:none;}
+body.quiz .s.show .b,body.quiz .vs.show .l span,body.quiz .vs.show .r span,body.quiz .n.show .t{filter:none;opacity:1;}
+body.quiz .vs,body.quiz .n{cursor:pointer;}
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Siglas y <em>mnemotecnias</em></h1>
+    <button class="practice" id="practice">🙈 Modo práctica</button>
+  </div>
+  <nav class="chips">
+    <a href="#rh">RRHH</a><a href="#pr">Proceso RRHH</a><a href="#ti">Alta dirección</a><a href="#cio">CIO</a><a href="#ciso">CISO</a><a href="#ceo">CEO</a><a href="#cto">CTO</a><a href="#dpo">DPO</a><a href="#fx">Áreas TI</a><a href="#raci">RACI</a>
+    <a href="#rol">Modelo de roles</a><a href="#def">Definiciones</a><a href="#jer">Jerarquía</a><a href="#cal">Calidad</a><a href="#drsei">DRSEI</a><a href="#org">Centro TI</a>
+    <a href="#apr">Aprovisionamiento</a><a href="#hw">Hardware</a><a href="#sw">Software</a><a href="#ben">Beneficios</a><a href="#prov">Proveedores</a><a href="#rsg">Riesgos</a>
+    <a href="#n">Números</a><a href="#v">No confundir</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint" id="hint">Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.</p>
+<p class="hint" style="margin-top:4px;">Orden: <b>Administración RRHH en TIC</b> → <b>Roles y Responsabilidades</b> → <b>Adquisición y Selección</b></p>
+
+<div class="part-label">TEMA 1 · ADMINISTRACIÓN DE RECURSO HUMANO EN TIC</div>
+
+<!-- 1. GESTIÓN DE RRHH -->
+<section id="rh">
+  <h2>1 · RRHH Y TI · SITUACIÓN ACTUAL</h2>
+  <div class="grid">
+    <div class="s"><span class="k r">RRHH ✗ TI</span><div class="b"><div class="x">La mayor barrera: <b>falta de comprensión</b> entre ambos departamentos → <b>mal reclutamiento</b> (RRHH no entiende el perfil · TI no se involucra en la selección)</div><div class="m">Dos áreas que no se hablan contratan mal</div></div></div>
+    <div class="s"><span class="k">ADMG</span><div class="b"><div class="x">Con las personas hay que: <b>A</b>dquirir sus servicios · <b>D</b>esarrollar sus habilidades · <b>M</b>otivarlas (más rendimiento) · <b>G</b>arantizar su compromiso</div><div class="m">Trata al empleado como un "ADMiGo"</div></div></div>
+    <div class="s"><span class="k a">CDHTIM</span><div class="b"><div class="x">Poca <b>C</b>omunicación entre áreas · no sabe <b>D</b>ónde buscar talento tech · no sabe qué <b>H</b>abilidades analizar · sin conocimiento <b>T</b>écnico · TI pide requerimientos <b>I</b>rreales · poco conocimiento del <b>M</b>ercado</div><div class="m">"Con Dificultad Hallamos Talento Informático en el Mercado"</div></div></div>
+  </div>
+</section>
+
+<!-- 2. PROCESO DE RRHH -->
+<section id="pr">
+  <h2>2 · PROCESO DE ADMINISTRACIÓN DE RRHH</h2>
+  <div class="grid">
+    <div class="s"><span class="k">PRSCOCD</span><div class="b"><div class="x"><b>P</b>lanificación · <b>R</b>eclutamiento · <b>S</b>elección · <b>C</b>ontratación · <b>O</b>rientación · <b>C</b>apacitación · <b>D</b>esarrollo de la carrera</div><div class="m">"Para Reclutar Sé Claro, Orienta, Capacita y Desarrolla" — 7 pasos</div></div></div>
+    <div class="s"><span class="k a">3 ★</span><div class="b"><div class="x">Planif. → Reclut. → Selección = <b>empleados competentes</b> · Orientación → Capacitación = <b>adaptados y actualizados</b> · Evaluación → Carrera ↔ Compensación = <b>alto rendimiento</b></div><div class="m">Elegir → adaptar → rendir (todo dentro del "Entorno")</div></div></div>
+    <div class="s"><span class="k c">↘ D</span><div class="b"><div class="x">De la <b>Planificación de RRHH</b> salen dos caminos: Reclutamiento y <b>Desvinculación</b> · Desarrollo de carrera ↔ Compensación y beneficios forman un <b>ciclo</b></div><div class="m">Planificar también es decidir quién sale</div></div></div>
+  </div>
+</section>
+
+<!-- 3. RESPONSABILIDADES DE TI Y ALTA DIRECCIÓN -->
+<section id="ti">
+  <h2>3 · RESPONSABILIDADES DE TI · ALTA DIRECCIÓN</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CPF</span><div class="b"><div class="x">Que los empleados se <b>C</b>omuniquen sobre tareas rutinarias · trabajen juntos en una <b>P</b>lataforma integral · tengan la <b>F</b>uncionalidad que necesitan</div><div class="m">Que hablen, que trabajen juntos, que tengan herramientas</div></div></div>
+    <div class="s"><span class="k v">CEO→VP→M</span><div class="b"><div class="x">CEO → Vicepresidentes ejecutivos → Managers → 4 dptos: <b>Tecnología y Desarrollo</b> (devs, testers, UX/UI) · <b>Ventas</b> (B2B, B2C, atención) · <b>Operaciones</b> (administrativos, logística, soporte) · <b>RRHH</b> (selección, formación, beneficios)</div><div class="m">"Te Vendo Operando Recursos"</div></div></div>
+    <div class="s"><span class="k">CEO · CFO · COO</span><div class="b"><div class="x">Chief <b>E</b>xecutive = director general · Chief <b>F</b>inancial = director financiero · Chief <b>O</b>perating = director operativo</div><div class="m">Manda · cuenta el dinero · opera</div></div></div>
+    <div class="s"><span class="k">CMO · CTO · CIO · CDO</span><div class="b"><div class="x"><b>M</b>arketing = mercadotecnia · <b>T</b>echnical = tecnologías · <b>I</b>nformation = informática · <b>D</b>ata = datos masivos</div><div class="m">Vende · tecnología · sistemas · datos</div></div></div>
+    <div class="s"><span class="k a">CSO · CCO · CRO</span><div class="b"><div class="x"><b>S</b>ustainability = sustentabilidad · <b>C</b>ompliance = anticorrupción · <b>R</b>eputation = reputación</div><div class="m">Ojo: aquí CSO es sustentabilidad, no seguridad (esa es el CISO)</div></div></div>
+  </div>
+</section>
+
+<!-- 4. CIO -->
+<section id="cio">
+  <h2>4 · CIO · CHIEF INFORMATION OFFICER</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CIO</span><div class="b"><div class="x">Responsable de los <b>sistemas y las TI</b> de la empresa · identifica y provee las tecnologías para que los <b>procesos de la empresa</b> funcionen lo mejor posible</div><div class="m">Director de informática: mira hacia adentro</div></div></div>
+    <div class="s"><span class="k">VDG</span><div class="b"><div class="x">Crear <b>V</b>alor con tecnología · <b>D</b>irigir los recursos informáticos a los objetivos estratégicos · <b>G</b>arantizar sistemas bien gestionados (costo, riesgo, operación fluida)</div><div class="m">Valor · Dirección · Garantía</div></div></div>
+    <div class="s"><span class="k a">PPAP·RGC·TIC</span><div class="b"><div class="x"><b>P</b>ersonal · <b>P</b>roveedores · <b>A</b>rquitectura · <b>P</b>olíticas de gobernanza · <b>R</b>iesgo · <b>G</b>asto e inversión · <b>C</b>apacidad y ciclo de vida · <b>T</b>endencias · <b>I</b>ncidentes a ejecutivos · <b>C</b>umplimiento (SOX, GDPR)</div><div class="m">10 funciones: 4 de gestión, 3 de control, 3 de entorno</div></div></div>
+    <div class="s"><span class="k c">= ejecutivo</span><div class="b"><div class="x">No difieren de las de cualquier otro ejecutivo de un área interna: <b>gestionar los recursos bajo su control para maximizar el valor</b></div><div class="m">Un jefe más, con la tecnología como recurso</div></div></div>
+    <div class="s"><span class="k a">VFA·3C·P$</span><div class="b"><div class="x"><b>V</b>isión estratégica · <b>F</b>lexibilidad · capacidad de <b>A</b>prendizaje · <b>C</b>omunicación y liderazgo · <b>C</b>oordinación · <b>C</b>reatividad · <b>P</b>lanificación y control · gestión financiera (<b>$</b>)</div><div class="m">Ve, se adapta y aprende; 3 C; planifica y cuida el $ — 8 características</div></div></div>
+  </div>
+</section>
+
+<!-- 5. CISO -->
+<section id="ciso">
+  <h2>5 · CISO · CHIEF INFORMATION SECURITY OFFICER</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CISO</span><div class="b"><div class="x">Director de seguridad de la información: vela por la <b>ciberseguridad</b>, protege la información ante <b>ciberataques y fugas de datos</b> dentro de las posibilidades <b>humanas, técnicas y económicas</b></div><div class="m">El guardián: H·T·E son sus límites</div></div></div>
+    <div class="s"><span class="k a">ANV·IRF·PPF</span><div class="b"><div class="x"><b>A</b>linear ciberseguridad con objetivos · <b>N</b>ormativa de seguridad · <b>V</b>ulnerabilidades · <b>I</b>nformar a dirección · <b>R</b>espuesta rápida a incidentes · <b>F</b>ormar y concienciar · <b>P</b>olíticas · <b>P</b>rivacidad · <b>F</b>orense digital y descubrimiento electrónico</div><div class="m">9 funciones en 3 grupos de 3</div></div></div>
+    <div class="s"><span class="k c">PDA</span><div class="b"><div class="x"><b>P</b>revenir · <b>D</b>etectar · <b>A</b>nalizar vulnerabilidades</div><div class="m">Antes · durante · después</div></div></div>
+  </div>
+</section>
+
+<!-- 6. CEO -->
+<section id="ceo">
+  <h2>6 · CEO · CHIEF EXECUTIVE OFFICER</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CEO</span><div class="b"><div class="x">El <b>puesto más alto</b> en la jerarquía administrativa y de operación · también <b>director general, consejero delegado o presidente ejecutivo</b> · en español: director ejecutivo</div><div class="m">La cima del organigrama</div></div></div>
+    <div class="s"><span class="k a">IPM·TCC·UGCF</span><div class="b"><div class="x"><b>I</b>nformar objetivos y logros · <b>P</b>lanificar estrategias · <b>M</b>otivar y asesorar · <b>T</b>omar decisiones · <b>C</b>rear equipo · <b>C</b>uidar clientes · <b>U</b>sar el presupuesto · <b>G</b>uiar directivos · <b>C</b>rear la estructura · <b>F</b>ijar objetivos</div><div class="m">Dos "Crear": el equipo y la estructura</div></div></div>
+  </div>
+</section>
+
+<!-- 7. CTO -->
+<section id="cto">
+  <h2>7 · CTO · CHIEF TECHNOLOGY OFFICER</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CTO</span><div class="b"><div class="x">Director de tecnología: máximo responsable del depto. <b>técnico y tecnológico</b> · mejora productos y servicios para <b>clientes externos</b> · estrategias para <b>aumentar ingresos</b> · análisis <b>costo-beneficio y ROI</b></div><div class="m">Mira hacia afuera: producto y cliente</div></div></div>
+    <div class="s"><span class="k a">12 F</span><div class="b"><div class="x">Liderar estrategia tecnológica · <b>Innovación</b> · proteger información sensible · supervisar equipos · comunicación entre dptos · presupuestos · <b>calidad</b> · mejoras · <b>escalabilidad</b> · proyectos · nuevas <b>legislaciones</b> · cultura de la información</div><div class="m">"Lidera, Innova, Protege, Supervisa, Comunica, Presupuesta… y fomenta cultura"</div></div></div>
+  </div>
+</section>
+
+<!-- 8. DPO -->
+<section id="dpo">
+  <h2>8 · DPO · DATA PROTECTION OFFICER</h2>
+  <div class="grid">
+    <div class="s"><span class="k">DPO</span><div class="b"><div class="x">Delegado de Protección de Datos: garantiza el <b>cumplimiento normativo</b> de protección de datos · el <b>RGPD no exige que sea jurista</b>, pero sí amplios conocimientos jurídicos · vela también por la seguridad del tratamiento</div><div class="m">El abogado de los datos (sin título obligatorio)</div></div></div>
+    <div class="s"><span class="k a">ISFA·ECP</span><div class="b"><div class="x"><b>I</b>nformar y asesorar · <b>S</b>upervisar el cumplimiento · <b>F</b>ormación y concienciación · <b>A</b>uditorías · <b>E</b>valuación de Impacto · <b>C</b>ooperar con Autoridades de Control · <b>P</b>unto de contacto</div><div class="m">7 funciones: 4 internas + 3 con la autoridad</div></div></div>
+  </div>
+</section>
+
+<!-- 9. FUNCIONES Y ÁREAS DE TI -->
+<section id="fx">
+  <h2>9 · FUNCIONES Y ÁREAS DE TI</h2>
+  <div class="grid">
+    <div class="s"><span class="k">IFG</span><div class="b"><div class="x"><b>I</b>nfraestructura (hardware, red, circuitos) · <b>F</b>uncionalidad (la más visible: aplicaciones, datos, ayuda con software) · <b>G</b>obernanza (reglas de uso; parte de la seguridad informática)</div><div class="m">Lo físico · lo que se ve · las reglas</div></div></div>
+    <div class="s"><span class="k a">7 ÁREAS</span><div class="b"><div class="x"><b>A</b>dministración (ITSM) · <b>S</b>oporte técnico · <b>C</b>omunicaciones · <b>P</b>rogramación · <b>S</b>itio web · <b>D</b>esarrollo de aplicaciones · <b>P</b>lanificación de contingencia de red</div><div class="m">Administra, Soporta, Comunica, Programa, publica, Desarrolla y Prevé</div></div></div>
+    <div class="s"><span class="k">ITSM</span><div class="b"><div class="x">Administración o gestión de las TI: <b>mantenimiento y reparación</b> de sistemas · <b>asesorar</b> sobre nuevas soluciones · <b>ayudar</b> a los departamentos a instalar y usar equipos</div><div class="m">Mantiene · asesora · ayuda</div></div></div>
+    <div class="s"><span class="k c">in house</span><div class="b"><div class="x">Parte de los sistemas los desarrolla la propia empresa: crean software <b>a la medida</b> en lugar de <b>comprar paquetes</b> · lenguajes: JavaScript, HTML/CSS, SQL, Python, C++</div><div class="m">Hecho en casa vs. comprado</div></div></div>
+    <div class="s"><span class="k">RECPI</span><div class="b"><div class="x"><b>R</b>edes alternativas · <b>E</b>nergía y redes de emergencia · <b>C</b>ooperar con expertos · <b>P</b>robar y mantener · <b>I</b>nvestigar nuevas soluciones</div><div class="m">Plan B de la red</div></div></div>
+  </div>
+</section>
+
+<!-- 10. RACI -->
+<section id="raci">
+  <h2>10 · MATRIZ RACI</h2>
+  <div class="grid">
+    <div class="s"><span class="k">RACI</span><div class="b"><div class="x"><b>R</b>esponsible = ejecuta · <b>A</b>ccountable / aprobador = responsabilidad última · <b>C</b>onsulted = se consulta <b>antes</b> · <b>I</b>nformed = se informa <b>después</b></div><div class="m">R hace · A responde · C opina antes · I se entera después</div></div></div>
+    <div class="s"><span class="k r">R ≠ A</span><div class="b"><div class="x"><b>Responsible</b> NO es el responsable último: es quien <b>ejecuta</b> · la responsabilidad última es del <b>Accountable</b> (puede no hacer el trabajo)</div><div class="m">Responsible = el que suda · Accountable = el que firma</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">TEMA 2 · ROLES Y RESPONSABILIDADES PARA LA GESTIÓN DE TI</div>
+
+<!-- 11. MODELO DE ROLES -->
+<section id="rol">
+  <h2>11 · MODELO DE ROLES (JUNTA DE ANDALUCÍA)</h2>
+  <div class="grid">
+    <div class="s"><span class="k">PIP</span><div class="b"><div class="x">Detrás de los servicios de administración electrónica hay <b>P</b>ersonas, <b>I</b>nfraestructuras y <b>P</b>rocesos · pero: personas que desconocen su rol · infraestructuras no controladas · procesos no definidos</div><div class="m">Base del modelo: COBIT + ITIL</div></div></div>
+    <div class="s"><span class="k c">F → P → R</span><div class="b"><div class="x"><b>F</b>unción → se definen los <b>P</b>rocesos → surgen de modo natural los <b>R</b>oles y responsabilidades · los roles no deberían cambiar salvo cambios <b>organizativos o tecnológicos profundos</b></div><div class="m">Pregunta clave: ¿se están gestionando adecuadamente las TI?</div></div></div>
+    <div class="s"><span class="k a">DES + J</span><div class="b"><div class="x">Modelo actual (casi <b>30 años</b>): <b>D</b>esarrollo · <b>E</b>xplotación · <b>S</b>istemas + <b>J</b>efatura · nuevo modelo: por <b>procesos</b> que cruzan en horizontal la organización (pueden romper la jerarquía)</div><div class="m">De áreas verticales a procesos horizontales</div></div></div>
+  </div>
+</section>
+
+<!-- 12. DEFINICIONES -->
+<section id="def">
+  <h2>12 · DEFINICIONES Y ACRÓNIMOS</h2>
+  <div class="grid">
+    <div class="s"><span class="k">RAA</span><div class="b"><div class="x">Rol = conjunto de <b>R</b>esponsabilidades, <b>A</b>ctividades y <b>A</b>utorizaciones</div><div class="m">Un rol echa "RAA-íces"</div></div></div>
+    <div class="s"><span class="k c">E → R</span><div class="b"><div class="x">Proceso = actividades relacionadas que transforman elementos de <b>E</b>ntrada en <b>R</b>esultados</div><div class="m">Entra algo, sale otra cosa</div></div></div>
+    <div class="s"><span class="k v">F ⊃ P ⊃ A</span><div class="b"><div class="x"><b>Función</b> = la mayor unidad de actividad de negocio (agregado de más alto nivel) · <b>Actividad</b> = acciones para un resultado particular</div><div class="m">Función es lo más grande, actividad lo más pequeño</div></div></div>
+    <div class="s"><span class="k a">FUENTES</span><div class="b"><div class="x"><b>ITIL</b>: actividad, rol, servicio TI, usuario · <b>ISO 9000</b>: proceso · <b>DIRKS</b>: función · <b>DRAE</b>: autorizar, responsabilidad, responsable · <b>ISO 8402:1994</b>: servicio TI</div><div class="m">Se tomaron de ISOs, ITIL, COBIT, MAGERIT o el DRAE</div></div></div>
+    <div class="s"><span class="k">PDCA</span><div class="b"><div class="x"><b>P</b>lan · <b>D</b>o · <b>C</b>heck · <b>A</b>ct = ciclo de Deming · COBIT = Control Objectives for Information and related Technology · ITIL = IT Infrastructure Library</div><div class="m">Planear, hacer, verificar, actuar</div></div></div>
+  </div>
+</section>
+
+<!-- 13. JERARQUÍA DE ROLES -->
+<section id="jer">
+  <h2>13 · JERARQUÍA DE ROLES</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">T0 · T1 · T2 · T3</span><div class="b"><div class="x">Tipo 0 = <b>un único rol</b> con todo · Tipo 1 = roles por <b>dominios COBIT</b> · Tipo 2 = <b>intermedia</b> (servicio bajo secretaría general técnica) · Tipo 3 = <b>más especialización</b> (COBIT + ITIL)</div><div class="m">La complejidad crece de 0 a 3</div></div></div>
+    <div class="s"><span class="k">PO·AI·DS·ME</span><div class="b"><div class="x"><b>P</b>lanificación y <b>O</b>rganización · <b>AI</b> → rebautizado <b>Gestión de la Infraestructura TI</b> · <b>DS</b> → <b>Gestión de los Servicios TI</b> · <b>M</b>onitorización y <b>E</b>valuación</div><div class="m">4 funciones de alto nivel = fases de un ciclo PDCA</div></div></div>
+    <div class="s"><span class="k c">AIIO</span><div class="b"><div class="x"><b>A</b>plicaciones · <b>I</b>nformación · <b>I</b>nfraestructura · <b>O</b>rganización (RRHH y otros elementos organizativos)</div><div class="m">Los recursos que usa el ciclo PDCA</div></div></div>
+    <div class="s"><span class="k v">0 · 1 · 2 · 3</span><div class="b"><div class="x">Nivel 0 = <b>Dirección TI</b> · 1 = dominios COBIT · 2 = procesos COBIT e ITIL <b>agrupados</b> · 3 = procesos <b>sin agrupar</b></div><div class="m">Del jefe a los procesos sueltos</div></div></div>
+    <div class="s"><span class="k">SPPE</span><div class="b"><div class="x">Gestión de la <b>S</b>eguridad y Cumplimiento Normativo · de los <b>P</b>rocesos, Organización, RRHH y Arquitectura de la Información · de <b>P</b>royectos y Calidad · <b>E</b>stratégica y Financiera</div><div class="m">Seguro, Procesado, Proyectado, Estratégico</div></div></div>
+    <div class="s"><span class="k">CCDN</span><div class="b"><div class="x">Gestión de la <b>C</b>ontinuidad · <b>C</b>apacidad · <b>D</b>isponibilidad · <b>N</b>ivel de Servicio</div><div class="m">"Con Capacidad Doy Nivel"</div></div></div>
+    <div class="s"><span class="k">CICP</span><div class="b"><div class="x">Gestión de <b>C</b>ambios (y revisiones) · <b>I</b>ncidencias · <b>C</b>onfiguración · <b>P</b>roblemas</div><div class="m">"Cambio Incidencias, Configuro Problemas"</div></div></div>
+    <div class="s"><span class="k c">AI·APP / AI·HW</span><div class="b"><div class="x">Adquisición e Implementación de <b>Aplicaciones</b> · AI de la Infraestructura <b>HW-SW-COM</b> → Gestión de HW y SW base · Gestión de las Comunicaciones</div><div class="m">Lo que se programa · lo que se enchufa</div></div></div>
+  </div>
+</section>
+
+<!-- 14. GESTIÓN DE LA CALIDAD -->
+<section id="cal">
+  <h2>14 · EJEMPLO: ROL GESTIÓN DE LA CALIDAD</h2>
+  <div class="grid">
+    <div class="s"><span class="k">VMT</span><div class="b"><div class="x">Esencial para garantizar que TI da <b>V</b>alor al negocio, <b>M</b>ejora continua y <b>T</b>ransparencia para los interesados</div><div class="m">Aporta normas de calidad, asesora, analiza riesgos y medidas de control</div></div></div>
+    <div class="s"><span class="k a">11 R</span><div class="b"><div class="x">Estándares · <b>Plan General de Calidad</b> · planes específicos · mediciones · acciones correctivas (<b>causas raíz</b>) · medir la política · asegurar recursos · <b>auditoría interna</b> · recomendar cambios · formar usuarios · informar a la Dirección</div><div class="m">Planea → mide → corrige → audita → informa</div></div></div>
+  </div>
+</section>
+
+<!-- 15. DRSEI -->
+<section id="drsei">
+  <h2>15 · NIVELES DE RESPONSABILIDAD</h2>
+  <div class="grid">
+    <div class="s"><span class="k">DRSEI</span><div class="b"><div class="x"><b>D</b>irector (responsable último, aprueba y da recursos) · <b>R</b>esponsable (procura que se haga, da cuenta al Director) · <b>S</b>upervisor (coordina y ejecuta un grupo) · <b>E</b>jecutor (realiza las tareas) · <b>I</b>nformado</div><div class="m">"Dirige, Responde, Supervisa, Ejecuta, se Informa" — similar al RACI de COBIT</div></div></div>
+    <div class="s"><span class="k a">0 · 1 · 2</span><div class="b"><div class="x">No roles <b>sin</b> responsable · no roles con <b>más de un</b> responsable (salvo de reserva) · sí <b>asignaciones dobles</b> (director y responsable a la vez)</div><div class="m">Cero no · dos no · doble sombrero sí</div></div></div>
+    <div class="s"><span class="k c">🟢 🟠 🔴</span><div class="b"><div class="x">Verde = definido y ejecutándose (asignada, comunicada y asumida) · naranja = a medio camino · rojo = no se ejecuta (sólo asignada, no comunicada ni asumida)</div><div class="m">Semáforo de procesos</div></div></div>
+  </div>
+</section>
+
+<!-- 16. EL CENTRO TI -->
+<section id="org">
+  <h2>16 · EL CENTRO TI Y CONCLUSIÓN</h2>
+  <div class="grid">
+    <div class="s"><span class="k v">C·4SG·DG·S</span><div class="b"><div class="x">Dirección TI = <b>consejero</b> · <b>4 secretarías generales</b> (una por dominio, nivel 1) · <b>direcciones generales</b> = roles nivel 2 · <b>servicios</b> = nivel 3 · debajo, departamentos</div><div class="m">Gestión TI centralizada al máximo</div></div></div>
+    <div class="s"><span class="k r">ND · DUP · MAL</span><div class="b"><div class="x">Economía y Hacienda no encaja: procesos <b>no definidos</b> (Nivel de Servicio) · <b>duplicados</b> (Calidad) · en la estructura <b>equivocada</b> (Seguridad la hace el Servicio de Producción)</div><div class="m">Falta · sobra · está mal puesto</div></div></div>
+    <div class="s"><span class="k">1 + 2 + 3</span><div class="b"><div class="x"><b>1</b> jefe · <b>1–2</b> adjuntos · <b>3</b> jefes de dpto (Desarrollo y Mantenimiento · Sistemas · Explotación) · organización de <b>nivel 2</b> · sin presupuesto propio · suelen faltar calidad, seguridad y monitorización</div><div class="m">Bajo la Secretaría General Técnica</div></div></div>
+    <div class="s"><span class="k a">80%</span><div class="b"><div class="x">Sin marco de referencia se crean estructuras <b>"sin ton ni son"</b> · no se justifica el tamaño ni la política de personal · contratación externa que supera el <b>80%</b> en algunos casos</div><div class="m">Se necesita un modelo para no improvisar</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">TEMA 3 · ADQUISICIÓN, SELECCIÓN Y CRITERIOS DE EVALUACIÓN</div>
+
+<!-- 17. APROVISIONAMIENTO -->
+<section id="apr">
+  <h2>17 · APROVISIONAMIENTO DE TI</h2>
+  <div class="grid">
+    <div class="s"><span class="k">PCV</span><div class="b"><div class="x">Optimizar los recursos informáticos permite aumentar la <b>P</b>roductividad · reducir <b>C</b>ostes · mantener una <b>V</b>entaja competitiva</div><div class="m">Desde activos HW/SW hasta despliegue de RRHH</div></div></div>
+    <div class="s"><span class="k">ASNE</span><div class="b"><div class="x">Compra y despliegue de bienes o servicios TI: <b>A</b>nalizar estrategia y necesidades · <b>S</b>eleccionar proveedores · <b>N</b>egociar contratos o licencias · <b>E</b>jecutar las órdenes</div><div class="m">Analiza, Selecciona, Negocia, Ejecuta</div></div></div>
+    <div class="s"><span class="k r">SaaS ⚠</span><div class="b"><div class="x">Con apps y SaaS más accesibles en las unidades de negocio, TI puede <b>perder el control</b> sobre el <b>gasto</b> y la <b>seguridad</b></div><div class="m">La estrategia da control sobre los activos</div></div></div>
+    <div class="s"><span class="k">DISB</span><div class="b"><div class="x"><b>D</b>irecta (infraestructura: HW, servidores, licencias) · <b>I</b>ndirecta (día a día: consumibles, nube, servicios públicos) · <b>S</b>ervicios (SaaS) · <b>B</b>ienes (activos físicos)</div><div class="m">Directa produce · Indirecta mantiene</div></div></div>
+    <div class="s"><span class="k a">11 P</span><div class="b"><div class="x">Auditar inventario · evaluar necesidades · equipo interdisciplinario · objetivos · <b>presupuesto</b> · riesgos · evaluar proveedores · solicitar propuestas · negociar · planificar implementación · <b>monitorear KPI</b></div><div class="m">Empieza en inventario, termina en KPI</div></div></div>
+  </div>
+</section>
+
+<!-- 18. HARDWARE -->
+<section id="hw">
+  <h2>18 · SELECCIÓN DEL HARDWARE</h2>
+  <div class="grid">
+    <div class="s"><span class="k">EPP</span><div class="b"><div class="x"><b>E</b>quipos · <b>P</b>roveedor · <b>P</b>recios</div><div class="m">Qué compro · a quién · cuánto</div></div></div>
+    <div class="s"><span class="k c">V · H</span><div class="b"><div class="x">Crecimiento <b>V</b>ertical = en el <b>mismo</b> equipo · <b>H</b>orizontal = con <b>otros</b> equipos · + fabricante de prestigio <b>mundial</b>, garantía, tecnología de punta</div><div class="m">Vertical crece hacia arriba, horizontal hacia el lado</div></div></div>
+    <div class="s"><span class="k">PSTCE</span><div class="b"><div class="x"><b>P</b>restigio local · <b>S</b>oporte de mantenimiento · <b>T</b>iempo de atención · <b>C</b>artera de clientes · <b>E</b>ntrega oportuna</div><div class="m">Fabricante = mundial · proveedor = local</div></div></div>
+    <div class="s"><span class="k">PCDM</span><div class="b"><div class="x">Condiciones de <b>P</b>ago · detallado por <b>C</b>omponentes · <b>D</b>escuentos por volumen · costo de <b>M</b>antenimiento</div><div class="m">"Pago Cada Descuento Mensual"</div></div></div>
+    <div class="s"><span class="k a">SPEFN</span><div class="b"><div class="x"><b>S</b>olicitud de propuesta · <b>P</b>arámetros (objetivos y políticas, por escrito) · <b>E</b>valuación de propuesta · <b>F</b>inanciamiento · <b>N</b>egociación de contrato</div><div class="m">Solicito, Parametrizo, Evalúo, Financio, Negocio</div></div></div>
+  </div>
+</section>
+
+<!-- 19. SOFTWARE -->
+<section id="sw">
+  <h2>19 · SELECCIÓN DEL SOFTWARE</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CEEFFCS</span><div class="b"><div class="x"><b>C</b>apacidad para las tareas · <b>E</b>ficacia en el desempeño · <b>E</b>ficiencia operativa · <b>F</b>acilidad de uso · <b>F</b>lexibilidad · <b>C</b>alidad de documentación · <b>S</b>oporte del fabricante</div><div class="m">Capaz, Eficaz, Eficiente, Fácil, Flexible, Con docs y con Soporte — 2 E + 2 F en medio</div></div></div>
+    <div class="s"><span class="k c">5 × eficiente</span><div class="b"><div class="x">Tiempos de respuesta rápidos · captura · salidas · almacenamiento · respaldos <b>eficientes</b></div><div class="m">Todo lo que "corre" rápido</div></div></div>
+    <div class="s"><span class="k c">LBA</span><div class="b"><div class="x"><b>L</b>ínea de consulta directa · <b>B</b>oletines · <b>A</b>ctualizaciones frecuentes (a bajo costo)</div><div class="m">Llamo, leo, actualizo</div></div></div>
+  </div>
+</section>
+
+<!-- 20. BENEFICIOS Y DESAFÍOS -->
+<section id="ben">
+  <h2>20 · BENEFICIOS Y DESAFÍOS DE LA COMPRA TI</h2>
+  <div class="grid">
+    <div class="s"><span class="k">ARCPDG</span><div class="b"><div class="x"><b>A</b>lineación estratégica · gestión de <b>R</b>iesgos · optimización de <b>C</b>ostos · relaciones con <b>P</b>roveedores · toma de <b>D</b>ecisiones · garantía de <b>G</b>RC</div><div class="m">6 beneficios: alinea, protege, ahorra, se relaciona, decide, cumple</div></div></div>
+    <div class="s"><span class="k c">GRC</span><div class="b"><div class="x"><b>G</b>obernanza · <b>R</b>iesgo · <b>C</b>umplimiento: licencias, gestión de datos y seguridad acatan las normas del sector</div><div class="m">Que todo sea legal y controlado</div></div></div>
+    <div class="s"><span class="k a">PRIC</span><div class="b"><div class="x"><b>P</b>lanificación y presupuestación · procesos <b>R</b>FP · <b>I</b>nventario de los activos · gestión de <b>C</b>ambios (resistencia)</div><div class="m">"El PRICe de comprar TI"</div></div></div>
+    <div class="s"><span class="k">RFP</span><div class="b"><div class="x"><b>R</b>equest <b>f</b>or <b>P</b>roposal = Solicitud de Propuestas: articula requerimientos y la relación con proveedores de forma <b>transparente, estructurada y justa</b></div><div class="m">T·E·J</div></div></div>
+  </div>
+</section>
+
+<!-- 21. PROVEEDORES -->
+<section id="prov">
+  <h2>21 · EVALUACIÓN Y SELECCIÓN DE PROVEEDORES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">PPCTD</span><div class="b"><div class="x"><b>P</b>erfil general · <b>P</b>recio · <b>C</b>apacidad técnica · <b>T</b>ecnología e infraestructura · <b>D</b>esempeño y nivel de servicio (SLA)</div><div class="m">Precio pesa mucho, pero solo no decide</div></div></div>
+    <div class="s"><span class="k">EBES</span><div class="b"><div class="x"><b>E</b>stablecer criterios · <b>B</b>úsqueda · <b>E</b>valuar según criterios · <b>S</b>elección</div><div class="m">4 pasos en cascada</div></div></div>
+    <div class="s"><span class="k a">CCLED</span><div class="b"><div class="x"><b>C</b>riterios (información objetiva) · <b>C</b>onvenio de confidencialidad · <b>L</b>ista de proveedores (listado corto) · <b>E</b>valúa propuestas (puntuación) · <b>D</b>ecide y negocia (relaciones beneficiosas)</div><div class="m">"Con Cuidado Listo, Evalúo y Decido"</div></div></div>
+    <div class="s"><span class="k">RRCHC</span><div class="b"><div class="x">Medir <b>R</b>iesgo · proteger <b>R</b>eputación de la marca · optimizar <b>C</b>osto · <b>H</b>omologar prácticas · aumentar <b>C</b>ompromiso de proveedores</div><div class="m">5 beneficios</div></div></div>
+  </div>
+</section>
+
+<!-- 22. RIESGOS -->
+<section id="rsg">
+  <h2>22 · RIESGO CON PROVEEDORES</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">87·44·28·11</span><div class="b"><div class="x"><b>87%</b> tuvo un incidente con un proveedor · <b>44%</b> muy efectivos en riesgo de terceros · <b>28%</b> grandes interrupciones · <b>11%</b> actividades completamente interrumpidas</div><div class="m">Bajan: casi todos, menos de la mitad, un cuarto, uno de cada diez</div></div></div>
+    <div class="s"><span class="k">CAMB</span><div class="b"><div class="x"><b>C</b>ríticos (afecta calidad, pocas o 1 alternativa) · <b>A</b>lto (afecta calidad, hay alternativas) · <b>M</b>edio (importante, no crítico) · <b>B</b>ajo (sin impacto en calidad)</div><div class="m">La diferencia crítico/alto = si hay alternativas</div></div></div>
+    <div class="s"><span class="k">ILRCFF</span><div class="b"><div class="x"><b>I</b>nterrupción del servicio al cliente · violaciones a la <b>L</b>ey · daño a la <b>R</b>eputación · quiebre de la <b>C</b>adena de suministro · <b>F</b>raude · <b>F</b>actibilidad económica del proveedor</div><div class="m">6 riesgos · multas de 2 a 50 millones USD</div></div></div>
+    <div class="s"><span class="k c">A · B · C</span><div class="b"><div class="x">Tipo <b>A</b> = crítico, riesgo elevado · <b>B</b> = importante, riesgo medio · <b>C</b> = no crítico, riesgo bajo</div><div class="m">A de Alarma, C de Calma</div></div></div>
+    <div class="s"><span class="k v">AENC</span><div class="b"><div class="x">Rentabilidad × Riesgo: <b>A</b>palancado (alta rent., bajo riesgo) · <b>E</b>stratégico (alta, alto) · <b>N</b>o crítico (baja, bajo) · <b>C</b>uello de botella (baja, alto)</div><div class="m">Arriba = rentable · derecha = riesgoso</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">REPASO FINAL</div>
+
+<!-- NÚMEROS -->
+<section id="n">
+  <h2>NÚMEROS CLAVE</h2>
+  <div class="nums">
+    <div class="n"><div class="v">7</div><div class="t">pasos del proceso de administración de RRHH</div></div>
+    <div class="n"><div class="v">6</div><div class="t">razones por las que reclutar TI es un reto</div></div>
+    <div class="n"><div class="v">10</div><div class="t">siglas de la alta dirección (CEO… CRO)</div></div>
+    <div class="n"><div class="v">10 · 8</div><div class="t">funciones · características del CIO</div></div>
+    <div class="n"><div class="v">9</div><div class="t">funciones del CISO</div></div>
+    <div class="n"><div class="v">10</div><div class="t">funciones de un CEO</div></div>
+    <div class="n"><div class="v">12</div><div class="t">funciones de un CTO</div></div>
+    <div class="n"><div class="v">7</div><div class="t">funciones de un DPO</div></div>
+    <div class="n"><div class="v">7</div><div class="t">áreas / puestos de TI</div></div>
+    <div class="n"><div class="v">~30</div><div class="t">años del modelo actual de centro TI</div></div>
+    <div class="n"><div class="v">0–3</div><div class="t">tipos de organización y niveles de la jerarquía</div></div>
+    <div class="n"><div class="v">5</div><div class="t">niveles de responsabilidad (DRSEI)</div></div>
+    <div class="n"><div class="v">80%</div><div class="t">contratación externa en algunos centros TI</div></div>
+    <div class="n"><div class="v">11</div><div class="t">pasos de la estrategia de aprovisionamiento</div></div>
+    <div class="n"><div class="v">7</div><div class="t">criterios para seleccionar software</div></div>
+    <div class="n"><div class="v">87%</div><div class="t">tuvo un incidente por un proveedor (Deloitte)</div></div>
+    <div class="n"><div class="v">44%</div><div class="t">muy efectivos gestionando riesgo de terceros</div></div>
+    <div class="n"><div class="v">28% · 11%</div><div class="t">grandes interrupciones · totalmente interrumpidas</div></div>
+    <div class="n"><div class="v">2–50 M</div><div class="t">USD en multas y pérdidas por faltas de terceros</div></div>
+    <div class="n"><div class="v">4</div><div class="t">cuadrantes de la matriz de Kraljic</div></div>
+  </div>
+</section>
+
+<!-- NO CONFUNDIR -->
+<section id="v">
+  <h2>NO CONFUNDIR</h2>
+  <div class="grid">
+    <div class="vs"><div class="l"><b>CIO</b><span>sistemas y procesos internos</span></div><div class="o">vs</div><div class="r"><b>CTO</b><span>productos para clientes externos</span></div></div>
+    <div class="vs"><div class="l"><b>CISO</b><span>seguridad de la información</span></div><div class="o">vs</div><div class="r"><b>CSO</b><span>sustentabilidad</span></div></div>
+    <div class="vs"><div class="l"><b>CDO</b><span>datos masivos</span></div><div class="o">vs</div><div class="r"><b>DPO</b><span>protección de datos (RGPD)</span></div></div>
+    <div class="vs"><div class="l"><b>CCO</b><span>anticorrupción (compliance)</span></div><div class="o">vs</div><div class="r"><b>CRO</b><span>reputación</span></div></div>
+    <div class="vs"><div class="l"><b>R (RACI)</b><span>ejecuta la tarea</span></div><div class="o">vs</div><div class="r"><b>A (RACI)</b><span>responsabilidad última</span></div></div>
+    <div class="vs"><div class="l"><b>C (RACI)</b><span>se consulta antes</span></div><div class="o">vs</div><div class="r"><b>I (RACI)</b><span>se informa después</span></div></div>
+    <div class="vs"><div class="l"><b>R (DRSEI)</b><span>procura que se haga</span></div><div class="o">vs</div><div class="r"><b>E (DRSEI)</b><span>realiza las tareas</span></div></div>
+    <div class="vs"><div class="l"><b>Función</b><span>mayor unidad de actividad</span></div><div class="o">vs</div><div class="r"><b>Actividad</b><span>acciones para un resultado</span></div></div>
+    <div class="vs"><div class="l"><b>Adq. directa</b><span>integra la infraestructura</span></div><div class="o">vs</div><div class="r"><b>Adq. indirecta</b><span>operación cotidiana</span></div></div>
+    <div class="vs"><div class="l"><b>Vertical</b><span>crece en el mismo equipo</span></div><div class="o">vs</div><div class="r"><b>Horizontal</b><span>crece con otros equipos</span></div></div>
+    <div class="vs"><div class="l"><b>Fabricante</b><span>prestigio mundial</span></div><div class="o">vs</div><div class="r"><b>Proveedor</b><span>prestigio local</span></div></div>
+    <div class="vs"><div class="l"><b>Crítico</b><span>pocas o 1 alternativa</span></div><div class="o">vs</div><div class="r"><b>Alto riesgo</b><span>sí hay alternativas</span></div></div>
+    <div class="vs"><div class="l"><b>Apalancado</b><span>fuente abundante</span></div><div class="o">vs</div><div class="r"><b>Cuello de botella</b><span>fuentes limitadas</span></div></div>
+    <div class="vs"><div class="l"><b>Estratégico</b><span>esencial, alto riesgo</span></div><div class="o">vs</div><div class="r"><b>No crítico</b><span>bajo valor, bajo riesgo</span></div></div>
+  </div>
+</section>
+
+<footer>Gerencia de Recursos de TIC · Parcial 2 · generado solo a partir de los PDF del parcial · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+<script>
+(function(){
+  "use strict";
+  var body = document.body, btn = document.getElementById("practice"), hint = document.getElementById("hint");
+  function setQuiz(on){
+    body.classList.toggle("quiz", on);
+    btn.classList.toggle("on", on);
+    btn.textContent = on ? "👀 Mostrar todo" : "🙈 Modo práctica";
+    hint.innerHTML = on ? "Toca cada tarjeta para revelar su significado." : "Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.";
+    document.querySelectorAll(".show").forEach(function(el){ el.classList.remove("show"); });
+    try{ localStorage.setItem("gr_p2_siglas_quiz", on ? "1" : "0"); }catch(e){}
+  }
+  btn.addEventListener("click", function(){ setQuiz(!body.classList.contains("quiz")); });
+  document.querySelector("main").addEventListener("click", function(e){
+    if(!body.classList.contains("quiz")) return;
+    var c = e.target.closest(".s, .vs, .n"); if(c) c.classList.toggle("show");
+  });
+  try{ if(localStorage.getItem("gr_p2_siglas_quiz") === "1") setQuiz(true); }catch(e){}
+
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>

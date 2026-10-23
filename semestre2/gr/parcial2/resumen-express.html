@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Resumen Express · GR Parcial 2</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.tgl{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.part-label{margin:26px 0 8px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+
+/* SECCIONES PLEGABLES */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:9px;scroll-margin-top:100px;overflow:hidden;}
+summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+summary::-webkit-details-marker{display:none;}
+summary .n{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:7px;min-width:28px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+summary h2{font-size:.92rem;flex:1;line-height:1.3;}
+summary .chev{color:var(--faint);font-size:.8rem;transition:transform .2s;}
+details[open] summary .chev{transform:rotate(180deg);}
+.body{padding:0 14px 13px;border-top:1px dashed var(--line-soft);}
+
+ul{margin:10px 0 0;padding:0;list-style:none;}
+li{position:relative;padding:3px 0 3px 15px;font-size:.85rem;color:var(--dim);}
+li::before{content:"▸";position:absolute;left:0;top:3px;color:var(--accent);font-size:.8rem;}
+li b{color:var(--text);}
+.tag{font-family:var(--mono);font-size:.68rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:6px;padding:1px 6px;margin-left:2px;white-space:nowrap;}
+.tag.c{color:var(--cyan);background:var(--cyan-dim);}
+.tag.a{color:var(--amber);background:var(--amber-dim);}
+h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;color:var(--cyan);margin:13px 0 0;}
+.key{margin-top:10px;font-size:.8rem;color:var(--text);background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+.key b{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78rem;}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;color:var(--accent);padding:6px 6px;border-bottom:1px solid var(--line);font-weight:800;}
+td{padding:6px 6px;border-bottom:1px solid var(--line-soft);color:var(--dim);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:600;}
+tr:last-child td{border-bottom:none;}
+
+.glo{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px;}
+.glo div{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--dim);}
+.glo div:last-child{border-bottom:none;}
+.glo b{color:var(--cyan);min-width:118px;flex-shrink:0;font-weight:700;}
+@media (min-width:620px){ .glo{grid-template-columns:1fr 1fr;column-gap:16px;} }
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:26px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Resumen <em>express</em></h1>
+    <button class="tgl" id="tgl">Plegar todo</button>
+  </div>
+  <nav class="chips">
+    <a href="#s1">RRHH y TI</a><a href="#s2">Proceso RRHH</a><a href="#s3">Organigramas</a><a href="#s4">Siglas C</a><a href="#s5">CIO</a>
+    <a href="#s6">CISO · CEO</a><a href="#s7">CTO · DPO</a><a href="#s8">Áreas TI</a><a href="#s9">RACI</a><a href="#s10">Modelo roles</a>
+    <a href="#s11">Definiciones</a><a href="#s12">Jerarquía</a><a href="#s13">Calidad · DRSEI</a><a href="#s14">Centro TI</a><a href="#s15">Aprovisionamiento</a>
+    <a href="#s16">Hardware</a><a href="#s17">Software</a><a href="#s18">Beneficios</a><a href="#s19">Proveedores</a><a href="#s20">Riesgos</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint">Los <b>3 PDF del Parcial 2</b>, en su orden, lo más corto posible. Toca un título para plegarlo.</p>
+
+<div class="part-label">TEMA 1 · ADMINISTRACIÓN DE RECURSO HUMANO EN TIC</div>
+
+<details open id="s1"><summary><span class="n">1</span><h2>RRHH y TI · Situación actual</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Introducción:</b> RRHH y TI no se complementaban; la mayor barrera es la <b>falta de comprensión</b> → <b>mal reclutamiento</b> (RRHH no entiende el perfil, TI no se involucra).</li>
+    <li>RRHH ahora debe <b>gestionar y digitalizar el capital humano</b>.</li>
+    <li><b>Gestión de RRHH:</b> dimensión humana; <b>adquirir</b> servicios · <b>desarrollar</b> habilidades · <b>motivar</b> · <b>garantizar compromiso</b> <span class="tag">ADMG</span>.</li>
+    <li><b>Reto de reclutar TI (6):</b> poca comunicación · no sabe dónde buscar · no sabe qué habilidades analizar · sin conocimiento técnico · TI pide requisitos irreales · poco conocimiento del mercado.</li>
+  </ul>
+</div></details>
+
+<details open id="s2"><summary><span class="n">2</span><h2>Proceso de administración de RRHH</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>7 pasos:</b> planificación → reclutamiento → selección → contratación → orientación → capacitación → desarrollo de la carrera.</li>
+  </ul>
+  <table>
+    <tr><th>Pasos (Proceso de Gestión RRHH)</th><th>Resultado</th></tr>
+    <tr><td>Planificación → Reclutamiento → Selección</td><td>Empleados competentes identificados</td></tr>
+    <tr><td>Orientación → Capacitación</td><td>Adaptados y actualizados</td></tr>
+    <tr><td>Evaluación de desempeño → Carrera ↔ Compensación</td><td>Competentes y de alto rendimiento</td></tr>
+  </table>
+  <div class="key">🔁 De la planificación también sale la <b>desvinculación</b>; todo ocurre dentro del <b>entorno</b>.</div>
+</div></details>
+
+<details open id="s3"><summary><span class="n">3</span><h2>Responsabilidades de TI · Organigramas</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Responsabilidades de TI (3):</b> comunicación de tareas rutinarias · plataforma integral · funcionalidad para las tareas.</li>
+    <li><b>Empresa de tecnología:</b> CEO → VP ejecutivos → managers → Tecnología y Desarrollo · Ventas · Operaciones · RRHH.</li>
+    <li><b>Decanato:</b> Depto. de Tecnología y Servicios Informáticos → Redes y Mantenimiento (taller) · Sistemas y Servicios Informáticos (mantenimiento, laboratorios y aula virtual, comunicación y noticias).</li>
+    <li><b>Ejemplo Facebook:</b> CEO & Chairman → COO; debajo CFO · CIO · CTO · CMO (→ CDO, Global mkt) · HR.</li>
+  </ul>
+</div></details>
+
+<details open id="s4"><summary><span class="n">4</span><h2>Siglas en la alta dirección</h2><span class="chev">▾</span></summary><div class="body">
+  <div class="glo">
+    <div><b>CEO</b>Director general (Executive)</div>
+    <div><b>CFO</b>Director financiero (Financial)</div>
+    <div><b>COO</b>Director operativo (Operating)</div>
+    <div><b>CMO</b>Director de mercadotecnia (Marketing)</div>
+    <div><b>CTO</b>Director de tecnologías (Technical)</div>
+    <div><b>CIO</b>Director de informática (Information)</div>
+    <div><b>CDO</b>Director de datos masivos (Data)</div>
+    <div><b>CSO</b>Director de sustentabilidad (Sustainability)</div>
+    <div><b>CCO</b>Director de anticorrupción (Compliance)</div>
+    <div><b>CRO</b>Director de reputación (Reputation)</div>
+  </div>
+</div></details>
+
+<details open id="s5"><summary><span class="n">5</span><h2>CIO · Chief Information Officer</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> responsable de los sistemas y TI; provee la tecnología para que los <b>procesos de la empresa</b> funcionen.</li>
+    <li><b>Responsabilidades (3):</b> crear valor · dirigir recursos a objetivos estratégicos · garantizar sistemas bien gestionados (costo, riesgo, operación).</li>
+    <li><b>Funciones (10):</b> personal · proveedores · arquitectura · políticas de gobernanza · riesgo · gasto e inversión · capacidad y ciclo de vida · tendencias · incidentes a ejecutivos · cumplimiento (SOX, GDPR).</li>
+    <li><b>Estrategia:</b> igual que cualquier ejecutivo: gestionar recursos para <b>maximizar el valor</b>.</li>
+    <li><b>Características (8):</b> visión estratégica · flexibilidad · aprendizaje · comunicación y liderazgo · coordinación · creatividad · planificación y control · gestión financiera.</li>
+  </ul>
+</div></details>
+
+<details open id="s6"><summary><span class="n">6</span><h2>CISO · CEO</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>CISO:</b> director de seguridad de la información; protege ante <b>ciberataques y fugas</b> según posibilidades humanas, técnicas y económicas.</li>
+    <li><b>Funciones CISO (9):</b> alinear ciberseguridad · normativa · prevenir/detectar/analizar vulnerabilidades · informar a dirección · respuesta rápida · formar · políticas · privacidad · forense digital.</li>
+    <li><b>CEO:</b> puesto más alto; director general, consejero delegado o presidente ejecutivo.</li>
+    <li><b>Funciones CEO (10):</b> informar · planificar · motivar y asesorar · decidir · crear equipo · cuidar clientes · usar presupuesto · guiar directivos · crear estructura · fijar objetivos.</li>
+  </ul>
+</div></details>
+
+<details open id="s7"><summary><span class="n">7</span><h2>CTO · DPO</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>CTO:</b> máximo responsable técnico y tecnológico; mejora productos y servicios para <b>clientes externos</b>; aumenta ingresos; costo-beneficio y ROI.</li>
+    <li><b>Funciones CTO (12):</b> estrategia tecnológica · innovación · información sensible · equipos · comunicación · presupuestos · calidad · mejoras · escalabilidad · proyectos · legislaciones · cultura de la información.</li>
+    <li><b>DPO:</b> Delegado de Protección de Datos; cumplimiento normativo. El RGPD <b>no exige que sea jurista</b>, pero sí amplios conocimientos jurídicos.</li>
+    <li><b>Funciones DPO (7):</b> informar y asesorar · supervisar · formar · auditorías · Evaluación de Impacto · cooperar con Autoridades de Control · punto de contacto.</li>
+  </ul>
+</div></details>
+
+<details open id="s8"><summary><span class="n">8</span><h2>Funciones y áreas de TI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Funciones (3):</b> <b>infraestructura</b> (HW, red, circuitos) · <b>funcionalidad</b> (la más visible: apps y datos) · <b>gobernanza</b> (reglas de uso, seguridad).</li>
+  </ul>
+  <table>
+    <tr><th>Área</th><th>Clave</th></tr>
+    <tr><td>Administración (ITSM)</td><td>Mantener y reparar, asesorar, ayudar a instalar</td></tr>
+    <tr><td>Soporte técnico</td><td>Asistir a quien necesita acceso; HW/SW, red, backups</td></tr>
+    <tr><td>Comunicaciones</td><td>Distancias, logística, personal remoto</td></tr>
+    <tr><td>Programación</td><td>Software in house en vez de comprar paquetes</td></tr>
+    <tr><td>Sitio web</td><td>Diseño, código, canales seguros, seguridad</td></tr>
+    <tr><td>Desarrollo de aplicaciones</td><td>Necesidades del cliente → apps viables</td></tr>
+    <tr><td>Contingencia de red</td><td>Redes alternativas, energía de emergencia, pruebas</td></tr>
+  </table>
+</div></details>
+
+<details open id="s9"><summary><span class="n">9</span><h2>Matriz RACI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Qué es:</b> matriz de asignación de responsabilidades por tarea, logro o entrega; reduce la confusión.</li>
+    <li><b>R</b> Responsible: ejecuta · <b>A</b> Accountable: responsabilidad última · <b>C</b> Consulted: antes · <b>I</b> Informed: después.</li>
+  </ul>
+  <div class="key">⚠️ <b>Ojo con el idioma:</b> Responsible = el que <b>hace</b>; Accountable = el que <b>responde</b>.</div>
+</div></details>
+
+<div class="part-label">TEMA 2 · ROLES Y RESPONSABILIDADES PARA LA GESTIÓN DE TI</div>
+
+<details open id="s10"><summary><span class="n">10</span><h2>Modelo de roles · Modelo actual vs. nuevo</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Problema:</b> personas que desconocen su rol · infraestructuras sin control · procesos no definidos. Propuesta basada en <b>COBIT e ITIL</b> (Junta de Andalucía).</li>
+    <li><b>Lógica:</b> función → procesos → roles y responsabilidades. Los roles solo cambian ante cambios <b>profundos</b>.</li>
+    <li><b>Pregunta clave:</b> ¿se están gestionando adecuadamente las TI?</li>
+    <li><b>Modelo actual</b> (~30 años): desarrollo, explotación, sistemas + jefatura. <b>Nuevo:</b> procesos horizontales.</li>
+  </ul>
+</div></details>
+
+<details open id="s11"><summary><span class="n">11</span><h2>Definiciones y acrónimos</h2><span class="chev">▾</span></summary><div class="body">
+  <div class="glo">
+    <div><b>Rol</b>Responsabilidades + actividades + autorizaciones (ITIL)</div>
+    <div><b>Proceso</b>Actividades que transforman entradas en resultados (ISO 9000)</div>
+    <div><b>Función</b>Mayor unidad de actividad de negocio (DIRKS)</div>
+    <div><b>Actividad</b>Acciones para un resultado particular (ITIL)</div>
+    <div><b>Servicio TI</b>Sistemas TI que hacen posible un proceso de negocio</div>
+    <div><b>Infraestructura TI</b>HW y SW de base, comunicaciones, instalaciones</div>
+    <div><b>Usuario</b>Usa el servicio en el día a día (ITIL)</div>
+    <div><b>Responsable</b>Pone cuidado y atención en lo que hace (DRAE)</div>
+    <div><b>PDCA</b>Plan-Do-Check-Act (ciclo de Deming)</div>
+    <div><b>COBIT · ITIL</b>Control Objectives… · IT Infrastructure Library</div>
+  </div>
+</div></details>
+
+<details open id="s12"><summary><span class="n">12</span><h2>Jerarquía de roles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Tipos:</b> 0 un único rol · 1 dominios COBIT · 2 intermedia (servicio bajo secretaría general técnica) · 3 especializada (COBIT + ITIL).</li>
+    <li><b>Nivel 1 (dominios COBIT, ciclo PDCA):</b> PO · AI = Gestión de la Infraestructura TI · DS = Gestión de los Servicios TI · ME.</li>
+    <li><b>Recursos TI:</b> aplicaciones, información, infraestructura, organización.</li>
+  </ul>
+  <table>
+    <tr><th>Nivel 1</th><th>Nivel 2 → nivel 3</th></tr>
+    <tr><td>Planificación y Coordinación TI</td><td>Seguridad y Cumplimiento · Procesos/Org./RRHH/Arquitectura · Proyectos y Calidad · Estratégica y Financiera</td></tr>
+    <tr><td>Gestión de Infraestructura TI</td><td>AI de Aplicaciones · AI de Infraestructura HW-SW-COM (HW y SW base, Comunicaciones)</td></tr>
+    <tr><td>Gestión de los Servicios TI</td><td>Producción (continuidad, capacidad, disponibilidad, nivel de servicio) · Soporte (cambios, incidencias, configuración, problemas)</td></tr>
+    <tr><td>Monitorización y Evaluación TI</td><td>—</td></tr>
+  </table>
+  <div class="key">🔝 Nivel 0 = <b>Dirección TI</b>.</div>
+</div></details>
+
+<details open id="s13"><summary><span class="n">13</span><h2>Rol Gestión de la Calidad · DRSEI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Calidad:</b> normas y procedimientos, asesoría, riesgos y controles → valor al negocio, mejora continua, transparencia.</li>
+    <li><b>Responsabilidades:</b> estándares · Plan General de Calidad · planes específicos · mediciones · acciones correctivas (causas raíz) · auditoría interna · recomendar cambios · formar · informar a la Dirección.</li>
+    <li><b>DRSEI</b> (similar a RACI): <b>D</b>irector (último, da recursos) · <b>R</b>esponsable (procura, da cuenta) · <b>S</b>upervisor · <b>E</b>jecutor · <b>I</b>nformado.</li>
+    <li><b>Reglas:</b> ningún rol sin responsable · ninguno con más de uno (salvo reserva) · sí asignaciones dobles.</li>
+    <li><b>Colores:</b> verde ejecutándose · naranja a medio camino · rojo no se ejecuta.</li>
+  </ul>
+</div></details>
+
+<details open id="s14"><summary><span class="n">14</span><h2>El centro TI · Conclusión</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Sirve para:</b> comprobar si la estructura de un centro TI es correcta: todos los procesos definidos sin ambigüedad y de modo único.</li>
+    <li><b>Consejería:</b> consejero · 4 secretarías generales · direcciones generales (nivel 2) · servicios (nivel 3).</li>
+    <li><b>Dirección General</b> (Economía y Hacienda): no encaja; procesos no definidos, duplicados o en otra estructura.</li>
+    <li><b>Servicio:</b> jefe + 1–2 adjuntos + 3 jefes de dpto · nivel 2 · faltan calidad, seguridad, monitorización.</li>
+    <li><b>Conclusión:</b> hace falta un marco de referencia; contratación externa hasta <b>80%</b>.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">TEMA 3 · ADQUISICIÓN, SELECCIÓN Y CRITERIOS DE EVALUACIÓN</div>
+
+<details open id="s15"><summary><span class="n">15</span><h2>Aprovisionamiento de TI · Categorías · Estrategia</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Para qué:</b> productividad, reducir costes, ventaja competitiva.</li>
+    <li><b>Aprovisionamiento:</b> comprar y desplegar bienes o servicios TI: analizar · seleccionar proveedores · negociar · ejecutar órdenes.</li>
+    <li><b>Riesgo:</b> con SaaS accesible, TI pierde control del <b>gasto y la seguridad</b>.</li>
+    <li><b>Categorías:</b> directa (infraestructura) · indirecta (día a día) · servicios (SaaS) · bienes (activos físicos).</li>
+    <li><b>Estrategia (11):</b> inventario · necesidades · equipo interdisciplinario · objetivos · presupuesto · riesgos · evaluar proveedores · solicitar propuestas · negociar · implementación · KPI.</li>
+  </ul>
+</div></details>
+
+<details open id="s16"><summary><span class="n">16</span><h2>Selección del hardware</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Según el <b>plan estratégico de sistemas</b> + estudio del dpto. de sistemas; define configuración mínima y costo aproximado.</li>
+  </ul>
+  <table>
+    <tr><th>Criterio</th><th>Qué mirar</th></tr>
+    <tr><td>Equipos</td><td>Carga · crecimiento vertical/horizontal · fabricante mundial · garantía · tecnología de punta</td></tr>
+    <tr><td>Proveedor</td><td>Prestigio local · soporte y repuestos · atención · cartera de clientes · entrega</td></tr>
+    <tr><td>Precios</td><td>Condiciones de pago · por componentes · descuentos por volumen · mantenimiento</td></tr>
+  </table>
+  <ul>
+    <li><b>Consideraciones SW/HW:</b> solicitud de propuesta · parámetros (objetivos y políticas por escrito) · evaluación · financiamiento (bancos) · negociación de contrato.</li>
+  </ul>
+</div></details>
+
+<details open id="s17"><summary><span class="n">17</span><h2>Selección del software</h2><span class="chev">▾</span></summary><div class="body">
+  <table>
+    <tr><th>Criterio</th><th>Incluye</th></tr>
+    <tr><td>Capacidad</td><td>Tareas futuras · buen diseño en pantalla · capacidad adecuada</td></tr>
+    <tr><td>Eficacia en el desempeño</td><td>Respuesta rápida · captura, salidas, almacenamiento y respaldos eficientes</td></tr>
+    <tr><td>Eficiencia operativa</td><td>Interfaz satisfactoria y flexible · menús de ayuda · retroalimentación · recuperación de errores</td></tr>
+    <tr><td>Facilidad de uso</td><td>Opciones de entrada y salida · compatibilidad</td></tr>
+    <tr><td>Flexibilidad</td><td>Buena organización · tutoriales · respuestas adecuadas</td></tr>
+    <tr><td>Calidad de documentación</td><td>—</td></tr>
+    <tr><td>Soporte del fabricante</td><td>Línea directa · boletines · actualizaciones a bajo costo</td></tr>
+  </table>
+</div></details>
+
+<details open id="s18"><summary><span class="n">18</span><h2>Beneficios y desafíos de la compra TI</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Beneficios (6):</b> alineación estratégica · riesgos · costos · relación con proveedores · toma de decisiones · GRC (Gobernanza, Riesgo, Cumplimiento).</li>
+    <li><b>Desafíos (4):</b> planificación y presupuesto · RFP (Request for Proposal) · inventario de activos · gestión de cambios.</li>
+  </ul>
+</div></details>
+
+<details open id="s19"><summary><span class="n">19</span><h2>Evaluación y selección de proveedores</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Aspectos (5):</b> perfil general · precio (pesa, pero no decide solo) · capacidad técnica · tecnología e infraestructura · desempeño y SLA.</li>
+    <li><b>Criterios (4 pasos):</b> establecer criterios → búsqueda → evaluar → seleccionar.</li>
+    <li><b>Proceso (5):</b> criterios · contrato de confidencialidad · listado corto · puntuar propuestas · decidir y negociar.</li>
+    <li><b>Beneficios de evaluar (5):</b> medir riesgo · proteger la marca · optimizar costo · homologar prácticas · compromiso del proveedor.</li>
+  </ul>
+</div></details>
+
+<details open id="s20"><summary><span class="n">20</span><h2>Riesgo con proveedores · Kraljic</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Deloitte:</b> 87% incidente · 44% muy efectivos · 28% grandes interrupciones · 11% interrupción total.</li>
+    <li><b>Niveles:</b> crítico (sin alternativas) · alto (con alternativas) · medio · bajo. <b>A/B/C</b> = elevado/medio/bajo.</li>
+    <li><b>Riesgos (6):</b> interrupción del servicio · violación de la ley (2–50 M USD) · reputación · cadena de suministro · fraude · factibilidad económica.</li>
+  </ul>
+  <table>
+    <tr><th>Kraljic</th><th>Rentab. · riesgo · estrategia</th></tr>
+    <tr><td>Apalancado</td><td>Alta · bajo · aprovechar el poder de compra</td></tr>
+    <tr><td>Estratégico</td><td>Alta · alto · garantizar disponibilidad</td></tr>
+    <tr><td>No crítico</td><td>Baja · bajo · fuentes descentralizadas</td></tr>
+    <tr><td>Cuello de botella</td><td>Baja · alto · mantener y desarrollar suministros</td></tr>
+  </table>
+  <div class="key">🎯 <b>Lo más preguntable:</b> siglas C · CIO vs. CTO · RACI vs. DRSEI · jerarquía de roles · criterios HW/SW · riesgos y Kraljic.</div>
+</div></details>
+
+<footer>Gerencia de Recursos de TIC · Parcial 2 · resumen de los 3 PDF del parcial · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var all = document.querySelectorAll("details"), tgl = document.getElementById("tgl");
+  function label(){
+    var anyOpen = Array.prototype.some.call(all, function(d){ return d.open; });
+    tgl.textContent = anyOpen ? "Plegar todo" : "Abrir todo";
+  }
+  tgl.addEventListener("click", function(){
+    var open = tgl.textContent === "Abrir todo";
+    all.forEach(function(d){ d.open = open; });
+    label();
+  });
+  all.forEach(function(d){ d.addEventListener("toggle", label); });
+  // Al tocar un chip, abrir esa sección
+  document.querySelectorAll("nav.chips a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var d = document.querySelector(a.getAttribute("href"));
+      if(d){ d.open = true; label(); }
+    });
+  });
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>
