@@ -57,6 +57,7 @@ Además: si la materia aún no enlaza este parcial, agrega el botón en `<materi
 4. Generar las páginas, luego el `index.html`, luego revisar (ver *Verificación*).
 5. Commit por página o por bloque, con mensajes como los del historial:
    `Parcial <N> <SIGLA>: guía, flashcards, resúmenes, siglas y simulacro`.
+6. Hacer push
 
 ## Estilo visual común (páginas de estudio)
 
