@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Simulacro de Parcial 2 · Calidad de Software</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --maxw:680px;
+  --radius:14px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);line-height:1.5;min-height:100vh;
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+.hidden{display:none !important;}
+a{color:var(--cyan);}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--text);
+  padding:13px 18px;border-radius:12px;font-size:.92rem;font-weight:700;text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.btn.danger{background:var(--red-dim);border-color:#5c2a2a;color:var(--red);}
+.btn.block{width:100%;}
+.btn.sm{padding:9px 13px;font-size:.8rem;border-radius:10px;}
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+.cover{margin:22px auto 30px;}
+.paper{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:22px 20px;position:relative;overflow:hidden;
+}
+.paper::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+}
+.inst{text-align:center;font-family:var(--serif);}
+.inst .u{font-size:.95rem;font-weight:700;letter-spacing:.02em;}
+.inst .f{font-size:.78rem;color:var(--text-dim);margin-top:2px;}
+.inst .c{font-size:1.02rem;margin-top:12px;font-weight:700;color:var(--accent);}
+.inst .t{font-size:1.45rem;margin-top:4px;font-weight:700;}
+.inst .p{font-size:.8rem;color:var(--text-faint);margin-top:4px;}
+.rule{border:none;border-top:1px dashed var(--line);margin:18px 0;}
+
+.fields{display:grid;grid-template-columns:1fr;gap:10px;}
+.field label{display:block;font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-bottom:4px;letter-spacing:.03em;}
+.field input,.field select{
+  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);
+  border-radius:10px;padding:11px 12px;font-size:16px;font-family:var(--sans);
+}
+.field input:focus,.field select:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+.sec-title{font-size:.78rem;font-family:var(--mono);color:var(--accent);letter-spacing:.04em;margin-bottom:8px;}
+ol.rules{margin:0;padding-left:20px;}
+ol.rules li{font-size:.86rem;color:var(--text-dim);margin-bottom:6px;}
+ol.rules li b{color:var(--text);}
+
+.valtable{width:100%;border-collapse:collapse;font-size:.84rem;}
+.valtable td{padding:8px 4px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);}
+.valtable td:last-child{text-align:right;font-family:var(--mono);color:var(--text);white-space:nowrap;}
+.valtable tr:last-child td{border-bottom:none;font-weight:700;color:var(--text);}
+
+.resume{
+  background:var(--amber-dim);border:1px solid #5c4515;border-radius:14px;padding:14px;margin-bottom:14px;
+}
+.resume p{font-size:.86rem;color:var(--text);margin-bottom:10px;}
+.resume .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+.history{margin-top:4px;}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:.82rem;color:var(--text-dim);}
+.hist-item:last-child{border-bottom:none;}
+.hist-item b{font-family:var(--mono);color:var(--text);}
+
+/* ============================================================
+   BARRA DE EXAMEN
+   ============================================================ */
+#topbar{
+  position:sticky;top:0;z-index:50;background:rgba(10,20,16,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.tb-inner{max-width:var(--maxw);margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.timer{
+  font-family:var(--mono);font-weight:800;font-size:1.05rem;color:var(--accent);
+  background:var(--accent-dim);border-radius:10px;padding:7px 10px;min-width:84px;text-align:center;
+}
+.timer.warn{color:var(--amber);background:var(--amber-dim);}
+.timer.crit{color:var(--red);background:var(--red-dim);animation:pulse 1s infinite;}
+@keyframes pulse{50%{opacity:.6}}
+.tb-mid{flex:1;min-width:0;}
+.tb-label{font-size:.68rem;color:var(--text-faint);font-family:var(--mono);}
+.tb-prog{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:4px;}
+.tb-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .3s;}
+
+/* ============================================================
+   SECCIONES Y PREGUNTAS
+   ============================================================ */
+#exam main{padding:8px 16px 110px;}
+.part{margin-top:22px;}
+.part-head{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:12px;
+}
+.part-head h2{font-size:1rem;font-family:var(--serif);}
+.part-head h2 span{float:right;font-family:var(--mono);font-size:.78rem;color:var(--accent);margin-top:3px;}
+.part-head p{font-size:.8rem;color:var(--text-dim);margin-top:4px;}
+
+.q{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px 14px 12px;margin-bottom:10px;scroll-margin-top:80px;
+}
+.q.unanswered-flag{border-color:var(--amber);}
+.q-top{display:flex;gap:10px;align-items:flex-start;}
+.q-num{
+  font-family:var(--mono);font-size:.72rem;font-weight:800;color:var(--accent);
+  border:1px solid var(--accent-dim);background:var(--accent-dim);border-radius:8px;
+  min-width:30px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.q-text{font-size:.94rem;color:var(--text);flex:1;}
+.q-pts{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);white-space:nowrap;margin-top:4px;}
+
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  background:var(--bg);border:1px solid var(--line);border-radius:11px;
+  padding:11px 12px;font-size:.9rem;color:var(--text-dim);width:100%;
+}
+.opt .l{
+  font-family:var(--mono);font-weight:800;font-size:.75rem;color:var(--text-faint);
+  border:1px solid var(--line);border-radius:6px;min-width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.opt.sel{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.opt.sel .l{border-color:var(--accent);color:var(--accent);}
+.vf{flex-direction:row;}
+.vf .opt{justify-content:center;font-weight:700;}
+
+.defs{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px;}
+.defs li{
+  display:flex;gap:10px;background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;
+  padding:9px 11px;font-size:.85rem;color:var(--text-dim);
+}
+.defs li b{font-family:var(--mono);color:var(--cyan);min-width:18px;}
+.match-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);}
+.match-row:last-child{border-bottom:none;}
+.match-row .term{flex:1;font-size:.9rem;color:var(--text);font-weight:600;}
+.match-row select,.ord-row select{
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;
+  padding:9px 8px;font-size:16px;font-family:var(--mono);min-width:74px;
+}
+.match-row select.filled,.ord-row select.filled{border-color:var(--accent);color:var(--accent);}
+.ord-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line-soft);}
+.ord-row:last-child{border-bottom:none;}
+.ord-row .item{flex:1;font-size:.88rem;color:var(--text-dim);}
+
+textarea{
+  width:100%;min-height:150px;margin-top:12px;resize:vertical;
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:11px;
+  padding:11px 12px;font-size:16px;font-family:var(--sans);line-height:1.5;
+}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.wc{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);text-align:right;margin-top:4px;}
+
+.submit-zone{margin-top:22px;}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal{position:fixed;inset:0;background:rgba(4,9,7,.82);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:16px;}
+.modal-box{
+  width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:20px 18px calc(18px + var(--safe-b));margin-bottom:max(0px,var(--safe-b));
+}
+.modal-box h3{font-size:1.05rem;margin-bottom:8px;}
+.modal-box p{font-size:.88rem;color:var(--text-dim);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.chip{font-family:var(--mono);font-size:.72rem;background:var(--amber-dim);color:var(--amber);border:none;border-radius:20px;padding:5px 10px;}
+.modal-actions{display:flex;gap:8px;}
+.modal-actions .btn{flex:1;}
+@media (min-width:600px){.modal{align-items:center;}}
+
+/* ============================================================
+   AUTOEVALUACIÓN
+   ============================================================ */
+.sg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;}
+.sg h3{font-size:.95rem;margin-bottom:10px;}
+.sg .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.03em;margin:12px 0 5px;}
+.sg .mine{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;}
+.sg .model{background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text);}
+.rub{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line-soft);cursor:pointer;}
+.rub:last-child{border-bottom:none;}
+.rub input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;margin-top:1px;}
+.rub span{flex:1;font-size:.86rem;color:var(--text-dim);}
+.rub em{font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;}
+.sg-total{text-align:right;font-family:var(--mono);font-size:.8rem;color:var(--text);margin-top:8px;}
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+.score-card{text-align:center;padding:26px 18px;}
+.score-big{font-size:3.4rem;font-weight:800;line-height:1;font-family:var(--mono);}
+.score-big small{font-size:1.1rem;color:var(--text-faint);}
+.grade{display:inline-block;margin-top:10px;font-family:var(--serif);font-size:1.1rem;font-weight:700;padding:5px 16px;border-radius:30px;}
+.g-A{background:var(--accent-dim);color:var(--accent);}
+.g-B{background:var(--cyan-dim);color:var(--cyan);}
+.g-C{background:var(--violet-dim);color:var(--violet);}
+.g-D{background:var(--amber-dim);color:var(--amber);}
+.g-F{background:var(--red-dim);color:var(--red);}
+.score-meta{font-size:.8rem;color:var(--text-faint);margin-top:10px;}
+.bars{margin-top:6px;}
+.bar-row{margin-bottom:12px;}
+.bar-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--text-dim);margin-bottom:4px;}
+.bar-top b{font-family:var(--mono);color:var(--text);}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:99px;}
+
+.filters{display:flex;gap:6px;margin:6px 0 12px;overflow-x:auto;scrollbar-width:none;}
+.filters::-webkit-scrollbar{display:none;}
+.fbtn{flex-shrink:0;background:var(--surface);border:1px solid var(--line);color:var(--text-dim);padding:8px 13px;border-radius:30px;font-size:.78rem;font-weight:700;}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:#06140c;}
+
+.rv{background:var(--surface);border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:12px 13px;margin-bottom:9px;}
+.rv.ok{border-left-color:var(--accent);}
+.rv.bad{border-left-color:var(--red);}
+.rv.part{border-left-color:var(--amber);}
+.rv-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.rv-q{font-size:.88rem;color:var(--text);flex:1;}
+.rv-pts{font-family:var(--mono);font-size:.72rem;white-space:nowrap;}
+.rv-line{font-size:.82rem;color:var(--text-dim);margin-top:6px;}
+.rv-line b{color:var(--text);}
+.rv-exp{font-size:.8rem;color:var(--text-dim);background:var(--bg);border-radius:9px;padding:8px 10px;margin-top:8px;}
+.c-ok{color:var(--accent);}
+.c-bad{color:var(--red);}
+.c-part{color:var(--amber);}
+
+.actions{display:flex;flex-direction:column;gap:8px;margin:20px 0 40px;}
+
+footer{text-align:center;padding:10px 16px 30px;}
+footer p{font-size:.7rem;color:var(--text-faint);}
+
+@media (min-width:600px){
+  .fields{grid-template-columns:1fr 1fr;}
+  .fields .field.full{grid-column:1 / -1;}
+  .actions{flex-direction:row;}
+  .actions .btn{flex:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PORTADA
+     ============================================================ -->
+<section id="start" class="wrap cover">
+  <div id="resumeBox" class="resume hidden">
+    <p>⏸️ Tienes un intento en curso. <b id="resumeInfo"></b></p>
+    <div class="row">
+      <button class="btn primary sm" id="btnResume">Continuar intento</button>
+      <button class="btn sm" id="btnDiscard">Descartar</button>
+    </div>
+  </div>
+
+  <div class="paper">
+    <div class="inst">
+      <div class="u">UNIVERSIDAD TECNOLÓGICA DE PANAMÁ</div>
+      <div class="f">Facultad de Ingeniería de Sistemas Computacionales</div>
+      <div class="c">Calidad de Software</div>
+      <div class="t">Segundo Examen Parcial</div>
+      <div class="p">Simulacro · II Semestre 2026</div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="fields">
+      <div class="field"><label>NOMBRE (OPCIONAL)</label><input id="fName" type="text" autocomplete="off" placeholder="Tu nombre"></div>
+      <div class="field"><label>CÉDULA (OPCIONAL)</label><input id="fId" type="text" autocomplete="off" placeholder="8-000-0000"></div>
+      <div class="field full"><label>DURACIÓN</label>
+        <select id="fTime">
+          <option value="60">60 minutos</option>
+          <option value="90" selected>90 minutos (recomendado)</option>
+          <option value="120">120 minutos</option>
+          <option value="0">Sin límite de tiempo</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="sec-title">INDICACIONES GENERALES</div>
+    <ol class="rules">
+      <li>El examen tiene <b>5 partes</b> y vale <b>100 puntos</b>.</li>
+      <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas del material del parcial.</li>
+      <li>El tiempo empieza al presionar <b>Iniciar examen</b>. Al llegar a cero, el examen se entrega solo.</li>
+      <li>La Parte V (desarrollo) la <b>autoevalúas</b> con una rúbrica después de entregar.</li>
+      <li>Tus respuestas se guardan en este dispositivo: si recargas la página, puedes continuar.</li>
+    </ol>
+
+    <hr class="rule">
+
+    <div class="sec-title">DISTRIBUCIÓN DE PUNTOS</div>
+    <table class="valtable">
+      <tr><td>I. Verdadero o falso (10 × 2)</td><td>20 pts</td></tr>
+      <tr><td>II. Selección múltiple (15 × 2)</td><td>30 pts</td></tr>
+      <tr><td>III. Pareo (8 × 2.5)</td><td>20 pts</td></tr>
+      <tr><td>IV. Ordenamiento (2 × 5)</td><td>10 pts</td></tr>
+      <tr><td>V. Desarrollo (2 × 10)</td><td>20 pts</td></tr>
+      <tr><td>Total</td><td>100 pts</td></tr>
+    </table>
+
+    <hr class="rule">
+    <button class="btn primary block" id="btnStart">✍️ Iniciar examen</button>
+  </div>
+
+  <div class="paper" id="histBox" style="margin-top:14px;display:none;">
+    <div class="sec-title">INTENTOS ANTERIORES</div>
+    <div class="history" id="histList"></div>
+  </div>
+
+  <p style="text-align:center;margin-top:16px;"><a href="index.html">← Volver al índice del parcial</a></p>
+</section>
+
+<!-- ============================================================
+     EXAMEN
+     ============================================================ -->
+<section id="exam" class="hidden">
+  <div id="topbar">
+    <div class="tb-inner">
+      <div class="timer" id="timer">--:--</div>
+      <div class="tb-mid">
+        <div class="tb-label" id="tbLabel">0 de 0 respondidas</div>
+        <div class="tb-prog"><i id="tbProg"></i></div>
+      </div>
+      <button class="btn primary sm" id="btnSubmitTop">Entregar</button>
+    </div>
+  </div>
+  <main class="wrap" id="examBody"></main>
+</section>
+
+<!-- ============================================================
+     AUTOEVALUACIÓN (PARTE V)
+     ============================================================ -->
+<section id="selfgrade" class="wrap hidden" style="padding:22px 16px 40px;">
+  <div class="paper" style="margin-bottom:14px;">
+    <div class="sec-title">PARTE V · AUTOEVALUACIÓN</div>
+    <p style="font-size:.88rem;color:var(--text-dim);">Compara tu respuesta con la respuesta modelo y marca con honestidad los puntos que <b style="color:var(--text)">sí incluiste</b>. Cada criterio suma los puntos indicados.</p>
+  </div>
+  <div id="sgBody"></div>
+  <button class="btn primary block" id="btnFinish">📊 Ver calificación final</button>
+</section>
+
+<!-- ============================================================
+     RESULTADOS
+     ============================================================ -->
+<section id="results" class="wrap hidden" style="padding:22px 16px 0;">
+  <div class="paper score-card">
+    <div class="sec-title" id="rsWho">RESULTADO</div>
+    <div class="score-big" id="rsScore">0<small>/100</small></div>
+    <div class="grade" id="rsGrade">F</div>
+    <div class="score-meta" id="rsMeta"></div>
+  </div>
+
+  <div class="paper" style="margin-top:14px;">
+    <div class="sec-title">PUNTAJE POR PARTE</div>
+    <div class="bars" id="rsBars"></div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="sec-title">REVISIÓN DETALLADA</div>
+    <div class="filters" id="rsFilters">
+      <button class="fbtn on" data-f="all">Todas</button>
+      <button class="fbtn" data-f="bad">❌ Incorrectas</button>
+      <button class="fbtn" data-f="part">⚠️ Parciales</button>
+      <button class="fbtn" data-f="ok">✅ Correctas</button>
+    </div>
+    <div id="rsReview"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="btnRetry">🔄 Nuevo intento (otra variante)</button>
+    <a class="btn" href="guia.html">📘 Repasar en la guía</a>
+    <a class="btn" href="index.html">← Índice del parcial</a>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="modal-box">
+    <h3 id="mTitle">¿Entregar examen?</h3>
+    <p id="mText"></p>
+    <div class="chips" id="mChips"></div>
+    <div class="modal-actions">
+      <button class="btn" id="mCancel">Seguir respondiendo</button>
+      <button class="btn primary" id="mOk">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<footer><p>Simulacro generado solo a partir del PDF del Parcial 2 (Unidad III) · UTP · FISC · uso académico.</p></footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     BANCO DE PREGUNTAS — Fuente: Calidad de Software_JN_Unidad III.pdf
+     (Medición de la calidad del Software)
+     ============================================================ */
+
+  // ---------- PARTE I: Verdadero o falso ----------
+  var VF = [
+    {s:"Según el material, la ingeniería de software es una disciplina que aún está aprendiendo a medir.", a:true, e:"Es la primera idea de \"Necesidad de la medida del software\"."},
+    {s:"La medición del software está ligada a la planificación, gestión y control de proyectos.", a:true, e:"El material la liga a la disciplina de vida del software: planificación, gestión y control de proyectos."},
+    {s:"Una métrica proporciona un indicio cuantitativo de la extensión, cantidad, dimensión, capacidad o tamaño de un atributo.", a:false, e:"Esa es la definición de <b>medida</b>. La <b>métrica</b> relaciona medidas individuales."},
+    {s:"El número promedio de errores encontrados por revisión es un ejemplo de métrica.", a:true, e:"Es el ejemplo que da el material: relaciona medidas individuales."},
+    {s:"Un indicador es una métrica o combinación de métricas que proporciona comprensión del proceso, proyecto o producto.", a:true, e:"Definición textual de indicador."},
+    {s:"En el proceso de recopilación de métricas, de la evaluación de métricas salen las medidas.", a:false, e:"De la recopilación de datos salen <b>medidas</b>; del cálculo, <b>métricas</b>; de la evaluación, <b>indicadores</b>."},
+    {s:"La retroalimentación es el cálculo de métricas y la aplicación de herramientas matemáticas.", a:false, e:"Eso es el <b>análisis</b>. La retroalimentación son recomendaciones transmitidas al equipo."},
+    {s:"La interpretación es la evaluación de las métricas resultantes para comprender la calidad de la representación.", a:true, e:"Es el cuarto principio de medición."},
+    {s:"Una métrica congruente y objetiva siempre debe producir resultados sin ambigüedades.", a:true, e:"Es uno de los 3 atributos de las métricas efectivas."},
+    {s:"El plan de pruebas es una entidad de tipo proceso que debe medirse.", a:false, e:"El plan de pruebas es un <b>producto</b> (documento). \"Pruebas\" sí es un proceso."},
+    {s:"El mantenimiento es uno de los procesos que deben medirse.", a:true, e:"Procesos: requisitos, diseño y construcción, pruebas y mantenimiento."},
+    {s:"La gestión de la calidad de los servicios es un conjunto de recursos empresariales interrelacionados y actividades que convierten las entradas en salidas.", a:true, e:"Recursos: personal, equipos, metodología y tecnología."},
+    {s:"En la segunda fase de implementación de la garantía de calidad se busca reducir los costes de calidad al menos en un dos por ciento.", a:true, e:"Así se demuestra la eficacia y eficiencia de las medidas adoptadas."},
+    {s:"El primer requisito para el aseguramiento de la calidad es implantar un sistema integral de gestión de la calidad.", a:false, e:"El primer requisito es la <b>verificación del cumplimiento de la norma</b>. El sistema integral es el último paso de las fases."},
+    {s:"La planificación estratégica de la calidad ha pasado a formar parte de la planificación estratégica global de las empresas.", a:true, e:"Es una de las consideraciones del material."},
+    {s:"Las métricas de proceso y proyecto las recopilan siempre los gerentes del software.", a:false, e:"Los gerentes las <b>analizan y valoran</b>; con frecuencia, los <b>ingenieros</b> recopilan las medidas."},
+    {s:"Un esquema de medición bien aplicado puede usarse para recompensar o castigar el desempeño individual.", a:false, e:"Nunca debe usarse para valorar, recompensar o castigar el desempeño individual."},
+    {s:"Uno de los lineamientos es no considerar \"negativos\" los datos que indiquen un área problemática.", a:true, e:"Es uno de los 7 lineamientos al recopilar métricas."},
+    {s:"En los proyectos clásicos las mediciones se enfocan en el triángulo tiempo, costo y alcance.", a:true, e:"La planificación es rígida y se priorizan los plazos predefinidos."},
+    {s:"La velocidad del equipo se mide en horas trabajadas por sprint.", a:false, e:"Se mide en <b>puntos de historia</b> completados en un sprint."},
+    {s:"En DevOps, un MTTR bajo indica un entorno eficiente.", a:true, e:"MTTR = tiempo promedio para restaurar el servicio tras una falla."},
+    {s:"El lead time mide el tiempo promedio que se tarda en restaurar el servicio después de una falla.", a:false, e:"Eso es el <b>MTTR</b>. El lead time va desde escribir el código hasta desplegarlo en producción."},
+    {s:"El crash rate es la tasa de fallos de la aplicación, medida en las veces que se cierra inesperadamente.", a:true, e:"Una tasa alta indica problemas de estabilidad y afecta la retención."},
+    {s:"Google Lighthouse y Pingdom se usan para medir los tiempos de carga y respuesta de aplicaciones web.", a:true, e:"Así lo indica la medición de producto para aplicaciones web."},
+    {s:"DAU y MAU son indicadores de la latencia global de una aplicación distribuida.", a:false, e:"Son indicadores de <b>retención y engagement</b> en aplicaciones móviles."},
+    {s:"Un software distribuido debe minimizar la latencia a través de CDN o servidores locales.", a:true, e:"Es parte de la medición de latencia global."},
+    {s:"En el proyecto semestral, el bloque de Seguridad de aplicaciones es el que tiene más herramientas.", a:true, e:"Tres: OWASP ZAP, Snyk y Dependency-Check."}
+  ];
+
+  // ---------- PARTE II: Selección múltiple (la primera opción es la correcta) ----------
+  var MC = [
+    {q:"¿Qué permite conocer la medición del software, según la necesidad de la medida?", o:["El estado del software para realizar ajustes o mejoras en los procesos","El precio final del producto","El número de usuarios activos","La lista de proveedores"], e:"La medición permite conocer el estado para ajustar o mejorar los procesos."},
+    {q:"Según la IEEE, una medida es:", o:["Una medida cuantitativa del grado en el que un sistema, componente o proceso posee un atributo","Una combinación de métricas que da comprensión del proyecto","Una recomendación transmitida al equipo","El cálculo de métricas con herramientas matemáticas"], e:"La combinación de métricas es un indicador; la recomendación es retroalimentación; el cálculo es análisis."},
+    {q:"¿Qué relaciona en alguna forma medidas individuales?", o:["La métrica","La medida","El indicador","La formulación"], e:"Ej.: número promedio de errores por revisión."},
+    {q:"¿Cuál NO es algo que permiten los indicadores de proyecto?", o:["Castigar el desempeño individual","Evaluar el estado del proyecto","Detectar áreas problema antes de que sean críticas","Ajustar el flujo y las tareas del trabajo"], e:"Las métricas nunca deben usarse para castigar a individuos."},
+    {q:"En el proceso de recopilación de métricas, ¿qué paso produce las métricas?", o:["Cálculo de métricas","Recopilación de datos","Evaluación de métricas","Proyecto del software"], e:"Recopilación → medidas; cálculo → métricas; evaluación → indicadores."},
+    {q:"¿Qué principio de medición es el mecanismo para acumular los datos requeridos?", o:["Recolección","Formulación","Análisis","Interpretación"], e:"La formulación deriva las medidas y métricas apropiadas."},
+    {q:"¿Qué principio de medición consiste en recomendaciones transmitidas al equipo del software?", o:["Retroalimentación","Interpretación","Análisis","Recolección"], e:"Se derivan de la interpretación de las métricas del producto."},
+    {q:"Una métrica que satisface las nociones intuitivas del ingeniero acerca del atributo es:", o:["Empírica o intuitivamente convincente","Simple y calculable","Congruente y objetiva","Formulada"], e:"Los otros dos atributos: simple y calculable; congruente y objetiva."},
+    {q:"¿Cuál de estos es una entidad de PRODUCTO que debe medirse?", o:["Los manuales de usuario","El mantenimiento","El diseño y construcción","Las pruebas"], e:"Mantenimiento, diseño y construcción y pruebas son procesos."},
+    {q:"La gestión de la calidad del producto busca, sobre el nivel de calidad requerido:", o:["Establecerlo, garantizarlo y mantenerlo","Venderlo, publicitarlo y exportarlo","Medirlo una sola vez al final","Delegarlo a los usuarios finales"], e:"Es un conjunto de actividades durante la creación y funcionamiento de los productos."},
+    {q:"¿Cuál es el segundo grupo de procesos de gestión de la calidad?", o:["Trasladar el sistema de producción a un nivel superior","Mantener el sistema de producción en un estado estable","Examinar los casos de incumplimiento","Certificar la fiabilidad"], e:"El primer grupo es mantener el sistema estable."},
+    {q:"¿Cuál NO es una función de la gestión como proceso mencionada en el material?", o:["Facturación","Motivación","Comunicación","Toma de decisiones"], e:"Funciones: planificación, organización, motivación, control, comunicación y toma de decisiones."},
+    {q:"¿Cuál es la primera fase de implementación de los sistemas de garantía de calidad?", o:["Examinar en detalle todos los casos de incumplimiento de las normas","Calcular los costes de calidad","Implantar un sistema integral de gestión de la calidad","Abordar la calidad con mayor profundidad y amplitud"], e:"Orden: examinar → calcular costes → profundizar → sistema integral."},
+    {q:"¿Cuál NO forma parte del sistema de gestión de la calidad según el material?", o:["Requisitos para la contratación de personal","Requisitos para el sistema de control y ensayo de los productos","Certificación de la fiabilidad","Requisitos para la organización de la producción y la gestión de la calidad"], e:"El SGC incluye control y ensayo, certificación de la fiabilidad y organización de la producción."},
+    {q:"¿Quién analiza y valora las métricas del software?", o:["Los gerentes del software","Los usuarios finales","Los proveedores","Los clientes externos"], e:"Con frecuencia, los ingenieros del software recopilan las medidas."},
+    {q:"¿Por qué son importantes las métricas de proceso y proyecto?", o:["Sin medir, el juicio puede basarse en la evaluación subjetiva","Porque sustituyen a las pruebas","Porque permiten evaluar a cada programador","Porque eliminan la necesidad de planificar"], e:"Con la medición se marcan tendencias, se hacen mejores estimaciones y se logra verdadera mejoría."},
+    {q:"¿Qué elemento está en el centro del triángulo del diagrama de métricas de proceso y proyecto?", o:["Proceso","Producto","Personas","Tecnología"], e:"Producto, personas y tecnología son los vértices."},
+    {q:"¿Cuál de estos es un resultado de la medición del proceso de software?", o:["Conformidad con la agenda","Satisfacción de los proveedores","Número de reuniones realizadas","Precio de las licencias"], e:"Los 6 resultados: errores, defectos, productos operativos, esfuerzo humano, tiempo calendario y conformidad con la agenda."},
+    {q:"¿Cuál es un lineamiento correcto al recopilar métricas?", o:["No obsesionarse con una sola métrica","Usar las métricas para valorar a los individuos","Considerar negativos los datos de áreas problemáticas","Usar las métricas para presionar a los equipos"], e:"Las otras tres opciones contradicen los lineamientos."},
+    {q:"En proyectos clásicos, ¿qué método se usa para medir costo y progreso en paralelo?", o:["Valor Ganado (EVM)","MTTR","WCAG","Puntos de historia"], e:"Se usa para el control del presupuesto."},
+    {q:"¿Qué medición pertenece a los ambientes ágiles?", o:["Velocidad del equipo","Cumplimiento de regulaciones locales","Tiempo de actividad del sitio web","Crash rate"], e:"Ágiles: velocidad del equipo, tasa de entrega y calidad del código."},
+    {q:"En proyectos web, un tiempo de actividad cercano al 100% es crucial para:", o:["La confianza del usuario","Reducir la deuda técnica","Cumplir regulaciones locales","Aumentar los puntos de historia"], e:"Es el porcentaje de tiempo que el sitio está disponible."},
+    {q:"¿Qué mide la tasa de cambio fallido en DevOps?", o:["El porcentaje de despliegues que resultan en errores que requieren reversión","El tiempo desde escribir el código hasta producción","El tiempo promedio de recuperación tras una falla","La cantidad de cierres inesperados de una app"], e:"Una tasa baja indica calidad y estabilidad."},
+    {q:"¿Cuál es una medición de proyectos en ambientes globales?", o:["Tasa de resolución de conflictos","Velocidad del equipo","Lead time","Uso de batería y datos"], e:"Globales: tiempos de respuesta de equipos distribuidos, cumplimiento de regulaciones locales y tasa de resolución de conflictos."},
+    {q:"¿Qué se busca garantizar con la medición del producto de software?", o:["Su calidad, rendimiento y alineación con los requisitos de usuarios y negocio","Que el proyecto termine en el plazo predefinido","Que los equipos distribuidos resuelvan conflictos","Que el presupuesto se ejecute en paralelo"], e:"Es la definición de medición del producto."},
+    {q:"En aplicaciones web, la usabilidad y accesibilidad se miden según el estándar:", o:["WCAG 2.0","EVM","MTTR","DAU"], e:"Incluye navegación intuitiva y compatibilidad con dispositivos de asistencia."},
+    {q:"¿Qué medición de aplicaciones móviles usa los indicadores DAU y MAU?", o:["Retención y engagement","Tasa de crashes y fallos","Uso de batería y recursos","Rendimiento en múltiples dispositivos"], e:"Miden cuántos usuarios siguen usando la app tras descargarla."},
+    {q:"¿Qué medición de aplicaciones distribuidas evalúa cómo se recupera el sistema ante fallos en bases de datos o servidores?", o:["Tolerancia a fallos y resiliencia","Latencia global","Escalabilidad","Rendimiento del backend"], e:"Un buen sistema distribuido se recupera rápidamente sin afectar al usuario."},
+    {q:"¿Qué herramienta del proyecto semestral realiza análisis estático y calidad de código?", o:["SonarQube","Postman","JMeter","Pact"], e:"Bloque 1: calidad y análisis de código (inspección)."},
+    {q:"¿Qué herramienta verifica acuerdos de interacción entre consumidor y proveedor de una API usando contratos ejecutables?", o:["Pact","DefectDojo","Playwright","OWASP ZAP"], e:"Bloque 5: integración y contratos."}
+  ];
+
+  // ---------- PARTE III: Pareo (se elige un set; 8 pares + 2 distractores) ----------
+  var PAREO = [
+    {title:"Conceptos y principios de medición",
+     pairs:[
+      ["Medida","Indicio cuantitativo de la extensión, cantidad, dimensión, capacidad o tamaño de un atributo"],
+      ["Métrica","Relaciona en alguna forma medidas individuales"],
+      ["Indicador","Métrica o combinación de métricas que da comprensión del proceso, proyecto o producto"],
+      ["Formulación","Derivación de medidas y métricas apropiadas para la representación del software"],
+      ["Recolección","Mecanismo para acumular los datos requeridos para derivar las métricas"],
+      ["Análisis","Cálculo de métricas y aplicación de herramientas matemáticas"],
+      ["Interpretación","Evaluación de las métricas resultantes para comprender la calidad"],
+      ["Retroalimentación","Recomendaciones derivadas de la interpretación, transmitidas al equipo"]],
+     extra:["Verificación del cumplimiento de la norma","Tiempo promedio para restaurar el servicio tras una falla"]},
+    {title:"Herramientas del proyecto semestral",
+     pairs:[
+      ["SonarQube","Análisis estático y calidad de código antes de producción"],
+      ["Playwright","Automatiza recorridos de usuario en navegadores"],
+      ["Postman","Permite enviar solicitudes a APIs"],
+      ["JMeter","Modela cargas y mide el comportamiento bajo diferentes condiciones"],
+      ["OWASP ZAP","Prueba aplicaciones web en ejecución para encontrar debilidades de seguridad"],
+      ["Dependency-Check","Compara las dependencias con fuentes de vulnerabilidades conocidas"],
+      ["Pact","Verifica acuerdos consumidor–proveedor con contratos ejecutables"],
+      ["DefectDojo","Centraliza y organiza hallazgos de seguridad para su seguimiento"]],
+     extra:["Mide la velocidad del equipo en puntos de historia","Calcula el valor ganado del presupuesto"]},
+    {title:"Mediciones del proyecto",
+     pairs:[
+      ["Control del presupuesto","Gastos reales vs. planificados, con el método de Valor Ganado (EVM)"],
+      ["Velocidad del equipo","Trabajo completado en un sprint, en puntos de historia"],
+      ["Tasa de entrega","Frecuencia y valor del software puesto en producción"],
+      ["Tiempo de actividad del sitio","Porcentaje de tiempo que el sitio está disponible"],
+      ["Lead time","Tiempo desde escribir el código hasta desplegarlo en producción"],
+      ["Tasa de cambio fallido","Porcentaje de despliegues que requieren reversión"],
+      ["MTTR","Tiempo promedio para restaurar el servicio tras una falla"],
+      ["Crash rate","Veces que la app se cierra inesperadamente"]],
+     extra:["Usuarios que siguen usando la app tras descargarla (DAU/MAU)","Tiempo de respuesta desde distintas ubicaciones geográficas"]},
+    {title:"Mediciones del producto",
+     pairs:[
+      ["Calidad funcional","Si el software cumple los requisitos especificados"],
+      ["Tasa de defectos","Cantidad de errores o bugs encontrados en producción"],
+      ["Satisfacción del cliente","Medida a través de encuestas o reportes de usuarios"],
+      ["Mantenimiento y soporte","Tiempo y esfuerzo para mantener el software desplegado"],
+      ["Rendimiento del backend","Eficiencia del servidor ante múltiples solicitudes concurrentes"],
+      ["Retención y engagement","Usuarios que siguen usando la app (DAU, MAU)"],
+      ["Latencia global","Tiempo de respuesta desde diferentes ubicaciones geográficas"],
+      ["Escalabilidad","Manejar más usuarios sin sacrificar el rendimiento"]],
+     extra:["Porcentaje de despliegues que requieren reversión","Cumplimiento de normativas de cada región"]},
+    {title:"Proceso de medición y métricas de proceso",
+     pairs:[
+      ["Gestión de la calidad del producto","Actividades para establecer, garantizar y mantener el nivel de calidad requerido"],
+      ["Gestión de la calidad de los servicios","Recursos interrelacionados y actividades que convierten entradas en salidas"],
+      ["Primer requisito del aseguramiento","Verificación del cumplimiento de la norma"],
+      ["Primera fase de implementación","Examinar los casos de incumplimiento de las normas"],
+      ["Segunda fase de implementación","Calcular los costes de calidad y reducirlos al menos un 2%"],
+      ["Último paso de implementación","Implantar un sistema integral de gestión de la calidad"],
+      ["Gerentes del software","Analizan y valoran las métricas"],
+      ["Ingenieros del software","Con frecuencia recopilan las medidas"]],
+     extra:["Automatiza flujos ante eventos del repositorio","Mide la consistencia en iOS y Android"]}
+  ];
+
+  // ---------- PARTE IV: Ordenamiento (items en orden correcto) ----------
+  var ORD = [
+    {q:"Ordena los principios de medición.", items:["Formulación","Recolección","Análisis","Interpretación","Retroalimentación"]},
+    {q:"Ordena el proceso de recopilación de métricas de software (pasos y lo que sale de cada uno).", items:["Recopilación de datos","Medidas","Cálculo de métricas","Métricas","Evaluación de métricas","Indicadores"]},
+    {q:"Ordena las fases de implementación de los sistemas de garantía de calidad.", items:["Examinar en detalle los casos de incumplimiento de las normas","Calcular los costes de calidad y reducirlos al menos un 2%","Abordar la calidad con mayor profundidad y amplitud","Implantar un sistema integral de gestión de la calidad"]},
+    {q:"Ordena los procesos del ciclo de vida que deben medirse.", items:["Requisitos","Diseño y construcción","Pruebas","Mantenimiento"]},
+    {q:"Ordena los bloques del proyecto semestral (del 1 al 6).", items:["Calidad y análisis de código","Automatización funcional","Rendimiento y carga","Seguridad de aplicaciones","Integración y contratos","DevOps y gestión de hallazgos"]},
+    {q:"Ordena los grandes temas de la Unidad III como aparecen en el material.", items:["Medición de la calidad del software","Proceso de medición de la calidad","Métricas de proceso y proyecto","Medición del proyecto","Medición del producto"]}
+  ];
+
+  // ---------- PARTE V: Desarrollo (rúbrica suma 10) ----------
+  var DES = [
+    {q:"Define medida, métrica e indicador, da el ejemplo de métrica del material y explica el proceso de recopilación de métricas de software.",
+     model:"<b>Medida:</b> indicio cuantitativo de la extensión, cantidad, dimensión, capacidad o tamaño de algún atributo de un producto o proceso (IEEE: grado en que un sistema, componente o proceso posee un atributo). <b>Métrica:</b> relaciona en alguna forma medidas individuales; ejemplo: el número promedio de errores encontrados por revisión o por unidad de prueba. <b>Indicador:</b> métrica o combinación de métricas que proporciona comprensión del proceso, proyecto o producto. <b>Recopilación:</b> el proceso, el proyecto y el producto del software alimentan la recopilación de datos (salen medidas) → cálculo de métricas (salen métricas) → evaluación de métricas (salen indicadores).",
+     rubric:[["Define correctamente medida",2],["Define métrica con el ejemplo del promedio de errores",2],["Define indicador",2],["Explica el proceso de recopilación con sus salidas",4]]},
+    {q:"Explica los cinco principios de medición y los tres atributos de las métricas de software efectivas.",
+     model:"<b>Principios:</b> formulación (derivar medidas y métricas apropiadas); recolección (mecanismo para acumular los datos); análisis (cálculo de métricas y herramientas matemáticas); interpretación (evaluar las métricas para comprender la calidad); retroalimentación (recomendaciones transmitidas al equipo). <b>Atributos:</b> simple y calculable (fácil de derivar, sin esfuerzo o tiempo excesivo); empírica o intuitivamente convincente (satisface las nociones intuitivas del ingeniero); congruente y objetiva (resultados sin ambigüedades).",
+     rubric:[["Nombra los 5 principios en orden",3],["Explica cada principio",3],["Nombra y explica los 3 atributos",4]]},
+    {q:"Describe las fases de implementación de los sistemas de garantía de calidad y qué incluye el sistema de gestión de la calidad.",
+     model:"<b>Fases:</b> 1) los gestores examinan en detalle todos los casos de incumplimiento de las normas; 2) se calculan los costes de calidad con el objetivo de reducirlos al menos un dos por ciento, demostrando eficacia y eficiencia; 3) se aborda la calidad con mayor profundidad y amplitud, logrando una reducción significativa del coste; 4) se implanta un sistema integral de gestión de la calidad como parte orgánica del proceso de producción. <b>El SGC incluye:</b> requisitos para el sistema de control y ensayo de los productos; certificación de la fiabilidad; requisitos para la organización de la producción y la gestión de la calidad desde el diseño hasta el funcionamiento.",
+     rubric:[["Explica las 4 fases en orden",4],["Menciona la meta de reducir al menos 2%",2],["Menciona los 3 elementos del SGC",4]]},
+    {q:"Explica las métricas de proceso y proyecto: qué son, quién las hace, por qué son importantes, cómo asegurarse de hacerlo bien, y menciona cuatro lineamientos para recopilarlas.",
+     model:"<b>Qué son:</b> medidas cuantitativas que dan comprensión de la eficiencia del proceso y de los proyectos. <b>Quién:</b> las analizan y valoran los gerentes del software; con frecuencia los ingenieros recopilan las medidas. <b>Por qué:</b> sin medir, el juicio es subjetivo; con la medición se marcan tendencias, se hacen mejores estimaciones y se logra verdadera mejoría. <b>Cómo:</b> con un esquema de medición consistente, aunque simple, que nunca se usa para valorar, recompensar o castigar el desempeño individual. <b>Lineamientos:</b> sentido común y sensibilidad organizacional; retroalimentación regular; no usar métricas para valorar individuos; metas y métricas claras con los equipos; nunca amenazar; no considerar negativos los datos de áreas problemáticas; no obsesionarse con una sola métrica.",
+     rubric:[["Explica qué son y quién las hace",3],["Explica por qué son importantes",2],["Explica cómo asegurarse de hacerlo bien",1],["Menciona 4 lineamientos correctos",4]]},
+    {q:"Compara las mediciones de proyecto en ambientes clásicos, ágiles y DevOps: enfoque y las tres mediciones de cada uno.",
+     model:"<b>Clásicos (cascada):</b> enfoque en el triángulo tiempo, costo y alcance, planificación rígida; mediciones: cumplimiento del cronograma, control del presupuesto (método de Valor Ganado, EVM) y gestión del riesgo. <b>Ágiles:</b> flexibilidad y entrega de valor iterativa; mediciones: velocidad del equipo (puntos de historia por sprint), tasa de entrega y calidad del código (errores, cobertura de pruebas, deuda técnica). <b>DevOps:</b> automatización y colaboración entre desarrollo y operaciones para acelerar entregas y mejorar la estabilidad; mediciones: lead time, tasa de cambio fallido y MTTR (Mean Time to Recovery).",
+     rubric:[["Clásicos: enfoque y 3 mediciones",3],["Ágiles: enfoque y 3 mediciones",3],["DevOps: enfoque y 3 mediciones",3],["Menciona EVM o explica MTTR correctamente",1]]},
+    {q:"Define la medición del producto de software y explica las mediciones para aplicaciones web y para aplicaciones móviles.",
+     model:"<b>Medición del producto:</b> proceso de cuantificar y evaluar atributos del software para garantizar su calidad, rendimiento y alineación con los requisitos de usuarios y negocio. <b>Web:</b> tiempos de carga y respuesta (Google Lighthouse, Pingdom); rendimiento del backend (latencia, recursos, escalabilidad ante solicitudes concurrentes); usabilidad y accesibilidad (WCAG 2.0, navegación intuitiva, dispositivos de asistencia). <b>Móviles:</b> rendimiento en múltiples dispositivos (iOS, Android); uso de batería y recursos (CPU/memoria; alto consumo → desinstalación); retención y engagement (DAU, MAU); tasa de crashes y fallos.",
+     rubric:[["Define la medición del producto",2],["Explica las 3 mediciones web",4],["Explica las 4 mediciones móviles",4]]},
+    {q:"Explica qué entidades deben medirse (con ejemplos) y cuáles son los resultados de la medición del proceso de software.",
+     model:"<b>Producto:</b> cualquier artefacto, entregable o documento del ciclo de vida: código fuente, especificaciones de requisitos, diseños, plan de pruebas, manuales de usuario. <b>Procesos:</b> todas las actividades del ciclo de vida, para conocer su estado y mejorarlas: requisitos, diseño y construcción, pruebas, mantenimiento. <b>Resultados de la medición del proceso:</b> errores descubiertos antes de liberar; defectos entregados y reportados por usuarios finales; productos operativos entregados; esfuerzo humano empleado; tiempo calendario consumido; conformidad con la agenda.",
+     rubric:[["Define producto con al menos 4 ejemplos",3],["Define procesos con sus 4 ejemplos",3],["Menciona al menos 5 de los 6 resultados",4]]}
+  ];
+
+  /* ============================================================
+     UTILIDADES
+     ============================================================ */
+  var STORE = "qa_p2_parcial_sim_v1";
+  var HIST = "qa_p2_parcial_hist_v1";
+  var LET = "ABCDEFGHIJ";
+  var $ = function(id){ return document.getElementById(id); };
+
+  function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function range(n){ var r=[]; for(var i=0;i<n;i++) r.push(i); return r; }
+  function pick(n, k){ return shuffle(range(n)).slice(0,k); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function fmt(sec){ sec=Math.max(0,Math.round(sec)); var m=Math.floor(sec/60), s=sec%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+  function r1(x){ return Math.round(x*10)/10; }
+  function load(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+  function show(id){
+    ["start","exam","selfgrade","results"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); });
+    window.scrollTo({top:0, left:0, behavior:"instant"});
+  }
+
+  /* ============================================================
+     ESTADO
+     ============================================================ */
+  var st = null;      // estado del intento
+  var tick = null;
+
+  function newAttempt(){
+    var pset = Math.floor(Math.random()*PAREO.length);
+    var P = PAREO[pset];
+    var nDefs = P.pairs.length + P.extra.length;
+    st = {
+      phase:"exam",
+      name:$("fName").value.trim(),
+      cid:$("fId").value.trim(),
+      minutes:parseInt($("fTime").value,10),
+      startAt:Date.now(),
+      endAt:0,
+      vf:pick(VF.length,10),
+      mc:pick(MC.length,15).map(function(i){ return {i:i, o:shuffle(range(MC[i].o.length))}; }),
+      pareo:{set:pset, terms:shuffle(range(P.pairs.length)), defs:shuffle(range(nDefs))},
+      ord:pick(ORD.length,2).map(function(i){ return {i:i, o:shuffle(range(ORD[i].items.length))}; }),
+      des:pick(DES.length,2),
+      ans:{vf:{}, mc:{}, pareo:{}, ord:{}, des:{}},
+      self:{},
+      submittedAt:0
+    };
+    if(st.minutes>0) st.endAt = st.startAt + st.minutes*60000;
+    save(STORE, st);
+  }
+
+  /* ============================================================
+     RENDER DEL EXAMEN
+     ============================================================ */
+  function renderExam(){
+    var h = "", n = 0;
+    var A = st.ans;
+
+    // Encabezado del alumno
+    h += '<div class="paper" style="margin-top:16px;"><div class="inst"><div class="c" style="margin-top:0">Segundo Examen Parcial · Calidad de Software</div>'+
+         '<div class="p">'+(st.name?esc(st.name):"Estudiante")+(st.cid?" · "+esc(st.cid):"")+' · '+(st.minutes?st.minutes+" min":"sin límite")+' · 100 pts</div></div></div>';
+
+    // PARTE I
+    h += part("I. Verdadero o falso","20 pts","Selecciona V si el enunciado es verdadero o F si es falso. Valor: 2 puntos c/u.");
+    st.vf.forEach(function(i,k){
+      n++;
+      var v = A.vf[k];
+      h += '<div class="q" id="q-vf-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+VF[i].s+'</div></div>'+
+           '<div class="opts vf">'+
+           '<button class="opt'+(v===true?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="1">Verdadero</button>'+
+           '<button class="opt'+(v===false?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="0">Falso</button>'+
+           '</div></div>';
+    });
+
+    // PARTE II
+    h += part("II. Selección múltiple","30 pts","Selecciona la única respuesta correcta. Valor: 2 puntos c/u.");
+    st.mc.forEach(function(m,k){
+      n++;
+      var Q = MC[m.i], v = A.mc[k];
+      h += '<div class="q" id="q-mc-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div class="opts">';
+      m.o.forEach(function(oi,pos){
+        h += '<button class="opt'+(v===oi?" sel":"")+'" data-t="mc" data-k="'+k+'" data-v="'+oi+'"><span class="l">'+LET[pos].toLowerCase()+'</span><span>'+Q.o[oi]+'</span></button>';
+      });
+      h += '</div></div>';
+    });
+
+    // PARTE III
+    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
+    h += part("III. Pareo · "+P.title,"20 pts","Escribe la letra de la definición que corresponde a cada concepto. Sobran 2 definiciones. Valor: 2.5 puntos c/u.");
+    h += '<div class="q" id="q-pareo"><ul class="defs">';
+    st.pareo.defs.forEach(function(di,pos){ h += '<li><b>'+LET[pos]+'</b><span>'+allDefs[di]+'</span></li>'; });
+    h += '</ul>';
+    st.pareo.terms.forEach(function(ti,k){
+      n++;
+      var v = A.pareo[k];
+      h += '<div class="match-row" id="q-pa-'+k+'"><span class="q-num">'+n+'</span><span class="term">'+P.pairs[ti][0]+'</span>'+
+           '<select data-t="pareo" data-k="'+k+'" class="'+(v!=null?"filled":"")+'"><option value="">—</option>';
+      st.pareo.defs.forEach(function(di,pos){ h += '<option value="'+di+'"'+(v===di?" selected":"")+'>'+LET[pos]+'</option>'; });
+      h += '</select></div>';
+    });
+    h += '</div>';
+
+    // PARTE IV
+    h += part("IV. Ordenamiento","10 pts","Asigna a cada elemento su posición correcta (1 = primero). Valor: 5 puntos c/u, proporcional a las posiciones correctas.");
+    st.ord.forEach(function(o,k){
+      n++;
+      var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {};
+      h += '<div class="q" id="q-ord-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div style="margin-top:8px;">';
+      o.o.forEach(function(ii){
+        h += '<div class="ord-row"><span class="item">'+Q.items[ii]+'</span><select data-t="ord" data-k="'+k+'" data-i="'+ii+'" class="'+(v[ii]!=null?"filled":"")+'"><option value="">#</option>';
+        for(var p=1;p<=N;p++) h += '<option value="'+p+'"'+(v[ii]===p?" selected":"")+'>'+p+'</option>';
+        h += '</select></div>';
+      });
+      h += '</div></div>';
+    });
+
+    // PARTE V
+    h += part("V. Desarrollo","20 pts","Responde con tus propias palabras. Se autoevalúa con rúbrica al entregar. Valor: 10 puntos c/u.");
+    st.des.forEach(function(di,k){
+      n++;
+      var v = A.des[k] || "";
+      h += '<div class="q" id="q-des-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+DES[di].q+'</div></div>'+
+           '<textarea data-t="des" data-k="'+k+'" placeholder="Escribe tu respuesta aquí…">'+esc(v)+'</textarea>'+
+           '<div class="wc" id="wc-'+k+'">'+words(v)+' palabras</div></div>';
+    });
+
+    h += '<div class="submit-zone"><button class="btn primary block" id="btnSubmitBottom">📤 Entregar examen</button></div>';
+    $("examBody").innerHTML = h;
+    $("btnSubmitBottom").addEventListener("click", askSubmit);
+    updateProgress();
+  }
+
+  function part(t, pts, desc){
+    return '<div class="part"><div class="part-head"><h2>'+t+'<span>'+pts+'</span></h2><p>'+desc+'</p></div></div>';
+  }
+  function words(s){ s=(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+
+  // Delegación de eventos en el examen
+  $("examBody").addEventListener("click", function(e){
+    var b = e.target.closest(".opt"); if(!b) return;
+    var t = b.getAttribute("data-t"), k = +b.getAttribute("data-k"), v = +b.getAttribute("data-v");
+    if(t==="vf") st.ans.vf[k] = (v===1);
+    if(t==="mc") st.ans.mc[k] = v;
+    Array.prototype.forEach.call(b.parentElement.children, function(x){ x.classList.toggle("sel", x===b); });
+    b.closest(".q").classList.remove("unanswered-flag");
+    persist(); updateProgress();
+  });
+  $("examBody").addEventListener("change", function(e){
+    var s = e.target; if(s.tagName!=="SELECT") return;
+    var t = s.getAttribute("data-t"), k = +s.getAttribute("data-k"), val = s.value===""?null:+s.value;
+    if(t==="pareo"){ if(val==null) delete st.ans.pareo[k]; else st.ans.pareo[k]=val; }
+    if(t==="ord"){
+      var i = +s.getAttribute("data-i");
+      st.ans.ord[k] = st.ans.ord[k] || {};
+      if(val==null) delete st.ans.ord[k][i]; else st.ans.ord[k][i]=val;
+    }
+    s.classList.toggle("filled", val!=null);
+    var q = s.closest(".q"); if(q) q.classList.remove("unanswered-flag");
+    persist(); updateProgress();
+  });
+  var typing;
+  $("examBody").addEventListener("input", function(e){
+    var t = e.target; if(t.tagName!=="TEXTAREA") return;
+    var k = +t.getAttribute("data-k");
+    st.ans.des[k] = t.value;
+    $("wc-"+k).textContent = words(t.value)+" palabras";
+    t.closest(".q").classList.remove("unanswered-flag");
+    clearTimeout(typing); typing = setTimeout(function(){ persist(); updateProgress(); }, 400);
+  });
+
+  function persist(){ save(STORE, st); }
+
+  /* ---------- progreso / pendientes ---------- */
+  function pending(){
+    var list = [], n = 0, A = st.ans;
+    st.vf.forEach(function(_,k){ n++; if(A.vf[k]==null) list.push({n:n,id:"q-vf-"+k}); });
+    st.mc.forEach(function(_,k){ n++; if(A.mc[k]==null) list.push({n:n,id:"q-mc-"+k}); });
+    st.pareo.terms.forEach(function(_,k){ n++; if(A.pareo[k]==null) list.push({n:n,id:"q-pa-"+k}); });
+    st.ord.forEach(function(o,k){ n++; var v=A.ord[k]||{}; if(Object.keys(v).length<ORD[o.i].items.length) list.push({n:n,id:"q-ord-"+k}); });
+    st.des.forEach(function(_,k){ n++; if(!(A.des[k]||"").trim()) list.push({n:n,id:"q-des-"+k}); });
+    return {list:list, total:n};
+  }
+  function updateProgress(){
+    var p = pending(), done = p.total - p.list.length;
+    $("tbLabel").textContent = done+" de "+p.total+" respondidas";
+    $("tbProg").style.width = (p.total?done/p.total*100:0)+"%";
+  }
+
+  /* ---------- temporizador ---------- */
+  function startTimer(){
+    clearInterval(tick);
+    var el = $("timer");
+    function upd(){
+      if(!st.endAt){ el.textContent = fmt((Date.now()-st.startAt)/1000); el.className="timer"; return; }
+      var left = (st.endAt - Date.now())/1000;
+      el.textContent = fmt(left);
+      el.className = "timer" + (left<=60?" crit":left<=600?" warn":"");
+      if(left<=0){ clearInterval(tick); submit(true); }
+    }
+    upd(); tick = setInterval(upd, 1000);
+  }
+
+  /* ---------- entrega ---------- */
+  function askSubmit(){
+    var p = pending();
+    $("mTitle").textContent = "¿Entregar examen?";
+    if(p.list.length){
+      $("mText").textContent = "Tienes "+p.list.length+" pregunta(s) sin responder. Toca un número para ir a ella.";
+      $("mChips").innerHTML = p.list.map(function(x){ return '<button class="chip" data-id="'+x.id+'">#'+x.n+'</button>'; }).join("");
+    } else {
+      $("mText").textContent = "Respondiste todas las preguntas. Una vez entregado no podrás modificar tus respuestas.";
+      $("mChips").innerHTML = "";
+    }
+    $("modal").classList.remove("hidden");
+  }
+  $("mChips").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if(!c) return;
+    $("modal").classList.add("hidden");
+    var el = $(c.getAttribute("data-id"));
+    if(el){ el.classList.add("unanswered-flag"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
+  });
+  $("mCancel").addEventListener("click", function(){ $("modal").classList.add("hidden"); });
+  $("mOk").addEventListener("click", function(){ $("modal").classList.add("hidden"); submit(false); });
+  $("btnSubmitTop").addEventListener("click", askSubmit);
+
+  function submit(auto){
+    clearInterval(tick);
+    st.phase = "selfgrade";
+    st.submittedAt = Date.now();
+    st.autoSubmitted = !!auto;
+    persist();
+    renderSelfGrade();
+    show("selfgrade");
+  }
+
+  /* ============================================================
+     AUTOEVALUACIÓN
+     ============================================================ */
+  function renderSelfGrade(){
+    var h = "";
+    if(st.autoSubmitted) h += '<div class="resume"><p>⏰ Se acabó el tiempo: el examen se entregó automáticamente.</p></div>';
+    st.des.forEach(function(di,k){
+      var D = DES[di], mine = (st.ans.des[k]||"").trim(), sel = st.self[k] || [];
+      h += '<div class="sg"><h3>Pregunta de desarrollo '+(k+1)+'</h3><div style="font-size:.88rem;color:var(--text-dim)">'+D.q+'</div>'+
+           '<div class="lbl">TU RESPUESTA</div><div class="mine">'+(mine?esc(mine):'<i>Sin respuesta.</i>')+'</div>'+
+           '<div class="lbl">RESPUESTA MODELO</div><div class="model">'+D.model+'</div>'+
+           '<div class="lbl">RÚBRICA · MARCA LO QUE SÍ INCLUISTE</div>';
+      D.rubric.forEach(function(r,ri){
+        h += '<label class="rub"><input type="checkbox" data-k="'+k+'" data-r="'+ri+'"'+(sel[ri]?" checked":"")+(mine?"":" disabled")+'><span>'+r[0]+'</span><em>+'+r[1]+'</em></label>';
+      });
+      h += '<div class="sg-total" id="sgt-'+k+'"></div></div>';
+    });
+    $("sgBody").innerHTML = h;
+    st.des.forEach(function(_,k){ updSg(k); });
+  }
+  $("sgBody").addEventListener("change", function(e){
+    var c = e.target; if(c.type!=="checkbox") return;
+    var k = +c.getAttribute("data-k"), r = +c.getAttribute("data-r");
+    st.self[k] = st.self[k] || [];
+    st.self[k][r] = c.checked;
+    updSg(k); persist();
+  });
+  function desPts(k){
+    var D = DES[st.des[k]], sel = st.self[k] || [], t = 0;
+    if(!(st.ans.des[k]||"").trim()) return 0;
+    D.rubric.forEach(function(r,ri){ if(sel[ri]) t += r[1]; });
+    return t;
+  }
+  function updSg(k){ $("sgt-"+k).textContent = desPts(k)+" / 10 pts"; }
+  $("btnFinish").addEventListener("click", function(){
+    st.phase = "results"; persist();
+    renderResults(true); show("results");
+  });
+
+  /* ============================================================
+     CALIFICACIÓN Y RESULTADOS
+     ============================================================ */
+  function grade(){
+    var A = st.ans, rv = [], n = 0;
+    var parts = {I:0, II:0, III:0, IV:0, V:0};
+
+    st.vf.forEach(function(i,k){
+      n++; var Q = VF[i], v = A.vf[k], ok = v===Q.a, pts = ok?2:0; parts.I += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.s,
+        lines:["Tu respuesta: <b>"+(v==null?"—":v?"Verdadero":"Falso")+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(Q.a?"Verdadero":"Falso")+"</b>"], exp:Q.e});
+    });
+    st.mc.forEach(function(m,k){
+      n++; var Q = MC[m.i], v = A.mc[k], ok = v===0, pts = ok?2:0; parts.II += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.q,
+        lines:["Tu respuesta: <b>"+(v==null?"—":Q.o[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+Q.o[0]+"</b>"], exp:Q.e});
+    });
+    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
+    st.pareo.terms.forEach(function(ti,k){
+      n++; var v = A.pareo[k], ok = v===ti, pts = ok?2.5:0; parts.III += pts;
+      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2.5, q:"Pareo: <b>"+P.pairs[ti][0]+"</b>",
+        lines:["Tu respuesta: <b>"+(v==null?"—":allDefs[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+P.pairs[ti][1]+"</b>"], exp:""});
+    });
+    st.ord.forEach(function(o,k){
+      n++; var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {}, good = 0;
+      Q.items.forEach(function(_,ii){ if(v[ii]===ii+1) good++; });
+      var pts = r1(5*good/N); parts.IV += pts;
+      var mineOrder = Q.items.map(function(it,ii){ return {it:it, p:v[ii]}; }).filter(function(x){ return x.p!=null; }).sort(function(a,b){ return a.p-b.p; }).map(function(x){ return x.p+". "+x.it; });
+      rv.push({n:n, cls:good===N?"ok":good===0?"bad":"part", pts:pts, max:5, q:Q.q,
+        lines:["Posiciones correctas: <b>"+good+" de "+N+"</b>", "Tu orden: "+(mineOrder.length?mineOrder.join(" · "):"—")],
+        exp:"Orden correcto: "+Q.items.map(function(it,ii){ return "<b>"+(ii+1)+".</b> "+it; }).join(" · ")});
+    });
+    st.des.forEach(function(di,k){
+      n++; var pts = desPts(k); parts.V += pts;
+      rv.push({n:n, cls:pts>=10?"ok":pts===0?"bad":"part", pts:pts, max:10, q:DES[di].q,
+        lines:["Autoevaluación con rúbrica"], exp:DES[di].model});
+    });
+
+    Object.keys(parts).forEach(function(p){ parts[p] = r1(parts[p]); });
+    var total = r1(parts.I+parts.II+parts.III+parts.IV+parts.V);
+    return {total:total, parts:parts, rv:rv};
+  }
+
+  function letter(s){ return s>=91?"A":s>=81?"B":s>=71?"C":s>=61?"D":"F"; }
+  var MSG = {A:"¡Excelente! Dominas el material.", B:"Muy bien. Repasa los detalles que fallaste.", C:"Bien, pero hay temas por reforzar.", D:"Aprobado por poco: repasa la guía.", F:"Necesitas repasar el material antes del parcial."};
+
+  function renderResults(addHist){
+    var g = grade(), L = letter(g.total);
+    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + "RESULTADO";
+    $("rsScore").innerHTML = g.total+"<small>/100</small>";
+    $("rsGrade").className = "grade g-"+L;
+    $("rsGrade").textContent = "Nota "+L;
+    var used = ((st.submittedAt||Date.now()) - st.startAt)/1000;
+    $("rsMeta").textContent = MSG[L]+" · Tiempo utilizado: "+fmt(used)+(st.minutes?" de "+st.minutes+":00":"")+(st.autoSubmitted?" · entregado por tiempo":"");
+
+    var defs = [["I. Verdadero o falso","I",20],["II. Selección múltiple","II",30],["III. Pareo","III",20],["IV. Ordenamiento","IV",10],["V. Desarrollo","V",20]];
+    $("rsBars").innerHTML = defs.map(function(d){
+      var v = g.parts[d[1]], pct = v/d[2]*100;
+      var col = pct>=81?"var(--accent)":pct>=61?"var(--amber)":"var(--red)";
+      return '<div class="bar-row"><div class="bar-top"><span>'+d[0]+'</span><b>'+v+' / '+d[2]+'</b></div><div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div></div>';
+    }).join("");
+
+    renderReview(g.rv, "all");
+    $("rsFilters").onclick = function(e){
+      var b = e.target.closest(".fbtn"); if(!b) return;
+      Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x===b); });
+      renderReview(g.rv, b.getAttribute("data-f"));
+    };
+
+    if(addHist && !st.saved){
+      var h = load(HIST) || [];
+      h.unshift({d:Date.now(), s:g.total, g:L});
+      save(HIST, h.slice(0,8));
+      st.saved = true; persist();
+    }
+  }
+
+  function renderReview(rv, f){
+    var list = rv.filter(function(r){ return f==="all" || r.cls===f; });
+    $("rsReview").innerHTML = list.length ? list.map(function(r){
+      var c = r.cls==="ok"?"c-ok":r.cls==="bad"?"c-bad":"c-part";
+      var icon = r.cls==="ok"?"✅":r.cls==="bad"?"❌":"⚠️";
+      return '<div class="rv '+r.cls+'"><div class="rv-top"><div class="rv-q"><b>'+r.n+'.</b> '+r.q+'</div><div class="rv-pts '+c+'">'+icon+' '+r.pts+'/'+r.max+'</div></div>'+
+        r.lines.filter(Boolean).map(function(l){ return '<div class="rv-line">'+l+'</div>'; }).join("")+
+        (r.exp?'<div class="rv-exp">💡 '+r.exp+'</div>':'')+'</div>';
+    }).join("") : '<p style="font-size:.86rem;color:var(--text-faint);padding:10px 0;">No hay preguntas en este filtro.</p>';
+  }
+
+  /* ============================================================
+     PORTADA: reanudar e historial
+     ============================================================ */
+  function renderStart(){
+    var saved = load(STORE);
+    if(saved && saved.phase && saved.phase!=="results"){
+      var info;
+      if(saved.phase==="exam") info = saved.endAt ? (saved.endAt>Date.now() ? "Quedan "+fmt((saved.endAt-Date.now())/1000)+"." : "El tiempo ya terminó; se entregará al continuar.") : "Sin límite de tiempo.";
+      else info = "Falta autoevaluar la Parte V.";
+      $("resumeInfo").textContent = info;
+      $("resumeBox").classList.remove("hidden");
+    } else {
+      $("resumeBox").classList.add("hidden");
+    }
+    var h = load(HIST) || [];
+    $("histBox").style.display = h.length ? "block" : "none";
+    $("histList").innerHTML = h.map(function(x){
+      var d = new Date(x.d);
+      return '<div class="hist-item"><span>'+d.toLocaleDateString("es-PA")+' · '+d.toLocaleTimeString("es-PA",{hour:"2-digit",minute:"2-digit"})+'</span><span><b>'+x.s+'</b> · <span class="grade g-'+x.g+'" style="margin:0;padding:2px 9px;font-size:.75rem;">'+x.g+'</span></span></div>';
+    }).join("");
+  }
+
+  $("btnStart").addEventListener("click", function(){
+    newAttempt(); renderExam(); show("exam"); startTimer();
+  });
+  $("btnResume").addEventListener("click", function(){
+    st = load(STORE); if(!st) return renderStart();
+    if(st.phase==="exam"){
+      renderExam(); show("exam");
+      if(st.endAt && st.endAt<=Date.now()) submit(true); else startTimer();
+    } else if(st.phase==="selfgrade"){ renderSelfGrade(); show("selfgrade"); }
+  });
+  $("btnDiscard").addEventListener("click", function(){ del(STORE); renderStart(); });
+  $("btnRetry").addEventListener("click", function(){
+    del(STORE); st = null; renderStart(); show("start");
+  });
+
+  // Aviso antes de salir con un examen en curso
+  window.addEventListener("beforeunload", function(e){
+    if(st && st.phase==="exam"){ persist(); e.preventDefault(); e.returnValue = ""; }
+  });
+
+  renderStart();
+})();
+</script>
+</body>
+</html>
+

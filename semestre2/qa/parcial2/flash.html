@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Repaso QA · Parcial 2</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+@media (max-width:560px){
+  /* ocupar exactamente la pantalla visible (descontando la barra del navegador) */
+  body{min-height:100vh;min-height:100dvh;}
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+
+  header{padding:12px 16px 6px;}
+  .brand-row h1{font-size:1.2rem;}
+  .subtitle{margin:0 0 10px;}
+  .progress-wrap{height:7px;margin-bottom:10px;}
+  .stats-row{gap:6px;margin-bottom:10px;font-size:.68rem;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .stats-row::-webkit-scrollbar{display:none;}
+  .stat-pill{padding:4px 9px;white-space:nowrap;flex-shrink:0;}
+  .tab{padding:8px 14px;font-size:.78rem;}
+
+  main{padding:8px 16px 0;min-height:0;}
+  .counter{margin-bottom:8px;}
+
+  /* la tarjeta llena todo el espacio disponible */
+  .stage{min-height:0;align-items:stretch;}
+  .card3d{height:100%;max-width:none;min-height:240px;}
+  .face{padding:50px 20px 40px;}
+  .face-tag{top:14px;left:14px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .face-status{top:12px;right:14px;}
+  .face-front .q-text{font-size:1.15rem;}
+  .face-back{justify-content:flex-start;padding-bottom:20px;}
+  .face-back .a-label{margin-top:0;}
+  .face-back .a-text{font-size:.98rem;line-height:1.5;}
+  .tap-hint{bottom:14px;}
+
+  /* botones de valoración alineados con la tarjeta */
+  .rate-row{padding:10px 0 0;gap:8px;}
+  .rate-btn{padding:12px 6px;font-size:.82rem;}
+
+  nav.controls{padding:10px 16px calc(12px + var(--safe-b));gap:8px;}
+  .nav-btn{padding:13px 6px;font-size:.88rem;}
+  .nav-btn.shuffle{flex:0 0 50px;padding:13px 0;}
+}
+@media (max-width:560px) and (max-height:700px){
+  .subtitle{display:none;}
+  .face{padding-top:44px;}
+  .face-front .q-text{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1>Repaso <em>QA</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Parcial 2</span>
+    </div>
+    <p class="subtitle">Calidad de Software · Unidad III · Medición de la calidad</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-filter="all">Todas · 84</div>
+      <div class="tab" data-filter="hard">Por repasar</div>
+      <div class="tab" data-filter="learned">Aprendidas</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 84</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     84 FLASHCARDS — Fuente: Calidad de Software_JN_Unidad III.pdf
+     (Medición de la calidad del Software), en el orden del PDF
+  ======================================================== */
+  var CARDS = [
+    // ---------- NECESIDAD DE LA MEDIDA ----------
+    {cat:"Medición", q:"¿Qué dice el material sobre la ingeniería de software y la medición?", a:"Que es una disciplina que <b>aún está aprendiendo a medir</b>. La historia demuestra cuán difícil es establecer el modo de medir ciertas magnitudes."},
+    {cat:"Medición", q:"¿Con qué está ligada la medición del software?", a:"Con la disciplina de vida del software: <b>planificación, gestión y control de proyectos</b>.<br><br><i>Mnemotecnia:</i> PGC."},
+    {cat:"Medición", q:"¿Qué permite conocer la medición del software?", a:"El <b>estado</b> del software, para realizar <b>ajustes o mejoras</b> en los procesos."},
+    {cat:"Medición", q:"¿Para qué ayudan las métricas del producto?", a:"A que los ingenieros obtengan <b>comprensión acerca del diseño y la construcción</b>."},
+    {cat:"Medición", q:"¿Qué se necesita para guiar el diseño de datos, arquitectura, interfaces y componentes?", a:"<b>Criterios objetivos</b> (que dan las métricas).<br><br><i>Mnemotecnia:</i> DAIC = Datos, Arquitectura, Interfaces, Componentes."},
+    {cat:"Medición", q:"¿Qué actividades tienen como base las métricas de producto?", a:"El <b>análisis</b>, el <b>diseño</b>, la <b>codificación</b> y las <b>pruebas</b>."},
+
+    // ---------- MEDIDA, MÉTRICA E INDICADOR ----------
+    {cat:"Medida·Métrica", q:"¿Qué es una medida?", a:"Un <b>indicio cuantitativo</b> de la extensión, cantidad, dimensión, capacidad o tamaño de algún <b>atributo</b> de un producto o proceso."},
+    {cat:"Medida·Métrica", q:"¿Cómo define la IEEE una medida?", a:"\"Una medida cuantitativa del <b>grado</b> en el que un sistema, componente o proceso <b>posee un atributo</b> determinado.\""},
+    {cat:"Medida·Métrica", q:"¿Qué es una métrica de software? Da el ejemplo del material.", a:"Relaciona en alguna forma <b>medidas individuales</b>. Ejemplo: el <b>número promedio de errores</b> encontrados por revisión o por unidad de prueba."},
+    {cat:"Medida·Métrica", q:"¿Qué es un indicador?", a:"Una <b>métrica o combinación de métricas</b> que proporciona <b>comprensión</b> acerca del proceso, proyecto o producto de software."},
+    {cat:"Medida·Métrica", q:"¿Qué permiten los indicadores de proyecto? (5)", a:"1. Evaluar el <b>estado</b> del proyecto.<br>2. Hacer seguimiento a los <b>riesgos</b> potenciales.<br>3. Detectar <b>áreas problema</b> antes de que sean críticas.<br>4. <b>Ajustar</b> el flujo y las tareas del trabajo.<br>5. Evaluar la <b>habilidad del equipo</b> para controlar la calidad.<br><br><i>Mnemotecnia:</i> ESDAE."},
+    {cat:"Medida·Métrica", q:"¿Cuáles son las entradas del proceso de recopilación de métricas de software?", a:"<b>Proceso</b> de ingeniería de software, <b>Proyecto</b> del software y <b>Producto</b> del software (3P)."},
+    {cat:"Medida·Métrica", q:"Describe el proceso de recopilación de métricas: pasos y lo que sale de cada uno.", a:"<b>Recopilación de datos</b> → salen <b>medidas</b> → <b>Cálculo de métricas</b> → salen <b>métricas</b> → <b>Evaluación de métricas</b> → salen <b>indicadores</b>."},
+
+    // ---------- PROYECTO SEMESTRAL ----------
+    {cat:"Proyecto semestral", q:"¿Cuáles son los 6 bloques del proyecto semestral?", a:"1. Calidad y análisis de código.<br>2. Automatización funcional.<br>3. Rendimiento y carga.<br>4. Seguridad de aplicaciones.<br>5. Integración y contratos.<br>6. DevOps y gestión de hallazgos.<br><br><i>Mnemotecnia:</i> CARSID."},
+    {cat:"Proyecto semestral", q:"¿Qué hace SonarQube y en qué bloque está?", a:"Bloque 1, <b>Calidad y análisis de código</b>: análisis estático y calidad de código para detectar problemas <b>antes de que lleguen a producción</b> (inspección)."},
+    {cat:"Proyecto semestral", q:"Automatización funcional: ¿qué hacen Playwright y Postman?", a:"Objetivo: comprobar que la app responde como espera el usuario.<br><b>Playwright:</b> automatiza recorridos de usuario en <b>navegadores</b>.<br><b>Postman:</b> permite enviar solicitudes a <b>APIs</b>."},
+    {cat:"Proyecto semestral", q:"Rendimiento y carga: ¿qué hacen JMeter y Grafana k6?", a:"Pregunta guía: ¿seguirá funcionando cuando muchas personas lo usen a la vez?<br><b>JMeter:</b> modela cargas y mide el comportamiento bajo diferentes condiciones.<br><b>Grafana k6:</b> escribe pruebas de rendimiento <b>como código</b> y las ejecuta en flujos de desarrollo."},
+    {cat:"Proyecto semestral", q:"Seguridad de aplicaciones: ¿qué hacen OWASP ZAP, Snyk y Dependency-Check?", a:"<b>OWASP ZAP:</b> prueba aplicaciones web <b>en ejecución</b> para encontrar debilidades.<br><b>Snyk:</b> identifica riesgos en código y dependencias (funciones según producto y plan).<br><b>OWASP Dependency-Check:</b> compara dependencias con fuentes de <b>vulnerabilidades conocidas</b>."},
+    {cat:"Proyecto semestral", q:"¿Qué hace Pact y cuál es el objetivo de su bloque?", a:"Bloque <b>Integración y contratos</b>: evitar que los servicios se rompan entre sí. Pact verifica <b>acuerdos de interacción</b> entre un consumidor y un proveedor de API o servicio usando <b>contratos ejecutables</b>."},
+    {cat:"Proyecto semestral", q:"DevOps y gestión de hallazgos: ¿qué hacen GitHub Actions y DefectDojo?", a:"Objetivo: convertir las comprobaciones de calidad en parte del flujo de entrega.<br><b>GitHub Actions:</b> automatiza flujos ante eventos del repositorio (cambios, pruebas, compilaciones).<br><b>DefectDojo:</b> centraliza y organiza <b>hallazgos de seguridad</b> de diferentes herramientas para seguimiento y priorización."},
+    {cat:"Proyecto semestral", q:"¿Qué bloque del proyecto semestral tiene más herramientas y cuántas en total hay?", a:"<b>Seguridad de aplicaciones</b> (3: OWASP ZAP, Snyk, Dependency-Check). En total: 1+2+2+3+1+2 = <b>11 herramientas</b>."},
+
+    // ---------- PRINCIPIOS ----------
+    {cat:"Principios", q:"¿Cuáles son los principios de medición?", a:"<b>Formulación · Recolección · Análisis · Interpretación · Retroalimentación</b>.<br><br><i>Mnemotecnia:</i> FRAIR (suena a \"fraile\")."},
+    {cat:"Principios", q:"Principio de medición: ¿qué es la formulación?", a:"La <b>derivación de medidas y métricas</b> de software apropiadas para la representación del software que se construye."},
+    {cat:"Principios", q:"Principio de medición: ¿qué es la recolección?", a:"El <b>mecanismo</b> que se usa para <b>acumular los datos</b> requeridos para derivar las métricas formuladas."},
+    {cat:"Principios", q:"Principio de medición: ¿qué es el análisis?", a:"El <b>cálculo de métricas</b> y la aplicación de <b>herramientas matemáticas</b>."},
+    {cat:"Principios", q:"Principio de medición: ¿qué es la interpretación?", a:"La <b>evaluación de las métricas</b> resultantes para <b>comprender la calidad</b> de la representación."},
+    {cat:"Principios", q:"Principio de medición: ¿qué es la retroalimentación?", a:"<b>Recomendaciones</b> derivadas de la interpretación de las métricas del producto, <b>transmitidas al equipo</b> del software."},
+
+    // ---------- ATRIBUTOS ----------
+    {cat:"Atributos", q:"¿Cuáles son los atributos de las métricas de software efectivas según el material?", a:"1. <b>Simple y calculable</b>.<br>2. <b>Empírica o intuitivamente convincente</b>.<br>3. <b>Congruente y objetiva</b>.<br><br><i>Mnemotecnia:</i> SEC."},
+    {cat:"Atributos", q:"¿Qué significa que una métrica sea simple y calculable?", a:"Que sea relativamente <b>fácil aprender a derivarla</b> y que su cálculo <b>no demande esfuerzo o tiempo excesivo</b>."},
+    {cat:"Atributos", q:"¿Qué significa que una métrica sea empírica o intuitivamente convincente?", a:"Que debe <b>satisfacer las nociones intuitivas del ingeniero</b> acerca del atributo de producto que se elabora."},
+    {cat:"Atributos", q:"¿Qué significa que una métrica sea congruente y objetiva?", a:"Que siempre debe producir resultados <b>sin ambigüedades</b>."},
+
+    // ---------- ENTIDADES ----------
+    {cat:"Entidades", q:"¿Qué entidades deben medirse?", a:"El <b>producto</b> y los <b>procesos</b>."},
+    {cat:"Entidades", q:"¿Qué se entiende por producto como entidad a medir? Da los 5 ejemplos.", a:"Cualquier <b>artefacto, entregable o documento</b> que resulta de las actividades del ciclo de vida:<br>código fuente · especificaciones de requisitos · diseños · plan de pruebas · manuales de usuario.<br><br><i>Mnemotecnia:</i> CEDPM."},
+    {cat:"Entidades", q:"¿Qué se entiende por procesos como entidad a medir? Da los 4 ejemplos.", a:"Todas las <b>actividades del ciclo de vida</b>, para conocer el estado de los procesos y cómo se llevan a cabo, y después <b>mejorarlos</b>:<br>requisitos · diseño y construcción · pruebas · mantenimiento."},
+
+    // ---------- PROCESO DE MEDICIÓN DE LA CALIDAD ----------
+    {cat:"Proceso de medición", q:"¿Qué es el proceso de gestión de la calidad del producto?", a:"Un conjunto de <b>actividades</b> durante la creación y el funcionamiento de los productos acordados para <b>establecer, garantizar y mantener</b> el nivel de calidad requerido."},
+    {cat:"Proceso de medición", q:"¿Qué es el proceso de gestión de la calidad de los servicios?", a:"Un conjunto de <b>recursos empresariales interrelacionados</b> (personal, equipos, metodología, tecnología) y <b>actividades</b> que convierten las <b>entradas en salidas</b>."},
+    {cat:"Proceso de medición", q:"¿En qué dos grupos se dividen los procesos de gestión de la calidad?", a:"1. <b>Mantener</b> el sistema de producción estable y garantizar productos del nivel de calidad previsto.<br>2. <b>Trasladar</b> el sistema de producción a un <b>nivel superior</b>: productos de mayor nivel técnico y calidad."},
+    {cat:"Proceso de medición", q:"¿Qué funciones de la gestión como proceso son inherentes a la gestión de la calidad del producto?", a:"<b>Planificación, organización, motivación, control, comunicación y toma de decisiones</b>.<br><br><i>Mnemotecnia:</i> POMCCT."},
+    {cat:"Proceso de medición", q:"¿Dónde deben integrarse los programas de mejora y los sistemas de gestión de la calidad?", a:"En la <b>producción</b>."},
+    {cat:"Proceso de medición", q:"¿Cuáles son las fases de implementación de los sistemas de garantía de calidad?", a:"1. Examinar en detalle los casos de <b>incumplimiento</b> de las normas.<br>2. Calcular los <b>costes de calidad</b> y reducirlos al menos un <b>2%</b>.<br>3. Abordar la calidad con mayor <b>profundidad y amplitud</b>.<br>4. Implantar un <b>sistema integral</b> como parte orgánica de la producción.<br><br><i>Mnemotecnia:</i> ECPI."},
+    {cat:"Proceso de medición", q:"En la segunda fase de implementación, ¿cuál es el objetivo con los costes de calidad?", a:"Reducirlos <b>al menos en un dos por ciento</b>, demostrando así la <b>eficacia y eficiencia</b> de las medidas adoptadas."},
+    {cat:"Proceso de medición", q:"¿Cuál es el primer requisito para el aseguramiento de la calidad?", a:"La <b>verificación del cumplimiento de la norma</b>."},
+    {cat:"Proceso de medición", q:"¿Sobre qué base desarrollan las organizaciones una estrategia de calidad?", a:"Sobre la base de un <b>concepto aceptado de calidad y sus criterios</b>."},
+    {cat:"Proceso de medición", q:"¿Qué ha pasado con la planificación estratégica de la calidad?", a:"Se considera tan importante que ha pasado a formar parte de la <b>planificación estratégica global</b> de las empresas."},
+    {cat:"Proceso de medición", q:"¿A qué se da gran importancia en la estrategia de calidad?", a:"A la <b>identificación clara de los responsables</b> y al <b>seguimiento</b> de la aplicación del programa."},
+    {cat:"Proceso de medición", q:"¿Cómo puede garantizarse la calidad según las consideraciones?", a:"Sólo mediante un sistema que asegure la calidad a lo largo de <b>todo el ciclo de vida</b> del producto."},
+    {cat:"Proceso de medición", q:"¿Qué incluye el sistema de gestión de la calidad?", a:"1. Requisitos para el sistema de <b>control y ensayo</b> de los productos.<br>2. <b>Certificación de la fiabilidad</b>.<br>3. Requisitos para la <b>organización de la producción</b> y la gestión de la calidad desde el diseño hasta el funcionamiento."},
+
+    // ---------- MÉTRICAS DE PROCESO Y PROYECTO ----------
+    {cat:"Métricas P&P", q:"¿Qué son las métricas de proceso y proyecto?", a:"<b>Medidas cuantitativas</b> que permiten obtener comprensión acerca de la <b>eficiencia</b> del proceso del software y de los proyectos que se realizan."},
+    {cat:"Métricas P&P", q:"¿Quién hace las métricas de proceso y proyecto?", a:"Se analizan y valoran por parte de los <b>gerentes del software</b>. Con frecuencia, los <b>ingenieros del software recopilan</b> las medidas."},
+    {cat:"Métricas P&P", q:"¿Por qué son importantes las métricas de proceso y proyecto?", a:"Si no se mide, el juicio puede basarse en la <b>evaluación subjetiva</b>. Con la medición se pueden marcar <b>tendencias</b>, hacer mejores <b>estimaciones</b> y lograr verdadera <b>mejoría</b>."},
+    {cat:"Métricas P&P", q:"¿Cuál es el producto final de las métricas de proceso y proyecto?", a:"Un <b>conjunto de métricas</b> de software que proporciona comprensión acerca del proceso y el proyecto."},
+    {cat:"Métricas P&P", q:"¿Cómo me aseguro de que lo hice bien al medir?", a:"Aplicando un esquema de medición <b>consistente, aunque simple</b>, que <b>nunca</b> debe usarse para <b>valorar, recompensar o castigar el desempeño individual</b>."},
+    {cat:"Métricas P&P", q:"¿Qué permiten al gerente las métricas de proceso y proyecto? (5)", a:"1. <b>Valorar</b> el estado de un proyecto en marcha.<br>2. <b>Rastrear</b> riesgos potenciales.<br>3. <b>Descubrir</b> áreas problema antes de que se vuelvan \"críticas\".<br>4. <b>Ajustar</b> el flujo de trabajo o las tareas.<br>5. <b>Evaluar</b> la habilidad del equipo para controlar la calidad.<br><br><i>Mnemotecnia:</i> VRDAE."},
+    {cat:"Métricas P&P", q:"Describe el diagrama del triángulo de métricas de proceso y proyecto.", a:"<b>Proceso</b> en el centro de un triángulo cuyos vértices son <b>Producto</b> (arriba), <b>Personas</b> y <b>Tecnología</b>. En el círculo que lo rodea: <b>características del cliente</b>, <b>condiciones del negocio</b> y <b>entorno de desarrollo</b>."},
+    {cat:"Métricas P&P", q:"¿Cuáles son los resultados de la medición del proceso de software? (6)", a:"1. Medidas de <b>errores descubiertos antes de liberar</b>.<br>2. <b>Defectos</b> entregados y reportados por usuarios finales.<br>3. <b>Productos operativos</b> entregados.<br>4. <b>Esfuerzo humano</b> empleado.<br>5. <b>Tiempo calendario</b> consumido.<br>6. <b>Conformidad con la agenda</b>.<br><br><i>Mnemotecnia:</i> EDPETC."},
+    {cat:"Métricas P&P", q:"¿Cuáles son los lineamientos para recopilar métricas? (7)", a:"1. Usar el <b>sentido común</b> y sensibilidad organizacional al interpretar.<br>2. Dar <b>retroalimentación regular</b> a quienes recopilan.<br>3. <b>No</b> usar métricas para valorar a los individuos.<br>4. Trabajar con profesionales y equipos para fijar <b>metas y métricas claras</b>.<br>5. <b>Nunca</b> usar métricas para amenazar.<br>6. <b>No</b> considerar \"negativos\" los datos de un área problemática.<br>7. <b>No</b> obsesionarse con una sola métrica."},
+    {cat:"Métricas P&P", q:"Según los lineamientos, ¿cómo deben tratarse los datos que indican un área problemática?", a:"<b>No</b> deben considerarse \"negativos\"."},
+
+    // ---------- MEDICIÓN DEL PROYECTO ----------
+    {cat:"Proyecto", q:"¿Qué enseña la medición de un proyecto?", a:"El <b>estado</b> del proyecto en un determinado momento de ejecución, con <b>datos objetivos</b> que permiten cuantificar su desarrollo, <b>identificar fallos</b> y definir <b>mejoras</b>."},
+    {cat:"Proyecto", q:"¿En qué se enfocan las mediciones en proyectos clásicos (cascada)?", a:"En el cumplimiento del <b>triángulo de proyecto: tiempo, costo y alcance</b>. La planificación es <b>rígida</b> y se priorizan los plazos predefinidos."},
+    {cat:"Proyecto", q:"¿Cuáles son las 3 mediciones en proyectos clásicos?", a:"1. <b>Cumplimiento del cronograma</b>: seguir el plan de tiempo (un retraso afecta costo y alcance).<br>2. <b>Control del presupuesto</b>: gastos reales vs. planificado.<br>3. <b>Gestión del riesgo</b>: identificar, analizar y controlar riesgos en todo el ciclo de vida."},
+    {cat:"Proyecto", q:"¿Qué herramienta se usa para el control del presupuesto en proyectos clásicos?", a:"El método de <b>Valor Ganado (EVM)</b>, que mide el <b>costo y el progreso en paralelo</b>."},
+    {cat:"Proyecto", q:"¿En qué se enfocan las mediciones en ambientes ágiles?", a:"En la <b>flexibilidad</b> y la entrega de valor de manera <b>iterativa</b>; evalúan la eficiencia del equipo, el valor para el cliente y la calidad de las entregas."},
+    {cat:"Proyecto", q:"¿Cuáles son las 3 mediciones en ambientes ágiles?", a:"1. <b>Velocidad del equipo</b>: trabajo completado en un sprint, en <b>puntos de historia</b>; predice capacidad futura.<br>2. <b>Tasa de entrega</b>: frecuencia y valor del software puesto en producción.<br>3. <b>Calidad del código</b>: errores, cobertura de pruebas automáticas y deuda técnica.<br><br><i>Mnemotecnia:</i> VTC."},
+    {cat:"Proyecto", q:"¿Cuáles son las 3 mediciones en proyectos web?", a:"Enfoque: experiencia del usuario y rendimiento del sitio.<br>1. <b>Tiempos de respuesta de páginas</b>.<br>2. <b>Tiempo de actividad</b> del sitio (cercano al 100%).<br>3. <b>Puntuación de accesibilidad (WCAG)</b>.<br><br><i>Mnemotecnia:</i> RAW."},
+    {cat:"Proyecto", q:"¿Qué es el tiempo de actividad de un sitio web y qué valor se busca?", a:"El <b>porcentaje de tiempo</b> que el sitio está disponible para los usuarios. Un valor alto, <b>cercano al 100%</b>, es crucial para la confianza del usuario."},
+    {cat:"Proyecto", q:"¿Qué mide la puntuación de accesibilidad WCAG?", a:"Qué tan accesible es el sitio para <b>personas con discapacidades</b>, siguiendo las pautas de accesibilidad para contenido web (WCAG)."},
+    {cat:"Proyecto", q:"¿En qué se enfocan las mediciones en ambientes DevOps?", a:"En mejorar la <b>automatización y la colaboración</b> entre desarrollo y operaciones, para <b>acelerar los ciclos de entrega</b> y mejorar la estabilidad."},
+    {cat:"Proyecto", q:"¿Cuáles son las 3 mediciones en ambientes DevOps?", a:"1. <b>Lead time</b> (tiempo de ciclo): desde escribir el código hasta desplegarlo en producción; corto = alta eficiencia.<br>2. <b>Tasa de cambio fallido</b>: % de despliegues con errores que requieren reversión; baja = calidad y estabilidad.<br>3. <b>MTTR</b>: tiempo promedio para restaurar el servicio tras una falla; bajo.<br><br><i>Mnemotecnia:</i> LTM."},
+    {cat:"Proyecto", q:"¿Qué significa MTTR?", a:"<b>Mean Time to Recovery</b>: tiempo promedio que se tarda en <b>restaurar el servicio</b> después de una falla. En un DevOps eficiente es <b>bajo</b>."},
+    {cat:"Proyecto", q:"¿Cuáles son las 3 mediciones en proyectos móviles?", a:"1. <b>Uso de batería y datos</b>.<br>2. <b>Tiempos de respuesta de la app</b>.<br>3. <b>Crash rate</b>: veces que la app se cierra inesperadamente; alta = problemas de estabilidad y afecta la retención.<br><br><i>Mnemotecnia:</i> BRC."},
+    {cat:"Proyecto", q:"¿En qué se enfocan las mediciones en ambientes globales?", a:"En que equipos en distintas ubicaciones funcionen de manera <b>cohesiva y efectiva</b>: comunicación, coordinación y adaptación a contextos locales."},
+    {cat:"Proyecto", q:"¿Cuáles son las 3 mediciones en ambientes globales?", a:"1. <b>Tiempos de respuesta de equipos distribuidos</b> (zonas horarias y regiones).<br>2. <b>Cumplimiento de regulaciones locales</b> (múltiples jurisdicciones).<br>3. <b>Tasa de resolución de conflictos</b> interdepartamentales.<br><br><i>Mnemotecnia:</i> RCR."},
+
+    // ---------- MEDICIÓN DEL PRODUCTO ----------
+    {cat:"Producto", q:"¿A qué se refiere la medición del producto de software?", a:"Al proceso de <b>cuantificar y evaluar</b> diferentes atributos del software para garantizar su <b>calidad, rendimiento y alineación</b> con los requisitos de los usuarios y del negocio."},
+    {cat:"Producto", q:"¿En qué se enfocan las mediciones de producto en software clásico?", a:"En la calidad, funcionalidad y cumplimiento de los requisitos de la fase inicial; se miden la <b>estabilidad y funcionalidad</b> del producto."},
+    {cat:"Producto", q:"¿Cuáles son las 4 mediciones de producto en software clásico?", a:"1. <b>Calidad funcional</b>: cumple requisitos (pruebas funcionales automatizadas o manuales).<br>2. <b>Tasa de defectos</b>: errores en producción; bajo = estable.<br>3. <b>Satisfacción del cliente</b>: encuestas o reportes.<br>4. <b>Mantenimiento y soporte</b>: tiempo y esfuerzo tras el despliegue.<br><br><i>Mnemotecnia:</i> CTSM."},
+    {cat:"Producto", q:"¿Cuáles son las 3 mediciones para aplicaciones web (producto)?", a:"1. <b>Tiempos de carga y respuesta</b>.<br>2. <b>Rendimiento del backend</b>: solicitudes concurrentes; latencia, recursos y escalabilidad.<br>3. <b>Usabilidad y accesibilidad</b> (WCAG 2.0).<br><br><i>Mnemotecnia:</i> CBU."},
+    {cat:"Producto", q:"¿Qué herramientas menciona el material para medir tiempos de carga y respuesta?", a:"<b>Google Lighthouse</b> y <b>Pingdom</b>."},
+    {cat:"Producto", q:"¿Qué estándar de accesibilidad se menciona para aplicaciones web y qué incluye esa medición?", a:"<b>WCAG 2.0</b>. Incluye la <b>navegación intuitiva</b> y la compatibilidad con <b>dispositivos de asistencia</b>."},
+    {cat:"Producto", q:"¿Cuáles son las 4 mediciones para aplicaciones móviles (producto)?", a:"1. <b>Rendimiento en múltiples dispositivos</b> (iOS, Android…).<br>2. <b>Uso de batería y recursos</b> (CPU/memoria).<br>3. <b>Retención y engagement</b>.<br>4. <b>Tasa de crashes y fallos</b>.<br><br><i>Mnemotecnia:</i> RBRC."},
+    {cat:"Producto", q:"¿Qué indicadores se usan para la retención y engagement de apps móviles?", a:"<b>DAU</b> (Daily Active Users) y <b>MAU</b> (Monthly Active Users): cuántos usuarios siguen usando la app después de descargarla."},
+    {cat:"Producto", q:"¿Qué puede provocar un alto consumo de batería y recursos en una app móvil?", a:"La <b>desinstalación</b> de la aplicación."},
+    {cat:"Producto", q:"¿Cuáles son las 3 mediciones para aplicaciones distribuidas o globales?", a:"1. <b>Latencia global</b>: tiempo de respuesta desde distintas ubicaciones.<br>2. <b>Escalabilidad</b>: más usuarios sin sacrificar rendimiento; agregar recursos dinámicamente.<br>3. <b>Tolerancia a fallos y resiliencia</b>: recuperarse rápido sin afectar al usuario.<br><br><i>Mnemotecnia:</i> LET."},
+    {cat:"Producto", q:"¿Cómo debe minimizar la latencia un software distribuido?", a:"A través de <b>CDN</b> o <b>servidores locales</b>."},
+    {cat:"Producto", q:"¿Qué diferencia hay entre las mediciones móviles de proyecto y de producto?", a:"<b>Proyecto móvil</b> (3): batería y datos · tiempos de respuesta · crash rate.<br><b>Producto móvil</b> (4): rendimiento en múltiples dispositivos · batería y recursos (CPU/memoria) · retención y engagement (DAU/MAU) · tasa de crashes y fallos."}
+  ];
+
+  var TOTAL = CARDS.length; // 84
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- STORAGE ---------------- */
+  var STORE_KEY = "qa_p2_flashcards_status_v1";
+  var status = {}; // id -> "easy" | "hard"
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw) status = JSON.parse(raw) || {};
+  }catch(e){ status = {}; }
+
+  function saveStatus(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "all";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+
+  function statusIcon(s){
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+
+  function computeStats(){
+    var learned=0, hard=0;
+    CARDS.forEach(function(c){
+      var s = status[c.id];
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+    });
+    var news = TOTAL - learned - hard;
+    return {learned:learned, hard:hard, news:news};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    var pct = Math.round((st.learned / TOTAL) * 100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function buildFilteredOrder(){
+    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
+    if(filter === "all"){
+      filteredOrder = base.slice();
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
+      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
+      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
+      filteredOrder = base.filter(function(i){
+        var s = status[CARDS[i].id];
+        return s === "hard";
+      });
+      if(filteredOrder.length === 0){
+        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
+      }
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){
+      renderEmpty();
+      return;
+    }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    var s = status[c.id];
+
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(s);
+    statusBack.textContent = statusIcon(s);
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+
+    btnHard.classList.toggle("on", s === "hard");
+    btnEasy.classList.toggle("on", s === "easy");
+
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    stage.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
+        '<p>' + (filter === "learned"
+            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
+            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
+        '</p>' +
+        '<button id="emptyBack">Ver todas las tarjetas</button>' +
+      '</div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn){
+      btn.addEventListener("click", function(){
+        setFilter("all");
+      });
+    }
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    if(status[c.id] === kind){
+      delete status[c.id]; // toggle off
+    } else {
+      status[c.id] = kind;
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", status[c.id] === "hard");
+    btnEasy.classList.toggle("on", status[c.id] === "easy");
+    statusFront.textContent = statusIcon(status[c.id]);
+    statusBack.textContent = statusIcon(status[c.id]);
+    refreshStats();
+
+    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
+    if(filter !== "all"){
+      setTimeout(function(){
+        buildFilteredOrder();
+        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
+        render();
+      }, 380);
+    }
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn){
+      shuffleArray(order);
+    } else {
+      order.sort(function(a,b){return a-b;});
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+  });
+
+  // swipe gestures (left/right) on stage
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // keyboard support (desktop testing)
+  document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  buildFilteredOrder();
+  render();
+
+})();
+</script>
+</body>
+</html>

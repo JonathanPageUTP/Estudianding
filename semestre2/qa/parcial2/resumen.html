@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>🧠 Cheat Sheet QA · Parcial 2</title>
+<style>
+:root{
+  --bg:#0b0f14; --bg2:#121822; --card:#161d29; --card2:#1c2432;
+  --border:#26303f; --text:#e7edf5; --sub:#93a2b8; --accent:#22c55e;
+  --accent-d:#0f2b1d; --red:#fb7185; --red-d:#3a1620; --blue:#60a5fa; --blue-d:#122036;
+  --purple:#c084fc; --purple-d:#241a36; --gold:#facc15;
+  --shadow:0 6px 18px -6px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+body{padding-bottom:78px;}
+h1,h2,h3,h4{margin:0;}
+.hide{display:none !important;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#0d1420,#0b0f14 95%);border-bottom:1px solid var(--border);padding:10px 14px 12px;}
+.htitle{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.htitle .emoji{font-size:1.4rem;}
+.htitle h1{font-size:1.05rem;font-weight:800;letter-spacing:.2px;}
+.htitle .sub{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.searchbox{position:relative;}
+.searchbox input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:10px 34px 10px 12px;font-size:.85rem;outline:none;}
+.searchbox input:focus{border-color:var(--accent);}
+.searchbox .sicon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:.9rem;pointer-events:none;}
+.searchclear{position:absolute;right:34px;top:50%;transform:translateY(-50%);color:var(--sub);background:none;border:none;font-size:1rem;display:none;padding:4px;}
+.nores{text-align:center;color:var(--sub);font-size:.85rem;padding:30px 10px;display:none;}
+
+/* QUICK INDEX CHIPS (scrollable) */
+.idxwrap{overflow-x:auto;white-space:nowrap;padding:10px 14px 4px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.idxwrap::-webkit-scrollbar{display:none;}
+.idxchip{display:inline-block;background:var(--card);border:1px solid var(--border);color:var(--sub);font-size:.72rem;font-weight:600;padding:6px 12px;border-radius:20px;margin-right:6px;text-decoration:none;}
+.idxchip:active{background:var(--accent-d);color:var(--accent);border-color:var(--accent);}
+
+main{padding:12px 12px 20px;max-width:720px;margin:0 auto;}
+
+/* SECTION / ACCORDION */
+.section{margin-bottom:14px;scroll-margin-top:118px;}
+.sec-head{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:12px 14px;cursor:pointer;}
+.sec-head .emoji{font-size:1.3rem;flex-shrink:0;}
+.sec-head .ttl{flex:1;}
+.sec-head .ttl h2{font-size:.95rem;font-weight:800;}
+.sec-head .ttl p{font-size:.68rem;color:var(--sub);margin-top:1px;}
+.sec-head .chev{color:var(--sub);transition:transform .25s;font-size:.9rem;}
+.section.open .sec-head .chev{transform:rotate(180deg);}
+.sec-body{display:none;padding:10px 2px 4px;}
+.section.open .sec-body{display:block;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+.card h3{font-size:.86rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.card p, .card li{font-size:.8rem;line-height:1.42;color:#d3dbe6;}
+.card ul{margin:4px 0 0;padding-left:0;list-style:none;}
+.card li{position:relative;padding-left:14px;margin-bottom:4px;}
+.card li:before{content:"▸";position:absolute;left:0;color:var(--accent);}
+
+/* ACRONYM BADGE */
+.acro{display:inline-flex;align-items:center;gap:6px;background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:900;letter-spacing:1px;padding:4px 10px;border-radius:10px;font-size:.85rem;margin:2px 0 8px;}
+.mnemo{font-size:.74rem;color:#a6e6bf;background:rgba(34,197,94,.08);border-left:3px solid var(--accent);padding:6px 9px;border-radius:0 8px 8px 0;margin-top:6px;font-style:italic;}
+
+/* COLOR TOKENS */
+.c-red{color:var(--red);font-weight:700;}
+.c-green{color:var(--accent);font-weight:700;}
+.c-blue{color:var(--blue);font-weight:700;}
+.c-purple{color:var(--purple);font-weight:700;}
+.tag{display:inline-block;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:20px;margin-bottom:6px;}
+.tag-crit{background:var(--red-d);color:var(--red);}
+.tag-gold{background:var(--accent-d);color:var(--accent);}
+.tag-term{background:var(--blue-d);color:var(--blue);}
+.tag-purple{background:var(--purple-d);color:var(--purple);}
+
+/* CHUNK GRID */
+.chunk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+.chunk{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center;}
+.chunk .e{font-size:1.2rem;}
+.chunk .t{font-size:.72rem;font-weight:800;margin-top:2px;}
+.chunk .d{font-size:.64rem;color:var(--sub);margin-top:2px;line-height:1.3;}
+
+/* TABLES */
+.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:6px;}
+table{border-collapse:collapse;width:100%;min-width:0;font-size:.72rem;}
+th{background:#0f2b1d;color:var(--accent);text-align:left;padding:7px 9px;font-weight:800;white-space:nowrap;position:sticky;top:0;}
+td{padding:7px 9px;border-top:1px solid var(--border);color:#d3dbe6;vertical-align:top;}
+tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+td b{color:var(--text);}
+
+/* FLOW STEPS */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:8px 0;}
+.step{background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);font-weight:800;font-size:.68rem;padding:6px 9px;border-radius:20px;white-space:nowrap;}
+.arrow{color:var(--sub);font-weight:700;}
+
+/* GLOSSARY GRID */
+.glo{display:grid;grid-template-columns:1fr;gap:8px;}
+.glo .card h3{color:var(--purple);}
+
+/* FOOTER */
+footer{max-width:720px;margin:10px auto 0;padding:14px;text-align:center;color:var(--sub);font-size:.68rem;}
+
+/* BOTTOM NAV */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#0d1420;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 2px calc(6px + env(safe-area-inset-bottom));z-index:60;}
+.bnitem{display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--sub);font-size:.55rem;font-weight:700;background:none;border:none;flex:1;padding:4px 0;}
+.bnitem .e{font-size:1.05rem;}
+.bnitem.active{color:var(--accent);}
+
+/* jump-to-top */
+.top-btn{position:fixed;right:14px;bottom:66px;background:var(--accent);color:#04240f;border:none;width:38px;height:38px;border-radius:50%;font-size:1rem;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;z-index:55;}
+.ordnote{text-align:center;font-size:.7rem;color:var(--sub);margin:0 0 12px;}
+.ordnote b{color:var(--text);}
+footer a{text-decoration:none;}
+
+/* MÓVIL (~412px) */
+@media (max-width:560px){
+  .searchbox input{font-size:16px;}
+  .searchclear{min-width:44px;min-height:44px;right:26px;}
+  .bnitem{min-height:44px;}
+  .card{padding:11px 12px;}
+  .step{white-space:normal;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="htitle">
+    <span class="emoji">🧠</span>
+    <div>
+      <h1>Cheat Sheet · QA Parcial 2</h1>
+      <p class="sub">Calidad de Software · resumen mnemotécnico</p>
+    </div>
+  </div>
+  <div class="searchbox">
+    <input id="search" type="text" placeholder="Buscar sigla, término o tema… (ej. MTTR, FRAIR, WCAG)" autocomplete="off">
+    <button class="searchclear" id="clearBtn">✕</button>
+    <span class="sicon" id="searchIcon">🔎</span>
+  </div>
+</header>
+
+<nav class="idxwrap" id="idxwrap">
+  <a class="idxchip" href="#s1">📏 Medición</a>
+  <a class="idxchip" href="#s2">🧰 Proyecto semestral</a>
+  <a class="idxchip" href="#s3">🧪 Principios · entidades</a>
+  <a class="idxchip" href="#s4">🏭 Proceso de medición</a>
+  <a class="idxchip" href="#s5">📊 Métricas P&amp;P</a>
+  <a class="idxchip" href="#s6">🗂️ Medición del proyecto</a>
+  <a class="idxchip" href="#s7">📦 Medición del producto</a>
+  <a class="idxchip" href="#s8">📖 Glosario</a>
+</nav>
+
+<main id="main">
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra sigla o palabra.</p>
+<p class="ordnote">Orden según <b>Calidad de Software · Unidad III</b> (Medición de la calidad del Software)</p>
+
+<!-- ============ SECCIÓN 1: MEDICIÓN ============ -->
+<section class="section open" id="s1" data-nav="📏 Medición">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📏</span>
+    <div class="ttl"><h2>1 · Medición de la calidad del software</h2><p>Necesidad · medida, métrica e indicador · recopilación</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+
+    <div class="card searchable">
+      <span class="tag tag-term">Necesidad de la medida</span>
+      <h3>📌 ¿Por qué medir el software?</h3>
+      <ul>
+        <li>La IS es una disciplina que <b>aún está aprendiendo a medir</b>.</li>
+        <li>La medición está ligada a la disciplina de vida del software: <span class="c-blue">planificación, gestión y control</span> de proyectos.</li>
+        <li>Permite conocer el <b>estado</b> para realizar <b>ajustes o mejoras</b> en los procesos.</li>
+      </ul>
+      <div class="acro">PGC</div>
+      <div class="mnemo">🟢 Medir = <b>P</b>lanificar, <b>G</b>estionar y <b>C</b>ontrolar con datos.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧱 Métricas del producto</h3>
+      <p>Dan comprensión del <b>diseño y la construcción</b>; aportan criterios objetivos para el diseño de:</p>
+      <div class="acro">DAIC</div>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">🗄️</div><div class="t">Datos</div></div>
+        <div class="chunk"><div class="e">🏛️</div><div class="t">Arquitectura</div></div>
+        <div class="chunk"><div class="e">🔌</div><div class="t">Interfaces</div></div>
+        <div class="chunk"><div class="e">🧩</div><div class="t">Componentes</div></div>
+      </div>
+      <div class="mnemo">🟢 Y son la base de <b>análisis → diseño → codificación → pruebas</b> (ADCP).</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>🪜 Medida → Métrica → Indicador</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Concepto</th><th>Qué es</th></tr></thead>
+        <tbody>
+          <tr><td><b>Medida</b></td><td>Indicio cuantitativo de la extensión, cantidad, dimensión, capacidad o tamaño de un atributo de un producto o proceso</td></tr>
+          <tr><td><b>Medida (IEEE)</b></td><td>Medida cuantitativa del grado en que un sistema, componente o proceso posee un atributo</td></tr>
+          <tr><td><b>Métrica</b></td><td>Relaciona medidas individuales (ej.: promedio de errores por revisión o por unidad de prueba)</td></tr>
+          <tr><td><b>Indicador</b></td><td>Métrica o combinación de métricas que da comprensión del proceso, proyecto o producto</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 Dato suelto → relación → comprensión. "<b>E</b>n <b>C</b>ada <b>D</b>ato <b>C</b>abe un <b>T</b>amaño" (extensión, cantidad, dimensión, capacidad, tamaño).</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🎯 Los indicadores de proyecto permiten (5)</h3>
+      <div class="acro">ESDAE</div>
+      <ul>
+        <li><b>E</b>valuar el estado del proyecto</li>
+        <li>Hacer <b>S</b>eguimiento a los riesgos potenciales</li>
+        <li><b>D</b>etectar las áreas problema antes de que sean críticas</li>
+        <li><b>A</b>justar el flujo y las tareas del trabajo</li>
+        <li><b>E</b>valuar la habilidad del equipo para controlar la calidad</li>
+      </ul>
+      <div class="mnemo">🟢 Empieza y termina con <b>Evaluar</b>.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🔁 Proceso de recopilación de métricas</h3>
+      <p>Entradas: <b>proceso</b> de ingeniería, <b>proyecto</b> y <b>producto</b> del software.</p>
+      <div class="flow">
+        <span class="step">Recopilación de datos</span><span class="arrow">→</span>
+        <span class="step">Cálculo de métricas</span><span class="arrow">→</span>
+        <span class="step">Evaluación de métricas</span>
+      </div>
+      <div class="mnemo">🟢 Salen, en orden: <b>medidas → métricas → indicadores</b>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 2: PROYECTO SEMESTRAL ============ -->
+<section class="section" id="s2" data-nav="🧰 Proyecto semestral">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🧰</span>
+    <div class="ttl"><h2>2 · Proyecto semestral</h2><p>6 bloques · 11 herramientas de calidad</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <h3>🧰 Bloques y herramientas</h3>
+      <div class="acro">CARSID</div>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Bloque</th><th>Herramientas</th><th>Objetivo</th></tr></thead>
+        <tbody>
+          <tr><td><b>1 Calidad y análisis de código</b></td><td>SonarQube (1)</td><td>Detectar problemas antes de producción (inspección)</td></tr>
+          <tr><td><b>2 Automatización funcional</b></td><td>Playwright, Postman (2)</td><td>Que la app responda como espera el usuario</td></tr>
+          <tr><td><b>3 Rendimiento y carga</b></td><td>JMeter, Grafana k6 (2)</td><td>¿Seguirá funcionando con muchos usuarios a la vez?</td></tr>
+          <tr><td><b>4 Seguridad de aplicaciones</b></td><td>OWASP ZAP, Snyk, Dependency-Check (3)</td><td>Buscar riesgos antes de que sean incidentes</td></tr>
+          <tr><td><b>5 Integración y contratos</b></td><td>Pact (1)</td><td>Evitar que los servicios se rompan entre sí</td></tr>
+          <tr><td><b>6 DevOps y gestión de hallazgos</b></td><td>GitHub Actions, DefectDojo (2)</td><td>Calidad como parte del flujo de entrega</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 "<b>CARS ID</b>": Código, Automatización, Rendimiento, Seguridad, Integración, DevOps.</div>
+    </div>
+    <div class="card searchable">
+      <h3>🔧 Qué hace cada herramienta</h3>
+      <ul>
+        <li><b>SonarQube:</b> análisis estático y calidad de código.</li>
+        <li><b>Playwright:</b> automatiza recorridos de usuario en <b>navegadores</b>.</li>
+        <li><b>Postman:</b> envía solicitudes a <b>APIs</b>.</li>
+        <li><b>JMeter:</b> modela cargas y mide el comportamiento bajo diferentes condiciones.</li>
+        <li><b>Grafana k6:</b> pruebas de rendimiento <b>como código</b> en flujos de desarrollo.</li>
+        <li><b>OWASP ZAP:</b> prueba aplicaciones web <b>en ejecución</b>.</li>
+        <li><b>Snyk:</b> riesgos en código y dependencias (según producto y plan).</li>
+        <li><b>Dependency-Check:</b> compara dependencias con vulnerabilidades <b>conocidas</b>.</li>
+        <li><b>Pact:</b> contratos ejecutables entre consumidor y proveedor de API.</li>
+        <li><b>GitHub Actions:</b> automatiza flujos ante eventos del repositorio.</li>
+        <li><b>DefectDojo:</b> centraliza y organiza hallazgos de seguridad.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 3: PRINCIPIOS, ATRIBUTOS, ENTIDADES ============ -->
+<section class="section" id="s3" data-nav="🧪 Principios · entidades">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🧪</span>
+    <div class="ttl"><h2>3 · Principios, atributos y entidades</h2><p>FRAIR · SEC · producto y procesos</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-gold">Regla de oro</span>
+      <h3>⚙️ Principios de medición (5)</h3>
+      <div class="acro">FRAIR</div>
+      <div class="flow">
+        <span class="step">Formulación</span><span class="arrow">→</span>
+        <span class="step">Recolección</span><span class="arrow">→</span>
+        <span class="step">Análisis</span><span class="arrow">→</span>
+        <span class="step">Interpretación</span><span class="arrow">→</span>
+        <span class="step">Retroalimentación</span>
+      </div>
+      <ul>
+        <li><b>Formulación:</b> derivar medidas y métricas apropiadas.</li>
+        <li><b>Recolección:</b> mecanismo para acumular los datos.</li>
+        <li><b>Análisis:</b> cálculo de métricas y herramientas matemáticas.</li>
+        <li><b>Interpretación:</b> evaluar las métricas para comprender la calidad.</li>
+        <li><b>Retroalimentación:</b> recomendaciones transmitidas al equipo.</li>
+      </ul>
+      <div class="mnemo">🟢 Suena a "<b>fraile</b>": formula, recoge, analiza, interpreta y aconseja.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>✅ Atributos de las métricas efectivas (3)</h3>
+      <div class="acro">SEC</div>
+      <ul>
+        <li><b>Simple y calculable:</b> fácil de derivar; sin esfuerzo o tiempo excesivo.</li>
+        <li><b>Empírica o intuitivamente convincente:</b> satisface las nociones intuitivas del ingeniero.</li>
+        <li><b>Congruente y objetiva:</b> resultados sin ambigüedades.</li>
+      </ul>
+      <div class="mnemo">🟢 Una buena métrica es "<b>SEC</b>a": directa y sin ambigüedad.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🎯 Entidades que deben medirse</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Producto · CEDPM</th><th>Procesos · RDPM</th></tr></thead>
+        <tbody>
+          <tr><td>Código fuente</td><td>Requisitos</td></tr>
+          <tr><td>Especificaciones de requisitos</td><td>Diseño y construcción</td></tr>
+          <tr><td>Diseños</td><td>Pruebas</td></tr>
+          <tr><td>Plan de pruebas</td><td>Mantenimiento</td></tr>
+          <tr><td>Manuales de usuario</td><td></td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 Producto = cualquier <b>artefacto, entregable o documento</b> · Procesos = <b>actividades</b> del ciclo de vida, para mejorarlas. "<b>C</b>ada <b>E</b>ntregable <b>D</b>ebe <b>P</b>asar <b>M</b>edición".</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 4: PROCESO DE MEDICIÓN ============ -->
+<section class="section" id="s4" data-nav="🏭 Proceso de medición">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🏭</span>
+    <div class="ttl"><h2>4 · Proceso de medición de la calidad</h2><p>Gestión de la calidad · funciones · fases · consideraciones</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-term">Término clave</span>
+      <h3>🏷️ Gestión de la calidad: producto vs. servicios</h3>
+      <ul>
+        <li><b>Producto:</b> actividades durante la creación y funcionamiento para <span class="c-green">establecer, garantizar y mantener</span> el nivel de calidad requerido (EGM).</li>
+        <li><b>Servicios:</b> recursos interrelacionados (<span class="c-blue">personal, equipos, metodología, tecnología</span>) y actividades que convierten <b>entradas en salidas</b> (PEMT).</li>
+      </ul>
+      <div class="mnemo">🟢 <b>2 grupos</b>: 1) <b>Mantener</b> la producción estable · 2) <b>Trasladarla</b> a un nivel superior.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>👔 Funciones de la gestión (6)</h3>
+      <div class="acro">POMCCT</div>
+      <p>Planificación · Organización · Motivación · Control · Comunicación · Toma de decisiones → inherentes a la gestión de la calidad del producto. Los programas de mejora y los SGC deben <b>integrarse en la producción</b>.</p>
+      <div class="mnemo">🟢 "<b>P</b>ara <b>O</b>rganizar <b>M</b>otiva, <b>C</b>ontrola, <b>C</b>omunica y <b>T</b>oma decisiones".</div>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Muy preguntable</span>
+      <h3>🪜 Fases de implementación (garantía de calidad)</h3>
+      <div class="acro">ECPI</div>
+      <div class="flow">
+        <span class="step">1 Examinar incumplimientos</span><span class="arrow">→</span>
+        <span class="step">2 Calcular costes (≥ 2%)</span><span class="arrow">→</span>
+        <span class="step">3 Profundidad y amplitud</span><span class="arrow">→</span>
+        <span class="step">4 Sistema integral</span>
+      </div>
+      <div class="mnemo">🟢 <b>E</b>xamina, <b>C</b>alcula, <b>P</b>rofundiza, <b>I</b>mplanta. En la fase 2 se reduce el coste de calidad <b>al menos un 2%</b> para demostrar eficacia y eficiencia.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📝 Consideraciones</h3>
+      <div class="acro">VEPR</div>
+      <ul>
+        <li>1.er requisito del aseguramiento: <b>verificar el cumplimiento de la norma</b>.</li>
+        <li>Con un concepto aceptado de calidad se desarrolla una <b>estrategia de calidad</b>.</li>
+        <li>La <b>planificación estratégica</b> de la calidad forma parte de la global.</li>
+        <li>Importan los <b>responsables</b> claros y el <b>seguimiento</b> del programa.</li>
+        <li>La calidad sólo se garantiza a lo largo de <b>todo el ciclo de vida</b>.</li>
+      </ul>
+      <div class="mnemo">🟢 El SGC incluye (<b>CCO</b>): <b>C</b>ontrol y ensayo · <b>C</b>ertificación de la fiabilidad · <b>O</b>rganización de la producción y gestión de calidad del diseño al funcionamiento.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 5: MÉTRICAS DE PROCESO Y PROYECTO ============ -->
+<section class="section" id="s5" data-nav="📊 Métricas P&amp;P">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📊</span>
+    <div class="ttl"><h2>5 · Métricas de proceso y proyecto</h2><p>Qué, quién, por qué · gerente · resultados · lineamientos</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <h3>❓ Las 5 preguntas</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Pregunta</th><th>Respuesta</th></tr></thead>
+        <tbody>
+          <tr><td><b>¿Qué son?</b></td><td>Medidas cuantitativas para comprender la <b>eficiencia</b> del proceso y los proyectos</td></tr>
+          <tr><td><b>¿Quién?</b></td><td><b>Gerentes</b> las analizan y valoran; <b>ingenieros</b> suelen recopilar las medidas</td></tr>
+          <tr><td><b>¿Por qué?</b></td><td>Sin medir, juicio subjetivo; midiendo: tendencias, mejores estimaciones, verdadera mejoría</td></tr>
+          <tr><td><b>¿Producto final?</b></td><td>Un conjunto de métricas que da comprensión del proceso y el proyecto</td></tr>
+          <tr><td><b>¿Cómo hacerlo bien?</b></td><td>Esquema consistente, aunque simple; <b>nunca</b> para valorar, recompensar o castigar a un individuo</td></tr>
+        </tbody>
+      </table></div>
+      <div class="mnemo">🟢 El ingeniero <b>junta</b>, el gerente <b>juzga</b>; y se mide el proceso, no a la persona.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🧭 Permiten al gerente (5)</h3>
+      <div class="acro">VRDAE</div>
+      <ul>
+        <li><b>V</b>alorar el estado de un proyecto en marcha</li>
+        <li><b>R</b>astrear riesgos potenciales</li>
+        <li><b>D</b>escubrir áreas problema antes de que sean "críticas"</li>
+        <li><b>A</b>justar el flujo de trabajo o las tareas</li>
+        <li><b>E</b>valuar la habilidad del equipo para controlar la calidad</li>
+      </ul>
+      <div class="mnemo">🟢 Es la misma lista de los indicadores de proyecto (ESDAE) con otros verbos.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🔺 Triángulo de proceso</h3>
+      <div class="chunk-grid">
+        <div class="chunk"><div class="e">⚙️</div><div class="t">Proceso</div><div class="d">en el centro</div></div>
+        <div class="chunk"><div class="e">📦</div><div class="t">Producto</div><div class="d">vértice superior</div></div>
+        <div class="chunk"><div class="e">👥</div><div class="t">Personas</div><div class="d">vértice</div></div>
+        <div class="chunk"><div class="e">💻</div><div class="t">Tecnología</div><div class="d">vértice</div></div>
+      </div>
+      <div class="mnemo">🟢 Alrededor (círculo): <b>características del cliente</b>, <b>condiciones del negocio</b>, <b>entorno de desarrollo</b>.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📈 Resultados de la medición del proceso (6)</h3>
+      <div class="acro">EDPETC</div>
+      <ul>
+        <li><b>E</b>rrores descubiertos antes de liberar el software</li>
+        <li><b>D</b>efectos entregados y reportados por usuarios finales</li>
+        <li><b>P</b>roductos operativos entregados</li>
+        <li><b>E</b>sfuerzo humano empleado</li>
+        <li><b>T</b>iempo calendario consumido</li>
+        <li><b>C</b>onformidad con la agenda</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Ojo</span>
+      <h3>📋 Lineamientos al recopilar métricas (7)</h3>
+      <ul>
+        <li>Sentido común y sensibilidad organizacional al interpretar</li>
+        <li>Retroalimentación regular a quienes recopilan</li>
+        <li><span class="c-red">No</span> usar métricas para valorar a los individuos</li>
+        <li>Trabajar con profesionales y equipos para metas y métricas claras</li>
+        <li><span class="c-red">Nunca</span> usar métricas para amenazar</li>
+        <li><span class="c-red">No</span> considerar "negativos" los datos de un área problemática</li>
+        <li><span class="c-red">No</span> obsesionarse con una sola métrica</li>
+      </ul>
+      <div class="mnemo">🟢 <b>3 "sí"</b> (sentido común, retroalimentación, trabajo conjunto) + <b>4 "no"</b>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 6: MEDICIÓN DEL PROYECTO ============ -->
+<section class="section" id="s6" data-nav="🗂️ Medición del proyecto">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">🗂️</span>
+    <div class="ttl"><h2>6 · Medición del proyecto</h2><p>Clásicos · ágiles · web · DevOps · móviles · globales</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-term">Definición</span>
+      <h3>📸 ¿Qué es medir un proyecto?</h3>
+      <p>Enseña el <b>estado</b> del proyecto en un determinado momento de ejecución, con <b>datos objetivos</b> para cuantificar su desarrollo, identificar fallos y definir mejoras.</p>
+    </div>
+
+    <div class="card searchable">
+      <h3>🏗️ Clásicos (tradicionales / cascada)</h3>
+      <div class="acro">CPR</div>
+      <p>Enfoque: triángulo <b>tiempo, costo y alcance</b>; planificación rígida, plazos predefinidos.</p>
+      <ul>
+        <li><b>C</b>umplimiento del cronograma (un retraso afecta costo y alcance)</li>
+        <li>Control del <b>P</b>resupuesto: método de <b>Valor Ganado (EVM)</b>, costo y progreso en paralelo</li>
+        <li>Gestión del <b>R</b>iesgo: identificar, analizar y controlar todo el ciclo de vida</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>🏃 Ágiles</h3>
+      <div class="acro">VTC</div>
+      <p>Enfoque: <b>flexibilidad</b> y entrega de valor <b>iterativa</b>.</p>
+      <ul>
+        <li><b>V</b>elocidad del equipo: trabajo por sprint en <b>puntos de historia</b></li>
+        <li><b>T</b>asa de entrega: frecuencia y valor en producción</li>
+        <li><b>C</b>alidad del código: errores, cobertura de pruebas, deuda técnica</li>
+      </ul>
+      <div class="mnemo">🟢 "<b>V</b>e <b>T</b>ú <b>C</b>orriendo".</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>🌐 Web</h3>
+      <div class="acro">RAW</div>
+      <p>Enfoque: experiencia del usuario y rendimiento del sitio.</p>
+      <ul>
+        <li>Tiempos de <b>R</b>espuesta de páginas</li>
+        <li>Tiempo de <b>A</b>ctividad (cercano al <b>100%</b>)</li>
+        <li>Puntuación de accesibilidad <b>W</b>CAG</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <span class="tag tag-crit">Muy preguntable</span>
+      <h3>🔄 DevOps</h3>
+      <div class="acro">LTM</div>
+      <p>Enfoque: automatización y colaboración desarrollo–operaciones; acelerar entregas y estabilidad.</p>
+      <ul>
+        <li><b>L</b>ead time: del código a producción; corto = eficiente</li>
+        <li><b>T</b>asa de cambio fallido: % de despliegues que requieren reversión; baja = estable</li>
+        <li><b>M</b>TTR (Mean Time to Recovery): restaurar tras una falla; bajo</li>
+      </ul>
+      <div class="mnemo">🟢 En DevOps eficiente, <b>los tres son bajos</b>.</div>
+    </div>
+
+    <div class="card searchable">
+      <h3>📱 Móviles</h3>
+      <div class="acro">BRC</div>
+      <ul>
+        <li>Uso de <b>B</b>atería y datos</li>
+        <li>Tiempos de <b>R</b>espuesta de la app</li>
+        <li><b>C</b>rash rate: cierres inesperados (afecta la retención)</li>
+      </ul>
+    </div>
+
+    <div class="card searchable">
+      <h3>🌍 Globales</h3>
+      <div class="acro">RCR</div>
+      <ul>
+        <li>Tiempos de <b>R</b>espuesta de equipos distribuidos</li>
+        <li><b>C</b>umplimiento de regulaciones locales</li>
+        <li>Tasa de <b>R</b>esolución de conflictos</li>
+      </ul>
+      <div class="mnemo">🟢 Enfoque: comunicación, coordinación y adaptación a contextos locales.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 7: MEDICIÓN DEL PRODUCTO ============ -->
+<section class="section" id="s7" data-nav="📦 Medición del producto">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📦</span>
+    <div class="ttl"><h2>7 · Medición del producto</h2><p>Clásico · web · móviles · distribuidas o globales</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable">
+      <span class="tag tag-term">Definición</span>
+      <h3>🔍 ¿Qué es medir el producto?</h3>
+      <p>Cuantificar y evaluar atributos del software para garantizar su <b>calidad, rendimiento y alineación</b> con los requisitos de usuarios y negocio.</p>
+    </div>
+    <div class="card searchable">
+      <h3>💾 Software clásico (4)</h3>
+      <div class="acro">CTSM</div>
+      <ul>
+        <li><b>C</b>alidad funcional: cumple requisitos (pruebas funcionales)</li>
+        <li><b>T</b>asa de defectos: bugs en producción</li>
+        <li><b>S</b>atisfacción del cliente: encuestas o reportes</li>
+        <li><b>M</b>antenimiento y soporte: tiempo y esfuerzo tras desplegar</li>
+      </ul>
+      <div class="mnemo">🟢 Enfoque: <b>estabilidad y funcionalidad</b>.</div>
+    </div>
+    <div class="card searchable">
+      <h3>🌐 Aplicaciones web (3)</h3>
+      <div class="acro">CBU</div>
+      <ul>
+        <li>Tiempos de <b>C</b>arga y respuesta: Google <b>Lighthouse</b>, <b>Pingdom</b></li>
+        <li>Rendimiento del <b>B</b>ackend: latencia, recursos, escalabilidad</li>
+        <li><b>U</b>sabilidad y accesibilidad: <b>WCAG 2.0</b>, dispositivos de asistencia</li>
+      </ul>
+    </div>
+    <div class="card searchable">
+      <h3>📱 Aplicaciones móviles (4)</h3>
+      <div class="acro">RBRC</div>
+      <ul>
+        <li><b>R</b>endimiento en múltiples dispositivos (iOS, Android)</li>
+        <li><b>B</b>atería y recursos (CPU/memoria) → riesgo de desinstalación</li>
+        <li><b>R</b>etención y engagement: <b>DAU</b>, <b>MAU</b></li>
+        <li>Tasa de <b>C</b>rashes y fallos</li>
+      </ul>
+    </div>
+    <div class="card searchable">
+      <h3>🌍 Distribuidas o globales (3)</h3>
+      <div class="acro">LET</div>
+      <ul>
+        <li><b>L</b>atencia global: <b>CDN</b> o servidores locales</li>
+        <li><b>E</b>scalabilidad: más usuarios sin perder rendimiento</li>
+        <li><b>T</b>olerancia a fallos y resiliencia: recuperarse rápido</li>
+      </ul>
+    </div>
+    <div class="card searchable">
+      <span class="tag tag-crit">No confundir</span>
+      <h3>⚖️ Proyecto vs. producto</h3>
+      <div class="tblwrap"><table>
+        <thead><tr><th>Ambiente</th><th>Proyecto</th><th>Producto</th></tr></thead>
+        <tbody>
+          <tr><td><b>Web</b></td><td>Respuesta de páginas · tiempo de actividad · WCAG</td><td>Carga y respuesta · backend · usabilidad (WCAG 2.0)</td></tr>
+          <tr><td><b>Móvil</b></td><td>Batería y datos · respuesta · crash rate</td><td>Multidispositivo · batería y recursos · retención · crashes</td></tr>
+          <tr><td><b>Global</b></td><td>Equipos distribuidos · regulaciones · conflictos</td><td>Latencia · escalabilidad · tolerancia a fallos</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECCIÓN 8: GLOSARIO ============ -->
+<section class="section" id="s8" data-nav="📖 Glosario">
+  <div class="sec-head" onclick="toggleSec(this)">
+    <span class="emoji">📖</span>
+    <div class="ttl"><h2>8 · Glosario y acrónimos</h2><p>Siglas del material y acrónimos propios</p></div>
+    <span class="chev">▾</span>
+  </div>
+  <div class="sec-body">
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>IEEE</h3><p>Organismo cuya definición de medida cita el material: grado en que un sistema, componente o proceso posee un atributo.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>EVM</h3><p>Método de Valor Ganado: mide costo y progreso en paralelo (control del presupuesto en proyectos clásicos).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>WCAG / WCAG 2.0</h3><p>Pautas de accesibilidad para contenido web; medición de proyectos web y estándar en aplicaciones web.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>MTTR</h3><p>Mean Time to Recovery: tiempo promedio para restaurar el servicio tras una falla (DevOps).</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Lead time</h3><p>Tiempo de ciclo: desde escribir el código hasta su despliegue en producción.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Tasa de cambio fallido</h3><p>Porcentaje de despliegues que resultan en errores o fallos que requieren reversión.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Crash rate</h3><p>Tasa de fallos de una app: veces que se cierra inesperadamente.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Puntos de historia / sprint</h3><p>Unidad y periodo con los que se mide la velocidad del equipo en ágil.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Término</span><h3>Deuda técnica</h3><p>Aspecto de la calidad del código que se mide en ambientes ágiles, junto a errores y cobertura de pruebas.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>DAU · MAU</h3><p>Daily / Monthly Active Users: indicadores de retención y engagement en apps móviles.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>CDN</h3><p>Junto con servidores locales, medio para minimizar la latencia global de un software distribuido.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Herramienta</span><h3>Lighthouse · Pingdom</h3><p>Herramientas para medir tiempos de carga y respuesta de aplicaciones web.</p></div>
+    <div class="card searchable"><span class="tag tag-purple">Sigla</span><h3>API</h3><p>Interfaz a la que Postman envía solicitudes y cuyos acuerdos verifica Pact.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>PGC / DAIC / ADCP</h3><p>Planificación-Gestión-Control / Datos-Arquitectura-Interfaces-Componentes / Análisis-Diseño-Codificación-Pruebas.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>ESDAE / VRDAE</h3><p>Lo que permiten los indicadores de proyecto / lo que permiten al gerente las métricas (misma lista).</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CARSID</h3><p>6 bloques del proyecto semestral.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>FRAIR / SEC</h3><p>Principios de medición / atributos de las métricas efectivas.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CEDPM / RDPM</h3><p>Entidades de producto / de procesos que deben medirse.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>EGM / PEMT / POMCCT / ECPI</h3><p>Gestión de calidad del producto / de servicios / funciones de la gestión / fases de implementación.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>VEPR / CCO</h3><p>Consideraciones / contenido del sistema de gestión de la calidad.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>EDPETC</h3><p>6 resultados de la medición del proceso.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CPR · VTC · RAW · LTM · BRC · RCR</h3><p>Mediciones del proyecto: clásico · ágil · web · DevOps · móvil · global.</p></div>
+    <div class="card searchable"><span class="tag tag-gold">Acrónimo propio</span><h3>CTSM · CBU · RBRC · LET</h3><p>Mediciones del producto: clásico · web · móvil · distribuido o global.</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Calidad de Software · Parcial 2 · II Semestre 2026 — Cheat Sheet generado solo a partir del PDF de la Unidad III.<br>
+  Universidad Tecnológica de Panamá · FISC · <a href="index.html" style="color:var(--blue)">← Índice</a>
+</footer>
+
+<button class="top-btn" id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<nav class="bottomnav" id="bottomnav">
+  <button class="bnitem active" data-target="s1"><span class="e">📏</span>Medición</button>
+  <button class="bnitem" data-target="s3"><span class="e">🧪</span>Principios</button>
+  <button class="bnitem" data-target="s5"><span class="e">📊</span>Métricas</button>
+  <button class="bnitem" data-target="s6"><span class="e">🗂️</span>Proyecto</button>
+  <button class="bnitem" data-target="s7"><span class="e">📦</span>Producto</button>
+</nav>
+
+<script>
+// ---------- Accordion ----------
+function toggleSec(headEl){
+  var sec = headEl.parentElement;
+  var wasOpen = sec.classList.contains('open');
+  // close all, then open target (accordion behaviour), unless already open -> just close it
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+  if(!wasOpen){ sec.classList.add('open'); }
+}
+
+// ---------- Bottom nav ----------
+document.querySelectorAll('.bnitem').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var id = btn.getAttribute('data-target');
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+    document.querySelectorAll('.bnitem').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    sec.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+// index chips: open target section on click too
+document.querySelectorAll('.idxchip').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href').substring(1);
+    var sec = document.getElementById(id);
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('open'); });
+    sec.classList.add('open');
+  });
+});
+
+// ---------- Search / filter ----------
+var searchInput = document.getElementById('search');
+var clearBtn = document.getElementById('clearBtn');
+var noRes = document.getElementById('nores');
+
+function normalize(t){
+  return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+searchInput.addEventListener('input', function(){
+  var q = normalize(searchInput.value.trim());
+  clearBtn.style.display = q ? 'block' : 'none';
+
+  if(!q){
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.remove('hide'); if(i===0) s.classList.add('open'); else s.classList.remove('open'); });
+    document.querySelectorAll('.card.searchable').forEach(function(c){ c.classList.remove('hide'); });
+    document.getElementById('idxwrap').classList.remove('hide');
+    noRes.style.display='none';
+    return;
+  }
+
+  document.getElementById('idxwrap').classList.add('hide');
+  var anyVisibleGlobal = false;
+
+  document.querySelectorAll('.section').forEach(function(sec){
+    var cards = sec.querySelectorAll('.card.searchable');
+    var anyVisible = false;
+    cards.forEach(function(c){
+      var txt = normalize(c.textContent);
+      if(txt.indexOf(q) !== -1){ c.classList.remove('hide'); anyVisible = true; }
+      else { c.classList.add('hide'); }
+    });
+    if(anyVisible){
+      sec.classList.remove('hide');
+      sec.classList.add('open');
+      anyVisibleGlobal = true;
+    } else {
+      sec.classList.add('hide');
+      sec.classList.remove('open');
+    }
+  });
+
+  noRes.style.display = anyVisibleGlobal ? 'none' : 'block';
+});
+
+clearBtn.addEventListener('click', function(){
+  searchInput.value = '';
+  searchInput.dispatchEvent(new Event('input'));
+  searchInput.focus();
+});
+
+// ---------- Top button + active nav on scroll ----------
+window.addEventListener('scroll', function(){
+  document.getElementById('topBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+</script>
+</body>
+</html>

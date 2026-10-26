@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Siglas y Mnemotecnias · QA Parcial 2</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.4;padding-bottom:40px;}
+h1,h2,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.practice{
+  border:1px solid var(--line);background:var(--surface);color:var(--dim);
+  border-radius:30px;padding:8px 12px;font-size:.75rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;
+}
+.practice.on{background:var(--amber);border-color:var(--amber);color:#2a1c08;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+
+.part-label{margin:30px 0 -6px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+/* SECCIONES */
+section{margin-top:22px;scroll-margin-top:100px;}
+section h2{font-size:.72rem;font-family:var(--mono);letter-spacing:.06em;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+section h2::after{content:"";flex:1;height:1px;background:var(--line);}
+.grid{display:grid;grid-template-columns:1fr;gap:7px;}
+@media (min-width:620px){.grid{grid-template-columns:1fr 1fr;}}
+
+/* TARJETA DE SIGLA */
+.s{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:11px;align-items:flex-start;cursor:default;}
+.k{
+  font-family:var(--mono);font-weight:800;font-size:.9rem;letter-spacing:.03em;color:var(--accent);
+  background:var(--accent-dim);border-radius:8px;padding:5px 8px;flex-shrink:0;min-width:58px;text-align:center;
+}
+.k.c{color:var(--cyan);background:var(--cyan-dim);}
+.k.a{color:var(--amber);background:var(--amber-dim);}
+.k.v{color:var(--violet);background:var(--violet-dim);}
+.k.r{color:var(--red);background:var(--red-dim);}
+.b{flex:1;min-width:0;}
+.x{font-size:.84rem;color:var(--text);}
+.x b{color:var(--accent);}
+.m{font-size:.74rem;color:var(--faint);font-style:italic;margin-top:3px;}
+
+/* CONFUSIONES */
+.vs{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:.8rem;}
+.vs .l{color:var(--text);}
+.vs .r{color:var(--text);text-align:right;}
+.vs .l b,.vs .r b{font-family:var(--mono);color:var(--cyan);display:block;font-size:.82rem;}
+.vs .o{font-family:var(--mono);font-size:.68rem;color:var(--red);}
+
+/* NÚMEROS */
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+@media (min-width:620px){.nums{grid-template-columns:repeat(4,1fr);}}
+.n{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;}
+.n .v{font-family:var(--mono);font-size:1.3rem;font-weight:800;color:var(--amber);}
+.n .t{font-size:.7rem;color:var(--dim);margin-top:2px;}
+
+/* MODO PRÁCTICA */
+body.quiz .s{cursor:pointer;}
+body.quiz .s .b,body.quiz .vs .l span,body.quiz .vs .r span,body.quiz .n .t{filter:blur(6px);opacity:.5;transition:filter .2s,opacity .2s;user-select:none;}
+body.quiz .s.show .b,body.quiz .vs.show .l span,body.quiz .vs.show .r span,body.quiz .n.show .t{filter:none;opacity:1;}
+body.quiz .vs,body.quiz .n{cursor:pointer;}
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Siglas y <em>mnemotecnias</em></h1>
+    <button class="practice" id="practice">🙈 Modo práctica</button>
+  </div>
+  <nav class="chips">
+    <a href="#nec">Necesidad</a><a href="#mmi">Medida·Métrica</a><a href="#ind">Indicadores</a><a href="#proy">Proyecto semestral</a><a href="#pri">Principios</a><a href="#atr">Atributos</a><a href="#ent">Entidades</a>
+    <a href="#gc">Gestión calidad</a><a href="#fx">Funciones·Fases</a><a href="#con">Consideraciones</a>
+    <a href="#mpp">Métricas P&amp;P</a><a href="#ger">Gerente</a><a href="#res">Resultados</a><a href="#lin">Lineamientos</a>
+    <a href="#pcl">Proy. clásico</a><a href="#pag">Ágil</a><a href="#pweb">Proy. web</a><a href="#pdev">DevOps</a><a href="#pmov">Proy. móvil</a><a href="#pglo">Proy. global</a>
+    <a href="#dcl">Prod. clásico</a><a href="#dweb">Prod. web</a><a href="#dmov">Prod. móvil</a><a href="#dglo">Prod. distribuido</a>
+    <a href="#n">Números</a><a href="#v">No confundir</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint" id="hint">Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.</p>
+<p class="hint" style="margin-top:4px;">Orden según <b>Calidad de Software · Unidad III</b> (Medición de la calidad del Software)</p>
+
+<div class="part-label">UNIDAD III · MEDICIÓN DE LA CALIDAD DEL SOFTWARE</div>
+
+<!-- 1. NECESIDAD DE LA MEDIDA -->
+<section id="nec">
+  <h2>1 · NECESIDAD DE LA MEDIDA DEL SOFTWARE</h2>
+  <div class="grid">
+    <div class="s"><span class="k">PGC</span><div class="b"><div class="x">La medición está ligada a la disciplina de vida del software: <b>P</b>lanificación, <b>G</b>estión y <b>C</b>ontrol de proyectos · permite conocer su <b>estado</b> para hacer <b>ajustes o mejoras</b> en los procesos</div><div class="m">La IS es una disciplina que aún está aprendiendo a medir</div></div></div>
+    <div class="s"><span class="k a">DAIC</span><div class="b"><div class="x">Se necesitan criterios objetivos que guíen el diseño de <b>D</b>atos · <b>A</b>rquitectura · <b>I</b>nterfaces · <b>C</b>omponentes</div><div class="m">Las métricas del producto dan comprensión del diseño y la construcción</div></div></div>
+    <div class="s"><span class="k">ADCP</span><div class="b"><div class="x">Las métricas de producto son la base desde donde se realizan el <b>A</b>nálisis · <b>D</b>iseño · <b>C</b>odificación · <b>P</b>ruebas</div><div class="m">El ciclo de construcción en orden: analizo, diseño, codifico, pruebo</div></div></div>
+  </div>
+</section>
+
+<!-- 2. MEDIDA, MÉTRICA E INDICADOR -->
+<section id="mmi">
+  <h2>2 · MEDIDA, MÉTRICA E INDICADOR</h2>
+  <div class="grid">
+    <div class="s"><span class="k">M → M → I</span><div class="b"><div class="x"><b>M</b>edida = indicio cuantitativo de un atributo · <b>M</b>étrica = relaciona medidas individuales · <b>I</b>ndicador = métrica o combinación de métricas que da comprensión del proceso, proyecto o producto</div><div class="m">Escalera: dato suelto → relación → comprensión</div></div></div>
+    <div class="s"><span class="k c">ECDCT</span><div class="b"><div class="x">Medida = indicio cuantitativo de la <b>E</b>xtensión, <b>C</b>antidad, <b>D</b>imensión, <b>C</b>apacidad o <b>T</b>amaño de algún atributo de un producto o proceso</div><div class="m">"En Cada Dato Cabe un Tamaño"</div></div></div>
+    <div class="s"><span class="k v">IEEE</span><div class="b"><div class="x">Medida = medida cuantitativa del <b>grado</b> en el que un sistema, componente o proceso <b>posee un atributo</b> determinado</div><div class="m">La definición "oficial" de medida</div></div></div>
+    <div class="s"><span class="k a">x̄ errores</span><div class="b"><div class="x">Ejemplo de métrica: el <b>número promedio de errores</b> que se encuentran por revisión o por unidad de prueba</div><div class="m">Un promedio relaciona medidas → es métrica</div></div></div>
+  </div>
+</section>
+
+<!-- 3. INDICADORES Y RECOPILACIÓN -->
+<section id="ind">
+  <h2>3 · INDICADORES DE PROYECTO Y RECOPILACIÓN</h2>
+  <div class="grid">
+    <div class="s"><span class="k">ESDAE</span><div class="b"><div class="x"><b>E</b>valuar el estado del proyecto · hacer <b>S</b>eguimiento a los riesgos potenciales · <b>D</b>etectar áreas problema antes de que sean críticas · <b>A</b>justar el flujo y las tareas · <b>E</b>valuar la habilidad del equipo para controlar la calidad</div><div class="m">Empieza y termina con "Evaluar" (E…E) — 5 cosas</div></div></div>
+    <div class="s"><span class="k c">3P → RCE</span><div class="b"><div class="x">Entradas: <b>P</b>roceso de ingeniería · <b>P</b>royecto · <b>P</b>roducto del software → <b>R</b>ecopilación de datos (salen <i>medidas</i>) → <b>C</b>álculo de métricas (salen <i>métricas</i>) → <b>E</b>valuación de métricas (salen <i>indicadores</i>)</div><div class="m">Recopilo → Calculo → Evalúo = Medidas → Métricas → Indicadores</div></div></div>
+  </div>
+</section>
+
+<!-- 4. PROYECTO SEMESTRAL -->
+<section id="proy">
+  <h2>4 · PROYECTO SEMESTRAL · HERRAMIENTAS</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CARSID</span><div class="b"><div class="x"><b>C</b>alidad y análisis de código · <b>A</b>utomatización funcional · <b>R</b>endimiento y carga · <b>S</b>eguridad de aplicaciones · <b>I</b>ntegración y contratos · <b>D</b>evOps y gestión de hallazgos</div><div class="m">"CARS ID": 6 bloques en orden</div></div></div>
+    <div class="s"><span class="k a">1·2·2·3·1·2</span><div class="b"><div class="x">SonarQube (<b>1</b>) · Playwright, Postman (<b>2</b>) · JMeter, Grafana k6 (<b>2</b>) · OWASP ZAP, Snyk, Dependency-Check (<b>3</b>) · Pact (<b>1</b>) · GitHub Actions, DefectDojo (<b>2</b>)</div><div class="m">11 herramientas; Seguridad es el bloque con más (3)</div></div></div>
+    <div class="s"><span class="k c">SonarQube</span><div class="b"><div class="x">Análisis estático y calidad de código: detectar problemas <b>antes de que lleguen a producción</b> (<b>inspección</b>)</div><div class="m">Sonar: "escucha" el código sin ejecutarlo</div></div></div>
+    <div class="s"><span class="k">PW · PM</span><div class="b"><div class="x"><b>Playwright</b> = automatiza recorridos de usuario en <b>navegadores</b> · <b>Postman</b> = envía solicitudes a <b>APIs</b> · objetivo: que la app responda como espera el usuario</div><div class="m">Play = juega en el navegador · Post = manda a la API</div></div></div>
+    <div class="s"><span class="k">JM · k6</span><div class="b"><div class="x"><b>JMeter</b> = modela cargas y mide el comportamiento bajo diferentes condiciones · <b>Grafana k6</b> = pruebas de rendimiento <b>como código</b> en flujos de desarrollo</div><div class="m">"¿Seguirá funcionando cuando muchas personas lo usen a la vez?"</div></div></div>
+    <div class="s"><span class="k r">ZSD</span><div class="b"><div class="x">OWASP <b>Z</b>AP = prueba apps web <b>en ejecución</b> · <b>S</b>nyk = riesgos en código y dependencias (según producto y plan) · <b>D</b>ependency-Check = compara dependencias con vulnerabilidades <b>conocidas</b></div><div class="m">Buscar riesgos antes de que se conviertan en incidentes</div></div></div>
+    <div class="s"><span class="k v">Pact</span><div class="b"><div class="x">Verifica <b>acuerdos de interacción</b> entre un consumidor y un proveedor de API o servicio usando <b>contratos ejecutables</b></div><div class="m">Pacto = contrato: evita que los servicios se rompan entre sí</div></div></div>
+    <div class="s"><span class="k">GA · DD</span><div class="b"><div class="x"><b>GitHub Actions</b> = automatiza flujos ante eventos del repositorio (cambios, pruebas, compilaciones) · <b>DefectDojo</b> = centraliza y organiza hallazgos de seguridad para seguimiento y priorización</div><div class="m">La calidad como parte del flujo de entrega</div></div></div>
+  </div>
+</section>
+
+<!-- 5. PRINCIPIOS -->
+<section id="pri">
+  <h2>5 · PRINCIPIOS DE MEDICIÓN</h2>
+  <div class="grid">
+    <div class="s"><span class="k">FRAIR</span><div class="b"><div class="x"><b>F</b>ormulación (derivar medidas y métricas apropiadas) · <b>R</b>ecolección (mecanismo para acumular datos) · <b>A</b>nálisis (cálculo y herramientas matemáticas) · <b>I</b>nterpretación (evaluar para comprender la calidad) · <b>R</b>etroalimentación (recomendaciones al equipo)</div><div class="m">Suena a "fraile": formula, recoge, analiza, interpreta y aconseja</div></div></div>
+    <div class="s"><span class="k r">A ≠ I</span><div class="b"><div class="x"><b>Análisis</b> = el cálculo de métricas · <b>Interpretación</b> = evaluar las métricas resultantes para comprender la calidad de la representación</div><div class="m">Primero se calcula, luego se entiende</div></div></div>
+  </div>
+</section>
+
+<!-- 6. ATRIBUTOS -->
+<section id="atr">
+  <h2>6 · ATRIBUTOS DE LAS MÉTRICAS EFECTIVAS</h2>
+  <div class="grid">
+    <div class="s"><span class="k">SEC</span><div class="b"><div class="x"><b>S</b>imple y calculable · <b>E</b>mpírica o intuitivamente convincente · <b>C</b>ongruente y objetiva</div><div class="m">Una buena métrica es "SECa": directa y sin ambigüedad</div></div></div>
+    <div class="s"><span class="k c">S · E · C</span><div class="b"><div class="x">S = fácil de aprender a derivar, cálculo sin esfuerzo o tiempo <b>excesivo</b> · E = satisface las <b>nociones intuitivas</b> del ingeniero · C = siempre produce resultados <b>sin ambigüedades</b></div><div class="m">Fácil · convincente · sin dudas</div></div></div>
+  </div>
+</section>
+
+<!-- 7. ENTIDADES -->
+<section id="ent">
+  <h2>7 · ENTIDADES QUE DEBEN MEDIRSE</h2>
+  <div class="grid">
+    <div class="s"><span class="k v">PROD · PROC</span><div class="b"><div class="x"><b>Producto</b> = cualquier artefacto, entregable o documento del ciclo de vida · <b>Procesos</b> = todas las actividades del ciclo de vida, para conocer su estado y mejorarlas</div><div class="m">Lo que se hace · cómo se hace</div></div></div>
+    <div class="s"><span class="k a">CEDPM</span><div class="b"><div class="x"><b>C</b>ódigo fuente · <b>E</b>specificaciones de requisitos · <b>D</b>iseños · <b>P</b>lan de pruebas · <b>M</b>anuales de usuario</div><div class="m">"Cada Entregable Debe Pasar Medición"</div></div></div>
+    <div class="s"><span class="k a">RDPM</span><div class="b"><div class="x"><b>R</b>equisitos · <b>D</b>iseño y construcción · <b>P</b>ruebas · <b>M</b>antenimiento</div><div class="m">Las fases del ciclo de vida, en orden</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">UNIDAD III · PROCESO DE MEDICIÓN DE LA CALIDAD</div>
+
+<!-- 8. GESTIÓN DE LA CALIDAD -->
+<section id="gc">
+  <h2>8 · GESTIÓN DE LA CALIDAD: PRODUCTO Y SERVICIOS</h2>
+  <div class="grid">
+    <div class="s"><span class="k">EGM</span><div class="b"><div class="x">Conjunto de actividades durante la creación y el funcionamiento de los productos para <b>E</b>stablecer, <b>G</b>arantizar y <b>M</b>antener el nivel de calidad requerido</div><div class="m">Establece, Garantiza, Mantiene</div></div></div>
+    <div class="s"><span class="k c">PEMT</span><div class="b"><div class="x">Conjunto de recursos empresariales interrelacionados (<b>P</b>ersonal, <b>E</b>quipos, <b>M</b>etodología, <b>T</b>ecnología) y actividades que convierten las <b>entradas en salidas</b></div><div class="m">Servicio = recursos + actividades: entra algo, sale otra cosa</div></div></div>
+    <div class="s"><span class="k v">M ↔ T</span><div class="b"><div class="x">1) <b>M</b>antener el sistema de producción estable (productos del nivel previsto) · 2) <b>T</b>rasladarlo a un nivel superior (productos de mayor nivel técnico y calidad)</div><div class="m">Sostener vs. subir de nivel</div></div></div>
+  </div>
+</section>
+
+<!-- 9. FUNCIONES Y FASES -->
+<section id="fx">
+  <h2>9 · FUNCIONES DE LA GESTIÓN Y FASES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">POMCCT</span><div class="b"><div class="x"><b>P</b>lanificación · <b>O</b>rganización · <b>M</b>otivación · <b>C</b>ontrol · <b>C</b>omunicación · <b>T</b>oma de decisiones → inherentes a la gestión de la calidad del producto</div><div class="m">"Para Organizar Motiva, Controla, Comunica y Toma decisiones"</div></div></div>
+    <div class="s"><span class="k c">⊂ producción</span><div class="b"><div class="x">Los programas de mejora de la calidad y los sistemas de gestión de la calidad deben <b>integrarse en la producción</b></div><div class="m">La calidad no va aparte: va dentro</div></div></div>
+    <div class="s"><span class="k a">ECPI</span><div class="b"><div class="x"><b>E</b>xaminar todos los casos de incumplimiento de las normas · <b>C</b>alcular los costes de calidad y reducirlos · <b>P</b>rofundizar (mayor profundidad y amplitud) · <b>I</b>mplantar un sistema integral como parte orgánica de la producción</div><div class="m">Examina, Calcula, Profundiza, Implanta</div></div></div>
+    <div class="s"><span class="k a">≥ 2%</span><div class="b"><div class="x">Calcular los costes de calidad con el objetivo de reducirlos <b>al menos en un dos por ciento</b>, demostrando la <b>eficacia y eficiencia</b> de las medidas</div><div class="m">Un 2 % para probar que funciona</div></div></div>
+  </div>
+</section>
+
+<!-- 10. CONSIDERACIONES -->
+<section id="con">
+  <h2>10 · CONSIDERACIONES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">VEPR</span><div class="b"><div class="x"><b>V</b>erificación del cumplimiento de la norma (primer requisito) · <b>E</b>strategia de calidad a partir de un concepto aceptado de calidad · <b>P</b>lanificación estratégica de la calidad dentro de la global · <b>R</b>esponsables claros y seguimiento del programa</div><div class="m">Verifica, Elabora estrategia, Planifica, nombra Responsables</div></div></div>
+    <div class="s"><span class="k c">∞ ciclo de vida</span><div class="b"><div class="x">La calidad sólo puede garantizarse mediante un sistema que la asegure a lo largo de <b>todo el ciclo de vida</b> del producto</div><div class="m">De principio a fin, no solo al final</div></div></div>
+    <div class="s"><span class="k a">CCO</span><div class="b"><div class="x">Requisitos para el <b>C</b>ontrol y ensayo de los productos · <b>C</b>ertificación de la fiabilidad · requisitos para la <b>O</b>rganización de la producción y la gestión de la calidad desde el diseño hasta el funcionamiento</div><div class="m">Controla, Certifica, Organiza</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">UNIDAD III · MÉTRICAS DE PROCESO Y PROYECTO</div>
+
+<!-- 11. QUÉ, QUIÉN, POR QUÉ -->
+<section id="mpp">
+  <h2>11 · MÉTRICAS DE PROCESO Y PROYECTO</h2>
+  <div class="grid">
+    <div class="s"><span class="k">QQPPC</span><div class="b"><div class="x">¿<b>Q</b>ué son? · ¿<b>Q</b>uién lo hace? · ¿<b>P</b>or qué es importante? · ¿Cuál es el <b>P</b>roducto final? · ¿<b>C</b>ómo me aseguro de que lo hice bien?</div><div class="m">Las 5 preguntas del tema</div></div></div>
+    <div class="s"><span class="k">MCE</span><div class="b"><div class="x"><b>M</b>edidas <b>C</b>uantitativas que dan comprensión de la <b>E</b>ficiencia del proceso del software y de los proyectos</div><div class="m">Números para entender qué tan eficientes somos</div></div></div>
+    <div class="s"><span class="k r">G ≠ I</span><div class="b"><div class="x">Los <b>gerentes</b> del software <b>analizan y valoran</b> las métricas · con frecuencia los <b>ingenieros</b> del software <b>recopilan</b> las medidas</div><div class="m">El ingeniero junta, el gerente juzga</div></div></div>
+    <div class="s"><span class="k a">TEM</span><div class="b"><div class="x">Sin medir, el juicio es <b>subjetivo</b> · con la medición se marcan <b>T</b>endencias, se hacen mejores <b>E</b>stimaciones y se logra verdadera <b>M</b>ejoría</div><div class="m">Tendencias, Estimaciones, Mejoría</div></div></div>
+    <div class="s"><span class="k r">¬ individuo</span><div class="b"><div class="x">Un esquema de medición <b>consistente, aunque simple</b>, que nunca debe usarse para <b>valorar, recompensar o castigar</b> el desempeño individual · producto final = un <b>conjunto de métricas</b></div><div class="m">Se mide el proceso, no a la persona</div></div></div>
+  </div>
+</section>
+
+<!-- 12. LO QUE PERMITEN AL GERENTE -->
+<section id="ger">
+  <h2>12 · PERMITEN AL GERENTE · TRIÁNGULO</h2>
+  <div class="grid">
+    <div class="s"><span class="k">VRDAE</span><div class="b"><div class="x"><b>V</b>alorar el estado de un proyecto en marcha · <b>R</b>astrear riesgos potenciales · <b>D</b>escubrir áreas problema antes de que sean "críticas" · <b>A</b>justar el flujo de trabajo o las tareas · <b>E</b>valuar la habilidad del equipo para controlar la calidad</div><div class="m">La misma lista que los indicadores de proyecto (ESDAE), con otros verbos</div></div></div>
+    <div class="s"><span class="k v">△ PPT</span><div class="b"><div class="x"><b>Proceso</b> en el centro del triángulo · vértices: <b>P</b>roducto (arriba), <b>P</b>ersonas, <b>T</b>ecnología</div><div class="m">El proceso entre lo que se hace, quién lo hace y con qué</div></div></div>
+    <div class="s"><span class="k c">CCE</span><div class="b"><div class="x"><b>C</b>aracterísticas del cliente · <b>C</b>ondiciones del negocio · <b>E</b>ntorno de desarrollo</div><div class="m">Lo que rodea al triángulo</div></div></div>
+  </div>
+</section>
+
+<!-- 13. RESULTADOS -->
+<section id="res">
+  <h2>13 · RESULTADOS DE LA MEDICIÓN DEL PROCESO</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">EDPETC</span><div class="b"><div class="x"><b>E</b>rrores descubiertos antes de liberar · <b>D</b>efectos entregados y reportados por usuarios finales · <b>P</b>roductos operativos entregados · <b>E</b>sfuerzo humano empleado · <b>T</b>iempo calendario consumido · <b>C</b>onformidad con la agenda</div><div class="m">6: antes, después, lo entregado, esfuerzo, tiempo, agenda</div></div></div>
+  </div>
+</section>
+
+<!-- 14. LINEAMIENTOS -->
+<section id="lin">
+  <h2>14 · LINEAMIENTOS AL RECOPILAR MÉTRICAS</h2>
+  <div class="grid">
+    <div class="s"><span class="k">SRT</span><div class="b"><div class="x"><b>S</b>entido común y sensibilidad organizacional al interpretar · <b>R</b>etroalimentación regular a quienes recopilan · <b>T</b>rabajar con profesionales y equipos para establecer metas y métricas claras</div><div class="m">3 "sí": sensatez, feedback, trabajo conjunto</div></div></div>
+    <div class="s"><span class="k r">NO × 4</span><div class="b"><div class="x"><b>No</b> usar métricas para valorar a los individuos · <b>Nunca</b> usarlas para amenazar a individuos o equipos · <b>No</b> considerar "negativos" los datos de un área problemática · <b>No</b> obsesionarse con una sola métrica</div><div class="m">7 lineamientos = 3 "sí" + 4 "no"</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">UNIDAD III · MEDICIÓN DEL PROYECTO</div>
+
+<!-- 15. PROYECTO CLÁSICO -->
+<section id="pcl">
+  <h2>15 · MEDICIÓN DEL PROYECTO · CLÁSICOS</h2>
+  <div class="grid">
+    <div class="s"><span class="k c">CIM</span><div class="b"><div class="x">Enseña el estado del proyecto en un momento de ejecución: datos objetivos para <b>C</b>uantificar su desarrollo, <b>I</b>dentificar fallos y definir <b>M</b>ejoras</div><div class="m">Una foto del proyecto en un instante</div></div></div>
+    <div class="s"><span class="k v">TCA</span><div class="b"><div class="x">En cascada se mide el triángulo de proyecto: <b>T</b>iempo, <b>C</b>osto y <b>A</b>lcance · planificación <b>rígida</b>, se priorizan los plazos predefinidos</div><div class="m">El triángulo clásico del proyecto</div></div></div>
+    <div class="s"><span class="k">CPR</span><div class="b"><div class="x"><b>C</b>umplimiento del cronograma · control del <b>P</b>resupuesto (con <b>EVM</b>, valor ganado: costo y progreso en paralelo) · gestión del <b>R</b>iesgo (identificar, analizar y controlar)</div><div class="m">Tiempo, dinero, amenazas</div></div></div>
+  </div>
+</section>
+
+<!-- 16. ÁGILES -->
+<section id="pag">
+  <h2>16 · MEDICIÓN DEL PROYECTO · ÁGILES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">VTC</span><div class="b"><div class="x"><b>V</b>elocidad del equipo (trabajo por sprint en <b>puntos de historia</b>) · <b>T</b>asa de entrega (frecuencia y valor puesto en producción) · <b>C</b>alidad del código (errores, cobertura de pruebas automáticas, deuda técnica)</div><div class="m">"Ve Tú Corriendo": velocidad, entrega, código</div></div></div>
+  </div>
+</section>
+
+<!-- 17. WEB (PROYECTO) -->
+<section id="pweb">
+  <h2>17 · MEDICIÓN DEL PROYECTO · WEB</h2>
+  <div class="grid">
+    <div class="s"><span class="k">RAW</span><div class="b"><div class="x">Tiempos de <b>R</b>espuesta de páginas · tiempo de <b>A</b>ctividad del sitio (cercano al <b>100%</b>) · puntuación de accesibilidad <b>W</b>CAG</div><div class="m">La web en "RAW": rápida, arriba y accesible</div></div></div>
+  </div>
+</section>
+
+<!-- 18. DEVOPS -->
+<section id="pdev">
+  <h2>18 · MEDICIÓN DEL PROYECTO · DEVOPS</h2>
+  <div class="grid">
+    <div class="s"><span class="k">LTM</span><div class="b"><div class="x"><b>L</b>ead time (del código a producción; corto = eficiente) · <b>T</b>asa de cambio fallido (% de despliegues que requieren reversión; baja = estable) · <b>M</b>TTR (tiempo promedio para restaurar; bajo)</div><div class="m">Los tres deben ser BAJOS</div></div></div>
+    <div class="s"><span class="k c">MTTR</span><div class="b"><div class="x"><b>M</b>ean <b>T</b>ime <b>t</b>o <b>R</b>ecovery = tiempo promedio en restaurar el servicio <b>después de una falla</b></div><div class="m">¿Cuánto tardamos en levantarnos?</div></div></div>
+  </div>
+</section>
+
+<!-- 19. MÓVILES (PROYECTO) -->
+<section id="pmov">
+  <h2>19 · MEDICIÓN DEL PROYECTO · MÓVILES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">BRC</span><div class="b"><div class="x">Uso de <b>B</b>atería y datos · tiempos de <b>R</b>espuesta de la app · <b>C</b>rash rate (cierres inesperados; alta = inestable, afecta la retención)</div><div class="m">Batería, Rapidez, Crashes</div></div></div>
+  </div>
+</section>
+
+<!-- 20. GLOBALES (PROYECTO) -->
+<section id="pglo">
+  <h2>20 · MEDICIÓN DEL PROYECTO · GLOBALES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">RCR</span><div class="b"><div class="x">Tiempos de <b>R</b>espuesta de equipos distribuidos (zonas horarias) · <b>C</b>umplimiento de regulaciones locales (múltiples jurisdicciones) · tasa de <b>R</b>esolución de conflictos</div><div class="m">Equipos lejos: responder, cumplir, resolver</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">UNIDAD III · MEDICIÓN DEL PRODUCTO</div>
+
+<!-- 21. PRODUCTO CLÁSICO -->
+<section id="dcl">
+  <h2>21 · MEDICIÓN DEL PRODUCTO · CLÁSICO</h2>
+  <div class="grid">
+    <div class="s"><span class="k c">CRA</span><div class="b"><div class="x">Cuantificar y evaluar atributos del software para garantizar su <b>C</b>alidad, <b>R</b>endimiento y <b>A</b>lineación con los requisitos de usuarios y negocio</div><div class="m">Medir el software en sí, no el proyecto</div></div></div>
+    <div class="s"><span class="k">CTSM</span><div class="b"><div class="x"><b>C</b>alidad funcional (cumple requisitos) · <b>T</b>asa de defectos (bugs en producción) · <b>S</b>atisfacción del cliente (encuestas, reportes) · <b>M</b>antenimiento y soporte (tiempo y esfuerzo)</div><div class="m">"Cada Test Satisface al Mantenedor" — enfoque: estabilidad y funcionalidad</div></div></div>
+  </div>
+</section>
+
+<!-- 22. WEB (PRODUCTO) -->
+<section id="dweb">
+  <h2>22 · MEDICIÓN DEL PRODUCTO · WEB</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CBU</span><div class="b"><div class="x">Tiempos de <b>C</b>arga y respuesta (Google <b>Lighthouse</b>, <b>Pingdom</b>) · rendimiento del <b>B</b>ackend (latencia, recursos, escalabilidad) · <b>U</b>sabilidad y accesibilidad (<b>WCAG 2.0</b>)</div><div class="m">Carga, Backend, Usuario</div></div></div>
+  </div>
+</section>
+
+<!-- 23. MÓVILES (PRODUCTO) -->
+<section id="dmov">
+  <h2>23 · MEDICIÓN DEL PRODUCTO · MÓVILES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">RBRC</span><div class="b"><div class="x"><b>R</b>endimiento en múltiples dispositivos (iOS, Android) · <b>B</b>atería y recursos (CPU/memoria) · <b>R</b>etención y engagement · tasa de <b>C</b>rashes y fallos</div><div class="m">Un alto consumo puede llevar a la desinstalación</div></div></div>
+    <div class="s"><span class="k c">DAU · MAU</span><div class="b"><div class="x"><b>D</b>aily <b>A</b>ctive <b>U</b>sers · <b>M</b>onthly <b>A</b>ctive <b>U</b>sers: cuántos usuarios siguen usando la app después de descargarla</div><div class="m">Diarios vs. mensuales</div></div></div>
+  </div>
+</section>
+
+<!-- 24. DISTRIBUIDAS (PRODUCTO) -->
+<section id="dglo">
+  <h2>24 · MEDICIÓN DEL PRODUCTO · DISTRIBUIDAS O GLOBALES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">LET</span><div class="b"><div class="x"><b>L</b>atencia global (minimizar con <b>CDN</b> o servidores locales) · <b>E</b>scalabilidad (más usuarios sin sacrificar rendimiento; recursos dinámicos) · <b>T</b>olerancia a fallos y resiliencia (recuperarse rápido sin afectar al usuario)</div><div class="m">"LET it scale": lejos, grande y sin caerse</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">REPASO FINAL</div>
+
+<!-- NÚMEROS -->
+<section id="n">
+  <h2>NÚMEROS CLAVE</h2>
+  <div class="nums">
+    <div class="n"><div class="v">3</div><div class="t">conceptos: medida, métrica, indicador</div></div>
+    <div class="n"><div class="v">5</div><div class="t">cosas que permiten los indicadores de proyecto</div></div>
+    <div class="n"><div class="v">6 · 11</div><div class="t">bloques · herramientas del proyecto semestral</div></div>
+    <div class="n"><div class="v">5</div><div class="t">principios de medición (FRAIR)</div></div>
+    <div class="n"><div class="v">3</div><div class="t">atributos de las métricas efectivas</div></div>
+    <div class="n"><div class="v">5 · 4</div><div class="t">entidades de producto · de procesos a medir</div></div>
+    <div class="n"><div class="v">2</div><div class="t">grupos de procesos de gestión de la calidad</div></div>
+    <div class="n"><div class="v">6</div><div class="t">funciones de la gestión como proceso</div></div>
+    <div class="n"><div class="v">4</div><div class="t">fases de implementación de la garantía de calidad</div></div>
+    <div class="n"><div class="v">≥ 2%</div><div class="t">reducción mínima de los costes de calidad (2.ª fase)</div></div>
+    <div class="n"><div class="v">3</div><div class="t">elementos del sistema de gestión de la calidad</div></div>
+    <div class="n"><div class="v">6</div><div class="t">resultados de la medición del proceso</div></div>
+    <div class="n"><div class="v">7</div><div class="t">lineamientos al recopilar métricas</div></div>
+    <div class="n"><div class="v">6 × 3</div><div class="t">ambientes de proyecto × 3 mediciones c/u</div></div>
+    <div class="n"><div class="v">4</div><div class="t">tipos de producto: clásico, web, móvil, distribuido</div></div>
+    <div class="n"><div class="v">4·3·4·3</div><div class="t">mediciones de producto: clásico·web·móvil·distribuido</div></div>
+    <div class="n"><div class="v">~100%</div><div class="t">tiempo de actividad deseado de un sitio web</div></div>
+    <div class="n"><div class="v">WCAG 2.0</div><div class="t">estándar de accesibilidad (producto web)</div></div>
+  </div>
+</section>
+
+<!-- NO CONFUNDIR -->
+<section id="v">
+  <h2>NO CONFUNDIR</h2>
+  <div class="grid">
+    <div class="vs"><div class="l"><b>Medida</b><span>indicio cuantitativo de un atributo</span></div><div class="o">vs</div><div class="r"><b>Métrica</b><span>relaciona medidas individuales</span></div></div>
+    <div class="vs"><div class="l"><b>Métrica</b><span>relación de medidas</span></div><div class="o">vs</div><div class="r"><b>Indicador</b><span>métrica(s) que dan comprensión</span></div></div>
+    <div class="vs"><div class="l"><b>Formulación</b><span>derivar medidas y métricas</span></div><div class="o">vs</div><div class="r"><b>Recolección</b><span>acumular los datos</span></div></div>
+    <div class="vs"><div class="l"><b>Análisis</b><span>calcular métricas</span></div><div class="o">vs</div><div class="r"><b>Interpretación</b><span>evaluarlas para comprender</span></div></div>
+    <div class="vs"><div class="l"><b>Entidad producto</b><span>artefactos y entregables</span></div><div class="o">vs</div><div class="r"><b>Entidad proceso</b><span>actividades del ciclo de vida</span></div></div>
+    <div class="vs"><div class="l"><b>Calidad del producto</b><span>actividades: establecer, garantizar, mantener</span></div><div class="o">vs</div><div class="r"><b>Calidad del servicio</b><span>recursos + actividades: entradas → salidas</span></div></div>
+    <div class="vs"><div class="l"><b>Grupo 1</b><span>mantener estable</span></div><div class="o">vs</div><div class="r"><b>Grupo 2</b><span>trasladar a nivel superior</span></div></div>
+    <div class="vs"><div class="l"><b>Gerentes</b><span>analizan y valoran</span></div><div class="o">vs</div><div class="r"><b>Ingenieros</b><span>recopilan las medidas</span></div></div>
+    <div class="vs"><div class="l"><b>Errores</b><span>descubiertos antes de liberar</span></div><div class="o">vs</div><div class="r"><b>Defectos</b><span>reportados por usuarios finales</span></div></div>
+    <div class="vs"><div class="l"><b>Clásico</b><span>tiempo, costo y alcance</span></div><div class="o">vs</div><div class="r"><b>Ágil</b><span>flexibilidad y entrega de valor</span></div></div>
+    <div class="vs"><div class="l"><b>Lead time</b><span>código → producción</span></div><div class="o">vs</div><div class="r"><b>MTTR</b><span>falla → servicio restaurado</span></div></div>
+    <div class="vs"><div class="l"><b>Tasa de cambio fallido</b><span>% despliegues con reversión</span></div><div class="o">vs</div><div class="r"><b>Crash rate</b><span>cierres inesperados de la app</span></div></div>
+    <div class="vs"><div class="l"><b>Proyecto web</b><span>respuesta, uptime, WCAG</span></div><div class="o">vs</div><div class="r"><b>Producto web</b><span>carga, backend, usabilidad</span></div></div>
+    <div class="vs"><div class="l"><b>Proyecto móvil</b><span>batería y datos</span></div><div class="o">vs</div><div class="r"><b>Producto móvil</b><span>batería y CPU/memoria</span></div></div>
+    <div class="vs"><div class="l"><b>Proyecto global</b><span>equipos distribuidos</span></div><div class="o">vs</div><div class="r"><b>Producto global</b><span>latencia, escalabilidad</span></div></div>
+    <div class="vs"><div class="l"><b>Playwright</b><span>recorridos en navegadores</span></div><div class="o">vs</div><div class="r"><b>Postman</b><span>solicitudes a APIs</span></div></div>
+    <div class="vs"><div class="l"><b>OWASP ZAP</b><span>app web en ejecución</span></div><div class="o">vs</div><div class="r"><b>Dependency-Check</b><span>dependencias vs. vulnerabilidades</span></div></div>
+    <div class="vs"><div class="l"><b>SonarQube</b><span>análisis estático del código</span></div><div class="o">vs</div><div class="r"><b>DefectDojo</b><span>centraliza hallazgos de seguridad</span></div></div>
+  </div>
+</section>
+
+<footer>Calidad de Software · Parcial 2 · generado solo a partir del PDF de la Unidad III · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+<script>
+(function(){
+  "use strict";
+  var body = document.body, btn = document.getElementById("practice"), hint = document.getElementById("hint");
+  function setQuiz(on){
+    body.classList.toggle("quiz", on);
+    btn.classList.toggle("on", on);
+    btn.textContent = on ? "👀 Mostrar todo" : "🙈 Modo práctica";
+    hint.innerHTML = on ? "Usa el título como pista y toca la tarjeta para revelar el significado." : "Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.";
+    document.querySelectorAll(".show").forEach(function(el){ el.classList.remove("show"); });
+    try{ localStorage.setItem("qa_p2_siglas_quiz", on ? "1" : "0"); }catch(e){}
+  }
+  btn.addEventListener("click", function(){ setQuiz(!body.classList.contains("quiz")); });
+  document.querySelector("main").addEventListener("click", function(e){
+    if(!body.classList.contains("quiz")) return;
+    var c = e.target.closest(".s, .vs, .n"); if(c) c.classList.toggle("show");
+  });
+  try{ if(localStorage.getItem("qa_p2_siglas_quiz") === "1") setQuiz(true); }catch(e){}
+
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>

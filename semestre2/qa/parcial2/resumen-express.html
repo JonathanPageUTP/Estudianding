@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen Express · QA Parcial 2</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.tgl{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.part-label{margin:26px 0 8px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+
+/* SECCIONES PLEGABLES */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:9px;scroll-margin-top:100px;overflow:hidden;}
+summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+summary::-webkit-details-marker{display:none;}
+summary .n{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:7px;min-width:28px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+summary h2{font-size:.92rem;flex:1;line-height:1.3;}
+summary .chev{color:var(--faint);font-size:.8rem;transition:transform .2s;}
+details[open] summary .chev{transform:rotate(180deg);}
+.body{padding:0 14px 13px;border-top:1px dashed var(--line-soft);}
+
+ul{margin:10px 0 0;padding:0;list-style:none;}
+li{position:relative;padding:3px 0 3px 15px;font-size:.85rem;color:var(--dim);}
+li::before{content:"▸";position:absolute;left:0;top:3px;color:var(--accent);font-size:.8rem;}
+li b{color:var(--text);}
+.tag{font-family:var(--mono);font-size:.68rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:6px;padding:1px 6px;margin-left:2px;white-space:nowrap;}
+.tag.c{color:var(--cyan);background:var(--cyan-dim);}
+.tag.a{color:var(--amber);background:var(--amber-dim);}
+h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;color:var(--cyan);margin:13px 0 0;}
+.key{margin-top:10px;font-size:.8rem;color:var(--text);background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+.key b{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78rem;}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;color:var(--accent);padding:6px 6px;border-bottom:1px solid var(--line);font-weight:800;}
+td{padding:6px 6px;border-bottom:1px solid var(--line-soft);color:var(--dim);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:600;}
+tr:last-child td{border-bottom:none;}
+
+.glo{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px;}
+.glo div{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--dim);}
+.glo div:last-child{border-bottom:none;}
+.glo b{color:var(--cyan);min-width:118px;flex-shrink:0;font-weight:700;}
+@media (min-width:620px){ .glo{grid-template-columns:1fr 1fr;column-gap:16px;} }
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:26px;padding:0 16px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Resumen <em>express</em></h1>
+    <button class="tgl" id="tgl">Plegar todo</button>
+  </div>
+  <nav class="chips">
+    <a href="#s1">Necesidad</a><a href="#s2">Medida·Métrica</a><a href="#s3">Indicadores</a><a href="#s4">Proyecto semestral</a><a href="#s5">Principios</a>
+    <a href="#s6">Atributos</a><a href="#s7">Entidades</a><a href="#s8">Gestión calidad</a><a href="#s9">Funciones·Fases</a><a href="#s10">Consideraciones</a>
+    <a href="#s11">Métricas P&amp;P</a><a href="#s12">Gerente</a><a href="#s13">Resultados</a><a href="#s14">Lineamientos</a><a href="#s15">Proy. clásico</a>
+    <a href="#s16">Ágil</a><a href="#s17">Proy. web</a><a href="#s18">DevOps</a><a href="#s19">Proy. móvil</a><a href="#s20">Proy. global</a>
+    <a href="#s21">Prod. clásico</a><a href="#s22">Prod. web</a><a href="#s23">Prod. móvil</a><a href="#s24">Prod. distribuido</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint">Todo <b>Calidad de Software · Unidad III</b>, en su orden, lo más corto posible. Toca un título para plegarlo.</p>
+
+<div class="part-label">UNIDAD III · MEDICIÓN DE LA CALIDAD DEL SOFTWARE</div>
+
+<details open id="s1"><summary><span class="n">1</span><h2>Necesidad de la medida del software</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>La IS es una disciplina que <b>aún está aprendiendo a medir</b>; medir ciertas magnitudes siempre ha sido difícil.</li>
+    <li>La medición está ligada a la disciplina de vida del software: <b>planificación, gestión y control</b> de proyectos.</li>
+    <li>Permite conocer el <b>estado</b> del software para hacer <b>ajustes o mejoras</b> en los procesos.</li>
+    <li><b>Métricas del producto:</b> dan comprensión del diseño y la construcción; criterios objetivos para el diseño de <b>datos, arquitectura, interfaces y componentes</b> <span class="tag a">DAIC</span>.</li>
+    <li>Son la base para <b>análisis, diseño, codificación y pruebas</b>.</li>
+  </ul>
+</div></details>
+
+<details open id="s2"><summary><span class="n">2</span><h2>Medida, métrica e indicador</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Medida:</b> indicio cuantitativo de la extensión, cantidad, dimensión, capacidad o tamaño de un atributo de un producto o proceso.</li>
+    <li><b>IEEE:</b> medida cuantitativa del <b>grado</b> en que un sistema, componente o proceso posee un atributo.</li>
+    <li><b>Métrica:</b> relaciona medidas individuales. Ej.: <b>promedio de errores</b> por revisión o por unidad de prueba.</li>
+    <li><b>Indicador:</b> métrica o combinación de métricas que da comprensión del proceso, proyecto o producto.</li>
+  </ul>
+  <div class="key">🪜 <b>Medida → Métrica → Indicador</b>: dato → relación → comprensión.</div>
+</div></details>
+
+<details open id="s3"><summary><span class="n">3</span><h2>Indicadores de proyecto y recopilación</h2><span class="chev">▾</span></summary><div class="body">
+  <h3>LOS INDICADORES DE PROYECTO PERMITEN (5)</h3>
+  <ul>
+    <li>Evaluar el <b>estado</b> del proyecto · seguimiento a los <b>riesgos</b> potenciales · detectar <b>áreas problema</b> antes de que sean críticas · <b>ajustar</b> flujo y tareas · evaluar la <b>habilidad del equipo</b> para controlar la calidad.</li>
+  </ul>
+  <h3>PROCESO DE RECOPILACIÓN DE MÉTRICAS</h3>
+  <table>
+    <tr><th>Paso</th><th>Sale</th></tr>
+    <tr><td>Proceso · Proyecto · Producto del software</td><td>(entradas)</td></tr>
+    <tr><td>Recopilación de datos</td><td>Medidas</td></tr>
+    <tr><td>Cálculo de métricas</td><td>Métricas</td></tr>
+    <tr><td>Evaluación de métricas</td><td>Indicadores</td></tr>
+  </table>
+</div></details>
+
+<details open id="s4"><summary><span class="n">4</span><h2>Proyecto semestral · herramientas</h2><span class="chev">▾</span></summary><div class="body">
+  <table>
+    <tr><th>Bloque</th><th>Herramientas · objetivo</th></tr>
+    <tr><td>1 Calidad y análisis de código</td><td><b>SonarQube</b> (1) · análisis estático, detectar antes de producción (inspección)</td></tr>
+    <tr><td>2 Automatización funcional</td><td><b>Playwright</b> (navegadores) · <b>Postman</b> (APIs) (2)</td></tr>
+    <tr><td>3 Rendimiento y carga</td><td><b>JMeter</b> (modela cargas) · <b>Grafana k6</b> (pruebas como código) (2)</td></tr>
+    <tr><td>4 Seguridad de aplicaciones</td><td><b>OWASP ZAP</b> (web en ejecución) · <b>Snyk</b> (código y dependencias) · <b>Dependency-Check</b> (vulnerabilidades conocidas) (3)</td></tr>
+    <tr><td>5 Integración y contratos</td><td><b>Pact</b> (contratos ejecutables consumidor–proveedor) (1)</td></tr>
+    <tr><td>6 DevOps y gestión de hallazgos</td><td><b>GitHub Actions</b> (flujos ante eventos del repo) · <b>DefectDojo</b> (centraliza hallazgos) (2)</td></tr>
+  </table>
+</div></details>
+
+<details open id="s5"><summary><span class="n">5</span><h2>Principios de medición</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Formulación:</b> derivar medidas y métricas apropiadas.</li>
+    <li><b>Recolección:</b> mecanismo para acumular los datos.</li>
+    <li><b>Análisis:</b> cálculo de métricas y herramientas matemáticas.</li>
+    <li><b>Interpretación:</b> evaluar las métricas para comprender la calidad.</li>
+    <li><b>Retroalimentación:</b> recomendaciones transmitidas al equipo. <span class="tag">FRAIR</span></li>
+  </ul>
+</div></details>
+
+<details open id="s6"><summary><span class="n">6</span><h2>Atributos de las métricas efectivas</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Simple y calculable:</b> fácil de derivar, sin esfuerzo o tiempo excesivo.</li>
+    <li><b>Empírica o intuitivamente convincente:</b> satisface las nociones intuitivas del ingeniero.</li>
+    <li><b>Congruente y objetiva:</b> resultados sin ambigüedades. <span class="tag">SEC</span></li>
+  </ul>
+</div></details>
+
+<details open id="s7"><summary><span class="n">7</span><h2>Entidades que deben medirse</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Producto</b> (artefacto, entregable o documento): código fuente · especificaciones de requisitos · diseños · plan de pruebas · manuales de usuario.</li>
+    <li><b>Procesos</b> (actividades del ciclo de vida, para mejorarlas): requisitos · diseño y construcción · pruebas · mantenimiento.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">UNIDAD III · PROCESO DE MEDICIÓN DE LA CALIDAD</div>
+
+<details open id="s8"><summary><span class="n">8</span><h2>Gestión de la calidad: producto y servicios</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Del producto:</b> actividades durante la creación y funcionamiento para <b>establecer, garantizar y mantener</b> el nivel de calidad requerido.</li>
+    <li><b>De los servicios:</b> recursos interrelacionados (<b>personal, equipos, metodología, tecnología</b>) y actividades que convierten <b>entradas en salidas</b>.</li>
+    <li><b>2 grupos:</b> 1) <b>mantener</b> la producción estable con el nivel previsto · 2) <b>trasladarla a un nivel superior</b> (mayor nivel técnico y calidad).</li>
+  </ul>
+</div></details>
+
+<details open id="s9"><summary><span class="n">9</span><h2>Funciones de la gestión y fases</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Funciones</b> inherentes a la gestión de la calidad: planificación · organización · motivación · control · comunicación · toma de decisiones.</li>
+    <li>Programas de mejora y sistemas de gestión de la calidad deben <b>integrarse en la producción</b>.</li>
+  </ul>
+  <h3>FASES DE IMPLEMENTACIÓN (GARANTÍA DE CALIDAD)</h3>
+  <ul>
+    <li><b>1.</b> Examinar todos los casos de <b>incumplimiento</b> de las normas.</li>
+    <li><b>2.</b> Calcular los <b>costes de calidad</b> y reducirlos <b>≥ 2%</b> (eficacia y eficiencia).</li>
+    <li><b>3.</b> Abordar la calidad con mayor <b>profundidad y amplitud</b> → reducción significativa del coste.</li>
+    <li><b>4.</b> Implantar un <b>sistema integral</b> como parte orgánica de la producción.</li>
+  </ul>
+</div></details>
+
+<details open id="s10"><summary><span class="n">10</span><h2>Consideraciones</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Primer requisito del aseguramiento: <b>verificar el cumplimiento de la norma</b>.</li>
+    <li>Con un concepto aceptado de calidad, las organizaciones desarrollan una <b>estrategia de calidad</b>.</li>
+    <li>La planificación estratégica de la calidad ya forma parte de la <b>planificación estratégica global</b>.</li>
+    <li>Importa identificar claramente a los <b>responsables</b> y el <b>seguimiento</b> del programa.</li>
+    <li>La calidad sólo se garantiza con un sistema a lo largo de <b>todo el ciclo de vida</b>.</li>
+    <li><b>El SGC incluye:</b> control y ensayo de productos · certificación de la fiabilidad · organización de la producción y gestión de la calidad desde el diseño hasta el funcionamiento.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">UNIDAD III · MÉTRICAS DE PROCESO Y PROYECTO</div>
+
+<details open id="s11"><summary><span class="n">11</span><h2>Métricas de proceso y proyecto</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>¿Qué son?</b> Medidas cuantitativas para comprender la <b>eficiencia</b> del proceso y de los proyectos.</li>
+    <li><b>¿Quién?</b> Los <b>gerentes</b> las analizan y valoran; los <b>ingenieros</b> suelen recopilar las medidas.</li>
+    <li><b>¿Por qué?</b> Sin medir, el juicio es subjetivo; midiendo: <b>tendencias, mejores estimaciones, verdadera mejoría</b>.</li>
+    <li><b>Producto final:</b> un conjunto de métricas que da comprensión del proceso y el proyecto.</li>
+    <li><b>¿Cómo hacerlo bien?</b> Esquema <b>consistente, aunque simple</b>; nunca para valorar, recompensar o castigar a un individuo.</li>
+  </ul>
+</div></details>
+
+<details open id="s12"><summary><span class="n">12</span><h2>Permiten al gerente · triángulo</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Permiten al gerente:</b> valorar el estado del proyecto · rastrear riesgos · descubrir áreas problema antes de que sean "críticas" · ajustar flujo o tareas · evaluar la habilidad del equipo para controlar la calidad.</li>
+    <li><b>Diagrama:</b> <b>Proceso</b> al centro de un triángulo con <b>Producto</b> (arriba), <b>Personas</b> y <b>Tecnología</b>; alrededor, características del cliente, condiciones del negocio y entorno de desarrollo.</li>
+  </ul>
+</div></details>
+
+<details open id="s13"><summary><span class="n">13</span><h2>Resultados de la medición del proceso</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Errores descubiertos <b>antes de liberar</b> · defectos entregados y <b>reportados por usuarios</b> · productos operativos entregados · <b>esfuerzo humano</b> · <b>tiempo calendario</b> · conformidad con la <b>agenda</b>.</li>
+  </ul>
+</div></details>
+
+<details open id="s14"><summary><span class="n">14</span><h2>Lineamientos al recopilar métricas</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Sentido común y sensibilidad organizacional al interpretar.</li>
+    <li>Retroalimentación regular a quienes recopilan.</li>
+    <li><b>No</b> usar métricas para valorar a los individuos.</li>
+    <li>Trabajar con los profesionales y equipos para fijar metas y métricas claras.</li>
+    <li><b>Nunca</b> usar métricas para amenazar a individuos o equipos.</li>
+    <li><b>No</b> considerar "negativos" los datos de un área problemática.</li>
+    <li><b>No</b> obsesionarse con una sola métrica ni excluir otras importantes.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">UNIDAD III · MEDICIÓN DEL PROYECTO</div>
+
+<details open id="s15"><summary><span class="n">15</span><h2>Medición del proyecto · clásicos</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Medir un proyecto</b> = su estado en un momento de ejecución: datos objetivos para cuantificar su desarrollo, identificar fallos y definir mejoras.</li>
+    <li><b>Clásicos (cascada):</b> triángulo <b>tiempo, costo y alcance</b>; planificación rígida, plazos predefinidos.</li>
+    <li><b>1.</b> Cumplimiento del <b>cronograma</b> (un retraso afecta costo y alcance).</li>
+    <li><b>2.</b> Control del <b>presupuesto</b>: método de <b>Valor Ganado (EVM)</b>, costo y progreso en paralelo.</li>
+    <li><b>3.</b> Gestión del <b>riesgo</b>: identificar, analizar y controlar en todo el ciclo de vida.</li>
+  </ul>
+</div></details>
+
+<details open id="s16"><summary><span class="n">16</span><h2>Medición del proyecto · ágiles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: <b>flexibilidad</b> y entrega de valor <b>iterativa</b>; se mide eficiencia del equipo, valor para el cliente y calidad.</li>
+    <li><b>1. Velocidad del equipo:</b> trabajo completado por sprint en <b>puntos de historia</b>; predice capacidad futura.</li>
+    <li><b>2. Tasa de entrega:</b> frecuencia y valor del software en producción; meta: más entrega continua.</li>
+    <li><b>3. Calidad del código:</b> errores, cobertura de pruebas automáticas, deuda técnica.</li>
+  </ul>
+</div></details>
+
+<details open id="s17"><summary><span class="n">17</span><h2>Medición del proyecto · web</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: <b>experiencia del usuario</b> y <b>rendimiento</b> del sitio.</li>
+    <li><b>1.</b> Tiempos de respuesta de páginas (carga completa).</li>
+    <li><b>2.</b> Tiempo de actividad: % disponible; cercano al <b>100%</b> = confianza.</li>
+    <li><b>3.</b> Puntuación de accesibilidad <b>WCAG</b> (personas con discapacidades).</li>
+  </ul>
+</div></details>
+
+<details open id="s18"><summary><span class="n">18</span><h2>Medición del proyecto · DevOps</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: <b>automatización y colaboración</b> desarrollo–operaciones; acelerar entregas y mejorar estabilidad.</li>
+    <li><b>1. Lead time</b> (tiempo de ciclo): de escribir el código al despliegue; corto = alta eficiencia.</li>
+    <li><b>2. Tasa de cambio fallido:</b> % de despliegues con errores que requieren reversión; baja = calidad.</li>
+    <li><b>3. MTTR</b> (Mean Time to Recovery): tiempo promedio para restaurar tras una falla; bajo.</li>
+  </ul>
+</div></details>
+
+<details open id="s19"><summary><span class="n">19</span><h2>Medición del proyecto · móviles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: experiencia del usuario y rendimiento en <b>distintos dispositivos</b>; funcionalidad y aceptación en el mercado.</li>
+    <li><b>1.</b> Uso de <b>batería y datos</b> (mucho consumo frustra).</li>
+    <li><b>2.</b> Tiempos de respuesta de la app.</li>
+    <li><b>3. Crash rate:</b> veces que la app se cierra inesperadamente; alta = inestable, afecta la retención.</li>
+  </ul>
+</div></details>
+
+<details open id="s20"><summary><span class="n">20</span><h2>Medición del proyecto · globales</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: <b>comunicación, coordinación y adaptación</b> a contextos locales; equipos cohesivos.</li>
+    <li><b>1.</b> Tiempos de respuesta de equipos distribuidos (zonas horarias y regiones).</li>
+    <li><b>2.</b> Cumplimiento de <b>regulaciones locales</b> (múltiples jurisdicciones).</li>
+    <li><b>3.</b> Tasa de <b>resolución de conflictos</b> interdepartamentales.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">UNIDAD III · MEDICIÓN DEL PRODUCTO</div>
+
+<details open id="s21"><summary><span class="n">21</span><h2>Medición del producto · clásico</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Medir el producto</b> = cuantificar y evaluar atributos para garantizar <b>calidad, rendimiento y alineación</b> con requisitos de usuarios y negocio.</li>
+    <li><b>Clásico:</b> enfoque en calidad, funcionalidad y requisitos iniciales; mide <b>estabilidad y funcionalidad</b>.</li>
+    <li><b>1. Calidad funcional:</b> cumple los requisitos (pruebas funcionales automatizadas o manuales).</li>
+    <li><b>2. Tasa de defectos:</b> bugs en producción; bajo = estable.</li>
+    <li><b>3. Satisfacción del cliente:</b> encuestas o reportes.</li>
+    <li><b>4. Mantenimiento y soporte:</b> tiempo y esfuerzo tras el despliegue.</li>
+  </ul>
+</div></details>
+
+<details open id="s22"><summary><span class="n">22</span><h2>Medición del producto · web</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: experiencia del usuario, <b>eficiencia de uso</b> y rendimiento; velocidad y accesibilidad cruciales.</li>
+    <li><b>1. Tiempos de carga y respuesta:</b> Google <b>Lighthouse</b> y <b>Pingdom</b>.</li>
+    <li><b>2. Rendimiento del backend:</b> solicitudes concurrentes; latencia, recursos, escalabilidad.</li>
+    <li><b>3. Usabilidad y accesibilidad:</b> <b>WCAG 2.0</b>, navegación intuitiva, dispositivos de asistencia.</li>
+  </ul>
+</div></details>
+
+<details open id="s23"><summary><span class="n">23</span><h2>Medición del producto · móviles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>1. Rendimiento en múltiples dispositivos</b> (iOS, Android…): testeo multiplataforma.</li>
+    <li><b>2. Uso de batería y recursos</b> (CPU/memoria): alto consumo → desinstalación.</li>
+    <li><b>3. Retención y engagement:</b> <b>DAU</b> y <b>MAU</b>.</li>
+    <li><b>4. Tasa de crashes y fallos:</b> alta = problemas críticos.</li>
+  </ul>
+</div></details>
+
+<details open id="s24"><summary><span class="n">24</span><h2>Medición del producto · distribuidas o globales</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Enfoque: operar eficientemente en distintas <b>ubicaciones, redes y volúmenes</b> de usuarios.</li>
+    <li><b>1. Latencia global:</b> minimizar con <b>CDN</b> o servidores locales.</li>
+    <li><b>2. Escalabilidad:</b> más usuarios sin perder rendimiento; recursos dinámicos.</li>
+    <li><b>3. Tolerancia a fallos y resiliencia:</b> recuperarse rápido sin afectar al usuario.</li>
+  </ul>
+  <div class="key">🎯 <b>Lo más preguntable:</b> medida vs. métrica vs. indicador · FRAIR · atributos SEC · fases (≥ 2%) · lineamientos · las 3 mediciones de cada ambiente de proyecto y de producto.</div>
+</div></details>
+
+<footer>Calidad de Software · Parcial 2 · resumen del PDF de la Unidad III · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var all = document.querySelectorAll("details"), tgl = document.getElementById("tgl");
+  function label(){
+    var anyOpen = Array.prototype.some.call(all, function(d){ return d.open; });
+    tgl.textContent = anyOpen ? "Plegar todo" : "Abrir todo";
+  }
+  tgl.addEventListener("click", function(){
+    var open = tgl.textContent === "Abrir todo";
+    all.forEach(function(d){ d.open = open; });
+    label();
+  });
+  all.forEach(function(d){ d.addEventListener("toggle", label); });
+  // Al tocar un chip, abrir esa sección
+  document.querySelectorAll("nav.chips a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var d = document.querySelector(a.getAttribute("href"));
+      if(d){ d.open = true; label(); }
+    });
+  });
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+</body>
+</html>
