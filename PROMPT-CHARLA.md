@@ -110,6 +110,9 @@ Claves con prefijo: `<sigla>_charla<N>_…_v1` (ej. `gpi_charla1_flash_v1`).
 ### `resumen.html` — Resumen general
 - Cabe idealmente en una o dos pantallas del celular.
 - **Idea central** en una frase grande (lo que el público debe recordar).
+- **La presentación, parte por parte**: un resumen corto (2–3 viñetas) de **cada parte del PPT**,
+  en su orden, con el expositor y las láminas de cada una; mi parte resaltada. Así sé qué dicen
+  los demás y puedo enlazar con ellos. Las láminas que son solo imagen hay que renderizarlas y leerlas.
 - **Mapa de la charla**: flujo vertical con los puntos numerados, cada uno con su frase-resumen
   de una línea y su tiempo.
 - **Mensaje de cierre** / llamado a la acción.
