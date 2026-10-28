@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen por Punto · Presupuesto de TI</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:460px;margin:0 auto;padding:10px 16px 6px;display:flex;align-items:center;gap:10px;}
+.hd a.back{color:var(--dim);text-decoration:none;font-size:1.1rem;padding:6px 4px;}
+.hd h1{font-size:1rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.fold{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;min-height:40px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;}
+.srch{max-width:460px;margin:0 auto;padding:0 16px 8px;}
+.srch input{width:100%;background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:10px 12px;font-size:16px;font-family:inherit;}
+nav.chips{max-width:460px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+main{max-width:460px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:14px;scroll-margin-top:130px;overflow:hidden;}
+.section h2{font-size:.95rem;padding:12px 14px;cursor:pointer;display:flex;gap:8px;align-items:center;min-height:44px;}
+.section h2 .n{font-family:var(--mono);font-size:.68rem;color:#06140c;background:var(--accent);border-radius:6px;padding:2px 6px;}
+.section h2::after{content:"▾";margin-left:auto;color:var(--faint);transition:transform .2s;}
+.section.closed h2::after{transform:rotate(-90deg);}
+.section.closed .body{display:none;}
+.body{padding:0 14px 14px;}
+ul{margin:0;padding-left:18px;font-size:.86rem;}
+li{margin:4px 0;}
+li b{color:var(--accent);}
+blockquote.q{margin:10px 0;border-left:3px solid var(--cyan);background:var(--cyan-dim);padding:8px 10px;border-radius:0 10px 10px 0;font-size:.82rem;}
+.tblwrap{overflow-x:auto;margin-top:10px;}
+table{border-collapse:collapse;width:100%;min-width:0;font-size:.76rem;}
+td,th{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;vertical-align:top;}
+th{color:var(--faint);font-weight:600;}
+td.n{text-align:right;font-family:var(--mono);white-space:nowrap;}
+tr.t td{font-weight:800;color:var(--accent);}
+.mnemo{margin-top:10px;background:var(--violet-dim);border-radius:12px;padding:10px 12px;}
+.mnemo .w{font-family:var(--mono);font-size:1.15rem;font-weight:900;color:var(--violet);}
+.mnemo p{font-size:.8rem;color:var(--text);margin-top:2px;}
+.error{margin-top:10px;background:var(--red-dim);border-radius:12px;padding:10px 12px;font-size:.8rem;}
+.error b:first-child{color:var(--red);}
+.qa{margin-top:12px;}
+.qa .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;color:var(--amber);margin-bottom:4px;}
+.qa details{background:var(--surface-2);border-radius:10px;padding:8px 10px;margin-top:6px;font-size:.82rem;}
+.qa summary{cursor:pointer;font-weight:600;}
+.qa details p{margin-top:6px;color:var(--dim);}
+mark{background:var(--amber);color:#2a1c08;border-radius:3px;padding:0 2px;}
+#empty{display:none;text-align:center;color:var(--faint);margin-top:30px;font-size:.85rem;}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd"><a class="back" href="index.html" aria-label="Volver">←</a><h1>Resumen por <em>punto</em></h1><button class="fold" id="foldAll">Plegar todo</button></div>
+  <div class="srch"><input id="q" type="search" placeholder="Buscar: SOC, contingencia, 180,000…" autocomplete="off"></div>
+  <nav class="chips"><a href="#s0">0 Intro</a><a href="#s7">7 Tipos</a><a href="#s71">7.1 Año 1</a><a href="#s72">7.2 Año 2</a><a href="#s73">7.3 Años 3–5</a><a href="#s74">7.4 Consolidado</a><a href="#sf">Cierre</a></nav>
+</header>
+<main>
+<p class="hint">Basado en <b>Proyecto N°1 Doc. GRTIC 1LS241.pdf</b> (sección 7) y láminas 17–18 del PPT. Toca un título para plegarlo.</p>
+
+<section class="section" id="s0"><h2><span class="n">0</span>Intro · el total</h2><div class="body">
+<blockquote class="q">"El presupuesto de TI de Banco Horizonte Panamá suma USD 6,793,600 en cinco años, en coherencia con la estrategia del negocio (sección 2.5) y con los objetivos estratégicos de TI (sección 4)."</blockquote>
+<ul>
+  <li>Banco ficticio mediano: <b>5 sucursales</b>, unos <b>200 colaboradores</b> y unos <b>40,000 clientes</b>.</li>
+  <li>Promedio de <b>USD 1,358,720 al año</b>.</li>
+  <li>El inventario (sección 6) son los activos que este presupuesto sostiene.</li>
+</ul>
+<div class="qa"><div class="lbl">POSIBLES PREGUNTAS</div>
+  <details><summary>¿Es mucho o poco para un banco así?</summary><p>Va de USD 5,940 por colaborador (año 1) a USD 7,370 (año 5), entre el 42 % y el 53 % del límite inferior referencial del sector (USD 14,000 al año, Tessier 2026). Por cliente son unos USD 34 al año.</p></details>
+  <details><summary>¿El portafolio de proyectos es un gasto aparte?</summary><p>No. Las asignaciones del portafolio ya están incluidas en el presupuesto del PETI; no son gasto adicional a los USD 6,793,600.</p></details>
+</div>
+</div></section>
+
+<section class="section" id="s7"><h2><span class="n">7</span>Cómo se arma el presupuesto</h2><div class="body">
+<blockquote class="q"><b>CAPEX</b>: inversiones de capital: adquisiciones de equipos, plataformas o proyectos con beneficio de varios años.<br><b>OPEX</b>: gastos operativos: costos recurrentes como licencias, mantenimiento, servicios gestionados, personal y capacitación.</blockquote>
+<ul>
+  <li><b>Contingencia del 10 %</b> cada año: variaciones de precios, imprevistos técnicos o ajustes en el alcance de los proyectos.</li>
+  <li>Distribución <b>progresiva</b>:
+    <ul><li>Año 1: base tecnológica, seguridad y continuidad.</li><li>Año 2: canales digitales, automatización y datos.</li><li>Años 3–5: innovación, modernización y renovación del ciclo de vida de la infraestructura.</li></ul></li>
+  <li>Peso sobre el total: CAPEX <b>21.5 %</b> (1,458,000) · OPEX <b>69.5 %</b> (4,718,000) · contingencia <b>9.1 %</b> (617,600).</li>
+</ul>
+<div class="mnemo"><div class="w">COC · BCI</div><p>CAPEX, OPEX, Contingencia · Base, Cliente, Innovación.</p></div>
+<div class="error"><b>No confundir:</b> la contingencia es el <b>10 % de cada año</b>; sobre el total de 5 años pesa <b>9.1 %</b> porque se calcula sobre el subtotal, no sobre el total final.</div>
+<div class="qa"><div class="lbl">POSIBLES PREGUNTAS</div>
+  <details><summary>¿Para qué sirve la contingencia?</summary><p>Para cubrir variaciones de precios, imprevistos técnicos o ajustes en el alcance de los proyectos.</p></details>
+  <details><summary>¿Por qué el OPEX es casi el 70 %?</summary><p>Porque incluye lo recurrente: personal, licencias (sobre todo el Core), servicios gestionados y capacitación. Desde el año 3 el banco sostiene lo ya implementado.</p></details>
+</div>
+</div></section>
+
+<section class="section" id="s71"><h2><span class="n">7.1</span>Corto plazo · Año 1 · Base segura</h2><div class="body">
+<ul>
+  <li>Objetivo: <b>estabilizar y proteger</b> la operación actual.</li>
+  <li>Renueva parte de la infraestructura, refuerza la ciberseguridad e implementa respaldo.</li>
+  <li>Responde a la estrategia de <b>reforzar los controles de riesgo</b> y mejorar los procesos internos prioritarios.</li>
+</ul>
+<div class="tblwrap"><table>
+<tr><th>Rubro</th><th>Obj.</th><th>Tipo</th><th style="text-align:right">USD</th></tr>
+<tr><td>Equipos de usuario final (lote 1 de 60)</td><td>1</td><td>CAPEX</td><td class="n">54,000</td></tr>
+<tr><td>Red y conectividad redundante (5 sucursales)</td><td>1, 5</td><td>CAPEX</td><td class="n">85,000</td></tr>
+<tr><td>Servidores, almacenamiento y virtualización</td><td>1</td><td>CAPEX</td><td class="n">120,000</td></tr>
+<tr><td>Respaldo y recuperación de información</td><td>5</td><td>CAPEX</td><td class="n">40,000</td></tr>
+<tr><td>Ciberseguridad: EDR, MFA, firewall, monitoreo</td><td>3</td><td>OPEX</td><td class="n">95,000</td></tr>
+<tr><td>Core bancario: mantenimiento y licencias</td><td>1</td><td>OPEX</td><td class="n">180,000</td></tr>
+<tr><td>Ofimática y colaboración (200 usuarios)</td><td>1, 4</td><td>OPEX</td><td class="n">53,000</td></tr>
+<tr><td>Mesa de servicio y gestión de incidentes</td><td>4, 5</td><td>OPEX</td><td class="n">18,000</td></tr>
+<tr><td>Auditoría y pruebas de penetración</td><td>3</td><td>OPEX</td><td class="n">30,000</td></tr>
+<tr><td>Capacitación en seguridad y uso de sistemas</td><td>8</td><td>OPEX</td><td class="n">25,000</td></tr>
+<tr><td>Personal de TI (11 colaboradores)</td><td>Todos</td><td>OPEX</td><td class="n">380,000</td></tr>
+<tr class="t"><td colspan="3">Subtotal (CAPEX 299,000 + OPEX 781,000)</td><td class="n">1,080,000</td></tr>
+<tr class="t"><td colspan="3">Contingencia 10 %</td><td class="n">108,000</td></tr>
+<tr class="t"><td colspan="3">Total año 1</td><td class="n">1,188,000</td></tr>
+</table></div>
+<div class="mnemo"><div class="w">SERR + PCC</div><p>CAPEX: Servidores, Equipos, Red, Respaldo · OPEX grandes: Personal, Core, Ciberseguridad.</p></div>
+<div class="qa"><div class="lbl">POSIBLES PREGUNTAS</div>
+  <details><summary>¿Cuál es el gasto más grande del año 1?</summary><p>El personal de TI: USD 380,000 (32 % del año 1). Le sigue el Core bancario con 180,000 (15.2 % del año y 23 % del OPEX).</p></details>
+  <details><summary>¿Cuánto va a seguridad en el año 1?</summary><p>USD 125,000: 95,000 en EDR, MFA, firewall y monitoreo y 30,000 en auditoría y pruebas de penetración (10.5 % del año 1).</p></details>
+  <details><summary>¿Por qué solo 60 equipos?</summary><p>La renovación es en dos lotes de 60 (años 1 y 2), 120 equipos en total para unos 200 usuarios (60 %).</p></details>
+</div>
+</div></section>
+
+<section class="section" id="s72"><h2><span class="n">7.2</span>Mediano plazo · Año 2 · Cliente digital</h2><div class="body">
+<ul>
+  <li>Con la base fortalecida, invierte en lo que impacta <b>al cliente y a la eficiencia operativa</b>.</li>
+  <li>Banca en línea y app móvil, automatización de apertura de cuentas y préstamos, plataforma de inteligencia de negocios.</li>
+  <li>Sitio alterno de recuperación en la nube.</li>
+  <li>Apoya la estrategia de <b>ampliar la base de clientes y los productos para PYMES</b>.</li>
+</ul>
+<div class="tblwrap"><table>
+<tr><th>Rubro</th><th>Obj.</th><th>Tipo</th><th style="text-align:right">USD</th></tr>
+<tr><td>Banca en línea y app móvil (incorporación digital)</td><td>2</td><td>CAPEX</td><td class="n">180,000</td></tr>
+<tr><td>Automatización (apertura de cuentas, préstamos)</td><td>4</td><td>CAPEX</td><td class="n">90,000</td></tr>
+<tr><td>Plataforma de datos e inteligencia de negocios</td><td>6</td><td>CAPEX</td><td class="n">70,000</td></tr>
+<tr><td>Equipos de usuario final (lote 2 de 60)</td><td>1</td><td>CAPEX</td><td class="n">54,000</td></tr>
+<tr><td>Sitio alterno de recuperación en la nube</td><td>5</td><td>OPEX</td><td class="n">60,000</td></tr>
+<tr><td>Core bancario</td><td>1</td><td>OPEX</td><td class="n">189,000</td></tr>
+<tr><td>Ofimática y colaboración</td><td>1, 4</td><td>OPEX</td><td class="n">55,000</td></tr>
+<tr><td>Ciberseguridad: licencias y SOC gestionado</td><td>3</td><td>OPEX</td><td class="n">120,000</td></tr>
+<tr><td>Mesa de servicio</td><td>4, 5</td><td>OPEX</td><td class="n">18,000</td></tr>
+<tr><td>Auditoría y pruebas de penetración</td><td>3</td><td>OPEX</td><td class="n">30,000</td></tr>
+<tr><td>Capacitación del personal</td><td>8</td><td>OPEX</td><td class="n">30,000</td></tr>
+<tr><td>Personal de TI (12, + analista de datos)</td><td>Todos</td><td>OPEX</td><td class="n">410,000</td></tr>
+<tr class="t"><td colspan="3">Subtotal (CAPEX 394,000 + OPEX 912,000)</td><td class="n">1,306,000</td></tr>
+<tr class="t"><td colspan="3">Contingencia 10 %</td><td class="n">130,600</td></tr>
+<tr class="t"><td colspan="3">Total año 2</td><td class="n">1,436,600</td></tr>
+</table></div>
+<div class="mnemo"><div class="w">BABE</div><p>CAPEX: Banca en línea y app, Automatización, BI, Equipos.</p></div>
+<div class="error"><b>No confundir:</b> respaldo <b>local</b> (año 1, CAPEX 40k) ≠ sitio alterno <b>en la nube</b> (año 2, OPEX 60k). EDR/MFA (año 1, 95k) ≠ <b>SOC</b> gestionado (año 2, 120k).</div>
+<div class="qa"><div class="lbl">POSIBLES PREGUNTAS</div>
+  <details><summary>¿Por qué crece el total un 20.9 %?</summary><p>Porque el año 2 ejecuta los proyectos de canales digitales, automatización y datos (CAPEX 394,000), y se suman el SOC, el sitio en la nube y un analista de datos.</p></details>
+  <details><summary>¿Por qué se contrata un analista de datos?</summary><p>Para administrar la plataforma de BI que entra en el año 2; el personal de TI pasa de 11 a 12.</p></details>
+</div>
+</div></section>
+
+<section class="section" id="s73"><h2><span class="n">7.3</span>Largo plazo · Años 3–5</h2><div class="body">
+<ul>
+  <li>Objetivo: posicionar al banco como una <b>entidad moderna y competitiva</b>.</li>
+  <li>Modernizar la integración del Core mediante <b>APIs</b>, analítica para <b>prevención de fraude</b> y evaluación de <b>nuevas soluciones</b>.</li>
+  <li>Renovar los <b>servidores del año 1</b> al cumplir su ciclo de vida.</li>
+  <li>⚠️ No tiene lámina propia: se explica con las barras de los años 3–5 de la lámina 17.</li>
+</ul>
+<div class="tblwrap"><table>
+<tr><th>Rubro (USD)</th><th style="text-align:right">Año 3</th><th style="text-align:right">Año 4</th><th style="text-align:right">Año 5</th></tr>
+<tr><td>Innovación y modernización · CAPEX</td><td class="n">200,000</td><td class="n">150,000</td><td class="n">120,000</td></tr>
+<tr><td>Renovación de infraestructura · CAPEX</td><td class="n">55,000</td><td class="n">70,000</td><td class="n">170,000</td></tr>
+<tr><td>Licenciamiento y mantenimiento · OPEX</td><td class="n">285,000</td><td class="n">295,000</td><td class="n">305,000</td></tr>
+<tr><td>Ciberseguridad y continuidad (SOC, DRP, auditorías) · OPEX</td><td class="n">220,000</td><td class="n">230,000</td><td class="n">240,000</td></tr>
+<tr><td>Personal de TI · OPEX</td><td class="n">430,000</td><td class="n">450,000</td><td class="n">470,000</td></tr>
+<tr><td>Capacitación · OPEX</td><td class="n">30,000</td><td class="n">35,000</td><td class="n">35,000</td></tr>
+<tr class="t"><td>Subtotal</td><td class="n">1,220,000</td><td class="n">1,230,000</td><td class="n">1,340,000</td></tr>
+<tr class="t"><td>Contingencia 10 %</td><td class="n">122,000</td><td class="n">123,000</td><td class="n">134,000</td></tr>
+<tr class="t"><td>Total anual</td><td class="n">1,342,000</td><td class="n">1,353,000</td><td class="n">1,474,000</td></tr>
+</table></div>
+<div class="mnemo"><div class="w">Innovación ↓ · Renovación ↑</div><p>Innovación 200 → 150 → 120 mil; renovación 55 → 70 → 170 mil.</p></div>
+<div class="qa"><div class="lbl">POSIBLES PREGUNTAS</div>
+  <details><summary>¿Por qué el año 5 es el más caro?</summary><p>Porque se renuevan los servidores adquiridos en el año 1 (renovación 170,000) y todo el OPEX sigue creciendo.</p></details>
+  <details><summary>¿Por qué baja la innovación?</summary><p>El año 3 arranca las APIs del Core y la prevención de fraude; los años 4 y 5 consolidan y evalúan nuevas soluciones.</p></details>
+</div>
+</div></section>
+
+<section class="section" id="s74"><h2><span class="n">7.4</span>Resumen consolidado</h2><div class="body">
+<div class="tblwrap"><table>
+<tr><th>Año</th><th style="text-align:right">CAPEX</th><th style="text-align:right">OPEX</th><th style="text-align:right">Cont.</th><th style="text-align:right">Total</th></tr>
+<tr><td>1</td><td class="n">299,000</td><td class="n">781,000</td><td class="n">108,000</td><td class="n">1,188,000</td></tr>
+<tr><td>2</td><td class="n">394,000</td><td class="n">912,000</td><td class="n">130,600</td><td class="n">1,436,600</td></tr>
+<tr><td>3</td><td class="n">255,000</td><td class="n">965,000</td><td class="n">122,000</td><td class="n">1,342,000</td></tr>
+<tr><td>4</td><td class="n">220,000</td><td class="n">1,010,000</td><td class="n">123,000</td><td class="n">1,353,000</td></tr>
+<tr><td>5</td><td class="n">290,000</td><td class="n">1,050,000</td><td class="n">134,000</td><td class="n">1,474,000</td></tr>
+<tr class="t"><td>Total</td><td class="n">1,458,000</td><td class="n">4,718,000</td><td class="n">617,600</td><td class="n">6,793,600</td></tr>
+</table></div>
+<ul style="margin-top:10px">
+  <li>El <b>año 2</b> concentra la mayor <b>inversión de capital</b>: canales digitales, automatización y datos.</li>
+  <li>Desde el <b>año 3</b> pesa más el <b>gasto operativo</b>: el banco sostiene las capacidades ya implementadas.</li>
+  <li>Se <b>revisa anualmente</b> según los resultados de los proyectos, los cambios regulatorios de la <b>SBP</b> y la evolución del negocio.</li>
+  <li>Reparto del total por año (lámina 17): 17.5 % · 21.1 % · 19.8 % · 19.9 % · 21.7 %.</li>
+</ul>
+<div class="error"><b>No confundir:</b> el año 2 tiene el mayor <b>CAPEX</b>, pero el mayor <b>total</b> es el del año 5 (1,474,000).</div>
+<div class="qa"><div class="lbl">POSIBLES PREGUNTAS</div>
+  <details><summary>¿Cuánto crece el OPEX?</summary><p>Un 34.4 % del año 1 al 5: de USD 781,000 a 1,050,000.</p></details>
+  <details><summary>¿Qué pasa si hay un incidente grave?</summary><p>El costo promedio de un incidente en el sector financiero (USD 5.56 millones) equivale a 4.7 veces el presupuesto del año 1 y al 82 % del presupuesto a cinco años; la contingencia anual cubre menos del 2.5 % de ese costo.</p></details>
+  <details><summary>¿Quién aprueba y administra el presupuesto?</summary><p>La Junta Directiva / Comité de Riesgos aprueba el PETI y el presupuesto; el Comité de TI revisa el presupuesto y los indicadores; la Gerencia de TI lo administra (matriz RACI).</p></details>
+</div>
+</div></section>
+
+<section class="section" id="sf"><h2><span class="n">FIN</span>Cierre</h2><div class="body">
+<ul>
+  <li>Frase final: <b>"Primero una base segura; después, el cliente digital."</b></li>
+  <li>Pase a Jimmy Ye (8. Portafolio): las partidas se organizan en 4 programas y 12 proyectos.</li>
+</ul>
+</div></section>
+
+<p id="empty">😶 Sin resultados. Prueba con otra palabra o cifra.</p>
+<footer>Generado solo a partir de los 2 PDF del Proyecto N°1 · UTP · FISC · uso académico.</footer>
+</main>
+
+<script>
+(function(){
+  var secs=[].slice.call(document.querySelectorAll(".section"));
+  secs.forEach(function(s){
+    s.querySelector("h2").addEventListener("click",function(){s.classList.toggle("closed");});
+    s._html=s.querySelector(".body").innerHTML;
+  });
+  var fb=document.getElementById("foldAll");
+  fb.onclick=function(){
+    var close=fb.textContent==="Plegar todo";
+    secs.forEach(function(s){s.classList.toggle("closed",close);});
+    fb.textContent=close?"Abrir todo":"Plegar todo";
+  };
+  function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+  function mark(node,re){
+    if(node.nodeType===3){
+      var m=node.nodeValue.match(re); if(!m)return;
+      var span=document.createElement("span");
+      span.innerHTML=node.nodeValue.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(re,"<mark>$&</mark>");
+      node.parentNode.replaceChild(span,node);
+    } else if(node.nodeType===1 && !/^(MARK|SCRIPT)$/.test(node.tagName)){
+      [].slice.call(node.childNodes).forEach(function(c){mark(c,re);});
+    }
+  }
+  document.getElementById("q").addEventListener("input",function(){
+    var v=this.value.trim(), any=false;
+    secs.forEach(function(s){
+      var b=s.querySelector(".body"); b.innerHTML=s._html;
+      if(!v){s.style.display="";return;}
+      var hit=(s.textContent.toLowerCase().indexOf(v.toLowerCase())>=0);
+      s.style.display=hit?"":"none";
+      if(hit){any=true;s.classList.remove("closed");s.querySelectorAll("details").forEach(function(d){if(d.textContent.toLowerCase().indexOf(v.toLowerCase())>=0)d.open=true;});mark(b,new RegExp(esc(v),"gi"));}
+    });
+    document.getElementById("empty").style.display=(v&&!any)?"block":"none";
+  });
+})();
+</script>
+</body>
+</html>

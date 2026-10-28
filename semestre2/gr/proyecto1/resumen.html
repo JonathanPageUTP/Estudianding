@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen General · Presupuesto de TI</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,p{margin:0;}
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:460px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd a.back{color:var(--dim);text-decoration:none;font-size:1.1rem;padding:6px 4px;}
+.hd h1{font-size:1rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+main{max-width:460px;margin:0 auto;padding:4px 16px 0;}
+.idea{margin-top:16px;background:linear-gradient(135deg,var(--accent-dim),var(--surface));border:1px solid var(--accent-dim);border-radius:18px;padding:18px 16px;text-align:center;}
+.idea .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;color:var(--accent);}
+.idea .big{font-size:1.35rem;font-weight:800;margin-top:6px;line-height:1.25;}
+.idea .num{font-family:var(--mono);font-size:1.6rem;font-weight:900;color:var(--amber);margin-top:10px;}
+.idea .sub{font-size:.78rem;color:var(--dim);}
+.split{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;}
+.split div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 4px;text-align:center;}
+.split b{display:block;font-family:var(--mono);font-size:.8rem;color:var(--cyan);}
+.split span{font-size:.68rem;color:var(--dim);}
+h2.sec{font-size:.72rem;font-family:var(--mono);letter-spacing:.06em;color:var(--accent);margin:22px 0 8px;display:flex;align-items:center;gap:8px;}
+h2.sec::after{content:"";flex:1;height:1px;background:var(--line);}
+.flow{position:relative;padding-left:26px;}
+.flow::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:var(--line);}
+.st{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 11px;margin-bottom:8px;}
+.st::before{content:attr(data-n);position:absolute;left:-26px;top:8px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#06140c;font-family:var(--mono);font-size:.56rem;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.st .t{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:.88rem;}
+.st .t i{font-style:normal;font-family:var(--mono);font-size:.7rem;color:var(--amber);white-space:nowrap;}
+.st p{font-size:.8rem;color:var(--dim);margin-top:2px;}
+.bars{display:grid;gap:6px;}
+.bar{display:grid;grid-template-columns:44px 1fr 92px;gap:8px;align-items:center;font-size:.74rem;}
+.bar .tr{height:10px;background:var(--surface-2);border-radius:6px;overflow:hidden;}
+.bar .tr span{display:block;height:100%;background:var(--cyan);border-radius:6px;}
+.bar .v{font-family:var(--mono);text-align:right;color:var(--text);}
+ul.pts{margin:0;padding-left:18px;font-size:.86rem;}
+ul.pts li{margin:5px 0;}
+ul.pts b{color:var(--accent);}
+.close{background:var(--violet-dim);border-radius:14px;padding:14px;text-align:center;font-size:1rem;font-weight:700;margin-top:8px;}
+.close small{display:block;font-weight:400;font-size:.76rem;color:var(--dim);margin-top:6px;}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;}
+</style>
+</head>
+<body>
+<header><div class="hd"><a class="back" href="index.html" aria-label="Volver">←</a><h1>Resumen <em>general</em></h1></div></header>
+<main>
+
+<div class="idea">
+  <div class="lbl">IDEA CENTRAL</div>
+  <div class="big">Primero una base segura; después, el cliente digital.</div>
+  <div class="num">USD 6,793,600</div>
+  <div class="sub">Presupuesto de TI de Banco Horizonte Panamá para cinco años</div>
+</div>
+<div class="split">
+  <div><b>1,458,000</b><span>CAPEX · 21.5 %</span></div>
+  <div><b>4,718,000</b><span>OPEX · 69.5 %</span></div>
+  <div><b>617,600</b><span>Contingencia · 10 %/año</span></div>
+</div>
+
+<h2 class="sec">MAPA DE LA CHARLA · 3:00</h2>
+<div class="flow">
+  <div class="st" data-n="0"><div class="t">Intro <i>0:15</i></div><p>USD 6,793,600 en 5 años, alineado al negocio y a los objetivos de TI.</p></div>
+  <div class="st" data-n="7"><div class="t">Cómo se arma <i>0:35</i></div><p>CAPEX vs. OPEX, contingencia del 10 % y distribución progresiva.</p></div>
+  <div class="st" data-n="7.1"><div class="t">Año 1 · Base segura <i>0:35</i></div><p>1,188,000: servidores, red, 60 equipos, ciberseguridad, respaldo y Core.</p></div>
+  <div class="st" data-n="7.2"><div class="t">Año 2 · Cliente digital <i>0:35</i></div><p>1,436,600: banca en línea y app, automatización, BI, nube y SOC.</p></div>
+  <div class="st" data-n="7.3"><div class="t">Años 3–5 · Innovación <i>0:25</i></div><p>APIs del Core, prevención de fraude y renovación por ciclo de vida.</p></div>
+  <div class="st" data-n="7.4"><div class="t">Resumen consolidado <i>0:20</i></div><p>Año 2 = más CAPEX; desde el año 3 pesa el OPEX; revisión anual.</p></div>
+  <div class="st" data-n="FIN"><div class="t">Cierre → Jimmy <i>0:15</i></div><p>"Primero una base segura; después, el cliente digital."</p></div>
+</div>
+
+<h2 class="sec">TOTAL POR AÑO</h2>
+<div class="bars">
+  <div class="bar"><span>Año 1</span><div class="tr"><span style="width:80.6%"></span></div><span class="v">1,188,000</span></div>
+  <div class="bar"><span>Año 2</span><div class="tr"><span style="width:97.5%"></span></div><span class="v">1,436,600</span></div>
+  <div class="bar"><span>Año 3</span><div class="tr"><span style="width:91%"></span></div><span class="v">1,342,000</span></div>
+  <div class="bar"><span>Año 4</span><div class="tr"><span style="width:91.8%"></span></div><span class="v">1,353,000</span></div>
+  <div class="bar"><span>Año 5</span><div class="tr"><span style="width:100%"></span></div><span class="v">1,474,000</span></div>
+</div>
+
+<h2 class="sec">EL CONTENIDO EN 7 PUNTOS</h2>
+<ul class="pts">
+  <li>Total de <b>USD 6,793,600</b> en cinco años, coherente con la estrategia del negocio y los objetivos de TI.</li>
+  <li><b>CAPEX</b>: adquisiciones con beneficio de varios años. <b>OPEX</b>: licencias, mantenimiento, servicios gestionados, personal y capacitación.</li>
+  <li>Cada año lleva una <b>contingencia del 10 %</b> para precios, imprevistos y cambios de alcance.</li>
+  <li><b>Año 1</b> estabiliza y protege: infraestructura, ciberseguridad, respaldo y Core.</li>
+  <li><b>Año 2</b> va al cliente: banca en línea y app, automatización, BI y recuperación en la nube.</li>
+  <li><b>Años 3–5</b>: APIs del Core, prevención de fraude, nuevas soluciones y renovación de servidores.</li>
+  <li>El año 2 tiene el mayor CAPEX; desde el año 3 domina el OPEX. Se <b>revisa cada año</b> (resultados, SBP, negocio).</li>
+</ul>
+
+<h2 class="sec">MENSAJE DE CIERRE</h2>
+<div class="close">Primero una base segura; después, el cliente digital.<small>Las partidas se organizan en programas y proyectos → Jimmy Ye, 8. Portafolio.</small></div>
+
+<footer>Basado en Proyecto N°1 Doc. (sección 7) y PPT (láminas 17–18).</footer>
+</main>
+</body>
+</html>

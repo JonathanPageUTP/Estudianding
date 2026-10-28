@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Palabras Clave · Presupuesto de TI</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.4;padding-bottom:40px;}
+h1,h2,p{margin:0;}
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:460px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd a.back{color:var(--dim);text-decoration:none;font-size:1.1rem;padding:6px 4px;}
+.hd h1{font-size:1rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.practice{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;min-height:40px;font-size:.75rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+.practice.on{background:var(--amber);border-color:var(--amber);color:#2a1c08;}
+nav.chips{max-width:460px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+main{max-width:460px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+section{margin-top:22px;scroll-margin-top:100px;}
+section h2{font-size:.72rem;font-family:var(--mono);letter-spacing:.06em;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+section h2::after{content:"";flex:1;height:1px;background:var(--line);}
+.grid{display:grid;grid-template-columns:1fr;gap:7px;}
+.s{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:11px;align-items:flex-start;}
+.k{font-family:var(--mono);font-weight:800;font-size:.86rem;letter-spacing:.02em;color:var(--accent);background:var(--accent-dim);border-radius:8px;padding:5px 8px;flex-shrink:0;min-width:62px;max-width:40%;text-align:center;overflow-wrap:anywhere;}
+.k.c{color:var(--cyan);background:var(--cyan-dim);}
+.k.a{color:var(--amber);background:var(--amber-dim);}
+.k.v{color:var(--violet);background:var(--violet-dim);}
+.b{flex:1;min-width:0;}
+.tt{font-size:.66rem;font-family:var(--mono);color:var(--violet);margin-bottom:2px;}
+.x{font-size:.84rem;color:var(--text);}
+.x b{color:var(--accent);}
+.m{font-size:.74rem;color:var(--faint);font-style:italic;margin-top:3px;}
+.vs{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:.78rem;}
+.vs .r{text-align:right;}
+.vs b{font-family:var(--mono);color:var(--cyan);display:block;font-size:.8rem;}
+.vs .o{font-family:var(--mono);font-size:.68rem;color:var(--red);}
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+.n{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;}
+.n .v{font-family:var(--mono);font-size:1.05rem;font-weight:800;color:var(--amber);overflow-wrap:anywhere;}
+.n .t{font-size:.7rem;color:var(--dim);margin-top:2px;}
+.seq{background:var(--surface);border:1px solid var(--accent-dim);border-radius:14px;padding:14px;text-align:center;}
+.seq .big{font-family:var(--mono);font-size:1.5rem;font-weight:900;color:var(--accent);letter-spacing:.06em;}
+.seq ol{text-align:left;font-size:.82rem;margin:10px 0 0;padding-left:20px;}
+body.quiz .s,body.quiz .vs,body.quiz .n{cursor:pointer;}
+body.quiz .s .b .x,body.quiz .s .b .m,body.quiz .vs span,body.quiz .n .t{filter:blur(6px);opacity:.5;transition:filter .2s,opacity .2s;user-select:none;}
+body.quiz .s.show .b .x,body.quiz .s.show .b .m,body.quiz .vs.show span,body.quiz .n.show .t{filter:none;opacity:1;}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;padding:0 16px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd">
+    <a class="back" href="index.html" aria-label="Volver">←</a>
+    <h1>Palabras <em>clave</em></h1>
+    <button class="practice" id="practice">🙈 Modo práctica</button>
+  </div>
+  <nav class="chips">
+    <a href="#seq">Secuencia</a><a href="#p0">Intro</a><a href="#p7">7 · Tipos</a><a href="#p71">7.1</a><a href="#p72">7.2</a><a href="#p73">7.3</a><a href="#p74">7.4</a><a href="#num">Números</a><a href="#vs">No confundir</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint" id="hint">Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.</p>
+
+<section id="seq">
+  <h2>SECUENCIA DE LA CHARLA</h2>
+  <div class="seq">
+    <div class="big">T · COC · BCI · R</div>
+    <div class="m" style="margin-top:6px">"Total, COC (CAPEX, OPEX, Contingencia), luego <b>BCI</b> como el banco: Base · Cliente · Innovación, y Resumen"</div>
+    <ol>
+      <li><b>T</b>otal: USD 6,793,600 en 5 años</li>
+      <li><b>C</b>APEX · <b>O</b>PEX · <b>C</b>ontingencia 10 % (7)</li>
+      <li><b>B</b>ase segura · año 1 (7.1)</li>
+      <li><b>C</b>liente digital · año 2 (7.2)</li>
+      <li><b>I</b>nnovación y renovación · años 3–5 (7.3)</li>
+      <li><b>R</b>esumen consolidado y revisión anual (7.4)</li>
+    </ol>
+  </div>
+</section>
+
+<section id="p0">
+  <h2>0 · INTRO</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">6·7·9·3·6</span><div class="b"><div class="tt">Presupuesto total</div><div class="x">USD <b>6,793,600</b> en <b>5 años</b> para Banco Horizonte Panamá</div><div class="m">"6 · 7 · 9 · 3 · 6": seis millones, setecientos noventa y tres mil seiscientos</div></div></div>
+    <div class="s"><span class="k c">2.5 + 4</span><div class="b"><div class="tt">Alineación</div><div class="x">Coherente con la <b>estrategia del negocio</b> (sección 2.5) y con los <b>objetivos de TI</b> (sección 4)</div><div class="m">El dinero sigue a la estrategia, no al revés</div></div></div>
+  </div>
+</section>
+
+<section id="p7">
+  <h2>7 · CÓMO SE ARMA</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CAPEX</span><div class="b"><div class="tt">Inversiones de capital</div><div class="x"><b>C</b>apital: equipos, plataformas o proyectos con beneficio de <b>varios años</b> · USD <b>1,458,000</b> (21.5 %)</div><div class="m">CAPEX = Comprar Algo que Perdura EXtra</div></div></div>
+    <div class="s"><span class="k">OPEX</span><div class="b"><div class="tt">Gastos operativos</div><div class="x"><b>O</b>peración recurrente: licencias, mantenimiento, servicios gestionados, personal y capacitación · USD <b>4,718,000</b> (69.5 %)</div><div class="m">OPEX = lo que se paga cada año para que Opere</div></div></div>
+    <div class="s"><span class="k a">10 %</span><div class="b"><div class="tt">Reserva de contingencia</div><div class="x"><b>Cada año</b>: variaciones de <b>precios</b>, <b>imprevistos</b> técnicos o ajustes de <b>alcance</b> · USD <b>617,600</b> (9.1 %)</div><div class="m">PIA: Precios · Imprevistos · Alcance</div></div></div>
+    <div class="s"><span class="k v">BCI</span><div class="b"><div class="tt">Distribución progresiva</div><div class="x">Año 1 <b>B</b>ase (seguridad, continuidad) · Año 2 <b>C</b>liente (canales digitales, automatización, datos) · Años 3–5 <b>I</b>nnovación (modernización, renovación)</div><div class="m">Como el banco BCI: primero la base, después el cliente, al final innovar</div></div></div>
+  </div>
+</section>
+
+<section id="p71">
+  <h2>7.1 · CORTO PLAZO · AÑO 1</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">1,188,000</span><div class="b"><div class="tt">Total año 1</div><div class="x">CAPEX <b>299,000</b> + OPEX <b>781,000</b> = 1,080,000 + 10 % (108,000)</div><div class="m">"Once-ochenta y ocho": el año más barato</div></div></div>
+    <div class="s"><span class="k">SERR</span><div class="b"><div class="tt">CAPEX del año 1</div><div class="x"><b>S</b>ervidores 120k · <b>E</b>quipos (60) 54k · <b>R</b>ed redundante 5 sucursales 85k · <b>R</b>espaldo 40k</div><div class="m">"Ser o no SERR la base"</div></div></div>
+    <div class="s"><span class="k">PCC</span><div class="b"><div class="tt">Los 3 OPEX grandes del año 1</div><div class="x"><b>P</b>ersonal TI (11) 380k · <b>C</b>ore 180k · <b>C</b>iberseguridad (EDR, MFA, firewall, monitoreo) 95k</div><div class="m">PC: Personal y Core se comen la mitad del año</div></div></div>
+    <div class="s"><span class="k c">OAC·M</span><div class="b"><div class="tt">OPEX menores del año 1</div><div class="x"><b>O</b>fimática (200 usuarios) 53k · <b>A</b>uditoría y pentest 30k · <b>C</b>apacitación 25k · <b>M</b>esa de servicio 18k</div><div class="m">De mayor a menor: 53 · 30 · 25 · 18</div></div></div>
+    <div class="s"><span class="k v">Estabilizar</span><div class="b"><div class="tt">Objetivo del año 1</div><div class="x"><b>Estabilizar y proteger</b> la operación actual · responde a reforzar <b>controles de riesgo</b> y mejorar procesos internos</div><div class="m">Lámina 18: "Base segura"</div></div></div>
+  </div>
+</section>
+
+<section id="p72">
+  <h2>7.2 · MEDIANO PLAZO · AÑO 2</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">1,436,600</span><div class="b"><div class="tt">Total año 2</div><div class="x">CAPEX <b>394,000</b> + OPEX <b>912,000</b> = 1,306,000 + 10 % (130,600)</div><div class="m">El único total con 600: catorce-treinta y seis-seis</div></div></div>
+    <div class="s"><span class="k">BABE</span><div class="b"><div class="tt">CAPEX del año 2</div><div class="x"><b>B</b>anca en línea y app 180k · <b>A</b>utomatización (cuentas, préstamos) 90k · <b>B</b>I / plataforma de datos 70k · <b>E</b>quipos (otros 60) 54k</div><div class="m">El "bebé digital" del año 2 · 180 → la mitad 90</div></div></div>
+    <div class="s"><span class="k">SOC·NUBE</span><div class="b"><div class="tt">Seguridad y continuidad año 2</div><div class="x"><b>SOC</b> gestionado 120k · <b>Sitio alterno</b> de recuperación en la nube 60k (ambos OPEX)</div><div class="m">Pasa de proteger a monitorear y de respaldar a recuperarse</div></div></div>
+    <div class="s"><span class="k c">12 TI</span><div class="b"><div class="tt">Personal año 2</div><div class="x">Personal 410k · se suma un <b>analista de datos</b> (11 → 12) · Core <b>189k</b></div><div class="m">Nueva plataforma de BI = nueva persona que la opere</div></div></div>
+    <div class="s"><span class="k v">PYMES</span><div class="b"><div class="tt">Por qué el año 2</div><div class="x">Impacto directo al <b>cliente</b> y a la <b>eficiencia</b> · estrategia de ampliar la <b>base de clientes</b> y productos para <b>PYMES</b></div><div class="m">Lámina 18: "Cliente digital"</div></div></div>
+  </div>
+</section>
+
+<section id="p73">
+  <h2>7.3 · LARGO PLAZO · AÑOS 3–5</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">42·53·74</span><div class="b"><div class="tt">Totales años 3, 4, 5</div><div class="x">1,3<b>42</b>,000 · 1,3<b>53</b>,000 · 1,4<b>74</b>,000</div><div class="m">13-42, 13-53, 14-74: el año 5 es el total más alto</div></div></div>
+    <div class="s"><span class="k">API·F·N</span><div class="b"><div class="tt">Innovación y modernización (CAPEX)</div><div class="x"><b>API</b>s del Core · prevención de <b>F</b>raude · <b>N</b>uevas soluciones · 200k → 150k → 120k</div><div class="m">La innovación baja año a año</div></div></div>
+    <div class="s"><span class="k c">55·70·170</span><div class="b"><div class="tt">Renovación de infraestructura (CAPEX)</div><div class="x">Equipos, red y servidores · el <b>año 5</b> renueva los <b>servidores del año 1</b> al cumplir su <b>ciclo de vida</b></div><div class="m">La renovación sube año a año (al revés que la innovación)</div></div></div>
+    <div class="s"><span class="k">LCPC</span><div class="b"><div class="tt">OPEX años 3–5</div><div class="x"><b>L</b>icencias 285→305k · <b>C</b>iberseguridad y continuidad (SOC, DRP, auditorías) 220→240k · <b>P</b>ersonal 430→470k · <b>C</b>apacitación 30/35/35k</div><div class="m">Todo el OPEX sube: sostener lo implementado</div></div></div>
+  </div>
+</section>
+
+<section id="p74">
+  <h2>7.4 · RESUMEN CONSOLIDADO</h2>
+  <div class="grid">
+    <div class="s"><span class="k a">2 = CAPEX↑</span><div class="b"><div class="tt">Mayor inversión de capital</div><div class="x">El <b>año 2</b> (394,000) porque ejecuta canales digitales, automatización y datos</div><div class="m">El año del cliente es el año de comprar</div></div></div>
+    <div class="s"><span class="k a">3+ = OPEX↑</span><div class="b"><div class="tt">Desde el año 3</div><div class="x">Pesa más el <b>gasto operativo</b>: el banco <b>sostiene</b> las capacidades ya implementadas</div><div class="m">Lo que se compra hay que mantenerlo</div></div></div>
+    <div class="s"><span class="k">RRE</span><div class="b"><div class="tt">Revisión anual del presupuesto</div><div class="x"><b>R</b>esultados de los proyectos · cambios <b>R</b>egulatorios de la SBP · <b>E</b>volución del negocio</div><div class="m">Cada año se "RRE-visa"</div></div></div>
+  </div>
+</section>
+
+<section id="num">
+  <h2>NÚMEROS Y DATOS CLAVE</h2>
+  <div class="nums">
+    <div class="n"><div class="v">6,793,600</div><div class="t">Total 5 años</div></div>
+    <div class="n"><div class="v">1,458,000</div><div class="t">CAPEX · 21.5 %</div></div>
+    <div class="n"><div class="v">4,718,000</div><div class="t">OPEX · 69.5 %</div></div>
+    <div class="n"><div class="v">617,600</div><div class="t">Contingencia · 9.1 %</div></div>
+    <div class="n"><div class="v">1,188,000</div><div class="t">Año 1 · 17.5 %</div></div>
+    <div class="n"><div class="v">1,436,600</div><div class="t">Año 2 · 21.1 %</div></div>
+    <div class="n"><div class="v">1,342,000</div><div class="t">Año 3 · 19.8 %</div></div>
+    <div class="n"><div class="v">1,353,000</div><div class="t">Año 4 · 19.9 %</div></div>
+    <div class="n"><div class="v">1,474,000</div><div class="t">Año 5 · 21.7 %</div></div>
+    <div class="n"><div class="v">11 → 12</div><div class="t">Personal de TI (año 1 → 2)</div></div>
+    <div class="n"><div class="v">120</div><div class="t">Equipos: 2 lotes de 60 a 54k</div></div>
+    <div class="n"><div class="v">5 · 200</div><div class="t">Sucursales · usuarios</div></div>
+  </div>
+</section>
+
+<section id="vs">
+  <h2>NO CONFUNDIR</h2>
+  <div class="grid">
+    <div class="vs"><div class="l"><b>Año 2</b><span>mayor CAPEX (394k)</span></div><div class="o">≠</div><div class="r"><b>Año 5</b><span>mayor total (1,474,000)</span></div></div>
+    <div class="vs"><div class="l"><b>Respaldo local</b><span>año 1 · CAPEX 40k</span></div><div class="o">≠</div><div class="r"><b>Sitio en la nube</b><span>año 2 · OPEX 60k</span></div></div>
+    <div class="vs"><div class="l"><b>EDR·MFA·firewall</b><span>año 1 · 95k</span></div><div class="o">≠</div><div class="r"><b>SOC gestionado</b><span>año 2 · 120k</span></div></div>
+    <div class="vs"><div class="l"><b>Servidores</b><span>año 1 · 120k</span></div><div class="o">≠</div><div class="r"><b>Renovación</b><span>año 5 · 170k</span></div></div>
+    <div class="vs"><div class="l"><b>Core año 1</b><span>180,000</span></div><div class="o">≠</div><div class="r"><b>Core año 2</b><span>189,000</span></div></div>
+    <div class="vs"><div class="l"><b>Contingencia</b><span>10 % de cada año</span></div><div class="o">≠</div><div class="r"><b>9.1 %</b><span>su peso sobre el total</span></div></div>
+  </div>
+</section>
+
+<footer>Generado solo a partir de los 2 PDF del Proyecto N°1 · UTP · FISC · uso académico.</footer>
+</main>
+
+<script>
+(function(){
+  var b=document.body, btn=document.getElementById("practice");
+  btn.onclick=function(){
+    var on=b.classList.toggle("quiz"); btn.classList.toggle("on",on);
+    btn.textContent=on?"👀 Ver todo":"🙈 Modo práctica";
+    document.querySelectorAll(".show").forEach(function(e){e.classList.remove("show");});
+    document.getElementById("hint").innerHTML=on?"Toca una tarjeta para revelar su significado.":"Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.";
+  };
+  document.querySelectorAll(".s,.vs,.n").forEach(function(e){e.addEventListener("click",function(){if(b.classList.contains("quiz"))e.classList.toggle("show");});});
+})();
+</script>
+</body>
+</html>

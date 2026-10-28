@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Guion · Presupuesto de TI</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:40px 40px;background-attachment:fixed;}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at top,rgba(10,20,16,.55),var(--bg) 70%);z-index:-1;}
+h1,h2,h3,p{margin:0;}
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:40;}
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:460px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd a.back{color:var(--dim);text-decoration:none;font-size:1.1rem;padding:6px 4px;}
+.hd h1{font-size:1rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.hd .tot{font-family:var(--mono);font-size:.72rem;color:var(--amber);}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:10px 14px;min-height:44px;font-size:.8rem;font-weight:700;font-family:inherit;cursor:pointer;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+main{max-width:460px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.who{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:12px;font-size:.72rem;}
+.who span{border:1px solid var(--line);border-radius:20px;padding:4px 10px;color:var(--faint);background:var(--surface);}
+.who span.me{color:#06140c;background:var(--accent);border-color:var(--accent);font-weight:800;}
+.actions{display:flex;gap:8px;justify-content:center;margin-top:12px;}
+
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:16px;scroll-margin-top:70px;}
+.blk .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.blk .num{font-family:var(--mono);font-size:.7rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.blk h2{font-size:1.02rem;flex:1;min-width:150px;}
+.blk .time{font-family:var(--mono);font-size:.72rem;color:var(--amber);white-space:nowrap;}
+.blk .time i{font-style:normal;color:var(--faint);}
+.slide{font-size:.72rem;color:var(--cyan);margin-top:6px;}
+.obj{font-size:.8rem;color:var(--dim);margin-top:8px;border-left:3px solid var(--violet);padding-left:8px;}
+.lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;color:var(--faint);margin:12px 0 4px;}
+ul.say{margin:0;padding-left:18px;font-size:.88rem;}
+ul.say li{margin:4px 0;}
+ul.say b{color:var(--accent);}
+.chips{display:flex;flex-wrap:wrap;gap:5px;}
+.chips span{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--amber);background:var(--amber-dim);border-radius:7px;padding:3px 7px;}
+.dato{font-size:.8rem;background:var(--cyan-dim);color:var(--text);border-radius:10px;padding:8px 10px;}
+.dato small{color:var(--faint);}
+.trans{font-size:.84rem;font-style:italic;color:var(--text);background:var(--surface-2);border:1px dashed var(--accent-dim);border-radius:10px;padding:8px 10px;}
+.trans::before{content:"➜ ";color:var(--accent);font-style:normal;}
+details{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;}
+summary{font-size:.78rem;color:var(--dim);cursor:pointer;min-height:32px;}
+.tblwrap{overflow-x:auto;margin-top:6px;}
+table{border-collapse:collapse;width:100%;font-size:.76rem;}
+td,th{border-bottom:1px solid var(--line);padding:5px 4px;text-align:left;}
+th{color:var(--faint);font-weight:600;}
+td.n{text-align:right;font-family:var(--mono);white-space:nowrap;}
+tr.t td{font-weight:800;color:var(--accent);}
+.warn{font-size:.74rem;color:var(--red);margin-top:6px;}
+
+/* MODO ESCENARIO */
+#stage{position:fixed;inset:0;background:#000;color:#fff;z-index:100;display:none;flex-direction:column;padding:calc(14px + env(safe-area-inset-top,0px)) 18px calc(14px + env(safe-area-inset-bottom,0px));}
+#stage.on{display:flex;}
+#stage .sh{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.8rem;color:#9aa;}
+#stage .sh button{background:#222;color:#fff;border:none;border-radius:20px;padding:10px 14px;min-height:44px;font-size:.85rem;}
+#stage .st{font-size:1.5rem;font-weight:800;color:var(--accent);margin-top:12px;}
+#stage .stime{font-family:var(--mono);color:var(--amber);font-size:1rem;margin-top:2px;}
+#stage ul{font-size:1.25rem;line-height:1.35;padding-left:22px;margin:14px 0 0;flex:1;overflow:auto;}
+#stage ul li{margin:8px 0;}
+#stage .sk{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+#stage .sk span{font-family:var(--mono);font-size:1rem;color:var(--amber);border:1px solid var(--amber-dim);border-radius:8px;padding:4px 8px;}
+#stage .stran{font-size:1.05rem;font-style:italic;color:#bbb;margin-top:10px;}
+#stage .tap{position:absolute;top:70px;bottom:0;width:50%;}
+#stage .tap.l{left:0;} #stage .tap.r{right:0;}
+#stage .sfoot{font-size:.7rem;color:#666;text-align:center;margin-top:8px;}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;padding:0 16px;}
+@media (max-width:560px){.hd{padding:8px 12px 6px;} .blk{padding:12px;}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<header>
+  <div class="hd">
+    <a class="back" href="index.html" aria-label="Volver">←</a>
+    <h1>Guion · <em>7. Presupuesto</em></h1>
+    <span class="tot">⏱ 3:00</span>
+  </div>
+</header>
+
+<main>
+<p class="hint">Basado en <b>Proyecto N°1 Doc.</b> (sección 7) y <b>PPT</b> (láminas 17–18).</p>
+<div class="who"><span>6 · Manuel Pérez</span><span class="me">7 · Jonathan Page</span><span>8 · Jimmy Ye</span></div>
+<div class="actions"><button class="btn pri" id="goStage">🎤 Modo escenario</button></div>
+
+<div id="blocks"></div>
+
+<footer>Charla generada solo a partir de los 2 PDF del Proyecto N°1 · UTP · FISC · uso académico.</footer>
+</main>
+
+<div id="stage" aria-modal="true" role="dialog">
+  <div class="sh"><span id="sPos"></span><button id="sClose">✕ Salir</button></div>
+  <div class="st" id="sT"></div>
+  <div class="stime" id="sTime"></div>
+  <ul id="sSay"></ul>
+  <div class="sk" id="sKeys"></div>
+  <div class="stran" id="sTran"></div>
+  <div class="sfoot">Toca la derecha → siguiente · izquierda → anterior</div>
+  <div class="tap l" id="tapL"></div><div class="tap r" id="tapR"></div>
+</div>
+
+<script>
+var BLOCKS = [
+ {n:"0", t:"Intro", sec:15, slide:"🖼 Lámina 17 (derecha, el número grande)",
+  obj:"Que sepan cuánto cuesta el plan y a qué responde.",
+  say:["Gracias, Manuel. El inventario que acabamos de ver es lo que vamos a <b>presupuestar</b>.",
+       "El presupuesto de TI de Banco Horizonte Panamá suma <b>USD 6,793,600 en cinco años</b>.",
+       "Está alineado con la <b>estrategia del negocio</b> (2.5) y con los <b>objetivos de TI</b> (4)."],
+  keys:["USD 6,793,600","cinco años","alineado"],
+  dato:"Promedio de USD 1,358,720 al año.<br><small>Doc. sección 5.1</small>",
+  tran:"Para leerlo, lo separamos en dos tipos de gasto."},
+ {n:"7", t:"Cómo se arma el presupuesto", sec:35, slide:"🖼 Lámina 17 (CAPEX · OPEX · Contingencia)",
+  obj:"Que distingan CAPEX, OPEX y contingencia, y entiendan la lógica por años.",
+  say:["<b>CAPEX</b>: inversiones de capital (equipos, plataformas, proyectos que benefician varios años). Son <b>USD 1,458,000</b>.",
+       "<b>OPEX</b>: gastos recurrentes (licencias, mantenimiento, servicios gestionados, personal y capacitación). Son <b>USD 4,718,000</b>.",
+       "<b>Contingencia del 10 %</b> cada año, por variaciones de precio, imprevistos técnicos o ajustes de alcance. En total, <b>USD 617,600</b>.",
+       "La distribución es <b>progresiva</b>: año 1 la base, año 2 el cliente digital, años 3 a 5 innovación y renovación."],
+  keys:["CAPEX","OPEX","contingencia 10 %","progresiva"],
+  dato:"CAPEX 21.5 % · OPEX 69.5 % · contingencia 9.1 % del total.<br><small>Doc. sección 5.1 / Conclusión</small>",
+  tran:"Veamos el primer año, el corto plazo."},
+ {n:"7.1", t:"Corto plazo · Año 1 · Base segura", sec:35, slide:"🖼 Lámina 18 (columna 1)",
+  obj:"Estabilizar y proteger la operación actual.",
+  say:["Año 1: <b>USD 1,188,000</b>.",
+       "Renovamos parte de la infraestructura: <b>servidores, red redundante en las 5 sucursales y 60 equipos</b> nuevos.",
+       "Ciberseguridad: <b>EDR, MFA, firewall y monitoreo</b>, más <b>respaldo y recuperación</b>.",
+       "Y mantenemos al día el <b>Core bancario</b> y las licencias. El rubro más grande es el <b>personal de TI</b>: 11 personas.",
+       "Responde a la estrategia de <b>reforzar los controles de riesgo</b>."],
+  keys:["1,188,000","servidores · red · 60 equipos","EDR · MFA","respaldo","Core"],
+  dato:"CAPEX 299,000 + OPEX 781,000 = 1,080,000 + 108,000 (10 %).<br><small>Doc. 7.1</small>",
+  tran:"Con la base fortalecida, el segundo año se enfoca en el cliente.",
+  table:[["Servidores, almacenamiento y virtualización","C","120,000"],["Red y conectividad redundante (5 sucursales)","C","85,000"],["Equipos de usuario final (lote 1 de 60)","C","54,000"],["Respaldo y recuperación","C","40,000"],["Personal de TI (11)","O","380,000"],["Core bancario (mantenimiento y licencias)","O","180,000"],["Ciberseguridad: EDR, MFA, firewall, monitoreo","O","95,000"],["Ofimática y colaboración (200 usuarios)","O","53,000"],["Auditoría y pruebas de penetración","O","30,000"],["Capacitación","O","25,000"],["Mesa de servicio","O","18,000"],["Subtotal","","1,080,000"],["Contingencia 10 %","","108,000"],["Total año 1","","1,188,000"]]},
+ {n:"7.2", t:"Mediano plazo · Año 2 · Cliente digital", sec:35, slide:"🖼 Lámina 18 (columna 2)",
+  obj:"Invertir en lo que impacta al cliente y a la eficiencia.",
+  say:["Año 2: <b>USD 1,436,600</b>.",
+       "Mejoramos la <b>banca en línea y la app móvil</b>, con incorporación digital de clientes.",
+       "<b>Automatizamos</b> la apertura de cuentas y la tramitación de préstamos.",
+       "Implementamos la <b>plataforma de datos e inteligencia de negocios</b>; se suma un analista de datos (12 en TI).",
+       "Y un <b>sitio alterno de recuperación en la nube</b>, más el <b>SOC</b> gestionado.",
+       "Apoya la estrategia de <b>ampliar la base de clientes y los productos para PYMES</b>."],
+  keys:["1,436,600","banca en línea y app","automatización","BI","nube","SOC"],
+  dato:"CAPEX 394,000 + OPEX 912,000 = 1,306,000 + 130,600 (10 %).<br><small>Doc. 7.2</small>",
+  tran:"Del año 3 al 5, el foco pasa a innovar y renovar.",
+  table:[["Banca en línea y app móvil","C","180,000"],["Automatización (cuentas, préstamos)","C","90,000"],["Plataforma de datos e inteligencia de negocios","C","70,000"],["Equipos de usuario final (lote 2 de 60)","C","54,000"],["Personal de TI (12, + analista de datos)","O","410,000"],["Core bancario","O","189,000"],["Ciberseguridad: licencias y SOC gestionado","O","120,000"],["Sitio alterno de recuperación en la nube","O","60,000"],["Ofimática y colaboración","O","55,000"],["Auditoría y pruebas de penetración","O","30,000"],["Capacitación","O","30,000"],["Mesa de servicio","O","18,000"],["Subtotal","","1,306,000"],["Contingencia 10 %","","130,600"],["Total año 2","","1,436,600"]]},
+ {n:"7.3", t:"Largo plazo · Años 3 a 5", sec:25, slide:"🖼 Sin lámina propia: señala las barras de los años 3–5 de la lámina 17",
+  obj:"Posicionar al banco como entidad moderna y competitiva.",
+  say:["Años 3, 4 y 5: <b>1,342,000 · 1,353,000 · 1,474,000</b>.",
+       "<b>Innovación</b>: APIs del Core, prevención de fraude y nuevas soluciones (baja de 200 mil a 120 mil).",
+       "<b>Renovación</b>: en el año 5 se renuevan los servidores del año 1 porque cumplen su ciclo de vida."],
+  keys:["APIs del Core","prevención de fraude","ciclo de vida"],
+  dato:"Innovación CAPEX 200k → 150k → 120k · Renovación 55k → 70k → 170k.<br><small>Doc. 7.3</small>",
+  tran:"Si juntamos los cinco años…",
+  table:[["Innovación y modernización (C)","","200k · 150k · 120k"],["Renovación de infraestructura (C)","","55k · 70k · 170k"],["Licenciamiento y mantenimiento (O)","","285k · 295k · 305k"],["Ciberseguridad y continuidad (O)","","220k · 230k · 240k"],["Personal de TI (O)","","430k · 450k · 470k"],["Capacitación (O)","","30k · 35k · 35k"],["Subtotal","","1,220k · 1,230k · 1,340k"],["Contingencia 10 %","","122k · 123k · 134k"],["Total","","1,342k · 1,353k · 1,474k"]]},
+ {n:"7.4", t:"Resumen consolidado", sec:20, slide:"🖼 Lámina 17 (izquierda, barras por año)",
+  obj:"Que se queden con la lectura de los cinco años.",
+  say:["El <b>año 2</b> concentra la mayor <b>inversión de capital</b>: canales digitales, automatización y datos.",
+       "Desde el <b>año 3 pesa más el OPEX</b>, porque el banco sostiene lo ya implementado.",
+       "El presupuesto se <b>revisa cada año</b> según resultados, cambios regulatorios de la <b>SBP</b> y la evolución del negocio."],
+  keys:["año 2 = más CAPEX","año 3+ = más OPEX","revisión anual","SBP"],
+  dato:"Reparto del total: 17.5 % · 21.1 % · 19.8 % · 19.9 % · 21.7 %.<br><small>Lámina 17</small>"},
+ {n:"FIN", t:"Cierre", sec:15, slide:"🖼 Lámina 18 → pasa a la 19",
+  obj:"Dejar una sola idea y dar la palabra.",
+  say:["<b>Primero una base segura; después, el cliente digital.</b>",
+       "Estas partidas se organizan en programas y proyectos: eso lo presenta <b>Jimmy</b> con el portafolio."],
+  keys:["base segura","cliente digital"],
+  tran:"Jimmy, adelante."}
+];
+
+function fmt(s){var m=Math.floor(s/60),r=s%60;return m+":"+(r<10?"0":"")+r;}
+var acc=0, html="";
+BLOCKS.forEach(function(b,i){
+  acc+=b.sec; b.acc=acc;
+  html+='<section class="blk" id="b'+i+'"><div class="top"><span class="num">'+b.n+'</span><h2>'+b.t+'</h2>'+
+    '<span class="time">⏱ '+fmt(b.sec)+' <i>→ '+fmt(acc)+'</i></span></div>'+
+    '<div class="slide">'+b.slide+'</div><div class="obj">'+b.obj+'</div>'+
+    '<div class="lbl">QUÉ DECIR</div><ul class="say">'+b.say.map(function(s){return "<li>"+s+"</li>";}).join("")+'</ul>'+
+    '<div class="lbl">PALABRAS CLAVE</div><div class="chips">'+b.keys.map(function(k){return "<span>"+k+"</span>";}).join("")+'</div>'+
+    (b.dato?'<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">'+b.dato+'</div>':'')+
+    (b.tran?'<div class="lbl">TRANSICIÓN</div><div class="trans">'+b.tran+'</div>':'')+
+    (b.table?'<details><summary>Ver todos los rubros (por si preguntan)</summary><div class="tblwrap"><table><tr><th>Rubro</th><th></th><th style="text-align:right">USD</th></tr>'+
+      b.table.map(function(r){var t=/^(Subtotal|Contingencia|Total)/.test(r[0]);return '<tr'+(t?' class="t"':'')+'><td>'+r[0]+'</td><td>'+(r[1]==="C"?"CAPEX":r[1]==="O"?"OPEX":"")+'</td><td class="n">'+r[2]+'</td></tr>';}).join("")+'</table></div></details>':'')+
+    '</section>';
+});
+document.getElementById("blocks").innerHTML=html;
+
+/* progreso de lectura */
+addEventListener("scroll",function(){var h=document.documentElement;document.getElementById("prog").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100||0)+"%";},{passive:true});
+
+/* modo escenario */
+var st=document.getElementById("stage"), cur=0, lock=null;
+function show(i){
+  cur=Math.max(0,Math.min(BLOCKS.length-1,i)); var b=BLOCKS[cur];
+  document.getElementById("sPos").textContent=(cur+1)+" / "+BLOCKS.length+" · "+b.n;
+  document.getElementById("sT").textContent=b.t;
+  document.getElementById("sTime").textContent="⏱ "+fmt(b.sec)+"  → "+fmt(b.acc);
+  document.getElementById("sSay").innerHTML=b.say.map(function(s){return "<li>"+s+"</li>";}).join("");
+  document.getElementById("sKeys").innerHTML=b.keys.map(function(k){return "<span>"+k+"</span>";}).join("");
+  document.getElementById("sTran").textContent=b.tran?"➜ "+b.tran:"";
+}
+document.getElementById("goStage").onclick=function(){
+  st.classList.add("on"); show(0);
+  try{ if(navigator.wakeLock) navigator.wakeLock.request("screen").then(function(l){lock=l;}).catch(function(){}); }catch(e){}
+};
+document.getElementById("sClose").onclick=function(){st.classList.remove("on");try{if(lock)lock.release();}catch(e){}lock=null;};
+document.getElementById("tapR").onclick=function(){show(cur+1);};
+document.getElementById("tapL").onclick=function(){show(cur-1);};
+addEventListener("keydown",function(e){if(!st.classList.contains("on"))return;if(e.key==="ArrowRight"||e.key===" ")show(cur+1);if(e.key==="ArrowLeft")show(cur-1);if(e.key==="Escape")document.getElementById("sClose").click();});
+</script>
+</body>
+</html>

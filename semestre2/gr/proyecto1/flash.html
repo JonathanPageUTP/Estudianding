@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FlashCards · Presupuesto de TI</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+@media (max-width:560px){
+  /* ocupar exactamente la pantalla visible (descontando la barra del navegador) */
+  body{min-height:100vh;min-height:100dvh;}
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+
+  header{padding:12px 16px 6px;}
+  .brand-row h1{font-size:1.2rem;}
+  .subtitle{margin:0 0 10px;}
+  .progress-wrap{height:7px;margin-bottom:10px;}
+  .stats-row{gap:6px;margin-bottom:10px;font-size:.68rem;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .stats-row::-webkit-scrollbar{display:none;}
+  .stat-pill{padding:4px 9px;white-space:nowrap;flex-shrink:0;}
+  .tab{padding:8px 14px;font-size:.78rem;}
+
+  main{padding:8px 16px 0;min-height:0;}
+  .counter{margin-bottom:8px;}
+
+  /* la tarjeta llena todo el espacio disponible */
+  .stage{min-height:0;align-items:stretch;}
+  .card3d{height:100%;max-width:none;min-height:240px;}
+  .face{padding:50px 20px 40px;}
+  .face-tag{top:14px;left:14px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .face-status{top:12px;right:14px;}
+  .face-front .q-text{font-size:1.15rem;}
+  .face-back{justify-content:flex-start;padding-bottom:20px;}
+  .face-back .a-label{margin-top:0;}
+  .face-back .a-text{font-size:.98rem;line-height:1.5;}
+  .tap-hint{bottom:14px;}
+
+  /* botones de valoración alineados con la tarjeta */
+  .rate-row{padding:10px 0 0;gap:8px;}
+  .rate-btn{padding:12px 6px;font-size:.82rem;}
+
+  nav.controls{padding:10px 16px calc(12px + var(--safe-b));gap:8px;}
+  .nav-btn{padding:13px 6px;font-size:.88rem;}
+  .nav-btn.shuffle{flex:0 0 50px;padding:13px 0;}
+}
+@media (max-width:560px) and (max-height:700px){
+  .subtitle{display:none;}
+  .face{padding-top:44px;}
+  .face-front .q-text{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1><a href="index.html" style="color:inherit;text-decoration:none" aria-label="Volver">←</a> Repaso <em>Presupuesto</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Proyecto 1 · Charla</span>
+    </div>
+    <p class="subtitle">7. Presupuesto de TI · Banco Horizonte Panamá</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-filter="all">Todas · 47</div>
+      <div class="tab" data-filter="hard">Por repasar</div>
+      <div class="tab" data-filter="learned">Aprendidas</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 47</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     FLASHCARDS — Fuente: Proyecto N°1 Doc. GRTIC 1LS241.pdf (sección 7)
+     y Proyecto N°1 PPT. GRTIC 1LS241.pdf (láminas 17–18)
+  ======================================================== */
+  var CARDS = [
+    {cat:"Orden", q:"¿En qué orden va la charla del punto 7?", a:"Intro (total) → 7 CAPEX/OPEX/contingencia → 7.1 Año 1 → 7.2 Año 2 → 7.3 Años 3–5 → 7.4 Consolidado → Cierre.<br><i>Mnemotecnia:</i> T · COC · BCI · R"},
+    {cat:"Orden", q:"¿Quién habla antes y después de ti?", a:"Antes: <b>Manuel Pérez</b> (6. Inventario). Después: <b>Jimmy Ye</b> (8. Portafolio)."},
+    {cat:"Orden", q:"¿Qué va después de «Cómo se arma el presupuesto»?", a:"<b>7.1 Corto plazo</b> · Año 1 · Base segura."},
+    {cat:"Orden", q:"¿Qué va después del Año 2?", a:"<b>7.3 Largo plazo</b> · Años 3 a 5 (sin lámina propia: usa las barras de la lámina 17)."},
+    {cat:"Orden", q:"¿Con qué frase cierras?", a:"<b>«Primero una base segura; después, el cliente digital.»</b> y das paso a Jimmy con el portafolio."},
+    {cat:"Orden", q:"¿Cuánto dura tu parte y cómo se reparte?", a:"<b>3:00</b> → Intro 0:15 · 7 0:35 · 7.1 0:35 · 7.2 0:35 · 7.3 0:25 · 7.4 0:20 · Cierre 0:15."},
+    {cat:"0 · Intro", q:"¿Cuál es el presupuesto total de TI y en cuánto tiempo?", a:"<b>USD 6,793,600</b> en <b>cinco años</b>."},
+    {cat:"0 · Intro", q:"¿Con qué está alineado el presupuesto?", a:"Con la <b>estrategia del negocio</b> (sección 2.5) y con los <b>objetivos estratégicos de TI</b> (sección 4)."},
+    {cat:"0 · Intro", q:"¿Cuál es el promedio anual del presupuesto?", a:"<b>USD 1,358,720</b> al año."},
+    {cat:"7 · Tipos", q:"¿Qué es CAPEX?", a:"Inversiones de capital: adquisiciones de <b>equipos, plataformas o proyectos con beneficio de varios años</b>."},
+    {cat:"7 · Tipos", q:"¿Qué es OPEX?", a:"Gastos operativos: costos <b>recurrentes</b> como licencias, mantenimiento, servicios gestionados, personal y capacitación."},
+    {cat:"7 · Tipos", q:"¿Cuánto es el CAPEX total y qué % representa?", a:"<b>USD 1,458,000</b> · <b>21.5 %</b>."},
+    {cat:"7 · Tipos", q:"¿Cuánto es el OPEX total y qué % representa?", a:"<b>USD 4,718,000</b> · <b>69.5 %</b>."},
+    {cat:"7 · Tipos", q:"¿Cuánto es la contingencia y para qué sirve?", a:"<b>10 % cada año</b> (USD 617,600 en total, 9.1 %) para variaciones de <b>precios</b>, <b>imprevistos</b> técnicos o ajustes de <b>alcance</b>.<br><i>Mnemotecnia:</i> PIA"},
+    {cat:"7 · Tipos", q:"¿Cómo es la distribución progresiva del presupuesto?", a:"Año 1: base, seguridad y continuidad · Año 2: canales digitales, automatización y datos · Años 3–5: innovación, modernización y renovación.<br><i>Mnemotecnia:</i> BCI"},
+    {cat:"7.1 · Año 1", q:"¿Cuál es el total del año 1?", a:"<b>USD 1,188,000</b> (CAPEX 299,000 + OPEX 781,000 = 1,080,000 + 108,000 de contingencia)."},
+    {cat:"7.1 · Año 1", q:"¿Cuál es el objetivo del corto plazo?", a:"<b>Estabilizar y proteger</b> la operación actual."},
+    {cat:"7.1 · Año 1", q:"¿Qué CAPEX tiene el año 1?", a:"<b>S</b>ervidores, almacenamiento y virtualización 120k · <b>E</b>quipos (60) 54k · <b>R</b>ed redundante 5 sucursales 85k · <b>R</b>espaldo 40k.<br><i>Mnemotecnia:</i> SERR"},
+    {cat:"7.1 · Año 1", q:"¿Cuáles son los 3 OPEX más grandes del año 1?", a:"<b>Personal de TI</b> (11) 380k · <b>Core bancario</b> 180k · <b>Ciberseguridad</b> 95k.<br><i>Mnemotecnia:</i> PCC"},
+    {cat:"7.1 · Año 1", q:"¿Qué incluye la ciberseguridad del año 1?", a:"<b>EDR</b> (protección de equipos), <b>MFA</b> (autenticación multifactorial), <b>firewall</b> perimetral y <b>monitoreo</b> de eventos · USD 95,000."},
+    {cat:"7.1 · Año 1", q:"¿Cuánto cuestan ofimática, auditoría, capacitación y mesa de servicio en el año 1?", a:"Ofimática (200 usuarios) <b>53k</b> · Auditoría y pentest <b>30k</b> · Capacitación <b>25k</b> · Mesa de servicio <b>18k</b>."},
+    {cat:"7.1 · Año 1", q:"¿A qué estrategia del negocio responde el año 1?", a:"Reforzar los <b>controles de riesgo</b> y mejorar los <b>procesos internos</b> prioritarios."},
+    {cat:"7.1 · Año 1", q:"¿Qué % del año 1 es personal y qué % el Core?", a:"Personal <b>32 %</b> (380k) · Core <b>15.2 %</b> (180k), que es el 23 % del OPEX del año."},
+    {cat:"7.2 · Año 2", q:"¿Cuál es el total del año 2?", a:"<b>USD 1,436,600</b> (CAPEX 394,000 + OPEX 912,000 = 1,306,000 + 130,600)."},
+    {cat:"7.2 · Año 2", q:"¿Qué CAPEX tiene el año 2?", a:"<b>B</b>anca en línea y app 180k · <b>A</b>utomatización 90k · <b>B</b>I / datos 70k · <b>E</b>quipos (otros 60) 54k.<br><i>Mnemotecnia:</i> BABE"},
+    {cat:"7.2 · Año 2", q:"¿Qué procesos se automatizan en el año 2?", a:"<b>Apertura de cuentas</b> y <b>tramitación de préstamos</b> (USD 90,000)."},
+    {cat:"7.2 · Año 2", q:"¿Cuánto cuesta el SOC gestionado y en qué año entra?", a:"<b>USD 120,000</b> (licencias y SOC) · <b>año 2</b> · OPEX."},
+    {cat:"7.2 · Año 2", q:"¿Cuánto cuesta el sitio alterno de recuperación en la nube?", a:"<b>USD 60,000</b> · año 2 · OPEX."},
+    {cat:"7.2 · Año 2", q:"¿Cuántas personas hay en TI el año 2 y por qué cambia?", a:"<b>12</b>: se suma un <b>analista de datos</b> para la plataforma de BI · personal 410k."},
+    {cat:"7.2 · Año 2", q:"¿Cuánto cuesta el Core en el año 2?", a:"<b>USD 189,000</b> (en el año 1 eran 180,000)."},
+    {cat:"7.2 · Año 2", q:"¿A qué estrategia del negocio apoya el año 2?", a:"Ampliar la <b>base de clientes</b> y los <b>productos para PYMES</b>."},
+    {cat:"7.3 · Años 3–5", q:"¿Cuáles son los totales de los años 3, 4 y 5?", a:"<b>1,342,000 · 1,353,000 · 1,474,000</b>.<br><i>Mnemotecnia:</i> 13-42, 13-53, 14-74"},
+    {cat:"7.3 · Años 3–5", q:"¿Qué incluye la innovación y modernización de los años 3–5?", a:"<b>APIs del Core</b>, <b>prevención de fraude</b> y <b>nuevas soluciones</b> · CAPEX 200k → 150k → 120k."},
+    {cat:"7.3 · Años 3–5", q:"¿Por qué el año 5 tiene 170k de renovación?", a:"Se renuevan los <b>servidores adquiridos en el año 1</b> al cumplir su <b>ciclo de vida</b>."},
+    {cat:"7.3 · Años 3–5", q:"¿Cuál es el objetivo del largo plazo?", a:"Posicionar al banco como una <b>entidad moderna y competitiva</b>."},
+    {cat:"7.3 · Años 3–5", q:"¿Cuánto es el personal de TI en los años 3, 4 y 5?", a:"<b>430k · 450k · 470k</b> (OPEX)."},
+    {cat:"7.4 · Consolidado", q:"¿Qué año tiene la mayor inversión de capital y por qué?", a:"El <b>año 2</b> (394,000): canales digitales, automatización y datos."},
+    {cat:"7.4 · Consolidado", q:"¿Qué año tiene el mayor total?", a:"El <b>año 5</b>: USD 1,474,000 (21.7 %). ¡No el año 2!"},
+    {cat:"7.4 · Consolidado", q:"¿Por qué desde el año 3 pesa más el OPEX?", a:"Porque el banco <b>sostiene las capacidades ya implementadas</b>."},
+    {cat:"7.4 · Consolidado", q:"¿Según qué se revisa el presupuesto cada año?", a:"<b>R</b>esultados de los proyectos · cambios <b>R</b>egulatorios de la <b>SBP</b> · <b>E</b>volución del negocio.<br><i>Mnemotecnia:</i> RRE"},
+    {cat:"7.4 · Consolidado", q:"¿Qué % del total corresponde a cada año?", a:"17.5 % · 21.1 % · 19.8 % · 19.9 % · 21.7 %."},
+    {cat:"7.4 · Consolidado", q:"¿Cuánto crece el OPEX del año 1 al 5?", a:"<b>34.4 %</b>: de 781,000 a 1,050,000."},
+    {cat:"Preguntas", q:"¿Es mucho o poco por colaborador?", a:"USD <b>5,940</b> (año 1) a <b>7,370</b> (año 5): entre el 42 % y el 53 % del límite inferior referencial del sector (USD 14,000/año, Tessier 2026)."},
+    {cat:"Preguntas", q:"¿Qué pasa si hay un incidente grave?", a:"El costo promedio en el sector financiero (USD <b>5.56 millones</b>) equivale a <b>4.7 veces</b> el año 1 y al <b>82 %</b> del presupuesto a cinco años."},
+    {cat:"Preguntas", q:"¿El portafolio de proyectos es un gasto adicional?", a:"<b>No.</b> Sus asignaciones ya están incluidas en los USD 6,793,600."},
+    {cat:"Preguntas", q:"¿Quién aprueba y quién administra el presupuesto?", a:"Aprueba: <b>Junta Directiva / Comité de Riesgos</b>. Revisa: <b>Comité de TI</b>. Administra: <b>Gerencia de TI</b> (RACI)."},
+    {cat:"Preguntas", q:"¿Por qué la contingencia pesa 9.1 % y no 10 %?", a:"Porque es el 10 % <b>del subtotal</b> de cada año; sobre el total final (subtotal + 10 %) pesa 1/11 ≈ 9.1 %."}
+  ];
+
+  var TOTAL = CARDS.length; // 47
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- STORAGE ---------------- */
+  var STORE_KEY = "gr_charla1_flash_v1";
+  var status = {}; // id -> "easy" | "hard"
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw) status = JSON.parse(raw) || {};
+  }catch(e){ status = {}; }
+
+  function saveStatus(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "all";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+
+  function statusIcon(s){
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+
+  function computeStats(){
+    var learned=0, hard=0;
+    CARDS.forEach(function(c){
+      var s = status[c.id];
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+    });
+    var news = TOTAL - learned - hard;
+    return {learned:learned, hard:hard, news:news};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    var pct = Math.round((st.learned / TOTAL) * 100);
+    progressFill.style.width = pct + "%";
+  }
+
+  function buildFilteredOrder(){
+    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
+    if(filter === "all"){
+      filteredOrder = base.slice();
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
+      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
+      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
+      filteredOrder = base.filter(function(i){
+        var s = status[CARDS[i].id];
+        return s === "hard";
+      });
+      if(filteredOrder.length === 0){
+        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
+      }
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){
+      renderEmpty();
+      return;
+    }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    var s = status[c.id];
+
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(s);
+    statusBack.textContent = statusIcon(s);
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+
+    btnHard.classList.toggle("on", s === "hard");
+    btnEasy.classList.toggle("on", s === "easy");
+
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    stage.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
+        '<p>' + (filter === "learned"
+            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
+            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
+        '</p>' +
+        '<button id="emptyBack">Ver todas las tarjetas</button>' +
+      '</div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn){
+      btn.addEventListener("click", function(){
+        setFilter("all");
+      });
+    }
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var cardIndex = filteredOrder[pos];
+    var c = CARDS[cardIndex];
+    if(status[c.id] === kind){
+      delete status[c.id]; // toggle off
+    } else {
+      status[c.id] = kind;
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", status[c.id] === "hard");
+    btnEasy.classList.toggle("on", status[c.id] === "easy");
+    statusFront.textContent = statusIcon(status[c.id]);
+    statusBack.textContent = statusIcon(status[c.id]);
+    refreshStats();
+
+    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
+    if(filter !== "all"){
+      setTimeout(function(){
+        buildFilteredOrder();
+        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
+        render();
+      }, 380);
+    }
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn){
+      shuffleArray(order);
+    } else {
+      order.sort(function(a,b){return a-b;});
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+  });
+
+  // swipe gestures (left/right) on stage
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX;
+    var dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
+      if(dx < 0) goNext(); else goPrev();
+    }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // keyboard support (desktop testing)
+  document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  buildFilteredOrder();
+  render();
+
+})();
+</script>
+</body>
+</html>
