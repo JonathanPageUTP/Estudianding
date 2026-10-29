@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Estudianding">
     <style>
         /* Estilos Base */
         body {
@@ -98,6 +104,29 @@
         .theme-toggle .i-sun { display: none; }
         html[data-theme="dark"] .theme-toggle .i-sun { display: block; }
         html[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+
+        /* Botón instalar como aplicación */
+        .install-btn {
+            margin-top: 30px;
+            width: 100%;
+            background: transparent;
+            font-family: inherit;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .install-btn.show { display: flex; }
+        .install-btn svg { width: 16px; height: 16px; }
+        .install-hint {
+            display: none;
+            margin-top: 14px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            opacity: 0.7;
+        }
+        .install-hint.show { display: block; }
     </style>
     <script>
         (function () {
@@ -123,6 +152,12 @@
             <a href="semestre1/index.html" class="btn">SEMESTRE 1</a>
             <a href="semestre2/index.html" class="btn">SEMESTRE 2</a>
         </nav>
+
+        <button class="btn install-btn" id="installBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
+            DESCARGAR APLICACIÓN
+        </button>
+        <p class="install-hint" id="installHint"></p>
     </div>
 
 
@@ -138,6 +173,46 @@
                 root.setAttribute("data-theme", t);
                 try { localStorage.setItem("theme", t); } catch (e) {}
                 label();
+            });
+        })();
+
+        (function () {
+            var btn = document.getElementById("installBtn"), hint = document.getElementById("installHint");
+            var standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+            var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+            var deferred = null;
+
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("sw.js").catch(function () {});
+            }
+            if (standalone) return;
+
+            // Chrome, Edge, Android: el navegador ofrece el diálogo de instalación
+            window.addEventListener("beforeinstallprompt", function (e) {
+                e.preventDefault();
+                deferred = e;
+                btn.classList.add("show");
+            });
+
+            // Safari en iPhone/iPad no tiene diálogo: se muestran instrucciones
+            if (isIOS) btn.classList.add("show");
+
+            btn.addEventListener("click", function () {
+                if (deferred) {
+                    deferred.prompt();
+                    deferred.userChoice.then(function (r) {
+                        if (r.outcome === "accepted") btn.classList.remove("show");
+                        deferred = null;
+                    });
+                } else if (isIOS) {
+                    hint.textContent = "En Safari, toca el botón Compartir y luego “Agregar a pantalla de inicio”.";
+                    hint.classList.add("show");
+                }
+            });
+
+            window.addEventListener("appinstalled", function () {
+                btn.classList.remove("show");
+                hint.classList.remove("show");
             });
         })();
     </script>
