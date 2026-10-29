@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Selección Única · 100 preguntas · Calidad de Software</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --maxw:680px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);line-height:1.5;min-height:100vh;
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+.hidden{display:none !important;}
+a{color:var(--cyan);}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;
+  border:1px solid var(--line);background:var(--surface);color:var(--text);
+  padding:12px 18px;border-radius:12px;font-size:.92rem;font-weight:700;text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.btn.danger{background:var(--red-dim);border-color:#5c2a2a;color:var(--red);}
+.btn.block{width:100%;}
+.btn.sm{padding:8px 12px;font-size:.8rem;border-radius:10px;min-height:38px;}
+
+/* navegación volver / inicio */
+.navc{display:flex;gap:8px;padding-top:calc(16px + env(safe-area-inset-top,0px));}
+.navc a{
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line);color:var(--text-dim);
+  display:flex;align-items:center;justify-content:center;background:var(--surface);
+}
+.navc svg{width:20px;height:20px;}
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+.cover{margin:16px auto 30px;}
+.paper{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:22px 20px;position:relative;overflow:hidden;
+}
+.paper::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+}
+.inst{text-align:center;font-family:var(--serif);}
+.inst .u{font-size:.95rem;font-weight:700;letter-spacing:.02em;}
+.inst .f{font-size:.78rem;color:var(--text-dim);margin-top:2px;}
+.inst .c{font-size:1.02rem;margin-top:12px;font-weight:700;color:var(--accent);}
+.inst .t{font-size:1.4rem;margin-top:4px;font-weight:700;}
+.inst .p{font-size:.8rem;color:var(--text-faint);margin-top:4px;}
+.rule{border:none;border-top:1px dashed var(--line);margin:18px 0;}
+.sec-title{font-size:.78rem;font-family:var(--mono);color:var(--accent);letter-spacing:.04em;margin-bottom:8px;}
+ol.rules{margin:0;padding-left:20px;}
+ol.rules li{font-size:.86rem;color:var(--text-dim);margin-bottom:6px;}
+ol.rules li b{color:var(--text);}
+
+.opts{display:grid;gap:12px;}
+.opt-group label.cap{display:block;font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-bottom:6px;letter-spacing:.03em;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{
+  flex:1 1 auto;min-height:40px;border:1px solid var(--line);background:var(--bg);color:var(--text-dim);
+  border-radius:10px;padding:8px 10px;font-size:.82rem;font-weight:600;
+}
+.seg button.on{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.opt-help{font-size:.76rem;color:var(--text-faint);margin-top:6px;}
+
+.topics{width:100%;border-collapse:collapse;font-size:.82rem;}
+.topics td{padding:7px 4px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);}
+.topics td:last-child{text-align:right;font-family:var(--mono);color:var(--text);white-space:nowrap;}
+.topics tr:last-child td{border-bottom:none;font-weight:700;color:var(--text);}
+
+.resume{background:var(--amber-dim);border:1px solid #5c4515;border-radius:14px;padding:14px;margin-bottom:14px;}
+.resume p{font-size:.86rem;margin-bottom:10px;}
+.resume .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+.hist-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:.82rem;color:var(--text-dim);}
+.hist-item:last-child{border-bottom:none;}
+.hist-item b{font-family:var(--mono);color:var(--text);}
+
+/* ============================================================
+   BARRA DE EXAMEN
+   ============================================================ */
+#topbar{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.tb-inner{max-width:var(--maxw);margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.timer{
+  font-family:var(--mono);font-weight:800;font-size:1rem;color:var(--accent);
+  background:var(--accent-dim);border-radius:10px;padding:7px 10px;min-width:78px;text-align:center;
+}
+.timer.warn{color:var(--amber);background:var(--amber-dim);}
+.timer.crit{color:var(--red);background:var(--red-dim);animation:pulse 1s infinite;}
+@keyframes pulse{50%{opacity:.6}}
+.tb-mid{flex:1;min-width:0;}
+.tb-label{font-size:.68rem;color:var(--text-faint);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-prog{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:4px;}
+.tb-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .3s;}
+
+/* ============================================================
+   PREGUNTAS
+   ============================================================ */
+.exam{padding:16px 0 120px;}
+.part-head{margin:22px 0 10px;}
+.part-head .k{font-family:var(--mono);font-size:.68rem;color:var(--cyan);letter-spacing:.05em;}
+.part-head h2{font-size:1.02rem;margin-top:2px;}
+.q{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px;margin-bottom:12px;scroll-margin-top:76px;
+}
+.q-top{display:flex;gap:10px;align-items:flex-start;}
+.q-num{
+  flex:none;font-family:var(--mono);font-weight:800;font-size:.8rem;color:var(--accent);
+  background:var(--accent-dim);border-radius:8px;padding:3px 7px;min-width:34px;text-align:center;
+}
+.q-text{font-size:.95rem;font-weight:600;}
+.q-opts{display:grid;gap:8px;margin-top:12px;}
+.o{
+  display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;min-height:44px;
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:11px;
+  padding:10px 12px;font-size:.88rem;line-height:1.4;
+}
+.o .l{flex:none;font-family:var(--mono);font-weight:800;color:var(--text-faint);width:18px;}
+.o.sel{border-color:var(--cyan);background:var(--cyan-dim);}
+.o.sel .l{color:var(--cyan);}
+.o.ok{border-color:var(--accent);background:var(--accent-dim);}
+.o.ok .l{color:var(--accent);}
+.o.bad{border-color:var(--red);background:var(--red-dim);}
+.o.bad .l{color:var(--red);}
+.o:disabled{cursor:default;}
+.exp{
+  margin-top:10px;font-size:.82rem;color:var(--text-dim);background:var(--surface-2);
+  border-left:3px solid var(--cyan);border-radius:8px;padding:9px 11px;
+}
+.exp b{color:var(--text);}
+.tag{display:inline-block;font-family:var(--mono);font-size:.64rem;padding:2px 7px;border-radius:99px;margin-top:8px;}
+.tag.ok{background:var(--accent-dim);color:var(--accent);}
+.tag.bad{background:var(--red-dim);color:var(--red);}
+.tag.none{background:var(--amber-dim);color:var(--amber);}
+
+.end-box{margin-top:20px;}
+
+/* botones flotantes */
+.fab{
+  position:fixed;right:16px;bottom:calc(16px + var(--safe-b));z-index:60;
+  width:54px;height:54px;border-radius:50%;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--text);font-size:1.2rem;font-weight:800;
+  box-shadow:0 6px 20px rgba(0,0,0,.4);
+}
+
+/* ============================================================
+   NAVEGADOR / MODAL
+   ============================================================ */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;justify-content:center;}
+.sheet{
+  width:100%;max-width:var(--maxw);max-height:82vh;overflow:auto;background:var(--surface);
+  border:1px solid var(--line);border-radius:18px 18px 0 0;padding:18px 16px calc(18px + var(--safe-b));
+}
+.sheet h3{font-size:1rem;margin-bottom:4px;}
+.sheet .sub{font-size:.8rem;color:var(--text-faint);margin-bottom:12px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;}
+.grid button{
+  height:44px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--text-faint);
+  font-family:var(--mono);font-weight:700;font-size:.8rem;
+}
+.grid button.a{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan);}
+.grid button.ok{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.grid button.bad{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;color:var(--text-faint);margin:12px 0;}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px;}
+.modal{
+  margin:auto 16px;max-width:420px;width:100%;background:var(--surface);border:1px solid var(--line);
+  border-radius:16px;padding:20px;
+}
+.modal p{font-size:.9rem;color:var(--text-dim);margin:8px 0 16px;}
+.modal .row{display:flex;gap:8px;}
+.modal .row .btn{flex:1;}
+.overlay.center{align-items:center;}
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+.result{padding:16px 0 120px;}
+.score{text-align:center;padding:26px 16px;}
+.score .big{font-family:var(--mono);font-size:3.2rem;font-weight:800;line-height:1;}
+.score .of{font-size:.9rem;color:var(--text-faint);margin-top:4px;}
+.score .grade{display:inline-block;margin-top:12px;font-family:var(--mono);font-weight:800;padding:4px 14px;border-radius:99px;}
+.score .msg{font-size:.88rem;color:var(--text-dim);margin-top:10px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0;}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;}
+.stat b{display:block;font-family:var(--mono);font-size:1.25rem;}
+.stat span{font-size:.7rem;color:var(--text-faint);}
+.bar-row{margin-bottom:10px;}
+.bar-row .lbl{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--text-dim);}
+.bar-row .lbl b{font-family:var(--mono);color:var(--text);white-space:nowrap;}
+.bar{height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:4px;}
+.bar i{display:block;height:100%;border-radius:99px;}
+.actions{display:grid;gap:8px;margin:16px 0;}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 12px;}
+
+@media (max-width:560px){
+  .inst .t{font-size:1.22rem;}
+  .q{padding:12px;}
+  .q-text{font-size:.92rem;}
+  .score .big{font-size:2.8rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= PORTADA ======================= -->
+<div id="vCover" class="wrap">
+  <nav class="navc" aria-label="Navegación">
+    <a href="index.html" aria-label="Volver al menú del parcial" title="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+    <a href="../../../index.html" aria-label="Ir al inicio" title="Inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5M10 21v-6h4v6"/></svg></a>
+  </nav>
+
+  <div class="cover">
+    <div id="resumeBox" class="resume hidden">
+      <p>⏸️ Tienes un intento en curso (<b id="resumeInfo"></b>).</p>
+      <div class="row">
+        <button class="btn primary sm" id="btnResume" type="button">Continuar</button>
+        <button class="btn danger sm" id="btnDiscard" type="button">Descartar</button>
+      </div>
+    </div>
+
+    <div class="paper">
+      <div class="inst">
+        <div class="u">UNIVERSIDAD TECNOLÓGICA DE PANAMÁ</div>
+        <div class="f">Facultad de Ingeniería de Sistemas Computacionales</div>
+        <div class="c">Calidad de Software</div>
+        <div class="t">Segundo Parcial · Selección Única</div>
+        <div class="p">Unidad III · Medición de la Calidad del Software · 100 preguntas</div>
+      </div>
+
+      <hr class="rule">
+
+      <div class="sec-title">INDICACIONES</div>
+      <ol class="rules">
+        <li>Lea cuidadosamente cada enunciado y <b>seleccione la mejor respuesta</b>. Solo una opción es correcta.</li>
+        <li>Cada pregunta vale <b>1 punto</b> (total <b>100 puntos</b>). Las preguntas sin responder valen 0.</li>
+        <li>Varias opciones pueden sonar bien: elija la que coincide <b>exactamente con el material</b>.</li>
+        <li>Las opciones se mezclan en cada intento. El progreso se guarda si recargas la página.</li>
+      </ol>
+
+      <hr class="rule">
+
+      <div class="opts">
+        <div class="opt-group">
+          <label class="cap">MODO</label>
+          <div class="seg" id="segMode">
+            <button type="button" data-v="exam" class="on">📝 Examen</button>
+            <button type="button" data-v="practice">💡 Práctica</button>
+          </div>
+          <div class="opt-help" id="modeHelp">Examen: ves la nota y las respuestas al entregar.</div>
+        </div>
+        <div class="opt-group">
+          <label class="cap">ORDEN DE LAS PREGUNTAS</label>
+          <div class="seg" id="segOrder">
+            <button type="button" data-v="pdf" class="on">Orden del PDF</button>
+            <button type="button" data-v="rand">🔀 Aleatorio</button>
+          </div>
+        </div>
+        <div class="opt-group">
+          <label class="cap">CANTIDAD</label>
+          <div class="seg" id="segCount">
+            <button type="button" data-v="100" class="on">100 (como el parcial)</button>
+            <button type="button" data-v="all" id="btnAll">Todo el banco</button>
+          </div>
+          <div class="opt-help">Cada intento de 100 saca preguntas distintas del banco, proporcionales por tema.</div>
+        </div>
+        <div class="opt-group">
+          <label class="cap">DURACIÓN</label>
+          <div class="seg" id="segDur">
+            <button type="button" data-v="60">60 min</button>
+            <button type="button" data-v="90" class="on">90 min</button>
+            <button type="button" data-v="120">120 min</button>
+            <button type="button" data-v="0">Sin límite</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="rule">
+
+      <div class="sec-title">BANCO DE PREGUNTAS (orden según Calidad de Software_JN_Unidad III)</div>
+      <table class="topics" id="topicTable"></table>
+
+      <hr class="rule">
+
+      <button class="btn primary block" id="btnStart" type="button">Comenzar examen</button>
+    </div>
+
+    <div class="paper" id="histBox" style="margin-top:14px;display:none;">
+      <div class="sec-title">HISTORIAL DE INTENTOS</div>
+      <div id="histList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= EXAMEN ======================= -->
+<div id="vExam" class="hidden">
+  <div id="topbar">
+    <div class="tb-inner">
+      <div class="timer" id="timer">--:--</div>
+      <div class="tb-mid">
+        <div class="tb-label" id="tbLabel">0 de 100 respondidas</div>
+        <div class="tb-prog"><i id="tbProg"></i></div>
+      </div>
+      <button class="btn primary sm" id="btnSubmitTop" type="button">Entregar</button>
+    </div>
+  </div>
+  <div class="wrap exam" id="examList"></div>
+  <button class="fab" id="fabNav" type="button" aria-label="Ver mapa de preguntas" title="Mapa de preguntas">#</button>
+</div>
+
+<!-- ======================= RESULTADOS ======================= -->
+<div id="vResult" class="hidden">
+  <div class="wrap result">
+    <nav class="navc" aria-label="Navegación">
+      <a href="index.html" aria-label="Volver al menú del parcial" title="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+    </nav>
+    <div class="paper score" style="margin-top:14px;">
+      <div class="big" id="rScore">0</div>
+      <div class="of" id="rOf">de 100 puntos</div>
+      <div class="grade" id="rGrade">F</div>
+      <div class="msg" id="rMsg"></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="rOk" style="color:var(--accent)">0</b><span>Correctas</span></div>
+      <div class="stat"><b id="rBad" style="color:var(--red)">0</b><span>Incorrectas</span></div>
+      <div class="stat"><b id="rNone" style="color:var(--amber)">0</b><span>Sin responder</span></div>
+    </div>
+    <div class="paper">
+      <div class="sec-title">RESULTADO POR TEMA</div>
+      <div id="rTopics"></div>
+    </div>
+    <div class="actions">
+      <button class="btn primary block" id="btnRetryWrong" type="button">🔁 Repetir solo las falladas</button>
+      <button class="btn block" id="btnNew" type="button">Nuevo intento (100 preguntas)</button>
+    </div>
+    <div class="sec-title" style="margin-top:22px;">REVISIÓN</div>
+    <div class="filters seg" id="segFilter">
+      <button type="button" data-v="bad" class="on">Falladas</button>
+      <button type="button" data-v="all">Todas</button>
+      <button type="button" data-v="ok">Correctas</button>
+    </div>
+    <div id="review"></div>
+  </div>
+</div>
+
+<!-- ======================= OVERLAYS ======================= -->
+<div class="overlay hidden" id="ovNav">
+  <div class="sheet">
+    <h3>Mapa de preguntas</h3>
+    <div class="sub" id="navSub"></div>
+    <div class="legend" id="navLegend"></div>
+    <div class="grid" id="navGrid"></div>
+    <button class="btn block" style="margin-top:14px;" id="btnNavClose" type="button">Cerrar</button>
+  </div>
+</div>
+
+<div class="overlay center hidden" id="ovConfirm">
+  <div class="modal">
+    <h3>¿Entregar el examen?</h3>
+    <p id="confirmMsg"></p>
+    <div class="row">
+      <button class="btn" id="btnCancel" type="button">Seguir</button>
+      <button class="btn primary" id="btnConfirm" type="button">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   TEMAS (orden del PDF)
+   ============================================================ */
+var TOPICS = [
+  "Necesidad de la medida del software",
+  "Medida, métrica e indicadores",
+  "Proyecto semestral: herramientas",
+  "Principios de medición",
+  "Atributos de las métricas efectivas",
+  "Entidades que deben medirse",
+  "Proceso de medición de la calidad",
+  "Métricas de proceso y proyecto",
+  "Medición del proyecto",
+  "Medición del producto"
+];
+
+/* ============================================================
+   BANCO: {t: tema, q: enunciado, o: [CORRECTA, distractor…], e: explicación}
+   Las opciones se mezclan al mostrarse.
+   ============================================================ */
+var Q = [];
+function add(t, q, o, e){ Q.push({id:Q.length, t:t, q:q, o:o, e:e}); }
+
+/* ---------- 0 · Necesidad de la medida ---------- */
+add(0, "Según el material, la ingeniería de software es una disciplina que:",
+  ["Aún está aprendiendo a medir",
+   "Ya domina por completo la medición de sus atributos",
+   "No requiere medición por ser una actividad creativa",
+   "Solo mide el costo de los proyectos"],
+  "La primera idea de la unidad: <b>la ingeniería de software es una disciplina que está aún aprendiendo a medir</b>.");
+add(0, "La medición está ligada a la disciplina de vida del software, que comprende:",
+  ["Planificación, gestión y control de proyectos",
+   "Análisis, codificación y despliegue",
+   "Requisitos, mantenimiento y retiro del sistema",
+   "Inspección, auditoría y certificación"],
+  "La medición está ligada a la disciplina de vida del software: <b>planificación, gestión y control de proyectos</b>.");
+add(0, "¿Para qué sirve conocer el estado del software mediante la medición?",
+  ["Para realizar ajustes o mejoras en los procesos",
+   "Para valorar y premiar el desempeño individual de los programadores",
+   "Para sustituir las pruebas del producto",
+   "Para fijar el precio de venta del software"],
+  "La medición <b>permite conocer el estado del mismo para realizar ajustes o mejoras en los procesos</b>.");
+add(0, "Las métricas del producto ayudan a los ingenieros a:",
+  ["Obtener comprensión acerca del diseño y la construcción",
+   "Reemplazar la opinión del cliente",
+   "Eliminar la necesidad de documentar",
+   "Medir únicamente la satisfacción del usuario"],
+  "<b>Las métricas del producto ayudan a los ingenieros a obtener comprensión acerca del diseño y la construcción.</b>");
+add(0, "Para guiar el diseño de datos, arquitectura, interfaces y componentes se necesitan:",
+  ["Criterios objetivos",
+   "Evaluaciones subjetivas del equipo",
+   "Opiniones del usuario final",
+   "Indicadores exclusivamente financieros"],
+  "<b>Se necesitan criterios objetivos</b> que ayuden a guiar el diseño de datos, arquitectura, interfaces y componentes.");
+add(0, "Las métricas de producto proporcionan una base desde donde:",
+  ["El análisis, el diseño, la codificación y las pruebas puedan realizarse",
+   "Se calcula la nómina del equipo de desarrollo",
+   "Se negocia el contrato con el cliente",
+   "Se define la estrategia comercial de la empresa"],
+  "Las métricas de producto proporcionan una base desde donde <b>el análisis, el diseño, la codificación y las pruebas</b> puedan realizarse.");
+
+/* ---------- 1 · Medida, métrica e indicadores ---------- */
+add(1, "¿Qué concepto proporciona un indicio cuantitativo de la extensión, cantidad, dimensión, capacidad o tamaño de algún atributo de un producto o proceso?",
+  ["Medida", "Métrica", "Indicador", "Retroalimentación"],
+  "Es la definición de <b>medida</b>: un indicio cuantitativo de extensión, cantidad, dimensión, capacidad o tamaño de un atributo.");
+add(1, "En el material, la definición de la IEEE “una medida cuantitativa del grado en el que un sistema, componente o proceso posee un atributo determinado” aparece en la diapositiva de:",
+  ["Medida", "Indicador", "Formulación", "Recolección"],
+  "En la lámina, la definición de la IEEE aparece como segunda definición de <b>Medida</b>: “Según la IEEE: una medida cuantitativa del grado en el que un sistema, componente o proceso posee un atributo determinado”.");
+add(1, "Una métrica de software:",
+  ["Relaciona en alguna forma medidas individuales",
+   "Es un único dato aislado sobre un atributo",
+   "Es siempre una opinión del gerente",
+   "Es una recomendación transmitida al equipo"],
+  "<b>Una métrica de software relaciona en alguna forma medidas individuales.</b>");
+add(1, "“El número promedio de errores que se encuentran por revisión o por unidad de prueba” es un ejemplo de:",
+  ["Métrica", "Medida", "Indicador", "Entidad"],
+  "El material lo usa como ejemplo de <b>métrica</b>, porque relaciona medidas individuales (errores ÷ revisiones).");
+add(1, "Es una métrica o combinación de métricas que proporciona comprensión acerca del proceso, el proyecto o los productos de software:",
+  ["Indicador", "Medida", "Formulación", "Atributo"],
+  "Definición de <b>indicador</b>: una métrica o combinación de métricas que da comprensión del proceso, proyecto o producto.");
+add(1, "Según el diagrama, los indicadores de proyecto permiten:",
+  ["Detectar las áreas problema antes de que se conviertan en críticas",
+   "Valorar el desempeño individual de cada programador",
+   "Fijar el presupuesto inicial del proyecto",
+   "Sustituir las pruebas de aceptación"],
+  "Los indicadores de proyecto permiten: 1) evaluar el estado del proyecto, 2) hacer seguimiento a los riesgos potenciales, 3) <b>detectar áreas problema antes de que sean críticas</b>, 4) ajustar el flujo y las tareas, 5) evaluar la habilidad del equipo para controlar la calidad.");
+add(1, "¿Cuántas cosas permiten los indicadores de proyecto según el diagrama del material?",
+  ["Cinco", "Tres", "Cuatro", "Seis"],
+  "Son <b>5</b>: evaluar el estado, seguir riesgos, detectar áreas problema, ajustar flujo y tareas, evaluar la habilidad del equipo.");
+add(1, "En el proceso de recopilación de métricas de software, ¿cuál es la salida de la “Recopilación de datos”?",
+  ["Medidas", "Métricas", "Indicadores", "Hallazgos"],
+  "Recopilación de datos → <b>Medidas</b>; Cálculo de métricas → Métricas; Evaluación de métricas → Indicadores.");
+add(1, "En el proceso de recopilación de métricas, la “Evaluación de métricas” produce:",
+  ["Indicadores", "Medidas", "Métricas", "Requisitos"],
+  "La última etapa, <b>Evaluación de métricas, entrega indicadores</b>.");
+add(1, "¿Cuál es el orden correcto de las etapas del proceso de recopilación de métricas de software?",
+  ["Recopilación de datos → Cálculo de métricas → Evaluación de métricas",
+   "Cálculo de métricas → Recopilación de datos → Evaluación de métricas",
+   "Evaluación de métricas → Cálculo de métricas → Recopilación de datos",
+   "Recopilación de datos → Evaluación de métricas → Cálculo de métricas"],
+  "Datos → medidas → métricas → indicadores: <b>Recopilación de datos → Cálculo de métricas → Evaluación de métricas</b>.");
+add(1, "¿Cuáles son las tres entradas del proceso de recopilación de métricas de software?",
+  ["Proceso de ingeniería de software, proyecto del software y producto del software",
+   "Personas, tecnología y entorno de desarrollo",
+   "Tiempo, costo y alcance",
+   "Medidas, métricas e indicadores"],
+  "Las entradas que alimentan la recopilación de datos son el <b>proceso de ingeniería de software, el proyecto del software y el producto del software</b>.");
+
+/* ---------- 2 · Proyecto semestral: herramientas ---------- */
+add(2, "Herramienta del bloque “Calidad y análisis de código”, usada para análisis estático y detectar problemas antes de que lleguen a producción (inspección):",
+  ["SonarQube", "JMeter", "Pact", "DefectDojo"],
+  "Bloque 1 · Calidad y análisis de código: <b>SonarQube</b> (análisis estático, inspección).");
+add(2, "Herramienta que automatiza recorridos de usuario en navegadores:",
+  ["Playwright", "Postman", "Snyk", "Grafana k6"],
+  "Bloque 2 · Automatización funcional: <b>Playwright automatiza recorridos de usuario en navegadores</b>; Postman envía solicitudes a APIs.");
+add(2, "Herramienta que permite enviar solicitudes a APIs:",
+  ["Postman", "Playwright", "OWASP ZAP", "GitHub Actions"],
+  "<b>Postman</b>: permite enviar solicitudes a APIs (bloque de automatización funcional).");
+add(2, "El objetivo “¿Seguirá funcionando cuando muchas personas lo usen a la vez?” corresponde al bloque:",
+  ["Rendimiento y carga", "Automatización funcional", "Seguridad de aplicaciones", "Integración y contratos"],
+  "Bloque 3 · <b>Rendimiento y carga</b> (JMeter y Grafana k6).");
+add(2, "Herramienta que modela cargas y mide el comportamiento de aplicaciones y servicios bajo diferentes condiciones:",
+  ["JMeter", "Pact", "SonarQube", "Dependency-Check"],
+  "<b>JMeter</b>: modela cargas y mide el comportamiento bajo diferentes condiciones.");
+add(2, "Herramienta que permite escribir pruebas de rendimiento como código y ejecutarlas en flujos de desarrollo:",
+  ["Grafana k6", "JMeter", "Postman", "DefectDojo"],
+  "<b>Grafana (k6)</b>: pruebas de rendimiento como código dentro de los flujos de desarrollo.");
+add(2, "Herramienta que prueba aplicaciones web en ejecución para encontrar posibles debilidades de seguridad:",
+  ["OWASP ZAP", "OWASP Dependency-Check", "SonarQube", "Playwright"],
+  "<b>OWASP ZAP</b> prueba la aplicación web <i>en ejecución</i>; Dependency-Check revisa dependencias.");
+add(2, "Herramienta que compara las dependencias del proyecto con fuentes de vulnerabilidades conocidas:",
+  ["OWASP Dependency-Check", "OWASP ZAP", "Pact", "GitHub Actions"],
+  "<b>OWASP Dependency-Check</b>: compara dependencias con fuentes de vulnerabilidades conocidas.");
+add(2, "Pact, del bloque “Integración y contratos”, sirve para:",
+  ["Verificar acuerdos de interacción entre un consumidor y un proveedor de API usando contratos ejecutables",
+   "Centralizar hallazgos de seguridad de diferentes herramientas",
+   "Medir el tiempo de carga de las páginas",
+   "Automatizar flujos ante eventos del repositorio"],
+  "<b>Pact</b> evita que los servicios se rompan entre sí: verifica acuerdos consumidor–proveedor con <b>contratos ejecutables</b>.");
+add(2, "Herramienta que centraliza y organiza hallazgos de seguridad de diferentes herramientas para facilitar seguimiento y priorización:",
+  ["DefectDojo", "GitHub Actions", "Snyk", "SonarQube"],
+  "Bloque 6 · DevOps y gestión de hallazgos: <b>DefectDojo</b> centraliza hallazgos; GitHub Actions automatiza flujos.");
+
+/* ---------- 3 · Principios de medición ---------- */
+add(3, "Principio de medición que consiste en la derivación de medidas y métricas de software apropiadas para la representación del software que se construye:",
+  ["Formulación", "Recolección", "Análisis", "Interpretación"],
+  "<b>Formulación</b>: derivar las medidas y métricas apropiadas.");
+add(3, "El mecanismo que se usa para acumular los datos requeridos para derivar las métricas formuladas es la:",
+  ["Recolección", "Formulación", "Retroalimentación", "Interpretación"],
+  "<b>Recolección</b>: mecanismo para acumular los datos necesarios.");
+add(3, "El cálculo de métricas y la aplicación de herramientas matemáticas corresponde al principio de:",
+  ["Análisis", "Interpretación", "Formulación", "Recolección"],
+  "<b>Análisis</b>: cálculo de métricas y aplicación de herramientas matemáticas.");
+add(3, "La evaluación de las métricas resultantes para comprender la calidad de la representación es la:",
+  ["Interpretación", "Análisis", "Retroalimentación", "Formulación"],
+  "<b>Interpretación</b>: evaluar las métricas para comprender la calidad.");
+add(3, "Las recomendaciones derivadas de la interpretación de las métricas del producto, transmitidas al equipo del software, son la:",
+  ["Retroalimentación", "Interpretación", "Recolección", "Formulación"],
+  "<b>Retroalimentación</b>: recomendaciones que se transmiten al equipo.");
+add(3, "¿Cuál es el orden correcto de los principios de medición?",
+  ["Formulación, recolección, análisis, interpretación y retroalimentación",
+   "Recolección, formulación, análisis, retroalimentación e interpretación",
+   "Análisis, formulación, recolección, interpretación y retroalimentación",
+   "Formulación, análisis, recolección, retroalimentación e interpretación"],
+  "Mnemotecnia <b>F-R-A-I-R</b>: Formulación, Recolección, Análisis, Interpretación, Retroalimentación.");
+add(3, "Un equipo ya calculó sus métricas y ahora las evalúa para entender qué tan buena es la calidad del diseño. ¿En qué principio está?",
+  ["Interpretación", "Análisis", "Recolección", "Retroalimentación"],
+  "Calcular es Análisis; <b>evaluar para comprender la calidad es Interpretación</b>. Si luego le dan recomendaciones al equipo, eso sería Retroalimentación.");
+
+/* ---------- 4 · Atributos de las métricas efectivas ---------- */
+add(4, "Atributo según el cual debe ser relativamente fácil aprender a derivar la métrica y su cálculo no debe demandar esfuerzo o tiempo excesivo:",
+  ["Simple y calculable", "Congruente y objetiva", "Empírica o intuitivamente convincente", "Consistente en el uso de unidades"],
+  "<b>Simple y calculable</b>: fácil de derivar y sin esfuerzo o tiempo excesivo.");
+add(4, "Atributo según el cual la métrica debe satisfacer las nociones intuitivas del ingeniero acerca del atributo del producto:",
+  ["Empírica o intuitivamente convincente", "Simple y calculable", "Congruente y objetiva", "Independiente del lenguaje"],
+  "<b>Empírica o intuitivamente convincente</b>: concuerda con la intuición del ingeniero.");
+add(4, "Atributo según el cual una métrica siempre debe producir resultados que no tengan ambigüedades:",
+  ["Congruente y objetiva", "Simple y calculable", "Empírica o intuitivamente convincente", "Flexible y adaptable"],
+  "<b>Congruente y objetiva</b>: resultados sin ambigüedades.");
+add(4, "Una métrica requiere dos semanas de trabajo de un analista para calcularse cada vez. ¿Qué atributo incumple?",
+  ["Simple y calculable", "Congruente y objetiva", "Empírica o intuitivamente convincente", "Ninguno; el tiempo no importa"],
+  "Si su cálculo demanda esfuerzo o tiempo excesivo, no es <b>simple y calculable</b>.");
+add(4, "Dos ingenieros aplican la misma métrica al mismo módulo y obtienen resultados distintos. ¿Qué atributo incumple la métrica?",
+  ["Congruente y objetiva", "Simple y calculable", "Empírica o intuitivamente convincente", "Ninguno; es normal que varíe"],
+  "Si produce resultados ambiguos, no es <b>congruente y objetiva</b>.");
+add(4, "¿Cuál de las siguientes es uno de los atributos de las métricas de software efectivas?",
+  ["Empírica o intuitivamente convincente", "Compleja y exhaustiva", "Subjetiva y flexible", "Individual y comparativa"],
+  "Los tres atributos son: <b>simple y calculable; empírica o intuitivamente convincente; congruente y objetiva</b>.");
+
+/* ---------- 5 · Entidades que deben medirse ---------- */
+add(5, "¿Cuáles son las entidades que deben medirse según el material?",
+  ["Producto y procesos", "Personas y tecnología", "Tiempo y costo", "Medidas e indicadores"],
+  "Las entidades a medir son el <b>producto</b> y los <b>procesos</b>.");
+add(5, "Cualquier artefacto, entregable o documento que resulta de cualquiera de las actividades del ciclo de vida del software es la entidad:",
+  ["Producto", "Proceso", "Proyecto", "Recurso"],
+  "<b>Producto</b>: cualquier artefacto, entregable o documento del ciclo de vida.");
+add(5, "¿Cuál de los siguientes es un ejemplo de la entidad PRODUCTO?",
+  ["El plan de pruebas", "Las pruebas", "El mantenimiento", "El diseño y la construcción"],
+  "El <b>plan de pruebas</b> es un documento (producto). “Las pruebas”, como actividad, son un proceso.");
+add(5, "¿Cuál de los siguientes es un ejemplo de la entidad PROCESOS?",
+  ["Mantenimiento", "Manuales de usuario", "Código fuente", "Especificaciones de requisitos"],
+  "Procesos: requisitos, diseño y construcción, pruebas y <b>mantenimiento</b>. Los demás son productos.");
+add(5, "La entidad “procesos” abarca todas las actividades del ciclo de vida del software encaminadas a:",
+  ["Conocer el estado de los procesos y cómo se llevan a cabo, para después mejorarlos",
+   "Producir artefactos y documentos entregables",
+   "Calcular el costo total del proyecto",
+   "Certificar la fiabilidad del producto"],
+  "Procesos: actividades encaminadas a <b>conocer el estado de los procesos y cómo se llevan a cabo, para después mejorarlos</b>.");
+add(5, "Los manuales de usuario y las especificaciones de requisitos se clasifican como entidad de tipo:",
+  ["Producto", "Proceso", "Indicador", "Métrica"],
+  "Son documentos resultantes del ciclo de vida → <b>producto</b>. (Ojo: “Requisitos” como actividad es proceso; la <i>especificación</i> es producto.)");
+
+/* ---------- 6 · Proceso de medición de la calidad ---------- */
+add(6, "El proceso de gestión de la calidad del producto es un conjunto de actividades que se llevan a cabo durante la creación y el funcionamiento de los productos acordados para:",
+  ["Establecer, garantizar y mantener el nivel de calidad requerido",
+   "Convertir las entradas en salidas mediante recursos empresariales",
+   "Reducir el costo de producción en al menos un 2%",
+   "Valorar el desempeño del personal"],
+  "Gestión de la calidad del <b>producto</b>: actividades para <b>establecer, garantizar y mantener</b> el nivel de calidad requerido.");
+add(6, "El proceso de gestión de la calidad de los servicios se define como:",
+  ["Un conjunto de recursos empresariales interrelacionados y actividades que convierten las entradas en salidas",
+   "Un conjunto de actividades para establecer, garantizar y mantener el nivel de calidad",
+   "La derivación de medidas y métricas apropiadas",
+   "Un esquema de medición usado para recompensar al personal"],
+  "Gestión de la calidad de los <b>servicios</b>: recursos empresariales interrelacionados + actividades que <b>convierten entradas en salidas</b>.");
+add(6, "Los recursos empresariales interrelacionados que menciona el proceso de gestión de la calidad de los servicios son:",
+  ["Personal, equipos, metodología y tecnología",
+   "Tiempo, costo, alcance y riesgo",
+   "Producto, personas, tecnología y proceso",
+   "Clientes, proveedores, normas y auditores"],
+  "Recursos: <b>personal, equipos, metodología y tecnología</b> (mnemotecnia: <b>PEMT</b>).");
+add(6, "¿En cuántos grupos pueden dividirse generalmente los procesos de gestión de la calidad?",
+  ["Dos", "Tres", "Cuatro", "Cinco"],
+  "En <b>dos grupos</b>: 1) mantener el sistema estable; 2) trasladarlo a un nivel superior.");
+add(6, "“Mantener el sistema de producción en un estado estable y garantizar la salida de productos dominados del nivel de calidad previsto” corresponde al:",
+  ["Primer grupo de procesos de gestión de la calidad",
+   "Segundo grupo de procesos de gestión de la calidad",
+   "Último paso de las fases de implementación",
+   "Principio de retroalimentación"],
+  "Es el <b>grupo 1</b> (mantener). El grupo 2 es trasladar a un nivel superior.");
+add(6, "El segundo grupo de procesos de gestión de la calidad busca:",
+  ["Trasladar el sistema de producción a un nivel superior, con productos de mayor nivel técnico y calidad",
+   "Mantener el sistema de producción en un estado estable",
+   "Examinar todos los casos de incumplimiento de normas",
+   "Calcular los costes de calidad"],
+  "Grupo 2: <b>trasladar el sistema a un nivel superior</b>, creando productos de mayor nivel técnico y calidad.");
+add(6, "¿Cuál de las siguientes es una de las funciones de la gestión como proceso, inherentes a la gestión de la calidad del producto?",
+  ["Motivación", "Codificación", "Certificación", "Formulación"],
+  "Funciones: <b>planificación, organización, motivación, control, comunicación y toma de decisiones</b>.");
+add(6, "Según el material, los programas de mejora de la calidad y los sistemas de gestión de la calidad deben:",
+  ["Integrarse en la producción", "Mantenerse separados de la producción", "Aplicarse solo al final del proyecto", "Delegarse a un auditor externo"],
+  "Los programas de mejora y los sistemas de gestión de la calidad <b>deben integrarse en la producción</b>.");
+add(6, "En la primera fase de implementación de los sistemas de garantía de calidad, la tarea de los gestores es:",
+  ["Examinar en detalle todos los casos de incumplimiento de las normas estipuladas",
+   "Calcular los costes de calidad y reducirlos al menos un 2%",
+   "Implantar un sistema integral de gestión de la calidad",
+   "Abordar el problema de la calidad con mayor profundidad y amplitud"],
+  "Fase 1: <b>examinar los casos de incumplimiento de normas</b>. Fase 2: costes (≥2%). Siguientes: profundidad. Último: sistema integral.");
+add(6, "En el segundo paso de implementación de los sistemas de garantía de calidad, el objetivo es reducir los costes de calidad al menos en:",
+  ["Un dos por ciento", "Un cinco por ciento", "Un diez por ciento", "Un cincuenta por ciento"],
+  "Segundo paso: calcular los costes de calidad y <b>reducirlos al menos en un 2%</b>, demostrando eficacia y eficiencia.");
+add(6, "El último paso de las fases de implementación de los sistemas de garantía de calidad es:",
+  ["Implantar un sistema integral de gestión de la calidad como parte orgánica del proceso de producción",
+   "Calcular los costes de calidad",
+   "Examinar los casos de incumplimiento de normas",
+   "Certificar la fiabilidad de cada producto"],
+  "Último paso: <b>sistema integral de gestión de la calidad como parte orgánica del proceso de producción</b>.");
+add(6, "Según las consideraciones del material, el primer requisito para el aseguramiento de la calidad es:",
+  ["La verificación del cumplimiento de la norma",
+   "La reducción de costes de calidad",
+   "La certificación de la fiabilidad",
+   "La contratación de un equipo de pruebas"],
+  "<b>El primer requisito para el aseguramiento de la calidad es la verificación del cumplimiento de la norma.</b>");
+add(6, "La planificación estratégica de la calidad se considera tan importante que:",
+  ["Ha pasado a formar parte de la planificación estratégica global de las empresas",
+   "Se realiza solo en la fase de pruebas",
+   "Reemplaza a la planificación financiera",
+   "Es responsabilidad exclusiva de los programadores"],
+  "La planificación estratégica de la calidad <b>forma parte de la planificación estratégica global</b> de las empresas.");
+add(6, "En la estrategia de calidad se da gran importancia a:",
+  ["La identificación clara de los responsables y el seguimiento de la aplicación del programa",
+   "Reducir al mínimo la documentación",
+   "Usar una única métrica para todo",
+   "Evaluar a cada empleado según sus defectos"],
+  "Se destaca la <b>identificación clara de los responsables</b> y el <b>seguimiento de la aplicación del programa</b>.");
+add(6, "Según el material, la calidad sólo puede garantizarse mediante un sistema que asegure la calidad:",
+  ["A lo largo de todo el ciclo de vida del producto",
+   "Únicamente en la fase de pruebas",
+   "Solo después de la entrega al cliente",
+   "Solo durante la codificación"],
+  "<b>A lo largo de todo el ciclo de vida del producto.</b>");
+add(6, "¿Cuál de los siguientes elementos incluye el sistema de gestión de la calidad?",
+  ["Certificación de la fiabilidad",
+   "Cálculo del Valor Ganado (EVM)",
+   "Medición de la velocidad del equipo",
+   "Encuestas de satisfacción del cliente"],
+  "El SGC incluye: requisitos para el sistema de control y ensayo; <b>certificación de la fiabilidad</b>; requisitos para la organización de la producción y gestión de la calidad desde el diseño hasta el funcionamiento.");
+
+/* ---------- 7 · Métricas de proceso y proyecto ---------- */
+add(7, "Las métricas de proceso y proyecto son:",
+  ["Medidas cuantitativas que permiten obtener comprensión acerca de la eficiencia del proceso del software y de los proyectos",
+   "Opiniones cualitativas de los usuarios sobre el producto",
+   "Recomendaciones transmitidas al equipo del software",
+   "Herramientas para evaluar el desempeño individual"],
+  "Son <b>medidas cuantitativas</b> que dan comprensión acerca de la <b>eficiencia</b> del proceso y los proyectos.");
+add(7, "¿Quién analiza y valora las métricas del software?",
+  ["Los gerentes del software", "Los usuarios finales", "Los auditores externos", "El cliente"],
+  "Las métricas se <b>analizan y valoran por los gerentes</b>; con frecuencia los <b>ingenieros las recopilan</b>.");
+add(7, "Según el material, con frecuencia ¿quiénes recopilan las medidas?",
+  ["Los ingenieros del software", "Los gerentes del software", "Los clientes", "Los usuarios finales"],
+  "Gerentes → analizan y valoran. <b>Ingenieros → recopilan las medidas.</b>");
+add(7, "¿Por qué es importante medir el proceso y el proyecto?",
+  ["Porque si no se mide, el juicio puede basarse en la evaluación subjetiva",
+   "Porque permite castigar a los equipos con bajo desempeño",
+   "Porque elimina la necesidad de planificar",
+   "Porque garantiza un software sin defectos"],
+  "Si no se mide, el juicio se basa en la <b>evaluación subjetiva</b>. Medir permite marcar tendencias, hacer mejores estimaciones y lograr verdadera mejoría.");
+add(7, "Con la medición del proceso y el proyecto se puede:",
+  ["Marcar tendencias, hacer mejores estimaciones y lograr verdadera mejoría",
+   "Evaluar y recompensar a cada desarrollador",
+   "Reemplazar la gestión de riesgos",
+   "Evitar las pruebas del software"],
+  "Con la medición se puede <b>marcar tendencias, hacer mejores estimaciones y lograr verdadera mejoría</b>.");
+add(7, "¿Cuál es el producto final de las métricas de proceso y proyecto?",
+  ["Un conjunto de métricas de software que proporciona comprensión acerca del proceso y el proyecto",
+   "Un informe de desempeño individual de cada ingeniero",
+   "El código fuente revisado",
+   "Un único indicador de costo"],
+  "Producto final: <b>un conjunto de métricas</b> que proporciona comprensión acerca del proceso y el proyecto.");
+add(7, "¿Cómo me aseguro de que apliqué bien las métricas de proceso y proyecto?",
+  ["Aplicando un esquema de medición consistente, aunque simple, que nunca se use para valorar, recompensar o castigar el desempeño individual",
+   "Aplicando el mayor número posible de métricas complejas",
+   "Usando las métricas para premiar a los mejores programadores",
+   "Midiendo solo cuando el proyecto ya terminó"],
+  "Esquema <b>consistente, aunque simple</b>, que <b>nunca</b> debe usarse para valorar, recompensar o castigar el desempeño individual.");
+add(7, "¿Cuál de las siguientes acciones permiten realizar al gerente las métricas de proceso y proyecto?",
+  ["Rastrear riesgos potenciales",
+   "Fijar salarios según la productividad individual",
+   "Eliminar la etapa de pruebas",
+   "Definir los requisitos del cliente"],
+  "Permiten al gerente: valorar el estado del proyecto, <b>rastrear riesgos potenciales</b>, descubrir áreas problema antes de que sean críticas, ajustar el flujo de trabajo y evaluar la habilidad del equipo para controlar la calidad.");
+add(7, "En el diagrama del triángulo de métricas de proceso y proyecto, ¿qué elemento está en el centro?",
+  ["Proceso", "Producto", "Personas", "Tecnología"],
+  "El <b>Proceso</b> está en el centro del triángulo; sus vértices son Producto, Personas y Tecnología.");
+add(7, "Los vértices del triángulo en el diagrama de métricas de proceso y proyecto son:",
+  ["Producto, personas y tecnología",
+   "Tiempo, costo y alcance",
+   "Características del cliente, condiciones del negocio y entorno de desarrollo",
+   "Medida, métrica e indicador"],
+  "Vértices: <b>Producto (arriba), Personas y Tecnología</b>. Alrededor, en el círculo: características del cliente, condiciones del negocio y entorno de desarrollo.");
+add(7, "En el diagrama del triángulo del proceso, los factores que rodean al triángulo (en el círculo) son:",
+  ["Características del cliente, condiciones del negocio y entorno de desarrollo",
+   "Producto, personas y tecnología",
+   "Tiempo, costo y alcance",
+   "Formulación, recolección y análisis"],
+  "El círculo que rodea al triángulo: <b>características del cliente, condiciones del negocio y entorno de desarrollo</b>.");
+add(7, "¿Cuál de los siguientes es uno de los resultados de la medición del proceso de software?",
+  ["Esfuerzo humano empleado",
+   "Puntuación de accesibilidad WCAG",
+   "Daily Active Users (DAU)",
+   "Latencia global"],
+  "Resultados de la medición del proceso: errores descubiertos antes de liberar, defectos entregados y reportados por usuarios finales, productos operativos entregados, <b>esfuerzo humano empleado</b>, tiempo calendario consumido y conformidad con la agenda.");
+add(7, "“Defectos entregados y reportados por usuarios finales” y “conformidad con la agenda” son:",
+  ["Resultados de la medición del proceso de software",
+   "Lineamientos para recopilar métricas",
+   "Principios de medición",
+   "Atributos de las métricas efectivas"],
+  "Ambos son <b>resultados de la medición del proceso</b> de software (son 6 en total).");
+add(7, "Un gerente usa la cantidad de defectos de cada programador para decidir quién recibe bono. ¿Qué lineamiento viola?",
+  ["No usar métricas para valorar a los individuos",
+   "No obsesionarse con una sola métrica",
+   "Proporcionar retroalimentación regular",
+   "Usar el sentido común y sensibilidad organizacional"],
+  "Viola <b>“No usar métricas para valorar a los individuos”</b> (y el esquema de medición nunca debe usarse para recompensar o castigar).");
+add(7, "Según los lineamientos para recopilar métricas, los datos que indiquen un área problemática:",
+  ["No deben considerarse “negativos”",
+   "Deben ocultarse para no desmotivar al equipo",
+   "Deben usarse para sancionar al responsable",
+   "Deben descartarse del análisis"],
+  "Lineamiento: <b>no considerar “negativos” los datos que indiquen un área problemática</b>.");
+add(7, "Un equipo se enfoca únicamente en la velocidad y deja de revisar la tasa de defectos y la cobertura de pruebas. ¿Qué lineamiento incumple?",
+  ["No obsesionarse con una sola métrica ni excluir otras métricas importantes",
+   "Nunca usar métricas para amenazar a los individuos",
+   "No usar métricas para valorar a los individuos",
+   "Trabajar con los profesionales para establecer metas claras"],
+  "Incumple <b>no obsesionarse con una sola métrica ni excluir otras importantes</b>.");
+add(7, "¿Cuál de los siguientes es un lineamiento a aplicar cuando se recopilan métricas?",
+  ["Proporcionar retroalimentación regular a los individuos y equipos que recopilan medidas y métricas",
+   "Usar las métricas para identificar a los peores programadores",
+   "Recopilar métricas solo al final del proyecto",
+   "Basar todas las decisiones en una sola métrica"],
+  "Lineamiento: <b>proporcionar retroalimentación regular</b> a quienes recopilan medidas y métricas.");
+
+/* ---------- 8 · Medición del proyecto ---------- */
+add(8, "La medición de un proyecto:",
+  ["Enseña el estado del proyecto en un determinado momento de ejecución, con datos objetivos para cuantificar su desarrollo, identificar fallos y definir mejoras",
+   "Cuantifica los atributos del software para garantizar su alineación con los requisitos del negocio",
+   "Mide únicamente el costo final del proyecto",
+   "Evalúa el desempeño individual de cada miembro del equipo"],
+  "Medición del <b>proyecto</b>: estado en un momento dado, datos objetivos para cuantificar, identificar fallos y definir mejoras. (La otra definición es la de medición del producto.)");
+add(8, "En los proyectos clásicos (tradicionales, cascada), las mediciones se enfocan en el cumplimiento del triángulo de proyecto, formado por:",
+  ["Tiempo, costo y alcance", "Producto, personas y tecnología", "Velocidad, tasa de entrega y calidad del código", "Lead time, tasa de cambio fallido y MTTR"],
+  "Triángulo del proyecto: <b>tiempo, costo y alcance</b>; la planificación es rígida y se priorizan los plazos predefinidos.");
+add(8, "En los proyectos clásicos, ¿qué herramienta se usa en el control del presupuesto para medir el costo y el progreso en paralelo?",
+  ["El método de Valor Ganado (EVM)", "Los puntos de historia", "El MTTR", "Google Lighthouse"],
+  "Control del presupuesto: se usa el <b>método de Valor Ganado (EVM)</b>.");
+add(8, "En un proyecto tradicional, ¿qué medición evalúa la capacidad del equipo para seguir el plan de tiempo, considerando que un retraso puede afectar el costo y el alcance?",
+  ["Cumplimiento del cronograma", "Control del presupuesto", "Gestión del riesgo", "Velocidad del equipo"],
+  "<b>Cumplimiento del cronograma</b>: un retraso puede afectar el costo y el alcance.");
+add(8, "En los proyectos clásicos, la medición en la que los riesgos se identifican, analizan y controlan durante todo el ciclo de vida del proyecto es la:",
+  ["Gestión del riesgo", "Tolerancia a fallos", "Tasa de resolución de conflictos", "Control del presupuesto"],
+  "<b>Gestión del riesgo</b>: identificar, analizar y controlar riesgos durante todo el ciclo de vida.");
+add(8, "En metodologías ágiles, el enfoque de las mediciones está en:",
+  ["La flexibilidad y la entrega de valor de manera iterativa",
+   "El cumplimiento rígido de plazos predefinidos",
+   "La experiencia del usuario en distintos dispositivos",
+   "La adaptación a regulaciones locales"],
+  "Ágil: <b>flexibilidad y entrega de valor iterativa</b>; se evalúa eficiencia del equipo, valor para el cliente y calidad de las entregas.");
+add(8, "La cantidad de trabajo completado en un sprint, medida en puntos de historia, que ayuda a predecir la capacidad de entrega futura, es la:",
+  ["Velocidad del equipo", "Tasa de entrega", "Lead time", "Calidad del código"],
+  "<b>Velocidad del equipo</b>: trabajo completado por sprint en <b>puntos de historia</b>.");
+add(8, "En ambientes ágiles, la medición que evalúa la frecuencia y el valor del software que se pone en producción es la:",
+  ["Tasa de entrega", "Velocidad del equipo", "Tasa de cambio fallido", "Tiempo de actividad"],
+  "<b>Tasa de entrega</b>: frecuencia y valor del software puesto en producción; aumentar la entrega continua es un objetivo clave.");
+add(8, "En ambientes ágiles, la “calidad del código” se mide con aspectos como:",
+  ["Cantidad de errores, cobertura de pruebas automáticas y deuda técnica acumulada",
+   "Tiempo, costo y alcance",
+   "Uso de batería, datos y crash rate",
+   "DAU y MAU"],
+  "Calidad del código (ágil): <b>errores encontrados, cobertura de pruebas automáticas y deuda técnica</b>.");
+add(8, "En los proyectos web, las mediciones se centran en:",
+  ["La experiencia del usuario y el rendimiento del sitio",
+   "El triángulo tiempo, costo y alcance",
+   "La colaboración entre desarrollo y operaciones",
+   "El cumplimiento de regulaciones locales"],
+  "Web: <b>experiencia del usuario y rendimiento del sitio</b>, para una experiencia fluida y eficiente.");
+add(8, "En un proyecto web, el porcentaje de tiempo que el sitio está disponible para los usuarios (idealmente cercano al 100%) es el:",
+  ["Tiempo de actividad del sitio web", "Tiempo de respuesta de páginas", "MTTR", "Lead time"],
+  "<b>Tiempo de actividad del sitio web</b> (uptime): cercano al 100% es crucial para la confianza del usuario.");
+add(8, "La puntuación de accesibilidad en proyectos web se mide siguiendo las pautas:",
+  ["WCAG", "EVM", "MTTR", "DAU"],
+  "<b>WCAG</b>: pautas de accesibilidad para contenido web; mide qué tan accesible es el sitio para personas con discapacidades.");
+add(8, "En DevOps, las mediciones se enfocan en:",
+  ["Mejorar la automatización y la colaboración entre los equipos de desarrollo y operaciones",
+   "La rigidez de la planificación y los plazos predefinidos",
+   "La adaptación a diferentes contextos locales",
+   "El consumo de batería de los dispositivos"],
+  "DevOps: <b>automatización y colaboración entre desarrollo y operaciones</b>, para acelerar los ciclos de entrega y mejorar la estabilidad.");
+add(8, "En DevOps, el tiempo que toma desde la escritura del código hasta que se despliega en producción es el:",
+  ["Lead time (tiempo de ciclo)", "MTTR", "Tiempo de actividad", "Tasa de entrega"],
+  "<b>Lead time</b>: de la escritura del código al despliegue en producción. Un ciclo corto indica alta eficiencia.");
+add(8, "El porcentaje de despliegues que resultan en errores o fallos que requieren reversión es la:",
+  ["Tasa de cambio fallido", "Crash rate", "Tasa de defectos", "Tasa de resolución de conflictos"],
+  "<b>Tasa de cambio fallido</b> (DevOps): una tasa baja indica calidad y estabilidad.");
+add(8, "En DevOps, MTTR (Mean Time to Recovery) es:",
+  ["El tiempo promedio que se tarda en restaurar el servicio después de una falla",
+   "El tiempo desde la escritura del código hasta producción",
+   "El porcentaje de despliegues fallidos",
+   "El tiempo promedio de carga de una página"],
+  "<b>MTTR</b>: tiempo promedio para <b>restaurar el servicio</b> tras una falla; en un DevOps eficiente es bajo.");
+add(8, "En proyectos móviles, la tasa de fallos medida en la cantidad de veces que la app se cierra inesperadamente se llama:",
+  ["Crash rate", "Tasa de cambio fallido", "Tasa de defectos", "Churn"],
+  "<b>Crash rate</b>: una tasa alta indica problemas de estabilidad y afecta la retención de usuarios.");
+add(8, "¿Cuáles son las tres mediciones de proyecto en ambientes móviles según el material?",
+  ["Uso de batería y datos, tiempos de respuesta de la app y crash rate",
+   "Lead time, tasa de cambio fallido y MTTR",
+   "Velocidad del equipo, tasa de entrega y calidad del código",
+   "Tiempos de respuesta de páginas, tiempo de actividad y WCAG"],
+  "Proyectos móviles: <b>uso de batería y datos, tiempos de respuesta de la app y crash rate</b>.");
+add(8, "En proyectos distribuidos globalmente, la medición que evalúa si el proyecto cumple las normativas y requisitos legales de cada región es el:",
+  ["Cumplimiento de regulaciones locales", "Control del presupuesto", "Tasa de resolución de conflictos", "Gestión del riesgo"],
+  "<b>Cumplimiento de regulaciones locales</b>: crucial en proyectos internacionales con múltiples jurisdicciones.");
+add(8, "La medición de proyectos globales que mide la velocidad de interacción y resolución de tareas entre equipos en distintas zonas horarias es:",
+  ["Tiempos de respuesta de equipos distribuidos", "Latencia global", "Lead time", "Velocidad del equipo"],
+  "<b>Tiempos de respuesta de equipos distribuidos</b> (proyecto global). No confundir con latencia global, que es del producto.");
+
+/* ---------- 9 · Medición del producto ---------- */
+add(9, "La medición del producto de software se refiere al proceso de:",
+  ["Cuantificar y evaluar diferentes atributos del software para garantizar su calidad, rendimiento y alineación con los requisitos de los usuarios y del negocio",
+   "Enseñar el estado del proyecto en un determinado momento de ejecución",
+   "Calcular los costes de calidad para reducirlos un 2%",
+   "Valorar el desempeño individual de los desarrolladores"],
+  "Medición del <b>producto</b>: cuantificar y evaluar atributos para garantizar <b>calidad, rendimiento y alineación con los requisitos</b>.");
+add(9, "En los productos de software clásicos, las mediciones se enfocan en:",
+  ["La estabilidad y funcionalidad del producto",
+   "La flexibilidad y la entrega iterativa de valor",
+   "La latencia desde distintas ubicaciones",
+   "El consumo de batería y datos"],
+  "Software clásico: enfoque en calidad, funcionalidad y cumplimiento de requisitos; mediciones enfocadas en <b>estabilidad y funcionalidad</b>.");
+add(9, "En el software clásico, la métrica que evalúa si el software cumple con los requisitos especificados y si las funcionalidades se comportan como se espera es:",
+  ["Calidad funcional", "Satisfacción del cliente", "Mantenimiento y soporte", "Usabilidad y accesibilidad"],
+  "<b>Calidad funcional</b>: puede medirse con pruebas funcionales automatizadas o manuales.");
+add(9, "En el software clásico, la “tasa de defectos” es:",
+  ["La cantidad de errores o bugs encontrados en producción",
+   "El porcentaje de despliegues que requieren reversión",
+   "La cantidad de veces que la app se cierra inesperadamente",
+   "El tiempo para restaurar el servicio"],
+  "<b>Tasa de defectos</b>: errores o bugs encontrados en producción; un número bajo indica un software estable.");
+add(9, "En el software clásico, la satisfacción del cliente se mide a través de:",
+  ["Encuestas o reportes de usuarios", "Puntos de historia", "Google Lighthouse", "El método de Valor Ganado"],
+  "<b>Satisfacción del cliente</b>: medida a través de encuestas o reportes de usuarios.");
+add(9, "La métrica de software clásico que mide el tiempo y esfuerzo necesario para mantener el software una vez desplegado es:",
+  ["Mantenimiento y soporte", "Calidad funcional", "Tasa de defectos", "Escalabilidad"],
+  "<b>Mantenimiento y soporte</b>: facilidad de realizar actualizaciones y correcciones después del despliegue.");
+add(9, "¿Qué herramientas menciona el material para medir los tiempos de carga y respuesta de una aplicación web?",
+  ["Google Lighthouse y Pingdom", "JMeter y Grafana k6", "SonarQube y Snyk", "Playwright y Postman"],
+  "Tiempos de carga y respuesta (producto web): <b>Google Lighthouse y Pingdom</b>.");
+add(9, "En aplicaciones web, la medición de la eficiencia del servidor y su capacidad para manejar múltiples solicitudes concurrentes es el:",
+  ["Rendimiento del backend", "Tiempo de carga y respuesta", "Tiempo de actividad", "Lead time"],
+  "<b>Rendimiento del backend</b>: puede incluir latencia, uso de recursos y escalabilidad.");
+add(9, "Para el producto web, la usabilidad y accesibilidad verifica el cumplimiento de los estándares:",
+  ["WCAG 2.0", "ISO 9001", "EVM", "OWASP Top 10"],
+  "Usabilidad y accesibilidad del producto web: estándares <b>WCAG 2.0</b>, navegación intuitiva y compatibilidad con dispositivos de asistencia.");
+add(9, "En aplicaciones móviles, los indicadores “Daily Active Users (DAU)” y “Monthly Active Users (MAU)” son comunes para medir:",
+  ["Retención y engagement", "Rendimiento en múltiples dispositivos", "Tasa de crashes y fallos", "Uso de batería y recursos"],
+  "<b>Retención y engagement</b>: cuántos usuarios siguen usando la app después de descargarla (DAU, MAU).");
+add(9, "En el producto móvil, un alto consumo de batería y de CPU/memoria puede llevar a:",
+  ["La desinstalación de la aplicación", "Un mayor engagement", "Una menor latencia global", "Un aumento del tiempo de actividad"],
+  "Uso de batería y recursos: <b>un alto consumo puede llevar a la desinstalación</b>.");
+add(9, "La medición de producto móvil que evalúa la consistencia del rendimiento en distintas plataformas (iOS, Android, etc.) es:",
+  ["Rendimiento en múltiples dispositivos", "Escalabilidad", "Retención y engagement", "Tolerancia a fallos y resiliencia"],
+  "<b>Rendimiento en múltiples dispositivos</b>: las herramientas de testeo multiplataforma son clave.");
+add(9, "En aplicaciones distribuidas o globales, ¿cómo se recomienda minimizar la latencia global?",
+  ["Mediante CDN o servidores locales", "Aumentando los puntos de historia", "Reduciendo la cobertura de pruebas", "Con encuestas de satisfacción"],
+  "<b>Latencia global</b>: se minimiza a través de <b>CDN o servidores locales</b>.");
+add(9, "La capacidad de una aplicación distribuida para manejar un número creciente de usuarios sin sacrificar el rendimiento, agregando recursos dinámicamente, es la:",
+  ["Escalabilidad", "Resiliencia", "Latencia global", "Retención"],
+  "<b>Escalabilidad</b>: más usuarios sin perder rendimiento, agregando recursos de forma dinámica.");
+add(9, "La medición que evalúa cómo la aplicación maneja fallos en distintos componentes (bases de datos, servidores) y se recupera rápidamente sin afectar al usuario es:",
+  ["Tolerancia a fallos y resiliencia", "MTTR", "Escalabilidad", "Tasa de cambio fallido"],
+  "<b>Tolerancia a fallos y resiliencia</b> (producto distribuido). MTTR es una medición de proyecto DevOps.");
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+var KEY = "qa_p2_sel_v1", HKEY = "qa_p2_sel_hist_v1";
+var LETTERS = ["a", "b", "c", "d", "e"];
+var S = null, timerId = null;
+var cfg = {mode: "exam", order: "pdf", dur: 90, count: "100"};
+
+function load(k){ try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function save(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function drop(k){ try { localStorage.removeItem(k); } catch (e) {} }
+function $(id){ return document.getElementById(id); }
+function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function show(v){ ["vCover", "vExam", "vResult"].forEach(function (x) { $(x).classList.toggle("hidden", x !== v); }); window.scrollTo(0, 0); }
+function persist(){ if (S) save(KEY, S); }
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+function segInit(id, key, onChange){
+  var seg = $(id);
+  seg.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    [].forEach.call(seg.children, function (x) { x.classList.toggle("on", x === b); });
+    var v = b.getAttribute("data-v");
+    if (key) cfg[key] = key === "dur" ? +v : v;
+    if (onChange) onChange(v);
+  });
+}
+segInit("segMode", "mode", function (v) {
+  $("modeHelp").textContent = v === "exam"
+    ? "Examen: ves la nota y las respuestas al entregar."
+    : "Práctica: al elegir una opción ves si es correcta y la explicación.";
+});
+segInit("segOrder", "order");
+segInit("segDur", "dur");
+segInit("segCount", "count");
+
+/* 100 preguntas del banco, repartidas por tema en proporción (residuo mayor) */
+function pick(n){
+  if (n >= Q.length) return Q.map(function (q) { return q.id; });
+  var groups = TOPICS.map(function () { return []; });
+  Q.forEach(function (q) { groups[q.t].push(q.id); });
+  var quota = groups.map(function (g) { var x = g.length * n / Q.length; return {f: Math.floor(x), r: x - Math.floor(x)}; });
+  var left = n - quota.reduce(function (a, q) { return a + q.f; }, 0);
+  quota.map(function (q, i) { return i; }).sort(function (a, b) { return quota[b].r - quota[a].r; })
+    .slice(0, left).forEach(function (i) { quota[i].f++; });
+  var ids = [];
+  groups.forEach(function (g, i) { ids = ids.concat(shuffle(g).slice(0, quota[i].f)); });
+  return ids.sort(function (a, b) { return a - b; });
+}
+
+function renderCover(){
+  var counts = TOPICS.map(function () { return 0; });
+  Q.forEach(function (q) { counts[q.t]++; });
+  var html = TOPICS.map(function (t, i) { return "<tr><td>" + (i + 1) + " · " + t + "</td><td>" + counts[i] + "</td></tr>"; }).join("");
+  $("topicTable").innerHTML = html + "<tr><td>Banco total · se preguntan 100</td><td>" + Q.length + "</td></tr>";
+  $("btnAll").textContent = "Todo el banco (" + Q.length + ")";
+
+  var saved = load(KEY);
+  if (saved && !saved.done) {
+    var n = Object.keys(saved.ans).length;
+    $("resumeInfo").textContent = n + " de " + saved.ids.length + " respondidas";
+    $("resumeBox").classList.remove("hidden");
+  } else $("resumeBox").classList.add("hidden");
+
+  var hist = load(HKEY) || [];
+  if (hist.length) {
+    $("histBox").style.display = "";
+    $("histList").innerHTML = hist.slice(0, 8).map(function (h) {
+      return '<div class="hist-item"><span>' + h.date + " · " + h.label + "</span><b>" + h.ok + "/" + h.total + "</b></div>";
+    }).join("");
+  }
+}
+
+/* ============================================================
+   EXAMEN
+   ============================================================ */
+function start(ids, label, mode, dur, order){
+  if (order === "rand") ids = shuffle(ids);
+  var perm = {};
+  ids.forEach(function (id) { perm[id] = shuffle(Q[id].o.map(function (_, i) { return i; })); });
+  S = {ids: ids, perm: perm, ans: {}, mode: mode, label: label, order: order,
+       deadline: dur ? Date.now() + dur * 60000 : 0, done: false};
+  persist();
+  openExam();
+}
+
+function openExam(){
+  var list = $("examList"), html = [], lastT = -1, byTopic = S.order === "pdf";
+  S.ids.forEach(function (id, n) {
+    var q = Q[id];
+    if (byTopic && q.t !== lastT) {
+      lastT = q.t;
+      html.push('<div class="part-head"><div class="k">TEMA ' + (q.t + 1) + '</div><h2>' + TOPICS[q.t] + '</h2></div>');
+    }
+    html.push(qHTML(id, n, false));
+  });
+  html.push('<div class="end-box"><button class="btn primary block" id="btnSubmitEnd" type="button">Entregar examen</button></div>');
+  list.innerHTML = html.join("");
+  $("btnSubmitEnd").addEventListener("click", askSubmit);
+  show("vExam");
+  updateBar();
+  tick();
+  clearInterval(timerId);
+  timerId = setInterval(tick, 1000);
+}
+
+function qHTML(id, n, review){
+  var q = Q[id], p = S.perm[id], a = S.ans[id], locked = review || (S.mode === "practice" && a !== undefined);
+  var opts = p.map(function (oi, k) {
+    var cls = "o";
+    if (locked) {
+      if (oi === 0) cls += " ok";
+      else if (oi === a) cls += " bad";
+    } else if (oi === a) cls += " sel";
+    return '<button type="button" class="' + cls + '" data-q="' + id + '" data-o="' + oi + '"' + (locked ? " disabled" : "") +
+           '><span class="l">' + LETTERS[k] + ')</span><span>' + q.o[oi] + '</span></button>';
+  }).join("");
+  var extra = "";
+  if (locked) {
+    var tag = a === undefined ? '<span class="tag none">SIN RESPONDER</span>' : a === 0 ? '<span class="tag ok">CORRECTA</span>' : '<span class="tag bad">INCORRECTA</span>';
+    extra = tag + '<div class="exp">' + q.e + '</div>';
+  }
+  return '<div class="q" id="q' + id + '"><div class="q-top"><span class="q-num">' + (n + 1) + '</span><div class="q-text">' + q.q +
+         '</div></div><div class="q-opts">' + opts + '</div>' + extra + '</div>';
+}
+
+$("examList").addEventListener("click", function (e) {
+  var b = e.target.closest(".o"); if (!b || b.disabled) return;
+  var id = +b.getAttribute("data-q"), oi = +b.getAttribute("data-o");
+  S.ans[id] = oi;
+  persist();
+  var box = $("q" + id), n = S.ids.indexOf(id);
+  box.outerHTML = qHTML(id, n, false);
+  updateBar();
+});
+
+function updateBar(){
+  var n = Object.keys(S.ans).length, total = S.ids.length;
+  var label = n + " de " + total + " respondidas";
+  if (S.mode === "practice") {
+    var ok = S.ids.filter(function (id) { return S.ans[id] === 0; }).length;
+    label += " · " + ok + " ✓";
+  }
+  $("tbLabel").textContent = label;
+  $("tbProg").style.width = (n / total * 100) + "%";
+}
+
+function tick(){
+  var t = $("timer");
+  if (!S.deadline) { t.textContent = "∞"; t.className = "timer"; return; }
+  var left = Math.max(0, Math.round((S.deadline - Date.now()) / 1000));
+  var m = Math.floor(left / 60), s = left % 60;
+  t.textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  t.className = "timer" + (left <= 60 ? " crit" : left <= 600 ? " warn" : "");
+  if (left === 0) finish();
+}
+
+function askSubmit(){
+  var left = S.ids.length - Object.keys(S.ans).length;
+  $("confirmMsg").textContent = left
+    ? "Te faltan " + left + " pregunta" + (left === 1 ? "" : "s") + " por responder. Las preguntas sin responder valen 0."
+    : "Respondiste todas las preguntas. ¿Listo para ver tu nota?";
+  $("ovConfirm").classList.remove("hidden");
+}
+$("btnSubmitTop").addEventListener("click", askSubmit);
+$("btnCancel").addEventListener("click", function () { $("ovConfirm").classList.add("hidden"); });
+$("btnConfirm").addEventListener("click", function () { $("ovConfirm").classList.add("hidden"); finish(); });
+
+/* mapa de preguntas */
+$("fabNav").addEventListener("click", function () {
+  var practice = S.mode === "practice";
+  $("navSub").textContent = Object.keys(S.ans).length + " de " + S.ids.length + " respondidas";
+  $("navLegend").innerHTML = practice
+    ? '<span><i style="background:var(--accent)"></i>Correcta</span><span><i style="background:var(--red)"></i>Incorrecta</span><span><i style="background:var(--line)"></i>Pendiente</span>'
+    : '<span><i style="background:var(--cyan)"></i>Respondida</span><span><i style="background:var(--line)"></i>Pendiente</span>';
+  $("navGrid").innerHTML = S.ids.map(function (id, n) {
+    var a = S.ans[id], cls = a === undefined ? "" : practice ? (a === 0 ? "ok" : "bad") : "a";
+    return '<button type="button" class="' + cls + '" data-q="' + id + '">' + (n + 1) + "</button>";
+  }).join("");
+  $("ovNav").classList.remove("hidden");
+});
+$("navGrid").addEventListener("click", function (e) {
+  var b = e.target.closest("button"); if (!b) return;
+  $("ovNav").classList.add("hidden");
+  $("q" + b.getAttribute("data-q")).scrollIntoView({block: "start"});
+});
+$("btnNavClose").addEventListener("click", function () { $("ovNav").classList.add("hidden"); });
+$("ovNav").addEventListener("click", function (e) { if (e.target === this) this.classList.add("hidden"); });
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+function finish(){
+  if (!S || S.done) return;
+  clearInterval(timerId);
+  S.done = true;
+  persist();
+  var ok = S.ids.filter(function (id) { return S.ans[id] === 0; }).length;
+  var hist = load(HKEY) || [];
+  var d = new Date();
+  hist.unshift({date: d.toLocaleDateString("es-PA") + " " + d.toLocaleTimeString("es-PA", {hour: "2-digit", minute: "2-digit"}),
+                label: S.label + (S.mode === "practice" ? " · práctica" : ""), ok: ok, total: S.ids.length});
+  save(HKEY, hist.slice(0, 30));
+  renderResult();
+}
+
+function grade(p){
+  if (p >= 91) return ["A", "var(--accent)", "var(--accent-dim)", "¡Excelente! Dominas la Unidad III."];
+  if (p >= 81) return ["B", "var(--cyan)", "var(--cyan-dim)", "Muy bien. Repasa las falladas para asegurar la A."];
+  if (p >= 71) return ["C", "var(--amber)", "var(--amber-dim)", "Aprobado. Refuerza los temas con barra más baja."];
+  if (p >= 61) return ["D", "var(--amber)", "var(--amber-dim)", "Justo. Repite las falladas y vuelve a intentarlo."];
+  return ["F", "var(--red)", "var(--red-dim)", "Toca repasar la guía y repetir el simulacro."];
+}
+
+var reviewFilter = "bad";
+function renderResult(){
+  var total = S.ids.length;
+  var ok = S.ids.filter(function (id) { return S.ans[id] === 0; }).length;
+  var none = S.ids.filter(function (id) { return S.ans[id] === undefined; }).length;
+  var pct = Math.round(ok / total * 100), g = grade(pct);
+  $("rScore").textContent = total === 100 ? ok : pct + "%";
+  $("rScore").style.color = g[1];
+  $("rOf").textContent = total === 100 ? "de 100 puntos" : ok + " de " + total + " correctas";
+  $("rGrade").textContent = g[0];
+  $("rGrade").style.color = g[1];
+  $("rGrade").style.background = g[2];
+  $("rMsg").textContent = g[3];
+  $("rOk").textContent = ok;
+  $("rBad").textContent = total - ok - none;
+  $("rNone").textContent = none;
+
+  var per = TOPICS.map(function () { return [0, 0]; });
+  S.ids.forEach(function (id) { var t = Q[id].t; per[t][1]++; if (S.ans[id] === 0) per[t][0]++; });
+  $("rTopics").innerHTML = per.map(function (p, i) {
+    if (!p[1]) return "";
+    var r = p[0] / p[1], c = r >= .8 ? "var(--accent)" : r >= .6 ? "var(--amber)" : "var(--red)";
+    return '<div class="bar-row"><div class="lbl"><span>' + (i + 1) + " · " + TOPICS[i] + "</span><b>" + p[0] + "/" + p[1] +
+           '</b></div><div class="bar"><i style="width:' + (r * 100) + "%;background:" + c + '"></i></div></div>';
+  }).join("");
+
+  var wrong = total - ok;
+  $("btnRetryWrong").classList.toggle("hidden", wrong === 0);
+  $("btnRetryWrong").textContent = "🔁 Repetir solo las falladas (" + wrong + ")";
+  reviewFilter = wrong ? "bad" : "all";
+  [].forEach.call($("segFilter").children, function (b) { b.classList.toggle("on", b.getAttribute("data-v") === reviewFilter); });
+  renderReview();
+  show("vResult");
+}
+
+function renderReview(){
+  var html = [];
+  S.ids.forEach(function (id, n) {
+    var a = S.ans[id], good = a === 0;
+    if (reviewFilter === "bad" && good) return;
+    if (reviewFilter === "ok" && !good) return;
+    html.push(qHTML(id, n, true));
+  });
+  $("review").innerHTML = html.join("") || '<p style="color:var(--text-faint);font-size:.88rem;">Nada que mostrar con este filtro.</p>';
+}
+$("segFilter").addEventListener("click", function (e) {
+  var b = e.target.closest("button"); if (!b) return;
+  reviewFilter = b.getAttribute("data-v");
+  [].forEach.call(this.children, function (x) { x.classList.toggle("on", x === b); });
+  renderReview();
+});
+
+$("btnRetryWrong").addEventListener("click", function () {
+  var ids = S.ids.filter(function (id) { return S.ans[id] !== 0; });
+  start(ids, "Falladas (" + ids.length + ")", S.mode, 0, "rand");
+});
+$("btnNew").addEventListener("click", function () { drop(KEY); S = null; renderCover(); show("vCover"); });
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+$("btnStart").addEventListener("click", function () {
+  var all = cfg.count === "all";
+  start(pick(all ? Q.length : 100), all ? "Banco completo" : "Parcial 100", cfg.mode, cfg.dur, cfg.order);
+});
+$("btnResume").addEventListener("click", function () {
+  S = load(KEY);
+  if (S.deadline && Date.now() >= S.deadline) { finish(); return; }
+  openExam();
+});
+$("btnDiscard").addEventListener("click", function () { drop(KEY); renderCover(); });
+
+(function init(){
+  renderCover();
+  var saved = load(KEY);
+  if (saved && saved.done) { S = saved; renderResult(); }
+})();
+</script>
+</body>
+</html>
