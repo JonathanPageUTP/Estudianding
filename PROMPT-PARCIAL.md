@@ -199,6 +199,14 @@ Cierre de la guía, antes del mapa mental:
   pueda enlazar a las tarjetas de un tema.
 - Botón **⬇️ Exportar a Anki**: descarga un TSV pregunta⇥respuesta.
 - Atajos de teclado en PC (ver *Diseño responsive*).
+- **En el teléfono todo cabe en una pantalla, sin scroll de página**: encabezado, tarjeta, botones
+  Difícil / Aprendida y Anterior / 🔀 / Siguiente siempre visibles.
+  - Altura de la app con `height:100vh; height:100svh` (`svh` = alto visible con la barra del
+    navegador mostrada; `vh`/`dvh` dejan los botones por fuera en Android), `html,body` con
+    `overflow:hidden` y layout en columna flex donde **solo la tarjeta se encoge**
+    (`min-height` bajo, ~150px). Si la respuesta es larga, se desplaza dentro de la tarjeta.
+  - Encabezado compacto: sin subtítulo, y en la fila de herramientas solo el filtro de tema a la
+    vista; fecha del examen y "Exportar a Anki" detrás de un botón **⚙️** que las despliega.
 
 ### `resumen.html` — Cheat sheet
 - Header "Cheat Sheet · <SIGLA> Parcial <N>" con subtítulo "<Materia> · resumen mnemotécnico".
@@ -318,7 +326,8 @@ asegurando que cumpla *Diseño responsive*, y cambiar solo:
   "Continuar donde quedé" funcionan, y ninguna respuesta se ve sin tocarla.
 - El botón 🔊 lee en español, pausa y reanuda (también en el teléfono: al reanudar repite el
   párrafo donde quedó) y se oculta si no hay `speechSynthesis`.
-- `flash.html`: la pestaña "Hoy" respeta las fechas, el progreso de `_v1` se migra, el TSV se
+- `flash.html`: en el teléfono (probar 412×740, 412×600 y 360×560, con la tarjeta girada) no
+  hay scroll de página y los botones de abajo se ven completos; la pestaña "Hoy" respeta las fechas, el progreso de `_v1` se migra, el TSV se
   descarga, el filtro por `#cat-…` funciona y los atajos de teclado responden en PC.
 - Comprobar que cada enlace del índice apunta a un archivo que existe (ojo con tildes y espacios
   en los nombres de los PDF).
