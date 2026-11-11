@@ -132,6 +132,11 @@ para ambos casos y priorizar **recordar activamente** sobre releer.
 
 - Botón **🔊 Escuchar** por sección usando `speechSynthesis`:
   - Voz `es-*`, velocidad ajustable de 0.9× a 1.3×, pausar y reanudar.
+  - Botones del reproductor **solo con icono** (⏸ / ▶ y ⏹), con `aria-label` para accesibilidad.
+  - **No usar `speechSynthesis.pause()` / `resume()`**: en Chrome de Android el reanudar no
+    funciona. Pausar = `speechSynthesis.cancel()` recordando el párrafo actual (que queda
+    resaltado); reanudar = volver a leer ese mismo párrafo y seguir. Ignorar el `onend`/`onerror`
+    de la frase cancelada (contador de generación) para que no salte al siguiente párrafo.
   - Resalta el párrafo que se está leyendo.
   - Si el navegador no tiene `speechSynthesis`, ocultar el botón.
 - Lo que se lee debe sonar bien: sin emojis, y los símbolos (→, ≥, ≠, ·) dichos en palabras.
@@ -237,8 +242,10 @@ Cierre de la guía, antes del mapa mental:
 - **Opciones de la portada**:
   - Tipo: **📝 Simulacro completo (100 pts)** o **⚡ Mini simulacro (10 min)**.
   - Duración (solo completo): 60 / 90 recomendado / 120 / sin límite.
-  - Interruptor **✅ Verificación inmediata** (apagado por defecto, para simular el examen real).
-    La preferencia se guarda en `<sigla>_parcial_verif_v1`.
+  - Interruptor **⚡ Respuestas instantáneas** (verificación inmediata; apagado por defecto, para
+    simular el examen real). La preferencia se guarda en `<sigla>_parcial_verif_v1`. La
+    estructura del examen es exactamente la misma: solo cambia que cada respuesta se corrige en
+    el momento de elegirla o escribirla.
 - **Distribución del simulacro completo (100 pts)**:
   | Parte | Tipo | Cantidad × puntos |
   |---|---|---|
@@ -259,10 +266,17 @@ Cierre de la guía, antes del mapa mental:
 - **Examen**: temporizador (ámbar a ≤10 min, rojo pulsante a ≤1 min, entrega automática en 0),
   contador "X de Y respondidas", botón Entregar con modal de confirmación, todo guardado en
   localStorage para poder recargar (incluido el estado de las preguntas ya verificadas).
-- **Verificación inmediata (si está activa)**:
+- **⚡ Respuestas instantáneas (si están activas)**:
+  - También se pueden **activar o desactivar durante el examen** con un botón **⚡ Instantáneas**
+    en la barra superior, sin empezar de nuevo (solo afecta lo que se responda después).
   - **V/F y selección múltiple**: al elegir una opción se corrige al instante: ✅ verde o
     ❌ rojo, se marca cuál era la correcta y se muestra la explicación `e`. La respuesta queda
     **bloqueada** (no se puede cambiar después de verla).
+  - **Llenar espacios en blanco** (si el simulacro tiene esa parte): se corrige solo cuando la
+    pregunta está completa, al pulsar **Enter** en el último espacio o al **pasar a otra pregunta**
+    (Enter con espacios vacíos solo salta al siguiente). Se mantiene un botón **✅ Verificar**.
+    Muestra ✅/❌ por espacio, las respuestas aceptadas y una casilla para ajustar si se escribió
+    lo mismo con otras palabras; los espacios quedan bloqueados.
   - **Pareo**: cada par se corrige al asignarlo (✅/❌ y la definición correcta si falló);
     el par queda bloqueado.
   - **Ordenamiento**: botón **Verificar orden** por pregunta; marca cada elemento en su
@@ -272,7 +286,7 @@ Cierre de la guía, antes del mapa mental:
   - Marcador en vivo en el header: puntos obtenidos / puntos verificados y racha de aciertos.
   - En cada fallo, enlaces rápidos "📘 Ver en la guía" y "🃏 Tarjetas del tema".
   - El temporizador sigue corriendo y al final se entrega igual que en modo normal.
-  - En el historial, los intentos con verificación se marcan con la etiqueta "✅ con
+  - En el historial, los intentos en los que se activó en algún momento se marcan con la etiqueta "✅ con
     verificación" para distinguirlos de los intentos tipo examen real.
 - **Autoevaluación de la Parte V**: respuesta modelo + rúbrica con casillas que suman puntos.
 - **Resultados**: nota /100 y letra, puntaje por parte, revisión detallada con filtros
@@ -302,7 +316,8 @@ asegurando que cumpla *Diseño responsive*, y cambiar solo:
   trae `table{min-width:520px}`: cambiarlo a `0` para que las tablas quepan en el teléfono.
 - Probar `guia.html` y `resumen-express.html` en ambos modos (🏢/🚌): los bloques, las pausas y
   "Continuar donde quedé" funcionan, y ninguna respuesta se ve sin tocarla.
-- El botón 🔊 lee en español, pausa y reanuda, y se oculta si no hay `speechSynthesis`.
+- El botón 🔊 lee en español, pausa y reanuda (también en el teléfono: al reanudar repite el
+  párrafo donde quedó) y se oculta si no hay `speechSynthesis`.
 - `flash.html`: la pestaña "Hoy" respeta las fechas, el progreso de `_v1` se migra, el TSV se
   descarga, el filtro por `#cat-…` funciona y los atajos de teclado responden en PC.
 - Comprobar que cada enlace del índice apunta a un archivo que existe (ojo con tildes y espacios
@@ -311,5 +326,7 @@ asegurando que cumpla *Diseño responsive*, y cambiar solo:
 - El simulacro: los bancos tienen al menos las cantidades que se eligen por intento, la suma da
   100, y un intento completo y un mini simulacro se pueden entregar y calificar sin errores en
   consola, **con y sin verificación inmediata**. Con verificación: las respuestas quedan
-  bloqueadas tras corregirse, el marcador en vivo suma bien y el estado sobrevive a una recarga.
+  bloqueadas tras corregirse, el marcador en vivo suma bien, el estado sobrevive a una recarga,
+  los espacios en blanco se corrigen solos con Enter o al salir de la pregunta, y el botón
+  ⚡ de la barra superior lo activa a mitad de un intento.
 - Reportar qué PDF se usó como principal y cualquier tema del material que se haya dejado fuera.

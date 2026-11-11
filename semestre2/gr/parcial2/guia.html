@@ -2553,7 +2553,7 @@ window.KIT_CFG = {
     var rate = load(CFG.prefix+"_tts_rate_v1") || 1;
     var queue = [], qi = 0, curEl = null, playing = false;
     var player = document.createElement("div"); player.id = "kitPlayer";
-    player.innerHTML = '<span class="now" id="kitNow">🔊</span><button type="button" id="kitPP">⏸ Pausar</button><button type="button" id="kitStop">⏹</button>'+
+    player.innerHTML = '<span class="now" id="kitNow">🔊</span><button type="button" id="kitPP" aria-label="Pausar">⏸</button><button type="button" id="kitStop" aria-label="Detener">⏹</button>'+
       '<select id="kitRate" aria-label="Velocidad">'+[0.9,1,1.1,1.2,1.3].map(function(r){ return '<option value="'+r+'"'+(r===rate?" selected":"")+'>'+r.toFixed(1)+'×</option>'; }).join("")+'</select>';
     document.body.appendChild(player);
     var voice = null;
@@ -2578,9 +2578,18 @@ window.KIT_CFG = {
       return list.filter(function(el){ return !list.some(function(o){ return o!==el && o.contains(el); }); });
     }
     function clearHi(){ if(curEl) curEl.classList.remove("tts-on"); curEl = null; }
+    // Pausa propia: pausar = cancelar la voz y recordar el párrafo; reanudar = volver a leerlo.
+    // (speechSynthesis.pause/resume no funciona bien en Chrome de Android)
+    var gen = 0, paused = false, curIdx = 0;
+    function setPP(){
+      var b = document.getElementById("kitPP");
+      b.textContent = paused ? "▶" : "⏸";
+      b.setAttribute("aria-label", paused ? "Reanudar" : "Pausar");
+    }
     function next(){
       clearHi();
       if(!playing || qi >= queue.length){ stop(); return; }
+      curIdx = qi;
       var el = queue[qi++];
       var txt = speakable(el.getAttribute("data-tts") || el.innerText || el.textContent);
       if(!txt){ next(); return; }
@@ -2589,24 +2598,29 @@ window.KIT_CFG = {
       if(r.top < 120 || r.bottom > window.innerHeight - 100) el.scrollIntoView({behavior:"smooth", block:"center"});
       var u = new SpeechSynthesisUtterance(txt);
       u.lang = voice ? voice.lang : "es-ES"; if(voice) u.voice = voice; u.rate = rate;
-      u.onend = function(){ if(playing) next(); };
-      u.onerror = function(){ if(playing) next(); };
+      var my = gen;
+      u.onend = function(){ if(playing && my === gen) next(); };
+      u.onerror = function(){ if(playing && my === gen) next(); };
       synth.speak(u);
     }
     function start(sec){
-      synth.cancel(); said = {};
-      queue = blocks(sec); qi = 0; playing = true;
+      gen++; synth.cancel(); said = {};
+      queue = blocks(sec); qi = 0; playing = true; paused = false;
       var d = sec.tagName === "DETAILS" ? sec : null; if(d) d.open = true;
       document.getElementById("kitNow").textContent = "🔊 " + (CFG.titleOf(sec) || "");
-      document.getElementById("kitPP").textContent = "⏸ Pausar";
+      setPP();
       player.classList.add("show");
       next();
     }
-    function stop(){ playing = false; synth.cancel(); clearHi(); player.classList.remove("show"); }
+    function stop(){ gen++; playing = false; paused = false; synth.cancel(); clearHi(); player.classList.remove("show"); }
     document.getElementById("kitStop").addEventListener("click", stop);
     document.getElementById("kitPP").addEventListener("click", function(){
-      if(synth.paused){ synth.resume(); this.textContent = "⏸ Pausar"; }
-      else { synth.pause(); this.textContent = "▶ Reanudar"; }
+      if(paused){
+        paused = false; playing = true; qi = curIdx; setPP(); next();
+      } else {
+        paused = true; playing = false; gen++; synth.cancel(); setPP();
+        if(curEl) curEl.classList.add("tts-on");   // dejar marcado dónde quedó
+      }
     });
     document.getElementById("kitRate").addEventListener("change", function(){ rate = +this.value; save(CFG.prefix+"_tts_rate_v1", rate); });
     sections.forEach(function(sec){
