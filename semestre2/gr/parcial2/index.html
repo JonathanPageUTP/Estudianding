@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Parcial 2 | Gerencia de Recursos de TIC</title>
     <style>
         /* Estilos Base */
@@ -52,10 +52,17 @@
         }
 
         /* Estados de interacción */
-        .btn:hover {
-            background-color: #000000;
-            color: #ffffff;
+        @media (hover: hover) {
+            .btn:hover {
+                background-color: #000000;
+                color: #ffffff;
+            }
         }
+        .btn:focus-visible, .navc a:focus-visible, .theme-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+        body { font-size: clamp(15px, 1rem + 0.2vw, 18px); }
+        .btn { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+        @media (min-width: 561px) { .container { max-width: 520px; } }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
 
         /* Separador visual opcional para documentos */
         .separator {
@@ -69,7 +76,7 @@
         html[data-theme="dark"] { color-scheme: dark; }
         html[data-theme="dark"] body { background-color: #0e0e0e; color: #f2f2f2; }
         html[data-theme="dark"] .btn { color: #f2f2f2; border-color: #f2f2f2; }
-        html[data-theme="dark"] .btn:hover { background-color: #f2f2f2; color: #0e0e0e; }
+        @media (hover: hover) { html[data-theme="dark"] .btn:hover { background-color: #f2f2f2; color: #0e0e0e; } }
         html[data-theme="dark"] .separator { background-color: #2a2a2a; }
 
         .theme-toggle {

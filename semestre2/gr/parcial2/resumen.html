@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>🧠 Cheat Sheet GR · Parcial 2</title>
 <style>
 :root{
@@ -109,6 +109,39 @@ footer{max-width:720px;margin:10px auto 0;padding:14px;text-align:center;color:v
 
 /* jump-to-top */
 .top-btn{position:fixed;right:14px;bottom:66px;background:var(--accent);color:#04240f;border:none;width:38px;height:38px;border-radius:50%;font-size:1rem;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.5);display:none;z-index:55;}
+/* RESPONSIVE-P2 */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+header{padding-top:calc(10px + env(safe-area-inset-top,0px));}
+.card p,.card li{max-width:70ch;}
+.sec-head{min-height:48px;}
+@media (max-width:560px){ .searchbox input{font-size:16px;} .bnitem{min-height:44px;} }
+@media (min-width:561px){
+  .section.open .sec-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;align-items:start;}
+  .section.open .sec-body>.card{margin-bottom:0;}
+}
+@media (min-width:561px) and (max-width:1023px){
+  header>*{max-width:720px;margin-left:auto;margin-right:auto;}
+  .idxwrap{text-align:center;}
+}
+@media (min-width:1024px){
+  :root{--side:max(16px, calc((100vw - 1180px) / 2));}
+  body{padding-bottom:30px;}
+  .bottomnav{display:none;}
+  .top-btn{bottom:20px;}
+  header>*{max-width:860px;margin-left:calc(var(--side) + 270px);}
+  main,footer{max-width:860px;margin-left:calc(var(--side) + 270px);margin-right:auto;}
+  .idxwrap{position:fixed;left:var(--side);top:calc(var(--hh,110px) + 14px);width:250px;max-height:calc(100vh - var(--hh,110px) - 30px);overflow-y:auto;
+    white-space:normal;display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--border);border-radius:14px;z-index:40;}
+  .idxwrap .idxchip{margin:0;border-radius:10px;padding:9px 12px;font-size:.8rem;}
+  .idxwrap .idxchip.on{background:var(--accent-d);color:var(--accent);border-color:var(--accent);}
+  .idxwrap.hide{display:flex !important;}
+}
+@media (hover:hover){ .idxchip:hover,.sec-head:hover{border-color:var(--accent);color:var(--text);} }
+
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
 </style>
 </head>
 <body>
@@ -897,6 +930,28 @@ clearBtn.addEventListener('click', function(){
 window.addEventListener('scroll', function(){
   document.getElementById('topBtn').style.display = window.scrollY > 400 ? 'block' : 'none';
 });
+</script>
+
+<script>
+/* Accesibilidad de teclado y barra lateral (PC) */
+(function(){
+  document.querySelectorAll(".sec-head").forEach(function(h){
+    h.setAttribute("role","button"); h.setAttribute("tabindex","0");
+    h.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleSec(h); } });
+  });
+  var header = document.querySelector("header");
+  function hh(){ document.documentElement.style.setProperty("--hh", header.offsetHeight+"px"); }
+  hh(); window.addEventListener("resize", hh);
+  var chips = document.querySelectorAll(".idxchip"), secs = document.querySelectorAll(".section"), t;
+  window.addEventListener("scroll", function(){
+    clearTimeout(t);
+    t = setTimeout(function(){
+      var cur = null;
+      secs.forEach(function(s){ if(!s.classList.contains("hide") && s.getBoundingClientRect().top <= 160) cur = s.id; });
+      chips.forEach(function(c){ c.classList.toggle("on", c.getAttribute("href") === "#"+cur); });
+    }, 120);
+  }, {passive:true});
+})();
 </script>
 </body>
 </html>
