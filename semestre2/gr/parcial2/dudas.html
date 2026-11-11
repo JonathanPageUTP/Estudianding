@@ -61,6 +61,18 @@
         html[data-theme="dark"] .theme-toggle .i-sun { display: block; }
         html[data-theme="dark"] .theme-toggle .i-moon { display: none; }
         @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+
+        /* Lectura en voz alta */
+        .tts-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; margin: 0 0 14px; border: 1px solid currentColor; background: transparent; color: inherit; font: inherit; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
+        @media (hover: hover) { .tts-btn:hover { background: var(--fg); color: var(--bg); } }
+        .tts-btn:focus-visible, #player button:focus-visible, #player select:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+        .tts-on { outline: 2px solid var(--fg); outline-offset: 4px; background: var(--soft); }
+        #player { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: none; align-items: center; gap: 8px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--bg); border-top: 1px solid var(--fg); }
+        #player.show { display: flex; }
+        #player .now { flex: 1; min-width: 0; font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #player button, #player select { min-width: 44px; height: 44px; border: 1px solid currentColor; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+        #player select { padding: 0 6px; }
+        body.playing .container { padding-bottom: 120px; }
     </style>
     <script>
         (function () {
@@ -385,6 +397,98 @@
                 });
                 nores.style.display = shown ? "none" : "block";
             });
+
+            /* ---------- Lectura en voz alta ---------- */
+            var synth = window.speechSynthesis;
+            if (!synth || !window.SpeechSynthesisUtterance) return;
+            var EXPAND = {
+                "COBIT": "COBIT, Control Objectives for Information and related Technology,",
+                "ITIL": "ITIL, IT Infrastructure Library,",
+                "RACI": "RACI, matriz de responsabilidades,",
+                "DRSEI": "D, R, S, E, I,",
+                "PDCA": "PDCA, planificar, hacer, verificar, actuar,"
+            };
+            var said = {};
+            var rate = 1;
+            try { rate = +localStorage.getItem("gr_p2_dudas_rate") || 1; } catch (e) {}
+            var voice = null;
+            function pickVoice() {
+                var vs = synth.getVoices().filter(function (v) { return /^es/i.test(v.lang); });
+                voice = vs.filter(function (v) { return /es-(ES|MX|US|419)/i.test(v.lang); })[0] || vs[0] || null;
+            }
+            pickVoice(); if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = pickVoice;
+
+            var player = document.createElement("div"); player.id = "player"; player.setAttribute("role", "region"); player.setAttribute("aria-label", "Reproductor de voz");
+            player.innerHTML = '<span class="now" id="pNow"></span>' +
+                '<button type="button" id="pPP" aria-label="Pausar">⏸</button>' +
+                '<button type="button" id="pStop" aria-label="Detener">⏹</button>' +
+                '<select id="pRate" aria-label="Velocidad">' + [0.8, 0.9, 1, 1.1, 1.2, 1.3].map(function (r) {
+                    return '<option value="' + r + '"' + (r === rate ? " selected" : "") + '>' + r.toFixed(1) + '×</option>';
+                }).join("") + '</select>';
+            document.body.appendChild(player);
+
+            function speakable(t) {
+                t = t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu, " ");
+                t = t.replace(/↔/g, " y viceversa ").replace(/→/g, " lleva a ").replace(/·/g, ", ").replace(/[—–]/g, ", ")
+                     .replace(/\|/g, ", y ").replace(/\t/g, ": ").replace(/\bRRHH\b/g, "recursos humanos").replace(/\bTI\b/g, "T I")
+                     .replace(/\bHW\b/g, "hardware").replace(/\bSW\b/g, "software").replace(/\bCOM\b/g, "comunicaciones")
+                     .replace(/\bJA\b/g, "Junta de Andalucía").replace(/(\d)\s?×/g, "$1 por");
+                t = t.replace(/\b(COBIT|ITIL|RACI|DRSEI|PDCA)\b/g, function (m) { if (said[m]) return m; said[m] = 1; return EXPAND[m]; });
+                return t.replace(/\s+/g, " ").trim();
+            }
+            function blocksOf(d) {
+                var list = [d.querySelector("summary")].concat(Array.prototype.slice.call(d.querySelectorAll(".ans p, .ans li, .ans tr, .ans .clave")))
+                    .filter(function (el) { return el && el.textContent.trim(); });
+                return list.filter(function (el) { return !list.some(function (o) { return o !== el && o.contains(el); }); });
+            }
+
+            // Pausa propia: cancelar y recordar el bloque; reanudar = volver a leerlo (pause/resume falla en Chrome Android)
+            var queue = [], qi = 0, curIdx = 0, curEl = null, playing = false, paused = false, gen = 0;
+            function clearHi() { if (curEl) curEl.classList.remove("tts-on"); curEl = null; }
+            function setPP() { var b = document.getElementById("pPP"); b.textContent = paused ? "▶" : "⏸"; b.setAttribute("aria-label", paused ? "Reanudar" : "Pausar"); }
+            function next() {
+                clearHi();
+                if (!playing || qi >= queue.length) { stop(); return; }
+                curIdx = qi;
+                var el = queue[qi++];
+                var raw = el.tagName === "SUMMARY" ? "Duda " + el.textContent : (el.innerText || el.textContent);
+                var txt = speakable(raw);
+                if (!txt) { next(); return; }
+                curEl = el; el.classList.add("tts-on");
+                var r = el.getBoundingClientRect();
+                if (r.top < 90 || r.bottom > window.innerHeight - 110) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                var u = new SpeechSynthesisUtterance(txt);
+                u.lang = voice ? voice.lang : "es-ES"; if (voice) u.voice = voice; u.rate = rate;
+                var my = gen;
+                u.onend = u.onerror = function () { if (playing && my === gen) next(); };
+                synth.speak(u);
+            }
+            function start(d) {
+                gen++; synth.cancel(); said = {};
+                d.open = true;
+                queue = blocksOf(d); qi = 0; playing = true; paused = false;
+                document.getElementById("pNow").textContent = "🔊 " + d.querySelector("summary").textContent.replace(/\s+/g, " ").trim();
+                setPP(); player.classList.add("show"); document.body.classList.add("playing");
+                next();
+            }
+            function stop() { gen++; playing = false; paused = false; synth.cancel(); clearHi(); player.classList.remove("show"); document.body.classList.remove("playing"); }
+            document.getElementById("pStop").addEventListener("click", stop);
+            document.getElementById("pPP").addEventListener("click", function () {
+                if (paused) { paused = false; playing = true; qi = curIdx; setPP(); next(); }
+                else { paused = true; playing = false; gen++; synth.cancel(); setPP(); if (curEl) curEl.classList.add("tts-on"); }
+            });
+            document.getElementById("pRate").addEventListener("change", function () {
+                rate = +this.value; try { localStorage.setItem("gr_p2_dudas_rate", rate); } catch (e) {}
+            });
+            items.forEach(function (d) {
+                var ans = d.querySelector(".ans"); if (!ans) return;
+                var b = document.createElement("button");
+                b.type = "button"; b.className = "tts-btn"; b.textContent = "🔊 Escuchar";
+                b.setAttribute("aria-label", "Escuchar esta duda");
+                b.addEventListener("click", function () { start(d); });
+                ans.insertBefore(b, ans.firstChild);
+            });
+            window.addEventListener("pagehide", function () { synth.cancel(); });
         })();
     </script>
 </body>
