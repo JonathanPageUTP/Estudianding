@@ -455,6 +455,30 @@ body{font-size:clamp(15px, 1rem + 0.2vw, 18px);}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important;}
 }
+
+/* ---------- TELÉFONO: todo en una pantalla, sin scroll ---------- */
+.tool-toggle{display:none;}
+@media (max-width:560px){
+  /* svh = alto visible con la barra del navegador mostrada: nunca queda nada por fuera */
+  html,body{height:100%;overflow:hidden;}
+  body{min-height:0 !important;}
+  .app{height:100vh;height:100svh;min-height:0;overflow:hidden;}
+  header{padding:10px 16px 4px;}
+  .brand-row{margin-bottom:6px;}
+  .subtitle{display:none;}
+  .progress-wrap{margin-bottom:8px;}
+  .stats-row{margin-bottom:8px;}
+  .tools{margin-top:8px;flex-wrap:wrap;overflow:visible;}
+  .tool-toggle{display:inline-flex;}
+  .tools:not(.open) .tool-more{display:none;}
+  .tools .tool:first-child{flex:1;min-width:0;}
+  .tools .tool:first-child select{max-width:none;flex:1;min-width:0;}
+  main{padding:6px 16px 0;}
+  .counter{margin-bottom:6px;}
+  .card3d{min-height:150px;}
+  .rate-row{padding-top:8px;}
+  nav.controls{padding:8px 16px calc(10px + var(--safe-b));}
+}
 </style>
 </head>
 <body>
@@ -482,10 +506,11 @@ body{font-size:clamp(15px, 1rem + 0.2vw, 18px);}
       <div class="tab" data-filter="learned" role="tab" tabindex="0">Aprendidas</div>
     </div>
 
-    <div class="tools">
+    <div class="tools" id="tools">
       <label class="tool"><span>🗂️</span><select id="catSel" aria-label="Filtrar por tema"><option value="">Todos los temas</option></select></label>
-      <label class="tool" title="Fecha del examen: ninguna tarjeta se programa después del día anterior"><span>📅 Examen</span><input type="date" id="examDate"></label>
-      <button class="tool tbtn" id="btnAnki" type="button">⬇️ Exportar a Anki</button>
+      <button class="tool tbtn tool-toggle" id="btnMore" type="button" aria-expanded="false" aria-controls="tools" aria-label="Más opciones: fecha del examen y exportar">⚙️</button>
+      <label class="tool tool-more" title="Fecha del examen: ninguna tarjeta se programa después del día anterior"><span>📅 Examen</span><input type="date" id="examDate"></label>
+      <button class="tool tbtn tool-more" id="btnAnki" type="button">⬇️ Exportar a Anki</button>
     </div>
   </header>
 
@@ -919,6 +944,10 @@ body{font-size:clamp(15px, 1rem + 0.2vw, 18px);}
   });
   catSel.addEventListener("change", function(){ setCat(catSel.value, false); });
   $("btnAnki").addEventListener("click", exportAnki);
+  $("btnMore").addEventListener("click", function(){
+    var open = $("tools").classList.toggle("open");
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+  });
   examIn.value = load(EXAM_KEY) || "";
   examIn.addEventListener("change", function(){ save(EXAM_KEY, examIn.value || null); });
   window.addEventListener("hashchange", function(){
