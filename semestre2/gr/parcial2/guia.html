@@ -490,8 +490,9 @@ html[data-mode="transit"] .kit-fold:not(.open)>.tblwrap{display:none;}
 .tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
 #kitPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
 #kitPlayer.show{display:flex;}
+@media (max-width:430px){#kitPlayer .now{display:none;}}
 #kitPlayer button,#kitPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .78rem var(--sans);padding:7px 11px;cursor:pointer;min-height:36px;}
-#kitPlayer .now{font-size:.7rem;color:var(--cyan);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#kitPlayer .now{flex:1;min-width:0;font-size:.7rem;color:var(--cyan);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #kitToast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:300;background:var(--amber-dim);border:1px solid var(--amber);color:var(--text);border-radius:14px;padding:12px 16px;font-size:.86rem;display:none;max-width:calc(100% - 32px);}
 #kitToast.show{display:block;}
 /* bloques de aprendizaje activo */
@@ -2390,6 +2391,8 @@ p.body,.box p,blockquote.q{max-width:70ch;}
 })();
 </script>
 
+<script src="audio/guia.js"></script>
+<script src="audio/voz.js"></script>
 <script>
 /* Configuración del kit para la guía */
 window.KIT_CFG = {
@@ -2540,98 +2543,19 @@ window.KIT_CFG = {
     }, 1000);
   });
 
-  /* ---------- lectura en voz alta ---------- */
-  var synth = window.speechSynthesis;
-  if(synth && window.SpeechSynthesisUtterance){
-    var EXPAND = {
-      "CIO":"CIO, Chief Information Officer,", "CISO":"CISO, Chief Information Security Officer,", "CEO":"CEO, Chief Executive Officer,",
-      "CTO":"CTO, Chief Technology Officer,", "DPO":"DPO, Delegado de Protección de Datos,", "RACI":"RACI, matriz de asignación de responsabilidades,",
-      "COBIT":"COBIT, Control Objectives for Information and related Technology,", "ITIL":"ITIL, IT Infrastructure Library,", "PDCA":"PDCA, Plan Do Check Act,",
-      "RFP":"RFP, Request for Proposal,", "GRC":"GRC, Gobernanza, Riesgo y Cumplimiento,", "SLA":"SLA, nivel de servicio,", "SaaS":"SaaS, Software como Servicio,"
-    };
-    var said = {};
-    var rate = load(CFG.prefix+"_tts_rate_v1") || 1;
-    var queue = [], qi = 0, curEl = null, playing = false;
-    var player = document.createElement("div"); player.id = "kitPlayer";
-    player.innerHTML = '<span class="now" id="kitNow">🔊</span><button type="button" id="kitPP" aria-label="Pausar">⏸</button><button type="button" id="kitStop" aria-label="Detener">⏹</button>'+
-      '<select id="kitRate" aria-label="Velocidad">'+[0.9,1,1.1,1.2,1.3].map(function(r){ return '<option value="'+r+'"'+(r===rate?" selected":"")+'>'+r.toFixed(1)+'×</option>'; }).join("")+'</select>';
-    document.body.appendChild(player);
-    var voice = null;
-    function pickVoice(){
-      var vs = synth.getVoices().filter(function(v){ return /^es/i.test(v.lang); });
-      voice = vs.filter(function(v){ return /es-(ES|MX|US|419)/i.test(v.lang); })[0] || vs[0] || null;
-    }
-    pickVoice(); if(synth.onvoiceschanged !== undefined) synth.onvoiceschanged = pickVoice;
-
-    function speakable(t){
-      t = t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu, " ");
-      t = t.replace(/↔/g," y viceversa ").replace(/→/g," lleva a ").replace(/≥/g," mayor o igual que ").replace(/≤/g," menor o igual que ")
-           .replace(/≠/g," distinto de ").replace(/⊃/g," contiene a ").replace(/×/g," por ").replace(/·/g,", ").replace(/[—–]/g,", ")
-           .replace(/▾|▴|▸/g,"").replace(/(\d)\s?%/g,"$1 por ciento").replace(/\bRRHH\b/g,"recursos humanos").replace(/\bTI\b/g,"T I");
-      t = t.replace(/\b(CIO|CISO|CEO|CTO|DPO|RACI|COBIT|ITIL|PDCA|RFP|GRC|SLA|SaaS)\b/g, function(m){ if(said[m]) return m; said[m] = 1; return EXPAND[m]; });
-      return t.replace(/\s+/g," ").trim();
-    }
-    function blocks(sec){
-      var list = Array.prototype.slice.call(sec.querySelectorAll(CFG.ttsBlocks)).filter(function(el){
-        return !el.closest(".active,.kit-bar,.kit-tts,.pausa,#kitPlayer,.kit-foldbtn") && el.textContent.trim();
-      });
-      return list.filter(function(el){ return !list.some(function(o){ return o!==el && o.contains(el); }); });
-    }
-    function clearHi(){ if(curEl) curEl.classList.remove("tts-on"); curEl = null; }
-    // Pausa propia: pausar = cancelar la voz y recordar el párrafo; reanudar = volver a leerlo.
-    // (speechSynthesis.pause/resume no funciona bien en Chrome de Android)
-    var gen = 0, paused = false, curIdx = 0;
-    function setPP(){
-      var b = document.getElementById("kitPP");
-      b.textContent = paused ? "▶" : "⏸";
-      b.setAttribute("aria-label", paused ? "Reanudar" : "Pausar");
-    }
-    function next(){
-      clearHi();
-      if(!playing || qi >= queue.length){ stop(); return; }
-      curIdx = qi;
-      var el = queue[qi++];
-      var txt = speakable(el.getAttribute("data-tts") || el.innerText || el.textContent);
-      if(!txt){ next(); return; }
-      curEl = el; el.classList.add("tts-on");
-      var r = el.getBoundingClientRect();
-      if(r.top < 120 || r.bottom > window.innerHeight - 100) el.scrollIntoView({behavior:"smooth", block:"center"});
-      var u = new SpeechSynthesisUtterance(txt);
-      u.lang = voice ? voice.lang : "es-ES"; if(voice) u.voice = voice; u.rate = rate;
-      var my = gen;
-      u.onend = function(){ if(playing && my === gen) next(); };
-      u.onerror = function(){ if(playing && my === gen) next(); };
-      synth.speak(u);
-    }
-    function start(sec){
-      gen++; synth.cancel(); said = {};
-      queue = blocks(sec); qi = 0; playing = true; paused = false;
-      var d = sec.tagName === "DETAILS" ? sec : null; if(d) d.open = true;
-      document.getElementById("kitNow").textContent = "🔊 " + (CFG.titleOf(sec) || "");
-      setPP();
-      player.classList.add("show");
-      next();
-    }
-    function stop(){ gen++; playing = false; paused = false; synth.cancel(); clearHi(); player.classList.remove("show"); }
-    document.getElementById("kitStop").addEventListener("click", stop);
-    document.getElementById("kitPP").addEventListener("click", function(){
-      if(paused){
-        paused = false; playing = true; qi = curIdx; setPP(); next();
-      } else {
-        paused = true; playing = false; gen++; synth.cancel(); setPP();
-        if(curEl) curEl.classList.add("tts-on");   // dejar marcado dónde quedó
-      }
+  /* ---------- lectura en voz alta (audio/voz.js: MP3 con pantalla apagada o voz del navegador) ---------- */
+  if(window.Voz){
+    Voz.init({
+      sections: sections,
+      key: function(sec){ return sec.id; },
+      title: CFG.titleOf,
+      blocks: CFG.ttsBlocks,
+      skip: ".active,.kit-bar,.pausa,#kitPlayer,.kit-foldbtn",
+      target: CFG.ttsTarget,
+      onOpen: function(sec){ if(sec.tagName === "DETAILS") sec.open = true; },
+      playerId: "kitPlayer", btnClass: "kit-tts", allClass: "kit-btn", allTarget: bar, allBefore: bar.children[1] || null,
+      rateKey: CFG.prefix+"_tts_rate_v1", artist: "Guía · GR Parcial 2"
     });
-    document.getElementById("kitRate").addEventListener("change", function(){ rate = +this.value; save(CFG.prefix+"_tts_rate_v1", rate); });
-    sections.forEach(function(sec){
-      var target = CFG.ttsTarget(sec); if(!target) return;
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "kit-tts"; b.textContent = "🔊 Escuchar";
-      b.setAttribute("aria-label", "Escuchar esta sección");
-      b.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); start(sec); });
-      target.appendChild(b);
-    });
-    window.addEventListener("pagehide", function(){ synth.cancel(); });
   }
 
   /* ---------- modo inicial ---------- */

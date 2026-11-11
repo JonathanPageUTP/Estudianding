@@ -142,6 +142,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[t
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
 }
+
+/* VOZ (audio/voz.js) */
+.voz-btn{background:var(--accent-d);border:1px solid #1f6b3f;color:var(--accent);border-radius:20px;font-size:.7rem;font-weight:800;padding:0 12px;min-height:36px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.htitle .voz-btn{margin-left:auto;}
+.tts-on{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px;background:rgba(34,197,94,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:70;display:none;gap:6px;align-items:center;background:rgba(13,20,32,.97);border:1px solid var(--accent);border-radius:30px;padding:6px 8px;box-shadow:var(--shadow);max-width:calc(100% - 24px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.7rem;color:var(--accent);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:4px;}
+#vozPlayer button,#vozPlayer select{background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:20px;font-size:.8rem;font-weight:700;min-width:40px;min-height:40px;padding:0 8px;cursor:pointer;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (min-width:1024px){#vozPlayer{bottom:20px;}}
+body.voz-playing .top-btn{display:none !important;}
 </style>
 </head>
 <body>
@@ -951,6 +963,36 @@ window.addEventListener('scroll', function(){
       chips.forEach(function(c){ c.classList.toggle("on", c.getAttribute("href") === "#"+cur); });
     }, 120);
   }, {passive:true});
+})();
+</script>
+<script src="audio/resumen.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+/* Lectura en voz alta: MP3 que sigue con la pantalla apagada (o voz del navegador) */
+(function(){
+  if(!window.Voz) return;
+  var secs = Array.prototype.slice.call(document.querySelectorAll("section.section"));
+  Voz.init({
+    sections: secs,
+    key: function(sec){ return sec.id; },
+    title: function(sec){ var h = sec.querySelector(".ttl h2"); return h ? h.textContent.replace(/\s+/g," ").trim() : ""; },
+    blocks: ".ttl h2, .ttl p, .card h3, .card p, .card li, .card tbody tr, .acro, .chunk, .mnemo, .flow",
+    skip: ".hide, #vozPlayer",
+    textOf: function(el){
+      if(el.classList.contains("acro")) return "Acrónimo: " + el.textContent.trim().split("").join(" ") + ".";
+      if(el.classList.contains("flow")) return Array.prototype.map.call(el.querySelectorAll(".step"), function(x){ return x.textContent; }).join(", ") + ".";
+      if(el.classList.contains("chunk")) return Array.prototype.map.call(el.querySelectorAll(".t,.d"), function(x){ return x.textContent; }).join(" ") + ".";
+      return null;
+    },
+    target: function(sec){ return sec.querySelector(".sec-head"); },
+    onOpen: function(sec){
+      document.querySelectorAll(".section").forEach(function(s){ if(s !== sec) s.classList.remove("open"); });
+      sec.classList.remove("hide"); sec.classList.add("open");
+    },
+    visible: function(sec){ return !sec.classList.contains("hide"); },
+    btnClass: "voz-btn", allTarget: document.querySelector(".htitle"),
+    rateKey: "gr_p2_resumen_rate", artist: "Resumen · GR Parcial 2"
+  });
 })();
 </script>
 </body>
