@@ -371,6 +371,7 @@
         <p class="nores" id="nores">Ninguna duda coincide con la búsqueda.</p>
     </main>
 
+    <script src="audio/dudas.js"></script>
     <script>
         (function () {
             var root = document.documentElement, btn = document.getElementById("themeToggle");
@@ -400,7 +401,12 @@
 
             /* ---------- Lectura en voz alta ---------- */
             var synth = window.speechSynthesis;
-            if (!synth || !window.SpeechSynthesisUtterance) return;
+            var hasTTS = !!(synth && window.SpeechSynthesisUtterance);
+            var AUD = window.DUDAS_AUDIO || {};
+            function numOf(d) { var n = d.querySelector(".num"); return n ? n.textContent.trim() : ""; }
+            function hasAudio(d) { return !!AUD[numOf(d)]; }
+            if (!hasTTS && !items.some(hasAudio)) return;
+            if (!hasTTS) synth = { cancel: function () {}, getVoices: function () { return []; } };
             var EXPAND = {
                 "COBIT": "COBIT, Control Objectives for Information and related Technology,",
                 "ITIL": "ITIL, IT Infrastructure Library,",
@@ -463,25 +469,98 @@
                 u.onend = u.onerror = function () { if (playing && my === gen) next(); };
                 synth.speak(u);
             }
-            function start(d) {
+            /* Modo MP3: un <audio> real sigue sonando con la pantalla apagada (la voz del navegador no). */
+            var audio = new Audio(); audio.preload = "none";
+            var aMode = false, aDuda = null, aBlocks = [], aTimes = [], playlist = [], pi = 0;
+            function titleOf(d) { return d.querySelector("summary").textContent.replace(/\s+/g, " ").trim(); }
+            function showPlayer(d) {
+                document.getElementById("pNow").textContent = "🔊 " + titleOf(d);
+                setPP(); player.classList.add("show"); document.body.classList.add("playing");
+            }
+            function mediaSession(d) {
+                if (!("mediaSession" in navigator)) return;
+                try {
+                    navigator.mediaSession.metadata = new MediaMetadata({ title: titleOf(d), artist: "Mis Dudas · GR Parcial 2" });
+                    navigator.mediaSession.setActionHandler("play", function () { if (paused) togglePP(); });
+                    navigator.mediaSession.setActionHandler("pause", function () { if (!paused) togglePP(); });
+                    navigator.mediaSession.setActionHandler("nexttrack", function () { if (pi + 1 < playlist.length) playAt(pi + 1); });
+                    navigator.mediaSession.setActionHandler("previoustrack", function () { if (pi > 0) playAt(pi - 1); else audio.currentTime = 0; });
+                    navigator.mediaSession.setActionHandler("stop", stop);
+                } catch (e) {}
+            }
+            function playAt(i) {
+                var d = playlist[i]; pi = i;
+                if (!hasAudio(d)) { if (!hasTTS) { if (i + 1 < playlist.length) playAt(i + 1); else stop(); return; } aMode = false; startTTS(d); return; }
+                gen++; synth.cancel(); clearHi();
+                aMode = true; aDuda = d; d.open = true; paused = false; playing = true;
+                var a = AUD[numOf(d)];
+                aBlocks = blocksOf(d); aTimes = a.t;
+                audio.src = a.src; audio.playbackRate = rate;
+                audio.play().catch(function () { paused = true; setPP(); });
+                showPlayer(d); mediaSession(d);
+            }
+            audio.addEventListener("timeupdate", function () {
+                if (!aMode) return;
+                var t = audio.currentTime, k = 0;
+                for (var i = 0; i < aTimes.length; i++) if (aTimes[i] <= t + 0.15) k = i;
+                var el = aBlocks[k];
+                if (el && el !== curEl) {
+                    clearHi(); curEl = el; el.classList.add("tts-on");
+                    if (document.visibilityState === "visible") {
+                        var r = el.getBoundingClientRect();
+                        if (r.top < 90 || r.bottom > window.innerHeight - 110) el.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                }
+            });
+            audio.addEventListener("ended", function () { if (pi + 1 < playlist.length) playAt(pi + 1); else stop(); });
+
+            function startTTS(d) {
                 gen++; synth.cancel(); said = {};
                 d.open = true;
                 queue = blocksOf(d); qi = 0; playing = true; paused = false;
-                document.getElementById("pNow").textContent = "🔊 " + d.querySelector("summary").textContent.replace(/\s+/g, " ").trim();
-                setPP(); player.classList.add("show"); document.body.classList.add("playing");
+                showPlayer(d);
                 next();
             }
-            function stop() { gen++; playing = false; paused = false; synth.cancel(); clearHi(); player.classList.remove("show"); document.body.classList.remove("playing"); }
-            document.getElementById("pStop").addEventListener("click", stop);
-            document.getElementById("pPP").addEventListener("click", function () {
+            function start(d) { playlist = [d]; playAt(0); }
+            function stop() {
+                gen++; playing = false; paused = false; synth.cancel(); clearHi();
+                audio.pause(); aMode = false; playlist = [];
+                player.classList.remove("show"); document.body.classList.remove("playing");
+                if ("mediaSession" in navigator) try { navigator.mediaSession.metadata = null; } catch (e) {}
+            }
+            function togglePP() {
+                if (aMode) {
+                    if (paused) { paused = false; audio.play(); } else { paused = true; audio.pause(); }
+                    setPP(); return;
+                }
                 if (paused) { paused = false; playing = true; qi = curIdx; setPP(); next(); }
                 else { paused = true; playing = false; gen++; synth.cancel(); setPP(); if (curEl) curEl.classList.add("tts-on"); }
-            });
+            }
+            // Al terminar una duda en voz del navegador, seguir con la siguiente de la lista
+            var _stopTTS = next;
+            next = function () {
+                if (!aMode && playing && qi >= queue.length && pi + 1 < playlist.length) { clearHi(); playAt(pi + 1); return; }
+                _stopTTS();
+            };
+            document.getElementById("pStop").addEventListener("click", stop);
+            document.getElementById("pPP").addEventListener("click", togglePP);
             document.getElementById("pRate").addEventListener("change", function () {
-                rate = +this.value; try { localStorage.setItem("gr_p2_dudas_rate", rate); } catch (e) {}
+                rate = +this.value; audio.playbackRate = rate;
+                try { localStorage.setItem("gr_p2_dudas_rate", rate); } catch (e) {}
             });
+
+            var all = document.createElement("button");
+            all.type = "button"; all.className = "tts-btn"; all.textContent = "🎧 Escuchar todas";
+            all.setAttribute("aria-label", "Escuchar todas las dudas seguidas");
+            all.addEventListener("click", function () {
+                playlist = items.filter(function (d) { return d.style.display !== "none" && (hasAudio(d) || hasTTS); });
+                if (playlist.length) playAt(0);
+            });
+            if (items.length) search.parentNode.insertBefore(all, search);
+
             items.forEach(function (d) {
                 var ans = d.querySelector(".ans"); if (!ans) return;
+                if (!hasAudio(d) && !hasTTS) return;
                 var b = document.createElement("button");
                 b.type = "button"; b.className = "tts-btn"; b.textContent = "🔊 Escuchar";
                 b.setAttribute("aria-label", "Escuchar esta duda");
