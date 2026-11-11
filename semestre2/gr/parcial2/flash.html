@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>Repaso GR · Parcial 2</title>
 <style>
 :root{
@@ -419,6 +419,42 @@ nav.controls{
   .face{padding-top:44px;}
   .face-front .q-text{font-size:1.05rem;}
 }
+
+/* ---------- HERRAMIENTAS, RESPONSIVE Y ACCESIBILIDAD ---------- */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.tool{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--edge);border-radius:99px;padding:4px 6px 4px 12px;font-size:.74rem;font-weight:700;color:var(--text-dim);min-height:36px;}
+.tool select,.tool input{background:transparent;border:none;color:var(--text);font-size:16px;font-family:inherit;max-width:170px;padding:4px;}
+.tool select option{background:var(--surface);}
+.tool input[type=date]{color-scheme:dark;}
+.tbtn{cursor:pointer;padding:4px 12px;color:var(--text);}
+.kbd-hint{display:none;text-align:center;font-size:.7rem;color:var(--text-faint);margin:0 0 14px;}
+.tab:focus-visible,.nav-btn:focus-visible,.rate-btn:focus-visible,.tbtn:focus-visible,.card3d:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offset:3px;}
+.face-back .face-status{font-size:.68rem;}
+@media (hover:hover){
+  .tab:hover,.nav-btn:hover,.tbtn:hover{border-color:var(--brand);}
+}
+@media (max-width:560px){
+  .tools{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:8px;}
+  .tools::-webkit-scrollbar{display:none;}
+  .tool{flex-shrink:0;}
+}
+@media (min-width:561px){
+  .app{max-width:720px;box-shadow:none;}
+  .card3d{max-width:640px;margin:0 auto;}
+  .rate-row,nav.controls{max-width:640px;width:100%;margin-left:auto;margin-right:auto;}
+}
+@media (min-width:1024px){
+  .app{max-width:1100px;}
+  header{max-width:760px;width:100%;margin:0 auto;}
+  .stage{min-height:0;}
+  .card3d{height:clamp(260px, calc(100vh - 400px), 460px);min-height:0;}
+  .face-front .q-text{font-size:1.35rem;}
+  .kbd-hint{display:block;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;}
+}
 </style>
 </head>
 <body>
@@ -439,10 +475,17 @@ nav.controls{
       <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
     </div>
 
-    <div class="tabs" id="tabs">
-      <div class="tab active" data-filter="all">Todas · 89</div>
-      <div class="tab" data-filter="hard">Por repasar</div>
-      <div class="tab" data-filter="learned">Aprendidas</div>
+    <div class="tabs" id="tabs" role="tablist">
+      <div class="tab active" data-filter="today" role="tab" tabindex="0" aria-selected="true">📅 Hoy</div>
+      <div class="tab" data-filter="all" role="tab" tabindex="0">Todas</div>
+      <div class="tab" data-filter="hard" role="tab" tabindex="0">Por repasar</div>
+      <div class="tab" data-filter="learned" role="tab" tabindex="0">Aprendidas</div>
+    </div>
+
+    <div class="tools">
+      <label class="tool"><span>🗂️</span><select id="catSel" aria-label="Filtrar por tema"><option value="">Todos los temas</option></select></label>
+      <label class="tool" title="Fecha del examen: ninguna tarjeta se programa después del día anterior"><span>📅 Examen</span><input type="date" id="examDate"></label>
+      <button class="tool tbtn" id="btnAnki" type="button">⬇️ Exportar a Anki</button>
     </div>
   </header>
 
@@ -450,7 +493,7 @@ nav.controls{
     <div class="counter" id="counter"><b>1</b> de 89</div>
 
     <div class="stage" id="stage">
-      <div class="card3d" id="card3d">
+      <div class="card3d" id="card3d" tabindex="0" role="button" aria-label="Tarjeta: toca o pulsa espacio para girar">
         <div class="card-inner" id="cardInner">
           <div class="face face-front">
             <span class="face-tag" id="tagFront">Tema</span>
@@ -479,6 +522,7 @@ nav.controls{
     <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
     <button class="nav-btn" id="btnNext">Siguiente ›</button>
   </nav>
+  <p class="kbd-hint">Teclado: ← → navegar · espacio girar · 1 difícil · 2 aprendida</p>
 
 </div>
 
@@ -593,24 +637,61 @@ nav.controls{
     {cat:"Proveedores", q:"Explica la matriz de Kraljic.", a:"Ejes: <b>Rentabilidad</b> (vertical) × <b>Riesgo</b> (horizontal).<br><b>Apalancado</b> (alta rent., bajo riesgo): fuente abundante; aprovechar el poder de compra.<br><b>Estratégico</b> (alta, alto): esenciales; garantizar disponibilidad con fuentes nacionales o internacionales.<br><b>No crítico</b> (baja, bajo): bajo valor; fuentes descentralizadas.<br><b>Cuello de botella</b> (baja, alto): esenciales con fuentes limitadas; mantener relaciones y buscar nuevos suministros."}
   ];
 
-  var TOTAL = CARDS.length; // 89
+  var TOTAL = CARDS.length;
   CARDS.forEach(function(c,i){ c.id = "c" + i; });
 
-  /* ---------------- STORAGE ---------------- */
-  var STORE_KEY = "gr_p2_flashcards_status_v1";
-  var status = {}; // id -> "easy" | "hard"
-  try{
-    var raw = localStorage.getItem(STORE_KEY);
-    if(raw) status = JSON.parse(raw) || {};
-  }catch(e){ status = {}; }
+  /* ---------------- UTILIDADES ---------------- */
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function norm(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9ñ ]+/g," ").replace(/\s+/g," ").trim(); }
+  function slug(c){ return norm(c).replace(/ /g,"-"); }
+  function ymd(d){ var m = d.getMonth()+1, x = d.getDate(); return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x; }
+  function addDays(base, n){ var d = new Date(base.getFullYear(), base.getMonth(), base.getDate()); d.setDate(d.getDate()+n); return d; }
+  function parseYmd(s){ if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+  var TODAY = ymd(new Date());
 
-  function saveStatus(){
-    try{ localStorage.setItem(STORE_KEY, JSON.stringify(status)); }catch(e){}
+  /* ---------------- REPETICIÓN ESPACIADA ----------------
+     status[id] = {lvl, due:"AAAA-MM-DD", last:"easy"|"hard"}
+     Aprendida: 1 → 3 → 7 → 14 días · Difícil: vuelve a 1 día y reaparece al final de la sesión.
+     Con fecha de examen, nada se programa después del día anterior al examen. */
+  var STORE_KEY = "gr_p2_flashcards_status_v2";
+  var OLD_KEY = "gr_p2_flashcards_status_v1";
+  var EXAM_KEY = "gr_p2_examen_v1";
+  var STEPS = [1,3,7,14];
+
+  var status = load(STORE_KEY);
+  if(!status){
+    status = {};
+    var old = load(OLD_KEY) || {};
+    Object.keys(old).forEach(function(id){
+      if(old[id]==="easy") status[id] = {lvl:1, due:ymd(addDays(new Date(),1)), last:"easy"};
+      else if(old[id]==="hard") status[id] = {lvl:0, due:TODAY, last:"hard"};
+    });
+    save(STORE_KEY, status);
   }
+  function saveStatus(){ save(STORE_KEY, status); }
+
+  function examEve(){
+    var ex = parseYmd(load(EXAM_KEY));
+    if(!ex) return null;
+    var eve = addDays(ex,-1), today = parseYmd(TODAY);
+    return eve < today ? null : eve;   // examen pasado: sin tope
+  }
+  function schedule(days){
+    var d = addDays(new Date(), days), cap = examEve();
+    if(cap && d > cap) d = cap;
+    return ymd(d);
+  }
+
+  var sessionHard = [];   // ids marcados "Difícil" en esta sesión (reaparecen al final)
+
+  function stateOf(c){ var s = status[c.id]; return s ? s.last : null; }
+  function isDue(c){ var s = status[c.id]; return !s || s.due <= TODAY; }
 
   /* ---------------- STATE ---------------- */
   var order = CARDS.map(function(c,i){return i;});
-  var filter = "all";
+  var filter = "today";
+  var catFilter = "";
   var filteredOrder = order.slice();
   var pos = 0;
   var flipped = false;
@@ -618,7 +699,7 @@ nav.controls{
 
   /* ---------------- DOM ---------------- */
   var $ = function(id){ return document.getElementById(id); };
-  var stage = $("stage"), card3d = $("card3d"), cardInner = $("cardInner");
+  var stage = $("stage"), card3d = $("card3d");
   var qText = $("qText"), aText = $("aText");
   var tagFront = $("tagFront"), tagBack = $("tagBack");
   var statusFront = $("statusFront"), statusBack = $("statusBack");
@@ -628,22 +709,32 @@ nav.controls{
   var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
   var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
   var tabs = document.querySelectorAll(".tab");
+  var catSel = $("catSel"), examIn = $("examDate");
 
-  function statusIcon(s){
+  // Categorías
+  var CATS = [];
+  CARDS.forEach(function(c){ if(CATS.indexOf(c.cat)<0) CATS.push(c.cat); });
+  CATS.forEach(function(c){ var o = document.createElement("option"); o.value = slug(c); o.textContent = c; catSel.appendChild(o); });
+
+  function statusIcon(c){
+    var s = stateOf(c);
     if(s === "easy") return "✅";
     if(s === "hard") return "😅";
     return "";
   }
+  function inCat(i){ return !catFilter || slug(CARDS[i].cat) === catFilter; }
 
   function computeStats(){
-    var learned=0, hard=0;
-    CARDS.forEach(function(c){
-      var s = status[c.id];
+    var learned=0, hard=0, today=0, all=0;
+    CARDS.forEach(function(c,i){
+      if(!inCat(i)) return;
+      all++;
+      var s = stateOf(c);
       if(s === "easy") learned++;
       else if(s === "hard") hard++;
+      if(isDue(c) || sessionHard.indexOf(c.id)>=0) today++;
     });
-    var news = TOTAL - learned - hard;
-    return {learned:learned, hard:hard, news:news};
+    return {learned:learned, hard:hard, news:all-learned-hard, today:today, all:all};
   }
 
   function refreshStats(){
@@ -651,27 +742,26 @@ nav.controls{
     statLearned.textContent = st.learned;
     statHard.textContent = st.hard;
     statNew.textContent = st.news;
-    var pct = Math.round((st.learned / TOTAL) * 100);
-    progressFill.style.width = pct + "%";
+    progressFill.style.width = (st.all ? Math.round(st.learned / st.all * 100) : 0) + "%";
+    tabs.forEach(function(t){
+      var f = t.getAttribute("data-filter");
+      if(f==="today") t.textContent = "📅 Hoy · " + st.today;
+      if(f==="all") t.textContent = "Todas · " + st.all;
+    });
   }
 
   function buildFilteredOrder(){
-    var base = shuffleOn ? order : order.slice().sort(function(a,b){return a-b;});
-    if(filter === "all"){
-      filteredOrder = base.slice();
+    var base = (shuffleOn ? order : order.slice().sort(function(a,b){return a-b;})).filter(inCat);
+    if(filter === "today"){
+      var first = base.filter(function(i){ return isDue(CARDS[i]) && sessionHard.indexOf(CARDS[i].id)<0; });
+      var again = sessionHard.map(function(id){ return +id.slice(1); }).filter(inCat);
+      filteredOrder = first.concat(again);
     } else if(filter === "hard"){
-      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "hard" || !status[CARDS[i].id]; });
-      // "Por repasar" muestra difíciles + no vistas (aún no dominadas)
-      // pero priorizamos mostrar solo lo NO aprendido: reinterpretación -> difíciles o sin marcar
-      filteredOrder = base.filter(function(i){
-        var s = status[CARDS[i].id];
-        return s === "hard";
-      });
-      if(filteredOrder.length === 0){
-        filteredOrder = base.filter(function(i){ return !status[CARDS[i].id]; });
-      }
+      filteredOrder = base.filter(function(i){ return stateOf(CARDS[i]) === "hard"; });
     } else if(filter === "learned"){
-      filteredOrder = base.filter(function(i){ return status[CARDS[i].id] === "easy"; });
+      filteredOrder = base.filter(function(i){ return stateOf(CARDS[i]) === "easy"; });
+    } else {
+      filteredOrder = base.slice();
     }
   }
 
@@ -685,62 +775,61 @@ nav.controls{
 
   function render(){
     refreshStats();
-    if(filteredOrder.length === 0){
-      renderEmpty();
-      return;
-    }
+    if(filteredOrder.length === 0){ renderEmpty(); return; }
     if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
     if(pos < 0) pos = 0;
 
     stage.innerHTML = "";
     stage.appendChild(card3d);
 
-    var cardIndex = filteredOrder[pos];
-    var c = CARDS[cardIndex];
+    var c = CARDS[filteredOrder[pos]];
     var s = status[c.id];
-
     qText.textContent = c.q;
     aText.innerHTML = c.a;
     tagFront.textContent = c.cat;
     tagBack.textContent = c.cat;
-    statusFront.textContent = statusIcon(s);
-    statusBack.textContent = statusIcon(s);
+    statusFront.textContent = statusIcon(c);
+    statusBack.textContent = s ? statusIcon(c)+" próx. "+s.due.slice(8)+"/"+s.due.slice(5,7) : "";
 
     counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
 
     card3d.classList.remove("flipped");
     flipped = false;
     rateRow.classList.remove("show");
-
-    btnHard.classList.toggle("on", s === "hard");
-    btnEasy.classList.toggle("on", s === "easy");
-
+    btnHard.classList.toggle("on", stateOf(c) === "hard");
+    btnEasy.classList.toggle("on", stateOf(c) === "easy");
     btnPrev.disabled = filteredOrder.length <= 1;
     btnNext.disabled = filteredOrder.length <= 1;
   }
 
   function renderEmpty(){
-    stage.innerHTML =
-      '<div class="empty-state">' +
-        '<div class="emoji">' + (filter === "learned" ? "🌱" : "🎉") + '</div>' +
-        '<p>' + (filter === "learned"
-            ? "Aún no marcas tarjetas como aprendidas.<br>Repasa el mazo \"Todas\" y valora tu progreso."
-            : "¡No tienes tarjetas por repasar!<br>Sigue así o vuelve a \"Todas\" para repasar más.") +
-        '</p>' +
-        '<button id="emptyBack">Ver todas las tarjetas</button>' +
-      '</div>';
+    var msg = filter === "learned" ? ["🌱","Aún no marcas tarjetas como aprendidas.<br>Repasa y valora tu progreso."]
+            : filter === "today"   ? ["🎉","¡Nada pendiente para hoy!<br>Vuelve mañana o repasa \"Todas\"."]
+            : filter === "hard"    ? ["🎉","¡No tienes tarjetas por repasar!"]
+            : ["😶","No hay tarjetas en este tema."];
+    stage.innerHTML = '<div class="empty-state"><div class="emoji">'+msg[0]+'</div><p>'+msg[1]+'</p><button id="emptyBack">Ver todas las tarjetas</button></div>';
     counter.innerHTML = "<b>0</b> de 0";
     var btn = $("emptyBack");
-    if(btn){
-      btn.addEventListener("click", function(){
-        setFilter("all");
-      });
-    }
+    if(btn) btn.addEventListener("click", function(){ setFilter("all"); });
   }
 
   function setFilter(f){
     filter = f;
-    tabs.forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-filter") === f); });
+    tabs.forEach(function(t){
+      var on = t.getAttribute("data-filter") === f;
+      t.classList.toggle("active", on); t.setAttribute("aria-selected", on?"true":"false");
+    });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function setCat(sl, fromHash){
+    catFilter = CATS.some(function(c){ return slug(c)===sl; }) ? sl : "";
+    catSel.value = catFilter;
+    if(!fromHash){
+      try{ history.replaceState(null, "", catFilter ? "#cat-"+catFilter : location.pathname + location.search); }catch(e){}
+    }
     pos = 0;
     buildFilteredOrder();
     render();
@@ -766,45 +855,59 @@ nav.controls{
 
   function setRating(kind){
     if(filteredOrder.length === 0) return;
-    var cardIndex = filteredOrder[pos];
-    var c = CARDS[cardIndex];
-    if(status[c.id] === kind){
-      delete status[c.id]; // toggle off
+    var c = CARDS[filteredOrder[pos]];
+    var s = status[c.id] || {lvl:0};
+    var k = sessionHard.indexOf(c.id);
+    if(k >= 0) sessionHard.splice(k,1);
+    if(kind === "easy"){
+      var lvl = Math.min((s.last==="easy" ? s.lvl : 0) + 1, STEPS.length);
+      status[c.id] = {lvl:lvl, due:schedule(STEPS[lvl-1]), last:"easy"};
     } else {
-      status[c.id] = kind;
+      status[c.id] = {lvl:0, due:schedule(1), last:"hard"};
+      sessionHard.push(c.id);
     }
     saveStatus();
-    btnHard.classList.toggle("on", status[c.id] === "hard");
-    btnEasy.classList.toggle("on", status[c.id] === "easy");
-    statusFront.textContent = statusIcon(status[c.id]);
-    statusBack.textContent = statusIcon(status[c.id]);
+    btnHard.classList.toggle("on", kind === "hard");
+    btnEasy.classList.toggle("on", kind === "easy");
+    statusFront.textContent = statusIcon(c);
     refreshStats();
 
-    // si estamos en un filtro y la tarjeta deja de pertenecer, la removemos del recorrido tras un instante
-    if(filter !== "all"){
-      setTimeout(function(){
-        buildFilteredOrder();
-        if(pos >= filteredOrder.length) pos = Math.max(0, filteredOrder.length - 1);
-        render();
-      }, 380);
-    }
+    // avanzar: en "Hoy" la tarjeta sale de la cola (o pasa al final si fue difícil)
+    setTimeout(function(){
+      var cur = filteredOrder[pos];
+      buildFilteredOrder();
+      var at = filteredOrder.indexOf(cur);
+      if(filter === "all") pos = (at >= 0 ? at + 1 : pos) % Math.max(1, filteredOrder.length);
+      else if(at >= 0 && at > pos) pos = pos;            // difícil movida al final: seguir en la misma posición
+      else if(at >= 0) pos = (at + 1) % filteredOrder.length;
+      render();
+    }, 320);
   }
 
   function toggleShuffle(){
     shuffleOn = !shuffleOn;
     btnShuffle.classList.toggle("on", shuffleOn);
-    if(shuffleOn){
-      shuffleArray(order);
-    } else {
-      order.sort(function(a,b){return a-b;});
-    }
+    if(shuffleOn) shuffleArray(order); else order.sort(function(a,b){return a-b;});
     pos = 0;
     buildFilteredOrder();
     render();
   }
 
+  /* ---------------- EXPORTAR A ANKI (TSV) ---------------- */
+  function exportAnki(){
+    var clean = function(s){ return String(s).replace(/\t/g," ").replace(/\r?\n/g,"<br>"); };
+    var rows = CARDS.map(function(c){ return clean(c.q) + "\t" + clean(c.a) + "\t" + clean(c.cat); });
+    var blob = new Blob(["#separator:tab\n#html:true\n#tags column:3\n" + rows.join("\n")], {type:"text/tab-separated-values;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "gr_parcial2_flashcards.tsv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  }
+
   /* ---------------- EVENTS ---------------- */
   card3d.addEventListener("click", flipCard);
+  card3d.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); flipCard(); } });
   btnNext.addEventListener("click", goNext);
   btnPrev.addEventListener("click", goPrev);
   btnShuffle.addEventListener("click", toggleShuffle);
@@ -812,9 +915,18 @@ nav.controls{
   btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
   tabs.forEach(function(t){
     t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+    t.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); setFilter(t.getAttribute("data-filter")); } });
+  });
+  catSel.addEventListener("change", function(){ setCat(catSel.value, false); });
+  $("btnAnki").addEventListener("click", exportAnki);
+  examIn.value = load(EXAM_KEY) || "";
+  examIn.addEventListener("change", function(){ save(EXAM_KEY, examIn.value || null); });
+  window.addEventListener("hashchange", function(){
+    var m = location.hash.match(/^#cat-(.+)$/);
+    setCat(m ? decodeURIComponent(m[1]) : "", true);
   });
 
-  // swipe gestures (left/right) on stage
+  // gestos (izquierda/derecha)
   var touchStartX = null, touchStartY = null;
   stage.addEventListener("touchstart", function(e){
     var t = e.touches[0];
@@ -823,24 +935,26 @@ nav.controls{
   stage.addEventListener("touchend", function(e){
     if(touchStartX === null) return;
     var t = e.changedTouches[0];
-    var dx = t.clientX - touchStartX;
-    var dy = t.clientY - touchStartY;
-    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){
-      if(dx < 0) goNext(); else goPrev();
-    }
+    var dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){ if(dx < 0) goNext(); else goPrev(); }
     touchStartX = null; touchStartY = null;
   }, {passive:true});
 
-  // keyboard support (desktop testing)
+  // atajos de teclado: ← → navegar · espacio girar · 1 difícil · 2 aprendida
   document.addEventListener("keydown", function(e){
+    var tg = e.target.tagName;
+    if(tg==="INPUT" || tg==="SELECT" || tg==="TEXTAREA" || e.ctrlKey || e.metaKey || e.altKey) return;
     if(e.key === "ArrowRight") goNext();
     else if(e.key === "ArrowLeft") goPrev();
-    else if(e.key === " "){ e.preventDefault(); flipCard(); }
+    else if(e.key === " "){ if(tg==="BUTTON") return; e.preventDefault(); flipCard(); }
+    else if(e.key === "1"){ if(!flipped) flipCard(); setRating("hard"); }
+    else if(e.key === "2"){ if(!flipped) flipCard(); setRating("easy"); }
   });
 
   /* ---------------- INIT ---------------- */
-  buildFilteredOrder();
-  render();
+  var hm = location.hash.match(/^#cat-(.+)$/);
+  if(hm){ catFilter = decodeURIComponent(hm[1]); catSel.value = catFilter; if(catSel.value !== catFilter) catFilter = ""; }
+  setFilter(hm && catFilter ? "all" : "today");
 
 })();
 </script>
