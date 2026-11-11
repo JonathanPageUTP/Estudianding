@@ -341,6 +341,10 @@ body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
 .lnk{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
 .lnk a{font-size:.78rem;font-weight:700;text-decoration:none;background:var(--cyan-dim);color:var(--cyan);border-radius:20px;padding:7px 12px;min-height:32px;display:inline-flex;align-items:center;}
 .chkbtn{margin-top:10px;}
+.vhint{display:inline-block;margin:10px 0 0 8px;font-size:.72rem;color:var(--text-faint);}
+.vtop{white-space:nowrap;background:var(--surface-2);color:var(--text-dim);}
+.vtop.on{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+@media (max-width:560px){ .vtop{padding:9px 9px;font-size:.72rem;} .tb-inner{gap:6px;} }
 .ovr{display:flex;align-items:center;gap:4px;font-size:.9rem;cursor:pointer;flex-shrink:0;}
 .ovr input{width:20px;height:20px;accent-color:var(--accent);}
 .blank input:disabled{opacity:.85;}
@@ -415,7 +419,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
         </select>
       </div>
       <div class="field full">
-        <label class="switch"><input type="checkbox" id="fVerif"><span class="sw"></span><span class="swt"><b>✅ Verificación inmediata</b><small>Corrige cada respuesta al instante y la bloquea. Apagada = como el examen real.</small></span></label>
+        <label class="switch"><input type="checkbox" id="fVerif"><span class="sw"></span><span class="swt"><b>⚡ Respuestas instantáneas</b><small>Misma estructura del examen, pero al elegir o escribir una respuesta te dice de una vez si está bien, cuál era la correcta y por qué. La respuesta queda bloqueada. Apagado = como el examen real. También puedes activarlo durante el examen con el botón ⚡ de arriba.</small></span></label>
       </div>
     </div>
 
@@ -425,7 +429,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
     <ol class="rules">
       <li>Lee la prueba con calma. Las respuestas deben ser del <b>material de clases</b>.</li>
       <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas.</li>
-      <li>Con <b>verificación inmediata</b> ves al instante si acertaste, la explicación y enlaces a la guía y a las tarjetas del tema.</li>
+      <li>Con <b>⚡ respuestas instantáneas</b> ves al instante si acertaste, la explicación y enlaces a la guía y a las tarjetas del tema.</li>
       <li>Al entregar, revisas la <b>Parte II</b> (espacios en blanco): el sistema sugiere si cada respuesta es correcta y tú confirmas.</li>
       <li>Tus respuestas se guardan en este dispositivo: si recargas la página, puedes continuar.</li>
     </ol>
@@ -470,6 +474,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
         <div class="tb-prog"><i id="tbProg"></i></div>
       </div>
       <div class="live hidden" id="live" aria-live="polite"></div>
+      <button class="btn sm vtop" id="btnVerifTop" type="button" aria-pressed="false">⚡ Instantáneas</button>
       <button class="btn primary sm" id="btnSubmitTop">Entregar</button>
     </div>
   </div>
@@ -981,7 +986,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
       h += '<div class="fb '+(good===f.n?"ok":good?"part":"bad")+'">'+good+' de '+f.n+' espacio(s) correcto(s) · ajusta la casilla si escribiste lo mismo con otras palabras</div>'+
            '<div class="rv-exp">💡 Aceptadas: '+accepted(f)+'</div>'+(good===f.n?"":links(fillCat(f)));
     } else if(st.verif){
-      h += '<button class="btn sm chkbtn" data-chk="'+k+'">✅ Verificar</button>';
+      h += '<button class="btn sm chkbtn" data-chk="'+k+'">✅ Verificar</button><span class="vhint">o pulsa Enter / pasa a la siguiente pregunta</span>';
     }
     return h + '</div>';
   }
@@ -1031,6 +1036,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
     $("btnSubmitBottom").addEventListener("click", askSubmit);
     updateProgress();
     updateLive();
+    syncVerifTop();
   }
 
   function replace(id, html){ var el = $(id); if(el) el.outerHTML = html; }
@@ -1044,12 +1050,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
 
   $("examBody").addEventListener("click", function(e){
     var cb = e.target.closest("[data-chk]");
-    if(cb){
-      var fk = +cb.getAttribute("data-chk");
-      verify("fi-"+fk, fillGood(fk)===st.fill[fk].n);
-      replace("q-fi-"+fk, fillHTML(fk));
-      persist(); updateLive(); return;
-    }
+    if(cb){ checkFill(+cb.getAttribute("data-chk")); return; }
     var b = e.target.closest(".opt"); if(!b || b.disabled) return;
     var t = b.getAttribute("data-t"), k = +b.getAttribute("data-k"), v = +b.getAttribute("data-v");
     if(t==="vf"){
@@ -1098,6 +1099,51 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
   });
 
   function persist(){ save(STORE, st); }
+
+  /* ---------- Parte II con respuestas instantáneas ---------- */
+  function fillComplete(k){
+    var v = st.ans.fill[k] || [];
+    for(var b=0;b<st.fill[k].n;b++){ if(!(v[b]||"").trim()) return false; }
+    return true;
+  }
+  function checkFill(k){
+    if(st.chk["fi-"+k]) return;
+    verify("fi-"+k, fillGood(k)===st.fill[k].n);
+    replace("q-fi-"+k, fillHTML(k));
+    persist(); updateProgress(); updateLive();
+  }
+  // Enter: pasa al siguiente espacio; en el último (o si ya está todo lleno) corrige
+  $("examBody").addEventListener("keydown", function(e){
+    var t = e.target;
+    if(e.key!=="Enter" || t.tagName!=="INPUT" || t.getAttribute("data-t")!=="fill") return;
+    e.preventDefault();
+    var k = +t.getAttribute("data-k"), b = +t.getAttribute("data-b");
+    var nextIn = document.querySelector('#q-fi-'+k+' input[data-b="'+(b+1)+'"]');
+    if(st.verif && fillComplete(k)) checkFill(k);
+    else if(nextIn) nextIn.focus();
+  });
+  // Al salir de la pregunta con todos los espacios llenos, se corrige sola
+  $("examBody").addEventListener("focusout", function(e){
+    var t = e.target;
+    if(!st.verif || t.tagName!=="INPUT" || t.getAttribute("data-t")!=="fill") return;
+    var q = t.closest(".q"), k = +t.getAttribute("data-k");
+    if(e.relatedTarget && q.contains(e.relatedTarget)) return;
+    if(fillComplete(k)) checkFill(k);
+  });
+
+  // Interruptor durante el examen
+  function syncVerifTop(){
+    var b = $("btnVerifTop"); if(!b || !st) return;
+    b.classList.toggle("on", !!st.verif);
+    b.setAttribute("aria-pressed", st.verif ? "true" : "false");
+    b.title = st.verif ? "Respuestas instantáneas: activadas" : "Respuestas instantáneas: desactivadas";
+  }
+  $("btnVerifTop").addEventListener("click", function(){
+    st.verif = !st.verif;
+    st.everVerif = st.everVerif || st.verif;
+    save(VERIF, st.verif);
+    persist(); renderExam(); syncVerifTop();
+  });
 
   /* ---------- marcador en vivo (solo con verificación) ---------- */
   function liveScore(){
@@ -1299,7 +1345,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
 
   function renderResults(addHist){
     var g = grade(), L = letter(g.pct), mini = st.mode==="mini";
-    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + (mini?"MINI SIMULACRO":"RESULTADO") + (st.verif?" · ✅ CON VERIFICACIÓN":"");
+    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + (mini?"MINI SIMULACRO":"RESULTADO") + ((st.verif||st.everVerif)?" · ✅ CON VERIFICACIÓN":"");
     $("rsScore").innerHTML = mini ? g.pct+"<small>/100</small>" : g.raw+"<small>/60</small>";
     $("rsGrade").className = "grade g-"+L;
     $("rsGrade").textContent = "Nota "+L+(mini?" · "+g.raw+" de "+g.max+" pts":" · "+g.pct+"%");
@@ -1325,7 +1371,7 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{ou
     if(addHist && !st.saved){
       var key = mini ? MINIH : HIST;
       var h = load(key) || [];
-      h.unshift({d:Date.now(), s:mini?g.pct:g.raw, g:L, v:!!st.verif});
+      h.unshift({d:Date.now(), s:mini?g.pct:g.raw, g:L, v:!!(st.verif||st.everVerif)});
       save(key, h.slice(0,8));
       st.saved = true; persist();
     }
