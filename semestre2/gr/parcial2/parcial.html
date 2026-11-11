@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>Simulacro de Parcial 2 · Gerencia de Recursos de TIC</title>
 <style>
 /* ============================================================
@@ -284,6 +284,89 @@ footer p{font-size:.7rem;color:var(--text-faint);}
   .actions{flex-direction:row;}
   .actions .btn{flex:1;}
 }
+
+/* ============================================================
+   PARTE II (ESPACIOS) Y PARTE IV (PAREO NUMÉRICO)
+   ============================================================ */
+.blanks{display:flex;flex-direction:column;gap:7px;margin-top:10px;}
+.blank{display:flex;align-items:center;gap:8px;}
+.blank b{font-family:var(--mono);font-size:.78rem;color:var(--text-faint);min-width:18px;}
+.blank input{
+  flex:1;min-width:0;background:var(--bg);border:none;border-bottom:1px solid var(--line);color:var(--text);
+  border-radius:6px 6px 0 0;padding:9px 10px;font-size:16px;font-family:var(--sans);
+}
+.blank input:focus{outline:none;border-bottom:2px solid var(--accent);}
+.blank input.filled{border-bottom-color:var(--accent);}
+.concepts{list-style:none;margin:0 0 12px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.concepts li{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;font-size:.84rem;color:var(--text);}
+.concepts li b{font-family:var(--mono);color:var(--cyan);margin-right:6px;}
+.match-row .def{flex:1;font-size:.86rem;color:var(--text-dim);}
+.based{background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:12px;padding:11px 13px;font-size:.82rem;color:var(--text);margin-bottom:12px;}
+.sg-row{padding:10px 0;border-bottom:1px dashed var(--line-soft);}
+.sg-row:last-child{border-bottom:none;}
+.sg-row .mine{margin-top:4px;}
+.sg-row .rub{border-bottom:none;padding:6px 0 0;}
+.quote{text-align:center;font-family:var(--serif);font-size:.86rem;color:var(--text-dim);margin:22px 8px 0;}
+.quote b{display:block;color:var(--text);font-size:.95rem;margin:4px 0;}
+
+/* ============================================================
+   MODOS, VERIFICACIÓN INMEDIATA Y RESPONSIVE
+   ============================================================ */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.seg button{background:var(--bg);border:1px solid var(--line);color:var(--text-dim);border-radius:12px;padding:11px 10px;font-size:.86rem;font-weight:700;text-align:left;min-height:44px;}
+.seg button small{display:block;font-weight:400;font-size:.7rem;color:var(--text-faint);margin-top:2px;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.field label.switch,.switch{display:flex;gap:12px;letter-spacing:0;margin:4px 0 0;align-items:flex-start;cursor:pointer;font-family:var(--sans) !important;font-size:.9rem !important;color:var(--text) !important;}
+.switch input{position:absolute;opacity:0;width:1px;height:1px;}
+.switch .sw{flex-shrink:0;width:46px;height:26px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);position:relative;transition:background .2s;}
+.switch .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--text-faint);transition:transform .2s,background .2s;}
+.switch input:checked + .sw{background:var(--accent-dim);border-color:var(--accent);}
+.switch input:checked + .sw::after{transform:translateX(20px);background:var(--accent);}
+.switch input:focus-visible + .sw{outline:2px solid var(--accent);outline-offset:2px;}
+.swt small{display:block;color:var(--text-faint);font-size:.74rem;margin-top:2px;}
+.live{font-family:var(--mono);font-size:.78rem;color:var(--text-dim);white-space:nowrap;}
+.live b{color:var(--accent);}
+.opt.right{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.opt.wrong{border-color:#5c2a2a;background:var(--red-dim);color:var(--text);}
+.opt:disabled{cursor:default;opacity:1;}
+.q.locked{border-color:var(--line);}
+.fb{margin-top:10px;font-size:.84rem;font-weight:700;border-radius:9px;padding:8px 10px;}
+.fb.ok{background:var(--accent-dim);color:var(--accent);}
+.fb.bad{background:var(--red-dim);color:var(--red);}
+.fb.part{background:var(--amber-dim);color:var(--amber);}
+.fb b{color:var(--text);}
+.fbi{display:block;font-size:.78rem;font-weight:700;margin-top:4px;}
+.fbi.ok{color:var(--accent);} .fbi.bad{color:var(--red);}
+.lnk{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.lnk a{font-size:.78rem;font-weight:700;text-decoration:none;background:var(--cyan-dim);color:var(--cyan);border-radius:20px;padding:7px 12px;min-height:32px;display:inline-flex;align-items:center;}
+.chkbtn{margin-top:10px;}
+.ovr{display:flex;align-items:center;gap:4px;font-size:.9rem;cursor:pointer;flex-shrink:0;}
+.ovr input{width:20px;height:20px;accent-color:var(--accent);}
+.blank input:disabled{opacity:.85;}
+.vtag{font-size:.66rem;color:var(--accent);font-family:var(--mono);margin-left:4px;}
+.history .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);margin:10px 0 2px;}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){
+  .opt:not(:disabled):hover{border-color:var(--accent);}
+  .btn:hover{filter:brightness(1.08);}
+  .lnk a:hover{background:#1f4d5c;}
+}
+@media (max-width:560px){
+  .btn,.opt,.seg button{min-height:44px;}
+  .live{font-size:.7rem;}
+  .concepts{grid-template-columns:1fr;}
+}
+@media (min-width:561px) and (max-width:1023px){
+  :root{--maxw:720px;}
+}
+@media (min-width:1024px){
+  :root{--maxw:800px;}
+  .cover{margin-top:40px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
 </style>
 </head>
 <body>
@@ -304,47 +387,63 @@ footer p{font-size:.7rem;color:var(--text-faint);}
     <div class="inst">
       <div class="u">UNIVERSIDAD TECNOLÓGICA DE PANAMÁ</div>
       <div class="f">Facultad de Ingeniería de Sistemas Computacionales</div>
-      <div class="c">Gerencia de Recursos de TIC</div>
-      <div class="t">Segundo Examen Parcial</div>
-      <div class="p">Simulacro · Ing. Lizmayrem Márquez · II Semestre 2026</div>
+      <div class="f">Departamento de Sistemas de Información, Control y Evaluación de Recursos Informáticos</div>
+      <div class="c">Gerencia de Recursos de Tecnología</div>
+      <div class="t">Parcial No 2</div>
+      <div class="p">Simulacro · Ing. Lizmayrem Márquez · Total: 60 puntos</div>
     </div>
 
     <hr class="rule">
 
+    <div class="based">📌 Mismo formato que el <b>Parcial 1 real</b> de la profesora: 4 partes (cierto/falso, llenar espacios, encierre la letra y pareo con números), 60 puntos. El contenido sale solo de los 3 PDF del Parcial 2.</div>
+
     <div class="fields">
       <div class="field"><label>NOMBRE (OPCIONAL)</label><input id="fName" type="text" autocomplete="off" placeholder="Tu nombre"></div>
       <div class="field"><label>CÉDULA (OPCIONAL)</label><input id="fId" type="text" autocomplete="off" placeholder="8-000-0000"></div>
-      <div class="field full"><label>DURACIÓN</label>
+      <div class="field full"><label>TIPO</label>
+        <div class="seg" id="fType" role="group" aria-label="Tipo de simulacro">
+          <button type="button" data-m="full" class="on" aria-pressed="true">📝 Simulacro completo<small>60 pts · formato real</small></button>
+          <button type="button" data-m="mini" aria-pressed="false">⚡ Mini simulacro<small>10 min · 5 C/F + 5 a/b/c</small></button>
+        </div>
+      </div>
+      <div class="field full" id="timeField"><label>DURACIÓN</label>
         <select id="fTime">
-          <option value="60">60 minutos</option>
-          <option value="90" selected>90 minutos (recomendado)</option>
-          <option value="120">120 minutos</option>
+          <option value="45">45 minutos</option>
+          <option value="60" selected>60 minutos (recomendado)</option>
+          <option value="90">90 minutos</option>
           <option value="0">Sin límite de tiempo</option>
         </select>
+      </div>
+      <div class="field full">
+        <label class="switch"><input type="checkbox" id="fVerif"><span class="sw"></span><span class="swt"><b>✅ Verificación inmediata</b><small>Corrige cada respuesta al instante y la bloquea. Apagada = como el examen real.</small></span></label>
       </div>
     </div>
 
     <hr class="rule">
 
-    <div class="sec-title">INDICACIONES GENERALES</div>
+    <div class="sec-title">ENUNCIADO</div>
     <ol class="rules">
-      <li>El examen tiene <b>5 partes</b> y vale <b>100 puntos</b>.</li>
-      <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas del material del parcial.</li>
-      <li>El tiempo empieza al presionar <b>Iniciar examen</b>. Al llegar a cero, el examen se entrega solo.</li>
-      <li>La Parte V (desarrollo) la <b>autoevalúas</b> con una rúbrica después de entregar.</li>
+      <li>Lee la prueba con calma. Las respuestas deben ser del <b>material de clases</b>.</li>
+      <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas.</li>
+      <li>Con <b>verificación inmediata</b> ves al instante si acertaste, la explicación y enlaces a la guía y a las tarjetas del tema.</li>
+      <li>Al entregar, revisas la <b>Parte II</b> (espacios en blanco): el sistema sugiere si cada respuesta es correcta y tú confirmas.</li>
       <li>Tus respuestas se guardan en este dispositivo: si recargas la página, puedes continuar.</li>
     </ol>
 
     <hr class="rule">
 
     <div class="sec-title">DISTRIBUCIÓN DE PUNTOS</div>
-    <table class="valtable">
-      <tr><td>I. Verdadero o falso (10 × 2)</td><td>20 pts</td></tr>
-      <tr><td>II. Selección múltiple (15 × 2)</td><td>30 pts</td></tr>
-      <tr><td>III. Pareo (8 × 2.5)</td><td>20 pts</td></tr>
-      <tr><td>IV. Ordenamiento (2 × 5)</td><td>10 pts</td></tr>
-      <tr><td>V. Desarrollo (2 × 10)</td><td>20 pts</td></tr>
-      <tr><td>Total</td><td>100 pts</td></tr>
+    <table class="valtable hidden" id="valMini">
+      <tr><td>I. Cierto o falso (5)</td><td>5 pts</td></tr>
+      <tr><td>II. Encierre la letra correcta (5 × 2)</td><td>10 pts</td></tr>
+      <tr><td>Nota proporcional</td><td>/100</td></tr>
+    </table>
+    <table class="valtable" id="valFull">
+      <tr><td>I. Cierto o falso (10 × 1)</td><td>10 pts</td></tr>
+      <tr><td>II. Llenar los espacios en blanco (10 espacios × 1)</td><td>10 pts</td></tr>
+      <tr><td>III. Encierre la letra correcta (10 × 2)</td><td>20 pts</td></tr>
+      <tr><td>IV. Número en el enunciado correcto (10 × 2)</td><td>20 pts</td></tr>
+      <tr><td>Total</td><td>60 pts</td></tr>
     </table>
 
     <hr class="rule">
@@ -370,6 +469,7 @@ footer p{font-size:.7rem;color:var(--text-faint);}
         <div class="tb-label" id="tbLabel">0 de 0 respondidas</div>
         <div class="tb-prog"><i id="tbProg"></i></div>
       </div>
+      <div class="live hidden" id="live" aria-live="polite"></div>
       <button class="btn primary sm" id="btnSubmitTop">Entregar</button>
     </div>
   </div>
@@ -377,12 +477,12 @@ footer p{font-size:.7rem;color:var(--text-faint);}
 </section>
 
 <!-- ============================================================
-     AUTOEVALUACIÓN (PARTE V)
+     REVISIÓN DE LA PARTE II
      ============================================================ -->
 <section id="selfgrade" class="wrap hidden" style="padding:22px 16px 40px;">
   <div class="paper" style="margin-bottom:14px;">
-    <div class="sec-title">PARTE V · AUTOEVALUACIÓN</div>
-    <p style="font-size:.88rem;color:var(--text-dim);">Compara tu respuesta con la respuesta modelo y marca con honestidad los puntos que <b style="color:var(--text)">sí incluiste</b>. Cada criterio suma los puntos indicados.</p>
+    <div class="sec-title">PARTE II · REVISIÓN DE ESPACIOS EN BLANCO</div>
+    <p style="font-size:.88rem;color:var(--text-dim);">El sistema ya marcó las respuestas que reconoce. Compara con las respuestas aceptadas y <b style="color:var(--text)">ajusta</b> si escribiste lo mismo con otras palabras (o si te dio por buena una que no lo es). Cada espacio vale 1 punto.</p>
   </div>
   <div id="sgBody"></div>
   <button class="btn primary block" id="btnFinish">📊 Ver calificación final</button>
@@ -394,7 +494,7 @@ footer p{font-size:.7rem;color:var(--text-faint);}
 <section id="results" class="wrap hidden" style="padding:22px 16px 0;">
   <div class="paper score-card">
     <div class="sec-title" id="rsWho">RESULTADO</div>
-    <div class="score-big" id="rsScore">0<small>/100</small></div>
+    <div class="score-big" id="rsScore">0<small>/60</small></div>
     <div class="grade" id="rsGrade">F</div>
     <div class="score-meta" id="rsMeta"></div>
   </div>
@@ -435,7 +535,7 @@ footer p{font-size:.7rem;color:var(--text-faint);}
   </div>
 </div>
 
-<footer><p>Simulacro generado solo a partir de los 3 PDF del Parcial 2 · UTP · FISC · uso académico.</p></footer>
+<footer><p>Simulacro con el formato del Parcial 1 real y el contenido de los 3 PDF del Parcial 2 · UTP · FISC · uso académico.</p></footer>
 
 <script>
 (function(){
@@ -445,176 +545,286 @@ footer p{font-size:.7rem;color:var(--text-faint);}
      BANCO DE PREGUNTAS — Fuente: Administración RRHH en TIC.pdf,
      Roles y Responsabilidades para la Gestión de la TI.pdf,
      Adquisición, Selección y Criterios de Evaluación Recursos Informáticos.pdf
+     Formato: Parcial 1 real (I. C/F · II. espacios · III. a/b/c · IV. pareo con números)
      ============================================================ */
 
-  // ---------- PARTE I: Verdadero o falso ----------
+  // ---------- PARTE I: Cierto o falso ----------
   var VF = [
-    {s:"Según el material, la carencia de comprensión entre RRHH y TI es la más grande barrera para la participación entre ambas áreas.", a:true, e:"La introducción lo dice así; su consecuencia más común es el <b>mal reclutamiento</b>."},
-    {s:"Uno de los problemas del reclutamiento TI es que el equipo de TI establece requerimientos poco realistas.", a:true, e:"Es una de las 6 razones de la situación actual."},
-    {s:"El proceso de administración de recursos humanos empieza con el reclutamiento.", a:false, e:"Empieza con la <b>planificación de recurso humano</b>; luego reclutamiento, selección, contratación, orientación, capacitación y desarrollo de la carrera."},
-    {s:"En el Proceso de Gestión RRHH, la desvinculación se desprende de la planificación de recursos humanos.", a:true, e:"Del bloque de planificación salen dos caminos: reclutamiento y <b>desvinculación</b>."},
-    {s:"En la lámina de siglas de la alta dirección, CSO significa Chief Security Officer.", a:false, e:"En esa lámina CSO es <b>Chief Sustainability Officer</b> (director de sustentabilidad). La seguridad la lleva el <b>CISO</b>."},
-    {s:"CCO es el director de anticorrupción (Chief Compliance Officer).", a:true, e:"Así aparece en la lámina de siglas de la alta dirección."},
-    {s:"El CIO es el responsable de identificar y proveer las tecnologías necesarias para que los procesos de la empresa funcionen lo mejor posible.", a:true, e:"Es parte de la definición del CIO."},
-    {s:"Las responsabilidades estratégicas del CIO son muy distintas a las de cualquier otro ejecutivo de un área interna.", a:false, e:"El material dice que <b>no difieren</b>: gestionar los recursos bajo su control para maximizar el valor."},
-    {s:"Encargarse del cumplimiento de normativas como Sarbanes Oxley o GDPR es una función del CIO.", a:true, e:"Es la última de sus 10 funciones."},
-    {s:"El CISO garantiza la seguridad dentro de las posibilidades humanas, técnicas y económicas de cada empresa.", a:true, e:"Así cierra la definición del CISO."},
-    {s:"Llevar a cabo investigaciones forenses digitales es una función del DPO.", a:false, e:"Es función del <b>CISO</b> (descubrimiento electrónico e investigaciones forenses digitales)."},
-    {s:"El CEO es el puesto más alto en la jerarquía administrativa y de operación de una empresa.", a:true, e:"También se le conoce como director general, consejero delegado o presidente ejecutivo."},
-    {s:"El CTO utiliza la tecnología para mejorar productos y servicios enfocados en los clientes internos de la empresa.", a:false, e:"El material dice <b>clientes externos</b>."},
-    {s:"El RGPD exige que el DPO sea jurista.", a:false, e:"<b>No lo exige</b>, aunque sí debe tener amplios conocimientos jurídicos en protección de datos."},
-    {s:"Cooperar con las Autoridades de Control es una función del DPO.", a:true, e:"Además actúa como su punto de contacto."},
-    {s:"La funcionalidad es quizás la tarea más visible realizada por el departamento de TI.", a:true, e:"Por eso es lo que más se asocia con TI."},
-    {s:"La gobernanza de TI se refiere a los componentes de hardware, red y circuitos.", a:false, e:"Eso es la <b>infraestructura</b>. La gobernanza son los parámetros operativos y reglas de uso de la tecnología."},
-    {s:"El desarrollo de software in house consiste en comprar paquetes de software ya hechos.", a:false, e:"Es lo contrario: la empresa crea su propio software <b>en lugar de comprar paquetes</b>."},
-    {s:"En la matriz RACI, la persona Accountable tiene la responsabilidad última sobre la tarea, aunque puede no realizar el trabajo.", a:true, e:"La que ejecuta es la <b>R</b> (Responsible)."},
-    {s:"En RACI, a la persona Informada se le consulta antes de tomar la decisión.", a:false, e:"Antes se consulta a la <b>C</b>. A la <b>I</b> se le informa <b>después</b>."},
-    {s:"Según ITIL, un rol es un conjunto de responsabilidades, actividades y autorizaciones.", a:true, e:"Es la definición de la Tabla 1."},
-    {s:"El modelo actual para la creación de un centro TI tiene casi 30 años y divide las TI en desarrollo, explotación y sistemas, además de la jefatura.", a:true, e:"El nuevo modelo propone gestionar por procesos que cruzan en horizontal la organización."},
-    {s:"Una organización de Tipo 0 define sus roles de acuerdo a los dominios de COBIT.", a:false, e:"Tipo 0 tiene un <b>único rol</b> con todas las responsabilidades. Por dominios de COBIT es el <b>Tipo 1</b>."},
-    {s:"En el modelo, el dominio Entrega y Soporte (DS) se rebautizó como Gestión de los Servicios TI.", a:true, e:"Y AI se rebautizó como Gestión de la Infraestructura TI."},
-    {s:"Pueden existir roles con más de un responsable sin necesidad de subdividirlos.", a:false, e:"Si hay más de un responsable, el rol debe <b>subdividirse</b>, salvo responsables de reserva (vacaciones, enfermedad)."},
-    {s:"Una misma persona puede ser al mismo tiempo el director y el responsable de un proceso.", a:true, e:"El modelo permite <b>asignaciones dobles</b>."},
-    {s:"La adquisición indirecta comprende bienes que integran la infraestructura de IT, como servidores y licencias.", a:false, e:"Eso es la <b>adquisición directa</b>. La indirecta cubre las operaciones cotidianas (consumibles, nube, servicios públicos)."},
-    {s:"El crecimiento vertical de un equipo se da en el mismo equipo; el horizontal, con otros equipos.", a:true, e:"Es un criterio de selección de hardware (Equipos)."},
-    {s:"Para seleccionar proveedores, el precio es el criterio que por sí solo determina la elección.", a:false, e:"Puede ser el de mayor interés, pero <b>por sí solo no puede ser determinante</b>."},
-    {s:"Según Deloitte, un 87% de los encuestados ha tenido algún incidente por parte de un proveedor que afectó sus operaciones.", a:true, e:"Además, solo el 44% es muy efectivo administrando el riesgo de terceros."},
-    {s:"En la matriz de Kraljic, el cuadrante cuello de botella agrupa productos esenciales con fuentes limitadas.", a:true, e:"Su estrategia es mantener las relaciones actuales y desarrollar nuevos suministros."},
-    {s:"Un proveedor de alto riesgo es aquel cuyo insumo afecta la calidad y para el cual no existen alternativas en el mercado.", a:false, e:"Ese es el proveedor <b>crítico</b>. En el de alto riesgo <b>sí existen alternativas</b>."}
+    {cat:"RRHH en TIC", s:"Según el material, la carencia de comprensión entre RRHH y TI es la más grande barrera para la participación entre ambas áreas.", a:true, e:"La introducción lo dice así; su consecuencia más común es el <b>mal reclutamiento</b>."},
+    {cat:"RRHH en TIC", s:"Uno de los problemas del reclutamiento TI es que el equipo de TI establece requerimientos poco realistas.", a:true, e:"Es una de las 6 razones de la situación actual."},
+    {cat:"RRHH en TIC", s:"El proceso de administración de recursos humanos empieza con el reclutamiento.", a:false, e:"Empieza con la <b>planificación de recurso humano</b>; luego reclutamiento, selección, contratación, orientación, capacitación y desarrollo de la carrera."},
+    {cat:"RRHH en TIC", s:"En el Proceso de Gestión RRHH, la desvinculación se desprende de la planificación de recursos humanos.", a:true, e:"Del bloque de planificación salen dos caminos: reclutamiento y <b>desvinculación</b>."},
+    {cat:"Alta dirección", s:"En la lámina de siglas de la alta dirección, CSO significa Chief Security Officer.", a:false, e:"En esa lámina CSO es <b>Chief Sustainability Officer</b> (director de sustentabilidad). La seguridad la lleva el <b>CISO</b>."},
+    {cat:"Alta dirección", s:"CCO es el director de anticorrupción (Chief Compliance Officer).", a:true, e:"Así aparece en la lámina de siglas de la alta dirección."},
+    {cat:"CIO", s:"El CIO es el responsable de identificar y proveer las tecnologías necesarias para que los procesos de la empresa funcionen lo mejor posible.", a:true, e:"Es parte de la definición del CIO."},
+    {cat:"CIO", s:"Las responsabilidades estratégicas del CIO son muy distintas a las de cualquier otro ejecutivo de un área interna.", a:false, e:"El material dice que <b>no difieren</b>: gestionar los recursos bajo su control para maximizar el valor."},
+    {cat:"CIO", s:"Encargarse del cumplimiento de normativas como Sarbanes Oxley o GDPR es una función del CIO.", a:true, e:"Es la última de sus 10 funciones."},
+    {cat:"CISO", s:"El CISO garantiza la seguridad dentro de las posibilidades humanas, técnicas y económicas de cada empresa.", a:true, e:"Así cierra la definición del CISO."},
+    {cat:"CISO", s:"Llevar a cabo investigaciones forenses digitales es una función del DPO.", a:false, e:"Es función del <b>CISO</b> (descubrimiento electrónico e investigaciones forenses digitales)."},
+    {cat:"CEO", s:"El CEO es el puesto más alto en la jerarquía administrativa y de operación de una empresa.", a:true, e:"También se le conoce como director general, consejero delegado o presidente ejecutivo."},
+    {cat:"CTO", s:"El CTO utiliza la tecnología para mejorar productos y servicios enfocados en los clientes internos de la empresa.", a:false, e:"El material dice <b>clientes externos</b>."},
+    {cat:"DPO", s:"El RGPD exige que el DPO sea jurista.", a:false, e:"<b>No lo exige</b>, aunque sí debe tener amplios conocimientos jurídicos en protección de datos."},
+    {cat:"DPO", s:"Cooperar con las Autoridades de Control es una función del DPO.", a:true, e:"Además actúa como su punto de contacto."},
+    {cat:"Áreas de TI", s:"La funcionalidad es quizás la tarea más visible realizada por el departamento de TI.", a:true, e:"Por eso es lo que más se asocia con TI."},
+    {cat:"Áreas de TI", s:"La gobernanza de TI se refiere a los componentes de hardware, red y circuitos.", a:false, e:"Eso es la <b>infraestructura</b>. La gobernanza son los parámetros operativos y reglas de uso de la tecnología."},
+    {cat:"Áreas de TI", s:"El desarrollo de software in house consiste en comprar paquetes de software ya hechos.", a:false, e:"Es lo contrario: la empresa crea su propio software <b>en lugar de comprar paquetes</b>."},
+    {cat:"RACI", s:"En la matriz RACI, la persona Accountable tiene la responsabilidad última sobre la tarea, aunque puede no realizar el trabajo.", a:true, e:"La que ejecuta es la <b>R</b> (Responsible)."},
+    {cat:"RACI", s:"En RACI, a la persona Informada se le consulta antes de tomar la decisión.", a:false, e:"Antes se consulta a la <b>C</b>. A la <b>I</b> se le informa <b>después</b>."},
+    {cat:"Roles TI", s:"Según ITIL, un rol es un conjunto de responsabilidades, actividades y autorizaciones.", a:true, e:"Es la definición de la Tabla 1."},
+    {cat:"Roles TI", s:"El modelo actual para la creación de un centro TI tiene casi 30 años y divide las TI en desarrollo, explotación y sistemas, además de la jefatura.", a:true, e:"El nuevo modelo propone gestionar por procesos que cruzan en horizontal la organización."},
+    {cat:"Roles TI", s:"Una organización de Tipo 0 define sus roles de acuerdo a los dominios de COBIT.", a:false, e:"Tipo 0 tiene un <b>único rol</b> con todas las responsabilidades. Por dominios de COBIT es el <b>Tipo 1</b>."},
+    {cat:"Roles TI", s:"En el modelo, el dominio Entrega y Soporte (DS) se rebautizó como Gestión de los Servicios TI.", a:true, e:"Y AI se rebautizó como Gestión de la Infraestructura TI."},
+    {cat:"Roles TI", s:"Pueden existir roles con más de un responsable sin necesidad de subdividirlos.", a:false, e:"Si hay más de un responsable, el rol debe <b>subdividirse</b>, salvo responsables de reserva (vacaciones, enfermedad)."},
+    {cat:"Roles TI", s:"Una misma persona puede ser al mismo tiempo el director y el responsable de un proceso.", a:true, e:"El modelo permite <b>asignaciones dobles</b>."},
+    {cat:"Adquisición", s:"La adquisición indirecta comprende bienes que integran la infraestructura de IT, como servidores y licencias.", a:false, e:"Eso es la <b>adquisición directa</b>. La indirecta cubre las operaciones cotidianas (consumibles, nube, servicios públicos)."},
+    {cat:"Adquisición", s:"El crecimiento vertical de un equipo se da en el mismo equipo; el horizontal, con otros equipos.", a:true, e:"Es un criterio de selección de hardware (Equipos)."},
+    {cat:"Proveedores", s:"Para seleccionar proveedores, el precio es el criterio que por sí solo determina la elección.", a:false, e:"Puede ser el de mayor interés, pero <b>por sí solo no puede ser determinante</b>."},
+    {cat:"Proveedores", s:"Según Deloitte, un 87% de los encuestados ha tenido algún incidente por parte de un proveedor que afectó sus operaciones.", a:true, e:"Además, solo el 44% es muy efectivo administrando el riesgo de terceros."},
+    {cat:"Proveedores", s:"En la matriz de Kraljic, el cuadrante cuello de botella agrupa productos esenciales con fuentes limitadas.", a:true, e:"Su estrategia es mantener las relaciones actuales y desarrollar nuevos suministros."},
+    {cat:"Proveedores", s:"Un proveedor de alto riesgo es aquel cuyo insumo afecta la calidad y para el cual no existen alternativas en el mercado.", a:false, e:"Ese es el proveedor <b>crítico</b>. En el de alto riesgo <b>sí existen alternativas</b>."},
+    {cat:"Adquisición", s:"El aprovisionamiento de IT es el proceso de compra y despliegue de bienes o servicios tecnológicos.", a:true, e:"Incluye analizar la estrategia, seleccionar proveedores, negociar y ejecutar órdenes."},
+    {cat:"Adquisición", s:"Monitorear los KPI es el primer paso de la estrategia de aprovisionamiento de IT.", a:false, e:"Es el <b>último</b>. El primero es <b>auditar y unificar el inventario informático</b>."},
+    {cat:"Adquisición", s:"La gestión de cambios es uno de los beneficios de la compra TI.", a:false, e:"Es un <b>desafío</b> (junto con planificación y presupuestación, RFP e inventario de activos)."},
+    {cat:"Roles TI", s:"Los cuatro dominios de COBIT corresponden a las fases de un ciclo PDCA.", a:true, e:"PDCA = Plan-Do-Check-Act (ciclo de Deming)."}
   ];
 
-  // ---------- PARTE II: Selección múltiple (la primera opción es la correcta) ----------
+  // ---------- PARTE II: Llenar espacios ----------
+  // LISTS: "Mencione dos/tres…" — cada ítem trae palabras clave para la corrección automática
+  var LISTS = [
+    {cat:"Áreas de TI", q:"responsabilidades del departamento de TI según la lámina", max:3, items:[
+      {t:"Que los empleados se comuniquen sobre tareas rutinarias", k:["comuni"]},
+      {t:"Que trabajen juntos en una plataforma integral", k:["plataforma","integral"]},
+      {t:"Dar a los equipos la funcionalidad que necesitan", k:["funcional"]}]},
+    {cat:"CIO", q:"responsabilidades principales del CIO", max:3, items:[
+      {t:"Crear valor para la empresa a través de la tecnología", k:["valor"]},
+      {t:"Dirigir el uso de los recursos informáticos para lograr los objetivos estratégicos", k:["recursos informaticos","objetivos estrategicos","dirigir"]},
+      {t:"Garantizar que los sistemas se gestionen adecuadamente (costo, riesgo, operaciones fluidas)", k:["gestion","gestionen","adecuad","costo","riesgo"]}]},
+    {cat:"CIO", q:"características (competencias) del CIO", max:3, items:[
+      {t:"Visión estratégica", k:["vision"]},
+      {t:"Flexibilidad", k:["flexib"]},
+      {t:"Capacidad de aprendizaje", k:["aprendiz"]},
+      {t:"Comunicación y liderazgo", k:["comunica","lider"]},
+      {t:"Coordinación", k:["coordina"]},
+      {t:"Creatividad", k:["creativ"]},
+      {t:"Planificación y control", k:["planifica","control"]},
+      {t:"Gestión financiera", k:["financ"]}]},
+    {cat:"Áreas de TI", q:"funciones de TI", max:3, items:[
+      {t:"Infraestructura", k:["infraestruc"]},
+      {t:"Funcionalidad", k:["funcional"]},
+      {t:"Gobernanza", k:["gobern"]}]},
+    {cat:"CISO", q:"funciones del CISO", max:3, items:[
+      {t:"Alinear la estrategia de ciberseguridad con los objetivos de la empresa", k:["alinea"]},
+      {t:"Definir la normativa de seguridad y procurar que se cumpla", k:["normativ"]},
+      {t:"Prevenir, detectar y analizar vulnerabilidades", k:["vulnerab"]},
+      {t:"Informar a la dirección sobre ciberseguridad", k:["inform","report"]},
+      {t:"Respuesta rápida ante incidentes", k:["incidente","respuesta"]},
+      {t:"Formar, concienciar y sensibilizar a la organización", k:["formar","concien","sensibil","capacit"]},
+      {t:"Establecer e implementar políticas de seguridad", k:["politica"]},
+      {t:"Garantizar la privacidad de los datos", k:["privacidad"]},
+      {t:"Investigaciones forenses digitales", k:["forense"]}]},
+    {cat:"DPO", q:"funciones del DPO", max:2, items:[
+      {t:"Garantizar el cumplimiento de la normativa de protección de datos", k:["cumplimiento","normativa","proteccion"]},
+      {t:"Cooperar con las Autoridades de Control (y ser su punto de contacto)", k:["autoridad","coopera","contacto"]},
+      {t:"Asesorar sobre la Evaluación de Impacto en Protección de datos", k:["impacto","asesor"]},
+      {t:"Velar por la seguridad del tratamiento de los datos", k:["tratamiento","seguridad"]}]},
+    {cat:"Adquisición", q:"tipos de adquisición de IT", max:2, items:[
+      {t:"Adquisición directa", k:["directa"]},
+      {t:"Adquisición indirecta", k:["indirecta"]}]},
+    {cat:"Adquisición", q:"criterios de precios para la selección de hardware", max:3, items:[
+      {t:"Condiciones de pago", k:["pago"]},
+      {t:"Detallado por componentes", k:["componente","detalla"]},
+      {t:"Descuentos por volumen", k:["descuento","volumen"]},
+      {t:"Costo de mantenimiento", k:["mantenim"]}]},
+    {cat:"Proveedores", q:"riesgos con proveedores", max:3, items:[
+      {t:"Interrupción del servicio al cliente", k:["interrup","servicio al cliente"]},
+      {t:"Violaciones a la ley y normativa vigentes", k:["ley","violacion","normativ"]},
+      {t:"Daño a la reputación", k:["reputacion"]},
+      {t:"Quiebre de la cadena de suministro", k:["cadena","suministro","quiebre"]},
+      {t:"Riesgo de fraude", k:["fraude"]},
+      {t:"Factibilidad económica del proveedor", k:["factib","economic"]}]},
+    {cat:"Proveedores", q:"cuadrantes de la matriz de Kraljic", max:3, items:[
+      {t:"Apalancados", k:["apalanc"]},
+      {t:"Estratégicos", k:["estrateg"]},
+      {t:"No críticos", k:["no critic"]},
+      {t:"Cuello de botella", k:["cuello","botella"]}]},
+    {cat:"Adquisición", q:"beneficios de la compra TI", max:3, items:[
+      {t:"Alineación estratégica", k:["alinea"]},
+      {t:"Gestión de riesgos", k:["riesgo"]},
+      {t:"Optimización de los costos", k:["costo","optimiz","ahorro"]},
+      {t:"Relaciones con los proveedores", k:["proveedor","relacion"]},
+      {t:"Toma de decisiones", k:["decision"]},
+      {t:"Garantía de GRC (Gobernanza, Riesgo y Cumplimiento)", k:["grc","cumplimiento","gobernanza"]}]},
+    {cat:"Adquisición", q:"desafíos de la compra TI", max:3, items:[
+      {t:"Planificación y presupuestación", k:["planifica","presupuest"]},
+      {t:"RFP (solicitud de propuestas)", k:["rfp","propuesta"]},
+      {t:"Inventario de activos", k:["inventario","activo"]},
+      {t:"Gestión de cambios", k:["cambio"]}]},
+    {cat:"Roles TI", q:"dominios de COBIT usados en el modelo de roles", max:3, items:[
+      {t:"PO – Planificación y Organización", k:["po","planifica"]},
+      {t:"AI – Adquisición e Implementación (Gestión de la Infraestructura TI)", k:["ai","adquisicion","implementa","infraestructura"]},
+      {t:"DS – Entrega y Soporte (Gestión de los Servicios TI)", k:["ds","entrega","soporte","servicios"]},
+      {t:"ME – Monitoreo y Evaluación", k:["me","monitor","evalua"]}]},
+    {cat:"RRHH en TIC", q:"pasos del proceso de administración de recursos humanos", max:3, items:[
+      {t:"Planificación de recurso humano", k:["planifica"]},
+      {t:"Reclutamiento", k:["reclut"]},
+      {t:"Selección", k:["seleccion"]},
+      {t:"Contratación", k:["contrata"]},
+      {t:"Orientación", k:["orienta"]},
+      {t:"Capacitación", k:["capacita"]},
+      {t:"Desarrollo de la carrera", k:["carrera"]}]},
+    {cat:"Roles TI", q:"niveles de responsabilidad del modelo de roles (DRSEI)", max:3, items:[
+      {t:"Director", k:["director"]},
+      {t:"Responsable", k:["responsable"]},
+      {t:"Supervisor", k:["supervis"]},
+      {t:"Ejecutor", k:["ejecut"]},
+      {t:"Informado", k:["informad"]}]},
+    {cat:"Roles TI", q:"reglas que deben cumplirse al asignar responsables a los roles", max:3, items:[
+      {t:"No deben existir roles sin responsable", k:["sin responsable","sin un responsable"]},
+      {t:"No deben existir roles con más de un responsable (salvo de reserva)", k:["mas de un","varios","reserva","subdivid"]},
+      {t:"Pueden existir asignaciones dobles", k:["doble"]}]},
+    {cat:"Proveedores", q:"aspectos para seleccionar proveedores", max:3, items:[
+      {t:"Perfil general del proveedor", k:["perfil"]},
+      {t:"Precio", k:["precio"]},
+      {t:"Capacidad técnica", k:["capacidad","tecnica"]},
+      {t:"Tecnología e infraestructura", k:["tecnolog","infraestruc"]},
+      {t:"Desempeño y nivel de servicio (SLA)", k:["desempeno","nivel de servicio","sla"]}]},
+    {cat:"Proveedores", q:"beneficios de evaluar al proveedor", max:3, items:[
+      {t:"Medir el riesgo", k:["riesgo"]},
+      {t:"Proteger la reputación de la marca", k:["reputacion","marca"]},
+      {t:"Optimizar el costo", k:["costo","optimiz"]},
+      {t:"Homologar prácticas", k:["homolog","practica"]},
+      {t:"Compromiso del proveedor", k:["compromiso"]}]}
+  ];
+
+  // SINGLES: un solo espacio (como "Etapa de la administración donde…: ____")
+  var SINGLES = [
+    {cat:"Adquisición", q:"Proceso de compra y despliegue de bienes o servicios tecnológicos:", a:"Aprovisionamiento de IT", k:["aprovision"]},
+    {cat:"RACI", q:"Matriz que identifica los roles y responsabilidades de los equipos para cualquier tarea, logro o entrega:", a:"Matriz RACI (matriz de asignación de responsabilidades)", k:["raci","asignacion de responsabilidades"]},
+    {cat:"Roles TI", q:"Según ITIL, conjunto de responsabilidades, actividades y autorizaciones:", a:"Rol", k:["rol"]},
+    {cat:"CISO", q:"Directivo que protege la información ante posibles ciberataques y fugas de datos:", a:"CISO", k:["ciso","seguridad de la informacion"]},
+    {cat:"DPO", q:"Directivo que garantiza el cumplimiento de la normativa de protección de datos:", a:"DPO (Delegado de Protección de Datos)", k:["dpo","delegado"]},
+    {cat:"CEO", q:"Puesto más alto en la jerarquía administrativa y de operación de una empresa:", a:"CEO", k:["ceo","director general","director ejecutivo"]},
+    {cat:"CTO", q:"Directivo que usa la tecnología para mejorar productos y servicios enfocados en los clientes externos:", a:"CTO", k:["cto"]},
+    {cat:"CIO", q:"Responsable de los sistemas y de las TI para que los procesos de la empresa funcionen lo mejor posible:", a:"CIO", k:["cio","director de informatica"]},
+    {cat:"Proveedores", q:"Matriz que segmenta los productos o servicios según su rentabilidad y su riesgo:", a:"Matriz de Kraljic", k:["kraljic"]},
+    {cat:"Adquisición", q:"Solicitud de propuestas transparente, estructurada y justa:", a:"RFP", k:["rfp","request for proposal","solicitud de propuesta"]},
+    {cat:"RRHH en TIC", q:"Primer paso del proceso de administración de recursos humanos:", a:"Planificación de recurso humano", k:["planifica"]},
+    {cat:"RRHH en TIC", q:"Paso del proceso de administración de RRHH que va inmediatamente después de la contratación:", a:"Orientación", k:["orienta"]},
+    {cat:"Áreas de TI", q:"Función de TI que establece los parámetros operativos y las reglas de uso de la tecnología:", a:"Gobernanza", k:["gobern"]},
+    {cat:"Áreas de TI", q:"Función de TI referida a los componentes de hardware, red, circuitos y equipos:", a:"Infraestructura", k:["infraestruc"]},
+    {cat:"Áreas de TI", q:"Cuando la empresa crea su propio software en lugar de comprar paquetes:", a:"Desarrollo de software in house", k:["in house","inhouse","propio"]},
+    {cat:"Adquisición", q:"Adquisición que contribuye a las operaciones cotidianas (consumibles, nube, servicios públicos):", a:"Adquisición indirecta", k:["indirecta"]},
+    {cat:"Proveedores", q:"Proveedor cuyo insumo afecta la calidad y para el cual existen pocas o una sola alternativa:", a:"Proveedor crítico (tipo A)", k:["critico"]},
+    {cat:"Proveedores", q:"Lista con los mejores candidatos finales en el proceso de evaluación de un proveedor:", a:"Listado corto", k:["corto"]},
+    {cat:"Adquisición", q:"Crecimiento de un equipo que se da con otros equipos:", a:"Crecimiento horizontal", k:["horizontal"]},
+    {cat:"Roles TI", q:"Tipo de organización con un único rol que tiene todas las responsabilidades:", a:"Tipo 0", k:["0","cero"]},
+    {cat:"RRHH en TIC", q:"Consecuencia más común de la falta de comprensión entre RRHH y TI:", a:"El mal reclutamiento", k:["reclut"]},
+    {cat:"Roles TI", q:"Ciclo al que corresponden los 4 dominios de COBIT (Plan-Do-Check-Act):", a:"Ciclo PDCA (de Deming)", k:["pdca","deming"]},
+    {cat:"RRHH en TIC", q:"Del bloque de planificación de RRHH salen dos caminos: el reclutamiento y la:", a:"Desvinculación", k:["desvincula"]},
+    {cat:"RACI", q:"En RACI, persona a la que se consulta antes de tomar una decisión o acción:", a:"Consulted (C)", k:["consult","c"]}
+  ];
+
+  // ---------- PARTE III: Encierre la letra (primera opción = correcta; se muestran 3: a, b, c) ----------
   var MC = [
-    {q:"¿Cuál es uno de los problemas más comunes que genera la falta de comunicación entre RRHH y TI?", o:["El mal reclutamiento","El exceso de presupuesto en TI","La falta de proveedores","La duplicidad de procesos COBIT"], e:"RRHH no entiende el perfil y TI no se involucra en la selección."},
-    {q:"¿Qué paso del proceso de administración de RRHH va inmediatamente después de la contratación?", o:["Orientación","Capacitación","Selección","Desarrollo de la carrera"], e:"Planificación → Reclutamiento → Selección → Contratación → <b>Orientación</b> → Capacitación → Desarrollo de la carrera."},
-    {q:"En el Proceso de Gestión RRHH, ¿qué resultado se obtiene tras la orientación y la capacitación?", o:["Empleados adaptados, competentes, con habilidades y conocimientos actualizados","Empleados competentes y de alto rendimiento","Identificación y selección de empleados competentes","Desvinculación de empleados"], e:"El alto rendimiento llega tras evaluación, desarrollo de carrera y compensación."},
-    {q:"¿Cuál NO es una de las responsabilidades de TI según la lámina?", o:["Reclutar al personal de todos los departamentos","Que los empleados se comuniquen sobre tareas rutinarias","Que trabajen juntos en una plataforma integral","Dar a los equipos la funcionalidad que necesitan"], e:"Las 3 responsabilidades son comunicación, plataforma integral y funcionalidad."},
-    {q:"En el organigrama de la empresa de tecnología, ¿qué departamento agrupa a desarrolladores, testers y diseñadores UX/UI?", o:["Tecnología y Desarrollo","Operaciones","Ventas","Recursos Humanos"], e:"Operaciones agrupa administrativos, logística y soporte técnico."},
-    {q:"¿Qué cargo es el \"director de datos masivos\"?", o:["CDO","CIO","DPO","CTO"], e:"CDO = Chief Data Officer."},
-    {q:"¿Cuál de estas es una de las 3 principales responsabilidades del CIO?", o:["Crear valor para la empresa a través de la tecnología","Llevar a cabo investigaciones forenses digitales","Cooperar con las Autoridades de Control","Crear la estructura organizativa de la corporación"], e:"Las otras son funciones del CISO, del DPO y del CEO, respectivamente."},
-    {q:"La característica del CIO de \"saber detectar las tecnologías adecuadas para el negocio que permitirán maximizar los resultados comerciales\" es:", o:["Visión estratégica","Flexibilidad","Capacidad de aprendizaje","Creatividad"], e:"Flexibilidad es adaptarse a nuevos modelos de negocio; aprendizaje, actualizarse en tendencias."},
-    {q:"¿Para qué necesita el CIO capacidad de coordinación?", o:["Para gestionar tanto al personal interno como a los proveedores externos","Para cumplir con los plazos establecidos","Para analizar los costos de las diferentes acciones","Para trabajar con nuevos modelos de negocio"], e:"Plazos = planificación y control; costos = gestión financiera; nuevos modelos = flexibilidad."},
-    {q:"¿Cuál es una función del CISO?", o:["Prevenir, detectar y analizar vulnerabilidades","Fijar los objetivos de la empresa","Ofrecer asesoramiento sobre la Evaluación de Impacto en Protección de datos","Supervisar la arquitectura de TI"], e:"Fijar objetivos es del CEO; Evaluación de Impacto, del DPO; arquitectura, del CIO."},
-    {q:"¿Con qué otro nombre NO se conoce al CEO según el material?", o:["Director de informática","Director general","Consejero delegado","Presidente ejecutivo"], e:"Director de informática es el <b>CIO</b>."},
-    {q:"\"Usar el presupuesto de la empresa\" y \"guiar a los directivos\" son funciones del:", o:["CEO","CTO","CIO","CISO"], e:"Están entre las 10 funciones de un CEO."},
-    {q:"¿Qué realiza el CTO además de liderar el departamento de tecnología?", o:["Estrategias para aumentar ingresos y análisis de costo-beneficio y retorno de la inversión","Supervisar el cumplimiento de la normativa de protección de datos","Gestionar el personal del área de informática y negociar con proveedores","Velar por la ciberseguridad ante fugas de datos"], e:"Protección de datos = DPO; personal y proveedores = CIO; ciberseguridad = CISO."},
-    {q:"\"Adaptar los sistemas para que puedan ser escalables\" es función del:", o:["CTO","DPO","CEO","CISO"], e:"Está entre las funciones de un CTO."},
-    {q:"El Delegado de Protección de Datos (DPO) se encarga principalmente de:", o:["Garantizar el cumplimiento de la normativa de protección de datos","Dirigir el área de Innovación","Dar respuesta rápida ante incidentes de ciberseguridad","Gestionar la capacidad y el ciclo de vida de la tecnología"], e:"También vela por la seguridad del tratamiento de los datos."},
-    {q:"La función de TI que se refiere a los componentes de hardware, red, circuitos y equipos necesarios para un sistema informático es:", o:["Infraestructura","Funcionalidad","Gobernanza","Administración"], e:"Las 3 funciones son infraestructura, funcionalidad y gobernanza."},
-    {q:"La administración o gestión de las TI (ITSM) implica:", o:["Mantenimiento y reparación de sistemas, asesoría sobre nuevas soluciones y ayuda a instalar y usar equipos","Configurar redes alternativas por si la principal deja de funcionar","Convertir necesidades de clientes en aplicaciones viables","Configurar canales seguros para comercio electrónico"], e:"Las otras son contingencia de red, desarrollo de aplicaciones y sitio web."},
-    {q:"\"Copia de seguridad y recuperación de los activos digitales\" e \"instalación y mantenimiento de servicios en la nube\" son responsabilidades de:", o:["Soporte técnico","Comunicaciones","Programación","Desarrollo de aplicaciones"], e:"Están en la lista de soporte técnico."},
-    {q:"En RACI, la persona a la que se debe consultar antes de tomar una decisión o acción es:", o:["Consulted (C)","Informed (I)","Accountable (A)","Responsible (R)"], e:"A la I se le informa después."},
-    {q:"Según el modelo de la Junta de Andalucía, ¿de dónde surgen de modo natural los roles y responsabilidades?", o:["De los procesos que soportan la función de la organización","De la cantidad de personal disponible","De los puestos de trabajo existentes","Del presupuesto asignado"], e:"Función → procesos → roles y responsabilidades."},
-    {q:"Según la ISO 9000, un proceso es:", o:["Un conjunto de actividades relacionadas que transforman elementos de entrada en resultados","La mayor unidad de actividad de negocio en una organización","Un conjunto de responsabilidades, actividades y autorizaciones","Uno o más sistemas TI que hacen posible un proceso de negocio"], e:"Las otras son función (DIRKS), rol (ITIL) y servicio TI (ITIL)."},
-    {q:"¿Qué significa PDCA?", o:["Plan-Do-Check-Act (ciclo de Deming)","Planificación, Dirección, Control y Auditoría","Procesos, Datos, Controles y Aplicaciones","Plan de Continuidad y Aseguramiento"], e:"Los 4 dominios COBIT corresponden a las fases de un ciclo PDCA."},
-    {q:"¿Qué tipo de organización corresponde a un servicio bajo una secretaría general técnica, con 2 o 3 personas de planificación, coordinación y control?", o:["Tipo 2","Tipo 0","Tipo 1","Tipo 3"], e:"Es la organización intermedia, parecida a las habituales en la JA."},
-    {q:"¿Cuál de estos roles de nivel 3 pertenece a la Gestión de la Producción?", o:["Gestión de la Disponibilidad","Gestión de Incidencias","Gestión de Problemas","Gestión de la Configuración"], e:"Producción = continuidad, capacidad, disponibilidad y nivel de servicio. Las otras son de Soporte."},
-    {q:"En los niveles de responsabilidad del modelo, quien aprueba los trabajos del rol y proporciona los recursos técnicos, humanos y financieros es el:", o:["Director (D)","Responsable (R)","Supervisor (S)","Ejecutor (E)"], e:"El Director es el responsable último, propietario del proceso-rol."},
-    {q:"¿Por qué el centro TI de la Consejería de Economía y Hacienda no encaja en el modelo?", o:["Porque tiene procesos no definidos, duplicados o desarrollados por una estructura que no corresponde","Porque no tiene presupuesto propio","Porque es una organización de Tipo 0","Porque supera el 80% de personal funcionario"], e:"Ej.: Nivel de Servicio no definido, Calidad duplicada y Seguridad hecha por el Servicio de Producción."},
-    {q:"El aprovisionamiento de IT es:", o:["El proceso de compra y despliegue de bienes o servicios tecnológicos","El mantenimiento y reparación de los sistemas tecnológicos","La matriz de asignación de responsabilidades","La evaluación del riesgo de terceros"], e:"Incluye analizar la estrategia, seleccionar proveedores, negociar y ejecutar órdenes."},
-    {q:"La compra de suministros consumibles y soluciones de software en la nube corresponde a la adquisición:", o:["Indirecta","Directa","De bienes","De infraestructura"], e:"La indirecta contribuye al funcionamiento cotidiano."},
-    {q:"¿Cuál es el primer paso de la estrategia de aprovisionamiento de IT?", o:["Auditar y unificar el inventario informático","Planificar el presupuesto de IT","Evaluar a los proveedores","Monitorear los KPI"], e:"Monitorear los KPI es el último."},
-    {q:"\"Reconocido prestigio local\" y \"cartera de clientes con equipos equivalentes\" son criterios sobre:", o:["El proveedor","Los equipos","Los precios","El fabricante"], e:"Del fabricante se pide prestigio <b>mundial</b>."},
-    {q:"\"Disponibilidad de menús de ayuda\" y \"buena recuperación de errores\" pertenecen al criterio de software:", o:["Eficiencia operativa","Calidad de documentación","Capacidad para realizar las tareas requeridas","Soporte del fabricante"], e:"Según la lámina de criterios para la selección de un software."},
-    {q:"¿Qué significa GRC en los beneficios de la compra TI?", o:["Gobernanza, Riesgo y Cumplimiento","Gestión de Recursos y Costos","Garantía, Rendimiento y Calidad","Gobierno, Responsabilidad y Control"], e:"Garantiza que licencias, datos y seguridad acaten las normas del sector."},
-    {q:"¿Cuál de estos es un desafío (no un beneficio) de la compra TI?", o:["Gestión de cambios","Optimización de los costos","Alineación estratégica","Toma de decisiones"], e:"Los desafíos son planificación y presupuestación, RFP, inventario de activos y gestión de cambios."},
-    {q:"En el proceso de evaluación de un proveedor, el \"listado corto\" se obtiene al:", o:["Crear tu lista de proveedores","Elaborar un convenio de confidencialidad","Evaluar las propuestas de los proveedores","Decidir y negociar un contrato"], e:"Analizas el mercado y te quedas con los mejores candidatos finales."},
-    {q:"Según Deloitte, ¿qué porcentaje de quienes tuvieron incidentes vio sus actividades completamente interrumpidas?", o:["11%","28%","44%","87%"], e:"28% enfrentó grandes interrupciones; 44% es muy efectivo; 87% tuvo algún incidente."},
-    {q:"¿Qué riesgo con proveedores puede llevar a multas, compensaciones y pérdidas de 2 a 50 millones de dólares?", o:["Violaciones a la ley y normativa vigentes","Daño a la reputación","Riesgo de fraude","Quiebre de la cadena de suministro"], e:"Es la estimación de Deloitte para multinacionales."},
-    {q:"En la matriz de Kraljic, los productos o servicios con fuente abundante, donde conviene sacar provecho del poder de compra, son:", o:["Apalancados","Estratégicos","No críticos","Cuello de botella"], e:"Alta rentabilidad y bajo riesgo."},
-    {q:"Un proveedor tipo \"A\" en la clasificación según su riesgo es:", o:["Crítico, con riesgo asociado elevado","Importante, con riesgo asociado medio","No crítico, con riesgo asociado bajo","Un proveedor sin impacto en la calidad"], e:"B = importante (medio) · C = no crítico (bajo)."}
+    {cat:"RRHH en TIC", q:"¿Cuál es uno de los problemas más comunes que genera la falta de comunicación entre RRHH y TI?", o:["El mal reclutamiento","El exceso de presupuesto en TI","La falta de proveedores","La duplicidad de procesos COBIT"], e:"RRHH no entiende el perfil y TI no se involucra en la selección."},
+    {cat:"RRHH en TIC", q:"¿Qué paso del proceso de administración de RRHH va inmediatamente después de la contratación?", o:["Orientación","Capacitación","Selección","Desarrollo de la carrera"], e:"Planificación → Reclutamiento → Selección → Contratación → <b>Orientación</b> → Capacitación → Desarrollo de la carrera."},
+    {cat:"RRHH en TIC", q:"En el Proceso de Gestión RRHH, ¿qué resultado se obtiene tras la orientación y la capacitación?", o:["Empleados adaptados, competentes, con habilidades y conocimientos actualizados","Empleados competentes y de alto rendimiento","Identificación y selección de empleados competentes"], e:"El alto rendimiento llega tras evaluación, desarrollo de carrera y compensación."},
+    {cat:"Áreas de TI", q:"En el organigrama de la empresa de tecnología, ¿qué departamento agrupa a desarrolladores, testers y diseñadores UX/UI?", o:["Tecnología y Desarrollo","Operaciones","Ventas","Recursos Humanos"], e:"Operaciones agrupa administrativos, logística y soporte técnico."},
+    {cat:"Alta dirección", q:"El \"director de datos masivos\" es el:", o:["CDO","CIO","DPO","CTO"], e:"CDO = Chief Data Officer."},
+    {cat:"CIO", q:"Una de las 3 principales responsabilidades del CIO es:", o:["Crear valor para la empresa a través de la tecnología","Llevar a cabo investigaciones forenses digitales","Cooperar con las Autoridades de Control","Crear la estructura organizativa de la corporación"], e:"Las otras son funciones del CISO, del DPO y del CEO, respectivamente."},
+    {cat:"CIO", q:"La característica del CIO de \"saber detectar las tecnologías adecuadas para el negocio que permitirán maximizar los resultados comerciales\" es:", o:["Visión estratégica","Flexibilidad","Capacidad de aprendizaje","Creatividad"], e:"Flexibilidad es adaptarse a nuevos modelos de negocio; aprendizaje, actualizarse en tendencias."},
+    {cat:"CIO", q:"El CIO necesita capacidad de coordinación para:", o:["Gestionar tanto al personal interno como a los proveedores externos","Cumplir con los plazos establecidos","Analizar los costos de las diferentes acciones","Trabajar con nuevos modelos de negocio"], e:"Plazos = planificación y control; costos = gestión financiera; nuevos modelos = flexibilidad."},
+    {cat:"CISO", q:"Una función del CISO es:", o:["Prevenir, detectar y analizar vulnerabilidades","Fijar los objetivos de la empresa","Ofrecer asesoramiento sobre la Evaluación de Impacto en Protección de datos","Supervisar la arquitectura de TI"], e:"Fijar objetivos es del CEO; Evaluación de Impacto, del DPO; arquitectura, del CIO."},
+    {cat:"CISO", q:"El CISO también se conoce como:", o:["Director de seguridad de la información","Director de informática","Director de datos masivos","Director de sustentabilidad"], e:"Director de informática = CIO; datos masivos = CDO; sustentabilidad = CSO."},
+    {cat:"CEO", q:"Con otro nombre, al CEO NO se le conoce como:", o:["Director de informática","Director general","Consejero delegado","Presidente ejecutivo"], e:"Director de informática es el <b>CIO</b>."},
+    {cat:"CEO", q:"\"Usar el presupuesto de la empresa\" y \"guiar a los directivos\" son funciones del:", o:["CEO","CTO","CIO","CISO"], e:"Están entre las 10 funciones de un CEO."},
+    {cat:"CTO", q:"Además de liderar el departamento de tecnología, el CTO realiza:", o:["Estrategias para aumentar ingresos y análisis de costo-beneficio y retorno de la inversión","Supervisión del cumplimiento de la normativa de protección de datos","Gestión del personal del área de informática y negociación con proveedores","Respuesta rápida ante fugas de datos"], e:"Protección de datos = DPO; personal y proveedores = CIO; fugas de datos = CISO."},
+    {cat:"CTO", q:"\"Adaptar los sistemas para que puedan ser escalables\" es función del:", o:["CTO","DPO","CEO","CISO"], e:"Está entre las funciones de un CTO."},
+    {cat:"DPO", q:"El Delegado de Protección de Datos (DPO) se encarga principalmente de:", o:["Garantizar el cumplimiento de la normativa de protección de datos","Dirigir el área de Innovación","Dar respuesta rápida ante incidentes de ciberseguridad","Gestionar la capacidad y el ciclo de vida de la tecnología"], e:"También vela por la seguridad del tratamiento de los datos."},
+    {cat:"Áreas de TI", q:"La función de TI que se refiere a los componentes de hardware, red, circuitos y equipos necesarios para un sistema informático es:", o:["Infraestructura","Funcionalidad","Gobernanza"], e:"Las 3 funciones son infraestructura, funcionalidad y gobernanza."},
+    {cat:"Áreas de TI", q:"La gobernanza de TI se refiere a:", o:["Los parámetros operativos y las reglas de uso de la tecnología","Los componentes de hardware, red y circuitos","El mantenimiento y reparación de los sistemas"], e:"Hardware/red = infraestructura; mantenimiento = ITSM."},
+    {cat:"Áreas de TI", q:"La administración o gestión de las TI (ITSM) implica:", o:["Mantenimiento y reparación de sistemas, asesoría sobre nuevas soluciones y ayuda a instalar y usar equipos","Configurar redes alternativas por si la principal deja de funcionar","Convertir necesidades de clientes en aplicaciones viables","Configurar canales seguros para comercio electrónico"], e:"Las otras son contingencia de red, desarrollo de aplicaciones y sitio web."},
+    {cat:"Áreas de TI", q:"\"Copia de seguridad y recuperación de los activos digitales\" e \"instalación y mantenimiento de servicios en la nube\" son responsabilidades de:", o:["Soporte técnico","Comunicaciones","Programación","Desarrollo de aplicaciones"], e:"Están en la lista de soporte técnico."},
+    {cat:"RACI", q:"La matriz RACI se utiliza para:", o:["Identificar los roles y responsabilidades de los equipos en cualquier tarea, logro o entrega","Clasificar productos según su rentabilidad y riesgo","Evaluar las propuestas de los proveedores"], e:"Clasificar productos = Kraljic."},
+    {cat:"RACI", q:"En RACI, la persona a la que se debe consultar antes de tomar una decisión o acción es:", o:["Consulted (C)","Informed (I)","Accountable (A)","Responsible (R)"], e:"A la I se le informa después."},
+    {cat:"Roles TI", q:"Según el modelo de la Junta de Andalucía, los roles y responsabilidades surgen de modo natural de:", o:["Los procesos que soportan la función de la organización","La cantidad de personal disponible","Los puestos de trabajo existentes","El presupuesto asignado"], e:"Función → procesos → roles y responsabilidades."},
+    {cat:"Roles TI", q:"El nuevo modelo para el centro TI propone gestionar las TI:", o:["Por procesos que cruzan en horizontal la organización","Por departamentos de desarrollo, explotación y sistemas","Por proyectos independientes entre sí"], e:"Dividir en desarrollo, explotación y sistemas es el modelo de hace casi 30 años."},
+    {cat:"Roles TI", q:"Según la ISO 9000, un proceso es:", o:["Un conjunto de actividades relacionadas que transforman elementos de entrada en resultados","La mayor unidad de actividad de negocio en una organización","Un conjunto de responsabilidades, actividades y autorizaciones","Uno o más sistemas TI que hacen posible un proceso de negocio"], e:"Las otras son función (DIRKS), rol (ITIL) y servicio TI (ITIL)."},
+    {cat:"Roles TI", q:"PDCA significa:", o:["Plan-Do-Check-Act (ciclo de Deming)","Planificación, Dirección, Control y Auditoría","Procesos, Datos, Controles y Aplicaciones"], e:"Los 4 dominios COBIT corresponden a las fases de un ciclo PDCA."},
+    {cat:"Roles TI", q:"Un servicio bajo una secretaría general técnica, con 2 o 3 personas de planificación, coordinación y control, es una organización:", o:["Tipo 2","Tipo 0","Tipo 1","Tipo 3"], e:"Es la organización intermedia, parecida a las habituales en la JA."},
+    {cat:"Roles TI", q:"Rol de nivel 3 que pertenece a la Gestión de la Producción:", o:["Gestión de la Disponibilidad","Gestión de Incidencias","Gestión de Problemas","Gestión de la Configuración"], e:"Producción = continuidad, capacidad, disponibilidad y nivel de servicio. Las otras son de Soporte."},
+    {cat:"Roles TI", q:"En los niveles de responsabilidad del modelo, quien aprueba los trabajos del rol y proporciona los recursos técnicos, humanos y financieros es el:", o:["Director (D)","Responsable (R)","Supervisor (S)","Ejecutor (E)"], e:"El Director es el responsable último, propietario del proceso-rol."},
+    {cat:"Roles TI", q:"El centro TI de la Consejería de Economía y Hacienda no encaja en el modelo porque:", o:["Tiene procesos no definidos, duplicados o desarrollados por una estructura que no corresponde","No tiene presupuesto propio","Es una organización de Tipo 0"], e:"Ej.: Nivel de Servicio no definido, Calidad duplicada y Seguridad hecha por el Servicio de Producción."},
+    {cat:"Adquisición", q:"El aprovisionamiento de IT es:", o:["El proceso de compra y despliegue de bienes o servicios tecnológicos","El mantenimiento y reparación de los sistemas tecnológicos","La matriz de asignación de responsabilidades","La evaluación del riesgo de terceros"], e:"Incluye analizar la estrategia, seleccionar proveedores, negociar y ejecutar órdenes."},
+    {cat:"Adquisición", q:"La compra de suministros consumibles y soluciones de software en la nube corresponde a la adquisición:", o:["Indirecta","Directa","De infraestructura"], e:"La indirecta contribuye al funcionamiento cotidiano."},
+    {cat:"Adquisición", q:"El primer paso de la estrategia de aprovisionamiento de IT es:", o:["Auditar y unificar el inventario informático","Planificar el presupuesto de IT","Evaluar a los proveedores","Monitorear los KPI"], e:"Monitorear los KPI es el último."},
+    {cat:"Adquisición", q:"\"Reconocido prestigio local\" y \"cartera de clientes con equipos equivalentes\" son criterios sobre:", o:["El proveedor","Los equipos","Los precios","El fabricante"], e:"Del fabricante se pide prestigio <b>mundial</b>."},
+    {cat:"Adquisición", q:"\"Disponibilidad de menús de ayuda\" y \"buena recuperación de errores\" pertenecen al criterio de software:", o:["Eficiencia operativa","Calidad de documentación","Capacidad para realizar las tareas requeridas","Soporte del fabricante"], e:"Según la lámina de criterios para la selección de un software."},
+    {cat:"Adquisición", q:"GRC, en los beneficios de la compra TI, significa:", o:["Gobernanza, Riesgo y Cumplimiento","Gestión de Recursos y Costos","Garantía, Rendimiento y Calidad","Gobierno, Responsabilidad y Control"], e:"Garantiza que licencias, datos y seguridad acaten las normas del sector."},
+    {cat:"Adquisición", q:"Es un desafío (no un beneficio) de la compra TI:", o:["Gestión de cambios","Optimización de los costos","Alineación estratégica","Toma de decisiones"], e:"Los desafíos son planificación y presupuestación, RFP, inventario de activos y gestión de cambios."},
+    {cat:"Proveedores", q:"En el proceso de evaluación de un proveedor, el \"listado corto\" se obtiene al:", o:["Crear tu lista de proveedores","Elaborar un convenio de confidencialidad","Evaluar las propuestas de los proveedores","Decidir y negociar un contrato"], e:"Analizas el mercado y te quedas con los mejores candidatos finales."},
+    {cat:"Proveedores", q:"Según Deloitte, el porcentaje de quienes tuvieron incidentes y vieron sus actividades completamente interrumpidas es:", o:["11%","28%","44%","87%"], e:"28% enfrentó grandes interrupciones; 44% es muy efectivo; 87% tuvo algún incidente."},
+    {cat:"Proveedores", q:"El riesgo con proveedores que puede llevar a multas, compensaciones y pérdidas de 2 a 50 millones de dólares es:", o:["Violaciones a la ley y normativa vigentes","Daño a la reputación","Riesgo de fraude","Quiebre de la cadena de suministro"], e:"Es la estimación de Deloitte para multinacionales."},
+    {cat:"Proveedores", q:"En la matriz de Kraljic, los productos con fuente abundante, donde conviene sacar provecho del poder de compra, son:", o:["Apalancados","Estratégicos","No críticos","Cuello de botella"], e:"Alta rentabilidad y bajo riesgo."},
+    {cat:"Proveedores", q:"Un proveedor tipo \"A\" en la clasificación según su riesgo es:", o:["Crítico, con riesgo asociado elevado","Importante, con riesgo asociado medio","No crítico, con riesgo asociado bajo"], e:"B = importante (medio) · C = no crítico (bajo)."}
   ];
 
-  // ---------- PARTE III: Pareo (se elige un set; 8 pares + 2 distractores) ----------
-  var PAREO = [
-    {title:"Puestos de la alta dirección",
-     pairs:[
-      ["CIO","Responsable de los sistemas y TI para que los procesos de la empresa funcionen"],
-      ["CISO","Protege la información ante ciberataques y fugas de datos"],
-      ["CEO","Puesto más alto de la jerarquía administrativa y de operación"],
-      ["CTO","Mejora productos y servicios para clientes externos; análisis de ROI"],
-      ["DPO","Garantiza el cumplimiento de la normativa de protección de datos"],
-      ["CFO","Director financiero"],
-      ["CDO","Director de datos masivos"],
-      ["CRO","Director de reputación"]],
-     extra:["Director de la mesa de servicio","Auditor externo de calidad"]},
-    {title:"RACI y niveles de responsabilidad",
-     pairs:[
-      ["Responsible (R)","Persona que ejecuta la tarea"],
-      ["Accountable (A)","Responsabilidad última sobre la tarea"],
-      ["Consulted (C)","Se le consulta antes de tomar una decisión"],
-      ["Informed (I)","Se le informa después de la decisión"],
-      ["Director (D)","Propietario del proceso-rol; aprueba y da los recursos"],
-      ["Responsable (DRSEI)","Procura que se realicen las responsabilidades y da cuenta al Director"],
-      ["Supervisor (S)","Coordina y ejecuta un grupo de responsabilidades de un rol complejo"],
-      ["Ejecutor (E)","Realiza las tareas porque posee los conocimientos técnicos"]],
-     extra:["Define la arquitectura de la información","Negocia el contrato con el proveedor"]},
-    {title:"Adquisición y proveedores",
-     pairs:[
-      ["Adquisición directa","Bienes que integran la infraestructura: HW, servidores, licencias"],
-      ["Adquisición indirecta","Mantiene las operaciones diarias: consumibles, nube, servicios públicos"],
-      ["RFP","Solicitud de propuestas transparente, estructurada y justa"],
-      ["Proveedor crítico","Afecta la calidad y existen pocas o una sola alternativa"],
-      ["Apalancado","Fuente abundante; sacar provecho del poder de compra"],
-      ["Estratégico","Esenciales; garantizar disponibilidad con fuentes nacionales o internacionales"],
-      ["No crítico","Productos de bajo valor; fuentes descentralizadas"],
-      ["Cuello de botella","Esenciales con fuentes limitadas"]],
-     extra:["Mide la satisfacción del usuario final","Define los roles de un proyecto"]},
-    {title:"Definiciones del modelo de roles",
-     pairs:[
-      ["Rol","Conjunto de responsabilidades, actividades y autorizaciones"],
-      ["Proceso","Actividades relacionadas que transforman entradas en resultados"],
-      ["Función","La mayor unidad de actividad de negocio de una organización"],
-      ["Actividad","Conjunto de acciones para alcanzar un resultado particular"],
-      ["Servicio TI","Uno o más sistemas TI que hacen posible un proceso de negocio"],
-      ["Infraestructura TI","Hardware y software de base, incluidas comunicaciones, instalaciones y locales"],
-      ["Usuario","Persona que usa el servicio en el día a día"],
-      ["PDCA","Ciclo de Deming: Plan-Do-Check-Act"]],
-     extra:["Matriz de segmentación de proveedores","Acuerdo de confidencialidad entre las partes"]}
-  ];
-
-  // ---------- PARTE IV: Ordenamiento (items en orden correcto) ----------
-  var ORD = [
-    {q:"Ordena los pasos del proceso de administración de recursos humanos.", items:["Planificación de recurso humano","Reclutamiento","Selección","Contratación","Orientación","Capacitación","Desarrollo de la carrera"]},
-    {q:"Ordena los pasos del proceso de evaluación de un proveedor.", items:["Criterios para seleccionar tus proveedores","Elabora un convenio o contrato de confidencialidad","Crea tu lista de proveedores","Evalúa las propuestas de tus proveedores","Decide y negocia un contrato"]},
-    {q:"Ordena los criterios (pasos) para la selección de proveedores.", items:["Establecer criterios de evaluación","Búsqueda de proveedores","Evaluar según los criterios establecidos","Selección de proveedores"]},
-    {q:"Ordena las primeras etapas de la estrategia de aprovisionamiento de IT.", items:["Auditar y unificar el inventario informático","Realizar una evaluación de las necesidades","Establecer un equipo interdisciplinario","Definir objetivos y metas","Planificar el presupuesto de IT","Determinar y gestionar los riesgos"]},
-    {q:"Ordena la jerarquía de roles del nivel 0 al nivel 3.", items:["Dirección TI","Dominios de COBIT (p. ej. Gestión de los Servicios TI)","Procesos agrupados (p. ej. Soporte de los Servicios TI)","Procesos sin agrupar (p. ej. Gestión de Incidencias)"]},
-    {q:"Ordena los tipos de organización de la más simple a la más especializada.", items:["Tipo 0: un único rol con todas las responsabilidades","Tipo 1: roles según los dominios de COBIT","Tipo 2: organización intermedia (servicio bajo secretaría general técnica)","Tipo 3: más especialización según COBIT e ITIL"]},
-    {q:"Ordena las consideraciones generales del software y hardware según el material.", items:["Solicitud de propuesta","Los parámetros (objetivos y políticas)","Evaluación de propuesta","Financiamiento","Negociación de contrato"]}
-  ];
-
-  // ---------- PARTE V: Desarrollo (rúbrica suma 10) ----------
-  var DES = [
-    {q:"Explica qué es el CIO, menciona sus tres principales responsabilidades y cuatro de sus características.",
-     model:"El <b>CIO</b> (Chief Information Officer) es el responsable de los sistemas y de las tecnologías de la información de la empresa, y de identificar y proveer las tecnologías necesarias para que los procesos de la empresa funcionen lo mejor posible. <b>Responsabilidades:</b> crear valor a través de la tecnología; dirigir el uso de los recursos informáticos para lograr los objetivos estratégicos; garantizar que los sistemas se gestionen adecuadamente (costo, riesgo y operaciones fluidas). <b>Características:</b> visión estratégica, flexibilidad, capacidad de aprendizaje, comunicación y liderazgo, coordinación, creatividad, planificación y control, gestión financiera.",
-     rubric:[["Define correctamente al CIO",2],["Menciona las 3 responsabilidades",4],["Menciona y explica 4 características",4]]},
-    {q:"Compara al CIO, al CTO y al CISO: qué es cada uno y menciona dos funciones de cada cargo.",
-     model:"<b>CIO:</b> responsable de los sistemas y TI para que los procesos de la empresa funcionen (gestionar personal de informática, negociar con proveedores, supervisar la arquitectura, gestionar el riesgo…). <b>CTO:</b> máximo responsable del departamento técnico y tecnológico; mejora productos y servicios para clientes externos, aumenta ingresos y analiza costo-beneficio y ROI (liderar la estrategia tecnológica, dirigir innovación, escalabilidad…). <b>CISO:</b> director de seguridad de la información; protege ante ciberataques y fugas de datos (definir la normativa de seguridad, prevenir y detectar vulnerabilidades, respuesta rápida ante incidentes, forense digital…).",
-     rubric:[["Define correctamente al CIO con 2 funciones",3],["Define correctamente al CTO con 2 funciones",3],["Define correctamente al CISO con 2 funciones",3],["Señala la diferencia interno (CIO) vs. clientes externos (CTO)",1]]},
-    {q:"Explica la matriz RACI: qué es, para qué sirve y el significado de cada letra. ¿Qué advierte el material sobre la letra R?",
-     model:"La <b>matriz RACI</b> (Matriz de asignación de responsabilidades) identifica los roles y responsabilidades de los equipos para cualquier tarea, logro o entrega; aclara cómo se distribuye la responsabilidad y reduce la confusión. <b>R – Responsible:</b> ejecuta la tarea. <b>A – Accountable:</b> tiene la responsabilidad última y supervisa la finalización, aunque quizás no haga el trabajo. <b>C – Consulted:</b> se le consulta antes de decidir; revisa y da el visto bueno. <b>I – Informed:</b> se le informa del progreso y después de la decisión. Advertencia: \"ojo con el idioma\": Responsible no es el responsable último, sino quien ejecuta.",
-     rubric:[["Define qué es y para qué sirve la matriz",2],["Explica R y A correctamente",3],["Explica C e I (antes / después)",3],["Explica la advertencia sobre la R",2]]},
-    {q:"Describe los niveles de responsabilidad del modelo de roles (D, R, S, E, I) y las reglas que deben cumplirse al asignar responsables.",
-     model:"<b>Director:</b> responsable último y propietario del proceso-rol; aprueba los trabajos y proporciona recursos técnicos, humanos y financieros. <b>Responsable:</b> procura la realización de las responsabilidades del rol y da cuenta al Director. <b>Supervisor:</b> en roles complejos, coordina y ejecuta un grupo de responsabilidades. <b>Ejecutor:</b> realiza las tareas por sus conocimientos técnicos. <b>Informado:</b> se le informa de las tareas. <b>Reglas:</b> no deben existir roles sin responsable; no deben existir roles con más de un responsable (salvo de reserva); pueden existir asignaciones dobles.",
-     rubric:[["Explica Director y Responsable",3],["Explica Supervisor, Ejecutor e Informado",3],["Enuncia las 3 reglas",4]]},
-    {q:"Explica la jerarquía de roles del modelo de la Junta de Andalucía: los tipos de organización y los niveles, con los dominios de COBIT y cómo se rebautizaron.",
-     model:"<b>Tipos:</b> 0 = un único rol con todas las responsabilidades; 1 = roles según los dominios de COBIT; 2 = organización intermedia (servicio bajo una secretaría general técnica); 3 = más especialización según COBIT e ITIL. <b>Niveles:</b> 0 = Dirección TI; 1 = dominios COBIT (PO; AI rebautizado como Gestión de la Infraestructura TI; DS rebautizado como Gestión de los Servicios TI; ME), que corresponden a un ciclo PDCA; 2 = procesos COBIT e ITIL agrupados; 3 = procesos sin agrupar (p. ej. gestión de incidencias, de problemas, de la capacidad).",
-     rubric:[["Explica los 4 tipos de organización",3],["Explica los niveles 0 a 3",3],["Nombra los 4 dominios de COBIT",2],["Indica cómo se rebautizaron AI y DS",2]]},
-    {q:"Menciona y explica los criterios para la selección de un hardware (equipos, proveedor y precios).",
-     model:"<b>Equipos:</b> configuración acorde a la carga de procesamiento; capacidad de crecimiento vertical (en el mismo equipo) y horizontal (con otros equipos); fabricante de reconocido prestigio mundial; tiempo de garantía; tecnología de punta. <b>Proveedor:</b> reconocido prestigio local; soporte de mantenimiento (personal especializado, stock de repuestos); tiempo de atención, local apropiado, comunicación rápida; cartera de clientes con equipos equivalentes; tiempo de entrega oportuno. <b>Precios:</b> condiciones de pago; detallado por componentes; descuentos por volumen; costo de mantenimiento.",
-     rubric:[["Criterios de equipos (incluye vertical / horizontal)",4],["Criterios del proveedor",3],["Criterios de precios",3]]},
-    {q:"Explica la gestión de riesgo con proveedores: datos del reporte de Deloitte, al menos cuatro de los principales riesgos y la matriz de Kraljic.",
-     model:"<b>Deloitte:</b> 87% tuvo algún incidente por un proveedor; solo 44% es muy efectivo administrando el riesgo de terceros; 28% sufrió grandes interrupciones; 11% vio sus actividades completamente interrumpidas. <b>Riesgos:</b> interrupción del servicio al cliente; violaciones a la ley (2 a 50 millones USD); daño a la reputación; quiebre de la cadena de suministro; fraude; factibilidad económica del proveedor. <b>Kraljic</b> (rentabilidad × riesgo): apalancado (fuente abundante, aprovechar poder de compra); estratégico (esenciales, garantizar disponibilidad); no crítico (bajo valor, fuentes descentralizadas); cuello de botella (esenciales con fuentes limitadas, mantener relaciones y desarrollar nuevos suministros).",
-     rubric:[["Cita correctamente los datos de Deloitte",2],["Explica al menos 4 riesgos",4],["Explica los 4 cuadrantes de Kraljic",4]]}
+  // ---------- PARTE IV: Pareo con números (se eligen 10 conceptos; g = grupo de conceptos que se confunden) ----------
+  var PAIRS = [
+    ["CIO","Responsable de los sistemas y TI para que los procesos de la empresa funcionen lo mejor posible.",null,"CIO"],
+    ["CISO","Protege la información ante posibles ciberataques y fugas de datos.",null,"CISO"],
+    ["CEO","Puesto más alto en la jerarquía administrativa y de operación de una empresa.",null,"CEO"],
+    ["CTO","Mejora productos y servicios para clientes externos y analiza el retorno de la inversión.",null,"CTO"],
+    ["DPO","Garantiza el cumplimiento de la normativa de protección de datos (RGPD).",null,"DPO"],
+    ["CDO","Director de datos masivos.",null,"Alta dirección"],
+    ["CFO","Director financiero.",null,"Alta dirección"],
+    ["CRO","Director de reputación.",null,"Alta dirección"],
+    ["CCO","Director de anticorrupción (Chief Compliance Officer).",null,"Alta dirección"],
+    ["CSO","Director de sustentabilidad.",null,"Alta dirección"],
+    ["Responsible (R)","En RACI, persona que ejecuta la tarea.","exec","RACI"],
+    ["Accountable (A)","En RACI, tiene la responsabilidad última y supervisa que la tarea se complete.","ult","RACI"],
+    ["Consulted (C)","En RACI, se le consulta antes de tomar una decisión o acción.",null,"RACI"],
+    ["Informed (I)","En RACI, se le informa después de tomada la decisión.",null,"RACI"],
+    ["Director (D)","Propietario del proceso-rol: aprueba los trabajos y proporciona los recursos.","ult","Roles TI"],
+    ["Supervisor (S)","En roles complejos, coordina y ejecuta un grupo de responsabilidades.","exec","Roles TI"],
+    ["Ejecutor (E)","Realiza las tareas por poseer los conocimientos técnicos necesarios.","exec","Roles TI"],
+    ["Rol","Conjunto de responsabilidades, actividades y autorizaciones (ITIL).",null,"Roles TI"],
+    ["Proceso","Conjunto de actividades relacionadas que transforman entradas en resultados (ISO 9000).",null,"Roles TI"],
+    ["Función","La mayor unidad de actividad de negocio de una organización.",null,"Roles TI"],
+    ["Servicio TI","Uno o más sistemas TI que hacen posible un proceso de negocio.",null,"Roles TI"],
+    ["Infraestructura","Componentes de hardware, red, circuitos y equipos de un sistema informático.",null,"Áreas de TI"],
+    ["Gobernanza","Parámetros operativos y reglas de uso de la tecnología.",null,"Áreas de TI"],
+    ["Funcionalidad","Quizás la tarea más visible realizada por el departamento de TI.",null,"Áreas de TI"],
+    ["Desarrollo in house","La empresa crea su propio software en lugar de comprar paquetes.",null,"Áreas de TI"],
+    ["Aprovisionamiento de IT","Proceso de compra y despliegue de bienes o servicios tecnológicos.",null,"Adquisición"],
+    ["Adquisición directa","Bienes que integran la infraestructura de IT: servidores, licencias, hardware.",null,"Adquisición"],
+    ["Adquisición indirecta","Mantiene las operaciones cotidianas: consumibles, nube, servicios públicos.",null,"Adquisición"],
+    ["RFP","Solicitud de propuestas transparente, estructurada y justa.",null,"Adquisición"],
+    ["Proveedor crítico","Su insumo afecta la calidad y existen pocas o una sola alternativa.","lim","Proveedores"],
+    ["Apalancados","Fuente abundante: conviene sacar provecho del poder de compra.",null,"Proveedores"],
+    ["Estratégicos","Productos esenciales: garantizar su disponibilidad con fuentes nacionales o internacionales.",null,"Proveedores"],
+    ["No críticos","Productos de bajo valor con fuentes descentralizadas.",null,"Proveedores"],
+    ["Cuello de botella","Productos esenciales con fuentes limitadas.","lim","Proveedores"],
+    ["Listado corto","Mejores candidatos finales en la evaluación de proveedores.",null,"Proveedores"],
+    ["Crecimiento horizontal","Capacidad de crecimiento de un equipo con otros equipos.","grow","Adquisición"],
+    ["Crecimiento vertical","Capacidad de crecimiento dentro del mismo equipo.","grow","Adquisición"],
+    ["Desvinculación","Camino que, junto al reclutamiento, se desprende de la planificación de RRHH.",null,"RRHH en TIC"],
+    ["Orientación","Paso del proceso de administración de RRHH que sigue a la contratación.",null,"RRHH en TIC"],
+    ["Tipo 0","Organización con un único rol que tiene todas las responsabilidades.",null,"Roles TI"],
+    ["PDCA","Ciclo de Deming: Plan-Do-Check-Act.",null,"Roles TI"]
   ];
 
   /* ============================================================
      UTILIDADES
      ============================================================ */
-  var STORE = "gr_p2_parcial_sim_v1";
-  var HIST = "gr_p2_parcial_hist_v1";
-  var LET = "ABCDEFGHIJ";
+  var STORE = "gr_p2_parcial_sim_v2";
+  var HIST = "gr_p2_parcial_hist_v2";
+  var MINIH = "gr_p2_parcial_mini_v1";
+  var VERIF = "gr_p2_parcial_verif_v1";
+  var LET = "abcdefghij";
+  var NUMW = {2:"dos (2)", 3:"tres (3)"};
+  // Tema (cat) → sección de la guía; las tarjetas usan flash.html#cat-<slug>
+  var GUIA = {"RRHH en TIC":"t-rrhh","Alta dirección":"t-siglas","CIO":"t-cio","CISO":"t-ciso","CEO":"t-ceo","CTO":"t-cto","DPO":"t-dpo","Áreas de TI":"t-areas","RACI":"t-raci","Roles TI":"t-modelo","Adquisición":"t-aprov","Proveedores":"t-proveedores"};
   var $ = function(id){ return document.getElementById(id); };
 
   function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
@@ -627,6 +837,25 @@ footer p{font-size:.7rem;color:var(--text-faint);}
   function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
   function del(k){ try{ localStorage.removeItem(k); }catch(e){} }
 
+  // Normaliza texto: minúsculas, sin tildes ni signos
+  function norm(s){
+    return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9ñ ]+/g," ").replace(/\s+/g," ").trim();
+  }
+  function slug(c){ return norm(c).replace(/ /g,"-"); }
+  function hit(ans, kws){
+    var a = norm(ans); if(!a) return false;
+    var toks = a.split(" ");
+    return kws.some(function(k){
+      var nk = norm(k);
+      if(nk.length<=3) return toks.indexOf(nk)>=0;   // siglas cortas: palabra exacta
+      return a.indexOf(nk)>=0;
+    });
+  }
+  function links(cat){
+    if(!cat || !GUIA[cat]) return "";
+    return '<div class="lnk"><a href="guia.html#'+GUIA[cat]+'">📘 Ver en la guía</a><a href="flash.html#cat-'+slug(cat)+'">🃏 Tarjetas del tema</a></div>';
+  }
+
   function show(id){
     ["start","exam","selfgrade","results"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); });
     window.scrollTo({top:0, left:0, behavior:"instant"});
@@ -635,163 +864,268 @@ footer p{font-size:.7rem;color:var(--text-faint);}
   /* ============================================================
      ESTADO
      ============================================================ */
-  var st = null;      // estado del intento
+  var st = null;
   var tick = null;
+  var mode = "full";
+
+  // Parte II como el parcial real: 2 + 2 + 3 espacios de listas y 3 de un solo espacio = 10
+  function buildFill(){
+    var three = shuffle(range(LISTS.length).filter(function(i){ return LISTS[i].max>=3; }));
+    var t = three[0];
+    var two = shuffle(range(LISTS.length).filter(function(i){ return i!==t; })).slice(0,2);
+    var items = two.map(function(i){ return {type:"L", i:i, n:2}; }).concat([{type:"L", i:t, n:3}]);
+    pick(SINGLES.length,3).forEach(function(i){ items.push({type:"S", i:i, n:1}); });
+    return items;
+  }
+
+  // Parte IV: 10 conceptos sin repetir grupos confundibles
+  function buildPareo(){
+    var used = {}, out = [];
+    shuffle(range(PAIRS.length)).forEach(function(i){
+      if(out.length>=10) return;
+      var g = PAIRS[i][2];
+      if(g && used[g]) return;
+      if(g) used[g] = 1;
+      out.push(i);
+    });
+    return {concepts:out, defs:shuffle(out)};
+  }
 
   function newAttempt(){
-    var pset = Math.floor(Math.random()*PAREO.length);
-    var P = PAREO[pset];
-    var nDefs = P.pairs.length + P.extra.length;
+    var mini = mode==="mini";
     st = {
       phase:"exam",
+      mode:mode,
+      verif:$("fVerif").checked,
       name:$("fName").value.trim(),
       cid:$("fId").value.trim(),
-      minutes:parseInt($("fTime").value,10),
+      minutes:mini ? 10 : parseInt($("fTime").value,10),
       startAt:Date.now(),
       endAt:0,
-      vf:pick(VF.length,10),
-      mc:pick(MC.length,15).map(function(i){ return {i:i, o:shuffle(range(MC[i].o.length))}; }),
-      pareo:{set:pset, terms:shuffle(range(P.pairs.length)), defs:shuffle(range(nDefs))},
-      ord:pick(ORD.length,2).map(function(i){ return {i:i, o:shuffle(range(ORD[i].items.length))}; }),
-      des:pick(DES.length,2),
-      ans:{vf:{}, mc:{}, pareo:{}, ord:{}, des:{}},
-      self:{},
+      vf:pick(VF.length, mini?5:10),
+      fill:mini ? [] : buildFill(),
+      mc:pick(MC.length, mini?5:10).map(function(i){
+        var d = shuffle(range(MC[i].o.length).slice(1)).slice(0,2);
+        return {i:i, o:shuffle([0].concat(d))};
+      }),
+      pareo:mini ? {concepts:[], defs:[]} : buildPareo(),
+      ans:{vf:{}, fill:{}, mc:{}, pareo:{}},
+      chk:{},     // preguntas ya verificadas (bloqueadas) en modo verificación
+      log:[],     // aciertos en el orden en que se verificaron (para la racha)
+      over:{},
       submittedAt:0
     };
     if(st.minutes>0) st.endAt = st.startAt + st.minutes*60000;
     save(STORE, st);
   }
 
+  function fillText(f){
+    if(f.type==="L") return "Mencione "+NUMW[f.n]+" "+LISTS[f.i].q+".";
+    return SINGLES[f.i].q;
+  }
+  function fillCat(f){ return f.type==="L" ? LISTS[f.i].cat : SINGLES[f.i].cat; }
+
   /* ============================================================
      RENDER DEL EXAMEN
      ============================================================ */
-  function renderExam(){
-    var h = "", n = 0;
-    var A = st.ans;
+  function part(t, pts, desc){
+    return '<div class="part"><div class="part-head"><h2>'+t+'<span>'+pts+'</span></h2><p>'+desc+'</p></div></div>';
+  }
+  function fb(ok, right, exp, cat){
+    return '<div class="fb '+(ok?"ok":"bad")+'">'+(ok?"✅ Correcto":"❌ Incorrecto"+(right?" · Correcta: <b>"+right+"</b>":""))+'</div>'+
+           (exp?'<div class="rv-exp">💡 '+exp+'</div>':'')+(ok?"":links(cat));
+  }
 
-    // Encabezado del alumno
-    h += '<div class="paper" style="margin-top:16px;"><div class="inst"><div class="c" style="margin-top:0">Segundo Examen Parcial · Gerencia de Recursos de TIC</div>'+
-         '<div class="p">'+(st.name?esc(st.name):"Estudiante")+(st.cid?" · "+esc(st.cid):"")+' · '+(st.minutes?st.minutes+" min":"sin límite")+' · 100 pts</div></div></div>';
+  function vfHTML(k){
+    var i = st.vf[k], Q = VF[i], v = st.ans.vf[k], done = !!st.chk["vf-"+k];
+    function cls(val){
+      var c = "opt";
+      if(v===val) c += " sel";
+      if(done){ if(Q.a===val) c += " right"; else if(v===val) c += " wrong"; }
+      return c;
+    }
+    return '<div class="q'+(done?" locked":"")+'" id="q-vf-'+k+'"><div class="q-top"><span class="q-num">'+(k+1)+'</span><div class="q-text">'+Q.s+'</div></div>'+
+      '<div class="opts vf">'+
+      '<button class="'+cls(true)+'" data-t="vf" data-k="'+k+'" data-v="1"'+(done?" disabled":"")+'>C · Cierto</button>'+
+      '<button class="'+cls(false)+'" data-t="vf" data-k="'+k+'" data-v="0"'+(done?" disabled":"")+'>F · Falso</button>'+
+      '</div>'+(done?fb(v===Q.a, Q.a?"C (cierto)":"F (falso)", Q.e, Q.cat):"")+'</div>';
+  }
 
-    // PARTE I
-    h += part("I. Verdadero o falso","20 pts","Selecciona V si el enunciado es verdadero o F si es falso. Valor: 2 puntos c/u.");
-    st.vf.forEach(function(i,k){
-      n++;
-      var v = A.vf[k];
-      h += '<div class="q" id="q-vf-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+VF[i].s+'</div></div>'+
-           '<div class="opts vf">'+
-           '<button class="opt'+(v===true?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="1">Verdadero</button>'+
-           '<button class="opt'+(v===false?" sel":"")+'" data-t="vf" data-k="'+k+'" data-v="0">Falso</button>'+
-           '</div></div>';
+  function mcHTML(k){
+    var m = st.mc[k], Q = MC[m.i], v = st.ans.mc[k], done = !!st.chk["mc-"+k];
+    var h = '<div class="q'+(done?" locked":"")+'" id="q-mc-'+k+'"><div class="q-top"><span class="q-num">'+(k+1)+'</span><div class="q-text">'+Q.q+'</div></div><div class="opts">';
+    m.o.forEach(function(oi,pos){
+      var c = "opt"+(v===oi?" sel":"");
+      if(done){ if(oi===0) c += " right"; else if(v===oi) c += " wrong"; }
+      h += '<button class="'+c+'" data-t="mc" data-k="'+k+'" data-v="'+oi+'"'+(done?" disabled":"")+'><span class="l">'+LET[pos]+'</span><span>'+Q.o[oi]+'</span></button>';
     });
+    return h + '</div>'+(done?fb(v===0, Q.o[0], Q.e, Q.cat):"")+'</div>';
+  }
 
-    // PARTE II
-    h += part("II. Selección múltiple","30 pts","Selecciona la única respuesta correcta. Valor: 2 puntos c/u.");
-    st.mc.forEach(function(m,k){
-      n++;
-      var Q = MC[m.i], v = A.mc[k];
-      h += '<div class="q" id="q-mc-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div class="opts">';
-      m.o.forEach(function(oi,pos){
-        h += '<button class="opt'+(v===oi?" sel":"")+'" data-t="mc" data-k="'+k+'" data-v="'+oi+'"><span class="l">'+LET[pos].toLowerCase()+'</span><span>'+Q.o[oi]+'</span></button>';
-      });
-      h += '</div></div>';
-    });
-
-    // PARTE III
-    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
-    h += part("III. Pareo · "+P.title,"20 pts","Escribe la letra de la definición que corresponde a cada concepto. Sobran 2 definiciones. Valor: 2.5 puntos c/u.");
-    h += '<div class="q" id="q-pareo"><ul class="defs">';
-    st.pareo.defs.forEach(function(di,pos){ h += '<li><b>'+LET[pos]+'</b><span>'+allDefs[di]+'</span></li>'; });
-    h += '</ul>';
-    st.pareo.terms.forEach(function(ti,k){
-      n++;
-      var v = A.pareo[k];
-      h += '<div class="match-row" id="q-pa-'+k+'"><span class="q-num">'+n+'</span><span class="term">'+P.pairs[ti][0]+'</span>'+
-           '<select data-t="pareo" data-k="'+k+'" class="'+(v!=null?"filled":"")+'"><option value="">—</option>';
-      st.pareo.defs.forEach(function(di,pos){ h += '<option value="'+di+'"'+(v===di?" selected":"")+'>'+LET[pos]+'</option>'; });
-      h += '</select></div>';
-    });
+  function fillHTML(k){
+    var f = st.fill[k], v = st.ans.fill[k] || [], done = !!st.chk["fi-"+k];
+    var h = '<div class="q'+(done?" locked":"")+'" id="q-fi-'+k+'"><div class="q-top"><span class="q-num">'+(k+1)+'</span><div class="q-text">'+fillText(f)+'</div></div><div class="blanks">';
+    var au = done ? autoFill(k) : null;
+    for(var b=0;b<f.n;b++){
+      var val = v[b] || "";
+      h += '<div class="blank">'+(f.n>1?'<b>'+LET[b]+'.</b>':'')+'<input type="text" autocomplete="off" data-t="fill" data-k="'+k+'" data-b="'+b+'" value="'+esc(val)+'" class="'+(val.trim()?"filled":"")+'" placeholder="________________"'+(done?" disabled":"")+'>';
+      if(done){
+        var ok = fillOk(k,b,au[b]);
+        h += '<label class="ovr" title="Cuenta como correcta"><input type="checkbox" data-ovr="'+k+'-'+b+'"'+(ok?" checked":"")+(val.trim()?"":" disabled")+'>'+(ok?"✅":"❌")+'</label>';
+      }
+      h += '</div>';
+    }
     h += '</div>';
+    if(done){
+      var good = fillGood(k);
+      h += '<div class="fb '+(good===f.n?"ok":good?"part":"bad")+'">'+good+' de '+f.n+' espacio(s) correcto(s) · ajusta la casilla si escribiste lo mismo con otras palabras</div>'+
+           '<div class="rv-exp">💡 Aceptadas: '+accepted(f)+'</div>'+(good===f.n?"":links(fillCat(f)));
+    } else if(st.verif){
+      h += '<button class="btn sm chkbtn" data-chk="'+k+'">✅ Verificar</button>';
+    }
+    return h + '</div>';
+  }
 
-    // PARTE IV
-    h += part("IV. Ordenamiento","10 pts","Asigna a cada elemento su posición correcta (1 = primero). Valor: 5 puntos c/u, proporcional a las posiciones correctas.");
-    st.ord.forEach(function(o,k){
-      n++;
-      var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {};
-      h += '<div class="q" id="q-ord-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+Q.q+'</div></div><div style="margin-top:8px;">';
-      o.o.forEach(function(ii){
-        h += '<div class="ord-row"><span class="item">'+Q.items[ii]+'</span><select data-t="ord" data-k="'+k+'" data-i="'+ii+'" class="'+(v[ii]!=null?"filled":"")+'"><option value="">#</option>';
-        for(var p=1;p<=N;p++) h += '<option value="'+p+'"'+(v[ii]===p?" selected":"")+'>'+p+'</option>';
-        h += '</select></div>';
-      });
-      h += '</div></div>';
-    });
+  function pareoRowHTML(k){
+    var di = st.pareo.defs[k], v = st.ans.pareo[k], done = !!st.chk["pa-"+k];
+    var h = '<div class="match-row'+(done?" locked":"")+'" id="q-pa-'+k+'"><select data-t="pareo" data-k="'+k+'" class="'+(v!=null?"filled":"")+'"'+(done?" disabled":"")+'><option value="">__</option>';
+    st.pareo.concepts.forEach(function(ci,pos){ h += '<option value="'+ci+'"'+(v===ci?" selected":"")+'>'+(pos+1)+'</option>'; });
+    h += '</select><span class="def">'+PAIRS[di][1];
+    if(done){
+      var ok = v===di;
+      h += '<span class="fbi '+(ok?"ok":"bad")+'">'+(ok?"✅ Correcto":"❌ Era "+(st.pareo.concepts.indexOf(di)+1)+". "+PAIRS[di][0])+'</span>'+(ok?"":links(PAIRS[di][3]));
+    }
+    return h + '</span></div>';
+  }
 
-    // PARTE V
-    h += part("V. Desarrollo","20 pts","Responde con tus propias palabras. Se autoevalúa con rúbrica al entregar. Valor: 10 puntos c/u.");
-    st.des.forEach(function(di,k){
-      n++;
-      var v = A.des[k] || "";
-      h += '<div class="q" id="q-des-'+k+'"><div class="q-top"><span class="q-num">'+n+'</span><div class="q-text">'+DES[di].q+'</div></div>'+
-           '<textarea data-t="des" data-k="'+k+'" placeholder="Escribe tu respuesta aquí…">'+esc(v)+'</textarea>'+
-           '<div class="wc" id="wc-'+k+'">'+words(v)+' palabras</div></div>';
-    });
+  function renderExam(){
+    var h = "", mini = st.mode==="mini";
+
+    h += '<div class="paper" style="margin-top:16px;"><div class="inst"><div class="c" style="margin-top:0">'+(mini?"⚡ Mini simulacro":"Parcial No 2")+' · Gerencia de Recursos de Tecnología</div>'+
+         '<div class="p">'+(st.name?esc(st.name):"Estudiante")+(st.cid?" · "+esc(st.cid):"")+' · '+(st.minutes?st.minutes+" min":"sin límite")+' · '+(mini?"NOTA SOBRE 100":"TOTAL: 60 PUNTOS")+(st.verif?" · ✅ con verificación":"")+'</div>'+
+         '<div class="p" style="margin-top:8px;font-style:italic;">Enunciado: lea la prueba; las respuestas deben ser del material de clases.</div></div></div>';
+
+    h += part("Parte I. Cierto o falso", mini?"5 preguntas":"10 pts","Coloque una <b>C</b> para el enunciado cierto y una <b>F</b> para el enunciado falso."+(mini?"":" Valor: 1 punto c/u."));
+    st.vf.forEach(function(_,k){ h += vfHTML(k); });
+
+    if(!mini){
+      h += part("Parte II. Llenar los espacios en blanco","10 pts","Material de clases. Cada espacio vale 1 punto.");
+      st.fill.forEach(function(_,k){ h += fillHTML(k); });
+    }
+
+    h += part((mini?"Parte II":"Parte III")+". Encierre en un círculo la letra correcta", mini?"5 preguntas":"20 pts", mini?"Una sola respuesta correcta.":"Valor: 2 puntos cada uno.");
+    st.mc.forEach(function(_,k){ h += mcHTML(k); });
+
+    if(!mini){
+      h += part("Parte IV. Coloque el número en el enunciado correcto","20 pts","Escriba el número del concepto junto a su enunciado. Valor: 2 puntos cada uno.");
+      h += '<div class="q" id="q-pareo"><ul class="concepts">';
+      st.pareo.concepts.forEach(function(ci,pos){ h += '<li><b>'+(pos+1)+'.</b>'+PAIRS[ci][0]+'</li>'; });
+      h += '</ul>';
+      st.pareo.defs.forEach(function(_,k){ h += pareoRowHTML(k); });
+      h += '</div>';
+      h += '<p class="quote">Peter Drucker solía recordar que:<b>"La mejor manera de predecir el futuro es crearlo."</b></p>';
+    }
 
     h += '<div class="submit-zone"><button class="btn primary block" id="btnSubmitBottom">📤 Entregar examen</button></div>';
     $("examBody").innerHTML = h;
     $("btnSubmitBottom").addEventListener("click", askSubmit);
     updateProgress();
+    updateLive();
   }
 
-  function part(t, pts, desc){
-    return '<div class="part"><div class="part-head"><h2>'+t+'<span>'+pts+'</span></h2><p>'+desc+'</p></div></div>';
-  }
-  function words(s){ s=(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+  function replace(id, html){ var el = $(id); if(el) el.outerHTML = html; }
 
-  // Delegación de eventos en el examen
+  /* ---------- verificación inmediata ---------- */
+  function verify(key, ok){
+    if(st.chk[key]) return;
+    st.chk[key] = true;
+    st.log.push(!!ok);
+  }
+
   $("examBody").addEventListener("click", function(e){
-    var b = e.target.closest(".opt"); if(!b) return;
+    var cb = e.target.closest("[data-chk]");
+    if(cb){
+      var fk = +cb.getAttribute("data-chk");
+      verify("fi-"+fk, fillGood(fk)===st.fill[fk].n);
+      replace("q-fi-"+fk, fillHTML(fk));
+      persist(); updateLive(); return;
+    }
+    var b = e.target.closest(".opt"); if(!b || b.disabled) return;
     var t = b.getAttribute("data-t"), k = +b.getAttribute("data-k"), v = +b.getAttribute("data-v");
-    if(t==="vf") st.ans.vf[k] = (v===1);
-    if(t==="mc") st.ans.mc[k] = v;
-    Array.prototype.forEach.call(b.parentElement.children, function(x){ x.classList.toggle("sel", x===b); });
-    b.closest(".q").classList.remove("unanswered-flag");
-    persist(); updateProgress();
+    if(t==="vf"){
+      st.ans.vf[k] = (v===1);
+      if(st.verif){ verify("vf-"+k, st.ans.vf[k]===VF[st.vf[k]].a); replace("q-vf-"+k, vfHTML(k)); }
+    }
+    if(t==="mc"){
+      st.ans.mc[k] = v;
+      if(st.verif){ verify("mc-"+k, v===0); replace("q-mc-"+k, mcHTML(k)); }
+    }
+    if(!st.verif){
+      Array.prototype.forEach.call(b.parentElement.children, function(x){ x.classList.toggle("sel", x===b); });
+      b.closest(".q").classList.remove("unanswered-flag");
+    }
+    persist(); updateProgress(); updateLive();
   });
   $("examBody").addEventListener("change", function(e){
-    var s = e.target; if(s.tagName!=="SELECT") return;
-    var t = s.getAttribute("data-t"), k = +s.getAttribute("data-k"), val = s.value===""?null:+s.value;
-    if(t==="pareo"){ if(val==null) delete st.ans.pareo[k]; else st.ans.pareo[k]=val; }
-    if(t==="ord"){
-      var i = +s.getAttribute("data-i");
-      st.ans.ord[k] = st.ans.ord[k] || {};
-      if(val==null) delete st.ans.ord[k][i]; else st.ans.ord[k][i]=val;
+    var s = e.target;
+    if(s.hasAttribute("data-ovr")){
+      st.over[s.getAttribute("data-ovr")] = s.checked;
+      var fk = +s.getAttribute("data-ovr").split("-")[0];
+      replace("q-fi-"+fk, fillHTML(fk));
+      persist(); updateLive(); return;
     }
-    s.classList.toggle("filled", val!=null);
-    var q = s.closest(".q"); if(q) q.classList.remove("unanswered-flag");
-    persist(); updateProgress();
+    if(s.tagName!=="SELECT") return;
+    var k = +s.getAttribute("data-k"), val = s.value===""?null:+s.value;
+    if(val==null) delete st.ans.pareo[k]; else st.ans.pareo[k]=val;
+    if(st.verif && val!=null){
+      verify("pa-"+k, val===st.pareo.defs[k]);
+      replace("q-pa-"+k, pareoRowHTML(k));
+    } else {
+      s.classList.toggle("filled", val!=null);
+    }
+    var q = $("q-pareo"); if(q) q.classList.remove("unanswered-flag");
+    persist(); updateProgress(); updateLive();
   });
   var typing;
   $("examBody").addEventListener("input", function(e){
-    var t = e.target; if(t.tagName!=="TEXTAREA") return;
-    var k = +t.getAttribute("data-k");
-    st.ans.des[k] = t.value;
-    $("wc-"+k).textContent = words(t.value)+" palabras";
+    var t = e.target; if(t.tagName!=="INPUT" || t.getAttribute("data-t")!=="fill") return;
+    var k = +t.getAttribute("data-k"), b = +t.getAttribute("data-b");
+    st.ans.fill[k] = st.ans.fill[k] || [];
+    st.ans.fill[k][b] = t.value;
+    t.classList.toggle("filled", !!t.value.trim());
     t.closest(".q").classList.remove("unanswered-flag");
-    clearTimeout(typing); typing = setTimeout(function(){ persist(); updateProgress(); }, 400);
+    clearTimeout(typing); typing = setTimeout(function(){ persist(); updateProgress(); }, 300);
   });
 
   function persist(){ save(STORE, st); }
 
+  /* ---------- marcador en vivo (solo con verificación) ---------- */
+  function liveScore(){
+    var got = 0, max = 0;
+    st.vf.forEach(function(i,k){ if(st.chk["vf-"+k]){ max += 1; if(st.ans.vf[k]===VF[i].a) got += 1; } });
+    st.fill.forEach(function(f,k){ if(st.chk["fi-"+k]){ max += f.n; got += fillGood(k); } });
+    st.mc.forEach(function(_,k){ if(st.chk["mc-"+k]){ max += 2; if(st.ans.mc[k]===0) got += 2; } });
+    st.pareo.defs.forEach(function(di,k){ if(st.chk["pa-"+k]){ max += 2; if(st.ans.pareo[k]===di) got += 2; } });
+    var streak = 0;
+    for(var i=st.log.length-1;i>=0 && st.log[i];i--) streak++;
+    return {got:got, max:max, streak:streak};
+  }
+  function updateLive(){
+    var el = $("live");
+    if(!st || !st.verif){ el.classList.add("hidden"); return; }
+    var L = liveScore();
+    el.classList.remove("hidden");
+    el.innerHTML = '<b>'+L.got+'</b>/'+L.max+' pts'+(L.streak>1?' · 🔥 '+L.streak:'');
+  }
+
   /* ---------- progreso / pendientes ---------- */
   function pending(){
-    var list = [], n = 0, A = st.ans;
-    st.vf.forEach(function(_,k){ n++; if(A.vf[k]==null) list.push({n:n,id:"q-vf-"+k}); });
-    st.mc.forEach(function(_,k){ n++; if(A.mc[k]==null) list.push({n:n,id:"q-mc-"+k}); });
-    st.pareo.terms.forEach(function(_,k){ n++; if(A.pareo[k]==null) list.push({n:n,id:"q-pa-"+k}); });
-    st.ord.forEach(function(o,k){ n++; var v=A.ord[k]||{}; if(Object.keys(v).length<ORD[o.i].items.length) list.push({n:n,id:"q-ord-"+k}); });
-    st.des.forEach(function(_,k){ n++; if(!(A.des[k]||"").trim()) list.push({n:n,id:"q-des-"+k}); });
-    return {list:list, total:n};
+    var list = [], total = 0, A = st.ans, mini = st.mode==="mini";
+    st.vf.forEach(function(_,k){ total++; if(A.vf[k]==null) list.push({n:"I-"+(k+1),id:"q-vf-"+k}); });
+    st.fill.forEach(function(f,k){ total++; var v=A.fill[k]||[]; for(var b=0;b<f.n;b++){ if(!(v[b]||"").trim()){ list.push({n:"II-"+(k+1),id:"q-fi-"+k}); break; } } });
+    st.mc.forEach(function(_,k){ total++; if(A.mc[k]==null) list.push({n:(mini?"II-":"III-")+(k+1),id:"q-mc-"+k}); });
+    st.pareo.defs.forEach(function(_,k){ total++; if(A.pareo[k]==null) list.push({n:"IV-"+(k+1),id:"q-pa-"+k}); });
+    return {list:list, total:total};
   }
   function updateProgress(){
     var p = pending(), done = p.total - p.list.length;
@@ -818,8 +1152,8 @@ footer p{font-size:.7rem;color:var(--text-faint);}
     var p = pending();
     $("mTitle").textContent = "¿Entregar examen?";
     if(p.list.length){
-      $("mText").textContent = "Tienes "+p.list.length+" pregunta(s) sin responder. Toca un número para ir a ella.";
-      $("mChips").innerHTML = p.list.map(function(x){ return '<button class="chip" data-id="'+x.id+'">#'+x.n+'</button>'; }).join("");
+      $("mText").textContent = "Tienes "+p.list.length+" pregunta(s) sin responder. Toca una para ir a ella.";
+      $("mChips").innerHTML = p.list.map(function(x){ return '<button class="chip" data-id="'+x.id+'">'+x.n+'</button>'; }).join("");
     } else {
       $("mText").textContent = "Respondiste todas las preguntas. Una vez entregado no podrás modificar tus respuestas.";
       $("mChips").innerHTML = "";
@@ -830,7 +1164,7 @@ footer p{font-size:.7rem;color:var(--text-faint);}
     var c = e.target.closest(".chip"); if(!c) return;
     $("modal").classList.add("hidden");
     var el = $(c.getAttribute("data-id"));
-    if(el){ el.classList.add("unanswered-flag"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
+    if(el){ (el.classList.contains("q")?el:el.closest(".q")||el).classList.add("unanswered-flag"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
   });
   $("mCancel").addEventListener("click", function(){ $("modal").classList.add("hidden"); });
   $("mOk").addEventListener("click", function(){ $("modal").classList.add("hidden"); submit(false); });
@@ -838,48 +1172,86 @@ footer p{font-size:.7rem;color:var(--text-faint);}
 
   function submit(auto){
     clearInterval(tick);
-    st.phase = "selfgrade";
     st.submittedAt = Date.now();
     st.autoSubmitted = !!auto;
+    if(st.mode==="mini"){
+      st.phase = "results"; persist();
+      renderResults(true); show("results");
+      return;
+    }
+    st.phase = "selfgrade";
     persist();
     renderSelfGrade();
     show("selfgrade");
   }
 
   /* ============================================================
-     AUTOEVALUACIÓN
+     CORRECCIÓN AUTOMÁTICA DE LA PARTE II (+ ajuste manual)
      ============================================================ */
+  // Devuelve [{ans, ok(auto), match(texto aceptado o null)}] por espacio
+  function autoFill(k){
+    var f = st.fill[k], v = st.ans.fill[k] || [], out = [];
+    if(f.type==="S"){
+      var S = SINGLES[f.i], a = v[0]||"", ok = hit(a, S.k);
+      out.push({ans:a, ok:ok, match:ok?S.a:null});
+      return out;
+    }
+    // Emparejamiento máximo espacio ↔ ítem aceptado (sin repetir ítems)
+    var L = LISTS[f.i], cand = [], owner = {}, mine = [], b;
+    for(b=0;b<f.n;b++){
+      cand.push(L.items.map(function(it,j){ return hit(v[b]||"", it.k) ? j : -1; }).filter(function(j){ return j>=0; }));
+    }
+    function aug(b, seen){
+      for(var c=0;c<cand[b].length;c++){
+        var j = cand[b][c]; if(seen[j]) continue; seen[j] = 1;
+        if(owner[j]==null || aug(owner[j], seen)){ owner[j] = b; return true; }
+      }
+      return false;
+    }
+    for(b=0;b<f.n;b++) aug(b, {});
+    Object.keys(owner).forEach(function(j){ mine[owner[j]] = +j; });
+    for(b=0;b<f.n;b++){
+      var m = mine[b];
+      out.push({ans:v[b]||"", ok:m!=null, match:m!=null?L.items[m].t:null});
+    }
+    return out;
+  }
+  function fillOk(k,b,auto){
+    var key = k+"-"+b;
+    if(!(auto.ans||"").trim()) return false;
+    return st.over[key]!=null ? st.over[key] : auto.ok;
+  }
+  function fillGood(k){
+    var good = 0;
+    autoFill(k).forEach(function(x,b){ if(fillOk(k,b,x)) good++; });
+    return good;
+  }
+  function accepted(f){
+    return f.type==="S" ? SINGLES[f.i].a : LISTS[f.i].items.map(function(x){ return x.t; }).join(" · ");
+  }
+
   function renderSelfGrade(){
     var h = "";
     if(st.autoSubmitted) h += '<div class="resume"><p>⏰ Se acabó el tiempo: el examen se entregó automáticamente.</p></div>';
-    st.des.forEach(function(di,k){
-      var D = DES[di], mine = (st.ans.des[k]||"").trim(), sel = st.self[k] || [];
-      h += '<div class="sg"><h3>Pregunta de desarrollo '+(k+1)+'</h3><div style="font-size:.88rem;color:var(--text-dim)">'+D.q+'</div>'+
-           '<div class="lbl">TU RESPUESTA</div><div class="mine">'+(mine?esc(mine):'<i>Sin respuesta.</i>')+'</div>'+
-           '<div class="lbl">RESPUESTA MODELO</div><div class="model">'+D.model+'</div>'+
-           '<div class="lbl">RÚBRICA · MARCA LO QUE SÍ INCLUISTE</div>';
-      D.rubric.forEach(function(r,ri){
-        h += '<label class="rub"><input type="checkbox" data-k="'+k+'" data-r="'+ri+'"'+(sel[ri]?" checked":"")+(mine?"":" disabled")+'><span>'+r[0]+'</span><em>+'+r[1]+'</em></label>';
+    st.fill.forEach(function(f,k){
+      var au = autoFill(k);
+      h += '<div class="sg"><h3>'+(k+1)+'. '+fillText(f)+'</h3>';
+      au.forEach(function(x,b){
+        var has = !!(x.ans||"").trim(), ok = fillOk(k,b,x);
+        h += '<div class="sg-row"><div class="lbl">'+(f.n>1?"ESPACIO "+LET[b].toUpperCase()+" · ":"")+(x.ok?"✅ RECONOCIDA":"🤔 NO RECONOCIDA")+'</div>'+
+             '<div class="mine">'+(has?esc(x.ans):'<i>Sin respuesta.</i>')+'</div>'+
+             (x.match?'<div class="rv-line">Coincide con: <b class="c-ok">'+x.match+'</b></div>':'')+
+             '<label class="rub"><input type="checkbox" data-k="'+k+'" data-b="'+b+'"'+(ok?" checked":"")+(has?"":" disabled")+'><span>Cuenta como correcta</span><em>+1</em></label></div>';
       });
-      h += '<div class="sg-total" id="sgt-'+k+'"></div></div>';
+      h += '<div class="lbl">RESPUESTAS ACEPTADAS</div><div class="model">'+accepted(f)+'</div></div>';
     });
     $("sgBody").innerHTML = h;
-    st.des.forEach(function(_,k){ updSg(k); });
   }
   $("sgBody").addEventListener("change", function(e){
     var c = e.target; if(c.type!=="checkbox") return;
-    var k = +c.getAttribute("data-k"), r = +c.getAttribute("data-r");
-    st.self[k] = st.self[k] || [];
-    st.self[k][r] = c.checked;
-    updSg(k); persist();
+    st.over[c.getAttribute("data-k")+"-"+c.getAttribute("data-b")] = c.checked;
+    persist();
   });
-  function desPts(k){
-    var D = DES[st.des[k]], sel = st.self[k] || [], t = 0;
-    if(!(st.ans.des[k]||"").trim()) return 0;
-    D.rubric.forEach(function(r,ri){ if(sel[ri]) t += r[1]; });
-    return t;
-  }
-  function updSg(k){ $("sgt-"+k).textContent = desPts(k)+" / 10 pts"; }
   $("btnFinish").addEventListener("click", function(){
     st.phase = "results"; persist();
     renderResults(true); show("results");
@@ -889,58 +1261,54 @@ footer p{font-size:.7rem;color:var(--text-faint);}
      CALIFICACIÓN Y RESULTADOS
      ============================================================ */
   function grade(){
-    var A = st.ans, rv = [], n = 0;
-    var parts = {I:0, II:0, III:0, IV:0, V:0};
+    var A = st.ans, rv = [], mini = st.mode==="mini";
+    var parts = {I:0, II:0, III:0, IV:0};
 
     st.vf.forEach(function(i,k){
-      n++; var Q = VF[i], v = A.vf[k], ok = v===Q.a, pts = ok?2:0; parts.I += pts;
-      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.s,
-        lines:["Tu respuesta: <b>"+(v==null?"—":v?"Verdadero":"Falso")+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(Q.a?"Verdadero":"Falso")+"</b>"], exp:Q.e});
+      var Q = VF[i], v = A.vf[k], ok = v===Q.a, pts = ok?1:0; parts.I += pts;
+      rv.push({n:"I-"+(k+1), cls:ok?"ok":"bad", pts:pts, max:1, q:Q.s, cat:Q.cat,
+        lines:["Tu respuesta: <b>"+(v==null?"—":v?"C":"F")+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(Q.a?"C (cierto)":"F (falso)")+"</b>"], exp:Q.e});
+    });
+    st.fill.forEach(function(f,k){
+      var au = autoFill(k), good = 0, mine = [];
+      au.forEach(function(x,b){ var ok = fillOk(k,b,x); if(ok) good++; mine.push((f.n>1?LET[b]+". ":"")+(x.ans.trim()?esc(x.ans):"—")+(ok?" ✅":" ❌")); });
+      parts.II += good;
+      rv.push({n:"II-"+(k+1), cls:good===f.n?"ok":good===0?"bad":"part", pts:good, max:f.n, q:fillText(f), cat:fillCat(f),
+        lines:["Tus respuestas: "+mine.join(" · ")], exp:"Aceptadas: "+accepted(f)});
     });
     st.mc.forEach(function(m,k){
-      n++; var Q = MC[m.i], v = A.mc[k], ok = v===0, pts = ok?2:0; parts.II += pts;
-      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.q,
+      var Q = MC[m.i], v = A.mc[k], ok = v===0, pts = ok?2:0; parts.III += pts;
+      rv.push({n:(mini?"II-":"III-")+(k+1), cls:ok?"ok":"bad", pts:pts, max:2, q:Q.q, cat:Q.cat,
         lines:["Tu respuesta: <b>"+(v==null?"—":Q.o[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+Q.o[0]+"</b>"], exp:Q.e});
     });
-    var P = PAREO[st.pareo.set], allDefs = P.pairs.map(function(p){ return p[1]; }).concat(P.extra);
-    st.pareo.terms.forEach(function(ti,k){
-      n++; var v = A.pareo[k], ok = v===ti, pts = ok?2.5:0; parts.III += pts;
-      rv.push({n:n, cls:ok?"ok":"bad", pts:pts, max:2.5, q:"Pareo: <b>"+P.pairs[ti][0]+"</b>",
-        lines:["Tu respuesta: <b>"+(v==null?"—":allDefs[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+P.pairs[ti][1]+"</b>"], exp:""});
-    });
-    st.ord.forEach(function(o,k){
-      n++; var Q = ORD[o.i], N = Q.items.length, v = A.ord[k] || {}, good = 0;
-      Q.items.forEach(function(_,ii){ if(v[ii]===ii+1) good++; });
-      var pts = r1(5*good/N); parts.IV += pts;
-      var mineOrder = Q.items.map(function(it,ii){ return {it:it, p:v[ii]}; }).filter(function(x){ return x.p!=null; }).sort(function(a,b){ return a.p-b.p; }).map(function(x){ return x.p+". "+x.it; });
-      rv.push({n:n, cls:good===N?"ok":good===0?"bad":"part", pts:pts, max:5, q:Q.q,
-        lines:["Posiciones correctas: <b>"+good+" de "+N+"</b>", "Tu orden: "+(mineOrder.length?mineOrder.join(" · "):"—")],
-        exp:"Orden correcto: "+Q.items.map(function(it,ii){ return "<b>"+(ii+1)+".</b> "+it; }).join(" · ")});
-    });
-    st.des.forEach(function(di,k){
-      n++; var pts = desPts(k); parts.V += pts;
-      rv.push({n:n, cls:pts>=10?"ok":pts===0?"bad":"part", pts:pts, max:10, q:DES[di].q,
-        lines:["Autoevaluación con rúbrica"], exp:DES[di].model});
+    st.pareo.defs.forEach(function(di,k){
+      var v = A.pareo[k], ok = v===di, pts = ok?2:0; parts.IV += pts;
+      rv.push({n:"IV-"+(k+1), cls:ok?"ok":"bad", pts:pts, max:2, q:PAIRS[di][1], cat:PAIRS[di][3],
+        lines:["Tu respuesta: <b>"+(v==null?"—":(st.pareo.concepts.indexOf(v)+1)+". "+PAIRS[v][0])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(st.pareo.concepts.indexOf(di)+1)+". "+PAIRS[di][0]+"</b>"], exp:""});
     });
 
     Object.keys(parts).forEach(function(p){ parts[p] = r1(parts[p]); });
-    var total = r1(parts.I+parts.II+parts.III+parts.IV+parts.V);
-    return {total:total, parts:parts, rv:rv};
+    var raw = r1(parts.I+parts.II+parts.III+parts.IV);
+    var max = mini ? st.vf.length*1 + st.mc.length*2 : 60;
+    var pct = Math.round(raw/max*100);
+    return {raw:raw, max:max, pct:pct, parts:parts, rv:rv};
   }
 
-  function letter(s){ return s>=91?"A":s>=81?"B":s>=71?"C":s>=61?"D":"F"; }
+  function letter(p){ return p>=91?"A":p>=81?"B":p>=71?"C":p>=61?"D":"F"; }
   var MSG = {A:"¡Excelente! Dominas el material.", B:"Muy bien. Repasa los detalles que fallaste.", C:"Bien, pero hay temas por reforzar.", D:"Aprobado por poco: repasa la guía.", F:"Necesitas repasar el material antes del parcial."};
 
   function renderResults(addHist){
-    var g = grade(), L = letter(g.total);
-    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + "RESULTADO";
-    $("rsScore").innerHTML = g.total+"<small>/100</small>";
+    var g = grade(), L = letter(g.pct), mini = st.mode==="mini";
+    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + (mini?"MINI SIMULACRO":"RESULTADO") + (st.verif?" · ✅ CON VERIFICACIÓN":"");
+    $("rsScore").innerHTML = mini ? g.pct+"<small>/100</small>" : g.raw+"<small>/60</small>";
     $("rsGrade").className = "grade g-"+L;
-    $("rsGrade").textContent = "Nota "+L;
+    $("rsGrade").textContent = "Nota "+L+(mini?" · "+g.raw+" de "+g.max+" pts":" · "+g.pct+"%");
     var used = ((st.submittedAt||Date.now()) - st.startAt)/1000;
     $("rsMeta").textContent = MSG[L]+" · Tiempo utilizado: "+fmt(used)+(st.minutes?" de "+st.minutes+":00":"")+(st.autoSubmitted?" · entregado por tiempo":"");
 
-    var defs = [["I. Verdadero o falso","I",20],["II. Selección múltiple","II",30],["III. Pareo","III",20],["IV. Ordenamiento","IV",10],["V. Desarrollo","V",20]];
+    var defs = mini
+      ? [["I. Cierto o falso","I",st.vf.length],["II. Encierre la letra","III",st.mc.length*2]]
+      : [["I. Cierto o falso","I",10],["II. Espacios en blanco","II",10],["III. Encierre la letra","III",20],["IV. Pareo con números","IV",20]];
     $("rsBars").innerHTML = defs.map(function(d){
       var v = g.parts[d[1]], pct = v/d[2]*100;
       var col = pct>=81?"var(--accent)":pct>=61?"var(--amber)":"var(--red)";
@@ -955,9 +1323,10 @@ footer p{font-size:.7rem;color:var(--text-faint);}
     };
 
     if(addHist && !st.saved){
-      var h = load(HIST) || [];
-      h.unshift({d:Date.now(), s:g.total, g:L});
-      save(HIST, h.slice(0,8));
+      var key = mini ? MINIH : HIST;
+      var h = load(key) || [];
+      h.unshift({d:Date.now(), s:mini?g.pct:g.raw, g:L, v:!!st.verif});
+      save(key, h.slice(0,8));
       st.saved = true; persist();
     }
   }
@@ -969,55 +1338,72 @@ footer p{font-size:.7rem;color:var(--text-faint);}
       var icon = r.cls==="ok"?"✅":r.cls==="bad"?"❌":"⚠️";
       return '<div class="rv '+r.cls+'"><div class="rv-top"><div class="rv-q"><b>'+r.n+'.</b> '+r.q+'</div><div class="rv-pts '+c+'">'+icon+' '+r.pts+'/'+r.max+'</div></div>'+
         r.lines.filter(Boolean).map(function(l){ return '<div class="rv-line">'+l+'</div>'; }).join("")+
-        (r.exp?'<div class="rv-exp">💡 '+r.exp+'</div>':'')+'</div>';
+        (r.exp?'<div class="rv-exp">💡 '+r.exp+'</div>':'')+(r.cls==="ok"?"":links(r.cat))+'</div>';
     }).join("") : '<p style="font-size:.86rem;color:var(--text-faint);padding:10px 0;">No hay preguntas en este filtro.</p>';
   }
 
   /* ============================================================
-     PORTADA: reanudar e historial
+     PORTADA: tipo, verificación, reanudar e historial
      ============================================================ */
+  function setMode(m){
+    mode = m;
+    Array.prototype.forEach.call(document.querySelectorAll("#fType button"), function(b){
+      var on = b.getAttribute("data-m")===m;
+      b.classList.toggle("on", on); b.setAttribute("aria-pressed", on?"true":"false");
+    });
+    $("timeField").classList.toggle("hidden", m==="mini");
+    $("valFull").classList.toggle("hidden", m==="mini");
+    $("valMini").classList.toggle("hidden", m!=="mini");
+  }
+  $("fType").addEventListener("click", function(e){ var b = e.target.closest("button"); if(b) setMode(b.getAttribute("data-m")); });
+  $("fVerif").addEventListener("change", function(){ save(VERIF, this.checked); });
+
+  function histHTML(list, unit){
+    return list.map(function(x){
+      var d = new Date(x.d);
+      return '<div class="hist-item"><span>'+d.toLocaleDateString("es-PA")+' · '+d.toLocaleTimeString("es-PA",{hour:"2-digit",minute:"2-digit"})+(x.v?' <span class="vtag">✅ con verificación</span>':'')+'</span><span><b>'+x.s+unit+'</b> · <span class="grade g-'+x.g+'" style="margin:0;padding:2px 9px;font-size:.75rem;">'+x.g+'</span></span></div>';
+    }).join("");
+  }
   function renderStart(){
     var saved = load(STORE);
     if(saved && saved.phase && saved.phase!=="results"){
       var info;
-      if(saved.phase==="exam") info = saved.endAt ? (saved.endAt>Date.now() ? "Quedan "+fmt((saved.endAt-Date.now())/1000)+"." : "El tiempo ya terminó; se entregará al continuar.") : "Sin límite de tiempo.";
-      else info = "Falta autoevaluar la Parte V.";
+      if(saved.phase==="exam") info = (saved.mode==="mini"?"Mini simulacro. ":"Simulacro completo. ")+(saved.endAt ? (saved.endAt>Date.now() ? "Quedan "+fmt((saved.endAt-Date.now())/1000)+"." : "El tiempo ya terminó; se entregará al continuar.") : "Sin límite de tiempo.");
+      else info = "Falta revisar la Parte II.";
       $("resumeInfo").textContent = info;
       $("resumeBox").classList.remove("hidden");
     } else {
       $("resumeBox").classList.add("hidden");
     }
-    var h = load(HIST) || [];
-    $("histBox").style.display = h.length ? "block" : "none";
-    $("histList").innerHTML = h.map(function(x){
-      var d = new Date(x.d);
-      return '<div class="hist-item"><span>'+d.toLocaleDateString("es-PA")+' · '+d.toLocaleTimeString("es-PA",{hour:"2-digit",minute:"2-digit"})+'</span><span><b>'+x.s+'</b> · <span class="grade g-'+x.g+'" style="margin:0;padding:2px 9px;font-size:.75rem;">'+x.g+'</span></span></div>';
-    }).join("");
+    var h = load(HIST) || [], m = load(MINIH) || [];
+    $("histBox").style.display = (h.length || m.length) ? "block" : "none";
+    $("histList").innerHTML = (h.length?'<div class="lbl">📝 SIMULACRO COMPLETO</div>'+histHTML(h,"/60"):"")+(m.length?'<div class="lbl">⚡ MINI SIMULACRO</div>'+histHTML(m,"/100"):"");
+    $("fVerif").checked = load(VERIF)===true;
   }
 
-  $("btnStart").addEventListener("click", function(){
-    newAttempt(); renderExam(); show("exam"); startTimer();
-  });
+  function enter(){
+    renderExam(); show("exam");
+    if(st.endAt && st.endAt<=Date.now()) submit(true); else startTimer();
+  }
+  $("btnStart").addEventListener("click", function(){ newAttempt(); enter(); });
   $("btnResume").addEventListener("click", function(){
     st = load(STORE); if(!st) return renderStart();
-    if(st.phase==="exam"){
-      renderExam(); show("exam");
-      if(st.endAt && st.endAt<=Date.now()) submit(true); else startTimer();
-    } else if(st.phase==="selfgrade"){ renderSelfGrade(); show("selfgrade"); }
+    st.chk = st.chk || {}; st.log = st.log || []; st.mode = st.mode || "full";
+    if(st.phase==="exam") enter();
+    else if(st.phase==="selfgrade"){ renderSelfGrade(); show("selfgrade"); }
   });
   $("btnDiscard").addEventListener("click", function(){ del(STORE); renderStart(); });
   $("btnRetry").addEventListener("click", function(){
     del(STORE); st = null; renderStart(); show("start");
   });
 
-  // Aviso antes de salir con un examen en curso
   window.addEventListener("beforeunload", function(e){
     if(st && st.phase==="exam"){ persist(); e.preventDefault(); e.returnValue = ""; }
   });
 
+  setMode("full");
   renderStart();
 })();
 </script>
 </body>
 </html>
-
