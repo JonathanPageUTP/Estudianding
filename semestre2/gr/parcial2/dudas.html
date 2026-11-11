@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>Mis Dudas | Parcial 2 GR</title>
+    <style>
+        :root { --bg:#ffffff; --fg:#000000; --sub:#555555; --line:#e6e6e6; --soft:#f6f6f6; }
+        html[data-theme="dark"] { color-scheme: dark; --bg:#0e0e0e; --fg:#f2f2f2; --sub:#a8a8a8; --line:#2a2a2a; --soft:#171717; }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; background: var(--bg); color: var(--fg);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: clamp(15px, 1rem + 0.2vw, 18px); line-height: 1.55;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .container { max-width: 720px; margin: 0 auto; padding: 96px 16px 60px; }
+        h1 { font-weight: 200; letter-spacing: 4px; text-transform: uppercase; font-size: 1.5rem; text-align: center; margin: 0 0 8px; }
+        .lead { text-align: center; color: var(--sub); font-size: .9rem; margin: 0 0 32px; }
+
+        .search { width: 100%; padding: 14px 16px; font-size: 1rem; border: 1px solid var(--fg); background: transparent; color: inherit; margin-bottom: 24px; min-height: 44px; }
+        .search:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+        .qa { border-top: 1px solid var(--line); }
+        .qa:last-of-type { border-bottom: 1px solid var(--line); }
+        .qa summary {
+            list-style: none; cursor: pointer; padding: 18px 36px 18px 0; position: relative;
+            font-weight: 600; min-height: 44px;
+        }
+        .qa summary::-webkit-details-marker { display: none; }
+        .qa summary::after { content: "+"; position: absolute; right: 4px; top: 14px; font-weight: 200; font-size: 1.6rem; line-height: 1; }
+        .qa[open] summary::after { content: "−"; }
+        .qa summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+        .num { display: inline-block; min-width: 2.2em; color: var(--sub); font-weight: 400; letter-spacing: 1px; }
+        .tema { display: inline-block; font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid currentColor; padding: 2px 8px; margin-left: 6px; vertical-align: middle; font-weight: 400; color: var(--sub); }
+        .ans { padding: 0 0 22px 2.2em; }
+        .ans p { margin: 0 0 12px; }
+        .ans ul, .ans ol { margin: 0 0 12px; padding-left: 1.2em; }
+        .ans li { margin-bottom: 6px; }
+        .clave { background: var(--soft); border-left: 3px solid var(--fg); padding: 10px 14px; margin: 12px 0; font-size: .92rem; }
+        .clave b:first-child { letter-spacing: 1px; text-transform: uppercase; font-size: .72rem; display: block; margin-bottom: 4px; }
+        table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 0 0 12px; display: block; overflow-x: auto; }
+        th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+        th { background: var(--soft); font-weight: 600; }
+
+        .empty { text-align: center; color: var(--sub); border: 1px dashed var(--line); padding: 40px 16px; }
+        .nores { display: none; text-align: center; color: var(--sub); padding: 30px 0; }
+
+        /* Navegación y tema (igual que index) */
+        .navc { position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); left: 16px; display: flex; gap: 8px; z-index: 10; }
+        .navc a, .theme-toggle {
+            width: 44px; height: 44px; border-radius: 50%; border: 1px solid currentColor; background: var(--bg);
+            color: inherit; display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 0; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); -webkit-tap-highlight-color: transparent;
+        }
+        .theme-toggle { position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); right: 16px; z-index: 10; }
+        .navc svg, .theme-toggle svg { width: 20px; height: 20px; }
+        .navc a:focus-visible, .theme-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+        @media (hover: hover) { .navc a:hover, .theme-toggle:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); } }
+        .theme-toggle .i-sun { display: none; }
+        html[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+        html[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+    </style>
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem("theme"); } catch (e) {}
+            if (!t) t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            document.documentElement.setAttribute("data-theme", t);
+        })();
+    </script>
+</head>
+<body>
+    <nav class="navc" aria-label="Navegación">
+        <a href="index.html" aria-label="Volver al menú anterior" title="Volver al menú anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+        <a href="../../../index.html" aria-label="Ir al inicio" title="Ir al inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5M5 9.5V21h14V9.5M10 21v-6h4v6"/></svg></a>
+    </nav>
+
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro / claro">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+
+    <main class="container">
+        <h1>Mis Dudas</h1>
+        <p class="lead">Preguntas que surgieron estudiando el Parcial 2 · Gerencia de Recursos de TIC</p>
+
+        <input class="search" id="search" type="search" placeholder="Buscar en mis dudas…" aria-label="Buscar en mis dudas">
+
+        <section id="lista">
+            <!--
+              PLANTILLA para cada duda:
+              <details class="qa">
+                  <summary><span class="num">01</span>Pregunta aquí <span class="tema">RRHH</span></summary>
+                  <div class="ans">
+                      <p>Respuesta…</p>
+                      <div class="clave"><b>Para el parcial</b>Idea clave en una línea.</div>
+                  </div>
+              </details>
+            -->
+        </section>
+
+        <p class="empty" id="empty">Aún no hay dudas. Se irán agregando aquí a medida que surjan.</p>
+        <p class="nores" id="nores">Ninguna duda coincide con la búsqueda.</p>
+    </main>
+
+    <script>
+        (function () {
+            var root = document.documentElement, btn = document.getElementById("themeToggle");
+            function label() { btn.setAttribute("aria-label", root.getAttribute("data-theme") === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"); }
+            label();
+            btn.addEventListener("click", function () {
+                var t = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+                root.setAttribute("data-theme", t);
+                try { localStorage.setItem("theme", t); } catch (e) {}
+                label();
+            });
+
+            var items = Array.prototype.slice.call(document.querySelectorAll(".qa"));
+            var empty = document.getElementById("empty"), nores = document.getElementById("nores"), search = document.getElementById("search");
+            if (items.length) { empty.style.display = "none"; } else { search.style.display = "none"; }
+            function norm(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+            search.addEventListener("input", function () {
+                var q = norm(search.value.trim()), shown = 0;
+                items.forEach(function (d) {
+                    var ok = !q || norm(d.textContent).indexOf(q) !== -1;
+                    d.style.display = ok ? "" : "none";
+                    if (ok) shown++;
+                    if (q && ok) d.open = true;
+                });
+                nores.style.display = shown ? "none" : "block";
+            });
+        })();
+    </script>
+</body>
+</html>
