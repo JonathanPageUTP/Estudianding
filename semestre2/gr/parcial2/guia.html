@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>Guía de Estudio · Gerencia de Recursos de TIC — Parcial 2</title>
 <style>
 /* ============================================================
@@ -411,6 +411,7 @@ header{transition:box-shadow .2s;}
   #searchcount{margin-top:4px;min-height:0;}
   #searchcount:empty{display:none;}
   header.compact .eyebrow{display:none;}
+  header.compact .kit-note{display:none;}
   header.compact{box-shadow:0 6px 16px -8px rgba(0,0,0,.6);}
   section.topic{scroll-margin-top:118px;padding:22px 0;}
 
@@ -465,6 +466,104 @@ header{transition:box-shadow .2s;}
   .route-row{gap:6px;}
   footer{padding-bottom:30px;}
 }
+
+/* ============================================================
+   KIT DE ESTUDIO: modos 🏢/🚌, continuar, pausas, 🔊 escuchar
+   ============================================================ */
+.kit-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;}
+.kit-seg{display:inline-flex;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:var(--surface);}
+.kit-seg button{background:none;border:none;color:var(--text-dim,var(--dim));font:700 .74rem var(--sans);padding:8px 12px;cursor:pointer;min-height:36px;}
+.kit-seg button[aria-pressed="true"]{background:var(--accent);color:#06140c;}
+.kit-btn{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:30px;font:700 .74rem var(--sans);padding:8px 12px;cursor:pointer;min-height:36px;white-space:nowrap;}
+.kit-btn.on{border-color:var(--amber);color:var(--amber);}
+.kit-note{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--text-dim,var(--dim));margin-top:6px;}
+.kit-note[hidden]{display:none;}
+.kit-note button{background:none;border:none;color:var(--text-faint,var(--faint));cursor:pointer;font-size:.9rem;padding:4px 6px;min-width:32px;min-height:32px;}
+html:not([data-mode="transit"]) .kit-transit-only{display:none !important;}
+html:not([data-mode="office"]) .kit-office-only{display:none !important;}
+.pausa{display:none;margin:16px 0;padding:9px 12px;border:1px dashed var(--amber);border-radius:10px;font-size:.78rem;font-weight:700;color:var(--amber);background:var(--amber-dim);scroll-margin-top:140px;}
+html[data-mode="transit"] .pausa{display:block;}
+.kit-fold>.kit-foldbtn{display:none;}
+html[data-mode="transit"] .kit-fold>.kit-foldbtn{display:inline-flex;margin:10px 0 0;}
+html[data-mode="transit"] .kit-fold:not(.open)>.tblwrap{display:none;}
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .7rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:32px;margin-left:auto;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#kitPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#kitPlayer.show{display:flex;}
+#kitPlayer button,#kitPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .78rem var(--sans);padding:7px 11px;cursor:pointer;min-height:36px;}
+#kitPlayer .now{font-size:.7rem;color:var(--cyan);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#kitToast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:300;background:var(--amber-dim);border:1px solid var(--amber);color:var(--text);border-radius:14px;padding:12px 16px;font-size:.86rem;display:none;max-width:calc(100% - 32px);}
+#kitToast.show{display:block;}
+/* bloques de aprendizaje activo */
+.active{border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin:14px 0;background:var(--surface);}
+.active.pre{border-color:#1f4d5c;background:var(--cyan-dim);}
+.active.why{border-color:#5c4515;}
+.active.rec{border-color:#453262;}
+.alabel{font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.04em;margin-bottom:6px;color:var(--cyan);}
+.active.why .alabel{color:var(--amber);}
+.active.rec .alabel{color:var(--violet,#c9a6f0);}
+.alabel small{font-family:var(--sans);font-weight:400;letter-spacing:0;color:var(--text-dim,var(--dim));}
+.aqt{font-size:.88rem;color:var(--text);margin:4px 0 8px;}
+details.aq{border-top:1px dashed var(--line-soft);padding:7px 0;}
+details.aq:first-of-type{border-top:none;}
+details.aq>summary{cursor:pointer;font-size:.86rem;color:var(--text);list-style:none;display:flex;gap:8px;align-items:flex-start;min-height:28px;}
+details.aq>summary::-webkit-details-marker{display:none;}
+details.aq>summary::before{content:"▸";color:var(--text-faint,var(--faint));transition:transform .15s;}
+details.aq[open]>summary::before{transform:rotate(90deg);}
+details.aq>summary .see{margin-left:auto;font-size:.68rem;color:var(--text-faint,var(--faint));font-family:var(--mono);white-space:nowrap;}
+.aa{font-size:.84rem;color:var(--text-dim,var(--dim));margin:6px 0 2px 16px;padding:8px 10px;background:var(--bg);border-radius:8px;}
+.aa b{color:var(--text);}
+textarea.note{width:100%;min-height:90px;margin:6px 0 4px;resize:vertical;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px;font:16px/1.45 var(--sans);}
+html:not([data-mode="office"]) textarea.note{display:none;}
+.kit-plan{list-style:none;padding:0;margin:10px 0 0;}
+.kit-plan li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line-soft);font-size:.86rem;color:var(--text-dim,var(--dim));}
+.kit-plan li::before{display:none;}
+.kit-plan li b{color:var(--accent);font-family:var(--mono);min-width:92px;flex-shrink:0;}
+.kit-frase{border:1px dashed var(--accent);border-radius:10px;padding:10px 12px;font-size:.9rem;color:var(--text);background:var(--accent-dim);outline:none;}
+.kit-frase:focus{border-style:solid;}
+.kit-date{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 10px;font-size:16px;color-scheme:dark;}
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){
+  .kit-btn:hover,.kit-seg button:hover,.kit-tts:hover{filter:brightness(1.15);}
+}
+@media (max-width:560px){
+  .kit-bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .kit-bar::-webkit-scrollbar{display:none;}
+  .kit-bar>*{flex-shrink:0;}
+  .kit-tts{padding:6px 9px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+
+/* ============================================================
+   RESPONSIVE: tablet y PC (índice lateral)
+   ============================================================ */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+img,svg{height:auto;}
+p.body,.box p,blockquote.q{max-width:70ch;}
+#kitSide{display:none;}
+@media (min-width:561px) and (max-width:1023px){
+  :root{--maxw:720px;}
+  .grid1{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1024px){
+  :root{--maxw:820px;--side:max(16px, calc((100vw - 1180px) / 2));}
+  body{padding-bottom:40px;}
+  #bottomnav{display:none;}
+  #kitPlayer{bottom:calc(16px + env(safe-area-inset-bottom,0px));}
+  .header-inner,.hero,main,footer{margin-left:calc(var(--side) + 290px);margin-right:auto;}
+  .grid1{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+  .grid2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  #kitSide{display:block;position:fixed;left:var(--side);top:calc(var(--hh,150px) + 12px);bottom:16px;width:270px;overflow-y:auto;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;scrollbar-width:thin;z-index:40;}
+  #kitSide .sh{font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:4px 6px 8px;letter-spacing:.04em;}
+  #kitSide a{display:flex;gap:8px;align-items:center;text-decoration:none;color:var(--text-dim);font-size:.8rem;padding:7px 8px;border-radius:8px;line-height:1.25;}
+  #kitSide a .tn{font-family:var(--mono);font-size:.64rem;color:var(--accent);min-width:22px;}
+  #kitSide a.on{background:var(--accent-dim);color:var(--text);}
+}
+@media (min-width:1024px) and (hover:hover){ #kitSide a:hover{background:var(--surface-2);color:var(--text);} }
+@media (hover:hover){ .navbtn:hover,.acc-btn:hover{filter:brightness(1.15);} .toc-list a:hover{border-color:var(--accent);} }
 </style>
 </head>
 <body>
@@ -485,9 +584,9 @@ header{transition:box-shadow .2s;}
 </header>
 
 <div class="hero">
-  <span class="tag">Lectura eficiente · Sin quizzes</span>
+  <span class="tag">Aprendizaje activo · 🏢 Oficina / 🚌 Transporte</span>
   <h1>Todo el material del Parcial 2, organizado para memorizar rápido</h1>
-  <p>Esta guía reorganiza el contenido de los 3 PDF del parcial (Administración de RRHH en TIC, Roles y Responsabilidades para la Gestión de las TI, y Adquisición, Selección y Criterios de Evaluación de Recursos Informáticos) en bloques cortos, con mnemotecnias, analogías, tablas y cajas de énfasis. Usa el buscador o el menú inferior para saltar directo a un tema.</p>
+  <p>Esta guía reorganiza el contenido de los 3 PDF del parcial (Administración de RRHH en TIC, Roles y Responsabilidades para la Gestión de las TI, y Adquisición, Selección y Criterios de Evaluación de Recursos Informáticos) en bloques cortos, con mnemotecnias, analogías, tablas y cajas de énfasis. Cada tema empieza con preguntas 🎯 y termina con 🤔 y 🧠: intenta responder antes de abrir las respuestas. Elige arriba el modo 🏢 Oficina o 🚌 Transporte y usa 🔊 Escuchar para oír una sección.</p>
   <div class="meta">
     <span>👩‍🏫 Ing. Lizmayrem Márquez</span>
     <span>🏛️ FISC · UTP</span>
@@ -507,6 +606,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Recursos humanos y TI</div>
       <div class="topic-kicker">Introducción · gestión de recursos humanos</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuál es la más grande barrera entre RRHH y TI?</summary><div class="aa">La <b>carencia de comprensión</b> entre ambos departamentos.</div></details>
+    <details class="aq"><summary>¿Qué problema común provoca esa barrera?</summary><div class="aa">El <b>mal reclutamiento</b>: RRHH no entiende al 100% el perfil y TI no se involucra en la selección.</div></details>
   </div>
 
   <blockquote class="q">Recursos humanos y TI naturalmente no se complementaban. De hecho, la carencia de comprensión entre ambos departamentos fue y es todavía la más grande barrera para la participación entre las dos áreas.</blockquote>
@@ -529,6 +633,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">ADMiGo</div>
     <p>Trata al empleado como un <b>ADMiGo</b>: lo <b>A</b>dquieres, lo <b>D</b>esarrollas, lo <b>M</b>otivas y <b>G</b>arantizas que se quede comprometido.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué TI debería involucrarse en el proceso de selección de su propio personal?</p><textarea class="note" data-note="t-rrhh-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque si TI no participa, RRHH no entiende al 100% el perfil que busca y se produce el <b>mal reclutamiento</b>. Además, la necesidad de trabajadores TI calificados obligó a RRHH a gestionar y digitalizar el capital humano, algo que requiere comprender a TI.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿De qué dimensión de la compañía se ocupa la gestión de RRHH?</summary><div class="aa">De la <b>dimensión humana</b>.</div></details>
+    <details class="aq"><summary>¿Qué 4 cosas son esenciales respecto a las personas para lograr los objetivos? (ADMiGo)</summary><div class="aa"><b>A</b>dquirir sus servicios, <b>D</b>esarrollar sus habilidades, <b>M</b>otivarlas a más rendimiento y <b>G</b>arantizar su compromiso.</div></details>
+    <details class="aq"><summary>¿A qué obligó a RRHH la necesidad de encontrar trabajadores TI calificados?</summary><div class="aa">A <b>gestionar y digitalizar el capital humano</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -541,6 +652,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Situación actual del reclutamiento TI</div>
       <div class="topic-kicker">Por qué cubrir perfiles TI especializados es un reto</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuántas razones da el material de por qué reclutar perfiles TI especializados es un reto?</summary><div class="aa"><b>Seis</b>.</div></details>
+    <details class="aq"><summary>¿La culpa es solo de RRHH?</summary><div class="aa">No: una de las razones es que <b>el equipo de TI establece requerimientos poco realistas</b>.</div></details>
   </div>
 
   <p class="body">Al cubrir perfiles TI <b>especializados o de alta competencia</b>, el reclutamiento se vuelve un reto y exige grandes esfuerzos, por estas razones:</p>
@@ -561,6 +677,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">⚠️ PUNTO CRÍTICO</div>
     <p>Ojo: no toda la culpa es de RRHH. Una de las razones es que <b>el equipo de TI establece requerimientos poco realistas</b>.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué la poca comunicación entre áreas se conecta con el mal reclutamiento del tema anterior?</p><textarea class="note" data-note="t-situacion-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque sin comunicación RRHH no comprende el perfil solicitado; así no sabe dónde buscar ni qué habilidades analizar, y termina reclutando mal (la barrera de comprensión entre RRHH y TI).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Menciona las 6 razones (C·D·H·T·I·M).</summary><div class="aa">Poca <b>comunicación</b> · no sabe <b>dónde</b> buscar · no sabe qué <b>habilidades</b> analizar · sin conocimiento <b>técnico</b> · requerimientos <b>irreales</b> de TI · poco conocimiento del <b>mercado</b>.</div></details>
+    <details class="aq"><summary>¿Quién establece los requerimientos poco realistas?</summary><div class="aa">El propio <b>equipo de TI</b>.</div></details>
+    <details class="aq"><summary>¿Para qué tipo de perfiles el reclutamiento se vuelve un reto?</summary><div class="aa">Perfiles TI <b>especializados o de alta competencia</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -573,6 +696,12 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Proceso de administración de RRHH</div>
       <div class="topic-kicker">7 pasos · el Proceso de Gestión RRHH y sus resultados</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Con qué paso empieza el proceso de administración de RRHH?</summary><div class="aa">Con la <b>planificación de recurso humano</b>.</div></details>
+    <details class="aq"><summary>¿Cuántos pasos tiene?</summary><div class="aa"><b>Siete</b>.</div></details>
+    <details class="aq"><summary>¿Qué otro camino, además del reclutamiento, sale de la planificación?</summary><div class="aa">La <b>desvinculación</b>.</div></details>
   </div>
 
   <h3 class="sub">🪜 Los 7 pasos</h3>
@@ -609,6 +738,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">💡 ANALOGÍA</div>
     <p>Como un equipo de fútbol: primero <b>fichas</b> jugadores buenos (tramo 1), luego los <b>adaptas</b> al estilo del club y los entrenas (tramo 2) y, por último, los <b>evalúas, haces crecer y pagas</b> para que rindan al máximo (tramo 3).</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el último tramo (evaluación, desarrollo de carrera y compensación) produce empleados de alto rendimiento y no solo competentes?</p><textarea class="note" data-note="t-proceso-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque los dos primeros tramos solo seleccionan y adaptan/capacitan; el tercero evalúa el desempeño y hace crecer y compensa al empleado (desarrollo de carrera ↔ compensación en ciclo), lo que lleva al <b>alto rendimiento</b>.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Ordena los 7 pasos.</summary><div class="aa">Planificación → Reclutamiento → Selección → Contratación → Orientación → Capacitación → Desarrollo de la carrera.</div></details>
+    <details class="aq"><summary>¿Qué resultado da el tramo Orientación → Capacitación?</summary><div class="aa">Empleados <b>adaptados, competentes</b>, con habilidades y conocimientos actualizados.</div></details>
+    <details class="aq"><summary>¿Qué rodea a todo el Proceso de Gestión RRHH en el diagrama?</summary><div class="aa">El <b>Entorno</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -621,6 +757,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Responsabilidades de TI y organigramas</div>
       <div class="topic-kicker">3 responsabilidades · empresa de tecnología · decanato · ejemplo Facebook</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuántas responsabilidades de TI muestra la lámina?</summary><div class="aa"><b>Tres</b>: comunicación, plataforma integral y funcionalidad.</div></details>
+    <details class="aq"><summary>¿Qué departamento agrupa a desarrolladores, testers y diseñadores UX/UI?</summary><div class="aa"><b>Tecnología y Desarrollo</b>.</div></details>
   </div>
 
   <h3 class="sub">🌐 Responsabilidades de TI</h3>
@@ -662,6 +803,13 @@ header{transition:box-shadow .2s;}
 
   <h3 class="sub">📎 Ejemplo: organigrama de Facebook</h3>
   <p class="body">Arriba el <b>CEO &amp; Chairman</b> (Mark Zuckerberg), con el <b>COO</b> (Sheryl Sandberg) a su lado. Debajo: <b>CFO</b>, <b>CIO</b>, <b>CTO</b>, <b>CMO</b> y <b>HR</b>. Del CMO dependen el <b>CDO</b> y <b>Global mkt</b>.</p>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el soporte técnico aparece dentro de Operaciones y no de Tecnología y Desarrollo en el organigrama de la empresa de tecnología?</p><textarea class="note" data-note="t-organigramas-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque en ese organigrama Tecnología y Desarrollo agrupa a quienes <b>crean</b> el producto (desarrolladores, testers, diseñadores), mientras que Operaciones agrupa el funcionamiento diario: administrativos, logística y <b>soporte técnico</b>.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di las 3 responsabilidades de TI.</summary><div class="aa">Que los empleados se <b>comuniquen</b> sobre tareas rutinarias · que trabajen juntos en una <b>plataforma integral</b> · dar a los equipos la <b>funcionalidad</b> que necesitan.</div></details>
+    <details class="aq"><summary>¿Qué jerarquía muestra la empresa de tecnología?</summary><div class="aa"><b>CEO</b> → Vicepresidentes ejecutivos → Managers.</div></details>
+    <details class="aq"><summary>¿Cuáles son las 2 ramas del Departamento de Tecnología y Servicios Informáticos del decanato?</summary><div class="aa"><b>Redes y Mantenimiento</b> y <b>Sistemas y Servicios Informáticos</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -674,6 +822,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Siglas en la alta dirección</div>
       <div class="topic-kicker">Los 10 "Chief … Officer" de la lámina</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué significa la C y la O de las siglas de la alta dirección?</summary><div class="aa"><b>Chief … Officer</b>.</div></details>
+    <details class="aq"><summary>En esta lámina, ¿CSO es seguridad?</summary><div class="aa">No: es director de <b>sustentabilidad</b> (Sustainability).</div></details>
   </div>
 
   <div class="tblwrap"><table>
@@ -700,6 +853,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">❌ ERROR FRECUENTE</div>
     <p>En esta lámina <b>CSO</b> es el director de <b>sustentabilidad</b>, no de seguridad. La seguridad de la información la lleva el <b>CISO</b> (Chief Information Security Officer).</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué es peligroso responder "CSO = seguridad" en el examen?</p><textarea class="note" data-note="t-siglas-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque en la lámina del material CSO es <b>Chief Sustainability Officer</b>; la seguridad de la información la lleva el <b>CISO</b>. El examen se corrige con el material de clases.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Quién es el director de datos masivos?</summary><div class="aa">El <b>CDO</b> (Chief Data Officer).</div></details>
+    <details class="aq"><summary>¿Quién es el director de anticorrupción?</summary><div class="aa">El <b>CCO</b> (Chief Compliance Officer).</div></details>
+    <details class="aq"><summary>¿Quién es el director de reputación?</summary><div class="aa">El <b>CRO</b> (Chief Reputation Officer).</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -712,6 +872,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">CIO · Chief Information Officer</div>
       <div class="topic-kicker">Responsabilidades · 10 funciones · 8 características</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿De qué es responsable el CIO?</summary><div class="aa">De los <b>sistemas y las TI</b> de la empresa, y de identificar y proveer las tecnologías para que los procesos funcionen lo mejor posible.</div></details>
+    <details class="aq"><summary>¿Cuántas funciones y cuántas características se listan?</summary><div class="aa"><b>10 funciones</b> y <b>8 características</b>.</div></details>
   </div>
 
   <blockquote class="q">El CIO (Chief Information Officer) es el responsable de los sistemas y de las tecnologías de la información de la empresa y, además, es el responsable de identificar y proveer las tecnologías necesarias para que los procesos de la empresa funcionen lo mejor posible.</blockquote>
@@ -765,6 +930,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">VFA · 3C · P$</div>
     <p>Un buen CIO <b>V</b>e, es <b>F</b>lexible y <b>A</b>prende; luego tiene 3 C (<b>C</b>omunicación-liderazgo, <b>C</b>oordinación, <b>C</b>reatividad); y al final <b>P</b>lanifica y cuida el <b>$</b>.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el material dice que las responsabilidades estratégicas del CIO no difieren de las de otros ejecutivos?</p><textarea class="note" data-note="t-cio-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque, como cualquier ejecutivo de un área interna, el CIO debe <b>gestionar los recursos bajo su control para maximizar el valor</b>; lo que cambia es que sus recursos son tecnológicos.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di las 3 principales responsabilidades del CIO.</summary><div class="aa">Crear <b>valor</b> a través de la tecnología · <b>dirigir</b> los recursos informáticos a los objetivos estratégicos · <b>garantizar</b> sistemas bien gestionados (costo, riesgo, operación fluida).</div></details>
+    <details class="aq"><summary>¿Para qué le sirve al CIO la coordinación?</summary><div class="aa">Para gestionar al <b>personal interno</b> y a los <b>proveedores externos</b>.</div></details>
+    <details class="aq"><summary>¿Qué normativas menciona la función de cumplimiento?</summary><div class="aa"><b>Sarbanes Oxley</b> y <b>GDPR</b>, entre otras.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -777,6 +949,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">CISO · Chief Information Security Officer</div>
       <div class="topic-kicker">Director de seguridad de la información · 9 funciones</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Con qué otro nombre se conoce al CISO?</summary><div class="aa"><b>Director de seguridad de la información</b>.</div></details>
+    <details class="aq"><summary>¿De qué protege la información?</summary><div class="aa">De posibles <b>ciberataques y fugas de datos</b>.</div></details>
   </div>
 
   <blockquote class="q">El CISO es la persona responsable de velar por la ciberseguridad de una empresa. También podemos conocerlo como director de seguridad de la información. Se encarga de proteger la información ante posibles ciberataques y fugas de datos.</blockquote>
@@ -799,6 +976,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">ANV · IRF · PPF</div>
     <p>Tres grupos de tres: <b>A</b>linea, <b>N</b>orma, <b>V</b>igila · <b>I</b>nforma, <b>R</b>esponde, <b>F</b>orma · <b>P</b>olíticas, <b>P</b>rivacidad, <b>F</b>orense.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el material aclara que el CISO garantiza la seguridad "dentro de las posibilidades humanas, técnicas y económicas" de cada empresa?</p><textarea class="note" data-note="t-ciso-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque la seguridad total no existe: el CISO trabaja con los recursos que la empresa tiene (personas, tecnología y presupuesto).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Menciona 3 funciones del CISO.</summary><div class="aa">Cualquiera de: alinear la estrategia de ciberseguridad · definir la normativa · prevenir/detectar/analizar vulnerabilidades · informar a dirección · respuesta rápida ante incidentes · formar y concienciar · políticas de seguridad · privacidad de datos · investigaciones forenses digitales.</div></details>
+    <details class="aq"><summary>¿Qué mnemotecnia agrupa sus 9 funciones?</summary><div class="aa"><b>ANV · IRF · PPF</b>.</div></details>
+    <details class="aq"><summary>¿Las investigaciones forenses digitales son del CISO o del DPO?</summary><div class="aa">Del <b>CISO</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -811,6 +995,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">CEO · Chief Executive Officer</div>
       <div class="topic-kicker">¿Qué es? · 10 funciones</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué lugar ocupa el CEO en la jerarquía?</summary><div class="aa">El <b>puesto más alto</b> de la jerarquía administrativa y de operación.</div></details>
+    <details class="aq"><summary>¿Cuántas funciones de un CEO da el material?</summary><div class="aa"><b>Diez</b>.</div></details>
   </div>
 
   <div class="grid1">
@@ -840,6 +1029,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">IPM · TCC · UGCF</div>
     <p><b>I</b>nforma, <b>P</b>lanifica, <b>M</b>otiva · <b>T</b>oma decisiones, <b>C</b>rea equipo, <b>C</b>uida clientes · <b>U</b>sa el presupuesto, <b>G</b>uía, <b>C</b>rea estructura, <b>F</b>ija objetivos. Ojo: hay <b>dos "Crear"</b> (equipo y estructura).</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué "director de informática" no puede ser otro nombre del CEO?</p><textarea class="note" data-note="t-ceo-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque director de informática es el <b>CIO</b>. Los otros nombres del CEO son director general, consejero delegado o presidente ejecutivo.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di 3 otros nombres del CEO.</summary><div class="aa"><b>Director general</b>, <b>consejero delegado</b>, <b>presidente ejecutivo</b>.</div></details>
+    <details class="aq"><summary>¿Qué dos funciones del CEO empiezan con "Crear"?</summary><div class="aa">Crear un <b>equipo</b> de trabajo y crear la <b>estructura organizativa</b>.</div></details>
+    <details class="aq"><summary>Menciona 3 funciones más del CEO.</summary><div class="aa">Cualquiera de: informar · planificar estrategias · motivar y asesorar · tomar decisiones organizativas · cuidar a los clientes · usar el presupuesto · guiar a los directivos · fijar objetivos.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -852,6 +1048,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">CTO · Chief Technology Officer</div>
       <div class="topic-kicker">Director de tecnología · 12 funciones · CIO vs. CTO</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿A qué clientes enfoca el CTO la tecnología?</summary><div class="aa">A los <b>clientes externos</b>.</div></details>
+    <details class="aq"><summary>¿Cuántas funciones del CTO lista el material?</summary><div class="aa"><b>Doce</b>.</div></details>
   </div>
 
   <blockquote class="q">El CTO, siglas en inglés de Chief Technology Officer, o director de tecnología, es el máximo responsable del departamento técnico y tecnológico de una compañía. El puesto de CTO es crucial para el desarrollo y la implementación de las estrategias tecnológicas de la empresa.</blockquote>
@@ -877,6 +1078,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">⚠️ PUNTO CRÍTICO · CIO vs. CTO</div>
     <p>El <b>CIO</b> mira <b>hacia adentro</b>: sistemas y TI para que los <b>procesos de la empresa</b> funcionen. El <b>CTO</b> mira <b>hacia afuera</b>: tecnología para mejorar <b>productos y servicios de los clientes externos</b>, aumentar ingresos y medir ROI.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué se dice que el CIO mira hacia adentro y el CTO hacia afuera?</p><textarea class="note" data-note="t-cto-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">El <b>CIO</b> provee tecnología para que los <b>procesos de la empresa</b> funcionen; el <b>CTO</b> usa tecnología para mejorar <b>productos y servicios de los clientes externos</b>, aumentar ingresos y medir el retorno de la inversión.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué análisis realiza el CTO?</summary><div class="aa">De <b>costo-beneficio</b> y de <b>retorno de la inversión</b>.</div></details>
+    <details class="aq"><summary>¿De qué es máximo responsable el CTO?</summary><div class="aa">Del <b>departamento técnico y tecnológico</b> de la compañía.</div></details>
+    <details class="aq"><summary>Menciona 3 funciones del CTO.</summary><div class="aa">Cualquiera de: liderar la estrategia tecnológica · dirigir Innovación · proteger información sensible · supervisar equipos · comunicación entre departamentos · presupuestos · estándares de calidad · identificar mejoras · sistemas escalables · gestionar proyectos · nuevas legislaciones · cultura de la información.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -889,6 +1097,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">DPO · Data Protection Officer</div>
       <div class="topic-kicker">Delegado de Protección de Datos · 7 funciones</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué significa DPO en español?</summary><div class="aa"><b>Delegado de Protección de Datos</b>.</div></details>
+    <details class="aq"><summary>¿El RGPD exige que sea jurista?</summary><div class="aa"><b>No</b>, pero debe tener amplios conocimientos jurídicos en protección de datos.</div></details>
   </div>
 
   <blockquote class="q">El Delegado de Protección de Datos es la persona encargada de garantizar el cumplimiento normativo de la normativa de protección de datos dentro de una organización.</blockquote>
@@ -916,6 +1129,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">❌ ERROR FRECUENTE</div>
     <p>No confundir al <b>DPO</b> (protección de datos personales, cumplimiento del RGPD) con el <b>CDO</b> (director de datos masivos) ni con el <b>CISO</b> (ciberseguridad).</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué no hay que confundir DPO, CDO y CISO?</p><textarea class="note" data-note="t-dpo-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el <b>DPO</b> vela por el cumplimiento de la normativa de protección de datos (RGPD), el <b>CDO</b> es director de datos masivos y el <b>CISO</b> se encarga de la ciberseguridad.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué dos funciones tiene el DPO frente a las Autoridades de Control?</summary><div class="aa"><b>Cooperar</b> con ellas y actuar como su <b>punto de contacto</b>.</div></details>
+    <details class="aq"><summary>¿Sobre qué evaluación asesora el DPO?</summary><div class="aa">La <b>Evaluación de Impacto</b> en Protección de datos.</div></details>
+    <details class="aq"><summary>Mnemotecnia de las 7 funciones.</summary><div class="aa"><b>ISFA · ECP</b>: Informa, Supervisa, Forma, Audita · Evaluación de impacto, Coopera, Punto de contacto.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -928,6 +1148,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Principales funciones y puestos en el área de TI</div>
       <div class="topic-kicker">Infraestructura · funcionalidad · gobernanza · 7 áreas</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuáles son las 3 funciones de TI?</summary><div class="aa"><b>Infraestructura, funcionalidad y gobernanza</b>.</div></details>
+    <details class="aq"><summary>¿Cuántas áreas o puestos de TI se describen?</summary><div class="aa"><b>Siete</b>.</div></details>
   </div>
 
   <p class="body">TI <b>gestiona y potencializa los sistemas tecnológicos</b> para aportar mayor <b>valor y competitividad</b> a los servicios de una organización.</p>
@@ -997,6 +1222,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">7 áreas: A · S · C · P · W · D · R</div>
     <p><b>A</b>dministra, <b>S</b>oporta, <b>C</b>omunica, <b>P</b>rograma, publica la <b>W</b>eb, <b>D</b>esarrolla apps y tiene una <b>R</b>ed de respaldo.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué la funcionalidad es lo que más se asocia con TI?</p><textarea class="note" data-note="t-areas-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque es quizás la tarea <b>más visible</b>: crear y mantener aplicaciones, desarrollar y almacenar datos y ayudar en el uso del software, cosas que el usuario ve a diario.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué es la gobernanza de TI?</summary><div class="aa">Implementar <b>parámetros operativos y reglas</b> sobre cómo usar la tecnología de la empresa.</div></details>
+    <details class="aq"><summary>¿Qué significa desarrollar in house?</summary><div class="aa">Que los especialistas de la empresa crean su propio software <b>en lugar de comprar paquetes</b>.</div></details>
+    <details class="aq"><summary>¿Qué área configura redes alternativas por si la principal falla?</summary><div class="aa"><b>Planificación de contingencia de red</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1009,6 +1241,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Matriz RACI</div>
       <div class="topic-kicker">Matriz de asignación de responsabilidades</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Con qué otro nombre se conoce la matriz RACI?</summary><div class="aa"><b>Matriz de asignación de responsabilidades</b>.</div></details>
+    <details class="aq"><summary>¿A quién se consulta antes de decidir?</summary><div class="aa">A la <b>C</b> (Consulted).</div></details>
   </div>
 
   <blockquote class="q">Una matriz RACI (a veces llamada Matriz de asignación de responsabilidades) es una forma de identificar los roles y responsabilidades de los equipos de tu proyecto para cualquier tarea, logro o entrega del proyecto.</blockquote>
@@ -1031,6 +1268,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">💡 ANALOGÍA</div>
     <p>En un restaurante: el <b>cocinero</b> prepara el plato (R), el <b>chef</b> responde por él (A), el <b>nutricionista</b> opina antes de cambiar el menú (C) y el <b>mesero</b> se entera del cambio después (I).</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el material advierte "ojo con el idioma" con la R?</p><textarea class="note" data-note="t-raci-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque <b>Responsible</b> no es quien responde en última instancia: es quien <b>ejecuta</b>. Quien tiene la responsabilidad última es el <b>Accountable</b>.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué hace la R?</summary><div class="aa"><b>Ejecuta</b> la tarea.</div></details>
+    <details class="aq"><summary>¿Qué hace la A?</summary><div class="aa">Tiene la <b>responsabilidad última</b> y supervisa la finalización, aunque quizás no haga el trabajo.</div></details>
+    <details class="aq"><summary>¿Cuándo se informa a la I?</summary><div class="aa"><b>Después</b> de la decisión; se le informa del progreso y la finalización.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1043,6 +1287,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Roles y responsabilidades para la gestión de las TI</div>
       <div class="topic-kicker">Junta de Andalucía · introducción · definiciones · modelo actual vs. nuevo</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿De qué surgen de modo natural los roles y responsabilidades?</summary><div class="aa">De los <b>procesos</b> que soportan la función de la organización.</div></details>
+    <details class="aq"><summary>¿En qué marcos se basa el modelo?</summary><div class="aa">En <b>COBIT e ITIL</b>.</div></details>
   </div>
 
   <p class="body">Documento de <b>Manuel Narbona Sarria</b> y <b>Zenobia Jiménez Loma</b> (Servicio de Producción, Consejería de Economía y Hacienda, Junta de Andalucía). Palabras clave: organización, recursos humanos.</p>
@@ -1108,6 +1357,13 @@ header{transition:box-shadow .2s;}
       <tr><td>Áreas verticales</td><td>Los procesos cruzan en <b>horizontal</b> la organización; la jerarquía existente puede romperse</td></tr>
     </tbody>
   </table></div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el nuevo modelo puede romper la jerarquía existente?</p><textarea class="note" data-note="t-modelo-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque la gestión se hace por <b>procesos TI que cruzan en horizontal</b> la organización, en lugar de áreas verticales (desarrollo, explotación y sistemas).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Según ITIL, ¿qué es un rol?</summary><div class="aa">Un conjunto de <b>responsabilidades, actividades y autorizaciones</b>.</div></details>
+    <details class="aq"><summary>Según la ISO 9000, ¿qué es un proceso?</summary><div class="aa">Actividades relacionadas que <b>transforman elementos de entrada en resultados</b>.</div></details>
+    <details class="aq"><summary>¿Cuántos años tiene el modelo actual y cómo divide las TI?</summary><div class="aa">Casi <b>30 años</b>; divide en <b>desarrollo, explotación y sistemas</b>, además de la jefatura.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1120,6 +1376,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Jerarquía de roles</div>
       <div class="topic-kicker">Tipos de organización 0–3 · niveles · Tabla 3</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué tipo de organización tiene un único rol con todas las responsabilidades?</summary><div class="aa">El <b>Tipo 0</b>.</div></details>
+    <details class="aq"><summary>¿Qué hay en el nivel 0 de la jerarquía?</summary><div class="aa">La <b>Dirección TI</b>.</div></details>
   </div>
 
   <h3 class="sub">🏢 Tipos de organización (la complejidad va creciendo)</h3>
@@ -1182,6 +1443,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">SPPE · CCDN · CICP</div>
     <p>Planificación: <b>S</b>eguridad, <b>P</b>rocesos, <b>P</b>royectos, <b>E</b>stratégica. Producción: "<b>C</b>on <b>C</b>apacidad <b>D</b>oy <b>N</b>ivel" (Continuidad, Capacidad, Disponibilidad, Nivel de servicio). Soporte: "<b>C</b>ambio <b>I</b>ncidencias, <b>C</b>onfiguro <b>P</b>roblemas".</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué los 4 dominios de COBIT se relacionan con el ciclo PDCA?</p><textarea class="note" data-note="t-jerarquia-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque corresponden a las fases de un ciclo <b>Plan-Do-Check-Act</b> relativo a la información: planificar (PO), adquirir/implementar (AI), entregar/soportar (DS) y monitorizar/evaluar (ME).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Cómo se rebautizaron AI y DS?</summary><div class="aa">AI = <b>Gestión de la Infraestructura TI</b>; DS = <b>Gestión de los Servicios TI</b>.</div></details>
+    <details class="aq"><summary>Describe el Tipo 2.</summary><div class="aa">Organización intermedia: un <b>servicio bajo una secretaría general técnica</b> con 2–3 personas de planificación, coordinación y control.</div></details>
+    <details class="aq"><summary>¿Qué roles de nivel 3 tiene la Gestión de la Producción?</summary><div class="aa"><b>Continuidad, Capacidad, Disponibilidad y Nivel de Servicio</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1194,6 +1462,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Rol Gestión de la Calidad · niveles de responsabilidad</div>
       <div class="topic-kicker">Ficha de ejemplo · D R S E I · reglas · Tabla 4</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué significan las letras D R S E I?</summary><div class="aa"><b>Director, Responsable, Supervisor, Ejecutor, Informado</b>.</div></details>
+    <details class="aq"><summary>¿Pueden existir roles sin responsable?</summary><div class="aa">No deberían: significaría que algún proceso <b>no se está ejecutando</b>.</div></details>
   </div>
 
   <h3 class="sub">🏅 Ejemplo: rol Gestión de la Calidad</h3>
@@ -1252,6 +1525,13 @@ header{transition:box-shadow .2s;}
     <div class="card"><div class="cico">🟠</div><div class="ctitle">Naranja</div><div class="cdesc">Proceso a medio camino.</div></div>
     <div class="card"><div class="cico">🔴</div><div class="ctitle">Rojo</div><div class="cdesc">Proceso que no se ejecuta · responsabilidad solo asignada o planificada, no comunicada ni asumida.</div></div>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué la R de DRSEI no equivale a la R de RACI?</p><textarea class="note" data-note="t-drsei-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">En RACI la R <b>ejecuta</b>; en DRSEI la R <b>procura que se haga</b> y da cuenta al Director, y quien ejecuta es la <b>E</b>. La responsabilidad última es la A en RACI y la D en DRSEI.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué hace el Director?</summary><div class="aa">Es el responsable último y propietario del proceso-rol: <b>aprueba</b> los trabajos y <b>proporciona recursos</b> técnicos, humanos y financieros.</div></details>
+    <details class="aq"><summary>Enuncia las 3 reglas.</summary><div class="aa">No roles sin responsable · no roles con más de un responsable (salvo de reserva) · pueden existir <b>asignaciones dobles</b>.</div></details>
+    <details class="aq"><summary>¿Qué significan verde, naranja y rojo en la Tabla 4?</summary><div class="aa">Verde: proceso definido y ejecutándose · naranja: a medio camino · rojo: no se ejecuta.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1264,6 +1544,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">¿Para qué sirve el modelo? · El centro TI</div>
       <div class="topic-kicker">Consejería · Dirección General · Servicio · conclusión</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué debe cumplir un modelo para reflejar la realidad?</summary><div class="aa">Ser <b>completo</b>: abarcar todas las funciones de la organización TI.</div></details>
+    <details class="aq"><summary>¿Qué porcentaje de contratación externa alcanzan algunos centros?</summary><div class="aa">Más del <b>80%</b>.</div></details>
   </div>
 
   <p class="body">Un modelo debe <b>reflejar la realidad</b> lo mejor posible, lo que significa que debe ser <b>completo</b>: abarcar todas las funciones de la organización TI. Sirve como herramienta para analizar si la estructura de un centro TI es correcta: basta ver si <b>todos los procesos necesarios están definidos sin ambigüedad y de modo único</b>.</p>
@@ -1296,6 +1581,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">📌 CONCLUSIÓN</div>
     <p>Es necesario un <b>marco de referencia</b> para definir las estructuras de los centros TI. Si no, se seguirán creando estructuras <b>"sin ton ni son"</b>, no se podrá justificar su tamaño ni adecuar la política de personal. Muchos centros suplen la falta de personal con <b>contratación externa que en algunos casos supera el 80%</b>.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué la Dirección General de Sistemas de Información Económico-Financiera no encaja en el modelo?</p><textarea class="note" data-note="t-centro-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque tiene procesos <b>no definidos</b> (Niveles de Servicio), <b>duplicados</b> (Calidad) y desarrollados por una <b>estructura que no corresponde</b> (Seguridad la hace el Servicio de Producción).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Cómo se sabe si la estructura de un centro TI es correcta?</summary><div class="aa">Viendo si todos los procesos necesarios están definidos <b>sin ambigüedad y de modo único</b>.</div></details>
+    <details class="aq"><summary>¿Qué suele faltar en un centro organizado como Servicio?</summary><div class="aa">Gestión de calidad, de la seguridad y el cumplimiento normativo, y la monitorización y evaluación TI.</div></details>
+    <details class="aq"><summary>¿Qué pasa si no hay un marco de referencia?</summary><div class="aa">Se crean estructuras <b>"sin ton ni son"</b>, sin poder justificar su tamaño ni adecuar la política de personal.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1308,6 +1600,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Aprovisionamiento de TI</div>
       <div class="topic-kicker">Introducción · definición · categorías · estrategia de 11 pasos</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué es el aprovisionamiento de IT?</summary><div class="aa">El proceso de <b>compra y despliegue</b> de bienes o servicios tecnológicos.</div></details>
+    <details class="aq"><summary>¿Cuál es el primer paso de la estrategia de aprovisionamiento?</summary><div class="aa"><b>Auditar y unificar el inventario</b> informático.</div></details>
   </div>
 
   <p class="body">Al optimizar la asignación y utilización de los recursos informáticos, las empresas pueden <b>aumentar la productividad, reducir costes y mantener una ventaja competitiva</b>. La gestión de recursos informáticos abarca desde la gestión de activos de hardware y software hasta el despliegue eficaz de recursos humanos.</p>
@@ -1363,6 +1660,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">💡 ANALOGÍA</div>
     <p>Es como remodelar la cocina: primero ves <b>qué tienes</b> (inventario) y <b>qué te falta</b>, juntas a la familia, fijas metas y <b>presupuesto</b>, piensas qué puede salir mal, comparas <b>tiendas</b>, pides cotizaciones, negocias, planificas la obra y luego <b>revisas</b> si quedó como querías.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el SaaS puede hacer que TI pierda el control?</p><textarea class="note" data-note="t-aprov-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque al volverse más accesibles las aplicaciones y el Software como Servicio en las unidades de negocio, estas compran por su cuenta y TI pierde el <b>control sobre el gasto y la seguridad</b>.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué diferencia la adquisición directa de la indirecta?</summary><div class="aa">Directa: bienes <b>esenciales</b> que integran la infraestructura (HW, servidores, licencias). Indirecta: el <b>funcionamiento cotidiano</b> (consumibles, nube, servicios públicos).</div></details>
+    <details class="aq"><summary>¿Cuál es el último paso de la estrategia?</summary><div class="aa"><b>Monitorear los KPI</b> y mejorar el rendimiento.</div></details>
+    <details class="aq"><summary>¿Qué ayuda a lograr una estrategia de gestión de adquisiciones?</summary><div class="aa">Infraestructura <b>equipada</b>, cambios <b>ágiles</b>, <b>minimizar interrupciones</b> y <b>control sobre los activos</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1375,6 +1679,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Selección del hardware</div>
       <div class="topic-kicker">Estudio previo · criterios: equipos, proveedor, precios · consideraciones generales</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuáles son los 3 grupos de criterios para seleccionar hardware?</summary><div class="aa"><b>Equipos, proveedor y precios</b>.</div></details>
+    <details class="aq"><summary>¿Con qué plan debe ir de acuerdo la selección del hardware?</summary><div class="aa">Con el <b>plan estratégico de sistemas</b>.</div></details>
   </div>
 
   <p class="body">La selección del modelo y capacidades del hardware debe ir de acuerdo con el <b>plan estratégico de sistemas</b> y sustentarse en un <b>estudio del departamento de sistemas</b> (características y volumen de información a sistematizar, tipos de equipos por área). Todo estudio determina una <b>configuración mínima</b> del computador y sus dispositivos anexos (unidades externas, impresoras, tarjetas, módems, backups…) y una <b>evaluación del costo aproximado</b> de la inversión.</p>
@@ -1418,6 +1727,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">EPP · SPEFN</div>
     <p>Criterios de HW: <b>E</b>quipos, <b>P</b>roveedor, <b>P</b>recios. Consideraciones: "<b>S</b>olicito, <b>P</b>arametrizo, <b>E</b>valúo, <b>F</b>inancio y <b>N</b>egocio".</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué al fabricante se le pide prestigio mundial y al proveedor prestigio local?</p><textarea class="note" data-note="t-hw-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el fabricante responde por la <b>calidad del equipo</b>, mientras que el proveedor debe dar <b>soporte de mantenimiento cercano</b> (personal, repuestos, tiempo de atención, local apropiado).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué es crecimiento vertical y horizontal?</summary><div class="aa">Vertical: en el <b>mismo equipo</b>. Horizontal: con <b>otros equipos</b>.</div></details>
+    <details class="aq"><summary>Di los 4 criterios de precios.</summary><div class="aa">Condiciones de <b>pago</b> · detallado por <b>componentes</b> · <b>descuentos por volumen</b> · costo de <b>mantenimiento</b>.</div></details>
+    <details class="aq"><summary>¿Qué incluye la negociación de contrato?</summary><div class="aa">Todos los aspectos de operación: <b>actualizaciones, innovaciones, capacitación, asesoría técnica</b>, etc.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1430,6 +1746,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Criterios para la selección de un software</div>
       <div class="topic-kicker">7 criterios y lo que incluye cada uno</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuántos criterios para seleccionar software da la lámina?</summary><div class="aa"><b>Siete</b>.</div></details>
+    <details class="aq"><summary>¿Qué criterio no tiene subpuntos?</summary><div class="aa"><b>Calidad de documentación</b>.</div></details>
   </div>
 
   <div class="tblwrap"><table style="min-width:0;">
@@ -1453,6 +1774,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">⚠️ PUNTO CRÍTICO</div>
     <p>En "<b>Eficacia en el desempeño</b>" todo es <b>rapidez y eficiencia</b> (respuesta, captura, salidas, almacenamiento, respaldos). En "<b>Eficiencia operativa</b>" todo es <b>interfaz y ayuda</b> (menús, retroalimentación, recuperación de errores).</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué no hay que confundir "eficacia en el desempeño" con "eficiencia operativa"?</p><textarea class="note" data-note="t-sw-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque la <b>eficacia en el desempeño</b> trata de rapidez y eficiencia (respuesta, captura, salidas, almacenamiento, respaldos) y la <b>eficiencia operativa</b> de interfaz y ayuda (menús, retroalimentación, recuperación de errores).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di los 7 criterios (C·E·E·F·F·C·S).</summary><div class="aa">Capacidad para las tareas · Eficacia en el desempeño · Eficiencia operativa · Facilidad de uso · Flexibilidad · Calidad de documentación · Soporte del fabricante.</div></details>
+    <details class="aq"><summary>¿Qué incluye el soporte del fabricante?</summary><div class="aa">Línea de consulta directa · boletines · <b>actualizaciones frecuentes</b> a bajo costo.</div></details>
+    <details class="aq"><summary>¿A qué criterio pertenece "compatibilidad con otro software"?</summary><div class="aa">A <b>facilidad de uso</b>.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1465,6 +1793,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Beneficios y desafíos de la compra TI</div>
       <div class="topic-kicker">6 beneficios · 4 desafíos · GRC · RFP</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuántos beneficios y cuántos desafíos de la compra TI hay?</summary><div class="aa"><b>6 beneficios</b> y <b>4 desafíos</b>.</div></details>
+    <details class="aq"><summary>¿Qué significa GRC?</summary><div class="aa"><b>Gobernanza, Riesgo y Cumplimiento</b>.</div></details>
   </div>
 
   <h3 class="sub">👍 Beneficios</h3>
@@ -1507,6 +1840,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">ARCPDG · PRIC</div>
     <p>Beneficios: <b>A</b>linea, <b>R</b>iesgos, <b>C</b>ostos, <b>P</b>roveedores, <b>D</b>ecisiones, <b>G</b>RC. Desafíos: "el <b>PRIC</b>e de comprar TI" — <b>P</b>lanificación, <b>R</b>FP, <b>I</b>nventario, <b>C</b>ambios.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué la gestión de cambios es un desafío de la compra TI?</p><textarea class="note" data-note="t-beneficios-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque las partes <b>acostumbradas a las prácticas existentes se resisten</b> a los cambios; se requieren estrategias de cambio.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di los 4 desafíos (PRIC).</summary><div class="aa"><b>P</b>lanificación y presupuestación · procesos <b>R</b>FP · <b>I</b>nventario de los activos · gestión de <b>C</b>ambios.</div></details>
+    <details class="aq"><summary>¿Qué es el RFP?</summary><div class="aa"><b>Request for Proposal</b>: articula los requerimientos con los proveedores de forma transparente, estructurada y justa.</div></details>
+    <details class="aq"><summary>Menciona 3 beneficios.</summary><div class="aa">Cualquiera de: alineación estratégica · gestión de riesgos · optimización de costos · relaciones con proveedores · toma de decisiones · garantía de GRC.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1519,6 +1859,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Evaluación y selección de proveedores</div>
       <div class="topic-kicker">5 aspectos · criterios · proceso de evaluación · beneficios</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuál es el primer aspecto para seleccionar un proveedor?</summary><div class="aa">El <b>perfil general del proveedor</b>.</div></details>
+    <details class="aq"><summary>¿El precio decide por sí solo?</summary><div class="aa"><b>No</b>: por sí solo no puede ser determinante.</div></details>
   </div>
 
   <div class="acc">
@@ -1573,6 +1918,13 @@ header{transition:box-shadow .2s;}
     <div class="mnemo-word">PPCTD · EBES · CCLED</div>
     <p>Aspectos: <b>P</b>erfil, <b>P</b>recio, <b>C</b>apacidad, <b>T</b>ecnología, <b>D</b>esempeño. Criterios: <b>E</b>stablece, <b>B</b>usca, <b>E</b>valúa, <b>S</b>elecciona. Proceso: "<b>C</b>on <b>C</b>uidado <b>L</b>isto, <b>E</b>valúo y <b>D</b>ecido".</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué no se debe descartar al 2.º y 3.º mejor calificado al evaluar propuestas?</p><textarea class="note" data-note="t-proveedores-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el primero <b>puede fallar</b>; conviene tener alternativas listas.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di los 5 aspectos (PPCTD).</summary><div class="aa"><b>P</b>erfil · <b>P</b>recio · <b>C</b>apacidad técnica · <b>T</b>ecnología e infraestructura · <b>D</b>esempeño y nivel de servicio (SLA).</div></details>
+    <details class="aq"><summary>Ordena el proceso de evaluación de un proveedor.</summary><div class="aa">Criterios → Convenio de confidencialidad → Lista (listado corto) → Evaluar propuestas → Decidir y negociar.</div></details>
+    <details class="aq"><summary>Menciona 3 beneficios de evaluar al proveedor.</summary><div class="aa">Cualquiera de: medir el riesgo · proteger la reputación de la marca · optimizar el costo · homologar prácticas · compromiso del proveedor.</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1585,6 +1937,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Gestión de riesgo con proveedores</div>
       <div class="topic-kicker">Deloitte · niveles de riesgo · 6 riesgos · matriz de evaluación · Kraljic</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>Según Deloitte, ¿qué porcentaje tuvo algún incidente con un proveedor?</summary><div class="aa">El <b>87%</b>.</div></details>
+    <details class="aq"><summary>¿Qué ejes tiene la matriz de Kraljic?</summary><div class="aa"><b>Rentabilidad</b> (vertical) y <b>Riesgo</b> (horizontal).</div></details>
   </div>
 
   <p class="body">Es una situación latente para cualquier industria que dependa intensivamente del cumplimiento de contratos de su cadena de suministro. Según un reporte de <b>Deloitte</b>:</p>
@@ -1662,6 +2019,13 @@ header{transition:box-shadow .2s;}
     <div class="blabel">💡 ANALOGÍA</div>
     <p>Comprar para una fiesta: el <b>refresco</b> está en todas partes y negocias precio (apalancado); el <b>pastel</b> del único pastelero bueno es clave y riesgoso (estratégico); las <b>servilletas</b> se compran donde sea (no crítico); y el <b>hielo</b> que solo vende una tienda y se acaba pronto es tu cuello de botella.</p>
   </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué un proveedor crítico es más peligroso que uno de alto riesgo?</p><textarea class="note" data-note="t-riesgos-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Ambos afectan directamente la calidad, pero para el <b>crítico</b> hay <b>pocas o una sola alternativa</b>; para el de alto riesgo <b>sí existen alternativas</b>.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di los 6 riesgos (I·L·R·C·F·F).</summary><div class="aa"><b>I</b>nterrupción del servicio al cliente · violaciones a la <b>L</b>ey · daño a la <b>R</b>eputación · quiebre de la <b>C</b>adena de suministro · <b>F</b>raude · <b>F</b>actibilidad económica del proveedor.</div></details>
+    <details class="aq"><summary>¿Qué cuadrante de Kraljic agrupa esenciales con fuentes limitadas?</summary><div class="aa"><b>Cuello de botella</b>: mantener relaciones y desarrollar nuevos suministros.</div></details>
+    <details class="aq"><summary>¿Qué son los proveedores tipo A, B y C?</summary><div class="aa">A: <b>crítico</b> (riesgo elevado) · B: <b>importante</b> (medio) · C: <b>no crítico</b> (bajo).</div></details>
+  </div>
 </section>
 
 <!-- =========================================================
@@ -1674,6 +2038,11 @@ header{transition:box-shadow .2s;}
       <div class="topic-title">Glosario del parcial</div>
       <div class="topic-kicker">24 términos y siglas · toca cada tarjeta para ver la definición</div>
     </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué significa RFP?</summary><div class="aa"><b>Request for Proposal</b> (Solicitud de Propuestas).</div></details>
+    <details class="aq"><summary>¿Qué significa SLA en el contexto de proveedores?</summary><div class="aa"><b>Desempeño y nivel de servicio</b>, quinto aspecto de su evaluación.</div></details>
   </div>
 
   <div class="glo" id="glosario-grid">
@@ -1701,6 +2070,54 @@ header{transition:box-shadow .2s;}
     <div class="glo-item"><div class="gs">GRC</div><div class="gn">Gobernanza, Riesgo y Cumplimiento</div><div class="gm">Requisitos que los procesos de adquisición deben imponer a licencias, datos y seguridad.</div><div class="gtoggle">ver ▾</div></div>
     <div class="glo-item"><div class="gs">SLA</div><div class="gn">Nivel de servicio</div><div class="gm">Desempeño y nivel de servicio del proveedor; quinto aspecto de su evaluación.</div><div class="gtoggle">ver ▾</div></div>
     <div class="glo-item"><div class="gs">Kraljic</div><div class="gn">Matriz de segmentación</div><div class="gm">Clasifica proveedores por rentabilidad y riesgo: apalancado, estratégico, no crítico, cuello de botella.</div><div class="gtoggle">ver ▾</div></div>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué SaaS se relaciona con la adquisición de servicios y con un riesgo para TI?</p><textarea class="note" data-note="t-glosario-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el Software como Servicio forma parte de la adquisición de servicios y su accesibilidad puede hacer que TI <b>pierda control del gasto y la seguridad</b>.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué significa DRSEI?</summary><div class="aa">Director, Responsable, Supervisor, Ejecutor, Informado.</div></details>
+    <details class="aq"><summary>¿Qué es COBIT?</summary><div class="aa"><b>Control Objectives for Information and related Technology</b>.</div></details>
+    <details class="aq"><summary>¿Qué es ITIL?</summary><div class="aa"><b>IT Infrastructure Library</b>.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     CIERRE ACTIVO
+     ========================================================= -->
+<section class="topic" id="t-cierre" data-title="Cierre activo: repaso y plan">
+  <div class="topic-head">
+    <span class="topic-num">★</span>
+    <div>
+      <div class="topic-title">Cierre activo</div>
+      <div class="topic-kicker">Repaso mezclado · explícalo en 3 frases · plan de repaso espaciado</div>
+    </div>
+  </div>
+
+  <div class="active rec"><div class="alabel">🔀 REPASO MEZCLADO · <small>temas distintos, sin seguir el orden</small></div>
+    <details class="aq"><summary>¿Qué tienen en común la A de RACI y la D de DRSEI?</summary><div class="aa">Ambas tienen la <b>responsabilidad última</b>: Accountable en RACI, Director en DRSEI.</div></details>
+    <details class="aq"><summary>¿Quién protege ante fugas de datos y quién vela por la normativa de protección de datos?</summary><div class="aa">El <b>CISO</b> protege ante ciberataques y fugas; el <b>DPO</b> vela por el cumplimiento de la normativa (RGPD).</div></details>
+    <details class="aq"><summary>¿Qué paso sigue a la contratación en RRHH y qué cuadrante de Kraljic tiene fuente abundante?</summary><div class="aa"><b>Orientación</b>; <b>apalancado</b>.</div></details>
+    <details class="aq"><summary>¿Qué tienen en común el primer paso de la estrategia de aprovisionamiento y uno de los desafíos de la compra TI?</summary><div class="aa">El <b>inventario</b>: auditar y unificar el inventario informático (paso 1) e inventario de los activos (desafío).</div></details>
+    <details class="aq"><summary>¿Qué función de TI se parece a lo que el CIO define como "políticas, normas y procesos"?</summary><div class="aa">La <b>gobernanza</b>: parámetros operativos y reglas de uso de la tecnología.</div></details>
+    <details class="aq"><summary>¿Qué organización corresponde a un único rol y qué regla prohíbe roles con más de un responsable?</summary><div class="aa"><b>Tipo 0</b>; la regla "no deben existir roles con más de un responsable" (salvo de reserva).</div></details>
+    <details class="aq"><summary>Fabricante con prestigio mundial vs. proveedor con prestigio local: ¿en qué tema aparece y qué aspecto del proveedor lo complementa?</summary><div class="aa">En la <b>selección del hardware</b>; lo complementa el <b>perfil general del proveedor</b> (prestigio, experiencia, localización).</div></details>
+    <details class="aq"><summary>¿Quién realiza análisis de retorno de la inversión y qué beneficio de la compra TI optimiza costos?</summary><div class="aa">El <b>CTO</b>; la <b>optimización de los costos</b>.</div></details>
+    <details class="aq"><summary>¿Qué porcentaje de Deloitte vio sus actividades completamente interrumpidas y qué riesgo se asocia a la cara de la empresa?</summary><div class="aa"><b>11%</b>; la <b>interrupción del servicio al cliente</b>.</div></details>
+    <details class="aq"><summary>¿Qué es la ISO 9000 para el modelo de roles y qué es la mayor unidad de actividad de negocio?</summary><div class="aa">La fuente de la definición de <b>proceso</b>; la <b>función</b> (DIRKS).</div></details>
+  </div>
+
+  <div class="active why"><div class="alabel">✍️ EXPLÍCALO EN 3 FRASES</div>
+    <p class="aqt">Explica el Parcial 2 completo en tres frases: personas (RRHH y cargos), roles (RACI, DRSEI y jerarquía) y compras (aprovisionamiento y proveedores).</p>
+    <textarea class="note" data-note="cierre-3frases" placeholder="Frase 1… Frase 2… Frase 3…" aria-label="Tu explicación en 3 frases"></textarea>
+    <details class="aq"><summary>Ver una versión modelo</summary><div class="aa">1. RRHH y TI deben entenderse para no reclutar mal; el proceso va de la planificación al desarrollo de la carrera, y la alta dirección reparte la tecnología entre CIO (procesos internos), CTO (clientes externos), CISO (ciberseguridad), DPO (protección de datos) y CEO (puesto más alto).<br>2. Los roles TI surgen de los procesos (COBIT e ITIL): RACI y DRSEI dicen quién ejecuta y quién responde, la jerarquía va de la Dirección TI (nivel 0) a los procesos sin agrupar (nivel 3), y ningún rol debe quedar sin responsable ni con dos.<br>3. Comprar TI es aprovisionar (de auditar el inventario a monitorear los KPI) con criterios para hardware, software y proveedores, gestionando el riesgo de terceros (Deloitte, proveedores A/B/C y Kraljic).</div></details>
+  </div>
+
+  <div class="active pre"><div class="alabel">📅 PLAN DE REPASO ESPACIADO</div>
+    <p class="aqt">Fecha del examen: <input type="date" id="planExam" class="kit-date" aria-label="Fecha del examen"></p>
+    <ul class="kit-plan" id="planList"></ul>
+  </div>
+
+  <div class="active rec"><div class="alabel">🚀 FRASE DE ARRANQUE · <small>toca para editarla</small></div>
+    <div class="kit-frase" id="frase" contenteditable="true" role="textbox" aria-label="Frase de arranque">Cuando me siente en el bus / llegue a la oficina, abro ▶ Continuar y respondo las preguntas de 🎯.</div>
   </div>
 </section>
 
@@ -1970,6 +2387,324 @@ header{transition:box-shadow .2s;}
   function onScroll(){ header.classList.toggle('compact', window.scrollY > 60); }
   document.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
+})();
+</script>
+
+<script>
+/* Configuración del kit para la guía */
+window.KIT_CFG = {
+  prefix:"gr_p2", posKey:"gr_p2_guia_pos_v1",
+  sections:"section.topic", header:".header-inner",
+  chunk:true, foldTables:".tblwrap",
+  ttsBlocks:".topic-title, h3.sub, p, li, blockquote, .card, tbody tr, .flow .step, .acc-btn, .mnemo-word, .rpill, .glo-item, .mm-branch",
+  ttsTarget:function(sec){ return sec.querySelector(".topic-head"); },
+  titleOf:function(sec){ var t = sec.querySelector(".topic-title"); return t ? t.textContent : ""; },
+  onMode:function(m){
+    document.querySelectorAll(".acc-item").forEach(function(it){ it.classList.toggle("open", m === "office"); });
+  }
+};
+</script>
+<script>
+/* ============================================================
+   KIT DE ESTUDIO · modos Oficina/Transporte, continuar donde quedé,
+   pausas seguras, temporizador de pausas y lectura en voz alta
+   ============================================================ */
+(function(){
+  "use strict";
+  var CFG = window.KIT_CFG;
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  var root = document.documentElement;
+  var sections = Array.prototype.slice.call(document.querySelectorAll(CFG.sections));
+
+  /* ---------- barra de modo ---------- */
+  var bar = document.createElement("div");
+  bar.className = "kit-bar";
+  bar.innerHTML =
+    '<div class="kit-seg" role="group" aria-label="Modo de estudio">'+
+      '<button type="button" data-mode="office" aria-pressed="false">🏢 Oficina</button>'+
+      '<button type="button" data-mode="transit" aria-pressed="false">🚌 Transporte</button>'+
+    '</div>'+
+    '<button type="button" class="kit-btn kit-transit-only" id="kitCont">▶ Continuar donde quedé</button>'+
+    '<button type="button" class="kit-btn kit-office-only" id="kitPomo" title="Sugiere una pausa a los 25 minutos">⏱ Pomodoro 25 min</button>';
+  var note = document.createElement("div");
+  note.className = "kit-note";
+  note.innerHTML = '<span id="kitNoteTxt"></span><button type="button" aria-label="Ocultar aviso">✕</button>';
+  var host = document.querySelector(CFG.header);
+  host.appendChild(bar); host.appendChild(note);
+  note.querySelector("button").addEventListener("click", function(){ note.hidden = true; });
+
+  var NOTES = {
+    transit:"🚌 Activa No Molestar · música instrumental o silencio, nada con letra.",
+    office:"🏢 Teléfono fuera de la vista y notificaciones en silencio."
+  };
+  function setMode(m, persist){
+    root.setAttribute("data-mode", m);
+    Array.prototype.forEach.call(bar.querySelectorAll(".kit-seg button"), function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-mode")===m ? "true" : "false"); });
+    document.getElementById("kitNoteTxt").textContent = NOTES[m];
+    note.hidden = false;
+    if(persist) save(CFG.prefix+"_modo_v1", m);
+    if(CFG.onMode) CFG.onMode(m);
+    if(m !== "office") stopPomo();
+  }
+  bar.querySelector(".kit-seg").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-mode]"); if(b) setMode(b.getAttribute("data-mode"), true);
+  });
+
+  /* ---------- pausas seguras (bloques de ~5–7 min) ---------- */
+  var checkpoints = [];
+  sections.forEach(function(sec){
+    sec.setAttribute("data-ck", sec.id);
+    checkpoints.push(sec);
+    if(!CFG.chunk) return;
+    var words = 0, n = 0;
+    var kids = Array.prototype.slice.call(CFG.chunkRoot ? sec.querySelector(CFG.chunkRoot).children : sec.children);
+    var total = kids.reduce(function(t,k){ return t + (k.textContent.trim().split(/\s+/).length); }, 0);
+    var seen = 0;
+    kids.forEach(function(k){
+      if(k.matches(".topic-head")) return;
+      var w = k.textContent.trim().split(/\s+/).length;
+      words += w; seen += w;
+      if(words >= 450 && total - seen >= 120){
+        n++;
+        var p = document.createElement("div");
+        p.className = "pausa"; p.id = sec.id+"-p"+n; p.setAttribute("data-ck", p.id);
+        p.textContent = "🚏 Pausa segura: si llegas a tu parada, retoma aquí";
+        k.parentNode.insertBefore(p, k.nextSibling);
+        checkpoints.push(p);
+        words = 0;
+      }
+    });
+  });
+  checkpoints.sort(function(a,b){ return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+
+  var POS = CFG.posKey;
+  var saveTimer;
+  function trackPos(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var cur = null;
+      for(var i=0;i<checkpoints.length;i++){
+        var el = checkpoints[i];
+        if(el.offsetParent === null && !el.matches(CFG.sections)) continue;   // pausa oculta
+        if(el.getBoundingClientRect().top <= 160) cur = el; else break;
+      }
+      if(cur) save(POS, cur.id);
+    }, 250);
+  }
+  window.addEventListener("scroll", trackPos, {passive:true});
+  document.getElementById("kitCont").addEventListener("click", function(){
+    var id = load(POS), el = id && document.getElementById(id);
+    if(!el){ toast("Aún no hay una posición guardada: empieza a leer y se guardará sola."); return; }
+    var d = el.closest("details"); if(d) d.open = true;
+    if(el.tagName === "DETAILS") el.open = true;
+    el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  /* ---------- tablas grandes plegadas en Transporte ---------- */
+  if(CFG.foldTables){
+    Array.prototype.forEach.call(document.querySelectorAll(CFG.foldTables), function(w){
+      var rows = w.querySelectorAll("tbody tr").length;
+      if(rows <= 5) return;
+      var f = document.createElement("div"); f.className = "kit-fold";
+      w.parentNode.insertBefore(f, w);
+      var b = document.createElement("button"); b.type = "button"; b.className = "kit-btn kit-foldbtn";
+      b.textContent = "📋 Ver tabla ("+rows+" filas)";
+      b.addEventListener("click", function(){ f.classList.toggle("open"); b.textContent = (f.classList.contains("open")?"🙈 Ocultar tabla":"📋 Ver tabla ("+rows+" filas)"); });
+      f.appendChild(b); f.appendChild(w);
+    });
+  }
+
+  /* ---------- notas escritas (Oficina) ---------- */
+  var NK = CFG.prefix+"_notas_v1", notes = load(NK) || {};
+  Array.prototype.forEach.call(document.querySelectorAll("textarea[data-note]"), function(t){
+    t.value = notes[t.getAttribute("data-note")] || "";
+    t.addEventListener("input", function(){ notes[t.getAttribute("data-note")] = t.value; save(NK, notes); });
+  });
+
+  /* ---------- toast + pomodoro ---------- */
+  var toastEl = document.createElement("div"); toastEl.id = "kitToast"; toastEl.setAttribute("role","status"); document.body.appendChild(toastEl);
+  var toastT;
+  function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, 6000); }
+  var pomoEnd = 0, pomoT = null, pomoBtn = document.getElementById("kitPomo");
+  function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), x = s%60; return m+":"+(x<10?"0":"")+x; }
+  function stopPomo(){ clearInterval(pomoT); pomoT = null; pomoEnd = 0; pomoBtn.classList.remove("on"); pomoBtn.textContent = "⏱ Pomodoro 25 min"; }
+  pomoBtn.addEventListener("click", function(){
+    if(pomoT){ stopPomo(); return; }
+    pomoEnd = Date.now() + 25*60000;
+    pomoBtn.classList.add("on");
+    pomoT = setInterval(function(){
+      var left = (pomoEnd - Date.now())/1000;
+      pomoBtn.textContent = "⏱ "+fmt(left)+" · detener";
+      if(left <= 0){ stopPomo(); toast("☕ Llevas 25 minutos: toma una pausa de 5 minutos. Luego responde las preguntas 🧠 del último tema."); try{ navigator.vibrate && navigator.vibrate(300); }catch(e){} }
+    }, 1000);
+  });
+
+  /* ---------- lectura en voz alta ---------- */
+  var synth = window.speechSynthesis;
+  if(synth && window.SpeechSynthesisUtterance){
+    var EXPAND = {
+      "CIO":"CIO, Chief Information Officer,", "CISO":"CISO, Chief Information Security Officer,", "CEO":"CEO, Chief Executive Officer,",
+      "CTO":"CTO, Chief Technology Officer,", "DPO":"DPO, Delegado de Protección de Datos,", "RACI":"RACI, matriz de asignación de responsabilidades,",
+      "COBIT":"COBIT, Control Objectives for Information and related Technology,", "ITIL":"ITIL, IT Infrastructure Library,", "PDCA":"PDCA, Plan Do Check Act,",
+      "RFP":"RFP, Request for Proposal,", "GRC":"GRC, Gobernanza, Riesgo y Cumplimiento,", "SLA":"SLA, nivel de servicio,", "SaaS":"SaaS, Software como Servicio,"
+    };
+    var said = {};
+    var rate = load(CFG.prefix+"_tts_rate_v1") || 1;
+    var queue = [], qi = 0, curEl = null, playing = false;
+    var player = document.createElement("div"); player.id = "kitPlayer";
+    player.innerHTML = '<span class="now" id="kitNow">🔊</span><button type="button" id="kitPP">⏸ Pausar</button><button type="button" id="kitStop">⏹</button>'+
+      '<select id="kitRate" aria-label="Velocidad">'+[0.9,1,1.1,1.2,1.3].map(function(r){ return '<option value="'+r+'"'+(r===rate?" selected":"")+'>'+r.toFixed(1)+'×</option>'; }).join("")+'</select>';
+    document.body.appendChild(player);
+    var voice = null;
+    function pickVoice(){
+      var vs = synth.getVoices().filter(function(v){ return /^es/i.test(v.lang); });
+      voice = vs.filter(function(v){ return /es-(ES|MX|US|419)/i.test(v.lang); })[0] || vs[0] || null;
+    }
+    pickVoice(); if(synth.onvoiceschanged !== undefined) synth.onvoiceschanged = pickVoice;
+
+    function speakable(t){
+      t = t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu, " ");
+      t = t.replace(/↔/g," y viceversa ").replace(/→/g," lleva a ").replace(/≥/g," mayor o igual que ").replace(/≤/g," menor o igual que ")
+           .replace(/≠/g," distinto de ").replace(/⊃/g," contiene a ").replace(/×/g," por ").replace(/·/g,", ").replace(/[—–]/g,", ")
+           .replace(/▾|▴|▸/g,"").replace(/(\d)\s?%/g,"$1 por ciento").replace(/\bRRHH\b/g,"recursos humanos").replace(/\bTI\b/g,"T I");
+      t = t.replace(/\b(CIO|CISO|CEO|CTO|DPO|RACI|COBIT|ITIL|PDCA|RFP|GRC|SLA|SaaS)\b/g, function(m){ if(said[m]) return m; said[m] = 1; return EXPAND[m]; });
+      return t.replace(/\s+/g," ").trim();
+    }
+    function blocks(sec){
+      var list = Array.prototype.slice.call(sec.querySelectorAll(CFG.ttsBlocks)).filter(function(el){
+        return !el.closest(".active,.kit-bar,.kit-tts,.pausa,#kitPlayer,.kit-foldbtn") && el.textContent.trim();
+      });
+      return list.filter(function(el){ return !list.some(function(o){ return o!==el && o.contains(el); }); });
+    }
+    function clearHi(){ if(curEl) curEl.classList.remove("tts-on"); curEl = null; }
+    function next(){
+      clearHi();
+      if(!playing || qi >= queue.length){ stop(); return; }
+      var el = queue[qi++];
+      var txt = speakable(el.getAttribute("data-tts") || el.innerText || el.textContent);
+      if(!txt){ next(); return; }
+      curEl = el; el.classList.add("tts-on");
+      var r = el.getBoundingClientRect();
+      if(r.top < 120 || r.bottom > window.innerHeight - 100) el.scrollIntoView({behavior:"smooth", block:"center"});
+      var u = new SpeechSynthesisUtterance(txt);
+      u.lang = voice ? voice.lang : "es-ES"; if(voice) u.voice = voice; u.rate = rate;
+      u.onend = function(){ if(playing) next(); };
+      u.onerror = function(){ if(playing) next(); };
+      synth.speak(u);
+    }
+    function start(sec){
+      synth.cancel(); said = {};
+      queue = blocks(sec); qi = 0; playing = true;
+      var d = sec.tagName === "DETAILS" ? sec : null; if(d) d.open = true;
+      document.getElementById("kitNow").textContent = "🔊 " + (CFG.titleOf(sec) || "");
+      document.getElementById("kitPP").textContent = "⏸ Pausar";
+      player.classList.add("show");
+      next();
+    }
+    function stop(){ playing = false; synth.cancel(); clearHi(); player.classList.remove("show"); }
+    document.getElementById("kitStop").addEventListener("click", stop);
+    document.getElementById("kitPP").addEventListener("click", function(){
+      if(synth.paused){ synth.resume(); this.textContent = "⏸ Pausar"; }
+      else { synth.pause(); this.textContent = "▶ Reanudar"; }
+    });
+    document.getElementById("kitRate").addEventListener("change", function(){ rate = +this.value; save(CFG.prefix+"_tts_rate_v1", rate); });
+    sections.forEach(function(sec){
+      var target = CFG.ttsTarget(sec); if(!target) return;
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "kit-tts"; b.textContent = "🔊 Escuchar";
+      b.setAttribute("aria-label", "Escuchar esta sección");
+      b.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); start(sec); });
+      target.appendChild(b);
+    });
+    window.addEventListener("pagehide", function(){ synth.cancel(); });
+  }
+
+  /* ---------- modo inicial ---------- */
+  var m = load(CFG.prefix+"_modo_v1");
+  if(m !== "office" && m !== "transit") m = window.matchMedia("(max-width:560px)").matches ? "transit" : "office";
+  setMode(m, false);
+})();
+</script>
+
+<script>
+/* Índice lateral (PC), plan de repaso espaciado y frase de arranque */
+(function(){
+  "use strict";
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  // --- índice lateral ---
+  var side = document.createElement("nav"); side.id = "kitSide"; side.setAttribute("aria-label","Índice");
+  side.innerHTML = '<div class="sh">ÍNDICE</div>';
+  document.querySelectorAll("#tocList a").forEach(function(a){ side.appendChild(a.cloneNode(true)); });
+  document.body.appendChild(side);
+  var header = document.querySelector("header");
+  function hh(){ document.documentElement.style.setProperty("--hh", header.offsetHeight+"px"); }
+  hh(); window.addEventListener("resize", hh);
+  var links = side.querySelectorAll("a"), secs = document.querySelectorAll("section.topic");
+  var spyT;
+  window.addEventListener("scroll", function(){
+    clearTimeout(spyT);
+    spyT = setTimeout(function(){
+      var cur = null;
+      secs.forEach(function(s){ if(s.getBoundingClientRect().top <= 180) cur = s.id; });
+      links.forEach(function(a){
+        var on = a.getAttribute("href") === "#"+cur;
+        if(on && !a.classList.contains("on") && side.offsetParent){
+          var r = a.getBoundingClientRect(), sr = side.getBoundingClientRect();
+          if(r.top < sr.top || r.bottom > sr.bottom) a.scrollIntoView({block:"nearest"});
+        }
+        a.classList.toggle("on", on);
+      });
+    }, 120);
+  }, {passive:true});
+
+  // --- plan de repaso espaciado ---
+  var EX = "gr_p2_examen_v1", inp = document.getElementById("planExam"), list = document.getElementById("planList");
+  function day(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function add(d,n){ var x = day(d); x.setDate(x.getDate()+n); return x; }
+  function parse(s){ if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+  function lbl(d){ return d.toLocaleDateString("es-PA",{weekday:"short", day:"2-digit", month:"2-digit"}); }
+  function diff(a,b){ return Math.round((day(b)-day(a))/86400000); }
+  var NAMES = [
+    "📖 Lectura de la guía + preguntas 🎯 y 🧠",
+    "🔁 Repaso 1: 🧠 Recuerda sin mirar + tarjetas 📅 Hoy",
+    "🔁 Repaso 2: 🔀 Repaso mezclado + tarjetas 📅 Hoy",
+    "🔁 Repaso 3: Resumen express + tarjetas 📅 Hoy"
+  ];
+  function plan(){
+    var ex = parse(inp.value), today = day(new Date());
+    if(!ex){ list.innerHTML = '<li>Elige la fecha del examen para generar tu plan.</li>'; return; }
+    if(diff(today, ex) <= 0){ list.innerHTML = '<li>El examen es hoy o ya pasó: haz un ⚡ mini simulacro y repasa las siglas y "No confundir".</li>'; return; }
+    var eve = add(ex,-1), sim = add(ex,-2);
+    if(sim < today) sim = today;
+    // los repasos (+0, +1, +3, +7) se comprimen si no caben antes del simulacro
+    var span = Math.max(0, diff(today, sim) - 1);
+    var sc = span >= 7 ? 1 : span / 7;
+    var items = [], last = -1;
+    [0,1,3,7].forEach(function(o,i){
+      var n = Math.round(o * sc);
+      if(i > 0 && n <= last && last + 1 <= span) n = last + 1;
+      last = Math.max(last, n);
+      var d = add(today, n);
+      if(d > eve) d = eve;
+      items.push([d, NAMES[i]]);
+    });
+    items.push([sim, "📝 Simulacro completo (sin verificación, como el examen real)"]);
+    items.push([eve < today ? today : eve, "🔤 Siglas y mnemotecnias + cajas \"No confundir\""]);
+    items.sort(function(a,b){ return a[0]-b[0]; });
+    list.innerHTML = items.map(function(x){ return '<li><b>'+lbl(x[0])+'</b><span>'+x[1]+'</span></li>'; }).join("") +
+      (sc < 1 ? '<li><b>⚡</b><span>El examen está cerca: las fechas se comprimieron sin pasar del día anterior al examen.</span></li>' : '');
+  }
+  inp.value = load(EX) || "";
+  inp.addEventListener("change", function(){ save(EX, inp.value || null); plan(); });
+  plan();
+
+  // --- frase de arranque editable ---
+  var fr = document.getElementById("frase"), FK = "gr_p2_frase_v1", f = load(FK);
+  if(f) fr.textContent = f;
+  fr.addEventListener("input", function(){ save(FK, fr.textContent.trim()); });
 })();
 </script>
 </body>
