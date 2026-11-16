@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen por Punto · Política de Adquisición</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px;}
+main{max-width:720px;margin:0 auto;}
+aside.side{display:none;}
+.tools{max-width:1180px;margin:8px auto 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.tools input[type=search]{flex:1;min-width:180px;min-height:44px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:0 14px;}
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+.notice{font-size:.8rem;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--amber-dim);border:1px solid #5c4515;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;scroll-margin-top:150px;}
+.ph{display:flex;align-items:center;gap:8px;cursor:pointer;flex-wrap:wrap;}
+.ph h2{font-size:1.05rem;flex:1;min-width:140px;}
+.num{font-family:var(--mono);font-size:.72rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.car{color:var(--text-faint);transition:transform .2s;}
+.pt.closed .car{transform:rotate(-90deg);}
+.pt.closed .body{display:none;}
+.pt .kit-tts{margin-left:auto;}
+.src{font-size:.76rem;color:var(--cyan);margin-top:10px;}
+ul.det{padding-left:20px;margin:8px 0 0;}
+ul.det li{margin:6px 0;max-width:70ch;color:var(--text-dim);}
+ul.det b{color:var(--text);}
+blockquote.q{margin:12px 0 0;border-left:3px solid var(--cyan);background:var(--cyan-dim);padding:8px 12px;border-radius:0 10px 10px 0;font-style:italic;}
+.mnemo{display:flex;gap:12px;align-items:flex-start;margin-top:12px;background:var(--violet-dim);border:1px solid #47336b;border-radius:12px;padding:10px 12px;}
+.mk{font-family:var(--mono);font-weight:900;color:var(--violet);font-size:1.05rem;white-space:nowrap;}
+.mt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.mx{font-size:.88rem;}
+.mx b{color:var(--violet);}
+.mm{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+.error{margin-top:10px;background:var(--red-dim);border:1px solid #5c2a2a;border-radius:12px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);}
+.error b{color:var(--red);}
+.qs{margin-top:12px;border-top:1px solid var(--line);}
+details.qa{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:10px;padding:2px 10px;margin-top:6px;}
+details.qa summary{font-size:.88rem;font-weight:600;}
+details.qa .ans{font-size:.86rem;color:var(--text-dim);padding:2px 0 8px 14px;}
+.pausa{display:none;font-size:.8rem;color:var(--amber);text-align:center;margin-top:16px;border:1px dashed #5c4515;border-radius:10px;padding:8px;}
+body.transit .pausa{display:block;}
+.nores{display:none;text-align:center;color:var(--text-dim);margin-top:24px;}
+mark{background:var(--amber);color:#2a1c08;border-radius:3px;}
+@media (min-width:561px){ .mnemo{padding:12px 14px;} }
+@media (min-width:1024px){
+  .wrap{display:grid;grid-template-columns:240px 1fr;gap:28px;}
+  main{max-width:800px;margin:0;}
+  nav.chips{display:none;}
+  aside.side{display:block;position:sticky;top:120px;align-self:start;max-height:calc(100vh - 140px);overflow:auto;padding-top:14px;}
+  aside.side a{display:block;text-decoration:none;color:var(--text-dim);font-size:.84rem;padding:7px 10px;border-radius:10px;border-left:3px solid transparent;}
+  aside.side a b{font-family:var(--mono);color:var(--accent);margin-right:4px;}
+  aside.side a.cur{background:var(--surface);border-left-color:var(--accent);color:var(--text);}
+}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Resumen por punto · <em>Política de Adquisición</em></h1>
+  <div class="seg" role="group" aria-label="Modo de estudio"><button type="button" data-m="office">🏢 Oficina</button><button type="button" data-m="transit">🚌 Transporte</button></div>
+</div>
+<div class="tools"><input type="search" id="q" placeholder="Buscar: TCO, CISO, ISO 20022…" aria-label="Buscar en los puntos"><button class="btn" type="button" id="fold">Plegar todo</button></div>
+<nav class="chips" aria-label="Puntos"><a href="#p-intro">0 Intro</a><a href="#p-principios">1 Principios generales</a><a href="#p-hwsw">2 Hardware y software</a><a href="#p-compat">3 Compatibilidad e interoperabilidad</a><a href="#p-seguridad">4 Seguridad</a><a href="#p-costos">5 Costos y costo total de propiedad</a><a href="#p-sostenible">6 Sostenibilidad</a><a href="#p-cumplimiento">7 Cumplimiento normativo y contratos</a><a href="#p-proceso">8 Aprobación, seguimiento y revisión</a><a href="#p-cierre">FIN Cierre</a></nav>
+</header>
+<div class="wrap">
+<aside class="side" aria-label="Puntos"><a href="#p-intro" data-id="p-intro"><b>0</b> Intro</a><a href="#p-principios" data-id="p-principios"><b>1</b> Principios generales</a><a href="#p-hwsw" data-id="p-hwsw"><b>2</b> Hardware y software</a><a href="#p-compat" data-id="p-compat"><b>3</b> Compatibilidad e interoperabilidad</a><a href="#p-seguridad" data-id="p-seguridad"><b>4</b> Seguridad</a><a href="#p-costos" data-id="p-costos"><b>5</b> Costos y costo total de propiedad</a><a href="#p-sostenible" data-id="p-sostenible"><b>6</b> Sostenibilidad</a><a href="#p-cumplimiento" data-id="p-cumplimiento"><b>7</b> Cumplimiento normativo y contratos</a><a href="#p-proceso" data-id="p-proceso"><b>8</b> Aprobación, seguimiento y revisión</a><a href="#p-cierre" data-id="p-cierre"><b>FIN</b> Cierre</a></aside>
+<main>
+<p class="hint">Basado en <b>Proyecto Final GRTIC 1LS241 (1).pdf</b>, págs. 27–33. Todo lo que dice el documento de cada punto, por si te preguntan.</p>
+<div class="notice" id="notice"></div>
+<div class="actions" id="actions"><button class="btn" type="button" id="btnCont">▶ Continuar donde quedé</button></div>
+<section class="pt" id="p-intro"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">0</span><h2>Intro</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Pág. 27 · Propósito, alcance y marco de referencia</div><ul class="det"><li>Establece los <b>criterios técnicos</b> para adquirir hardware y software.</li><li>Objetivo: que cada compra responda a los objetivos del PETI, sea compatible con la plataforma existente y se integre con los demás sistemas <b>sin generar riesgos ni dependencias innecesarias</b>.</li><li>Alcance: toda compra, arrendamiento, suscripción o renovación tecnológica, incluidos los proyectos <b>PR-02 a PR-09</b> y los <b>servicios en la nube</b>.</li><li>Fundamento: procesos <b>BAI03, APO03 y BAI09</b> de COBIT 5, <b>Acuerdo No. 003-2012</b> de la Superintendencia de Bancos y el modelo <b>ISO/IEC 25010</b>.</li></ul><div class="mnemo"><span class="mk">4 tipos</span><div><div class="mt">Alcance de la política</div><div class="mx"><b>C</b>ompra · <b>A</b>rrendamiento · <b>S</b>uscripción · <b>R</b>enovación (incluida la nube y PR-02 a PR-09)</div><div class="mm">«CASaR»: toda forma de casar al banco con una tecnología</div></div></div><div class="mnemo"><span class="mk">C-S-I</span><div><div class="mt">Marco de referencia</div><div class="mx"><b>C</b>OBIT 5 (BAI03, APO03, BAI09) · <b>S</b>BP Acuerdo 003-2012 · <b>I</b>SO/IEC 25010</div><div class="mm">«CSI»: la política investiga cada compra como en la serie</div></div></div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué significan BAI03, APO03 y BAI09?</summary><div class="ans">Son procesos de COBIT 5. El documento solo cita los códigos; en COBIT 5 son: BAI03 Gestionar la identificación y construcción de soluciones, APO03 Gestionar la arquitectura empresarial y BAI09 Gestionar los activos. <i>(Nombres de COBIT 5, no están en el documento.)</i></div></details><details class="qa"><summary>¿Qué son PR-02 a PR-09?</summary><div class="ans">Proyectos del PETI. El mapa COBIT 5 del documento (pág. 26) los nombra: por ejemplo PR-02 Servidores y virtualización, PR-06 SOC gestionado, PR-08 Banca en línea y app móvil, PR-09 Apertura de cuentas y préstamos.</div></details></div></div></section>
+<section class="pt" id="p-principios"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">1</span><h2>Principios generales</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Pág. 27 · Principios generales</div><ul class="det"><li>Toda adquisición debe estar <b>vinculada a un objetivo o proyecto del PETI</b>.</li><li>Preferir las tecnologías del <b>catálogo de estándares tecnológicos</b> (lo mantiene la Gerencia de TI y lo aprueba el Comité de TI cada año).</li><li>Se evalúa por su <b>costo total de propiedad</b>, no solo por su precio.</li><li>No se adquiere tecnología cuyo <b>soporte termine antes de su vida útil</b>.</li><li>Todo activo se registra en el <b>inventario</b>.</li></ul><div class="mnemo"><span class="mk">PCCSI</span><div><div class="mt">Principios generales</div><div class="mx"><b>P</b>ETI · <b>C</b>atálogo de estándares · <b>C</b>osto total de propiedad · <b>S</b>oporte ≥ vida útil · <b>I</b>nventario</div><div class="mm">«Para Comprar, Compara Sin Improvisar»</div></div></div><div class="mnemo"><span class="mk">TI ≠ CTI</span><div><div class="mt">Catálogo de estándares</div><div class="mx">Gerencia de <b>TI</b> lo mantiene · <b>C</b>omité de <b>TI</b> lo aprueba cada año</div><div class="mm">La gerencia escribe, el comité firma</div></div></div><div class="error"><b>⚠️ No confundir: Gerencia de TI ≠ Comité de TI</b><br>La Gerencia mantiene el catálogo; el Comité lo aprueba, autoriza compras y excepciones.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Y si lo que necesito no está en el catálogo?</summary><div class="ans">Se puede pedir una excepción: la aprueba el Comité de TI por un máximo de doce meses.</div></details></div></div></section>
+<section class="pt" id="p-hwsw"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">2</span><h2>Hardware y software</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Págs. 27–28 · Hardware (Tabla 10) y Software</div><ul class="det"><li>Todo equipo debe ser <b>compatible</b> con la plataforma vigente y <b>administrarse de forma centralizada</b>.</li><li>Software sin licencia o fuera del catálogo no entra; los usuarios <b>no instalan software por su cuenta</b>.</li><li>El software debe tener <b>hoja de ruta pública</b> y al menos <b>tres años</b> de actualizaciones de seguridad.</li><li>Las alternativas se califican con <b>criterios ponderados</b> y se descarta toda alternativa con <b>menos de 70 puntos</b>.</li></ul><div class="tblwrap"><table><caption>Tabla 10 · Requisitos mínimos de hardware</caption><thead><tr><th>Categoría</th><th>Requisitos mínimos, garantía y vida útil</th></tr></thead><tbody><tr><td>Equipos de usuario</td><td>64 bits, 16 GB de RAM, SSD de 512 GB, TPM 2.0 y compatibilidad con el EDR (SRV-01); garantía de 3 años; renovación a los 4 años.</td></tr><tr><td>Servidores (INF-02)</td><td>Certificados para la plataforma de virtualización; fuentes redundantes y RAID; soporte 24/7 con reposición en 4 horas; vida útil de 5 años.</td></tr><tr><td>Red y seguridad (INF-03)</td><td>VLAN 802.1Q, IPv4/IPv6, SNMPv3, administración centralizada y envío de registros al SOC (SRV-02); vida útil de 5 años.</td></tr><tr><td>Respaldo (INF-04, SRV-03)</td><td>Cifrado en reposo, copias inmutables y replicación al sitio alterno en la nube; soporte 24/7; vida útil de 5 años.</td></tr></tbody></table></div><div class="tblwrap"><table><caption>Software</caption><thead><tr><th>Requisito</th><th>Qué exige</th></tr></thead><tbody><tr><td>Licenciamiento</td><td>Solo software con licencia válida e incluido en el catálogo autorizado; los usuarios no pueden instalar software por su cuenta.</td></tr><tr><td>Soporte</td><td>Actualizaciones de seguridad garantizadas por al menos tres años y hoja de ruta pública del producto.</td></tr><tr><td>Seguridad</td><td>Integración con el directorio corporativo, MFA, control de acceso por roles, cifrado TLS 1.2 o superior y registros de auditoría.</td></tr><tr><td>Datos y nube</td><td>Derechos de los titulares (Ley 81 de 2019), acceso de la SBP y devolución de los datos al terminar el servicio.</td></tr></tbody></table></div><div class="tblwrap"><table><caption>Criterios ponderados (se descarta con menos de 70 puntos)</caption><thead><tr><th>Criterio</th><th>Peso</th></tr></thead><tbody><tr><td>Funcionalidad</td><td>25 %</td></tr><tr><td>Seguridad</td><td>20 %</td></tr><tr><td>Compatibilidad</td><td>15 %</td></tr><tr><td>Interoperabilidad</td><td>15 %</td></tr><tr><td>Costo total de propiedad</td><td>15 %</td></tr><tr><td>Soporte</td><td>10 %</td></tr></tbody></table></div><div class="mnemo"><span class="mk">64·16·512</span><div><div class="mt">Equipos de usuario</div><div class="mx"><b>64</b> bits · <b>16</b> GB RAM · SSD <b>512</b> GB · TPM 2.0 · compatible con EDR</div><div class="mm">Todo es potencia de 2</div></div></div><div class="mnemo"><span class="mk">3-4-5</span><div><div class="mt">Garantía y vida útil</div><div class="mx"><b>3</b> años de garantía · renovación a los <b>4</b> (equipos) · <b>5</b> años de vida útil (servidores, red, respaldo)</div><div class="mm">Contar 3, 4, 5</div></div></div><div class="error"><b>⚠️ No confundir: Garantía 3 ≠ renovación 4 ≠ vida útil 5</b><br>Equipos de usuario: 3 de garantía y renovación a los 4. Servidores, red y respaldo: 5 de vida útil.</div><div class="error"><b>⚠️ No confundir: Requisito obligatorio ≠ criterio que suma puntos</b><br>Los requisitos de seguridad son obligatorios; además, la seguridad pesa 20 de 100 al comparar alternativas.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Los requisitos de hardware son fijos?</summary><div class="ans">No: son valores de referencia propuestos y se actualizan en la revisión anual del catálogo (nota de la Tabla 10).</div></details><details class="qa"><summary>Si la seguridad es obligatoria, ¿por qué pesa 20 %?</summary><div class="ans">Son dos cosas distintas: cumplir los requisitos de seguridad es obligatorio, y entre las alternativas que los cumplen, la seguridad suma 20 de 100 puntos.</div></details></div></div></section>
+<section class="pt" id="p-compat"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">3</span><h2>Compatibilidad e interoperabilidad</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Pág. 28 · Compatibilidad e Interoperabilidad</div><ul class="det"><li>ISO/IEC 25010 divide la compatibilidad en <b>coexistencia</b> e <b>interoperabilidad</b>.</li><li>Compatible = funciona en el entorno del banco <b>sin afectar el desempeño ni la seguridad</b> de los demás sistemas; respeta el catálogo y las matrices de compatibilidad de los fabricantes; opera con el EDR, el respaldo y el monitoreo del SOC activos; soporta las versiones vigentes del sistema operativo y la base de datos.</li><li>Servicios críticos (APP-01, APP-02, INF-02, INF-03): <b>prueba de concepto</b> previa y <b>dictamen técnico</b> revisado por el CISO; sin él, la compra no continúa.</li><li>Interoperabilidad = <b>intercambiar información y utilizarla correctamente</b>; indispensable para que el core bancario, los canales digitales, la BI y el SOC compartan datos.</li></ul><blockquote class="q">«La interoperabilidad es la capacidad de intercambiar información y utilizarla correctamente» (ISO, 2011).</blockquote><div class="tblwrap"><table><caption>Interoperabilidad: lo que se exige</caption><thead><tr><th>Ámbito</th><th>Estándar</th></tr></thead><tbody><tr><td>Integraciones</td><td>APIs REST documentadas (OpenAPI) en una puerta de enlace con OAuth 2.0; sin acceso directo a la base de datos de otro sistema.</td></tr><tr><td>Identidad</td><td>Inicio de sesión único con SAML 2.0 u OpenID Connect.</td></tr><tr><td>Pagos</td><td>Mensajería ISO 20022.</td></tr><tr><td>Datos y registros</td><td>Exportación en formatos abiertos (CSV, JSON o XML) para la BI (APP-04) y para migrar de proveedor; registros por syslog al SOC.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">CO ≠ IN</span><div><div class="mt">Compatibilidad vs. interoperabilidad (ISO/IEC 25010)</div><div class="mx"><b>CO</b>existir sin afectar a otros ≠ <b>IN</b>tercambiar información y usarla bien</div><div class="mm">Compañeros de piso (conviven) vs. traductores (se entienden)</div></div></div><div class="mnemo"><span class="mk">PoC + CISO</span><div><div class="mt">Servicios críticos</div><div class="mx">APP-01 · APP-02 · INF-02 · INF-03 → <b>prueba de concepto</b> + <b>dictamen técnico</b> revisado por el CISO</div><div class="mm">Sin dictamen, no hay compra</div></div></div><div class="error"><b>⚠️ No confundir: Compatibilidad ≠ Interoperabilidad</b><br>Coexistir sin afectar a los demás ≠ intercambiar información y usarla correctamente.</div><div class="error"><b>⚠️ No confundir: OAuth 2.0 ≠ SAML 2.0 / OpenID Connect</b><br>OAuth 2.0 protege las APIs; SAML y OpenID Connect dan el inicio de sesión único.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué son APP-01, APP-02, INF-02 e INF-03?</summary><div class="ans">Códigos de la arquitectura de TI (pág. 25): Core bancario, Banca en línea y móvil, Servidores y virtualización, y Red de cinco sucursales.</div></details><details class="qa"><summary>¿Por qué formatos abiertos?</summary><div class="ans">Para alimentar la plataforma de BI (APP-04) y para poder migrar de proveedor.</div></details></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="p-seguridad"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">4</span><h2>Seguridad</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Pág. 29 · Seguridad de las adquisiciones tecnológicas</div><ul class="det"><li>La seguridad es un <b>requisito obligatorio</b>, no un criterio opcional, desde la evaluación inicial hasta la implementación y el retiro.</li><li><b>Evaluación de riesgos</b>: amenazas, vulnerabilidades e impactos sobre la confidencialidad, integridad y disponibilidad.</li><li><b>Protección de datos</b>: cifrado, autenticación multifactor, gestión de accesos y prevención de pérdida de información.</li><li><b>Gestión de vulnerabilidades</b>: parches, actualizaciones de seguridad y monitoreo continuo.</li><li><b>Continuidad operativa</b>: compatible con respaldo, recuperación ante desastres y continuidad del negocio.</li><li><b>Gestión de terceros</b>: notificar incidentes, colaborar en investigaciones y permitir auditorías.</li><li>El <b>CISO</b> valida y emite un dictamen previo a la aprobación de las adquisiciones críticas (Acuerdo No. 003-2012).</li></ul><blockquote class="q">«La seguridad constituye un requisito obligatorio y no un criterio opcional de selección.»</blockquote><div class="mnemo"><span class="mk">RDVCT</span><div><div class="mt">Requisitos de seguridad</div><div class="mx"><b>R</b>iesgos (CID) · <b>D</b>atos · <b>V</b>ulnerabilidades · <b>C</b>ontinuidad · <b>T</b>erceros</div><div class="mm">«Revisa De Verdad Cada Tercero»</div></div></div><div class="mnemo"><span class="mk">CID</span><div><div class="mt">Evaluación de riesgos</div><div class="mx"><b>C</b>onfidencialidad · <b>I</b>ntegridad · <b>D</b>isponibilidad</div><div class="mm">Lo que se protege de la información</div></div></div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué se le exige a un proveedor en seguridad?</summary><div class="ans">Notificar incidentes de seguridad, colaborar en investigaciones y permitir las auditorías.</div></details></div></div></section>
+<section class="pt" id="p-costos"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">5</span><h2>Costos y costo total de propiedad</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Pág. 30 · Gestión de costos y evaluación económica</div><ul class="det"><li>Criterios de <b>eficiencia financiera, transparencia y optimización</b> de recursos.</li><li>Se evalúa el <b>TCO durante todo el ciclo de vida</b>, evitando decidir solo por el precio inicial.</li><li><b>Justificación económica</b>: beneficio para el banco, relación con los objetivos del PETI y disponibilidad presupuestaria.</li><li>Se comparan propuestas por <b>TCO, calidad del servicio, riesgos y retorno esperado</b>.</li><li>Si supera el presupuesto aprobado: revisión del <b>Comité de TI</b> y la <b>Gerencia Financiera</b>.</li></ul><div class="tblwrap"><table><caption>Los cinco componentes del TCO</caption><thead><tr><th>Costo</th><th>Incluye</th></tr></thead><tbody><tr><td>Adquisición</td><td>Compra de equipos, licencias, suscripciones y servicios iniciales.</td></tr><tr><td>Implementación</td><td>Instalación, configuración, integración, migración de datos y capacitación.</td></tr><tr><td>Operación</td><td>Mantenimiento, soporte técnico, consumo energético, almacenamiento y servicios recurrentes.</td></tr><tr><td>Renovación</td><td>Actualizaciones, ampliaciones de capacidad y reemplazo de componentes.</td></tr><tr><td>Salida</td><td>Migración de información, terminación contractual y sustitución del proveedor.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">AIORS</span><div><div class="mt">Componentes del TCO</div><div class="mx"><b>A</b>dquisición · <b>I</b>mplementación · <b>O</b>peración · <b>R</b>enovación · <b>S</b>alida</div><div class="mm">«Al Inicio, Otro Rato Sale caro»: el precio es solo la A</div></div></div><div class="mnemo"><span class="mk">CTI + GF</span><div><div class="mt">Supera el presupuesto</div><div class="mx">Revisión del <b>C</b>omité de <b>TI</b> y la <b>G</b>erencia <b>F</b>inanciera</div><div class="mm">Si se pasa de plata, entran los de la plata</div></div></div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Cómo se comparan dos propuestas?</summary><div class="ans">Por el TCO, la calidad del servicio, los riesgos y el retorno esperado de la inversión.</div></details></div></div></section>
+<section class="pt" id="p-sostenible"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">6</span><h2>Sostenibilidad</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Págs. 30–31 · Sostenibilidad y responsabilidad ambiental</div><ul class="det"><li><b>Eficiencia energética</b>: certificaciones y bajo consumo eléctrico.</li><li><b>Durabilidad</b>: vida útil adecuada, repuestos y posibilidad de actualizar.</li><li><b>Reutilización</b>: reutilizar, reasignar o actualizar antes de reemplazar.</li><li><b>Residuos electrónicos</b>: entregar los equipos retirados a gestores autorizados.</li><li><b>Servicios en la nube</b>: evaluar eficiencia energética e información ambiental del proveedor.</li><li><b>Reducción de materiales</b>: menos papel, componentes innecesarios y embalaje.</li><li>La Gerencia de TI, con las áreas administrativas, incluye estos criterios en la evaluación de proveedores y la renovación (ISO 14001 e ISO 20400).</li></ul><div class="mnemo"><span class="mk">EDRRNM</span><div><div class="mt">Criterios de sostenibilidad</div><div class="mx"><b>E</b>ficiencia energética · <b>D</b>urabilidad · <b>R</b>eutilización · <b>R</b>esiduos electrónicos · <b>N</b>ube · <b>M</b>ateriales</div><div class="mm">«En Días Raros Reciclo Nubes y Materiales»</div></div></div><div class="mnemo"><span class="mk">14001 · 20400</span><div><div class="mt">Referencias ambientales</div><div class="mx">ISO <b>14001</b> (gestión ambiental) · ISO <b>20400</b> (compras sostenibles)</div><div class="mm">La de 14 mil cuida el ambiente; la de 20 mil, las compras</div></div></div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué pasa con los equipos viejos?</summary><div class="ans">Primero se evalúa reutilizarlos, reasignarlos o actualizarlos; si se retiran, van a gestores autorizados para su disposición o reciclaje.</div></details></div></div></section>
+<section class="pt" id="p-cumplimiento"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">7</span><h2>Cumplimiento normativo y contratos</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Págs. 31–32 · Cumplimiento normativo y contractual</div><ul class="det"><li>Cumplir leyes, regulaciones bancarias y disposiciones internas; se verifica <b>antes de formalizar contratos y durante el servicio</b>.</li><li><b>Acuerdo 003-2012</b> (SBP): gestión del riesgo de tecnología de la información.</li><li><b>Acuerdo 007-2011</b>: gestión del riesgo operativo y sus factores tecnológicos.</li><li><b>Ley 81 de 2019</b>: protección de datos personales · <b>Decreto Ejecutivo 285 de 2021</b>: la reglamenta.</li><li><b>Ley 23 de 2015</b>: prevención del blanqueo de capitales y el financiamiento del terrorismo, cuando aplique.</li><li><b>COBIT 5</b>: procesos de referencia para adquisiciones, proveedores, riesgos y recursos.</li><li>El <b>Analista de Cumplimiento</b> verifica; participan Asesoría Legal, Gestión de Riesgos y Auditoría Interna cuando corresponda.</li></ul><div class="tblwrap"><table><caption>Cláusulas mínimas de los contratos</caption><thead><tr><th>#</th><th>Cláusula</th></tr></thead><tbody><tr><td>1</td><td>Alcance, condiciones, responsabilidades y niveles de servicio (SLA).</td></tr><tr><td>2</td><td>Obligaciones de confidencialidad y protección de datos.</td></tr><tr><td>3</td><td>Requisitos de seguridad y notificación de incidentes.</td></tr><tr><td>4</td><td>Derechos de auditoría y acceso a evidencias de cumplimiento.</td></tr><tr><td>5</td><td>Condiciones de continuidad operativa y recuperación de servicios.</td></tr><tr><td>6</td><td>Propiedad, acceso, portabilidad y devolución de los datos.</td></tr><tr><td>7</td><td>Condiciones de terminación, renovación y transferencia del servicio.</td></tr><tr><td>8</td><td>Responsabilidades por incumplimientos contractuales y regulatorios.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">3·7·81·285·23</span><div><div class="mt">Normas aplicables</div><div class="mx">Acuerdo <b>003</b>-2012 (riesgo TI) · Acuerdo <b>007</b>-2011 (riesgo operativo) · Ley <b>81</b>-2019 (datos) · Decreto <b>285</b>-2021 · Ley <b>23</b>-2015 (blanqueo) · COBIT 5</div><div class="mm">Del más chico al más grande, y la 23 al final</div></div></div><div class="mnemo"><span class="mk">8 cláusulas</span><div><div class="mt">Contratos con proveedores</div><div class="mx">SLA · Confidencialidad · Seguridad e incidentes · Auditoría · Continuidad · Datos y portabilidad · Terminación · Responsabilidades</div><div class="mm">Empieza por el servicio y termina por la culpa</div></div></div><div class="error"><b>⚠️ No confundir: Acuerdo 003-2012 ≠ 007-2011</b><br>003-2012: riesgo de tecnología de la información. 007-2011: riesgo operativo.</div><div class="error"><b>⚠️ No confundir: Ley 81 ≠ Ley 23</b><br>Ley 81 de 2019: datos personales. Ley 23 de 2015: blanqueo de capitales.</div><div class="error"><b>⚠️ No confundir: CISO ≠ Analista de Cumplimiento</b><br>El CISO revisa dictámenes técnicos y de seguridad; el Analista verifica normas y contratos.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Cuándo intervienen Legal, Riesgos y Auditoría?</summary><div class="ans">Cuando corresponda, junto al Analista de Cumplimiento, que verifica que las adquisiciones se ajusten a la regulación y los contratos.</div></details></div></div></section>
+<section class="pt" id="p-proceso"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">8</span><h2>Aprobación, seguimiento y revisión</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Págs. 29 y 32–33 · Procedimientos y excepciones</div><ul class="det"><li>La evaluación integral incorpora <b>seguridad, costos, sostenibilidad y cumplimiento</b> dentro del procedimiento de la Parte 1.</li><li>Parte 1: solicitud, revisión del catálogo, especificación técnica (con requisitos del CISO y del Analista de Cumplimiento), evaluación de alternativas, dictamen técnico y registro en el inventario.</li><li>Excepciones de la Parte 1: las aprueba el <b>Comité de TI</b> por un <b>máximo de doce meses</b>.</li><li>Excepciones de la Parte 2: <b>justificación documental</b>, aprobación del Comité de TI y <b>aceptación formal de los riesgos</b> por las áreas responsables, sin eximir al banco de sus obligaciones legales.</li></ul><div class="tblwrap"><table><caption>Procedimiento de aprobación (Parte 2)</caption><thead><tr><th>Paso</th><th>Qué pasa</th></tr></thead><tbody><tr><td>1. Solicitud</td><td>El área solicitante presenta la necesidad y su relación con el PETI.</td></tr><tr><td>2. Evaluación integral</td><td>TI, CISO, Gestión de Riesgos, Cumplimiento y Finanzas revisan los criterios.</td></tr><tr><td>3. Evaluación económica</td><td>Se calcula el TCO y se verifica el presupuesto.</td></tr><tr><td>4. Evaluación del proveedor</td><td>Capacidades, antecedentes, condiciones contractuales y riesgos.</td></tr><tr><td>5. Aprobación</td><td>El Comité de TI autoriza según criticidad y presupuesto.</td></tr><tr><td>6. Formalización</td><td>Se documentan las condiciones contractuales y los requisitos de seguridad y cumplimiento.</td></tr><tr><td>7. Seguimiento</td><td>TI supervisa el desempeño, los SLA, las renovaciones y los riesgos.</td></tr><tr><td>8. Revisión</td><td>La política se revisa cada año o ante cambios regulatorios, tecnológicos o de riesgo.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">S-EEE-AFSR</span><div><div class="mt">Procedimiento de 8 pasos</div><div class="mx"><b>S</b>olicitud · <b>E</b>valuación integral · <b>E</b>conómica · del <b>E</b>proveedor · <b>A</b>probación · <b>F</b>ormalización · <b>S</b>eguimiento · <b>R</b>evisión</div><div class="mm">«Si Evalúas En Equipo, Apruebas, Firmas, Sigues y Revisas»</div></div></div><div class="mnemo"><span class="mk">12 m</span><div><div class="mt">Excepciones</div><div class="mx">Justificadas por escrito · Comité de TI · máximo <b>12 meses</b> (Parte 1) · aceptación formal de los riesgos (Parte 2)</div><div class="mm">Una excepción dura como mucho un año</div></div></div><div class="error"><b>⚠️ No confundir: Flujo Parte 1 (6) ≠ Procedimiento Parte 2 (8)</b><br>Parte 1: solicitud → inventario. Parte 2: solicitud → revisión.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Una excepción libera al banco de cumplir la ley?</summary><div class="ans">No: la excepción no exime al banco de sus obligaciones legales o regulatorias.</div></details></div></div></section>
+<section class="pt" id="p-cierre"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">FIN</span><h2>Cierre</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">📄 Págs. 35–36 · Conclusión</div><ul class="det"><li>Comprar tecnología en un banco <b>no es solo una decisión de precio</b>.</li><li>Lo incompatible, lo que no se integra con el core o lo que pierde soporte <b>termina costando más y aumentando el riesgo</b>.</li><li>La política define requisitos mínimos, un catálogo de estándares, criterios con peso importante para la seguridad y estándares de interoperabilidad como las APIs documentadas e ISO 20022.</li><li>Con compatibilidad, interoperabilidad, seguridad, costos, sostenibilidad y cumplimiento, cada adquisición contribuye a los objetivos del PETI.</li></ul><blockquote class="q">«Comprar tecnología en un banco no es solo una decisión de precio.» (Conclusión, pág. 35)</blockquote><div class="mnemo"><span class="mk">≠ $</span><div><div class="mt">Idea de cierre</div><div class="mx">Comprar tecnología <b>no es solo una decisión de precio</b></div><div class="mm">Lo barato que no se integra sale caro</div></div></div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Cuál es el objetivo final de la política?</summary><div class="ans">Que cada adquisición contribuya a los objetivos del PETI de forma estratégica, segura y eficiente.</div></details></div></div></section>
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra sigla o palabra.</p>
+<footer>Resumen por punto generado solo a partir de Proyecto Final GRTIC 1LS241 (1).pdf · UTP · FISC · uso académico.</footer>
+</main></div>
+<script src="audio/puntos.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+(function(){
+"use strict";
+function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
+
+var PRE = "gr_charlapf_";
+var pts = Array.prototype.slice.call(document.querySelectorAll("section.pt"));
+var mode = load(PRE+"modo_v1") || (matchMedia("(max-width:560px)").matches ? "transit" : "office");
+function setOpen(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); if(open) save(PRE+"puntos_pos_v1", s.id); }
+function applyMode(){
+  document.body.classList.toggle("transit", mode === "transit");
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ var on = b.getAttribute("data-m") === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $("notice").textContent = mode === "transit" ? "🚌 Activa No Molestar · música instrumental o silencio, nada con letra." : "🏢 Teléfono fuera de la vista y notificaciones en silencio.";
+  $("btnCont").style.display = mode === "transit" ? "" : "none";
+  pts.forEach(function(s){ setOpenQuiet(s, mode !== "transit"); });
+}
+function setOpenQuiet(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); }
+Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ b.addEventListener("click", function(){ mode = b.getAttribute("data-m"); save(PRE+"modo_v1", mode); applyMode(); }); });
+pts.forEach(function(s){
+  var h = s.querySelector(".ph");
+  function tog(e){ if(e.target.closest(".kit-tts")) return; setOpen(s, s.classList.contains("closed")); }
+  h.addEventListener("click", tog);
+  h.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(e); } });
+});
+applyMode();
+$("fold").addEventListener("click", function(){
+  var anyOpen = pts.some(function(s){ return !s.classList.contains("closed"); });
+  pts.forEach(function(s){ setOpenQuiet(s, !anyOpen); });
+  $("fold").textContent = anyOpen ? "Desplegar todo" : "Plegar todo";
+});
+$("btnCont").addEventListener("click", function(){ var id = load(PRE+"puntos_pos_v1"), s = id && $(id); if(!s) s = pts[0]; setOpen(s, true); s.scrollIntoView({behavior:"smooth", block:"start"}); });
+document.querySelectorAll("nav.chips a, aside.side a").forEach(function(a){ a.addEventListener("click", function(){ var s = $(a.getAttribute("href").slice(1)); if(s) setOpen(s, true); }); });
+
+/* buscador */
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+$("q").addEventListener("input", function(){
+  var q = norm(this.value.trim()), n = 0;
+  pts.forEach(function(s){
+    var hit = !q || norm(s.textContent).indexOf(q) >= 0;
+    s.style.display = hit ? "" : "none"; if(hit) n++;
+    if(q && hit) setOpenQuiet(s, true);
+  });
+  document.querySelectorAll(".pausa").forEach(function(p){ p.style.visibility = q ? "hidden" : ""; });
+  $("nores").style.display = n ? "none" : "block";
+});
+
+/* barra lateral */
+var side = document.querySelectorAll("aside.side a");
+addEventListener("scroll", function(){
+  var cur = null; pts.forEach(function(s){ if(s.style.display !== "none" && s.getBoundingClientRect().top < 180) cur = s; });
+  if(cur) Array.prototype.forEach.call(side, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); });
+}, {passive:true});
+
+if(window.Voz){
+  Voz.init({
+    sections: pts, key: function(s){ return s.id; },
+    title: function(s){ return s.querySelector(".num").textContent + " · " + s.querySelector("h2").textContent; },
+    blocks: "ul.det li, blockquote, tr, .mnemo, .error", skip: ".qs, caption",
+    target: function(s){ return s.querySelector(".ph"); },
+    onOpen: function(s){ if(s.classList.contains("closed")) setOpen(s, true); },
+    playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
+    rateKey: PRE+"tts_rate_v1", artist: "Resumen por punto · Política de Adquisición"
+  });
+}
+})();
+</script>
+</body>
+</html>

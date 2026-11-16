@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>FlashCards · Política de Adquisición</title>
+<style>
+:root{
+  --bg:#0a100c;
+  --bg-2:#0f1712;
+  --surface:#132019;
+  --surface-2:#182a20;
+  --edge:#22352b;
+  --text:#eaf2ec;
+  --text-dim:#8fa79a;
+  --text-faint:#5e7268;
+  --brand:#37b978;
+  --brand-dim:#245b3e;
+  --brand-glow:rgba(55,185,120,.18);
+  --gold:#e0a458;
+  --gold-dim:#4a3620;
+  --gold-glow:rgba(224,164,88,.16);
+  --danger:#d97a6b;
+  --radius-l:22px;
+  --radius-m:14px;
+  --radius-s:9px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(55,185,120,.14), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+.app{
+  width:100%;
+  max-width:460px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  padding-top:var(--safe-t);
+}
+
+/* ---------- HEADER ---------- */
+header{
+  padding:18px 18px 10px;
+  flex-shrink:0;
+}
+.brand-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom:2px;
+}
+.brand-row h1{
+  font-size:1.32rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0;
+}
+.brand-row h1 em{
+  font-style:normal;
+  color:var(--brand);
+}
+.subtitle{
+  font-size:.76rem;
+  color:var(--text-faint);
+  margin:0 0 14px;
+}
+
+/* progress bar */
+.progress-wrap{
+  height:9px;
+  border-radius:99px;
+  background:var(--surface-2);
+  overflow:hidden;
+  border:1px solid var(--edge);
+  margin-bottom:12px;
+}
+.progress-fill{
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--brand-dim),var(--brand));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+
+.stats-row{
+  display:flex;
+  gap:8px;
+  font-size:.72rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.stat-pill{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  padding:5px 10px;
+  border-radius:99px;
+  font-weight:600;
+}
+.stat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-learned{background:var(--brand);}
+.dot-hard{background:var(--gold);}
+.dot-new{background:var(--text-faint);}
+
+/* filter tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0;
+  padding:9px 15px;
+  border-radius:99px;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text-dim);
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--brand);
+  border-color:var(--brand);
+  color:#06140c;
+}
+
+/* ---------- CARD STAGE ---------- */
+main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:14px 18px 6px;
+  min-height:0;
+}
+.counter{
+  text-align:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-dim);
+  margin-bottom:12px;
+  letter-spacing:.02em;
+}
+.counter b{color:var(--text);}
+
+.stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  perspective:1600px;
+  min-height:300px;
+  touch-action: pan-y;
+}
+.card3d{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  height:min(56vh,420px);
+  min-height:280px;
+  cursor:pointer;
+}
+.card-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  transition:transform .55s cubic-bezier(.34,1.15,.4,1);
+  transform-style:preserve-3d;
+}
+.card3d.flipped .card-inner{transform:rotateY(180deg);}
+.face{
+  position:absolute;
+  inset:0;
+  border-radius:var(--radius-l);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:26px 24px;
+  display:flex;
+  flex-direction:column;
+  border:1px solid var(--edge);
+  overflow-y:auto;
+}
+.face::-webkit-scrollbar{width:0;}
+.face-front{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  justify-content:center;
+}
+.face-back{
+  background:linear-gradient(160deg,var(--surface),#0f1a14);
+  transform:rotateY(180deg);
+  justify-content:flex-start;
+}
+.face-tag{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:var(--brand);
+  background:var(--brand-glow);
+  padding:4px 9px;
+  border-radius:99px;
+}
+.face-status{
+  position:absolute;
+  top:16px;
+  right:16px;
+  font-size:1rem;
+}
+.cat-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-faint);
+  margin-bottom:10px;
+}
+.face-front .q-text{
+  font-size:1.18rem;
+  font-weight:700;
+  line-height:1.42;
+  color:var(--text);
+}
+.tap-hint{
+  position:absolute;
+  bottom:16px;
+  left:0; right:0;
+  text-align:center;
+  font-size:.68rem;
+  color:var(--text-faint);
+  font-weight:600;
+}
+.face-back .a-label{
+  font-size:.68rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--brand);
+  margin-bottom:8px;
+  margin-top:6px;
+}
+.face-back .a-text{
+  font-size:1.02rem;
+  line-height:1.5;
+  color:var(--text);
+  font-weight:500;
+}
+.a-text b, .a-text strong{color:var(--brand);}
+
+/* ---------- RATE BUTTONS (only visible when flipped) ---------- */
+.rate-row{
+  display:flex;
+  gap:10px;
+  padding:14px 18px 4px;
+  flex-shrink:0;
+  opacity:0;
+  transform:translateY(6px);
+  pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.rate-row.show{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.rate-btn{
+  flex:1;
+  border:none;
+  border-radius:var(--radius-m);
+  padding:14px 8px;
+  font-size:.86rem;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  cursor:pointer;
+}
+.rate-hard{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid #5c451f;
+}
+.rate-hard.on{background:var(--gold);color:#2a1c08;}
+.rate-easy{
+  background:var(--brand-dim);
+  color:#a8f0c6;
+  border:1px solid #2a5c40;
+}
+.rate-easy.on{background:var(--brand);color:#06140c;}
+
+/* ---------- NAV CONTROLS ---------- */
+nav.controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px calc(16px + var(--safe-b));
+  flex-shrink:0;
+}
+.nav-btn{
+  flex:1;
+  background:var(--surface);
+  border:1px solid var(--edge);
+  color:var(--text);
+  border-radius:var(--radius-m);
+  padding:15px 6px;
+  font-size:.92rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  cursor:pointer;
+}
+.nav-btn:active{background:var(--surface-2);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn.shuffle{
+  flex:0 0 54px;
+  font-size:1.15rem;
+  padding:15px 0;
+}
+.nav-btn.shuffle.on{
+  border-color:var(--brand);
+  color:var(--brand);
+  background:var(--brand-glow);
+}
+
+.empty-state{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 30px;
+  color:var(--text-dim);
+  gap:10px;
+}
+.empty-state .emoji{font-size:2.4rem;}
+.empty-state p{margin:0;font-size:.9rem;line-height:1.5;}
+.empty-state button{
+  margin-top:8px;
+  background:var(--brand);
+  color:#06140c;
+  border:none;
+  padding:11px 20px;
+  border-radius:99px;
+  font-weight:800;
+  font-size:.82rem;
+  cursor:pointer;
+}
+
+@media (min-width:480px){
+  .app{max-width:420px; margin:0 auto; box-shadow:0 0 60px rgba(0,0,0,.4);}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+@media (max-width:560px){
+  /* ocupar exactamente la pantalla visible (descontando la barra del navegador) */
+  body{min-height:100vh;min-height:100dvh;}
+  .app{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+
+  header{padding:12px 16px 6px;}
+  .brand-row h1{font-size:1.2rem;}
+  .subtitle{margin:0 0 10px;}
+  .progress-wrap{height:7px;margin-bottom:10px;}
+  .stats-row{gap:6px;margin-bottom:10px;font-size:.68rem;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .stats-row::-webkit-scrollbar{display:none;}
+  .stat-pill{padding:4px 9px;white-space:nowrap;flex-shrink:0;}
+  .tab{padding:8px 14px;font-size:.78rem;}
+
+  main{padding:8px 16px 0;min-height:0;}
+  .counter{margin-bottom:8px;}
+
+  /* la tarjeta llena todo el espacio disponible */
+  .stage{min-height:0;align-items:stretch;}
+  .card3d{height:100%;max-width:none;min-height:240px;}
+  .face{padding:50px 20px 40px;}
+  .face-tag{top:14px;left:14px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .face-status{top:12px;right:14px;}
+  .face-front .q-text{font-size:1.15rem;}
+  .face-back{justify-content:flex-start;padding-bottom:20px;}
+  .face-back .a-label{margin-top:0;}
+  .face-back .a-text{font-size:.98rem;line-height:1.5;}
+  .tap-hint{bottom:14px;}
+
+  /* botones de valoración alineados con la tarjeta */
+  .rate-row{padding:10px 0 0;gap:8px;}
+  .rate-btn{padding:12px 6px;font-size:.82rem;}
+
+  nav.controls{padding:10px 16px calc(12px + var(--safe-b));gap:8px;}
+  .nav-btn{padding:13px 6px;font-size:.88rem;}
+  .nav-btn.shuffle{flex:0 0 50px;padding:13px 0;}
+}
+@media (max-width:560px) and (max-height:700px){
+  .subtitle{display:none;}
+  .face{padding-top:44px;}
+  .face-front .q-text{font-size:1.05rem;}
+}
+
+/* ---------- HERRAMIENTAS, RESPONSIVE Y ACCESIBILIDAD ---------- */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.tool{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--edge);border-radius:99px;padding:4px 6px 4px 12px;font-size:.74rem;font-weight:700;color:var(--text-dim);min-height:36px;}
+.tool select,.tool input{background:transparent;border:none;color:var(--text);font-size:16px;font-family:inherit;max-width:170px;padding:4px;}
+.tool select option{background:var(--surface);}
+.tool input[type=date]{color-scheme:dark;}
+.tbtn{cursor:pointer;padding:4px 12px;color:var(--text);}
+.kbd-hint{display:none;text-align:center;font-size:.7rem;color:var(--text-faint);margin:0 0 14px;}
+.tab:focus-visible,.nav-btn:focus-visible,.rate-btn:focus-visible,.tbtn:focus-visible,.card3d:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--brand);outline-offset:3px;}
+.face-back .face-status{font-size:.68rem;}
+@media (hover:hover){
+  .tab:hover,.nav-btn:hover,.tbtn:hover{border-color:var(--brand);}
+}
+@media (max-width:560px){
+  .tools{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:8px;}
+  .tools::-webkit-scrollbar{display:none;}
+  .tool{flex-shrink:0;}
+}
+@media (min-width:561px){
+  .app{max-width:720px;box-shadow:none;}
+  .card3d{max-width:640px;margin:0 auto;}
+  .rate-row,nav.controls{max-width:640px;width:100%;margin-left:auto;margin-right:auto;}
+}
+@media (min-width:1024px){
+  .app{max-width:1100px;}
+  header{max-width:760px;width:100%;margin:0 auto;}
+  .stage{min-height:0;}
+  .card3d{height:clamp(260px, calc(100vh - 400px), 460px);min-height:0;}
+  .face-front .q-text{font-size:1.35rem;}
+  .kbd-hint{display:block;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;}
+}
+
+/* ---------- TELÉFONO: todo en una pantalla, sin scroll ---------- */
+.tool-toggle{display:none;}
+@media (max-width:560px){
+  /* svh = alto visible con la barra del navegador mostrada: nunca queda nada por fuera */
+  html,body{height:100%;overflow:hidden;}
+  body{min-height:0 !important;}
+  .app{height:100vh;height:100svh;min-height:0;overflow:hidden;}
+  header{padding:10px 16px 4px;}
+  .brand-row{margin-bottom:6px;}
+  .subtitle{display:none;}
+  .progress-wrap{margin-bottom:8px;}
+  .stats-row{margin-bottom:8px;}
+  .tools{margin-top:8px;flex-wrap:wrap;overflow:visible;}
+  .tool-toggle{display:inline-flex;}
+  .tools:not(.open) .tool-more{display:none;}
+  .tools .tool:first-child{flex:1;min-width:0;}
+  .tools .tool:first-child select{max-width:none;flex:1;min-width:0;}
+  main{padding:6px 16px 0;}
+  .counter{margin-bottom:6px;}
+  .card3d{min-height:150px;}
+  .rate-row{padding-top:8px;}
+  nav.controls{padding:8px 16px calc(10px + var(--safe-b));}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand-row">
+      <h1><a href="index.html" style="color:inherit;text-decoration:none" aria-label="Volver al menú de la charla">←</a> Repaso <em>Adquisición</em></h1>
+      <span style="font-size:.68rem;color:var(--text-faint);font-weight:700;">Charla · Proyecto Final</span>
+    </div>
+    <p class="subtitle">Política de Adquisición Tecnológica · Banco Horizonte Panamá</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stats-row">
+      <span class="stat-pill"><span class="stat-dot dot-learned"></span>Aprendidas: <span id="statLearned">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-hard"></span>Por repasar: <span id="statHard">0</span></span>
+      <span class="stat-pill"><span class="stat-dot dot-new"></span>Sin ver: <span id="statNew">0</span></span>
+    </div>
+
+    <div class="tabs" id="tabs" role="tablist">
+      <div class="tab active" data-filter="today" role="tab" tabindex="0" aria-selected="true">📅 Hoy</div>
+      <div class="tab" data-filter="all" role="tab" tabindex="0">Todas</div>
+      <div class="tab" data-filter="hard" role="tab" tabindex="0">Por repasar</div>
+      <div class="tab" data-filter="learned" role="tab" tabindex="0">Aprendidas</div>
+    </div>
+
+    <div class="tools" id="tools">
+      <label class="tool"><span>🗂️</span><select id="catSel" aria-label="Filtrar por tema"><option value="">Todos los temas</option></select></label>
+      <button class="tool tbtn tool-toggle" id="btnMore" type="button" aria-expanded="false" aria-controls="tools" aria-label="Más opciones: fecha de la charla y exportar">⚙️</button>
+      <label class="tool tool-more" title="Fecha de la charla: ninguna tarjeta se programa después del día anterior"><span>📅 Charla</span><input type="date" id="examDate"></label>
+      <button class="tool tbtn tool-more" id="btnAnki" type="button">⬇️ Exportar a Anki</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="counter" id="counter"><b>1</b> de 62</div>
+
+    <div class="stage" id="stage">
+      <div class="card3d" id="card3d" tabindex="0" role="button" aria-label="Tarjeta: toca o pulsa espacio para girar">
+        <div class="card-inner" id="cardInner">
+          <div class="face face-front">
+            <span class="face-tag" id="tagFront">Tema</span>
+            <span class="face-status" id="statusFront"></span>
+            <div class="q-text" id="qText">Cargando…</div>
+            <div class="tap-hint">Toca la tarjeta para ver la respuesta ↻</div>
+          </div>
+          <div class="face face-back">
+            <span class="face-tag" id="tagBack">Tema</span>
+            <span class="face-status" id="statusBack"></span>
+            <div class="a-label">Respuesta</div>
+            <div class="a-text" id="aText">…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row" id="rateRow">
+      <button class="rate-btn rate-hard" id="btnHard">😅 Difícil / Repasar</button>
+      <button class="rate-btn rate-easy" id="btnEasy">✅ Aprendida</button>
+    </div>
+  </main>
+
+  <nav class="controls">
+    <button class="nav-btn" id="btnPrev">‹ Anterior</button>
+    <button class="nav-btn shuffle" id="btnShuffle" title="Mezclar">🔀</button>
+    <button class="nav-btn" id="btnNext">Siguiente ›</button>
+  </nav>
+  <p class="kbd-hint">Teclado: ← → navegar · espacio girar · 1 difícil · 2 aprendida</p>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ========================================================
+     FLASHCARDS — Fuente: Proyecto Final GRTIC 1LS241 (1).pdf, págs. 27–33
+  ======================================================== */
+  var CARDS = [
+    {"cat": "Orden", "q": "¿En qué orden va la charla?", "a": "Intro → 1 Principios → 2 Hardware y software → 3 Compatibilidad e interoperabilidad → 4 Seguridad → 5 Costos → 6 Sostenibilidad → 7 Cumplimiento → 8 Aprobación → Cierre.<br><i>Mnemotecnia:</i> «Primero Hay que Comprobar · Si Cuesta, Sostén, Cumple y Aprueba»"},
+    {"cat": "Orden", "q": "¿Cuánto dura la charla y cómo se reparte?", "a": "<b>5:00</b> → Intro 0:30 · 1 0:25 · 2 0:45 · 3 0:40 · 4 0:30 · 5 0:30 · 6 0:20 · 7 0:30 · 8 0:25 · Cierre 0:25."},
+    {"cat": "Orden", "q": "¿Qué punto abre la Parte 2?", "a": "<b>4 · Seguridad</b>, después de Compatibilidad e interoperabilidad."},
+    {"cat": "Orden", "q": "¿Qué va después de Costos?", "a": "<b>6 · Sostenibilidad</b>."},
+    {"cat": "Orden", "q": "¿Con qué frase pasas de Hardware y software a Compatibilidad?", "a": "«Pero cumplir no basta: tiene que convivir con lo que existe y hablar con los demás sistemas.»"},
+    {"cat": "Orden", "q": "¿Con qué frase pasas de Seguridad a Costos?", "a": "«Segura, sí; pero también tiene que tener sentido económico.»"},
+    {"cat": "Orden", "q": "¿Con qué frase pasas de Sostenibilidad a Cumplimiento?", "a": "«Y todo esto, dentro de la ley.»"},
+    {"cat": "0 · Intro", "q": "¿A qué tipos de adquisición aplica la política?", "a": "A toda <b>compra, arrendamiento, suscripción o renovación</b> tecnológica, incluidos los proyectos PR-02 a PR-09 y los servicios en la nube."},
+    {"cat": "0 · Intro", "q": "¿En qué tres referencias se fundamenta?", "a": "COBIT 5 (BAI03, APO03, BAI09), Acuerdo No. 003-2012 de la SBP e ISO/IEC 25010."},
+    {"cat": "0 · Intro", "q": "¿Cuáles son las dos partes de la política?", "a": "Parte 1: hardware, software, compatibilidad e interoperabilidad. Parte 2: seguridad, costos, sostenibilidad y cumplimiento normativo."},
+    {"cat": "1 · Principios generales", "q": "¿Se elige la opción más barata?", "a": "No: se evalúa por su <b>costo total de propiedad</b>, no solo por su precio."},
+    {"cat": "1 · Principios generales", "q": "¿Quién mantiene y quién aprueba el catálogo de estándares?", "a": "Lo mantiene la Gerencia de TI; lo aprueba el Comité de TI cada año."},
+    {"cat": "1 · Principios generales", "q": "¿Qué tecnología no se adquiere?", "a": "La que pierde el soporte antes de terminar su vida útil."},
+    {"cat": "1 · Principios generales", "q": "🙋 ¿Y si lo que necesito no está en el catálogo?", "a": "Se puede pedir una excepción: la aprueba el Comité de TI por un máximo de doce meses."},
+    {"cat": "2 · Hardware y software", "q": "¿Con cuántos puntos se descarta una alternativa?", "a": "Con <b>menos de 70</b> puntos."},
+    {"cat": "2 · Hardware y software", "q": "¿Cuánto pesa la seguridad en la calificación?", "a": "<b>20 %</b>; solo la funcionalidad pesa más (25 %)."},
+    {"cat": "2 · Hardware y software", "q": "¿Cuáles son los requisitos mínimos de un equipo de usuario?", "a": "64 bits, 16 GB de RAM, SSD de 512 GB, TPM 2.0 y compatible con el EDR; garantía de 3 años y renovación a los 4."},
+    {"cat": "2 · Hardware y software", "q": "Di los seis pesos de la calificación.", "a": "Funcionalidad 25 · Seguridad 20 · Compatibilidad 15 · Interoperabilidad 15 · Costo total 15 · Soporte 10."},
+    {"cat": "2 · Hardware y software", "q": "¿Pueden los usuarios instalar software por su cuenta?", "a": "No: solo software con licencia válida y del catálogo autorizado."},
+    {"cat": "2 · Hardware y software", "q": "¿Qué se exige a los servidores (INF-02)?", "a": "Certificados para la virtualización, fuentes redundantes y RAID, soporte <b>24/7 con reposición en 4 horas</b> y vida útil de <b>5 años</b>."},
+    {"cat": "2 · Hardware y software", "q": "¿Qué se exige al respaldo (INF-04, SRV-03)?", "a": "Cifrado en reposo, <b>copias inmutables</b> y replicación al sitio alterno en la nube; soporte 24/7; vida útil de 5 años."},
+    {"cat": "2 · Hardware y software", "q": "¿Qué se exige a la red (INF-03)?", "a": "VLAN 802.1Q, IPv4/IPv6, SNMPv3, administración centralizada y envío de registros al SOC; vida útil de 5 años."},
+    {"cat": "2 · Hardware y software", "q": "¿Qué exige el software en datos y nube?", "a": "Derechos de los titulares (<b>Ley 81 de 2019</b>), acceso de la <b>SBP</b> y <b>devolución de los datos</b> al terminar el servicio."},
+    {"cat": "2 · Hardware y software", "q": "🙋 ¿Los requisitos de hardware son fijos?", "a": "No: son valores de referencia propuestos y se actualizan en la revisión anual del catálogo (nota de la Tabla 10)."},
+    {"cat": "2 · Hardware y software", "q": "🙋 Si la seguridad es obligatoria, ¿por qué pesa 20 %?", "a": "Son dos cosas distintas: cumplir los requisitos de seguridad es obligatorio, y entre las alternativas que los cumplen, la seguridad suma 20 de 100 puntos."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Qué diferencia hay entre compatibilidad e interoperabilidad?", "a": "Compatibilidad = <b>coexistir</b> sin afectar a los demás sistemas. Interoperabilidad = <b>intercambiar información</b> y usarla correctamente."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Cuándo se exige prueba de concepto?", "a": "Cuando la compra afecta servicios críticos: APP-01, APP-02, INF-02 e INF-03."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Qué pasa si no hay dictamen técnico?", "a": "La compra no continúa. El dictamen lo revisa el CISO."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Qué estándar se usa para los pagos?", "a": "ISO 20022."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Cómo se integran los sistemas?", "a": "Con <b>APIs REST documentadas (OpenAPI)</b> en una puerta de enlace con <b>OAuth 2.0</b>; nunca con acceso directo a la base de datos de otro sistema."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Qué estándar se usa para el inicio de sesión único?", "a": "<b>SAML 2.0 u OpenID Connect</b>."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "¿Para qué se exportan datos en CSV, JSON o XML?", "a": "Para la <b>BI (APP-04)</b> y para <b>migrar de proveedor</b>; los registros van por <b>syslog</b> al SOC."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "🙋 ¿Qué son APP-01, APP-02, INF-02 e INF-03?", "a": "Códigos de la arquitectura de TI (pág. 25): Core bancario, Banca en línea y móvil, Servidores y virtualización, y Red de cinco sucursales."},
+    {"cat": "3 · Compatibilidad e interoperabilidad", "q": "🙋 ¿Por qué formatos abiertos?", "a": "Para alimentar la plataforma de BI (APP-04) y para poder migrar de proveedor."},
+    {"cat": "4 · Seguridad", "q": "¿La seguridad es un criterio opcional de selección?", "a": "No: es un <b>requisito obligatorio</b>, desde la evaluación inicial hasta la implementación y el retiro."},
+    {"cat": "4 · Seguridad", "q": "Di los cinco requisitos de seguridad.", "a": "Evaluación de riesgos · Protección de datos · Gestión de vulnerabilidades · Continuidad operativa · Gestión de terceros."},
+    {"cat": "4 · Seguridad", "q": "¿Quién emite el dictamen de seguridad y cuándo?", "a": "El CISO, antes de aprobar las adquisiciones críticas (Acuerdo 003-2012)."},
+    {"cat": "4 · Seguridad", "q": "🙋 ¿Qué se le exige a un proveedor en seguridad?", "a": "Notificar incidentes de seguridad, colaborar en investigaciones y permitir las auditorías."},
+    {"cat": "5 · Costos y costo total de propiedad", "q": "¿Cuál es el último costo que se considera?", "a": "El <b>costo de salida</b>: migrar la información, terminar el contrato y sustituir al proveedor."},
+    {"cat": "5 · Costos y costo total de propiedad", "q": "Di los cinco costos del TCO en orden.", "a": "Adquisición · Implementación · Operación · Renovación · Salida."},
+    {"cat": "5 · Costos y costo total de propiedad", "q": "¿Quién revisa una compra que supera el presupuesto?", "a": "El Comité de TI y la Gerencia Financiera."},
+    {"cat": "5 · Costos y costo total de propiedad", "q": "¿Qué debe demostrar la justificación económica?", "a": "Beneficio para el banco, relación con los objetivos del <b>PETI</b> y <b>disponibilidad presupuestaria</b>."},
+    {"cat": "5 · Costos y costo total de propiedad", "q": "🙋 ¿Cómo se comparan dos propuestas?", "a": "Por el TCO, la calidad del servicio, los riesgos y el retorno esperado de la inversión."},
+    {"cat": "6 · Sostenibilidad", "q": "¿Qué se hace antes de reemplazar un equipo?", "a": "Evaluar su <b>reutilización, reasignación o actualización</b>."},
+    {"cat": "6 · Sostenibilidad", "q": "Di los seis criterios de sostenibilidad.", "a": "Eficiencia energética · Durabilidad · Reutilización · Residuos electrónicos · Servicios en la nube · Reducción de materiales."},
+    {"cat": "6 · Sostenibilidad", "q": "¿Qué normas ISO se toman de referencia ambiental?", "a": "<b>ISO 14001</b> (sistemas de gestión ambiental) e <b>ISO 20400</b> (compras sostenibles)."},
+    {"cat": "6 · Sostenibilidad", "q": "🙋 ¿Qué pasa con los equipos viejos?", "a": "Primero se evalúa reutilizarlos, reasignarlos o actualizarlos; si se retiran, van a gestores autorizados para su disposición o reciclaje."},
+    {"cat": "7 · Cumplimiento normativo y contratos", "q": "¿Qué ley protege los datos personales en Panamá?", "a": "La <b>Ley 81 de 2019</b>, reglamentada por el <b>Decreto Ejecutivo 285 de 2021</b>."},
+    {"cat": "7 · Cumplimiento normativo y contratos", "q": "¿Qué regula el Acuerdo 003-2012 y qué el 007-2011?", "a": "003-2012: gestión del riesgo de tecnología de la información. 007-2011: gestión del riesgo operativo."},
+    {"cat": "7 · Cumplimiento normativo y contratos", "q": "¿Cuántas cláusulas mínimas lleva un contrato?", "a": "Ocho, empezando por alcance y niveles de servicio (SLA)."},
+    {"cat": "7 · Cumplimiento normativo y contratos", "q": "Di las ocho cláusulas mínimas de un contrato.", "a": "SLA · Confidencialidad y datos · Seguridad e incidentes · Auditoría · Continuidad · Propiedad y portabilidad de datos · Terminación y renovación · Responsabilidades."},
+    {"cat": "7 · Cumplimiento normativo y contratos", "q": "¿Quién verifica el cumplimiento?", "a": "El <b>Analista de Cumplimiento</b>, con Asesoría Legal, Gestión de Riesgos y Auditoría Interna cuando corresponda."},
+    {"cat": "7 · Cumplimiento normativo y contratos", "q": "🙋 ¿Cuándo intervienen Legal, Riesgos y Auditoría?", "a": "Cuando corresponda, junto al Analista de Cumplimiento, que verifica que las adquisiciones se ajusten a la regulación y los contratos."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "¿Quién autoriza las adquisiciones?", "a": "El <b>Comité de TI</b>, según su criticidad y presupuesto."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "Di los ocho pasos del procedimiento.", "a": "Solicitud · Evaluación integral · Evaluación económica · Evaluación del proveedor · Aprobación · Formalización · Seguimiento · Revisión."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "¿Cuánto dura como máximo una excepción de la parte técnica?", "a": "Doce meses, aprobada por el Comité de TI."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "¿Quiénes participan en la evaluación integral?", "a": "<b>TI, CISO, Gestión de Riesgos, Cumplimiento y Finanzas</b>."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "¿Qué exigen las excepciones de la Parte 2?", "a": "Justificación documental, aprobación del <b>Comité de TI</b> y <b>aceptación formal de los riesgos</b>, sin eximir al banco de la ley."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "Di los seis pasos del flujo de la Parte 1.", "a": "Solicitud · Revisión del catálogo · Especificación técnica · Evaluación de alternativas · Dictamen técnico · Registro en el inventario."},
+    {"cat": "8 · Aprobación, seguimiento y revisión", "q": "🙋 ¿Una excepción libera al banco de cumplir la ley?", "a": "No: la excepción no exime al banco de sus obligaciones legales o regulatorias."},
+    {"cat": "FIN · Cierre", "q": "¿Con qué frase cierras?", "a": "«Comprar tecnología en un banco no es solo una decisión de precio.»"},
+    {"cat": "FIN · Cierre", "q": "🙋 ¿Cuál es el objetivo final de la política?", "a": "Que cada adquisición contribuya a los objetivos del PETI de forma estratégica, segura y eficiente."}
+  ];
+
+  var TOTAL = CARDS.length;
+  CARDS.forEach(function(c,i){ c.id = "c" + i; });
+
+  /* ---------------- UTILIDADES ---------------- */
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function norm(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9ñ ]+/g," ").replace(/\s+/g," ").trim(); }
+  function slug(c){ return norm(c).replace(/ /g,"-"); }
+  function ymd(d){ var m = d.getMonth()+1, x = d.getDate(); return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x; }
+  function addDays(base, n){ var d = new Date(base.getFullYear(), base.getMonth(), base.getDate()); d.setDate(d.getDate()+n); return d; }
+  function parseYmd(s){ if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+  var TODAY = ymd(new Date());
+
+  /* ---------------- REPETICIÓN ESPACIADA ----------------
+     status[id] = {lvl, due:"AAAA-MM-DD", last:"easy"|"hard"}
+     Aprendida: 1 → 3 → 7 → 14 días · Difícil: vuelve a 1 día y reaparece al final de la sesión.
+     Con fecha de examen, nada se programa después del día anterior al examen. */
+  var STORE_KEY = "gr_charlapf_flash_v2";
+  var OLD_KEY = "gr_charlapf_flash_v1";
+  var EXAM_KEY = "gr_charlapf_fecha_v1";
+  var STEPS = [1,3,7,14];
+  if(load(EXAM_KEY) === null) save(EXAM_KEY, "2026-11-20");
+
+  var status = load(STORE_KEY);
+  if(!status){
+    status = {};
+    var old = load(OLD_KEY) || {};
+    Object.keys(old).forEach(function(id){
+      if(old[id]==="easy") status[id] = {lvl:1, due:ymd(addDays(new Date(),1)), last:"easy"};
+      else if(old[id]==="hard") status[id] = {lvl:0, due:TODAY, last:"hard"};
+    });
+    save(STORE_KEY, status);
+  }
+  function saveStatus(){ save(STORE_KEY, status); }
+
+  function examEve(){
+    var ex = parseYmd(load(EXAM_KEY));
+    if(!ex) return null;
+    var eve = addDays(ex,-1), today = parseYmd(TODAY);
+    return eve < today ? null : eve;   // examen pasado: sin tope
+  }
+  function schedule(days){
+    var d = addDays(new Date(), days), cap = examEve();
+    if(cap && d > cap) d = cap;
+    return ymd(d);
+  }
+
+  var sessionHard = [];   // ids marcados "Difícil" en esta sesión (reaparecen al final)
+
+  function stateOf(c){ var s = status[c.id]; return s ? s.last : null; }
+  function isDue(c){ var s = status[c.id]; return !s || s.due <= TODAY; }
+
+  /* ---------------- STATE ---------------- */
+  var order = CARDS.map(function(c,i){return i;});
+  var filter = "today";
+  var catFilter = "";
+  var filteredOrder = order.slice();
+  var pos = 0;
+  var flipped = false;
+  var shuffleOn = false;
+
+  /* ---------------- DOM ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var stage = $("stage"), card3d = $("card3d");
+  var qText = $("qText"), aText = $("aText");
+  var tagFront = $("tagFront"), tagBack = $("tagBack");
+  var statusFront = $("statusFront"), statusBack = $("statusBack");
+  var counter = $("counter");
+  var progressFill = $("progressFill");
+  var statLearned = $("statLearned"), statHard = $("statHard"), statNew = $("statNew");
+  var rateRow = $("rateRow"), btnHard = $("btnHard"), btnEasy = $("btnEasy");
+  var btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnShuffle = $("btnShuffle");
+  var tabs = document.querySelectorAll(".tab");
+  var catSel = $("catSel"), examIn = $("examDate");
+
+  // Categorías
+  var CATS = [];
+  CARDS.forEach(function(c){ if(CATS.indexOf(c.cat)<0) CATS.push(c.cat); });
+  CATS.forEach(function(c){ var o = document.createElement("option"); o.value = slug(c); o.textContent = c; catSel.appendChild(o); });
+
+  function statusIcon(c){
+    var s = stateOf(c);
+    if(s === "easy") return "✅";
+    if(s === "hard") return "😅";
+    return "";
+  }
+  function inCat(i){ return !catFilter || slug(CARDS[i].cat) === catFilter; }
+
+  function computeStats(){
+    var learned=0, hard=0, today=0, all=0;
+    CARDS.forEach(function(c,i){
+      if(!inCat(i)) return;
+      all++;
+      var s = stateOf(c);
+      if(s === "easy") learned++;
+      else if(s === "hard") hard++;
+      if(isDue(c) || sessionHard.indexOf(c.id)>=0) today++;
+    });
+    return {learned:learned, hard:hard, news:all-learned-hard, today:today, all:all};
+  }
+
+  function refreshStats(){
+    var st = computeStats();
+    statLearned.textContent = st.learned;
+    statHard.textContent = st.hard;
+    statNew.textContent = st.news;
+    progressFill.style.width = (st.all ? Math.round(st.learned / st.all * 100) : 0) + "%";
+    tabs.forEach(function(t){
+      var f = t.getAttribute("data-filter");
+      if(f==="today") t.textContent = "📅 Hoy · " + st.today;
+      if(f==="all") t.textContent = "Todas · " + st.all;
+    });
+  }
+
+  function buildFilteredOrder(){
+    var base = (shuffleOn ? order : order.slice().sort(function(a,b){return a-b;})).filter(inCat);
+    if(filter === "today"){
+      var first = base.filter(function(i){ return isDue(CARDS[i]) && sessionHard.indexOf(CARDS[i].id)<0; });
+      var again = sessionHard.map(function(id){ return +id.slice(1); }).filter(inCat);
+      filteredOrder = first.concat(again);
+    } else if(filter === "hard"){
+      filteredOrder = base.filter(function(i){ return stateOf(CARDS[i]) === "hard"; });
+    } else if(filter === "learned"){
+      filteredOrder = base.filter(function(i){ return stateOf(CARDS[i]) === "easy"; });
+    } else {
+      filteredOrder = base.slice();
+    }
+  }
+
+  function shuffleArray(arr){
+    for(var i=arr.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+    }
+    return arr;
+  }
+
+  function render(){
+    refreshStats();
+    if(filteredOrder.length === 0){ renderEmpty(); return; }
+    if(pos >= filteredOrder.length) pos = filteredOrder.length - 1;
+    if(pos < 0) pos = 0;
+
+    stage.innerHTML = "";
+    stage.appendChild(card3d);
+
+    var c = CARDS[filteredOrder[pos]];
+    var s = status[c.id];
+    qText.textContent = c.q;
+    aText.innerHTML = c.a;
+    tagFront.textContent = c.cat;
+    tagBack.textContent = c.cat;
+    statusFront.textContent = statusIcon(c);
+    statusBack.textContent = s ? statusIcon(c)+" próx. "+s.due.slice(8)+"/"+s.due.slice(5,7) : "";
+
+    counter.innerHTML = "<b>" + (pos+1) + "</b> de " + filteredOrder.length;
+
+    card3d.classList.remove("flipped");
+    flipped = false;
+    rateRow.classList.remove("show");
+    btnHard.classList.toggle("on", stateOf(c) === "hard");
+    btnEasy.classList.toggle("on", stateOf(c) === "easy");
+    btnPrev.disabled = filteredOrder.length <= 1;
+    btnNext.disabled = filteredOrder.length <= 1;
+  }
+
+  function renderEmpty(){
+    var msg = filter === "learned" ? ["🌱","Aún no marcas tarjetas como aprendidas.<br>Repasa y valora tu progreso."]
+            : filter === "today"   ? ["🎉","¡Nada pendiente para hoy!<br>Vuelve mañana o repasa \"Todas\"."]
+            : filter === "hard"    ? ["🎉","¡No tienes tarjetas por repasar!"]
+            : ["😶","No hay tarjetas en este tema."];
+    stage.innerHTML = '<div class="empty-state"><div class="emoji">'+msg[0]+'</div><p>'+msg[1]+'</p><button id="emptyBack">Ver todas las tarjetas</button></div>';
+    counter.innerHTML = "<b>0</b> de 0";
+    var btn = $("emptyBack");
+    if(btn) btn.addEventListener("click", function(){ setFilter("all"); });
+  }
+
+  function setFilter(f){
+    filter = f;
+    tabs.forEach(function(t){
+      var on = t.getAttribute("data-filter") === f;
+      t.classList.toggle("active", on); t.setAttribute("aria-selected", on?"true":"false");
+    });
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function setCat(sl, fromHash){
+    catFilter = CATS.some(function(c){ return slug(c)===sl; }) ? sl : "";
+    catSel.value = catFilter;
+    if(!fromHash){
+      try{ history.replaceState(null, "", catFilter ? "#cat-"+catFilter : location.pathname + location.search); }catch(e){}
+    }
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  function flipCard(){
+    if(filteredOrder.length === 0) return;
+    flipped = !flipped;
+    card3d.classList.toggle("flipped", flipped);
+    rateRow.classList.toggle("show", flipped);
+  }
+
+  function goNext(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos + 1) % filteredOrder.length;
+    render();
+  }
+  function goPrev(){
+    if(filteredOrder.length === 0) return;
+    pos = (pos - 1 + filteredOrder.length) % filteredOrder.length;
+    render();
+  }
+
+  function setRating(kind){
+    if(filteredOrder.length === 0) return;
+    var c = CARDS[filteredOrder[pos]];
+    var s = status[c.id] || {lvl:0};
+    var k = sessionHard.indexOf(c.id);
+    if(k >= 0) sessionHard.splice(k,1);
+    if(kind === "easy"){
+      var lvl = Math.min((s.last==="easy" ? s.lvl : 0) + 1, STEPS.length);
+      status[c.id] = {lvl:lvl, due:schedule(STEPS[lvl-1]), last:"easy"};
+    } else {
+      status[c.id] = {lvl:0, due:schedule(1), last:"hard"};
+      sessionHard.push(c.id);
+    }
+    saveStatus();
+    btnHard.classList.toggle("on", kind === "hard");
+    btnEasy.classList.toggle("on", kind === "easy");
+    statusFront.textContent = statusIcon(c);
+    refreshStats();
+
+    // avanzar: en "Hoy" la tarjeta sale de la cola (o pasa al final si fue difícil)
+    setTimeout(function(){
+      var cur = filteredOrder[pos];
+      buildFilteredOrder();
+      var at = filteredOrder.indexOf(cur);
+      if(filter === "all") pos = (at >= 0 ? at + 1 : pos) % Math.max(1, filteredOrder.length);
+      else if(at >= 0 && at > pos) pos = pos;            // difícil movida al final: seguir en la misma posición
+      else if(at >= 0) pos = (at + 1) % filteredOrder.length;
+      render();
+    }, 320);
+  }
+
+  function toggleShuffle(){
+    shuffleOn = !shuffleOn;
+    btnShuffle.classList.toggle("on", shuffleOn);
+    if(shuffleOn) shuffleArray(order); else order.sort(function(a,b){return a-b;});
+    pos = 0;
+    buildFilteredOrder();
+    render();
+  }
+
+  /* ---------------- EXPORTAR A ANKI (TSV) ---------------- */
+  function exportAnki(){
+    var clean = function(s){ return String(s).replace(/\t/g," ").replace(/\r?\n/g,"<br>"); };
+    var rows = CARDS.map(function(c){ return clean(c.q) + "\t" + clean(c.a) + "\t" + clean(c.cat); });
+    var blob = new Blob(["#separator:tab\n#html:true\n#tags column:3\n" + rows.join("\n")], {type:"text/tab-separated-values;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "charla_politica_adquisicion.tsv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  }
+
+  /* ---------------- EVENTS ---------------- */
+  card3d.addEventListener("click", flipCard);
+  card3d.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); flipCard(); } });
+  btnNext.addEventListener("click", goNext);
+  btnPrev.addEventListener("click", goPrev);
+  btnShuffle.addEventListener("click", toggleShuffle);
+  btnHard.addEventListener("click", function(e){ e.stopPropagation(); setRating("hard"); });
+  btnEasy.addEventListener("click", function(e){ e.stopPropagation(); setRating("easy"); });
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ setFilter(t.getAttribute("data-filter")); });
+    t.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); setFilter(t.getAttribute("data-filter")); } });
+  });
+  catSel.addEventListener("change", function(){ setCat(catSel.value, false); });
+  $("btnAnki").addEventListener("click", exportAnki);
+  $("btnMore").addEventListener("click", function(){
+    var open = $("tools").classList.toggle("open");
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  examIn.value = load(EXAM_KEY) || "";
+  examIn.addEventListener("change", function(){ save(EXAM_KEY, examIn.value || null); });
+  window.addEventListener("hashchange", function(){
+    var m = location.hash.match(/^#cat-(.+)$/);
+    setCat(m ? decodeURIComponent(m[1]) : "", true);
+  });
+
+  // gestos (izquierda/derecha)
+  var touchStartX = null, touchStartY = null;
+  stage.addEventListener("touchstart", function(e){
+    var t = e.touches[0];
+    touchStartX = t.clientX; touchStartY = t.clientY;
+  }, {passive:true});
+  stage.addEventListener("touchend", function(e){
+    if(touchStartX === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touchStartX, dy = t.clientY - touchStartY;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.4){ if(dx < 0) goNext(); else goPrev(); }
+    touchStartX = null; touchStartY = null;
+  }, {passive:true});
+
+  // atajos de teclado: ← → navegar · espacio girar · 1 difícil · 2 aprendida
+  document.addEventListener("keydown", function(e){
+    var tg = e.target.tagName;
+    if(tg==="INPUT" || tg==="SELECT" || tg==="TEXTAREA" || e.ctrlKey || e.metaKey || e.altKey) return;
+    if(e.key === "ArrowRight") goNext();
+    else if(e.key === "ArrowLeft") goPrev();
+    else if(e.key === " "){ if(tg==="BUTTON") return; e.preventDefault(); flipCard(); }
+    else if(e.key === "1"){ if(!flipped) flipCard(); setRating("hard"); }
+    else if(e.key === "2"){ if(!flipped) flipCard(); setRating("easy"); }
+  });
+
+  /* ---------------- INIT ---------------- */
+  var hm = location.hash.match(/^#cat-(.+)$/);
+  if(hm){ catFilter = decodeURIComponent(hm[1]); catSel.value = catFilter; if(catSel.value !== catFilter) catFilter = ""; }
+  setFilter(hm && catFilter ? "all" : "today");
+
+})();
+</script>
+</body>
+</html>

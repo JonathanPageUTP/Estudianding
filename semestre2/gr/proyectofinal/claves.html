@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Palabras Clave · Política de Adquisición</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:0 16px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+section{margin-top:22px;scroll-margin-top:130px;}
+section h2{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;color:var(--amber);margin-bottom:8px;display:flex;gap:8px;align-items:center;}
+.num{font-size:.7rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:2px 7px;}
+.kws{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.kws span{font-family:var(--mono);font-size:.72rem;color:var(--amber);background:var(--amber-dim);border-radius:7px;padding:3px 8px;}
+.grid{display:grid;gap:8px;grid-template-columns:1fr;}
+@media (min-width:1024px){ .grid{grid-template-columns:1fr 1fr;} }
+.s{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;align-items:flex-start;}
+.k{font-family:var(--mono);font-weight:900;font-size:1rem;color:var(--accent);min-width:74px;max-width:40%;}
+.k.a{color:var(--amber);} .k.c{color:var(--red);} .k.v{color:var(--violet);}
+.b{flex:1;min-width:0;}
+.tt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.x{font-size:.9rem;}
+.x b{color:var(--accent);}
+.m{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+body.prac .x,body.prac .m{filter:blur(6px);cursor:pointer;user-select:none;}
+body.prac .s.rev .x,body.prac .s.rev .m{filter:none;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Palabras clave · <em>Política de Adquisición</em></h1>
+  <button class="btn" type="button" id="prac" aria-pressed="false">🙈 Modo práctica</button>
+</div><nav class="chips" aria-label="Puntos"><a href="#k-intro">0 Intro</a><a href="#k-principios">1 Principios generales</a><a href="#k-hwsw">2 Hardware y software</a><a href="#k-compat">3 Compatibilidad e interoperabilidad</a><a href="#k-seguridad">4 Seguridad</a><a href="#k-costos">5 Costos y costo total de propiedad</a><a href="#k-sostenible">6 Sostenibilidad</a><a href="#k-cumplimiento">7 Cumplimiento normativo y contratos</a><a href="#k-proceso">8 Aprobación, seguimiento y revisión</a><a href="#k-cierre">FIN Cierre</a><a href="#k-secuencia">🧭 Secuencia</a><a href="#k-numeros">🔢 Números</a><a href="#k-noconf">⚠️ No confundir</a></nav></header>
+<main>
+<p class="hint">Lo que no puede faltar en cada punto. Con <b>🙈 Modo práctica</b> se ocultan las definiciones: intenta decirlas y toca para revelar.</p>
+<section id="k-intro"><h2><span class="num">0</span> Intro</h2><div class="kws"><span>responde al PETI</span><span>compra · arriendo · suscripción · renovación</span><span>COBIT 5</span><span>Acuerdo 003-2012</span><span>ISO/IEC 25010</span><span>2 partes</span></div><div class="grid"><div class="s"><span class="k a">4 tipos</span><div class="b"><div class="tt">Alcance de la política</div><div class="x"><b>C</b>ompra · <b>A</b>rrendamiento · <b>S</b>uscripción · <b>R</b>enovación (incluida la nube y PR-02 a PR-09)</div><div class="m">«CASaR»: toda forma de casar al banco con una tecnología</div></div></div><div class="s"><span class="k">C-S-I</span><div class="b"><div class="tt">Marco de referencia</div><div class="x"><b>C</b>OBIT 5 (BAI03, APO03, BAI09) · <b>S</b>BP Acuerdo 003-2012 · <b>I</b>SO/IEC 25010</div><div class="m">«CSI»: la política investiga cada compra como en la serie</div></div></div></div></section>
+<section id="k-principios"><h2><span class="num">1</span> Principios generales</h2><div class="kws"><span>objetivo del PETI</span><span>catálogo de estándares</span><span>costo total de propiedad</span><span>soporte ≥ vida útil</span><span>inventario</span></div><div class="grid"><div class="s"><span class="k">PCCSI</span><div class="b"><div class="tt">Principios generales</div><div class="x"><b>P</b>ETI · <b>C</b>atálogo de estándares · <b>C</b>osto total de propiedad · <b>S</b>oporte ≥ vida útil · <b>I</b>nventario</div><div class="m">«Para Comprar, Compara Sin Improvisar»</div></div></div><div class="s"><span class="k c">TI ≠ CTI</span><div class="b"><div class="tt">Catálogo de estándares</div><div class="x">Gerencia de <b>TI</b> lo mantiene · <b>C</b>omité de <b>TI</b> lo aprueba cada año</div><div class="m">La gerencia escribe, el comité firma</div></div></div></div></section>
+<section id="k-hwsw"><h2><span class="num">2</span> Hardware y software</h2><div class="kws"><span>16 GB · SSD 512 · TPM 2.0</span><span>vida útil 5 años</span><span>licencia válida</span><span>MFA · TLS 1.2</span><span>25-20-15-15-15-10</span><span>menos de 70 se descarta</span></div><div class="grid"><div class="s"><span class="k a">64·16·512</span><div class="b"><div class="tt">Equipos de usuario</div><div class="x"><b>64</b> bits · <b>16</b> GB RAM · SSD <b>512</b> GB · TPM 2.0 · compatible con EDR</div><div class="m">Todo es potencia de 2</div></div></div><div class="s"><span class="k a">3-4-5</span><div class="b"><div class="tt">Garantía y vida útil</div><div class="x"><b>3</b> años de garantía · renovación a los <b>4</b> (equipos) · <b>5</b> años de vida útil (servidores, red, respaldo)</div><div class="m">Contar 3, 4, 5</div></div></div><div class="s"><span class="k">LiSo-SeDa</span><div class="b"><div class="tt">Requisitos de software</div><div class="x"><b>Li</b>cenciamiento · <b>So</b>porte (3 años) · <b>Se</b>guridad (MFA, TLS 1.2) · <b>Da</b>tos y nube</div><div class="m">«Liso como seda»</div></div></div><div class="s"><span class="k a">25·20·15·15·15·10</span><div class="b"><div class="tt">Criterios ponderados</div><div class="x"><b>F</b>uncionalidad 25 · <b>S</b>eguridad 20 · <b>C</b>ompatibilidad 15 · <b>I</b>nteroperabilidad 15 · <b>C</b>osto 15 · <b>S</b>oporte 10 → menos de 70 se descarta</div><div class="m">La función manda, la seguridad sigue, tres quinceañeras y el soporte cierra</div></div></div></div></section>
+<section id="k-compat"><h2><span class="num">3</span> Compatibilidad e interoperabilidad</h2><div class="kws"><span>coexistencia</span><span>interoperabilidad</span><span>prueba de concepto</span><span>dictamen del CISO</span><span>APIs REST · OAuth 2.0</span><span>ISO 20022</span></div><div class="grid"><div class="s"><span class="k c">CO ≠ IN</span><div class="b"><div class="tt">Compatibilidad vs. interoperabilidad (ISO/IEC 25010)</div><div class="x"><b>CO</b>existir sin afectar a otros ≠ <b>IN</b>tercambiar información y usarla bien</div><div class="m">Compañeros de piso (conviven) vs. traductores (se entienden)</div></div></div><div class="s"><span class="k">PoC + CISO</span><div class="b"><div class="tt">Servicios críticos</div><div class="x">APP-01 · APP-02 · INF-02 · INF-03 → <b>prueba de concepto</b> + <b>dictamen técnico</b> revisado por el CISO</div><div class="m">Sin dictamen, no hay compra</div></div></div><div class="s"><span class="k">IIPD</span><div class="b"><div class="tt">Exigencias de interoperabilidad</div><div class="x"><b>I</b>ntegraciones (APIs REST + OAuth 2.0) · <b>I</b>dentidad (SAML 2.0 / OpenID Connect) · <b>P</b>agos (ISO 20022) · <b>D</b>atos (CSV, JSON, XML + syslog)</div><div class="m">«Integrar, Identificar, Pagar y Dar datos»</div></div></div></div></section>
+<section id="k-seguridad"><h2><span class="num">4</span> Seguridad</h2><div class="kws"><span>obligatorio, no opcional</span><span>riesgos · datos · vulnerabilidades · continuidad · terceros</span><span>confidencialidad · integridad · disponibilidad</span><span>dictamen previo del CISO</span></div><div class="grid"><div class="s"><span class="k">RDVCT</span><div class="b"><div class="tt">Requisitos de seguridad</div><div class="x"><b>R</b>iesgos (CID) · <b>D</b>atos · <b>V</b>ulnerabilidades · <b>C</b>ontinuidad · <b>T</b>erceros</div><div class="m">«Revisa De Verdad Cada Tercero»</div></div></div><div class="s"><span class="k">CID</span><div class="b"><div class="tt">Evaluación de riesgos</div><div class="x"><b>C</b>onfidencialidad · <b>I</b>ntegridad · <b>D</b>isponibilidad</div><div class="m">Lo que se protege de la información</div></div></div></div></section>
+<section id="k-costos"><h2><span class="num">5</span> Costos y costo total de propiedad</h2><div class="kws"><span>TCO</span><span>adquisición · implementación · operación · renovación · salida</span><span>justificación económica</span><span>Comité de TI + Gerencia Financiera</span></div><div class="grid"><div class="s"><span class="k">AIORS</span><div class="b"><div class="tt">Componentes del TCO</div><div class="x"><b>A</b>dquisición · <b>I</b>mplementación · <b>O</b>peración · <b>R</b>enovación · <b>S</b>alida</div><div class="m">«Al Inicio, Otro Rato Sale caro»: el precio es solo la A</div></div></div><div class="s"><span class="k">CTI + GF</span><div class="b"><div class="tt">Supera el presupuesto</div><div class="x">Revisión del <b>C</b>omité de <b>TI</b> y la <b>G</b>erencia <b>F</b>inanciera</div><div class="m">Si se pasa de plata, entran los de la plata</div></div></div></div></section>
+<section id="k-sostenible"><h2><span class="num">6</span> Sostenibilidad</h2><div class="kws"><span>eficiencia energética</span><span>durabilidad</span><span>reutilización</span><span>residuos electrónicos</span><span>ISO 14001 · ISO 20400</span></div><div class="grid"><div class="s"><span class="k">EDRRNM</span><div class="b"><div class="tt">Criterios de sostenibilidad</div><div class="x"><b>E</b>ficiencia energética · <b>D</b>urabilidad · <b>R</b>eutilización · <b>R</b>esiduos electrónicos · <b>N</b>ube · <b>M</b>ateriales</div><div class="m">«En Días Raros Reciclo Nubes y Materiales»</div></div></div><div class="s"><span class="k a">14001 · 20400</span><div class="b"><div class="tt">Referencias ambientales</div><div class="x">ISO <b>14001</b> (gestión ambiental) · ISO <b>20400</b> (compras sostenibles)</div><div class="m">La de 14 mil cuida el ambiente; la de 20 mil, las compras</div></div></div></div></section>
+<section id="k-cumplimiento"><h2><span class="num">7</span> Cumplimiento normativo y contratos</h2><div class="kws"><span>003-2012</span><span>007-2011</span><span>Ley 81 · Decreto 285</span><span>Ley 23 de 2015</span><span>8 cláusulas · SLA</span><span>Analista de Cumplimiento</span></div><div class="grid"><div class="s"><span class="k a">3·7·81·285·23</span><div class="b"><div class="tt">Normas aplicables</div><div class="x">Acuerdo <b>003</b>-2012 (riesgo TI) · Acuerdo <b>007</b>-2011 (riesgo operativo) · Ley <b>81</b>-2019 (datos) · Decreto <b>285</b>-2021 · Ley <b>23</b>-2015 (blanqueo) · COBIT 5</div><div class="m">Del más chico al más grande, y la 23 al final</div></div></div><div class="s"><span class="k a">8 cláusulas</span><div class="b"><div class="tt">Contratos con proveedores</div><div class="x">SLA · Confidencialidad · Seguridad e incidentes · Auditoría · Continuidad · Datos y portabilidad · Terminación · Responsabilidades</div><div class="m">Empieza por el servicio y termina por la culpa</div></div></div></div></section>
+<section id="k-proceso"><h2><span class="num">8</span> Aprobación, seguimiento y revisión</h2><div class="kws"><span>8 pasos</span><span>Comité de TI aprueba</span><span>revisión anual</span><span>excepciones máx. 12 meses</span><span>aceptación de riesgos</span></div><div class="grid"><div class="s"><span class="k">S-EEE-AFSR</span><div class="b"><div class="tt">Procedimiento de 8 pasos</div><div class="x"><b>S</b>olicitud · <b>E</b>valuación integral · <b>E</b>conómica · del <b>E</b>proveedor · <b>A</b>probación · <b>F</b>ormalización · <b>S</b>eguimiento · <b>R</b>evisión</div><div class="m">«Si Evalúas En Equipo, Apruebas, Firmas, Sigues y Revisas»</div></div></div><div class="s"><span class="k a">12 m</span><div class="b"><div class="tt">Excepciones</div><div class="x">Justificadas por escrito · Comité de TI · máximo <b>12 meses</b> (Parte 1) · aceptación formal de los riesgos (Parte 2)</div><div class="m">Una excepción dura como mucho un año</div></div></div></div></section>
+<section id="k-cierre"><h2><span class="num">FIN</span> Cierre</h2><div class="kws"><span>no es solo precio</span><span>cuesta más y aumenta el riesgo</span><span>aporta al PETI</span></div><div class="grid"><div class="s"><span class="k c">≠ $</span><div class="b"><div class="tt">Idea de cierre</div><div class="x">Comprar tecnología <b>no es solo una decisión de precio</b></div><div class="m">Lo barato que no se integra sale caro</div></div></div></div></section>
+<section id="k-secuencia"><h2>🧭 SECUENCIA DE LA CHARLA</h2><div class="grid"><div class="s"><span class="k v">PHC · SCSCA</span><div class="b"><div class="tt">Orden de los 8 puntos</div><div class="x">Principios · Hardware y software · Compatibilidad e interoperabilidad | Seguridad · Costos · Sostenibilidad · Cumplimiento · Aprobación</div><div class="m">«Primero Hay que Comprobar · Si Cuesta, Sostén, Cumple y Aprueba»</div></div></div></div></section>
+<section id="k-numeros"><h2>🔢 NÚMEROS Y DATOS CLAVE</h2><div class="grid"><div class="s"><span class="k a">70</span><div class="b"><div class="x">Puntaje mínimo de una alternativa (por debajo se descarta)</div></div></div><div class="s"><span class="k a">25 · 20 · 15 · 15 · 15 · 10</span><div class="b"><div class="x">Pesos: funcionalidad, seguridad, compatibilidad, interoperabilidad, costo total, soporte</div></div></div><div class="s"><span class="k a">64 · 16 · 512</span><div class="b"><div class="x">Bits, GB de RAM y GB de SSD de un equipo de usuario (+ TPM 2.0)</div></div></div><div class="s"><span class="k a">3 · 4 · 5</span><div class="b"><div class="x">Años de garantía, renovación de equipos y vida útil de servidores/red/respaldo</div></div></div><div class="s"><span class="k a">4 h · 24/7</span><div class="b"><div class="x">Reposición de servidores y soporte</div></div></div><div class="s"><span class="k a">3 años</span><div class="b"><div class="x">Mínimo de actualizaciones de seguridad del software</div></div></div><div class="s"><span class="k a">TLS 1.2</span><div class="b"><div class="x">Cifrado mínimo del software</div></div></div><div class="s"><span class="k a">12 meses</span><div class="b"><div class="x">Máximo de una excepción de la Parte 1</div></div></div><div class="s"><span class="k a">5 · 5 · 6</span><div class="b"><div class="x">Requisitos de seguridad · costos del TCO · criterios de sostenibilidad</div></div></div><div class="s"><span class="k a">6 · 8 · 8</span><div class="b"><div class="x">Pasos del flujo de la Parte 1 · cláusulas mínimas · pasos del procedimiento de la Parte 2</div></div></div></div></section>
+<section id="k-noconf"><h2>⚠️ NO CONFUNDIR</h2><div class="grid"><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Compatibilidad ≠ Interoperabilidad</div><div class="x">Coexistir sin afectar a los demás ≠ intercambiar información y usarla correctamente.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Gerencia de TI ≠ Comité de TI</div><div class="x">La Gerencia mantiene el catálogo; el Comité lo aprueba, autoriza compras y excepciones.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">CISO ≠ Analista de Cumplimiento</div><div class="x">El CISO revisa dictámenes técnicos y de seguridad; el Analista verifica normas y contratos.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Acuerdo 003-2012 ≠ 007-2011</div><div class="x">003-2012: riesgo de tecnología de la información. 007-2011: riesgo operativo.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Ley 81 ≠ Ley 23</div><div class="x">Ley 81 de 2019: datos personales. Ley 23 de 2015: blanqueo de capitales.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">OAuth 2.0 ≠ SAML 2.0 / OpenID Connect</div><div class="x">OAuth 2.0 protege las APIs; SAML y OpenID Connect dan el inicio de sesión único.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Flujo Parte 1 (6) ≠ Procedimiento Parte 2 (8)</div><div class="x">Parte 1: solicitud → inventario. Parte 2: solicitud → revisión.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Garantía 3 ≠ renovación 4 ≠ vida útil 5</div><div class="x">Equipos de usuario: 3 de garantía y renovación a los 4. Servidores, red y respaldo: 5 de vida útil.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Requisito obligatorio ≠ criterio que suma puntos</div><div class="x">Los requisitos de seguridad son obligatorios; además, la seguridad pesa 20 de 100 al comparar alternativas.</div></div></div></div></section>
+<footer>Palabras clave generadas solo a partir de Proyecto Final GRTIC 1LS241 (1).pdf · UTP · FISC · uso académico.</footer>
+</main>
+<script>
+(function(){
+  var b = document.getElementById("prac");
+  b.addEventListener("click", function(){ var on = document.body.classList.toggle("prac"); b.setAttribute("aria-pressed", on); b.textContent = on ? "👀 Mostrar todo" : "🙈 Modo práctica"; document.querySelectorAll(".s.rev").forEach(function(s){ s.classList.remove("rev"); }); });
+  document.querySelectorAll(".s").forEach(function(s){ s.addEventListener("click", function(){ if(document.body.classList.contains("prac")) s.classList.toggle("rev"); }); });
+})();
+</script>
+</body>
+</html>
