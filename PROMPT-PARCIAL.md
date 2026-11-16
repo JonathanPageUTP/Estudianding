@@ -1,4 +1,4 @@
-# Prompt: material de estudio de un parcial (modelo `semestre2/gr/parcial1`)
+# Prompt: material de estudio de un parcial (modelo `semestre2/gr/parcial2`)
 
 Copia el bloque de abajo, cambia los valores entre `<…>` y pégalo en Claude Code.
 Ejemplo: `Aplica PROMPT-PARCIAL.md a semestre2/gr/parcial2, materia "Gerencia de Recursos de TIC", sigla GR, parcial 2`.
@@ -17,7 +17,8 @@ Lee PROMPT-PARCIAL.md y aplícalo a:
 - Fecha del examen: <dd/mm/aaaa>          (opcional, para el plan de repaso espaciado)
 - PDF principal (define el orden): <nombre del PDF>   (si no lo indico, elige el más completo y dímelo)
 
-Usa como referencia de diseño y estructura semestre2/gr/parcial1. Todo el contenido
+Usa como referencia de diseño y estructura semestre2/gr/parcial2 (incluida la carpeta
+audio/: copia voz.js y los generadores). Todo el contenido
 sale SOLO de los PDF que están en la carpeta: no inventes datos.
 ```
 
@@ -38,7 +39,9 @@ tablet y PC).
 | `siglas.html` | Siglas y Mnemotecnias | Siglas inventadas + mnemotecnias, con modo práctica |
 | `siglas-titulos.html` | Siglas con Títulos | Igual que `siglas.html` + el título del PDF de cada sigla |
 | `parcial.html` | Simulacro de Parcial | Examen simulado de 100 puntos (y mini simulacro) con temporizador, calificación y verificación inmediata opcional |
+| `dudas.html` | Mis Dudas | Mis preguntas mientras estudio, explicadas corto y simple (empieza vacía, se llena después) |
 | `index.html` | — | Menú del parcial (ver abajo) |
+| `audio/` | — | Reproductor compartido `voz.js`, generadores de MP3 y los MP3 de cada página (ver *Lectura en voz alta*) |
 
 Además: si la materia aún no enlaza este parcial, agrega el botón en `<materia>/index.html`.
 
@@ -59,9 +62,12 @@ Además: si la materia aún no enlaza este parcial, agrega el botón en `<materi
    preguntas de aprendizaje activo (🎯, 🤔, 🧠, repaso mezclado) y sus respuestas también salen
    solo de los PDF.
 4. Generar las páginas, luego el `index.html`, luego revisar (ver *Verificación*).
-5. Commit por página o por bloque, con mensajes como los del historial:
+5. Generar los MP3 (`python audio/generar_paginas.py` y, si hay dudas, `python audio/generar_audio.py`)
+   y commitearlos junto con los `audio/*.js`.
+6. Commit por página o por bloque, con mensajes como los del historial:
    `Parcial <N> <SIGLA>: guía, flashcards, resúmenes, siglas y simulacro`.
-6. Hacer push.
+   Las dudas van una por commit: `Dudas <SIGLA> P<N>: #NN <tema>`.
+7. Hacer push.
 
 ## Estilo visual común (páginas de estudio)
 
@@ -128,20 +134,47 @@ para ambos casos y priorizar **recordar activamente** sobre releer.
   - Aviso de una línea: "Teléfono fuera de la vista y notificaciones en silencio".
   - Temporizador opcional que sugiere una pausa cada 25–30 min.
 
-### Lectura en voz alta (`guia.html` y `resumen-express.html`)
+### Lectura en voz alta con MP3 (`guia.html`, `resumen.html`, `resumen-express.html` y `dudas.html`)
 
-- Botón **🔊 Escuchar** por sección usando `speechSynthesis`:
-  - Voz `es-*`, velocidad ajustable de 0.9× a 1.3×, pausar y reanudar.
-  - Botones del reproductor **solo con icono** (⏸ / ▶ y ⏹), con `aria-label` para accesibilidad.
-  - **No usar `speechSynthesis.pause()` / `resume()`**: en Chrome de Android el reanudar no
-    funciona. Pausar = `speechSynthesis.cancel()` recordando el párrafo actual (que queda
-    resaltado); reanudar = volver a leer ese mismo párrafo y seguir. Ignorar el `onend`/`onerror`
-    de la frase cancelada (contador de generación) para que no salte al siguiente párrafo.
-  - Resalta el párrafo que se está leyendo.
-  - Si el navegador no tiene `speechSynthesis`, ocultar el botón.
-- Lo que se lee debe sonar bien: sin emojis, y los símbolos (→, ≥, ≠, ·) dichos en palabras.
-  Las siglas se expanden la primera vez. Cuando el texto visible tenga símbolos, poner la
-  versión hablada en `data-tts`.
+La voz del navegador (`speechSynthesis`) **se corta al apagar la pantalla del teléfono**. Por eso
+cada página trae audio MP3 pregenerado, que sigue sonando con la pantalla apagada y en el bus.
+
+- **Reproductor compartido `audio/voz.js`** (guía, resumen y resumen express), configurado con
+  `Voz.init({sections, key, title, blocks, skip, target, onOpen, playerId, btnClass, allTarget,
+  rateKey, artist})`. Cada página carga antes su manifiesto `<script src="audio/<pagina>.js">`
+  (define `window.VOZ_AUDIO`) y luego `<script src="audio/voz.js">`.
+  - Si la sección tiene MP3 en `VOZ_AUDIO`, lo reproduce con `<audio>` y **Media Session**
+    (título y controles en la pantalla de bloqueo: play/pausa, anterior/siguiente, detener).
+  - Si no hay MP3, usa `speechSynthesis` como respaldo. Si no hay ninguno de los dos, no se
+    muestra el botón.
+  - Botón **🔊 Escuchar** por sección: lee esa sección y sigue con las siguientes, como un
+    podcast. Botón **🎧 Escuchar todo** en la barra.
+  - Reproductor fijo con botones **solo con icono** (⏮ ⏸/▶ ⏭ ⏹) y `aria-label`, y velocidad
+    de 0.8× a 1.3× guardada en `<sigla>_tts_rate_v1`. En pantallas ≤ 430px se oculta el título.
+  - Resalta el bloque que se está oyendo usando los tiempos de inicio del manifiesto (`t`), y
+    abre la sección (`onOpen`) si estaba plegada.
+  - Respaldo `speechSynthesis`: **no usar `pause()` / `resume()`** (en Chrome de Android el
+    reanudar no funciona). Pausar = `cancel()` recordando el párrafo actual (queda resaltado);
+    reanudar = volver a leer ese párrafo. Ignorar el `onend`/`onerror` de la frase cancelada
+    (contador de generación) para que no salte al siguiente.
+- **Generar los MP3**: `python audio/generar_paginas.py [guia|resumen|resumen-express]`
+  (`pip install edge-tts playwright`, usa el Edge o Chrome instalado).
+  - Abre la página sin ventana, pide a `Voz.dump()` los textos exactos que se leen (así el
+    resaltado coincide) y sintetiza cada bloque con la voz neural **`es-PA-MargaritaNeural`**.
+  - Crea `audio/<pagina>/<seccion>.mp3` (clave = `id` de la sección) y `audio/<pagina>.js` con
+    `{src, t:[inicio de cada bloque], h:hash}`. Solo regenera las secciones cuyo texto cambió y
+    borra los MP3 de secciones que ya no existen.
+  - Al agregar otra página con voz, añadirla a `PAGES` en el script.
+  - **Cada vez que se edite el texto de una de esas páginas, volver a correr el script y
+    commitear los MP3 y el `.js`.**
+- `dudas.html` tiene su propio reproductor (mismo comportamiento) y su generador
+  `audio/generar_audio.py` (lee el HTML con BeautifulSoup, crea `audio/dudaNN.mp3` y
+  `audio/dudas.js` con `window.DUDAS_AUDIO`), con botón 🎧 Escuchar todas.
+- Lo que se lee debe sonar bien: sin emojis, y los símbolos (→, ↔, ≥, ≠, ×, %, ·) dichos en
+  palabras; RRHH = "recursos humanos", TI = "T I". Las siglas se expanden la primera vez en
+  cada sección (diccionario `EXPAND` en `voz.js` y en `generar_audio.py`: ampliarlo con las
+  siglas de la materia nueva). Cuando el texto visible tenga símbolos raros, poner la versión
+  hablada en `data-tts`.
 
 ### Aprendizaje activo en `guia.html`
 
@@ -179,7 +212,7 @@ Cierre de la guía, antes del mapa mental:
   tablas, acordeones para detalle, flujos de pasos numerados, cajas `mnemo` (palabra
   mnemotécnica grande + explicación), cajas `error` ("no confundir"), glosario desplegable.
   Más los bloques 🎯 / 🤔 / 🧠 descritos en *Aprendizaje activo*.
-- Botón 🔊 Escuchar por sección.
+- Botón 🔊 Escuchar por sección y 🎧 Escuchar todo, con MP3 (ver *Lectura en voz alta*).
 - Al final: cierre activo (repaso mezclado, explícalo en 3 frases, plan de repaso espaciado,
   frase de arranque) y mapa mental de cierre.
 
@@ -214,13 +247,16 @@ Cierre de la guía, antes del mapa mental:
   sección, secciones plegables `<section class="section" data-nav="🧭 Tema">` con resumen
   denso y cajas `.mnemo`. Última sección: glosario y acrónimos.
 - En PC, la navegación por secciones va en una barra lateral fija.
+- Botón 🔊 Escuchar por sección con MP3 (`audio/voz.js`, manifiesto `audio/resumen.js`).
 
 ### `resumen-express.html` — Resumen express
 - "Todo **<PDF principal>**, en su orden, lo más corto posible. Toca un título para plegarlo."
 - Chips de navegación, botón **Plegar todo**, etiquetas de unidad, secciones numeradas
   plegables (`1 El curso ▾`). Viñetas cortas, sin párrafos. Cubre el PDF entero.
-- Interruptor de modo 🏢/🚌 (en Transporte: "Continuar donde quedé" y secciones plegadas) y
-  botón 🔊 Escuchar por sección.
+- Interruptor de modo 🏢/🚌 (en Transporte: "Continuar donde quedé" y secciones plegadas).
+- Botón 🔊 Escuchar por sección y 🎧 Escuchar todo **con MP3** (`audio/voz.js`, manifiesto
+  `audio/resumen-express.js`, carpeta `audio/resumen-express/`), para repasarlo completo
+  con la pantalla apagada.
 
 ### `siglas.html` — Siglas y mnemotecnias
 - Header con botón **🙈 Modo práctica** (oculta los significados para adivinarlos; tocar una
@@ -303,6 +339,27 @@ Cierre de la guía, antes del mapa mental:
   "📘 Repasar en la guía", "← Índice del parcial".
 - Pie: "Simulacro generado solo a partir de los <n> PDF del Parcial <N> · UTP · FISC · uso académico."
 
+### `dudas.html` — Mis dudas
+- Mismo estilo blanco/negro que `index.html` (modo oscuro con luna/sol y `localStorage("theme")`,
+  botones ← al índice del parcial y ⌂ al inicio). Título "Mis Dudas" y subtítulo "Preguntas que
+  surgieron estudiando el Parcial <N> · <Materia>".
+- Se crea **vacía**, con mensaje de estado vacío y una plantilla comentada:
+  ```html
+  <details class="qa">
+    <summary><span class="num">01</span>Pregunta <span class="tema">Tema</span></summary>
+    <div class="ans">
+      <p>Respuesta…</p>
+      <div class="clave"><b>Para memorizar</b>…</div>
+      <div class="clave"><b>Ojo en el examen</b>…</div>
+    </div>
+  </details>
+  ```
+- Buscador (se oculta si no hay dudas) con mensaje de sin resultados.
+- Cuando pida explicar una duda: **corto y simple**, legible en menos de un minuto: la idea en
+  una frase, una analogía concreta, una tabla pequeña o 3–5 viñetas, una mnemotecnia y una
+  trampa de examen. Nada de explicaciones largas con muchas secciones. Todo fiel al PDF.
+- 🔊 por duda y 🎧 Escuchar todas, con MP3 (`python audio/generar_audio.py` tras cada duda).
+
 ### `index.html` — Menú del parcial
 Copiar `semestre2/gr/parcial1/index.html` (estilo blanco/negro minimalista, modo oscuro con
 botón luna/sol y `localStorage("theme")`, botones circulares de volver ← y de inicio ⌂),
@@ -310,7 +367,7 @@ asegurando que cumpla *Diseño responsive*, y cambiar solo:
 - `<title>Parcial <N> | <Materia></title>` y el `<h1>` con el nombre de la materia.
 - Enlaces: volver = `../index.html`, inicio = `../../../index.html`.
 - Botones en este orden: Guia, FlashCards, Resumen, Resumen Express, Siglas y Mnemotecnias,
-  Siglas con Títulos, Simulacro de Parcial; luego `<div class="separator"></div>` y un botón
+  Siglas con Títulos, Simulacro de Parcial, Mis Dudas; luego `<div class="separator"></div>` y un botón
   por cada PDF (`<Nombre corto> (PDF)`), con el PDF principal primero.
 
 ## Verificación antes de terminar
@@ -324,8 +381,12 @@ asegurando que cumpla *Diseño responsive*, y cambiar solo:
   trae `table{min-width:520px}`: cambiarlo a `0` para que las tablas quepan en el teléfono.
 - Probar `guia.html` y `resumen-express.html` en ambos modos (🏢/🚌): los bloques, las pausas y
   "Continuar donde quedé" funcionan, y ninguna respuesta se ve sin tocarla.
-- El botón 🔊 lee en español, pausa y reanuda (también en el teléfono: al reanudar repite el
-  párrafo donde quedó) y se oculta si no hay `speechSynthesis`.
+- Audio: cada sección de la guía, el resumen y el resumen express tiene su MP3 (el script
+  muestra "N bloques, X min" por sección y ningún error JS). Al tocar 🔊 suena el MP3, se
+  resalta el bloque correcto, ⏮/⏭ cambian de sección, sigue sonando con la pantalla apagada y
+  aparecen los controles en la pantalla de bloqueo. Sin MP3, la voz del navegador pausa y
+  reanuda (en el teléfono repite el párrafo donde quedó). Los MP3 y `audio/*.js` están
+  commiteados.
 - `flash.html`: en el teléfono (probar 412×740, 412×600 y 360×560, con la tarjeta girada) no
   hay scroll de página y los botones de abajo se ven completos; la pestaña "Hoy" respeta las fechas, el progreso de `_v1` se migra, el TSV se
   descarga, el filtro por `#cat-…` funciona y los atajos de teclado responden en PC.
