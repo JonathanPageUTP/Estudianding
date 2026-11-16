@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Mis Pokémon · PokeMMO</title>
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.form{display:grid;gap:10px;grid-template-columns:1fr 1fr;}
+@media (min-width:768px){ .form{grid-template-columns:2fr 1fr 2fr 2fr;} }
+.form input,.form select{width:100%;}
+.st{overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:12px;}
+.st table{min-width:0;}
+.st th,.st td{text-align:center;padding:6px 4px;}
+.st td:first-child,.st th:first-child{text-align:left;padding-left:10px;white-space:nowrap;}
+.st input{min-height:40px;width:100%;min-width:52px;max-width:76px;text-align:center;padding:0 4px;}
+.ivq{font-family:var(--mono);font-weight:800;font-size:.74rem;display:block;}
+.q0{color:var(--red);} .q1{color:var(--orange);} .q2{color:var(--accent);} .q3{color:var(--green);} .q4{color:var(--green);text-decoration:underline;}
+.fin{font-family:var(--mono);font-weight:800;font-size:1rem;color:var(--text);}
+.fin.up{color:var(--red);} .fin.down{color:var(--blue);}
+.unused td{opacity:.55;}
+.sum{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.sum span{font-size:.82rem;border-radius:10px;padding:6px 10px;background:var(--surface-2);border:1px solid var(--line);}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+#an p{margin-top:6px;}
+.mine{display:grid;gap:10px;grid-template-columns:1fr;}
+@media (min-width:561px){ .mine{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .mine{grid-template-columns:repeat(3,1fr);} }
+.pk{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;}
+.pk h3{display:flex;justify-content:space-between;gap:6px;font-size:1rem;}
+.pk .meta{font-size:.8rem;color:var(--faint);}
+.pk .ivs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.pk .ivs span{font-family:var(--mono);font-size:.74rem;border-radius:6px;padding:2px 6px;background:var(--surface-2);}
+.pk .row{display:flex;gap:6px;margin-top:8px;}
+.pk .row .btn{min-height:38px;padding:4px 10px;font-size:.78rem;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Mis <em>Pokémon</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#calc">🧮 Calculadora</a><a href="#mis">📦 Mis Pokémon</a></nav></header>
+<main>
+
+<p class="lead">Escribe los datos de tu Pokémon y te digo qué tan bueno es, si su naturaleza le conviene y cuánto valen sus estadísticas. Se guarda solo en este dispositivo.</p>
+<section id="calc">
+  <h2>🧮 Calculadora</h2>
+  <div class="card">
+    <div class="form">
+      <label class="f">Nombre o apodo<input id="nm" type="text" placeholder="Krokorok"></label>
+      <label class="f">Nivel<input id="lv" type="number" min="1" max="100" value="50" inputmode="numeric"></label>
+      <label class="f">Naturaleza<select id="nat"></select></label>
+      <label class="f">¿Cómo ataca?<select id="rol"><option value="fis">💪 Físico</option><option value="esp">🔮 Especial</option><option value="mix">⚔️ Los dos</option></select></label>
+    </div>
+    <div class="st"><table><thead><tr><th>Stat</th><th>Base<br><small>(Pokédex)</small></th><th>IV<br><small>0–31</small></th><th>EV<br><small>0–252</small></th><th>Final</th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div class="sum" id="sum"></div>
+    <div id="an"></div>
+    <div class="actions">
+      <button class="btn pri" type="button" id="save">💾 Guardar en Mis Pokémon</button>
+      <button class="btn" type="button" id="ex">🐊 Cargar ejemplo (Krokorok)</button>
+      <button class="btn" type="button" id="clr">↺ Limpiar</button>
+    </div>
+    <p style="font-size:.78rem;color:var(--faint);margin-top:8px">Las estadísticas <b>base</b> son de la especie (búscalas en la Pokédex del juego). Si no las pones, igual te analizo IVs, EVs y naturaleza.</p>
+  </div>
+</section>
+<section id="mis">
+  <h2>📦 Mis Pokémon</h2>
+  <div class="mine" id="mine"></div>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script>
+(function(){
+"use strict";
+var NAT = [{"es": "Fuerte", "en": "Hardy", "up": null, "down": null}, {"es": "Huraña", "en": "Lonely", "up": "atk", "down": "def"}, {"es": "Audaz", "en": "Brave", "up": "atk", "down": "spe"}, {"es": "Firme", "en": "Adamant", "up": "atk", "down": "spa"}, {"es": "Pícara", "en": "Naughty", "up": "atk", "down": "spd"}, {"es": "Osada", "en": "Bold", "up": "def", "down": "atk"}, {"es": "Dócil", "en": "Docile", "up": null, "down": null}, {"es": "Plácida", "en": "Relaxed", "up": "def", "down": "spe"}, {"es": "Agitada", "en": "Impish", "up": "def", "down": "spa"}, {"es": "Floja", "en": "Lax", "up": "def", "down": "spd"}, {"es": "Miedosa", "en": "Timid", "up": "spe", "down": "atk"}, {"es": "Activa", "en": "Hasty", "up": "spe", "down": "def"}, {"es": "Seria", "en": "Serious", "up": null, "down": null}, {"es": "Alegre", "en": "Jolly", "up": "spe", "down": "spa"}, {"es": "Ingenua", "en": "Naive", "up": "spe", "down": "spd"}, {"es": "Modesta", "en": "Modest", "up": "spa", "down": "atk"}, {"es": "Afable", "en": "Mild", "up": "spa", "down": "def"}, {"es": "Mansa", "en": "Quiet", "up": "spa", "down": "spe"}, {"es": "Tímida", "en": "Bashful", "up": null, "down": null}, {"es": "Alocada", "en": "Rash", "up": "spa", "down": "spd"}, {"es": "Serena", "en": "Calm", "up": "spd", "down": "atk"}, {"es": "Amable", "en": "Gentle", "up": "spd", "down": "def"}, {"es": "Grosera", "en": "Sassy", "up": "spd", "down": "spe"}, {"es": "Cauta", "en": "Careful", "up": "spd", "down": "spa"}, {"es": "Rara", "en": "Quirky", "up": null, "down": null}], SN = {"hp": "PS", "atk": "Ataque", "def": "Defensa", "spa": "At. Esp.", "spd": "Def. Esp.", "spe": "Velocidad"};
+var K = ["hp","atk","def","spa","spd","spe"], EN = {hp:"HP",atk:"Atk",def:"Def",spa:"SpA",spd:"SpD",spe:"Spe"};
+var KEY = "pokemmo_mis_v1", editing = null;
+function $(id){ return document.getElementById(id); }
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
+function store(v){ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+NAT.forEach(function(n){ var o = document.createElement("option"); o.value = n.es; o.textContent = n.es + " (" + n.en + ")" + (n.up ? " · +" + SN[n.up] + " −" + SN[n.down] : " · neutra"); $("nat").appendChild(o); });
+$("nat").value = "Seria";
+$("rows").innerHTML = K.map(function(k){ return '<tr id="r-'+k+'"><td><b>'+SN[k]+'</b> <small style="color:var(--faint)">'+EN[k]+'</small></td>'+
+  '<td><input type="number" min="1" max="255" inputmode="numeric" data-k="'+k+'" data-t="b" aria-label="Base '+SN[k]+'"></td>'+
+  '<td><input type="number" min="0" max="31" inputmode="numeric" data-k="'+k+'" data-t="iv" aria-label="IV '+SN[k]+'"><span class="ivq" id="q-'+k+'"></span></td>'+
+  '<td><input type="number" min="0" max="252" step="4" inputmode="numeric" data-k="'+k+'" data-t="ev" value="0" aria-label="EV '+SN[k]+'"></td>'+
+  '<td><span class="fin" id="f-'+k+'">—</span></td></tr>'; }).join("");
+function val(k, t){ var el = document.querySelector('input[data-k="'+k+'"][data-t="'+t+'"]'); var v = el.value === "" ? null : +el.value; return v; }
+function setv(k, t, v){ document.querySelector('input[data-k="'+k+'"][data-t="'+t+'"]').value = v == null ? "" : v; }
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+function quality(iv){ if(iv == null) return ["", ""]; if(iv === 31) return ["q4","perfecto"]; if(iv >= 26) return ["q3","muy bueno"]; if(iv >= 20) return ["q2","bueno"]; if(iv >= 10) return ["q1","regular"]; return ["q0","malo"]; }
+function nature(){ var s = $("nat").value; return NAT.filter(function(n){ return n.es === s; })[0]; }
+function unused(rol){ return rol === "fis" ? "spa" : rol === "esp" ? "atk" : null; }
+function calc(k, b, iv, ev, lv, n){
+  var core = Math.floor((2*b + iv + Math.floor(ev/4)) * lv / 100);
+  if(k === "hp") return core + lv + 10;
+  var m = n.up === k ? 1.1 : n.down === k ? 0.9 : 1;
+  return Math.floor((core + 5) * m);
+}
+function read(){
+  var d = {name: $("nm").value.trim(), lv: clamp(+$("lv").value || 50, 1, 100), nat: $("nat").value, rol: $("rol").value, b:{}, iv:{}, ev:{}};
+  K.forEach(function(k){ d.b[k] = val(k,"b"); d.iv[k] = val(k,"iv"); d.ev[k] = val(k,"ev") || 0; });
+  return d;
+}
+function analyze(){
+  var d = read(), n = nature(), un = unused(d.rol), ivT = 0, ivN = 0, evT = 0, msgs = [];
+  K.forEach(function(k){
+    var iv = d.iv[k], q = quality(iv);
+    $("q-"+k).className = "ivq " + q[0]; $("q-"+k).textContent = q[1];
+    if(iv != null){ ivT += clamp(iv,0,31); ivN++; }
+    evT += clamp(d.ev[k],0,252);
+    $("r-"+k).classList.toggle("unused", k === un);
+    var f = $("f-"+k);
+    if(d.b[k]){ f.textContent = calc(k, d.b[k], clamp(iv == null ? 0 : iv,0,31), clamp(d.ev[k],0,252), d.lv, n); }
+    else f.textContent = "—";
+    f.className = "fin" + (n.up === k ? " up" : n.down === k ? " down" : "");
+  });
+  var sum = [];
+  if(ivN) sum.push("🧬 IVs: <b>" + ivT + "/" + (ivN*31) + "</b> (" + Math.round(ivT/(ivN*31)*100) + " %)");
+  sum.push("🏋️ EVs: <b>" + evT + "/510</b>" + (evT > 510 ? ' <span style="color:var(--red)">¡te pasaste!</span>' : " · te quedan " + (510-evT)));
+  sum.push("🎭 " + n.es + (n.up ? ': <span class="up">+' + SN[n.up] + '</span> <span class="down">−' + SN[n.down] + '</span>' : ": neutra"));
+  $("sum").innerHTML = sum.map(function(s){ return "<span>" + s + "</span>"; }).join("");
+  /* consejos */
+  var main = d.rol === "fis" ? "atk" : d.rol === "esp" ? "spa" : null;
+  if(!n.up) msgs.push(["tip","🎭 Naturaleza neutra: no le ayuda ni le perjudica. Para este Pokémon sería mejor " + (d.rol === "fis" ? "<b>Firme</b> o <b>Alegre</b>" : d.rol === "esp" ? "<b>Modesta</b> o <b>Miedosa</b>" : "<b>Ingenua</b> o <b>Activa</b>") + "."]);
+  else if(un && n.down === un) msgs.push(["ok","🎭 Buena naturaleza: baja el " + SN[un] + ", que no usa" + (n.up === main || n.up === "spe" ? ", y sube " + SN[n.up] + "." : ".")]);
+  else if(main && n.down === main) msgs.push(["warn","🎭 Mala naturaleza: le baja el " + SN[main] + ", que es justo lo que usa para atacar."]);
+  else if(un && n.up === un) msgs.push(["warn","🎭 Le sube el " + SN[un] + ", que no usa. Mejor una que baje esa estadística."]);
+  else msgs.push(["tip","🎭 Naturaleza aceptable: sube " + SN[n.up] + " y baja " + SN[n.down] + "."]);
+  if(un && d.iv[un] != null) msgs.push(["tip","🧬 Su IV de " + SN[un] + " (" + d.iv[un] + ") <b>no importa</b>: no usa esa estadística."]);
+  var bad = K.filter(function(k){ return k !== un && d.iv[k] != null && d.iv[k] < 10; });
+  if(bad.length) msgs.push(["warn","🧬 IV bajo en " + bad.map(function(k){ return SN[k]; }).join(", ") + ". En la historia se nota poco; en competitivo, sí."]);
+  var best = K.filter(function(k){ return d.iv[k] === 31; });
+  if(best.length) msgs.push(["ok","🧬 IV perfecto (31) en " + best.map(function(k){ return SN[k]; }).join(", ") + "."]);
+  var over = K.filter(function(k){ return d.ev[k] > 252; });
+  if(over.length) msgs.push(["warn","🏋️ Máximo 252 EVs por estadística (" + over.map(function(k){ return SN[k]; }).join(", ") + ")."]);
+  if(main && evT < 510) msgs.push(["tip","🏋️ Para competitivo, el reparto típico es <b>252 " + SN[main] + " + 252 Velocidad + 4 PS</b>."]);
+  if(!K.some(function(k){ return d.b[k]; })) msgs.push(["tip","📊 Pon las estadísticas <b>base</b> de la especie para ver los valores finales."]);
+  $("an").innerHTML = msgs.map(function(m){ return '<div class="' + m[0] + '">' + m[1] + '</div>'; }).join("");
+}
+document.querySelector("#calc .card").addEventListener("input", analyze);
+function fill(d){
+  $("nm").value = d.name || ""; $("lv").value = d.lv || 50; $("nat").value = d.nat || "Seria"; $("rol").value = d.rol || "fis";
+  K.forEach(function(k){ setv(k,"b",d.b ? d.b[k] : null); setv(k,"iv",d.iv ? d.iv[k] : null); setv(k,"ev",d.ev ? d.ev[k] : 0); });
+  analyze();
+}
+$("ex").addEventListener("click", function(){
+  editing = null;
+  fill({name:"Krokorok (ejemplo)", lv:30, nat:"Firme", rol:"fis", b:{hp:60,atk:82,def:45,spa:45,spd:45,spe:74}, iv:{hp:26,atk:17,def:4,spa:26,spd:15,spe:31}, ev:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}});
+});
+$("clr").addEventListener("click", function(){ editing = null; fill({}); $("save").textContent = "💾 Guardar en Mis Pokémon"; });
+function render(){
+  var L = load();
+  $("mine").innerHTML = L.length ? L.map(function(d, i){
+    var n = NAT.filter(function(m){ return m.es === d.nat; })[0] || NAT[12], t = 0, c = 0;
+    var ivs = K.map(function(k){ var iv = d.iv[k]; if(iv != null){ t += iv; c++; } var q = quality(iv); return '<span class="'+q[0]+'">'+EN[k]+' '+(iv == null ? "?" : iv)+'</span>'; }).join("");
+    return '<div class="pk"><h3><span>' + esc(d.name || "Sin nombre") + '</span><span class="pill">Nv. ' + d.lv + '</span></h3>' +
+      '<div class="meta">' + n.es + (n.up ? ' · <span class="up">+' + SN[n.up] + '</span> <span class="down">−' + SN[n.down] + '</span>' : ' · neutra') + ' · ' + ({fis:"físico",esp:"especial",mix:"mixto"}[d.rol]) + (c ? ' · IVs ' + t + '/' + (c*31) : '') + '</div>' +
+      '<div class="ivs">' + ivs + '</div><div class="row"><button class="btn" type="button" data-e="'+i+'">✏️ Ver / editar</button><button class="btn" type="button" data-d="'+i+'">🗑 Borrar</button></div></div>';
+  }).join("") : '<p class="lead">Aún no guardas ninguno. Llena la calculadora y toca 💾 Guardar.</p>';
+}
+$("save").addEventListener("click", function(){
+  var d = read(), L = load();
+  if(!d.name){ $("nm").focus(); $("nm").placeholder = "Ponle un nombre"; return; }
+  if(editing != null && L[editing]) L[editing] = d; else L.push(d);
+  store(L); editing = null; $("save").textContent = "💾 Guardar en Mis Pokémon"; render();
+  $("mis").scrollIntoView({behavior:"smooth"});
+});
+$("mine").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if(!b) return; var L = load();
+  if(b.hasAttribute("data-d")){ var i = +b.getAttribute("data-d"); if(confirm("¿Borrar a " + (L[i].name || "este Pokémon") + "?")){ L.splice(i,1); store(L); render(); } }
+  if(b.hasAttribute("data-e")){ editing = +b.getAttribute("data-e"); fill(L[editing]); $("save").textContent = "💾 Guardar cambios"; $("calc").scrollIntoView({behavior:"smooth"}); }
+});
+analyze(); render();
+})();
+</script>
+</body>
+</html>

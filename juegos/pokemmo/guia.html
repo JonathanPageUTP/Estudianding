@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Guía · Entender a tu Pokémon</title>
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.hero{background:linear-gradient(135deg,var(--surface),var(--violet-dim));border:1px solid var(--line);border-radius:16px;padding:18px;}
+.hero h2{font-size:clamp(1.2rem,1rem + 1vw,1.7rem);margin-bottom:6px;}
+.hero p{color:var(--dim);max-width:70ch;}
+.atleta{display:grid;gap:8px;grid-template-columns:1fr;margin-top:12px;}
+@media (min-width:561px){ .atleta{grid-template-columns:repeat(5,1fr);} }
+.atleta div{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;}
+.atleta .e{font-size:1.6rem;} .atleta b{display:block;color:var(--accent);} .atleta span{font-size:.82rem;color:var(--dim);}
+.bars .row{display:grid;grid-template-columns:110px 1fr 54px;gap:8px;align-items:center;margin:6px 0;font-size:.86rem;}
+.bars .bar{height:14px;border-radius:8px;background:var(--surface-2);overflow:hidden;}
+.bars .bar i{display:block;height:100%;border-radius:8px;}
+.bars .v{font-family:var(--mono);text-align:right;color:var(--text);}
+.iv{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.iv span{font-family:var(--mono);font-size:.8rem;border-radius:8px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line);}
+.formula{font-family:var(--mono);font-size:.84rem;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px;overflow-x:auto;white-space:nowrap;}
+.rank{counter-reset:r;list-style:none;padding:0;margin:0;}
+.rank li{counter-increment:r;display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line-soft);color:var(--dim);}
+.rank li::before{content:counter(r);flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#2a1f00;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.rank li b{color:var(--text);}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Guía · <em>tu Pokémon</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#cuanto">⚖️ Cuánto aporta</a><a href="#ivs">🧬 IVs</a><a href="#evs">🏋️ EVs</a><a href="#naturaleza">🎭 Naturaleza</a><a href="#habilidad">✨ Habilidad</a><a href="#stats">📊 Stats</a><a href="#ataques">⚔️ Ataques</a><a href="#ficha">📋 Ficha</a><a href="#importa">🎯 Qué importa</a></nav></header>
+<main>
+
+<div class="hero">
+  <h2>🏃 Un Pokémon es como un atleta</h2>
+  <p>Sus estadísticas finales (PS, Ataque…) salen de sumar cinco cosas. Entiende cada una y vas a saber leer toda la ficha.</p>
+  <div class="atleta">
+    <div><div class="e">🐎</div><b>Especie</b><span>Su «raza». Un Krokorok siempre será más fuerte que un Sandile.</span></div>
+    <div><div class="e">🧬</div><b>IVs</b><span>Talento natural. Nació así; no se entrena.</span></div>
+    <div><div class="e">🏋️</div><b>EVs</b><span>Entrenamiento en el gimnasio: lo que gana peleando.</span></div>
+    <div><div class="e">🎭</div><b>Naturaleza</b><span>Personalidad: mejor en una cosa, peor en otra.</span></div>
+    <div><div class="e">⭐</div><b>Nivel</b><span>Su experiencia.</span></div>
+  </div>
+</div>
+
+<section id="cuanto">
+  <h2>⚖️ ¿Cuánto aporta cada cosa?</h2>
+  <p class="lead">Ejemplo con la <b>Velocidad de Krokorok</b> (base 74) a <b>nivel 100</b>. Así ves qué pesa más:</p>
+  <div class="card bars">
+    <div class="row"><span>🐎 Especie (2 × 74)</span><div class="bar"><i style="width:100%;background:var(--violet)"></i></div><span class="v">148</span></div>
+    <div class="row"><span>🏋️ EVs (252)</span><div class="bar"><i style="width:43%;background:var(--green)"></i></div><span class="v">+63</span></div>
+    <div class="row"><span>🧬 IV (31)</span><div class="bar"><i style="width:21%;background:var(--blue)"></i></div><span class="v">+31</span></div>
+    <div class="row"><span>🎭 Naturaleza</span><div class="bar"><i style="width:16%;background:var(--accent)"></i></div><span class="v">≈ +24</span></div>
+    <p style="font-size:.84rem;margin-top:8px">Con todo al máximo: <b>(148 + 31 + 63 + 5) × 1.1 ≈ 271</b>. Sin IVs, sin EVs y con naturaleza en contra serían <b>(148 + 5) × 0.9 ≈ 137</b>. A <b>nivel 50</b> todo vale la mitad: un IV 31 da ~+15 y 252 EVs dan ~+31.</p>
+  </div>
+  <div class="formula">Estadística = ((2 × Base + IV + EV ÷ 4) × Nivel ÷ 100 + 5) × Naturaleza<br>PS = (2 × Base + IV + EV ÷ 4) × Nivel ÷ 100 + Nivel + 10</div>
+  <p class="lead" style="margin-top:8px">No hace falta memorizarla: la <a href="mispokemon.html">calculadora</a> la hace por ti.</p>
+</section>
+
+<section id="ivs">
+  <h2>🧬 IVs · la pestaña del ADN</h2>
+  <div class="grid">
+    <div class="card"><h3>Qué son</h3>
+      <ul><li>Van de <b>0 a 31</b> en cada estadística y vienen fijos desde que nace o lo capturas.</li>
+      <li><b>31 = perfecto</b> (en verde). <b>0 = el peor</b> (en rojo).</li>
+      <li>El total va sobre <b>186</b> (6 × 31).</li>
+      <li>A nivel 100, cada punto de IV ≈ <b>+1</b> en esa estadística.</li></ul>
+    </div>
+    <div class="card"><h3>Cómo leer los números</h3>
+      <div class="iv"><span style="color:var(--red)">0–9 malo</span><span style="color:var(--orange)">10–19 regular</span><span style="color:var(--accent)">20–25 bueno</span><span style="color:var(--green)">26–30 muy bueno</span><span style="color:var(--green);border-color:var(--green)">31 perfecto</span></div>
+      <p style="margin-top:8px">Dos Krokorok iguales, uno con Velocidad 31 y otro con 0, tienen ~31 puntos de diferencia a nivel 100. En la historia es poco; en competitivo decide quién ataca primero.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px"><h3>🐊 Tu Krokorok (total 119/186)</h3>
+    <div class="iv"><span>PS <b style="color:var(--green)">26</b></span><span>Ataque <b style="color:var(--orange)">17</b></span><span>Defensa <b style="color:var(--red)">4</b></span><span>At. Esp. <b style="color:var(--green)">26</b></span><span>Def. Esp. <b style="color:var(--orange)">15</b></span><span>Velocidad <b style="color:var(--green)">31</b></span></div>
+    <ul><li><b>PS 26 y Velocidad 31</b>: muy bien.</li><li><b>Ataque 17</b>: normal.</li><li><b>Defensa 4</b>: muy baja; recibe más daño de golpes físicos.</li><li><b>At. Esp. 26</b>: no le sirve, porque ataca con movimientos físicos.</li></ul>
+    <p style="font-size:.8rem">Def. Esp. 15 sale de restar al total 119 los otros cinco. Para la historia está perfectamente bien.</p>
+  </div>
+</section>
+
+<section id="evs">
+  <h2>🏋️ EVs · la pestaña de la pesa</h2>
+  <div class="grid">
+    <div class="card"><h3>Cómo se ganan</h3>
+      <ul><li>Al <b>derrotar</b> Pokémon. Cada especie da EVs de una estadística concreta.</li>
+      <li>Sandile → +1 Ataque · Krokorok → +2 Ataque · Woobat → +1 Velocidad.</li>
+      <li>En las <b>hordas</b> de PokeMMO (5 a la vez) sumas los EVs de los cinco.</li></ul>
+    </div>
+    <div class="card"><h3>Límites</h3>
+      <ul><li>Máximo <b>252 por estadística</b> y <b>510 en total</b>.</li>
+      <li>A nivel 100, cada <b>4 EVs = +1 punto</b>: 252 EVs ≈ <b>+63</b>, el doble que un IV perfecto.</li>
+      <li>Por eso en competitivo se reparten así: <b>252 + 252 + 4</b> en lo que más importa.</li></ul>
+    </div>
+    <div class="card"><h3>Objetos</h3>
+      <ul><li><b>Brazal Firme</b>: duplica los EVs que ganas, pero baja la Velocidad mientras lo lleva.</li>
+      <li><b>Vitaminas</b> (Proteína, Carburante…): dan EVs directamente sin pelear.</li></ul>
+    </div>
+    <div class="card"><h3>Ejemplos de quién da qué (5.ª generación)</h3>
+      <div class="tblwrap"><table><thead><tr><th>Stat</th><th>Pokémon</th></tr></thead><tbody>
+      <tr><td><b>PS</b></td><td>Audino (+2), Munna, Ducklett</td></tr>
+      <tr><td><b>Ataque</b></td><td>Patrat, Lillipup, Pidove, Sandile, Drilbur, Timburr, Darumaka · Krokorok (+2)</td></tr>
+      <tr><td><b>Defensa</b></td><td>Sewaddle, Venipede, Roggenrola</td></tr>
+      <tr><td><b>At. Esp.</b></td><td>Petilil, Solosis</td></tr>
+      <tr><td><b>Def. Esp.</b></td><td>Frillish, Gothita</td></tr>
+      <tr><td><b>Velocidad</b></td><td>Purrloin, Woobat, Tympole, Blitzle, Cottonee, Tynamo · Basculin (+2)</td></tr>
+      </tbody></table></div>
+      <p style="font-size:.8rem;margin-top:6px">Compruébalo en la Pokédex del juego antes de entrenar.</p>
+    </div>
+  </div>
+</section>
+
+<section id="naturaleza">
+  <h2>🎭 Naturaleza</h2>
+  <div class="card">
+    <p>Sube <b>+10 %</b> una estadística y baja <b>−10 %</b> otra. Cinco no cambian nada. En el resumen, la que sube sale en <span class="up">rojo</span> y la que baja en <span class="down">azul</span>.</p>
+    <ul><li><b>Firme</b>: +Ataque, −At. Esp. → ideal para Krokorok, que no usa At. Esp.</li>
+    <li><b>Alegre</b>: +Velocidad, −At. Esp. → también ideal.</li>
+    <li><b>Modesta</b>: +At. Esp., −Ataque → mala: sube lo que no usa y baja lo que sí.</li></ul>
+    <div class="tip">💡 Truco: la naturaleza buena <b>baja la estadística que tu Pokémon no usa</b>. Físico → que baje At. Esp. Especial → que baje Ataque. <a href="naturalezas.html">Ver las 25 →</a></div>
+  </div>
+</section>
+
+<section id="habilidad">
+  <h2>✨ Habilidad</h2>
+  <div class="card"><p>Un efecto pasivo. Krokorok puede tener:</p>
+    <ul><li><b>Intimidación</b>: baja el Ataque del rival al entrar.</li>
+    <li><b>Autoestima</b>: +1 de Ataque cada vez que derrota a uno. Si viste «+1 Atk» tras debilitar a un rival, es esta, y es excelente para barrer.</li>
+    <li><b>Irascible</b>: si le dan un golpe crítico, su Ataque sube al máximo.</li></ul></div>
+</section>
+
+<section id="stats">
+  <h2>📊 Estadísticas · la pestaña de las barras</h2>
+  <div class="tblwrap"><table><thead><tr><th>Stat</th><th>En inglés</th><th>Para qué sirve</th></tr></thead><tbody>
+    <tr><td><b>PS</b></td><td>HP</td><td>Cuánta vida tiene.</td></tr>
+    <tr><td><b>Ataque</b></td><td>Atk</td><td>Daño de los ataques <b>físicos</b> (Triturar, Excavar, Demolición).</td></tr>
+    <tr><td><b>Defensa</b></td><td>Def</td><td>Aguanta los ataques <b>físicos</b>.</td></tr>
+    <tr><td><b>At. Esp.</b></td><td>SpA</td><td>Daño de los ataques <b>especiales</b> (Lanzallamas, Surf, Rayo).</td></tr>
+    <tr><td><b>Def. Esp.</b></td><td>SpD</td><td>Aguanta los ataques <b>especiales</b>.</td></tr>
+    <tr><td><b>Velocidad</b></td><td>Spe</td><td>Quién ataca primero.</td></tr>
+  </tbody></table></div>
+  <div class="tip">💡 Lo que importa es <b>la categoría del ataque</b>, no el tipo: Krokorok es físico, así que su At. Esp. da igual. Pignite usa los dos: Lanzallamas es especial y Demolición es física.</div>
+</section>
+
+<section id="ataques">
+  <h2>⚔️ Ataques · la pestaña de la lista</h2>
+  <div class="grid">
+    <div class="card"><h3>Qué muestra cada ataque</h3><ul>
+      <li><b>Poder</b>: cuánto daño hace (Triturar 80, Bofetón Lodo 20).</li>
+      <li><b>Precisión</b>: probabilidad de acertar (100 = siempre; Tumba Rocas 95 falla a veces).</li>
+      <li><b>PP</b>: cuántas veces lo puedes usar antes de curarte.</li>
+      <li><b>Categoría</b>: físico o especial.</li></ul></div>
+    <div class="card"><h3>Regla del mismo tipo (STAB)</h3><p>Si el ataque es <b>del mismo tipo que el Pokémon</b>, pega un <b>50 % más</b>.</p>
+      <p>Triturar en Krokorok (Siniestro) pega más que Cabezazo (Normal), aunque tengan poder parecido.</p>
+      <p>Y súmale la <a href="tipos.html">tabla de tipos</a>: súper eficaz ×2, poco eficaz ×½.</p></div>
+  </div>
+</section>
+
+<section id="ficha">
+  <h2>📋 Otros datos de la ficha</h2>
+  <div class="tblwrap"><table><thead><tr><th>Dato</th><th>Qué es</th><th>¿Afecta al combate?</th></tr></thead><tbody>
+    <tr><td><b>Objeto equipado</b></td><td>Tu Krokorok lleva <b>Repartir Exp</b>: gana experiencia aunque no pelee. Ideal para subir a uno atrasado.</td><td>Depende del objeto</td></tr>
+    <tr><td><b>Entrenador original, ID, lugar y fecha</b></td><td>Datos de origen.</td><td class="neu">No</td></tr>
+    <tr><td><b>Pokéball</b></td><td>En la que fue capturado.</td><td class="neu">No</td></tr>
+    <tr><td><b>Cariño (amistad)</b></td><td>Sube al usarlo, curarlo y caminar con él. Afecta a ciertas evoluciones y a ataques como Retribución.</td><td>A veces</td></tr>
+    <tr><td><b>Característica</b></td><td>Frase como «Le encanta correr»: pista de cuál es su <b>IV más alto</b> (aquí, Velocidad).</td><td class="neu">No (es una pista)</td></tr>
+    <tr><td><b>Candado</b></td><td>Probablemente protege al Pokémon para que no lo liberes ni lo intercambies por error.</td><td class="neu">No</td></tr>
+    <tr><td><b>Marcas</b> (● ▲ ★ ◆)</td><td>Para organizarte en la PC.</td><td class="neu">No</td></tr>
+    <tr><td><b>Cintas</b></td><td>Recuerdos de logros.</td><td class="neu">No</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="importa">
+  <h2>🎯 ¿Qué importa más?</h2>
+  <div class="grid">
+    <div class="card"><h3>📖 Para la historia</h3><ol class="rank">
+      <li><span><b>Nivel</b> y <b>ataques</b> (con STAB y buen tipo).</span></li>
+      <li><span><b>Naturaleza</b> y <b>habilidad</b>.</span></li>
+      <li><span><b>IVs</b> y <b>EVs</b>: ayudan, pero no son necesarios.</span></li></ol></div>
+    <div class="card"><h3>🏆 Para competitivo o crianza</h3><ol class="rank">
+      <li><span><b>Naturaleza</b> correcta (+ lo que usa, − lo que no).</span></li>
+      <li><span><b>EVs</b> bien repartidos (252 / 252 / 4).</span></li>
+      <li><span><b>IVs</b> en 31 en lo importante; el resto da igual.</span></li></ol></div>
+  </div>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+</body>
+</html>

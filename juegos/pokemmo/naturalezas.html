@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Naturalezas · PokeMMO</title>
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+table.mat td,table.mat th{text-align:center;vertical-align:middle;min-width:92px;}
+table.mat td small{color:var(--faint);}
+table.mat td.neu{background:var(--surface-2);}
+table.mat td.hl{background:var(--accent-dim);outline:2px solid var(--accent);}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:10px;}
+.filters label.f{flex:1 1 140px;}
+.filters input,.filters select{width:100%;}
+.nlist{display:grid;gap:8px;grid-template-columns:1fr;}
+@media (min-width:561px){ .nlist{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .nlist{grid-template-columns:repeat(3,1fr);} }
+.nat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;gap:8px;align-items:center;}
+.nat b{font-size:1rem;} .nat small{color:var(--faint);display:block;}
+.nat .eff{text-align:right;font-size:.82rem;}
+.res{margin-top:10px;}
+.res .nat{border-color:var(--accent);}
+.why{font-size:.84rem;color:var(--dim);margin-top:4px;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Las 25 <em>naturalezas</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#ayuda">🤔 Cuál me conviene</a><a href="#tabla">🧩 Tabla</a><a href="#lista">🔎 Buscar</a><a href="#favoritas">⭐ Más usadas</a></nav></header>
+<main>
+
+<p class="lead">Cada naturaleza sube <span class="up">+10 %</span> una estadística y baja <span class="down">−10 %</span> otra. Las <b>5 neutras</b> no cambian nada. Nunca afecta a los PS. Entre paréntesis, el nombre en inglés (el que verás si juegas PokeMMO en inglés).</p>
+
+<section id="ayuda">
+  <h2>🤔 ¿Qué naturaleza le conviene a mi Pokémon?</h2>
+  <div class="card">
+    <div class="lbl" style="font-size:.78rem;color:var(--faint)">1. ¿Cómo ataca?</div>
+    <div class="seg" id="qRol" role="group" aria-label="Cómo ataca">
+      <button type="button" data-v="fis">💪 Físico (Ataque)</button><button type="button" data-v="esp">🔮 Especial (At. Esp.)</button>
+      <button type="button" data-v="mix">⚔️ Usa los dos</button><button type="button" data-v="tank">🛡️ Aguantar golpes</button></div>
+    <div class="lbl" style="font-size:.78rem;color:var(--faint);margin-top:10px">2. ¿Qué prefieres?</div>
+    <div class="seg" id="qPref" role="group" aria-label="Preferencia">
+      <button type="button" data-v="fuerza">💥 Pegar más fuerte</button><button type="button" data-v="vel">⚡ Ser más rápido</button></div>
+    <div class="res" id="res"></div>
+  </div>
+</section>
+
+<section id="tabla">
+  <h2>🧩 Las 25 en una tabla</h2>
+  <p class="lead">Fila = lo que <span class="up">sube</span>. Columna = lo que <span class="down">baja</span>. La diagonal son las neutras.</p>
+  <div class="tblwrap"><table class="mat"><thead><tr><th>Sube ↓ · Baja →</th><th class="down">−Ataque</th><th class="down">−Defensa</th><th class="down">−At. Esp.</th><th class="down">−Def. Esp.</th><th class="down">−Velocidad</th></tr></thead><tbody><tr><th class="up">+Ataque</th><td class="neu"><b>Fuerte</b><br><small>Hardy · neutra</small></td><td data-n="Huraña"><b>Huraña</b><br><small>Lonely</small></td><td data-n="Firme"><b>Firme</b><br><small>Adamant</small></td><td data-n="Pícara"><b>Pícara</b><br><small>Naughty</small></td><td data-n="Audaz"><b>Audaz</b><br><small>Brave</small></td></tr><tr><th class="up">+Defensa</th><td data-n="Osada"><b>Osada</b><br><small>Bold</small></td><td class="neu"><b>Dócil</b><br><small>Docile · neutra</small></td><td data-n="Agitada"><b>Agitada</b><br><small>Impish</small></td><td data-n="Floja"><b>Floja</b><br><small>Lax</small></td><td data-n="Plácida"><b>Plácida</b><br><small>Relaxed</small></td></tr><tr><th class="up">+At. Esp.</th><td data-n="Modesta"><b>Modesta</b><br><small>Modest</small></td><td data-n="Afable"><b>Afable</b><br><small>Mild</small></td><td class="neu"><b>Seria</b><br><small>Serious · neutra</small></td><td data-n="Alocada"><b>Alocada</b><br><small>Rash</small></td><td data-n="Mansa"><b>Mansa</b><br><small>Quiet</small></td></tr><tr><th class="up">+Def. Esp.</th><td data-n="Serena"><b>Serena</b><br><small>Calm</small></td><td data-n="Amable"><b>Amable</b><br><small>Gentle</small></td><td data-n="Cauta"><b>Cauta</b><br><small>Careful</small></td><td class="neu"><b>Tímida</b><br><small>Bashful · neutra</small></td><td data-n="Grosera"><b>Grosera</b><br><small>Sassy</small></td></tr><tr><th class="up">+Velocidad</th><td data-n="Miedosa"><b>Miedosa</b><br><small>Timid</small></td><td data-n="Activa"><b>Activa</b><br><small>Hasty</small></td><td data-n="Alegre"><b>Alegre</b><br><small>Jolly</small></td><td data-n="Ingenua"><b>Ingenua</b><br><small>Naive</small></td><td class="neu"><b>Rara</b><br><small>Quirky · neutra</small></td></tr></tbody></table></div>
+</section>
+
+<section id="lista">
+  <h2>🔎 Buscar y filtrar</h2>
+  <div class="filters">
+    <label class="f">Nombre (español o inglés)<input type="search" id="fq" placeholder="Firme, Jolly…"></label>
+    <label class="f">Que suba<select id="fup"><option value="">Cualquiera</option></select></label>
+    <label class="f">Que baje<select id="fdn"><option value="">Cualquiera</option></select></label>
+  </div>
+  <div class="nlist" id="nlist"></div>
+</section>
+
+<section id="favoritas">
+  <h2>⭐ Las más usadas</h2>
+  <div class="tblwrap"><table><thead><tr><th>Naturaleza</th><th>Efecto</th><th>Para quién</th></tr></thead><tbody>
+    <tr><td><b>Firme</b> (Adamant)</td><td><span class="up">+Ataque</span> <span class="down">−At. Esp.</span></td><td>Físicos que quieren pegar fuerte (Krokorok, Excadrill).</td></tr>
+    <tr><td><b>Alegre</b> (Jolly)</td><td><span class="up">+Velocidad</span> <span class="down">−At. Esp.</span></td><td>Físicos que necesitan atacar primero.</td></tr>
+    <tr><td><b>Modesta</b> (Modest)</td><td><span class="up">+At. Esp.</span> <span class="down">−Ataque</span></td><td>Especiales que quieren pegar fuerte.</td></tr>
+    <tr><td><b>Miedosa</b> (Timid)</td><td><span class="up">+Velocidad</span> <span class="down">−Ataque</span></td><td>Especiales rápidos.</td></tr>
+    <tr><td><b>Osada</b> (Bold)</td><td><span class="up">+Defensa</span> <span class="down">−Ataque</span></td><td>Especiales o defensivos que aguantan golpes físicos.</td></tr>
+    <tr><td><b>Serena</b> (Calm)</td><td><span class="up">+Def. Esp.</span> <span class="down">−Ataque</span></td><td>Especiales o defensivos que aguantan golpes especiales.</td></tr>
+    <tr><td><b>Agitada</b> (Impish)</td><td><span class="up">+Defensa</span> <span class="down">−At. Esp.</span></td><td>Físicos que aguantan golpes físicos.</td></tr>
+    <tr><td><b>Cauta</b> (Careful)</td><td><span class="up">+Def. Esp.</span> <span class="down">−At. Esp.</span></td><td>Físicos que aguantan golpes especiales.</td></tr>
+    <tr><td><b>Activa</b> / <b>Ingenua</b> (Hasty / Naive)</td><td><span class="up">+Velocidad</span> <span class="down">−Def. o −Def. Esp.</span></td><td>Mixtos rápidos: usan Ataque y At. Esp.</td></tr>
+  </tbody></table></div>
+  <div class="tip">💡 Regla de oro: que <b>baje lo que tu Pokémon no usa</b>. Si es físico, que baje At. Esp.; si es especial, que baje Ataque.</div>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script>
+(function(){
+"use strict";
+var NAT = [{"es": "Fuerte", "en": "Hardy", "up": null, "down": null}, {"es": "Huraña", "en": "Lonely", "up": "atk", "down": "def"}, {"es": "Audaz", "en": "Brave", "up": "atk", "down": "spe"}, {"es": "Firme", "en": "Adamant", "up": "atk", "down": "spa"}, {"es": "Pícara", "en": "Naughty", "up": "atk", "down": "spd"}, {"es": "Osada", "en": "Bold", "up": "def", "down": "atk"}, {"es": "Dócil", "en": "Docile", "up": null, "down": null}, {"es": "Plácida", "en": "Relaxed", "up": "def", "down": "spe"}, {"es": "Agitada", "en": "Impish", "up": "def", "down": "spa"}, {"es": "Floja", "en": "Lax", "up": "def", "down": "spd"}, {"es": "Miedosa", "en": "Timid", "up": "spe", "down": "atk"}, {"es": "Activa", "en": "Hasty", "up": "spe", "down": "def"}, {"es": "Seria", "en": "Serious", "up": null, "down": null}, {"es": "Alegre", "en": "Jolly", "up": "spe", "down": "spa"}, {"es": "Ingenua", "en": "Naive", "up": "spe", "down": "spd"}, {"es": "Modesta", "en": "Modest", "up": "spa", "down": "atk"}, {"es": "Afable", "en": "Mild", "up": "spa", "down": "def"}, {"es": "Mansa", "en": "Quiet", "up": "spa", "down": "spe"}, {"es": "Tímida", "en": "Bashful", "up": null, "down": null}, {"es": "Alocada", "en": "Rash", "up": "spa", "down": "spd"}, {"es": "Serena", "en": "Calm", "up": "spd", "down": "atk"}, {"es": "Amable", "en": "Gentle", "up": "spd", "down": "def"}, {"es": "Grosera", "en": "Sassy", "up": "spd", "down": "spe"}, {"es": "Cauta", "en": "Careful", "up": "spd", "down": "spa"}, {"es": "Rara", "en": "Quirky", "up": null, "down": null}], SN = {"hp": "PS", "atk": "Ataque", "def": "Defensa", "spa": "At. Esp.", "spd": "Def. Esp.", "spe": "Velocidad"};
+function $(id){ return document.getElementById(id); }
+function eff(n){ return n.up ? '<span class="up">+' + SN[n.up] + '</span><br><span class="down">−' + SN[n.down] + '</span>' : '<span class="neu">Neutra</span>'; }
+function card(n, why){ return '<div class="nat"><div><b>' + n.es + '</b><small>' + n.en + '</small>' + (why ? '<div class="why">' + why + '</div>' : '') + '</div><div class="eff">' + eff(n) + '</div></div>'; }
+["atk","def","spa","spd","spe"].forEach(function(k){ ["fup","fdn"].forEach(function(id){ var o = document.createElement("option"); o.value = k; o.textContent = SN[k]; $(id).appendChild(o); }); });
+function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+function list(){
+  var q = norm($("fq").value.trim()), u = $("fup").value, d = $("fdn").value;
+  var r = NAT.filter(function(n){ return (!q || norm(n.es + " " + n.en).indexOf(q) >= 0) && (!u || n.up === u) && (!d || n.down === d); });
+  $("nlist").innerHTML = r.length ? r.map(function(n){ return card(n); }).join("") : '<p class="lead">Ninguna coincide.</p>';
+  document.querySelectorAll("table.mat td[data-n]").forEach(function(td){ td.classList.toggle("hl", (q || u || d) && r.some(function(n){ return n.es === td.getAttribute("data-n"); })); });
+}
+["fq","fup","fdn"].forEach(function(id){ $(id).addEventListener("input", list); });
+list();
+/* recomendador */
+var REC = {
+  fis:{fuerza:[["Firme","Sube el Ataque y baja el At. Esp., que no usa."],["Huraña","Si no le importa recibir golpes físicos."]], vel:[["Alegre","Más velocidad sin tocar el Ataque."]]},
+  esp:{fuerza:[["Modesta","Sube el At. Esp. y baja el Ataque, que no usa."],["Afable","Si no le importa recibir golpes físicos."]], vel:[["Miedosa","Más velocidad sin tocar el At. Esp."]]},
+  mix:{fuerza:[["Pícara","Más Ataque; sacrifica la Def. Esp."],["Alocada","Más At. Esp.; sacrifica la Def. Esp."]], vel:[["Ingenua","Más velocidad; sacrifica la Def. Esp."],["Activa","Más velocidad; sacrifica la Defensa."]]},
+  tank:{fuerza:[["Osada","+Defensa si ataca con At. Esp. (baja Ataque)."],["Agitada","+Defensa si ataca con Ataque (baja At. Esp.)."],["Serena","+Def. Esp. si ataca con At. Esp."],["Cauta","+Def. Esp. si ataca con Ataque."]],
+        vel:[["Osada","Un defensivo casi nunca necesita velocidad: elige según qué golpes quiere aguantar."],["Cauta","Para aguantar golpes especiales siendo físico."]]}
+};
+var sel = {rol:null, pref:"fuerza"};
+function rec(){
+  ["qRol","qPref"].forEach(function(g){ Array.prototype.forEach.call($(g).children, function(b){ var on = b.getAttribute("data-v") === sel[g === "qRol" ? "rol" : "pref"]; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); }); });
+  if(!sel.rol){ $("res").innerHTML = '<p class="lead">Elige cómo ataca tu Pokémon.</p>'; return; }
+  $("res").innerHTML = REC[sel.rol][sel.pref].map(function(x){ var n = NAT.filter(function(m){ return m.es === x[0]; })[0]; return card(n, x[1]); }).join("");
+}
+$("qRol").addEventListener("click", function(e){ var b = e.target.closest("button"); if(b){ sel.rol = b.getAttribute("data-v"); rec(); } });
+$("qPref").addEventListener("click", function(e){ var b = e.target.closest("button"); if(b){ sel.pref = b.getAttribute("data-v"); rec(); } });
+rec();
+})();
+</script>
+</body>
+</html>
