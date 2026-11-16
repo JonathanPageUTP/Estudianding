@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Objetos de Teselia · PokeMMO</title>
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.top-note{margin-bottom:14px;}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:10px;}
+.filters label.f{flex:1 1 200px;} .filters input{width:100%;}
+.cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;padding-bottom:2px;}
+.cats::-webkit-scrollbar{display:none;}
+.cats button{flex-shrink:0;min-height:40px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:20px;padding:0 12px;font:700 .8rem var(--sans);cursor:pointer;}
+.cats button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.items{display:grid;gap:10px;grid-template-columns:1fr;}
+@media (min-width:768px){ .items{grid-template-columns:1fr 1fr;} }
+@media (min-width:1200px){ .items{grid-template-columns:repeat(3,1fr);} }
+.it{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;}
+.it.done{border-color:var(--green);}
+.it h3{font-size:1rem;}
+.it .en{font-size:.76rem;color:var(--faint);}
+.it .row{font-size:.88rem;color:var(--dim);}
+.it .row b{color:var(--text);}
+.it .where{background:var(--surface-2);border-radius:10px;padding:8px 10px;font-size:.84rem;color:var(--dim);}
+.it .where b{color:var(--accent);}
+.it .mine{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.it .mine input[type=text]{flex:1;min-width:150px;min-height:40px;font-size:16px;}
+.it .mine label{display:flex;gap:6px;align-items:center;font-size:.8rem;color:var(--dim);min-height:40px;cursor:pointer;}
+.it .mine input[type=checkbox]{width:20px;height:20px;accent-color:var(--green);}
+.count{font-size:.82rem;color:var(--faint);margin-bottom:8px;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Objetos de <em>Teselia</em></h1></div></header>
+<main>
+
+<div class="warn top-note"><b>📍 Sobre las ubicaciones:</b> son las de <b>Pokémon Negro/Blanco</b>, la base del Teselia de PokeMMO. PokeMMO cambia algunas: el Metro Batalla y sus Puntos de Batalla (PB) pueden no existir igual, y las polvaredas de las cuevas también pueden variar. Casi todo se puede comprar a otros jugadores en el <b>GTL</b>. Cuando confirmes dónde lo conseguiste, márcalo con ✔️ y escribe tu nota: se guarda en este dispositivo.</div>
+<div class="filters">
+  <label class="f">Buscar (español o inglés, uso o lugar)<input type="search" id="q" placeholder="Restos, Leftovers, EVs, Porcelana…"></label>
+</div>
+<div class="cats" id="cats" role="group" aria-label="Categorías"></div>
+<p class="count" id="count"></p>
+<div class="items" id="items"></div>
+<section id="consejos">
+  <h2>🧭 Lo primero que conviene conseguir</h2>
+  <div class="grid">
+    <div class="card"><h3>📖 Para avanzar en la historia</h3><ul>
+      <li><b>Repartir Exp</b> y <b>Huevo Suerte</b>: subir de nivel sin esfuerzo.</li>
+      <li><b>Bici</b> (Mayólica) y <b>Zahorí</b> (Esmalte): moverte y encontrar objetos ocultos.</li>
+      <li><b>Moneda Amuleto</b> (Porcelana): doble dinero para comprar curas y Poké Balls.</li>
+      <li>El potenciador del tipo de tu atacante principal: <b>Gafas de Sol</b> para Krokorok.</li></ul></div>
+    <div class="card"><h3>🏆 Para competitivo y crianza</h3><ul>
+      <li><b>Brazal Firme</b> y <b>objetos Recios</b>: EVs rápido.</li>
+      <li><b>Piedra Eterna</b> + <b>objetos Recios</b>: criar con naturaleza e IVs elegidos.</li>
+      <li><b>Restos</b>, <b>Vidasfera</b> y los objetos <b>Elección</b>: los equipables más usados.</li></ul></div>
+  </div>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script>
+(function(){
+"use strict";
+var DATA = [{"c": "entrenar", "es": "Repartir Exp", "en": "Exp. Share", "q": "El Pokémon que lo lleva gana experiencia aunque no pelee.", "u": "Equípalo al Pokémon atrasado y déjalo en el equipo; pelea con otro.", "d": "Ciudad Porcelana (Castelia): anciano en el último piso de un edificio, tras subir en el ascensor. También Ciudad Teja (Icirrus): caballero del Club de Fans, si cree que tus Pokémon están bien criados."}, {"c": "entrenar", "es": "Huevo Suerte", "en": "Lucky Egg", "q": "+50 % de experiencia para quien lo lleva.", "u": "Equípalo al que quieras subir rápido. Combínalo con hordas o entrenadores fuertes.", "d": "Cueva Electrorroca (Chargestone Cave): regalo de la profesora Encina (Juniper). También al azar del hombre de negro de la Ruta 13."}, {"c": "entrenar", "es": "Brazal Firme", "en": "Macho Brace", "q": "Duplica los EVs que gana, pero baja la Velocidad mientras lo lleva.", "u": "Equípalo solo mientras entrenas EVs; quítaselo para combatir.", "d": "Garita del noroeste hacia la Ruta 16, junto a Ciudad Mayólica (Nimbasa): te lo da el Karateka de adentro."}, {"c": "entrenar", "es": "Pesa / Brazal / Cinto / Lente / Banda / Franja Recia", "en": "Power Weight / Bracer / Belt / Lens / Band / Anklet", "q": "Cada uno da +4 EVs extra de una estadística por combate (PS, Ataque, Defensa, At. Esp., Def. Esp., Velocidad) y baja la Velocidad.", "u": "Para entrenar EVs más rápido. En PokeMMO también se usan en la crianza para pasar un IV (ver 🥚).", "d": "Metro Batalla (Battle Subway): 16 PB cada uno."}, {"c": "entrenar", "es": "Vitaminas: Más PS, Proteína, Hierro, Calcio, Zinc, Carburante", "en": "HP Up, Protein, Iron, Calcium, Zinc, Carbos", "q": "+10 EVs en PS, Ataque, Defensa, At. Esp., Def. Esp. o Velocidad.", "u": "Úsalas desde la mochila. En la 5.ª generación solo funcionan hasta 100 EVs en esa estadística; el resto, peleando.", "d": "Tiendas de algunas ciudades. Las guías consultadas no dicen cuáles; en PokeMMO, búscalas también en el GTL."}, {"c": "entrenar", "es": "Bayas que bajan EVs: Grana, Algama, Ispero, Meluce, Uvav, Tamate", "en": "Pomeg, Kelpsy, Qualot, Hondew, Grepa, Tamato", "q": "Bajan 10 EVs de PS, Ataque, Defensa, At. Esp., Def. Esp. o Velocidad (y suben la amistad).", "u": "Para corregir EVs mal puestos. Úsalas desde la mochila.", "d": "En Negro/Blanco casi solo por el Dream World (Baya Grana). En PokeMMO, compruébalo en el juego o en el GTL."}, {"c": "entrenar", "es": "Caramelo Raro", "en": "Rare Candy", "q": "Sube 1 nivel al instante.", "u": "Úsalo desde la mochila. Guárdalo para cuando un Pokémon esté a punto de evolucionar.", "d": "En el suelo: Ruta 2, Ruta 13, Ruta 16, Ciudad Mayólica, Cueva Loza (Mistralton Cave), Cueva Electrorroca, Calle Victoria… y ocultos (Zahorí) en Ruta 3, Bosque Azulejo, Desierto y Monte Tuerca."}, {"c": "entrenar", "es": "Moneda Amuleto", "en": "Amulet Coin", "q": "Duplica el dinero que ganas en combates.", "u": "Equípala a un Pokémon que pelee (basta con que salga al combate).", "d": "Ciudad Porcelana (Castelia): vence a los tres bailarines de break y habla con ellos en la fuente."}, {"c": "entrenar", "es": "Cascabel Alivio", "en": "Soothe Bell", "q": "La amistad sube más rápido.", "u": "Equípalo a Pokémon que evolucionan por amistad, como Woobat → Swoobat.", "d": "Apartamento al este del Metro Batalla, en el piso de arriba: te lo da una señora mayor."}, {"c": "combate", "es": "Restos", "en": "Leftovers", "q": "Recupera 1/16 de los PS al final de cada turno.", "u": "Ideal para Pokémon que aguantan muchos turnos.", "d": "Bote de basura al sur del Puente Aldea (Village Bridge), viniendo de la Ruta 11; también oculto ahí con el Zahorí. Snorlax salvajes pueden llevarlo."}, {"c": "combate", "es": "Lodo Negro", "en": "Black Sludge", "q": "Como Restos para Pokémon tipo Veneno; a los demás les quita 1/8 de PS.", "u": "Solo en Pokémon tipo Veneno.", "d": "Llevado por Trubbish y Croagunk salvajes (5 %) y Garbodor (50 %). Usa Ladrón o Antojo para quitárselo."}, {"c": "combate", "es": "Cinta Elección", "en": "Choice Band", "q": "×1.5 al Ataque, pero solo puede usar el primer movimiento que elija.", "u": "Para atacantes físicos con un gran ataque. Cambia de Pokémon para elegir otro movimiento.", "d": "Metro Batalla: 48 PB."}, {"c": "combate", "es": "Gafas Elección", "en": "Choice Specs", "q": "×1.5 al At. Esp., bloqueado en un movimiento.", "u": "Igual que la Cinta, para atacantes especiales.", "d": "Metro Batalla: 48 PB."}, {"c": "combate", "es": "Pañuelo Elección", "en": "Choice Scarf", "q": "×1.5 a la Velocidad, bloqueado en un movimiento.", "u": "Para adelantar a rivales más rápidos.", "d": "Metro Batalla: 48 PB. También en el Centro Pokémon de Ciudad Porcelana si tienes Pokémon de 30 entrenadores distintos."}, {"c": "combate", "es": "Vidasfera", "en": "Life Orb", "q": "×1.3 al daño de todos sus ataques, pero pierde 10 % de PS por golpe.", "u": "Para atacantes que pegan fuerte y no se quedan mucho tiempo.", "d": "Metro Batalla: 48 PB."}, {"c": "combate", "es": "Banda Focus", "en": "Focus Sash", "q": "Con los PS llenos, sobrevive con 1 PS a un golpe que lo debilitaría.", "u": "Para Pokémon frágiles que necesitan atacar al menos una vez.", "d": "Metro Batalla: 48 PB."}, {"c": "combate", "es": "Cinta Experto", "en": "Expert Belt", "q": "×1.2 a los ataques súper eficaces.", "u": "Para Pokémon con ataques de varios tipos.", "d": "Ciudad Fayenza (Driftveil): el tipo sospechoso del mercado, si le enseñas un Pokémon de nivel 30 o más."}, {"c": "combate", "es": "Cinta Fuerte / Gafas Especiales", "en": "Muscle Band / Wise Glasses", "q": "×1.1 a los ataques físicos / especiales, sin bloquear movimientos.", "u": "Una mejora pequeña pero libre.", "d": "Metro Batalla: 48 PB."}, {"c": "combate", "es": "Garra Rápida", "en": "Quick Claw", "q": "20 % de probabilidad de atacar primero.", "u": "En Pokémon lentos.", "d": "Montañero en la garita justo antes del Puente Saeta (Sky Arrow Bridge)."}, {"c": "combate", "es": "Periscopio", "en": "Scope Lens", "q": "Sube la probabilidad de golpe crítico.", "u": "Con ataques de crítico alto (Tajo Umbrío, Cuchillada…).", "d": "Metro Batalla: 48 PB."}, {"c": "combate", "es": "Campana Concha", "en": "Shell Bell", "q": "Recupera 1/8 del daño que hace.", "u": "En atacantes que pegan muchas veces.", "d": "Ciudad Fayenza: casa al sureste del Centro Pokémon, con 50 Pokémon registrados en la Pokédex."}, {"c": "combate", "es": "Roca del Rey", "en": "King's Rock", "q": "10 % de que el rival retroceda al recibir un ataque. También evoluciona a Poliwhirl y Slowpoke por intercambio.", "u": "En ataques que golpean varias veces.", "d": "Al azar del hombre de negro de la Ruta 13 (un objeto por día)."}, {"c": "combate", "es": "Gemas (Gema Fuego, Gema Agua…)", "en": "Type Gems", "q": "+50 % de poder al primer ataque de su tipo; luego se gasta.", "u": "Para asegurar un golpe fuerte. Una por combate.", "d": "Polvaredas dentro de cualquier cueva (Negro/Blanco). En PokeMMO, compruébalo."}, {"c": "tipo", "es": "Carbón", "en": "Charcoal", "q": "+20 % a los ataques de tipo Fuego.", "u": "Equípalo al Pokémon que usa ese tipo de ataque.", "d": "Ciudad Esmalte (Nacrene): responde «Tepig» a la pregunta del inicial."}, {"c": "tipo", "es": "Agua Mística", "en": "Mystic Water", "q": "+20 % a los ataques de tipo Agua.", "u": "Igual que el Carbón.", "d": "Cueva Manantial (Wellspring Cave), en el suelo; o Ciudad Esmalte respondiendo «Oshawott»."}, {"c": "tipo", "es": "Semilla Milagro", "en": "Miracle Seed", "q": "+20 % a los ataques de tipo Planta.", "u": "Igual que el Carbón.", "d": "Bosque Azulejo (Pinwheel Forest), en el suelo; o Ciudad Esmalte respondiendo «Snivy». Maractus salvajes (5 %)."}, {"c": "tipo", "es": "Imán", "en": "Magnet", "q": "+20 % a los ataques de tipo Eléctrico.", "u": "Igual que el Carbón.", "d": "Cueva Electrorroca, en el suelo."}, {"c": "tipo", "es": "Antiderretir", "en": "Never-Melt Ice", "q": "+20 % a los ataques de tipo Hielo.", "u": "Igual que el Carbón.", "d": "Sala pequeña de los Almacenes Frigoríficos (Cold Storage); Cryogonal salvajes (5 %)."}, {"c": "tipo", "es": "Cinturón Negro", "en": "Black Belt", "q": "+20 % a los ataques de tipo Lucha.", "u": "Igual que el Carbón.", "d": "Cueva Desafío (Challenger's Cave), en el suelo."}, {"c": "tipo", "es": "Flecha Venenosa", "en": "Poison Barb", "q": "+20 % a los ataques de tipo Veneno.", "u": "Igual que el Carbón.", "d": "Ruta 8, en el suelo; Venipede y Whirlipede salvajes (5 %)."}, {"c": "tipo", "es": "Arena Fina", "en": "Soft Sand", "q": "+20 % a los ataques de tipo Tierra.", "u": "Igual que el Carbón.", "d": "Desierto Desolado (Desert Resort)."}, {"c": "tipo", "es": "Pico Afilado", "en": "Sharp Beak", "q": "+20 % a los ataques de tipo Volador.", "u": "Igual que el Carbón.", "d": "Ciudad Loza (Mistralton)."}, {"c": "tipo", "es": "Cuchara Torcida", "en": "TwistedSpoon", "q": "+20 % a los ataques de tipo Psíquico.", "u": "Igual que el Carbón.", "d": "Solar de los Sueños (Dreamyard); Abra salvajes (5 %)."}, {"c": "tipo", "es": "Polvo Plata", "en": "Silver Powder", "q": "+20 % a los ataques de tipo Bicho.", "u": "Igual que el Carbón.", "d": "Bosque Azulejo, en el suelo."}, {"c": "tipo", "es": "Piedra Dura", "en": "Hard Stone", "q": "+20 % a los ataques de tipo Roca.", "u": "Igual que el Carbón.", "d": "Cueva Loza (Mistralton Cave); Roggenrola, Boldore y Dwebble salvajes (5 %)."}, {"c": "tipo", "es": "Hechizo", "en": "Spell Tag", "q": "+20 % a los ataques de tipo Fantasma.", "u": "Igual que el Carbón.", "d": "Torre de los Cielos (Celestial Tower); Yamask salvajes (5 %)."}, {"c": "tipo", "es": "Colmillo Dragón", "en": "Dragon Fang", "q": "+20 % a los ataques de tipo Dragón.", "u": "Igual que el Carbón.", "d": "Torre Dragoespiral (Dragonspiral Tower), en el suelo."}, {"c": "tipo", "es": "Gafas de Sol", "en": "BlackGlasses", "q": "+20 % a los ataques de tipo Siniestro.", "u": "Ideal para Krokorok y su Triturar.", "d": "Desierto Desolado, en el suelo."}, {"c": "tipo", "es": "Revestimiento Metálico", "en": "Metal Coat", "q": "+20 % a los ataques de tipo Acero. También evoluciona a Onix y Scyther por intercambio.", "u": "Igual que el Carbón.", "d": "Al azar del hombre de negro de la Ruta 13."}, {"c": "tipo", "es": "Pañuelo Seda", "en": "Silk Scarf", "q": "+20 % a los ataques de tipo Normal.", "u": "Igual que el Carbón.", "d": "Zona noroeste de la Ruta 6, en el suelo."}, {"c": "evol", "es": "Piedra Fuego", "en": "Fire Stone", "q": "Evoluciona a Pansear → Simisear (y a Growlithe, Vulpix, Eevee).", "u": "Úsala desde la mochila sobre el Pokémon.", "d": "Desierto Desolado (suelo); muelle de Ciudad Porcelana, responde «Pansear» al científico; tienda de Ciudad Negra; polvaredas en cuevas."}, {"c": "evol", "es": "Piedra Agua", "en": "Water Stone", "q": "Panpour → Simipour (y Poliwhirl, Shellder, Staryu, Eevee).", "u": "Úsala desde la mochila.", "d": "Ciudad Fayenza (suelo); muelle de Ciudad Porcelana respondiendo «Panpour»; tienda de Ciudad Negra; polvaredas."}, {"c": "evol", "es": "Piedra Hoja", "en": "Leaf Stone", "q": "Pansage → Simisage (y Gloom, Weepinbell, Exeggcute).", "u": "Úsala desde la mochila.", "d": "Muelle de Ciudad Porcelana respondiendo «Pansage»; tienda de Ciudad Negra; polvaredas."}, {"c": "evol", "es": "Piedra Trueno", "en": "Thunder Stone", "q": "Eelektrik → Eelektross (y Pikachu, Eevee).", "u": "Úsala desde la mochila.", "d": "Cueva Electrorroca y Ruta 9; tienda de Ciudad Negra; polvaredas."}, {"c": "evol", "es": "Piedra Lunar", "en": "Moon Stone", "q": "Munna → Musharna (y Clefairy, Jigglypuff, Nidorina, Nidorino, Skitty).", "u": "Úsala desde la mochila.", "d": "Bosque Azulejo (suelo); regalo de Aloe (Lenora) por el Cráneo de Dragón; Monte Tuerca; tienda de Ciudad Negra."}, {"c": "evol", "es": "Piedra Solar", "en": "Sun Stone", "q": "Cottonee → Whimsicott y Petilil → Lilligant (y Gloom, Sunkern).", "u": "Úsala desde la mochila.", "d": "Castillo Ancestral (Relic Castle), en el suelo; tienda de Ciudad Negra; polvaredas."}, {"c": "evol", "es": "Piedra Día", "en": "Shiny Stone", "q": "Minccino → Cinccino (y Togetic, Roselia).", "u": "Úsala desde la mochila.", "d": "Ruta 6: casa sobre el puente estrecho, te la da una niña; Torre Dragoespiral; tienda de Ciudad Negra."}, {"c": "evol", "es": "Piedra Noche", "en": "Dusk Stone", "q": "Lampent → Chandelure (y Murkrow, Misdreavus).", "u": "Úsala desde la mochila.", "d": "Ruta 10: veterano escondido tras los árboles pasando el puente; Cueva Loza; tienda de Ciudad Negra."}, {"c": "evol", "es": "Piedra Alba", "en": "Dawn Stone", "q": "Kirlia macho → Gallade y Snorunt hembra → Froslass.", "u": "Úsala desde la mochila.", "d": "Ruta 10, en la hierba antes de la Calle Victoria; tienda de Ciudad Negra; polvaredas."}, {"c": "crianza", "es": "Piedra Eterna", "en": "Everstone", "q": "Impide que evolucione. En la crianza, el padre que la lleva pasa su naturaleza a la cría.", "u": "Para mantener un Pokémon sin evolucionar o para criar con la naturaleza que quieres.", "d": "Roggenrola y Boldore salvajes (50 %); Centro Pokémon de Ciudad Porcelana si tienes Pokémon de 10 entrenadores distintos."}, {"c": "crianza", "es": "Objetos Recios (en crianza)", "en": "Power items", "q": "En PokeMMO, el padre que lleva uno pasa a la cría el IV de esa estadística (Pesa Recia = PS, Brazal = Ataque…).", "u": "Equipa uno a cada padre para fijar dos IVs; combínalo con la Piedra Eterna para la naturaleza.", "d": "Metro Batalla: 16 PB cada uno. En PokeMMO también se compran en el GTL."}, {"c": "captura", "es": "Poké Ball / Super Ball / Ultra Ball", "en": "Poké / Great / Ultra Ball", "q": "×1 / ×1.5 / ×2 de probabilidad de captura.", "u": "Debilita y paraliza o duerme al Pokémon antes de lanzarla.", "d": "Tiendas de los Centros Pokémon (más tipos con más medallas)."}, {"c": "captura", "es": "Veloz Ball", "en": "Quick Ball", "q": "×5 si la lanzas en el primer turno.", "u": "Lánzala apenas empieza el combate.", "d": "Tiendas especiales de algunas ciudades; en PokeMMO, también el GTL."}, {"c": "captura", "es": "Ocaso Ball", "en": "Dusk Ball", "q": "×3.5 de noche o en cuevas.", "u": "Para cuevas o capturas nocturnas.", "d": "Tiendas especiales de algunas ciudades."}, {"c": "captura", "es": "Turno Ball", "en": "Timer Ball", "q": "Mejora cada turno que pasa, hasta ×4.", "u": "Para combates largos (legendarios).", "d": "Tiendas especiales de algunas ciudades."}, {"c": "captura", "es": "Malla Ball", "en": "Net Ball", "q": "×3 contra Pokémon de tipo Agua o Bicho.", "u": "En el agua y en bosques.", "d": "Tiendas especiales de algunas ciudades."}, {"c": "captura", "es": "Buceo Ball", "en": "Dive Ball", "q": "×3.5 en el agua (surfeando o pescando).", "u": "Para Pokémon de agua.", "d": "Tiendas especiales de algunas ciudades."}, {"c": "captura", "es": "Nido Ball", "en": "Nest Ball", "q": "Mejor cuanto más bajo es el nivel del Pokémon salvaje.", "u": "Para Pokémon de nivel bajo.", "d": "Tiendas especiales de algunas ciudades."}, {"c": "captura", "es": "Acopio Ball", "en": "Repeat Ball", "q": "×3 si ya tienes esa especie en la Pokédex.", "u": "Para capturar otro igual (por ejemplo, buscando mejores IVs).", "d": "Tiendas especiales de algunas ciudades."}, {"c": "captura", "es": "Lujo Ball / Sana Ball", "en": "Luxury Ball / Heal Ball", "q": "Lujo: la amistad sube más rápido. Sana: el Pokémon capturado sale curado.", "u": "Lujo para evoluciones por amistad.", "d": "Tiendas especiales de algunas ciudades."}, {"c": "cura", "es": "Poción · Superpoción · Hiperpoción · Poción Máxima", "en": "Potion · Super · Hyper · Max Potion", "q": "Curan 20 · 50 · 200 PS · todos los PS.", "u": "Desde la mochila, en combate o fuera.", "d": "Tiendas de los Centros Pokémon (las mejores se desbloquean con medallas)."}, {"c": "cura", "es": "Revivir · Revivir Máximo", "en": "Revive · Max Revive", "q": "Reviven a un debilitado con la mitad / todos los PS.", "u": "Desde la mochila.", "d": "Tiendas de los Centros Pokémon (Revivir); el Máximo, en el suelo de lugares avanzados."}, {"c": "cura", "es": "Antídoto · Antiparalizador · Despertar · Antiquemar · Antihielo · Cura Total", "en": "Antidote · Paralyze Heal · Awakening · Burn Heal · Ice Heal · Full Heal", "q": "Curan envenenamiento, parálisis, sueño, quemadura, congelación / cualquier problema.", "u": "Desde la mochila.", "d": "Tiendas de los Centros Pokémon."}, {"c": "cura", "es": "Éter · Elixir", "en": "Ether · Elixir", "q": "Recuperan PP de un movimiento / de todos.", "u": "Para no tener que volver al Centro Pokémon.", "d": "En el suelo de rutas y cuevas."}, {"c": "cura", "es": "Repelente · Superrepelente · Máximo Repelente", "en": "Repel · Super · Max Repel", "q": "Evitan Pokémon salvajes más débiles que el primero de tu equipo durante 100 · 200 · 250 pasos.", "u": "Para cruzar cuevas sin interrupciones.", "d": "Tiendas de los Centros Pokémon."}, {"c": "clave", "es": "Bici", "en": "Bicycle", "q": "Moverte mucho más rápido.", "u": "Regístrala en un atajo y úsala en exteriores.", "d": "Ciudad Mayólica (Nimbasa): te la da el dueño de la tienda de bicis."}, {"c": "clave", "es": "Zahorí", "en": "Dowsing Machine", "q": "Detecta objetos ocultos en el suelo.", "u": "Actívalo y camina hacia donde marque.", "d": "Ciudad Esmalte (Nacrene): te lo da Bel (Bianca)."}, {"c": "clave", "es": "Supercaña", "en": "Super Rod", "q": "Pescar Pokémon en el agua.", "u": "Úsala frente al agua.", "d": "Negro/Blanco: te la da Looker tras vencer al Alto Mando. En PokeMMO puede ser distinto."}, {"c": "vender", "es": "Perla · Perla Grande", "en": "Pearl · Big Pearl", "q": "Solo sirven para venderlas.", "u": "Véndelas en una tienda o a un coleccionista.", "d": "Rutas 1, 4, 13 y 18 (algunas ocultas), Ciudad Gres (Striaton), Ciudad Fayenza. El coleccionista de Ciudad Teja paga más por la Perla Grande."}, {"c": "vender", "es": "Polvoestelar · Pepita · Pepita Grande", "en": "Stardust · Nugget · Big Nugget", "q": "Solo sirven para venderlas (la Pepita Grande vale muchísimo).", "u": "Véndelas.", "d": "Polvoestelar: Ruta 13, Desierto Desolado, Monte Tuerca, Torre Dragoespiral. Pepita Grande: Undella Town (el coleccionista de ahí paga 30 000)."}], CATS = [["entrenar", "🏋️ Entrenar"], ["combate", "⚔️ Combate"], ["tipo", "🎯 Potenciar un tipo"], ["evol", "✨ Evolución"], ["crianza", "🥚 Crianza"], ["captura", "🔴 Captura"], ["cura", "💊 Curación"], ["clave", "🔑 Clave"], ["vender", "💰 Vender"]], KEY = "pokemmo_objetos_v1";
+function $(id){ return document.getElementById(id); }
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return {}; } }
+function store(v){ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+var cat = "", M = load(), CN = {};
+CATS.forEach(function(c){ CN[c[0]] = c[1]; });
+$("cats").innerHTML = '<button type="button" data-c="" class="on">Todos</button>' + CATS.map(function(c){ return '<button type="button" data-c="' + c[0] + '">' + c[1] + '</button>'; }).join("");
+$("cats").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; cat = b.getAttribute("data-c"); Array.prototype.forEach.call($("cats").children, function(x){ x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); }); draw(); });
+function draw(){
+  var q = norm($("q").value.trim());
+  var L = DATA.map(function(x, i){ x.i = i; return x; }).filter(function(x){ return (!cat || x.c === cat) && (!q || norm(x.es + " " + x.en + " " + x.q + " " + x.u + " " + x.d + " " + ((M[x.i] || {}).n || "")).indexOf(q) >= 0); });
+  var done = DATA.filter(function(x, i){ return (M[i] || {}).ok; }).length;
+  $("count").textContent = L.length + " objetos · ✔️ confirmados por ti: " + done + " de " + DATA.length;
+  $("items").innerHTML = L.length ? L.map(function(x){
+    var m = M[x.i] || {};
+    return '<div class="it' + (m.ok ? " done" : "") + '"><div><span class="pill">' + CN[x.c] + '</span></div><h3>' + x.es + '</h3><div class="en">' + x.en + '</div>' +
+      '<div class="row"><b>Para qué sirve:</b> ' + x.q + '</div><div class="row"><b>Cómo usarlo:</b> ' + x.u + '</div>' +
+      '<div class="where"><b>📍 Dónde (Negro/Blanco):</b> ' + x.d + '</div>' +
+      '<div class="mine"><input type="text" data-i="' + x.i + '" value="' + esc(m.n || "") + '" placeholder="Mi nota: dónde lo conseguí en PokeMMO" aria-label="Mi nota de ' + esc(x.es) + '">' +
+      '<label><input type="checkbox" data-k="' + x.i + '"' + (m.ok ? " checked" : "") + '> ✔️ Confirmado</label></div></div>';
+  }).join("") : '<p class="lead">😶 Ningún objeto coincide.</p>';
+}
+$("items").addEventListener("input", function(e){
+  var t = e.target, i;
+  if(t.hasAttribute("data-i")){ i = t.getAttribute("data-i"); M[i] = M[i] || {}; M[i].n = t.value; store(M); }
+});
+$("items").addEventListener("change", function(e){
+  var t = e.target;
+  if(t.hasAttribute("data-k")){ var i = t.getAttribute("data-k"); M[i] = M[i] || {}; M[i].ok = t.checked; store(M); t.closest(".it").classList.toggle("done", t.checked);
+    var done = DATA.filter(function(x, j){ return (M[j] || {}).ok; }).length; $("count").textContent = $("count").textContent.replace(/\d+ de \d+$/, done + " de " + DATA.length); }
+});
+$("q").addEventListener("input", draw);
+draw();
+})();
+</script>
+</body>
+</html>
