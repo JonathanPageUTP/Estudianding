@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen Express · GPI Parcial 3</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.45;padding-bottom:40px;}
+h1,h2,h3,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.tgl{border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:30px;padding:8px 12px;font-size:.74rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+.part-label{margin:26px 0 8px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+
+/* SECCIONES PLEGABLES */
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:9px;scroll-margin-top:100px;overflow:hidden;}
+summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+summary::-webkit-details-marker{display:none;}
+summary .n{font-family:var(--mono);font-size:.7rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:7px;min-width:28px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+summary h2{font-size:.92rem;flex:1;line-height:1.3;}
+summary .chev{color:var(--faint);font-size:.8rem;transition:transform .2s;}
+details[open] summary .chev{transform:rotate(180deg);}
+.body{padding:0 14px 13px;border-top:1px dashed var(--line-soft);}
+
+ul{margin:10px 0 0;padding:0;list-style:none;}
+li{position:relative;padding:3px 0 3px 15px;font-size:.85rem;color:var(--dim);}
+li::before{content:"▸";position:absolute;left:0;top:3px;color:var(--accent);font-size:.8rem;}
+li b{color:var(--text);}
+.tag{font-family:var(--mono);font-size:.68rem;font-weight:800;color:var(--accent);background:var(--accent-dim);border-radius:6px;padding:1px 6px;margin-left:2px;white-space:nowrap;}
+.tag.c{color:var(--cyan);background:var(--cyan-dim);}
+.tag.a{color:var(--amber);background:var(--amber-dim);}
+h3{font-size:.72rem;font-family:var(--mono);letter-spacing:.05em;color:var(--cyan);margin:13px 0 0;}
+.key{margin-top:10px;font-size:.8rem;color:var(--text);background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+.key b{color:var(--amber);}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.78rem;}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;color:var(--accent);padding:6px 6px;border-bottom:1px solid var(--line);font-weight:800;}
+td{padding:6px 6px;border-bottom:1px solid var(--line-soft);color:var(--dim);vertical-align:top;}
+td:first-child{color:var(--text);font-weight:600;}
+tr:last-child td{border-bottom:none;}
+
+.glo{display:grid;grid-template-columns:1fr;gap:0;margin-top:8px;}
+.glo div{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:.8rem;color:var(--dim);}
+.glo div:last-child{border-bottom:none;}
+.glo b{color:var(--cyan);min-width:118px;flex-shrink:0;font-weight:700;}
+@media (min-width:620px){ .glo{grid-template-columns:1fr 1fr;column-gap:16px;} }
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:26px;padding:0 16px;}
+
+/* ============================================================
+   KIT DE ESTUDIO: modos 🏢/🚌, continuar, pausas, 🔊 escuchar
+   ============================================================ */
+.kit-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;}
+.kit-seg{display:inline-flex;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:var(--surface);}
+.kit-seg button{background:none;border:none;color:var(--text-dim,var(--dim));font:700 .74rem var(--sans);padding:8px 12px;cursor:pointer;min-height:36px;}
+.kit-seg button[aria-pressed="true"]{background:var(--accent);color:#06140c;}
+.kit-btn{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:30px;font:700 .74rem var(--sans);padding:8px 12px;cursor:pointer;min-height:36px;white-space:nowrap;}
+.kit-btn.on{border-color:var(--amber);color:var(--amber);}
+.kit-note{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--text-dim,var(--dim));margin-top:6px;}
+.kit-note[hidden]{display:none;}
+.kit-note button{background:none;border:none;color:var(--text-faint,var(--faint));cursor:pointer;font-size:.9rem;padding:4px 6px;min-width:32px;min-height:32px;}
+html:not([data-mode="transit"]) .kit-transit-only{display:none !important;}
+html:not([data-mode="office"]) .kit-office-only{display:none !important;}
+.pausa{display:none;margin:16px 0;padding:9px 12px;border:1px dashed var(--amber);border-radius:10px;font-size:.78rem;font-weight:700;color:var(--amber);background:var(--amber-dim);scroll-margin-top:140px;}
+html[data-mode="transit"] .pausa{display:block;}
+.kit-fold>.kit-foldbtn{display:none;}
+html[data-mode="transit"] .kit-fold>.kit-foldbtn{display:inline-flex;margin:10px 0 0;}
+html[data-mode="transit"] .kit-fold:not(.open)>.tblwrap{display:none;}
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .7rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:32px;margin-left:auto;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#kitPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#kitPlayer.show{display:flex;}
+#kitPlayer button,#kitPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .78rem var(--sans);padding:7px 11px;cursor:pointer;min-height:36px;}
+@media (max-width:430px){#kitPlayer .now{display:none;}}
+#kitPlayer .now{flex:1;min-width:0;font-size:.7rem;color:var(--cyan);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#kitToast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:300;background:var(--amber-dim);border:1px solid var(--amber);color:var(--text);border-radius:14px;padding:12px 16px;font-size:.86rem;display:none;max-width:calc(100% - 32px);}
+#kitToast.show{display:block;}
+/* bloques de aprendizaje activo */
+.active{border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin:14px 0;background:var(--surface);}
+.active.pre{border-color:#1f4d5c;background:var(--cyan-dim);}
+.active.why{border-color:#5c4515;}
+.active.rec{border-color:#453262;}
+.alabel{font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.04em;margin-bottom:6px;color:var(--cyan);}
+.active.why .alabel{color:var(--amber);}
+.active.rec .alabel{color:var(--violet,#c9a6f0);}
+.alabel small{font-family:var(--sans);font-weight:400;letter-spacing:0;color:var(--text-dim,var(--dim));}
+.aqt{font-size:.88rem;color:var(--text);margin:4px 0 8px;}
+details.aq{border-top:1px dashed var(--line-soft);padding:7px 0;}
+details.aq:first-of-type{border-top:none;}
+details.aq>summary{cursor:pointer;font-size:.86rem;color:var(--text);list-style:none;display:flex;gap:8px;align-items:flex-start;min-height:28px;}
+details.aq>summary::-webkit-details-marker{display:none;}
+details.aq>summary::before{content:"▸";color:var(--text-faint,var(--faint));transition:transform .15s;}
+details.aq[open]>summary::before{transform:rotate(90deg);}
+details.aq>summary .see{margin-left:auto;font-size:.68rem;color:var(--text-faint,var(--faint));font-family:var(--mono);white-space:nowrap;}
+.aa{font-size:.84rem;color:var(--text-dim,var(--dim));margin:6px 0 2px 16px;padding:8px 10px;background:var(--bg);border-radius:8px;}
+.aa b{color:var(--text);}
+textarea.note{width:100%;min-height:90px;margin:6px 0 4px;resize:vertical;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px;font:16px/1.45 var(--sans);}
+html:not([data-mode="office"]) textarea.note{display:none;}
+.kit-plan{list-style:none;padding:0;margin:10px 0 0;}
+.kit-plan li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line-soft);font-size:.86rem;color:var(--text-dim,var(--dim));}
+.kit-plan li::before{display:none;}
+.kit-plan li b{color:var(--accent);font-family:var(--mono);min-width:92px;flex-shrink:0;}
+.kit-frase{border:1px dashed var(--accent);border-radius:10px;padding:10px 12px;font-size:.9rem;color:var(--text);background:var(--accent-dim);outline:none;}
+.kit-frase:focus{border-style:solid;}
+.kit-date{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 10px;font-size:16px;color-scheme:dark;}
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){
+  .kit-btn:hover,.kit-seg button:hover,.kit-tts:hover{filter:brightness(1.15);}
+}
+@media (max-width:560px){
+  .kit-bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .kit-bar::-webkit-scrollbar{display:none;}
+  .kit-bar>*{flex-shrink:0;}
+  .kit-tts{padding:6px 9px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+
+/* ---------- RESPONSIVE ---------- */
+:root{--text-dim:var(--dim);--text-faint:var(--faint);}
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+.hd2{max-width:760px;margin:0 auto;padding:0 16px 10px;}
+.hd2 .kit-bar{margin-top:0;}
+summary .kit-tts{margin-left:0;}
+li,.key{max-width:70ch;}
+table{display:block;overflow-x:auto;}
+@media (max-width:560px){ .tgl{min-height:44px;} summary{min-height:48px;} }
+@media (min-width:561px) and (max-width:1023px){
+  .hd,nav.chips,.hd2,main{max-width:720px;}
+}
+@media (min-width:1024px){
+  .hd,nav.chips,.hd2,main{max-width:1160px;}
+  main{columns:2;column-gap:16px;}
+  main>.hint,main>.part-label{column-span:all;}
+  main>details{break-inside:avoid;display:block;}
+  #kitPlayer{bottom:calc(16px + env(safe-area-inset-bottom,0px));}
+}
+@media (hover:hover){ nav.chips a:hover,.tgl:hover{border-color:var(--accent);color:var(--text);} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Resumen <em>express</em></h1>
+    <button class="tgl" id="tgl">Plegar todo</button>
+  </div>
+  <nav class="chips">
+    <a href="#s1">Ágil</a><a href="#s2">Manifiesto</a><a href="#s3">Ciclo</a><a href="#s4">Scrum</a><a href="#s5">XP · Kanban</a>
+    <a href="#s6">Herramientas</a><a href="#s7">Trad. vs. Ágil</a><a href="#s8">Ejemplo</a><a href="#s9">Casos</a><a href="#s10">Simulador</a>
+    <a href="#s11">Plantillas</a><a href="#s12">Glosario</a><a href="#s13">Resumen</a>
+  </nav>
+  <div class="hd2"></div>
+</header>
+
+<main>
+<p class="hint">Todo <b>Mod3_ProyectosAgiles.html</b> (Módulo 3 · Gestión de Proyectos Ágiles), en su orden, lo más corto posible. Toca un título para plegarlo. En 🚌 Transporte las secciones empiezan plegadas y ▶ Continuar te lleva a donde quedaste.</p>
+
+<div class="part-label">UNIDAD 3.1 · GESTIÓN DE PROYECTOS ÁGILES</div>
+
+<details open id="s1"><summary><span class="n">1</span><h2>¿Qué es la gestión ágil?</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Definición:</b> enfoque <b>iterativo e incremental</b> que entrega valor <b>temprano y continuo</b>, respondiendo al cambio en lugar de seguir un plan rígido.</li>
+    <li><b>Origen (2001):</b> 17 profesionales firman el Manifiesto Ágil.</li>
+    <li><b>Adaptativo</b> (responde al cambio) · <b>Colaborativo</b> (equipos autoorganizados) · <b>Valor temprano</b> (entregas frecuentes).</li>
+  </ul>
+</div></details>
+
+<details open id="s2"><summary><span class="n">2</span><h2>Los 4 valores del Manifiesto Ágil</h2><span class="chev">▾</span></summary><div class="body">
+  <table>
+    <tr><th>Se valora más</th><th>…sobre</th></tr>
+    <tr><td>Individuos e interacciones</td><td>procesos y herramientas</td></tr>
+    <tr><td>Software funcionando</td><td>documentación extensiva</td></tr>
+    <tr><td>Colaboración con el cliente</td><td>negociación contractual</td></tr>
+    <tr><td>Respuesta ante el cambio</td><td>seguir un plan</td></tr>
+  </table>
+  <ul>
+    <li>Se valora la derecha, pero se valora <b>más</b> la izquierda.</li>
+    <li><b>12 principios:</b> valor temprano, bienvenido el cambio, entregas frecuentes, sostenibilidad, mejora continua.</li>
+  </ul>
+  <div class="key">🧠 <b>4 valores + 12 principios</b> · "Individuos Siempre Colaboran Rápido".</div>
+</div></details>
+
+<details open id="s3"><summary><span class="n">3</span><h2>Ciclo de vida iterativo e incremental</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Ciclo:</b> Backlog → Sprint → Incremento → Retro, y se repite. Cada iteración da un <b>incremento potencialmente entregable</b>.</li>
+    <li><b>Sprint:</b> 1 a 4 semanas; todos los eventos tienen <b>time-box</b> (duración máxima fija).</li>
+  </ul>
+  <table>
+    <tr><th>Evento</th><th>Qué · time-box</th></tr>
+    <tr><td>Sprint Planning</td><td>qué (objetivo) y cómo · hasta 8 h (Sprint de 1 mes)</td></tr>
+    <tr><td>Daily Scrum</td><td>sincronizar e impedimentos, la facilita el equipo, no es reporte al jefe · 15 min</td></tr>
+    <tr><td>Trabajo del Sprint</td><td>construir el incremento según el Sprint Backlog · 1 a 4 semanas</td></tr>
+    <tr><td>Sprint Review</td><td>mostrar el incremento y recoger feedback · hasta 4 h</td></tr>
+    <tr><td>Retrospectiva</td><td>cómo mejorar la forma de trabajar · hasta 3 h</td></tr>
+  </table>
+</div></details>
+
+<details open id="s4"><summary><span class="n">4</span><h2>Marco de trabajo Scrum</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Pilares:</b> transparencia, inspección y adaptación. Time-boxing para dar ritmo.</li>
+    <li><b>Roles:</b> Product Owner (maximiza el valor, prioriza el Product Backlog) · Scrum Master (facilita, elimina impedimentos, líder-servidor) · Equipo de Desarrollo (autoorganizado, construye el incremento).</li>
+    <li><b>Artefactos:</b> Product Backlog (lista ordenada de todo el producto) · Sprint Backlog (ítems del Sprint más el plan) · Incremento (terminado según la DoD).</li>
+    <li><b>Eventos:</b> Sprint Planning (planifica) · Daily Scrum (15 min) · Sprint Review (muestra) · Retrospective (mejoras).</li>
+  </ul>
+  <div class="key">🧠 Pilares "TIA" · Scrum 3-3-4: 3 roles, 3 artefactos, 4 eventos.</div>
+</div></details>
+
+<details open id="s5"><summary><span class="n">5</span><h2>Otras metodologías: XP y Kanban</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>XP:</b> excelencia técnica · pair programming · TDD · integración continua y refactorización.</li>
+    <li><b>Kanban:</b> flujo continuo (sin sprints fijos) · tablero visual con columnas · límite WIP · optimiza el tiempo de ciclo.</li>
+    <li><b>Tablero de ejemplo:</b> Por hacer · En progreso (WIP máx 2) · Hecho. Si En progreso supera 2, el contador se pone rojo.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">HERRAMIENTAS</div>
+
+<details open id="s6"><summary><span class="n">6</span><h2>Herramientas para proyectos ágiles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Jira:</b> estándar de la industria (Scrum y Kanban), gratis hasta 10 personas · <b>Trello:</b> Kanban simple, ideal para empezar.</li>
+    <li><b>Asana:</b> lista, tablero y cronograma · <b>monday.com:</b> tableros con automatizaciones · <b>ClickUp:</b> todo en uno.</li>
+    <li><b>Notion:</b> documentos, bases de datos y tableros · <b>GitHub Projects:</b> ligado al código · <b>Miro:</b> pizarra colaborativa (retros, mapas de historias).</li>
+  </ul>
+  <div class="key">🎯 Proyecto grupal: <b>Trello</b> (sencillez) o <b>Jira</b> (estándar profesional).</div>
+</div></details>
+
+<div class="part-label">SÍNTESIS Y PRÁCTICA</div>
+
+<details open id="s7"><summary><span class="n">7</span><h2>Tradicional vs. Ágil</h2><span class="chev">▾</span></summary><div class="body">
+  <table>
+    <tr><th>Tradicional</th><th>Ágil</th></tr>
+    <tr><td>Alcance fijo, plan detallado</td><td>Alcance flexible, plan adaptativo</td></tr>
+    <tr><td>Entrega al final</td><td>Entregas incrementales</td></tr>
+    <tr><td>Cambios controlados y costosos</td><td>Cambios bienvenidos</td></tr>
+    <tr><td>Documentación extensa</td><td>Documentación mínima suficiente</td></tr>
+  </table>
+</div></details>
+
+<details open id="s8"><summary><span class="n">8</span><h2>Ejemplo: Portal de matrícula</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Historias:</b> Como estudiante quiero matricularme en línea para evitar filas · ver mi horario para organizar mis clases · pagar en línea para no ir a caja.</li>
+    <li><b>Burndown:</b> trabajo restante del Sprint (puntos restantes contra días). Real por encima de la ideal significa atrasado.</li>
+    <li><b>DoD:</b> código revisado por un compañero · pruebas pasan · funciona en el ambiente de prueba · documentación mínima actualizada. Define cuándo está realmente terminado, no "casi listo".</li>
+  </ul>
+</div></details>
+
+<details open id="s9"><summary><span class="n">9</span><h2>Casos reales</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Spotify</b> (éxito, escalado): squads, tribes, chapters. Lo ágil se adapta; no es receta para copiar.</li>
+    <li><b>Healthcare.gov</b> (recuperación): de cascada fallida a entregas ágiles, estable en semanas. Iteraciones cortas reducen el riesgo.</li>
+    <li><b>CHAOS</b> (dato): ágil con mayor tasa de éxito que cascada, sobre todo en proyectos grandes. Feedback temprano.</li>
+    <li><b>Agile teatral</b> (lección): rituales sin valores. Los valores importan más que las ceremonias.</li>
+  </ul>
+</div></details>
+
+<details open id="s10"><summary><span class="n">10</span><h2>Simulador: dentro de un Sprint</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Eres el Scrum Master; mides <b>valor, calidad, moral y predictibilidad</b>.</li>
+    <li><b>Historia urgente a mitad del Sprint:</b> dejarla para el próximo Sprint (o sacar otra de igual tamaño). Agregarla encima baja todo.</li>
+    <li><b>No se termina a tiempo:</b> mover lo no terminado al siguiente Sprint. Recortar pruebas da deuda técnica; horas extra desgastan.</li>
+    <li><b>Daily de 40 min:</b> reenfocarlo a 15 min, equipo e impedimentos. Eliminarlo oculta bloqueos.</li>
+  </ul>
+</div></details>
+
+<details open id="s11"><summary><span class="n">11</span><h2>Plantillas ágiles</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li><b>Backlog Scrum</b> (Excel, hoja "Backlog"): historias de usuario, prioridad, estimación y sprint.</li>
+    <li><b>Acta de Constitución</b> (Word): también sirve en ágil para enmarcar el proyecto.</li>
+  </ul>
+</div></details>
+
+<div class="part-label">REFERENCIA</div>
+
+<details open id="s12"><summary><span class="n">12</span><h2>Glosario de siglas</h2><span class="chev">▾</span></summary><div class="body">
+  <div class="glo">
+    <div><b>PO</b> Product Owner: prioriza el backlog y maximiza el valor.</div>
+    <div><b>SM</b> Scrum Master: facilita, protege y elimina impedimentos.</div>
+    <div><b>DoD</b> Definición de Hecho: criterios para considerar terminado un ítem.</div>
+    <div><b>WIP</b> trabajo en progreso: en Kanban se limita.</div>
+    <div><b>TDD</b> desarrollo guiado por pruebas: la prueba antes que el código.</div>
+    <div><b>CI</b> integración continua: fusionar y probar con frecuencia.</div>
+    <div><b>XP</b> eXtreme Programming: excelencia técnica.</div>
+    <div><b>MVP</b> Producto Mínimo Viable: lo más simple que ya aporta valor.</div>
+    <div><b>Sprint</b> iteración de 1 a 4 semanas que produce un incremento.</div>
+    <div><b>Backlog</b> lista priorizada del producto o del sprint.</div>
+    <div><b>PSM / CSM</b> certificaciones de Scrum Master (Scrum.org / Scrum Alliance).</div>
+    <div><b>PSPO / CSPO</b> certificaciones de Product Owner.</div>
+    <div><b>PMI-ACP</b> certificación ágil del PMI.</div>
+  </div>
+</div></details>
+
+<details open id="s13"><summary><span class="n">13</span><h2>Resumen del Módulo 3</h2><span class="chev">▾</span></summary><div class="body">
+  <ul>
+    <li>Ágil entrega valor de forma iterativa e incremental.</li>
+    <li>El Manifiesto define 4 valores y 12 principios.</li>
+    <li>Scrum organiza el trabajo en Sprints con roles, artefactos y eventos.</li>
+    <li>XP aporta prácticas técnicas; Kanban optimiza el flujo.</li>
+    <li>El enfoque se elige según la <b>estabilidad de los requisitos</b>.</li>
+    <li>El Proyecto Grupal integra la planificación tradicional con un backlog ágil.</li>
+  </ul>
+  <div class="key">🎯 <b>Lo más preguntable:</b> 4 valores · roles y artefactos de Scrum · time-boxes (8 h · 15 min · 4 h · 3 h) · XP vs. Kanban · DoD · Tradicional vs. Ágil.</div>
+</div></details>
+
+<footer>Gerencia de Proyectos Informáticos · Parcial 3 · resumen de Mod3_ProyectosAgiles.html · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+
+<script>
+(function(){
+  "use strict";
+  var all = document.querySelectorAll("details"), tgl = document.getElementById("tgl");
+  function label(){
+    var anyOpen = Array.prototype.some.call(all, function(d){ return d.open; });
+    tgl.textContent = anyOpen ? "Plegar todo" : "Abrir todo";
+  }
+  tgl.addEventListener("click", function(){
+    var open = tgl.textContent === "Abrir todo";
+    all.forEach(function(d){ d.open = open; });
+    label();
+  });
+  all.forEach(function(d){ d.addEventListener("toggle", label); });
+  // Al tocar un chip, abrir esa sección
+  document.querySelectorAll("nav.chips a").forEach(function(a){
+    a.addEventListener("click", function(){
+      var d = document.querySelector(a.getAttribute("href"));
+      if(d){ d.open = true; label(); }
+    });
+  });
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+
+<script src="audio/resumen-express.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+/* Configuración del kit para el resumen express */
+window.KIT_CFG = {
+  prefix:"gpi_p3", posKey:"gpi_p3_express_pos_v1",
+  sections:"main > details", header:".hd2",
+  chunk:false, foldTables:false,
+  ttsBlocks:"summary h2, h3, li, .key, tr, .glo > div, p",
+  ttsTarget:function(sec){ return sec.querySelector("summary"); },
+  titleOf:function(sec){ var t = sec.querySelector("summary h2"); return t ? t.textContent : ""; },
+  onMode:function(m){
+    document.querySelectorAll("main > details").forEach(function(d){ d.open = (m === "office"); });
+  }
+};
+</script>
+<script>
+/* ============================================================
+   KIT DE ESTUDIO · modos Oficina/Transporte, continuar donde quedé,
+   pausas seguras, temporizador de pausas y lectura en voz alta
+   ============================================================ */
+(function(){
+  "use strict";
+  var CFG = window.KIT_CFG;
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  var root = document.documentElement;
+  var sections = Array.prototype.slice.call(document.querySelectorAll(CFG.sections));
+
+  /* ---------- barra de modo ---------- */
+  var bar = document.createElement("div");
+  bar.className = "kit-bar";
+  bar.innerHTML =
+    '<div class="kit-seg" role="group" aria-label="Modo de estudio">'+
+      '<button type="button" data-mode="office" aria-pressed="false">🏢 Oficina</button>'+
+      '<button type="button" data-mode="transit" aria-pressed="false">🚌 Transporte</button>'+
+    '</div>'+
+    '<button type="button" class="kit-btn kit-transit-only" id="kitCont">▶ Continuar donde quedé</button>'+
+    '<button type="button" class="kit-btn kit-office-only" id="kitPomo" title="Sugiere una pausa a los 25 minutos">⏱ Pomodoro 25 min</button>';
+  var note = document.createElement("div");
+  note.className = "kit-note";
+  note.innerHTML = '<span id="kitNoteTxt"></span><button type="button" aria-label="Ocultar aviso">✕</button>';
+  var host = document.querySelector(CFG.header);
+  host.appendChild(bar); host.appendChild(note);
+  note.querySelector("button").addEventListener("click", function(){ note.hidden = true; });
+
+  var NOTES = {
+    transit:"🚌 Activa No Molestar · música instrumental o silencio, nada con letra.",
+    office:"🏢 Teléfono fuera de la vista y notificaciones en silencio."
+  };
+  function setMode(m, persist){
+    root.setAttribute("data-mode", m);
+    Array.prototype.forEach.call(bar.querySelectorAll(".kit-seg button"), function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-mode")===m ? "true" : "false"); });
+    document.getElementById("kitNoteTxt").textContent = NOTES[m];
+    note.hidden = false;
+    if(persist) save(CFG.prefix+"_modo_v1", m);
+    if(CFG.onMode) CFG.onMode(m);
+    if(m !== "office") stopPomo();
+  }
+  bar.querySelector(".kit-seg").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-mode]"); if(b) setMode(b.getAttribute("data-mode"), true);
+  });
+
+  /* ---------- pausas seguras (bloques de ~5–7 min) ---------- */
+  var checkpoints = [];
+  sections.forEach(function(sec){
+    sec.setAttribute("data-ck", sec.id);
+    checkpoints.push(sec);
+    if(!CFG.chunk) return;
+    var words = 0, n = 0;
+    var kids = Array.prototype.slice.call(CFG.chunkRoot ? sec.querySelector(CFG.chunkRoot).children : sec.children);
+    var total = kids.reduce(function(t,k){ return t + (k.textContent.trim().split(/\s+/).length); }, 0);
+    var seen = 0;
+    kids.forEach(function(k){
+      if(k.matches(".topic-head")) return;
+      var w = k.textContent.trim().split(/\s+/).length;
+      words += w; seen += w;
+      if(words >= 450 && total - seen >= 120){
+        n++;
+        var p = document.createElement("div");
+        p.className = "pausa"; p.id = sec.id+"-p"+n; p.setAttribute("data-ck", p.id);
+        p.textContent = "🚏 Pausa segura: si llegas a tu parada, retoma aquí";
+        k.parentNode.insertBefore(p, k.nextSibling);
+        checkpoints.push(p);
+        words = 0;
+      }
+    });
+  });
+  checkpoints.sort(function(a,b){ return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+
+  var POS = CFG.posKey;
+  var saveTimer;
+  function trackPos(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var cur = null;
+      for(var i=0;i<checkpoints.length;i++){
+        var el = checkpoints[i];
+        if(el.offsetParent === null && !el.matches(CFG.sections)) continue;   // pausa oculta
+        if(el.getBoundingClientRect().top <= 160) cur = el; else break;
+      }
+      if(cur) save(POS, cur.id);
+    }, 250);
+  }
+  window.addEventListener("scroll", trackPos, {passive:true});
+  document.getElementById("kitCont").addEventListener("click", function(){
+    var id = load(POS), el = id && document.getElementById(id);
+    if(!el){ toast("Aún no hay una posición guardada: empieza a leer y se guardará sola."); return; }
+    var d = el.closest("details"); if(d) d.open = true;
+    if(el.tagName === "DETAILS") el.open = true;
+    el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  /* ---------- tablas grandes plegadas en Transporte ---------- */
+  if(CFG.foldTables){
+    Array.prototype.forEach.call(document.querySelectorAll(CFG.foldTables), function(w){
+      var rows = w.querySelectorAll("tbody tr").length;
+      if(rows <= 5) return;
+      var f = document.createElement("div"); f.className = "kit-fold";
+      w.parentNode.insertBefore(f, w);
+      var b = document.createElement("button"); b.type = "button"; b.className = "kit-btn kit-foldbtn";
+      b.textContent = "📋 Ver tabla ("+rows+" filas)";
+      b.addEventListener("click", function(){ f.classList.toggle("open"); b.textContent = (f.classList.contains("open")?"🙈 Ocultar tabla":"📋 Ver tabla ("+rows+" filas)"); });
+      f.appendChild(b); f.appendChild(w);
+    });
+  }
+
+  /* ---------- notas escritas (Oficina) ---------- */
+  var NK = CFG.prefix+"_notas_v1", notes = load(NK) || {};
+  Array.prototype.forEach.call(document.querySelectorAll("textarea[data-note]"), function(t){
+    t.value = notes[t.getAttribute("data-note")] || "";
+    t.addEventListener("input", function(){ notes[t.getAttribute("data-note")] = t.value; save(NK, notes); });
+  });
+
+  /* ---------- toast + pomodoro ---------- */
+  var toastEl = document.createElement("div"); toastEl.id = "kitToast"; toastEl.setAttribute("role","status"); document.body.appendChild(toastEl);
+  var toastT;
+  function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, 6000); }
+  var pomoEnd = 0, pomoT = null, pomoBtn = document.getElementById("kitPomo");
+  function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), x = s%60; return m+":"+(x<10?"0":"")+x; }
+  function stopPomo(){ clearInterval(pomoT); pomoT = null; pomoEnd = 0; pomoBtn.classList.remove("on"); pomoBtn.textContent = "⏱ Pomodoro 25 min"; }
+  pomoBtn.addEventListener("click", function(){
+    if(pomoT){ stopPomo(); return; }
+    pomoEnd = Date.now() + 25*60000;
+    pomoBtn.classList.add("on");
+    pomoT = setInterval(function(){
+      var left = (pomoEnd - Date.now())/1000;
+      pomoBtn.textContent = "⏱ "+fmt(left)+" · detener";
+      if(left <= 0){ stopPomo(); toast("☕ Llevas 25 minutos: toma una pausa de 5 minutos. Luego responde las preguntas 🧠 del último tema."); try{ navigator.vibrate && navigator.vibrate(300); }catch(e){} }
+    }, 1000);
+  });
+
+  /* ---------- lectura en voz alta (audio/voz.js: MP3 con pantalla apagada o voz del navegador) ---------- */
+  if(window.Voz){
+    Voz.init({
+      sections: sections,
+      key: function(sec){ return sec.id; },
+      title: CFG.titleOf,
+      blocks: CFG.ttsBlocks,
+      skip: ".active,.kit-bar,.pausa,#kitPlayer,.kit-foldbtn",
+      target: CFG.ttsTarget,
+      onOpen: function(sec){ if(sec.tagName === "DETAILS") sec.open = true; },
+      playerId: "kitPlayer", btnClass: "kit-tts", allClass: "kit-btn", allTarget: bar, allBefore: bar.children[1] || null,
+      rateKey: CFG.prefix+"_tts_rate_v1", artist: "Resumen express · GPI Parcial 3"
+    });
+  }
+
+  /* ---------- modo inicial ---------- */
+  var m = load(CFG.prefix+"_modo_v1");
+  if(m !== "office" && m !== "transit") m = window.matchMedia("(max-width:560px)").matches ? "transit" : "office";
+  setMode(m, false);
+})();
+</script>
+</body>
+</html>

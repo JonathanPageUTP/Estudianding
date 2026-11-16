@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Guía de Estudio · Gerencia de Proyectos Informáticos — Parcial 3</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --maxw:460px;
+  --radius:14px;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--sans);
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+  color:var(--text);
+  line-height:1.55;
+  padding-bottom:92px;
+  min-height:100vh;
+}
+::selection{background:var(--accent-dim);color:var(--accent);}
+a{color:var(--cyan);}
+h1,h2,h3,h4{font-family:var(--sans);margin:0;}
+p{margin:0;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+img,svg{max-width:100%;}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+  z-index:100;transition:width .1s linear;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(10,20,16,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  padding-top:3px;
+}
+.header-inner{
+  max-width:var(--maxw);margin:0 auto;padding:12px 16px 10px;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:.68rem;color:var(--accent);
+  letter-spacing:.03em;
+}
+.htitle{font-size:1.18rem;font-weight:700;margin-top:2px;color:var(--text);}
+.hsub{font-size:.76rem;color:var(--text-faint);margin-top:2px;}
+
+.searchbox{
+  margin-top:10px;position:relative;
+}
+.searchbox input{
+  width:100%;padding:10px 38px 10px 14px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;color:var(--text);font-size:.92rem;
+  font-family:var(--sans);
+}
+.searchbox input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.searchbox input::placeholder{color:var(--text-faint);}
+.searchbox .sico{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--text-faint);pointer-events:none;font-size:.95rem;
+}
+#searchcount{
+  font-family:var(--mono);font-size:.68rem;color:var(--text-faint);
+  margin-top:6px;min-height:14px;
+}
+#searchcount b{color:var(--accent);}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  padding:26px 16px 18px;max-width:var(--maxw);margin:0 auto;
+  border-bottom:1px dashed var(--line);
+}
+.hero .tag{
+  display:inline-block;font-family:var(--mono);font-size:.68rem;
+  color:var(--accent);border:1px solid var(--accent-dim);
+  background:var(--accent-dim);padding:3px 9px;border-radius:20px;
+}
+.hero h1{font-size:1.55rem;line-height:1.28;margin-top:12px;color:var(--text);}
+.hero p{font-size:.87rem;color:var(--text-dim);margin-top:8px;}
+.hero .meta{
+  margin-top:14px;font-family:var(--mono);font-size:.68rem;color:var(--text-faint);
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+
+/* ============================================================
+   MAIN / SECTIONS
+   ============================================================ */
+main{max-width:var(--maxw);margin:0 auto;padding:6px 16px 0;}
+section.topic{
+  padding:26px 0;border-bottom:1px solid var(--line-soft);
+  scroll-margin-top:130px;
+}
+section.topic:last-child{border-bottom:none;}
+.topic-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.topic-num{
+  font-family:var(--mono);font-size:.72rem;color:var(--accent);
+  border:1px solid var(--accent-dim);border-radius:8px;
+  min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:var(--accent-dim);
+}
+.topic-title{font-size:1.15rem;font-weight:700;color:var(--text);}
+.topic-kicker{font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-top:2px;letter-spacing:.02em;}
+
+h3.sub{font-size:.98rem;font-weight:700;color:var(--text);margin:18px 0 10px;}
+h3.sub:first-child{margin-top:0;}
+
+p.body{font-size:.89rem;color:var(--text-dim);margin-bottom:10px;}
+p.body b, li b, td b{color:var(--text);}
+ul.plain{padding-left:0;margin:8px 0;}
+ul.plain li{
+  list-style:none;font-size:.87rem;color:var(--text-dim);
+  padding:6px 0 6px 20px;position:relative;
+}
+ul.plain li::before{
+  content:"—";position:absolute;left:0;color:var(--accent);
+}
+
+/* ============================================================
+   CALLOUT BOXES
+   ============================================================ */
+.box{
+  border-radius:var(--radius);padding:14px 15px;margin:14px 0;
+  border:1px solid;font-size:.85rem;
+}
+.box .blabel{
+  font-family:var(--mono);font-size:.66rem;font-weight:700;
+  letter-spacing:.04em;margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.box p{color:var(--text-dim);font-size:.85rem;}
+.box p+p{margin-top:6px;}
+
+.box.critico{background:var(--red-dim);border-color:#5c2a2a;}
+.box.critico .blabel{color:var(--red);}
+.box.termino{background:var(--cyan-dim);border-color:#1f4d5c;}
+.box.termino .blabel{color:var(--cyan);}
+.box.error{background:var(--amber-dim);border-color:#5c4515;}
+.box.error .blabel{color:var(--amber);}
+.box.mnemo{background:var(--violet-dim);border-color:#453262;}
+.box.mnemo .blabel{color:var(--violet);}
+.box.analogia{background:var(--accent-dim);border-color:#265c3a;}
+.box.analogia .blabel{color:var(--accent);}
+
+.mnemo-word{
+  font-family:var(--mono);font-weight:800;font-size:1.05rem;
+  color:var(--violet);letter-spacing:.04em;margin:2px 0 8px;
+}
+
+/* ============================================================
+   TABLES (scroll horizontal en móvil)
+   ============================================================ */
+.tblwrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:12px;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.78rem;}
+thead th{
+  background:var(--surface-2);color:var(--accent);text-align:left;
+  padding:9px 10px;font-family:var(--mono);font-weight:700;font-size:.7rem;
+  border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;
+}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);vertical-align:top;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:nth-child(even){background:rgba(255,255,255,.015);}
+
+/* ============================================================
+   ACCORDION
+   ============================================================ */
+.acc{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:10px 0;background:var(--surface);}
+.acc-item + .acc-item{border-top:1px solid var(--line-soft);}
+.acc-btn{
+  width:100%;background:none;border:none;color:var(--text);
+  padding:13px 14px;display:flex;justify-content:space-between;align-items:center;
+  gap:10px;text-align:left;font-size:.87rem;font-weight:600;font-family:var(--sans);
+  cursor:pointer;
+}
+.acc-btn .tagpill{
+  font-family:var(--mono);font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:20px;
+  white-space:nowrap;
+}
+.tagpill.ok{background:var(--accent-dim);color:var(--accent);}
+.tagpill.bad{background:var(--red-dim);color:var(--red);}
+.acc-btn .chev{color:var(--text-faint);transition:transform .2s;flex-shrink:0;font-size:.8rem;}
+.acc-item.open .acc-btn .chev{transform:rotate(180deg);}
+.acc-panel{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+.acc-item.open .acc-panel{max-height:600px;}
+.acc-panel-inner{padding:0 14px 14px;font-size:.82rem;color:var(--text-dim);border-top:1px dashed var(--line-soft);padding-top:10px;}
+.acc-panel-inner p+p{margin-top:6px;}
+
+/* ============================================================
+   CARDS / GRIDS
+   ============================================================ */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.grid1{display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0;}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:12px 13px;
+}
+.card .cico{font-size:1.3rem;margin-bottom:4px;}
+.card .ctitle{font-weight:700;font-size:.83rem;color:var(--text);}
+.card .cdesc{font-size:.76rem;color:var(--text-dim);margin-top:3px;}
+
+.card-wide{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:14px 15px;margin:10px 0;
+}
+.card-wide .ctop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;}
+.card-wide .cname{font-weight:800;color:var(--text);font-size:.98rem;}
+.card-wide .csub{font-family:var(--mono);font-size:.68rem;color:var(--accent);margin-bottom:6px;}
+.card-wide .ccost{font-size:1rem;font-weight:800;color:var(--accent);margin:4px 0;}
+.card-wide .cfield{font-size:.78rem;color:var(--text-dim);margin-top:3px;}
+.card-wide .cfield b{color:var(--text);}
+.pill{
+  font-family:var(--mono);font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:20px;
+}
+.pill.green{background:var(--accent-dim);color:var(--accent);}
+.pill.amber{background:var(--amber-dim);color:var(--amber);}
+.pill.cyan{background:var(--cyan-dim);color:var(--cyan);}
+.pill.red{background:var(--red-dim);color:var(--red);}
+
+/* ============================================================
+   TRIPLE RESTRICCIÓN TRIANGLE (SVG puro, sin dependencia)
+   ============================================================ */
+.tri-wrap{display:flex;justify-content:center;margin:14px 0;}
+
+/* ============================================================
+   STEP FLOW
+   ============================================================ */
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:14px 0;}
+.flow .step{
+  display:flex;flex-direction:column;align-items:center;gap:4px;width:72px;
+}
+.flow .circ{
+  width:34px;height:34px;border-radius:50%;background:var(--accent-dim);
+  border:1px solid var(--accent);color:var(--accent);font-weight:800;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+}
+.flow .steplabel{font-size:.66rem;text-align:center;color:var(--text-dim);line-height:1.2;}
+.flow .arrow{color:var(--text-faint);font-size:1rem;}
+
+/* ============================================================
+   GLOSSARY GRID
+   ============================================================ */
+.glo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.glo-item{
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:10px 11px;cursor:pointer;
+}
+.glo-item .gs{font-family:var(--mono);font-weight:800;color:var(--cyan);font-size:.82rem;}
+.glo-item .gn{font-size:.68rem;color:var(--text-faint);margin-top:2px;line-height:1.25;}
+.glo-item .gm{
+  font-size:.74rem;color:var(--text-dim);margin-top:6px;
+  display:none;border-top:1px dashed var(--line-soft);padding-top:6px;
+}
+.glo-item.open .gm{display:block;}
+.glo-item .gtoggle{font-size:.62rem;color:var(--accent);margin-top:5px;font-family:var(--mono);}
+
+/* ============================================================
+   ROUTE / PATH
+   ============================================================ */
+.route{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0;}
+.route-label{font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.03em;margin-bottom:8px;}
+.route-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px;}
+.rpill{font-family:var(--mono);font-size:.68rem;padding:4px 9px;border-radius:20px;background:var(--surface-2);color:var(--text-dim);white-space:nowrap;}
+.rpill.hi{background:var(--accent-dim);color:var(--accent);font-weight:700;}
+.rarrow{color:var(--text-faint);font-size:.8rem;}
+
+blockquote.q{
+  border-left:3px solid var(--accent);background:var(--surface);
+  border-radius:0 10px 10px 0;padding:12px 15px;margin:14px 0;
+  font-size:.85rem;font-style:italic;color:var(--text-dim);
+}
+
+/* ============================================================
+   MAPA MENTAL FINAL
+   ============================================================ */
+.mm-center{
+  background:linear-gradient(135deg,var(--accent-dim),var(--surface-2));
+  border:1px solid var(--accent);color:var(--accent);
+  border-radius:50%;width:120px;height:120px;margin:0 auto 16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  font-weight:800;font-size:.8rem;
+}
+.mm-branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.mm-branch{
+  border-radius:10px;padding:10px;font-size:.72rem;font-weight:700;text-align:center;
+  border:1px solid var(--line);
+}
+
+/* ============================================================
+   TOC OVERLAY
+   ============================================================ */
+#tocOverlay{
+  position:fixed;inset:0;background:rgba(6,12,9,.97);z-index:200;
+  display:none;overflow-y:auto;padding:20px 16px 100px;
+}
+#tocOverlay.open{display:block;}
+.toc-head{display:flex;justify-content:space-between;align-items:center;max-width:var(--maxw);margin:0 auto 18px;}
+.toc-head h2{font-size:1.05rem;color:var(--text);}
+#tocClose{
+  background:var(--surface);border:1px solid var(--line);color:var(--text);
+  width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;
+}
+.toc-list{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;gap:6px;}
+.toc-list a{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+  padding:13px 14px;border-radius:10px;background:var(--surface);
+  border:1px solid var(--line);color:var(--text);font-size:.87rem;font-weight:600;
+}
+.toc-list a .tn{
+  font-family:var(--mono);font-size:.68rem;color:var(--accent);
+  border:1px solid var(--accent-dim);border-radius:6px;min-width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.toc-list a:active{background:var(--surface-2);}
+
+/* ============================================================
+   BOTTOM NAV
+   ============================================================ */
+#bottomnav{
+  position:fixed;bottom:0;left:0;right:0;z-index:150;
+  display:flex;justify-content:center;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  pointer-events:none;
+}
+.navpill{
+  pointer-events:auto;
+  display:flex;gap:4px;background:rgba(16,31,25,.94);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:30px;padding:6px;
+  box-shadow:0 8px 24px -6px rgba(0,0,0,.5);
+}
+.navbtn{
+  background:none;border:none;color:var(--text-dim);font-family:var(--sans);
+  font-size:.72rem;font-weight:600;padding:9px 16px;border-radius:24px;
+  display:flex;align-items:center;gap:6px;cursor:pointer;
+}
+.navbtn.primary{background:var(--accent);color:#0a1410;}
+.navbtn .nico{font-size:.95rem;}
+
+/* ============================================================
+   SEARCH HIGHLIGHT / FILTER STATES
+   ============================================================ */
+mark.hit{background:var(--amber);color:#241a04;padding:0 2px;border-radius:3px;}
+.topic.hidden-by-search{display:none;}
+.acc-item.hidden-by-search{display:none;}
+.glo-item.hidden-by-search{display:none;}
+.card-wide.hidden-by-search{display:none;}
+
+footer{
+  max-width:var(--maxw);margin:0 auto;padding:30px 16px 20px;
+  border-top:1px dashed var(--line);text-align:center;
+}
+footer p{font-size:.72rem;color:var(--text-faint);}
+footer p+p{margin-top:4px;}
+
+@media (min-width:480px){
+  .glo{grid-template-columns:1fr 1fr 1fr;}
+}
+
+/* ============================================================
+   MOBILE LAYOUT (teléfonos ≤ 560px, ej. S25 Ultra ~412px)
+   ============================================================ */
+.acc-item.open .acc-panel{max-height:1600px;}
+.tblwrap table.fit{min-width:0;}
+header{transition:box-shadow .2s;}
+.header-inner .eyebrow,.header-inner .hsub{transition:opacity .2s;}
+@media (max-width:560px){
+  /* header compacto: menos alto y aún más al hacer scroll */
+  .header-inner{padding:8px 16px 8px;}
+  .hsub{display:none;}
+  .htitle{font-size:1.05rem;}
+  .searchbox{margin-top:8px;}
+  .searchbox input{padding:9px 38px 9px 12px;font-size:16px;}
+  #searchcount{margin-top:4px;min-height:0;}
+  #searchcount:empty{display:none;}
+  header.compact .eyebrow{display:none;}
+  header.compact .kit-note{display:none;}
+  header.compact{box-shadow:0 6px 16px -8px rgba(0,0,0,.6);}
+  section.topic{scroll-margin-top:118px;padding:22px 0;}
+
+  .hero{padding:20px 16px 16px;}
+  .hero h1{font-size:1.32rem;}
+  .topic-title{font-size:1.06rem;line-height:1.3;}
+  .topic-kicker{line-height:1.35;}
+
+  /* flujos de pasos → línea de tiempo vertical */
+  .flow{flex-direction:column;align-items:stretch;gap:0;margin:14px 0 16px;position:relative;}
+  .flow .arrow{display:none;}
+  .flow .step{flex-direction:row;width:auto;gap:12px;align-items:center;padding:5px 0;position:relative;}
+  .flow .step:not(:last-of-type)::after{
+    content:"";position:absolute;left:14px;top:34px;bottom:-6px;width:2px;background:var(--accent-dim);
+  }
+  .flow .circ{width:30px;height:30px;font-size:.8rem;flex-shrink:0;position:relative;z-index:1;background:var(--surface-2);}
+  .flow .steplabel{font-size:.85rem;text-align:left;color:var(--text);line-height:1.3;}
+  .flow .steplabel br{display:none;}
+  .flow .steplabel span{margin-left:6px;}
+
+  /* tablas de 3+ columnas → tarjetas apiladas */
+  .tblwrap.stackwrap{overflow:visible;border:none;border-radius:0;}
+  table.stack{min-width:0;font-size:.82rem;}
+  table.stack thead{display:none;}
+  table.stack, table.stack tbody, table.stack tr, table.stack td{display:block;width:100%;}
+  table.stack tr{
+    background:var(--surface)!important;border:1px solid var(--line);border-radius:12px;
+    padding:10px 13px;margin-bottom:8px;
+  }
+  table.stack td{border:none;padding:3px 0;}
+  table.stack td:first-child{font-size:.9rem;color:var(--text);padding-bottom:5px;margin-bottom:3px;border-bottom:1px dashed var(--line-soft);}
+  table.stack td:not(:first-child)::before{
+    content:attr(data-label);display:block;font-family:var(--mono);font-size:.64rem;
+    color:var(--accent);letter-spacing:.03em;margin-bottom:1px;
+  }
+  table.stack td:empty{display:none;}
+  table.stack.codefirst td:first-child{display:inline-block;width:auto;border:none;margin:0 8px 0 0;padding:0;font-family:var(--mono);color:var(--accent);}
+  table.stack.codefirst td:nth-child(2){display:inline;width:auto;font-weight:700;color:var(--text);}
+  table.stack.codefirst td:nth-child(2)::before{display:none;}
+  table.stack.codefirst td:nth-child(3){margin-top:4px;}
+  table.stack.codefirst td:nth-child(3)::before{display:none;}
+  table.fit{font-size:.8rem;}
+  table.fit thead th{white-space:normal;}
+
+  /* tarjetas: una columna cuando el texto es largo */
+  .grid2.wide{grid-template-columns:1fr;}
+  .card .ctitle{line-height:1.3;}
+  .box{padding:12px 13px;}
+  .mnemo-word{font-size:.95rem;word-break:break-word;}
+  .mm-branches{gap:6px;}
+  .glo-item .gs{word-break:break-word;}
+  .route-row{gap:6px;}
+  footer{padding-bottom:30px;}
+}
+
+/* ============================================================
+   KIT DE ESTUDIO: modos 🏢/🚌, continuar, pausas, 🔊 escuchar
+   ============================================================ */
+.kit-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;}
+.kit-seg{display:inline-flex;border:1px solid var(--line);border-radius:30px;overflow:hidden;background:var(--surface);}
+.kit-seg button{background:none;border:none;color:var(--text-dim,var(--dim));font:700 .74rem var(--sans);padding:8px 12px;cursor:pointer;min-height:36px;}
+.kit-seg button[aria-pressed="true"]{background:var(--accent);color:#06140c;}
+.kit-btn{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:30px;font:700 .74rem var(--sans);padding:8px 12px;cursor:pointer;min-height:36px;white-space:nowrap;}
+.kit-btn.on{border-color:var(--amber);color:var(--amber);}
+.kit-note{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--text-dim,var(--dim));margin-top:6px;}
+.kit-note[hidden]{display:none;}
+.kit-note button{background:none;border:none;color:var(--text-faint,var(--faint));cursor:pointer;font-size:.9rem;padding:4px 6px;min-width:32px;min-height:32px;}
+html:not([data-mode="transit"]) .kit-transit-only{display:none !important;}
+html:not([data-mode="office"]) .kit-office-only{display:none !important;}
+.pausa{display:none;margin:16px 0;padding:9px 12px;border:1px dashed var(--amber);border-radius:10px;font-size:.78rem;font-weight:700;color:var(--amber);background:var(--amber-dim);scroll-margin-top:140px;}
+html[data-mode="transit"] .pausa{display:block;}
+.kit-fold>.kit-foldbtn{display:none;}
+html[data-mode="transit"] .kit-fold>.kit-foldbtn{display:inline-flex;margin:10px 0 0;}
+html[data-mode="transit"] .kit-fold:not(.open)>.tblwrap{display:none;}
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .7rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:32px;margin-left:auto;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#kitPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#kitPlayer.show{display:flex;}
+@media (max-width:430px){#kitPlayer .now{display:none;}}
+#kitPlayer button,#kitPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .78rem var(--sans);padding:7px 11px;cursor:pointer;min-height:36px;}
+#kitPlayer .now{flex:1;min-width:0;font-size:.7rem;color:var(--cyan);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#kitToast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:300;background:var(--amber-dim);border:1px solid var(--amber);color:var(--text);border-radius:14px;padding:12px 16px;font-size:.86rem;display:none;max-width:calc(100% - 32px);}
+#kitToast.show{display:block;}
+/* bloques de aprendizaje activo */
+.active{border:1px solid var(--line);border-radius:12px;padding:12px 13px;margin:14px 0;background:var(--surface);}
+.active.pre{border-color:#1f4d5c;background:var(--cyan-dim);}
+.active.why{border-color:#5c4515;}
+.active.rec{border-color:#453262;}
+.alabel{font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.04em;margin-bottom:6px;color:var(--cyan);}
+.active.why .alabel{color:var(--amber);}
+.active.rec .alabel{color:var(--violet,#c9a6f0);}
+.alabel small{font-family:var(--sans);font-weight:400;letter-spacing:0;color:var(--text-dim,var(--dim));}
+.aqt{font-size:.88rem;color:var(--text);margin:4px 0 8px;}
+details.aq{border-top:1px dashed var(--line-soft);padding:7px 0;}
+details.aq:first-of-type{border-top:none;}
+details.aq>summary{cursor:pointer;font-size:.86rem;color:var(--text);list-style:none;display:flex;gap:8px;align-items:flex-start;min-height:28px;}
+details.aq>summary::-webkit-details-marker{display:none;}
+details.aq>summary::before{content:"▸";color:var(--text-faint,var(--faint));transition:transform .15s;}
+details.aq[open]>summary::before{transform:rotate(90deg);}
+details.aq>summary .see{margin-left:auto;font-size:.68rem;color:var(--text-faint,var(--faint));font-family:var(--mono);white-space:nowrap;}
+.aa{font-size:.84rem;color:var(--text-dim,var(--dim));margin:6px 0 2px 16px;padding:8px 10px;background:var(--bg);border-radius:8px;}
+.aa b{color:var(--text);}
+textarea.note{width:100%;min-height:90px;margin:6px 0 4px;resize:vertical;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px;font:16px/1.45 var(--sans);}
+html:not([data-mode="office"]) textarea.note{display:none;}
+.kit-plan{list-style:none;padding:0;margin:10px 0 0;}
+.kit-plan li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line-soft);font-size:.86rem;color:var(--text-dim,var(--dim));}
+.kit-plan li::before{display:none;}
+.kit-plan li b{color:var(--accent);font-family:var(--mono);min-width:92px;flex-shrink:0;}
+.kit-frase{border:1px dashed var(--accent);border-radius:10px;padding:10px 12px;font-size:.9rem;color:var(--text);background:var(--accent-dim);outline:none;}
+.kit-frase:focus{border-style:solid;}
+.kit-date{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 10px;font-size:16px;color-scheme:dark;}
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){
+  .kit-btn:hover,.kit-seg button:hover,.kit-tts:hover{filter:brightness(1.15);}
+}
+@media (max-width:560px){
+  .kit-bar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .kit-bar::-webkit-scrollbar{display:none;}
+  .kit-bar>*{flex-shrink:0;}
+  .kit-tts{padding:6px 9px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+
+/* ============================================================
+   RESPONSIVE: tablet y PC (índice lateral)
+   ============================================================ */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+img,svg{height:auto;}
+p.body,.box p,blockquote.q{max-width:70ch;}
+#kitSide{display:none;}
+@media (min-width:561px) and (max-width:1023px){
+  :root{--maxw:720px;}
+  .grid1{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1024px){
+  :root{--maxw:820px;--side:max(16px, calc((100vw - 1180px) / 2));}
+  body{padding-bottom:40px;}
+  #bottomnav{display:none;}
+  #kitPlayer{bottom:calc(16px + env(safe-area-inset-bottom,0px));}
+  .header-inner,.hero,main,footer{margin-left:calc(var(--side) + 290px);margin-right:auto;}
+  .grid1{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+  .grid2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  #kitSide{display:block;position:fixed;left:var(--side);top:calc(var(--hh,150px) + 12px);bottom:16px;width:270px;overflow-y:auto;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;scrollbar-width:thin;z-index:40;}
+  #kitSide .sh{font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:4px 6px 8px;letter-spacing:.04em;}
+  #kitSide a{display:flex;gap:8px;align-items:center;text-decoration:none;color:var(--text-dim);font-size:.8rem;padding:7px 8px;border-radius:8px;line-height:1.25;}
+  #kitSide a .tn{font-family:var(--mono);font-size:.64rem;color:var(--accent);min-width:22px;}
+  #kitSide a.on{background:var(--accent-dim);color:var(--text);}
+}
+@media (min-width:1024px) and (hover:hover){ #kitSide a:hover{background:var(--surface-2);color:var(--text);} }
+@media (hover:hover){ .navbtn:hover,.acc-btn:hover{filter:brightness(1.15);} .toc-list a:hover{border-color:var(--accent);} }
+.unit-label{max-width:1100px;margin:22px auto 4px;padding:0 16px;font-family:var(--mono);font-size:.72rem;font-weight:800;letter-spacing:.12em;color:var(--amber);}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">GPI · Gerencia de Proyectos Informáticos · Parcial 3</div>
+    <div class="htitle">Guía de Estudio — Parcial 3</div>
+    <div class="hsub">Módulo 3 · Gestión de Proyectos Ágiles · Manifiesto · Scrum · XP y Kanban</div>
+    <div class="searchbox">
+      <input type="text" id="searchInput" placeholder="Buscar un tema, término o sigla…" autocomplete="off">
+      <span class="sico">🔎</span>
+    </div>
+    <div id="searchcount"></div>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="tag">Aprendizaje activo · 🏢 Oficina / 🚌 Transporte</span>
+  <h1>Todo el material del Parcial 3, organizado para memorizar rápido</h1>
+  <p>Orden según <b>Mod3_ProyectosAgiles.html</b> (Módulo 3 · Gestión de Proyectos Ágiles, semanas 11–15). Reorganiza el módulo en bloques cortos con mnemotecnias, analogías, tablas y cajas de énfasis. Cada tema empieza con preguntas 🎯 y termina con 🤔 y 🧠: intenta responder antes de abrir las respuestas. Elige arriba el modo 🏢 Oficina o 🚌 Transporte y usa 🔊 Escuchar para oír una sección.</p>
+  <div class="meta">
+    <span>👨‍🏫 Mgtr. Henry D. De Gracia R.</span>
+    <span>🏛️ FISC · UTP</span>
+    <span>📘 Módulo 3</span>
+  </div>
+</div>
+
+<main id="main">
+
+<div class="unit-label">UNIDAD 3.1 · GESTIÓN DE PROYECTOS ÁGILES</div>
+
+<!-- =========================================================
+     1. QUÉ ES LA GESTIÓN ÁGIL
+     ========================================================= -->
+<section class="topic" id="t-agil" data-title="¿Qué es la gestión ágil?">
+  <div class="topic-head">
+    <span class="topic-num">01</span>
+    <div>
+      <div class="topic-title">¿Qué es la gestión ágil?</div>
+      <div class="topic-kicker">Definición · origen (2001) · adaptativo · colaborativo · valor temprano</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿En qué año se firmó el Manifiesto Ágil y cuántas personas lo firmaron?</summary><div class="aa">En <b>2001</b>, por <b>17 profesionales</b>.</div></details>
+    <details class="aq"><summary>¿El enfoque ágil sigue un plan rígido?</summary><div class="aa">No: <b>responde al cambio</b> en lugar de seguir un plan rígido.</div></details>
+  </div>
+
+  <blockquote class="q">Enfoque iterativo e incremental que entrega valor de forma temprana y continua, respondiendo al cambio en lugar de seguir un plan rígido.</blockquote>
+
+  <div class="grid2">
+    <div class="card"><div class="cico">📜</div><div class="ctitle">Origen (2001)</div><div class="cdesc"><b>17 profesionales</b> firman el Manifiesto Ágil.</div></div>
+    <div class="card"><div class="cico">🔁</div><div class="ctitle">Adaptativo</div><div class="cdesc">Responde al <b>cambio</b>.</div></div>
+    <div class="card"><div class="cico">👥</div><div class="ctitle">Colaborativo</div><div class="cdesc">Equipos <b>autoorganizados</b>.</div></div>
+    <div class="card"><div class="cico">🎁</div><div class="ctitle">Valor temprano</div><div class="cdesc"><b>Entregas frecuentes</b>.</div></div>
+  </div>
+
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">O · A · C · V</div>
+    <p>"<b>O</b>tra <b>A</b>gilidad <b>C</b>on <b>V</b>alor": <b>O</b>rigen 2001 (17 firmantes) · <b>A</b>daptativo · <b>C</b>olaborativo · <b>V</b>alor temprano.</p>
+  </div>
+  <div class="box analogia">
+    <div class="blabel">💡 ANALOGÍA</div>
+    <p>Iterativo e incremental es como construir una casa por cuartos habitables: en cada vuelta entregas algo que ya se puede usar, en vez de entregar toda la casa al final.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué entregar valor de forma temprana se relaciona con responder al cambio?</p><textarea class="note" data-note="t-agil-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque con entregas frecuentes el cliente ve el producto pronto y puede pedir cambios a tiempo; el equipo adapta el siguiente paso en lugar de seguir un plan rígido hasta el final.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Define la gestión ágil.</summary><div class="aa">Enfoque <b>iterativo e incremental</b> que entrega valor de forma <b>temprana y continua</b>, respondiendo al cambio en lugar de seguir un plan rígido.</div></details>
+    <details class="aq"><summary>¿Cómo son los equipos en el enfoque ágil?</summary><div class="aa"><b>Autoorganizados</b> (colaborativo).</div></details>
+    <details class="aq"><summary>Menciona las 4 características de las tarjetas del tema.</summary><div class="aa">Origen (2001) · Adaptativo · Colaborativo · Valor temprano.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     2. MANIFIESTO ÁGIL
+     ========================================================= -->
+<section class="topic" id="t-manifiesto" data-title="Los 4 valores del Manifiesto Ágil">
+  <div class="topic-head">
+    <span class="topic-num">02</span>
+    <div>
+      <div class="topic-title">Los 4 valores del Manifiesto Ágil</div>
+      <div class="topic-kicker">4 valores · 12 principios · izquierda sobre derecha</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuántos valores y cuántos principios tiene el Manifiesto Ágil?</summary><div class="aa"><b>4 valores</b> y <b>12 principios</b>.</div></details>
+    <details class="aq"><summary>"Software funcionando" se valora sobre…</summary><div class="aa">…la <b>documentación extensiva</b>.</div></details>
+    <details class="aq"><summary>¿El Manifiesto dice que los procesos y herramientas no valen nada?</summary><div class="aa">No: se valoran, pero se valoran <b>más</b> los elementos de la izquierda.</div></details>
+  </div>
+
+  <div class="tblwrap"><table class="fit">
+    <thead><tr><th>Se valora más (izquierda)</th><th>…sobre (derecha)</th></tr></thead>
+    <tbody>
+      <tr><td>🧑‍🤝‍🧑 <b>Individuos e interacciones</b></td><td>procesos y herramientas</td></tr>
+      <tr><td>💻 <b>Software funcionando</b></td><td>documentación extensiva</td></tr>
+      <tr><td>🤝 <b>Colaboración con el cliente</b></td><td>negociación contractual</td></tr>
+      <tr><td>🔄 <b>Respuesta ante el cambio</b></td><td>seguir un plan</td></tr>
+    </tbody>
+  </table></div>
+
+  <blockquote class="q">Se valoran los elementos de la derecha, pero se valoran más los de la izquierda.</blockquote>
+  <p class="body">Los guían <b>12 principios</b>: valor temprano, bienvenido el cambio, entregas frecuentes, sostenibilidad y mejora continua.</p>
+
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">I · S · C · R</div>
+    <p>"<b>I</b>ndividuos <b>S</b>iempre <b>C</b>olaboran <b>R</b>ápido": <b>I</b>ndividuos e interacciones · <b>S</b>oftware funcionando · <b>C</b>olaboración con el cliente · <b>R</b>espuesta ante el cambio. Lo que pierde contra cada uno: <b>P</b>rocesos, <b>D</b>ocumentación, <b>N</b>egociación, <b>P</b>lan → "<b>P</b>apeles <b>D</b>e <b>N</b>ingún <b>P</b>rovecho".</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ ERROR FRECUENTE</div>
+    <p>No son 12 valores: son <b>4 valores</b> y <b>12 principios</b>. Y la derecha <b>no se elimina</b>: se valora, pero menos.</p>
+  </div>
+  <p class="body">El módulo enlaza el Manifiesto original en español: agilemanifesto.org.</p>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el caso del "Agile teatral" se conecta con este tema?</p><textarea class="note" data-note="t-manifiesto-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque esos equipos hacen dailies y sprints (ceremonias) pero sin colaboración real ni entrega de valor. La lección es que los <b>valores</b> del Manifiesto importan más que las ceremonias.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di los 4 valores con lo que superan.</summary><div class="aa">Individuos e interacciones sobre procesos y herramientas · Software funcionando sobre documentación extensiva · Colaboración con el cliente sobre negociación contractual · Respuesta ante el cambio sobre seguir un plan.</div></details>
+    <details class="aq"><summary>Menciona ideas de los 12 principios que cita el módulo.</summary><div class="aa">Valor temprano, bienvenido el cambio, entregas frecuentes, sostenibilidad y mejora continua.</div></details>
+    <details class="aq"><summary>¿Qué se valora más: colaboración con el cliente o negociación contractual?</summary><div class="aa"><b>Colaboración con el cliente</b>.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     3. CICLO DE VIDA ITERATIVO
+     ========================================================= -->
+<section class="topic" id="t-ciclo" data-title="Ciclo de vida iterativo e incremental">
+  <div class="topic-head">
+    <span class="topic-num">03</span>
+    <div>
+      <div class="topic-title">Ciclo de vida iterativo e incremental</div>
+      <div class="topic-kicker">Backlog → Sprint → Incremento → Retro ↻ · eventos y time-box</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuánto dura un Sprint?</summary><div class="aa">De <b>1 a 4 semanas</b>, y se repite.</div></details>
+    <details class="aq"><summary>¿Qué es un time-box?</summary><div class="aa">Una <b>duración máxima fija</b> para un evento.</div></details>
+    <details class="aq"><summary>¿Cuánto dura el Daily Scrum?</summary><div class="aa"><b>15 minutos</b>.</div></details>
+  </div>
+
+  <div class="flow">
+    <div class="step"><div class="circ">1</div><div class="steplabel">Backlog</div></div>
+    <div class="step"><div class="circ">2</div><div class="steplabel">Sprint</div></div>
+    <div class="step"><div class="circ">3</div><div class="steplabel">Incremento</div></div>
+    <div class="step"><div class="circ">4</div><div class="steplabel">Retro ↻</div></div>
+  </div>
+  <p class="body">Cada iteración produce un <b>incremento potencialmente entregable</b>; el ciclo se repite.</p>
+
+  <h3 class="sub">⏱️ Los eventos del Sprint</h3>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Evento</th><th>Qué se hace</th><th>Time-box</th></tr></thead>
+    <tbody>
+      <tr><td>📝 <b>Sprint Planning</b></td><td>El equipo planifica el Sprint: <b>qué</b> se hará (objetivo) y <b>cómo</b>.</td><td>Hasta <b>8 h</b> para un Sprint de 1 mes</td></tr>
+      <tr><td>☀️ <b>Daily Scrum</b></td><td>Reunión diaria: el equipo se sincroniza y detecta impedimentos. La facilita el equipo, <b>no es un reporte al jefe</b>.</td><td><b>15 minutos</b></td></tr>
+      <tr><td>🔨 <b>Trabajo del Sprint</b></td><td>El equipo construye el <b>incremento</b> según el Sprint Backlog.</td><td>Sprint de <b>1–4 semanas</b></td></tr>
+      <tr><td>🎬 <b>Sprint Review</b></td><td>Se muestra el incremento a los interesados y se recoge <b>feedback</b>.</td><td>Hasta <b>4 h</b></td></tr>
+      <tr><td>🔧 <b>Retrospectiva</b></td><td>El equipo reflexiona sobre cómo <b>mejorar</b> su forma de trabajar.</td><td>Hasta <b>3 h</b></td></tr>
+    </tbody>
+  </table></div>
+  <p class="body">Todos los eventos tienen <b>time-box</b> (duración máxima fija) y ocurren dentro de un Sprint de 1 a 4 semanas, que se repite.</p>
+
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word" data-tts="8 horas, 15 minutos, 4 horas, 3 horas">8 · 15 · 4 · 3</div>
+    <p>Cuenta regresiva de las reuniones: Planning <b>8 h</b> → Daily <b>15 min</b> → Review <b>4 h</b> → Retro <b>3 h</b>. "Planeo 8, hablo 15, muestro 4, mejoro 3".</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ ERROR FRECUENTE</div>
+    <p><b>Review ≠ Retrospectiva</b>: la Review muestra el <b>producto</b> (incremento) a los interesados; la Retro revisa la <b>forma de trabajar</b> del equipo.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué los eventos tienen time-box?</p><textarea class="note" data-note="t-ciclo-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque la duración fija da <b>ritmo</b> al equipo (como dice Scrum) y evita reuniones eternas: en el simulador, un Daily de 40 min que se volvió reporte baja el valor y la moral; se reenfoca a 15 min.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Ordena el ciclo iterativo.</summary><div class="aa">Backlog → Sprint → Incremento → Retro, y se repite ↻.</div></details>
+    <details class="aq"><summary>Time-box de Planning, Review y Retro.</summary><div class="aa">Planning hasta 8 h (Sprint de 1 mes) · Review hasta 4 h · Retro hasta 3 h.</div></details>
+    <details class="aq"><summary>¿Qué produce cada iteración?</summary><div class="aa">Un <b>incremento potencialmente entregable</b>.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     4. SCRUM
+     ========================================================= -->
+<section class="topic" id="t-scrum" data-title="Marco de trabajo Scrum">
+  <div class="topic-head">
+    <span class="topic-num">04</span>
+    <div>
+      <div class="topic-title">Marco de trabajo Scrum</div>
+      <div class="topic-kicker">3 pilares · 3 roles · 3 artefactos · 4 eventos</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Quién prioriza el Product Backlog?</summary><div class="aa">El <b>Product Owner</b>.</div></details>
+    <details class="aq"><summary>¿El Scrum Master es el jefe del equipo?</summary><div class="aa">No: es un <b>facilitador</b> (líder-servidor) que elimina impedimentos.</div></details>
+    <details class="aq"><summary>¿Cuáles son los 3 pilares de Scrum?</summary><div class="aa"><b>Transparencia, inspección y adaptación</b>.</div></details>
+  </div>
+
+  <p class="body"><b>Pilares:</b> transparencia, inspección y adaptación (pilares empíricos). Los eventos usan <b>time-boxing</b> (duración fija) para dar ritmo al equipo.</p>
+
+  <h3 class="sub">👥 Roles</h3>
+  <div class="grid1">
+    <div class="card"><div class="cico">📌</div><div class="ctitle">Product Owner (PO)</div><div class="cdesc"><b>Maximiza el valor</b>; gestiona y <b>prioriza el Product Backlog</b>.</div></div>
+    <div class="card"><div class="cico">🛡️</div><div class="ctitle">Scrum Master (SM)</div><div class="cdesc"><b>Facilita</b> el proceso y <b>elimina impedimentos</b>. Es líder-servidor, no el jefe; protege al equipo.</div></div>
+    <div class="card"><div class="cico">👨‍💻</div><div class="ctitle">Equipo de Desarrollo</div><div class="cdesc"><b>Autoorganizado</b>; construye el incremento.</div></div>
+  </div>
+
+  <h3 class="sub">📚 Artefactos</h3>
+  <div class="grid1">
+    <div class="card"><div class="cico">📚</div><div class="ctitle">Product Backlog</div><div class="cdesc">Lista <b>ordenada</b> de todo lo necesario para el producto.</div></div>
+    <div class="card"><div class="cico">🗂️</div><div class="ctitle">Sprint Backlog</div><div class="cdesc">Ítems del Sprint <b>más el plan</b> para lograrlos.</div></div>
+    <div class="card"><div class="cico">📦</div><div class="ctitle">Incremento</div><div class="cdesc">Ítems terminados que cumplen la <b>Definición de Hecho</b> (DoD).</div></div>
+  </div>
+
+  <h3 class="sub">📅 Eventos</h3>
+  <div class="flow">
+    <div class="step"><div class="circ">📝</div><div class="steplabel">Sprint Planning · planifica el Sprint</div></div>
+    <div class="step"><div class="circ">☀️</div><div class="steplabel">Daily Scrum · sincroniza en 15 min</div></div>
+    <div class="step"><div class="circ">🎬</div><div class="steplabel">Sprint Review · muestra el incremento</div></div>
+    <div class="step"><div class="circ">🔧</div><div class="steplabel">Retrospective · define mejoras</div></div>
+  </div>
+
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">TIA · 3-3-4</div>
+    <p>Los pilares son tu "<b>TIA</b>": <b>T</b>ransparencia, <b>I</b>nspección, <b>A</b>daptación. Scrum se cuenta <b>3-3-4</b>: 3 roles, 3 artefactos, 4 eventos (dentro del Sprint).</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ NO CONFUNDIR</div>
+    <p><b>PO</b> = el <b>qué</b> y el valor (prioriza el backlog). <b>SM</b> = el <b>proceso</b> (facilita y quita impedimentos). <b>Product Backlog</b> = todo el producto; <b>Sprint Backlog</b> = solo lo del Sprint más su plan.</p>
+  </div>
+  <div class="box termino">
+    <div class="blabel">📌 TÉRMINO CLAVE</div>
+    <p><b>Definición de Hecho (DoD)</b>: criterios que un ítem debe cumplir para considerarse <b>realmente terminado</b>, no solo "casi listo".</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el Incremento se define con la Definición de Hecho?</p><textarea class="note" data-note="t-scrum-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el incremento debe ser potencialmente entregable: solo cuenta lo que está realmente terminado (código revisado, pruebas que pasan, funciona en el ambiente de prueba, documentación mínima). Por eso, si no se termina, lo no "Hecho" vuelve al backlog y no se recortan pruebas.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Los 3 roles y qué hace cada uno.</summary><div class="aa">PO: maximiza el valor y prioriza el Product Backlog · SM: facilita y elimina impedimentos · Equipo de Desarrollo: autoorganizado, construye el incremento.</div></details>
+    <details class="aq"><summary>Los 3 artefactos.</summary><div class="aa">Product Backlog · Sprint Backlog · Incremento.</div></details>
+    <details class="aq"><summary>Los 4 eventos del tema.</summary><div class="aa">Sprint Planning · Daily Scrum · Sprint Review · Retrospective.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     5. XP Y KANBAN
+     ========================================================= -->
+<section class="topic" id="t-xpkanban" data-title="Otras metodologías: XP y Kanban">
+  <div class="topic-head">
+    <span class="topic-num">05</span>
+    <div>
+      <div class="topic-title">Otras metodologías: XP y Kanban</div>
+      <div class="topic-kicker">Excelencia técnica vs. flujo continuo · límite WIP</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Kanban usa sprints fijos?</summary><div class="aa">No: <b>flujo continuo</b>, sin sprints fijos.</div></details>
+    <details class="aq"><summary>¿Qué significa WIP?</summary><div class="aa"><b>Work In Progress</b>: trabajo en progreso.</div></details>
+  </div>
+
+  <div class="tblwrap"><table class="fit">
+    <thead><tr><th>🧪 eXtreme Programming (XP)</th><th>📋 Kanban</th></tr></thead>
+    <tbody>
+      <tr><td>Foco en la <b>excelencia técnica</b></td><td><b>Flujo continuo</b> (sin sprints fijos)</td></tr>
+      <tr><td>Programación en parejas (<b>pair programming</b>)</td><td><b>Tablero visual</b> con columnas</td></tr>
+      <tr><td>Desarrollo guiado por pruebas (<b>TDD</b>)</td><td><b>Límite</b> de trabajo en progreso (<b>WIP</b>)</td></tr>
+      <tr><td><b>Integración continua</b> y <b>refactorización</b></td><td>Optimiza el <b>tiempo de ciclo</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">📋 El tablero del módulo</h3>
+  <p class="body">Columnas <b>📋 Por hacer</b> · <b>🔨 En progreso (WIP máx 2)</b> · <b>✅ Hecho</b>. Tarjetas de ejemplo: diseñar pantalla de login, conectar la base de datos, formulario de matrícula (por hacer); integrar pasarela de pago (en progreso); levantar requisitos (hecho).</p>
+  <blockquote class="q">El límite WIP (Work In Progress) evita empezar demasiadas cosas a la vez: si "En progreso" supera 2, el contador se pone en rojo.</blockquote>
+
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">XP = PTIR · Kanban = FTLC</div>
+    <p>XP es para "<b>P</b>rogramadores <b>T</b>écnicos <b>I</b>mpecables y <b>R</b>igurosos": <b>P</b>arejas · <b>T</b>DD · <b>I</b>ntegración continua · <b>R</b>efactorización. Kanban "<b>F</b>luye <b>T</b>ranquilo, <b>L</b>imita y <b>C</b>orre": <b>F</b>lujo continuo · <b>T</b>ablero · <b>L</b>ímite WIP · tiempo de <b>C</b>iclo.</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ NO CONFUNDIR</div>
+    <p><b>XP</b> aporta <b>prácticas técnicas</b>; <b>Kanban</b> optimiza el <b>flujo</b>. Scrum trabaja en Sprints; Kanban <b>no</b> tiene sprints fijos.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué limitar el WIP mejora el flujo?</p><textarea class="note" data-note="t-xpkanban-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque evita empezar demasiadas cosas a la vez: el equipo termina lo que tiene en progreso antes de tomar más, y así se optimiza el tiempo de ciclo.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>4 prácticas de XP.</summary><div class="aa">Excelencia técnica como foco · pair programming · TDD · integración continua y refactorización.</div></details>
+    <details class="aq"><summary>4 rasgos de Kanban.</summary><div class="aa">Flujo continuo · tablero visual con columnas · límite WIP · optimiza el tiempo de ciclo.</div></details>
+    <details class="aq"><summary>¿Cuál es el WIP máximo de la columna En progreso del tablero de ejemplo?</summary><div class="aa"><b>2</b>.</div></details>
+  </div>
+</section>
+
+<div class="unit-label">HERRAMIENTAS</div>
+
+<!-- =========================================================
+     6. HERRAMIENTAS
+     ========================================================= -->
+<section class="topic" id="t-herramientas" data-title="Herramientas para proyectos ágiles">
+  <div class="topic-head">
+    <span class="topic-num">06</span>
+    <div>
+      <div class="topic-title">Herramientas para gestionar proyectos ágiles</div>
+      <div class="topic-kicker">8 aplicaciones reales para el backlog y el tablero</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Cuál es el estándar de la industria para Scrum y Kanban?</summary><div class="aa"><b>Jira</b>.</div></details>
+    <details class="aq"><summary>¿Qué herramienta es una pizarra colaborativa?</summary><div class="aa"><b>Miro</b>.</div></details>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><div class="cico">🟦</div><div class="ctitle">Jira</div><div class="cdesc">El <b>estándar de la industria</b> para Scrum y Kanban: backlogs, sprints e informes. Plan gratuito hasta <b>10 personas</b>.</div></div>
+    <div class="card"><div class="cico">📋</div><div class="ctitle">Trello</div><div class="cdesc">Tableros <b>Kanban simples</b> con tarjetas arrastrables. Ideal para empezar; plan gratuito.</div></div>
+    <div class="card"><div class="cico">🎯</div><div class="ctitle">Asana</div><div class="cdesc">Tareas y proyectos con vistas de <b>lista, tablero y cronograma</b>.</div></div>
+    <div class="card"><div class="cico">🟪</div><div class="ctitle">monday.com</div><div class="cdesc">Tableros visuales muy personalizables con <b>automatizaciones</b>.</div></div>
+    <div class="card"><div class="cico">🚀</div><div class="ctitle">ClickUp</div><div class="cdesc"><b>Todo en uno</b>: tareas, documentos, metas y tableros.</div></div>
+    <div class="card"><div class="cico">📝</div><div class="ctitle">Notion</div><div class="cdesc"><b>Documentos + bases de datos + tableros</b> en un mismo espacio.</div></div>
+    <div class="card"><div class="cico">💻</div><div class="ctitle">GitHub Projects</div><div class="cdesc">Tableros <b>ligados al código</b>; ideal para equipos de desarrollo.</div></div>
+    <div class="card"><div class="cico">🧑‍🎨</div><div class="ctitle">Miro</div><div class="cdesc"><b>Pizarra colaborativa</b> para retrospectivas, mapas de historias y planificación.</div></div>
+  </div>
+  <div class="box critico">
+    <div class="blabel">⚠️ PARA EL PROYECTO GRUPAL</div>
+    <p><b>Trello</b> o <b>Jira</b> son excelentes puntos de partida: uno por su <b>sencillez</b> y el otro por ser el <b>estándar profesional</b>.</p>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">J · T · A · M · C · N · G · M</div>
+    <p>"<b>J</b>uan <b>T</b>rabaja <b>A</b>sí: <b>M</b>uchas <b>C</b>osas, <b>N</b>ada <b>G</b>rande, <b>M</b>ucho": Jira · Trello · Asana · monday.com · ClickUp · Notion · GitHub Projects · Miro.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué se recomienda Trello para empezar y Jira como estándar?</p><textarea class="note" data-note="t-herr-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Trello son tableros Kanban simples con tarjetas arrastrables (sencillez); Jira cubre Scrum y Kanban con backlogs, sprints e informes y es el estándar de la industria (profesional).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Hasta cuántas personas es gratis Jira?</summary><div class="aa">Hasta <b>10 personas</b>.</div></details>
+    <details class="aq"><summary>¿Qué herramienta liga los tableros directamente al código?</summary><div class="aa"><b>GitHub Projects</b>.</div></details>
+    <details class="aq"><summary>¿Cuál combina documentos, bases de datos y tableros?</summary><div class="aa"><b>Notion</b> (ClickUp también es "todo en uno": tareas, documentos, metas y tableros).</div></details>
+  </div>
+</section>
+
+<div class="unit-label">SÍNTESIS Y PRÁCTICA</div>
+
+<!-- =========================================================
+     7. TRADICIONAL VS ÁGIL
+     ========================================================= -->
+<section class="topic" id="t-comparacion" data-title="Tradicional vs. Ágil">
+  <div class="topic-head">
+    <span class="topic-num">07</span>
+    <div>
+      <div class="topic-title">Tradicional vs. Ágil</div>
+      <div class="topic-kicker">Alcance · entrega · cambios · documentación</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿En qué enfoque el alcance es fijo?</summary><div class="aa">En el <b>tradicional</b>.</div></details>
+    <details class="aq"><summary>¿Según qué se elige el enfoque?</summary><div class="aa">Según la <b>estabilidad de los requisitos</b>.</div></details>
+  </div>
+
+  <div class="tblwrap"><table class="fit">
+    <thead><tr><th>Aspecto</th><th>🧱 Tradicional</th><th>⚡ Ágil</th></tr></thead>
+    <tbody>
+      <tr><td>Alcance y plan</td><td>Alcance <b>fijo</b>, plan detallado</td><td>Alcance <b>flexible</b>, plan adaptativo</td></tr>
+      <tr><td>Entrega</td><td><b>Al final</b></td><td><b>Incrementales</b></td></tr>
+      <tr><td>Cambios</td><td>Controlados y <b>costosos</b></td><td><b>Bienvenidos</b></td></tr>
+      <tr><td>Documentación</td><td><b>Extensa</b></td><td><b>Mínima suficiente</b></td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">A · E · C · D</div>
+    <p>Compara siempre en el mismo orden: <b>A</b>lcance · <b>E</b>ntrega · <b>C</b>ambios · <b>D</b>ocumentación ("<b>A</b>sí <b>E</b>s <b>C</b>ada <b>D</b>iferencia"). Tradicional = fijo, al final, costosos, extensa. Ágil = flexible, incremental, bienvenidos, mínima.</p>
+  </div>
+  <div class="box termino">
+    <div class="blabel">📌 IDEA CLAVE</div>
+    <p>El enfoque se elige según la <b>estabilidad de los requisitos</b>, y el <b>Proyecto Grupal</b> integra la planificación tradicional con un <b>backlog ágil</b>.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué en ágil la documentación es "mínima suficiente" y no cero?</p><textarea class="note" data-note="t-comp-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el Manifiesto valora más el software funcionando que la documentación extensiva, pero la documentación también se valora; incluso la DoD pide "documentación mínima actualizada".</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Cómo son los cambios en cada enfoque?</summary><div class="aa">Tradicional: controlados y costosos · Ágil: bienvenidos.</div></details>
+    <details class="aq"><summary>¿Cuándo se entrega en cada enfoque?</summary><div class="aa">Tradicional: al final · Ágil: entregas incrementales.</div></details>
+    <details class="aq"><summary>¿Qué integra el Proyecto Grupal?</summary><div class="aa">La planificación <b>tradicional</b> con un <b>backlog ágil</b>.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     8. EJEMPLO GUIADO
+     ========================================================= -->
+<section class="topic" id="t-ejemplo" data-title="Ejemplo: el Portal de matrícula en modo ágil">
+  <div class="topic-head">
+    <span class="topic-num">08</span>
+    <div>
+      <div class="topic-title">El proyecto en modo ágil</div>
+      <div class="topic-kicker">Portal de matrícula · historias de usuario · burndown · DoD</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué tres partes tiene una historia de usuario?</summary><div class="aa"><b>Como</b> (quién) · <b>quiero</b> (qué) · <b>para</b> (para qué).</div></details>
+    <details class="aq"><summary>En un burndown, si la línea real va por encima de la ideal, ¿cómo va el equipo?</summary><div class="aa"><b>Atrasado</b>.</div></details>
+  </div>
+
+  <p class="body">El <b>"Portal de matrícula"</b> gestionado con Scrum: historias, sprint y avance.</p>
+  <h3 class="sub">🧾 Historias de usuario</h3>
+  <ul class="plain">
+    <li><b>Como</b> estudiante <b>quiero</b> matricularme en línea <b>para</b> evitar filas.</li>
+    <li><b>Como</b> estudiante <b>quiero</b> ver mi horario <b>para</b> organizar mis clases.</li>
+    <li><b>Como</b> estudiante <b>quiero</b> pagar en línea <b>para</b> no ir a caja.</li>
+  </ul>
+
+  <h3 class="sub">📉 Gráfico Burndown</h3>
+  <p class="body">Muestra el <b>trabajo restante</b> del Sprint (eje vertical: puntos restantes; eje horizontal: días del Sprint, de 0 a 10). Línea punteada = <b>ideal</b>; línea continua = <b>real</b>. Si la línea real va <b>por encima</b> de la ideal, el equipo va <b>atrasado</b>.</p>
+  <figure style="margin:12px 0;">
+    <svg viewBox="0 0 460 240" width="100%" style="max-width:460px;height:auto;" role="img" aria-label="Gráfico burndown: la línea real va por encima de la ideal y la alcanza al final">
+      <line x1="45" y1="20" x2="45" y2="200" stroke="#7d8a84"/><line x1="45" y1="200" x2="440" y2="200" stroke="#7d8a84"/>
+      <text x="16" y="110" text-anchor="middle" font-size="10" fill="#9fb0a8" transform="rotate(-90 16 110)">Puntos restantes</text>
+      <text x="242" y="230" text-anchor="middle" font-size="10" fill="#9fb0a8">Días del Sprint</text>
+      <text x="45" y="214" text-anchor="middle" font-size="9" fill="#9fb0a8">0</text><text x="124" y="214" text-anchor="middle" font-size="9" fill="#9fb0a8">2</text><text x="203" y="214" text-anchor="middle" font-size="9" fill="#9fb0a8">4</text><text x="282" y="214" text-anchor="middle" font-size="9" fill="#9fb0a8">6</text><text x="361" y="214" text-anchor="middle" font-size="9" fill="#9fb0a8">8</text><text x="440" y="214" text-anchor="middle" font-size="9" fill="#9fb0a8">10</text>
+      <polyline points="45,20 84.5,38 124,56 163.5,74 203,92 242.5,110 282,128 321.5,146 361,164 400.5,182 440,200" fill="none" stroke="#9fb0a8" stroke-width="2" stroke-dasharray="4 3"/>
+      <polyline points="45,20 84.5,24.5 124,33.5 163.5,47 203,65 242.5,78.5 282,105.5 321.5,132.5 361,159.5 400.5,182 440,200" fill="none" stroke="#4ade80" stroke-width="2.5"/>
+      <text x="300" y="60" font-size="10" fill="#9fb0a8">- - ideal</text><text x="300" y="76" font-size="10" fill="#4ade80">—— real</text>
+    </svg>
+  </figure>
+
+  <h3 class="sub">✔️ Definición de Hecho (DoD)</h3>
+  <div class="flow">
+    <div class="step"><div class="circ">R</div><div class="steplabel">Código revisado por un compañero</div></div>
+    <div class="step"><div class="circ">P</div><div class="steplabel">Pruebas pasan correctamente</div></div>
+    <div class="step"><div class="circ">A</div><div class="steplabel">Funciona en el ambiente de prueba</div></div>
+    <div class="step"><div class="circ">D</div><div class="steplabel">Documentación mínima actualizada</div></div>
+  </div>
+  <blockquote class="q">La DoD define cuándo una historia está realmente terminada, no solo "casi lista".</blockquote>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">R · P · A · D</div>
+    <p>Una historia está Hecha cuando es "<b>R</b>eal, <b>P</b>robada, <b>A</b>ctiva y <b>D</b>ocumentada": <b>R</b>evisado por un compañero · <b>P</b>ruebas pasan · funciona en el <b>A</b>mbiente de prueba · <b>D</b>ocumentación mínima. Y la historia: "<b>Como</b> ___ <b>quiero</b> ___ <b>para</b> ___" (quién · qué · para qué).</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">En el burndown del ejemplo la línea real va arriba de la ideal casi todo el Sprint y la alcanza al final. ¿Qué significa?</p><textarea class="note" data-note="t-ejemplo-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Que el equipo fue <b>atrasado</b> durante el Sprint (le quedaba más trabajo del que debía) y recuperó al final hasta llegar a 0 puntos restantes el día 10.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>Di una historia de usuario del Portal de matrícula.</summary><div class="aa">Como estudiante quiero matricularme en línea para evitar filas (o ver mi horario para organizar mis clases, o pagar en línea para no ir a caja).</div></details>
+    <details class="aq"><summary>¿Qué muestra el burndown?</summary><div class="aa">El <b>trabajo restante</b> del Sprint.</div></details>
+    <details class="aq"><summary>Los 4 criterios de la DoD del ejemplo.</summary><div class="aa">Código revisado por un compañero · pruebas pasan · funciona en el ambiente de prueba · documentación mínima actualizada.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     9. CASOS REALES
+     ========================================================= -->
+<section class="topic" id="t-casos" data-title="Casos reales: lo ágil en la práctica">
+  <div class="topic-head">
+    <span class="topic-num">09</span>
+    <div>
+      <div class="topic-title">Lo ágil en la práctica</div>
+      <div class="topic-kicker">Spotify · Healthcare.gov · CHAOS · "Agile teatral"</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué empresa popularizó los squads, tribes y chapters?</summary><div class="aa"><b>Spotify</b>.</div></details>
+    <details class="aq"><summary>¿Qué es el "Agile teatral"?</summary><div class="aa">Hacer dailies y sprints <b>sin colaboración real</b>, sin entregar valor ni mejorar: ágil solo de nombre (cargo cult).</div></details>
+  </div>
+
+  <div class="acc">
+    <div class="acc-item">
+      <button class="acc-btn"><span>Spotify · modelo de squads <span class="tagpill ok">Éxito</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p><b>Escalado ágil.</b> Popularizó una forma de organizar equipos ágiles autónomos (<b>squads, tribes, chapters</b>) que inspiró a muchas empresas.</p>
+        <p><b>Lección:</b> lo ágil se <b>adapta</b> a cada organización; la propia Spotify advirtió que <b>no es una receta para copiar tal cual</b>.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Rescate de Healthcare.gov <span class="tagpill">Recuperación</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p><b>De cascada fallida a entregas ágiles.</b> Tras un lanzamiento fallido, un equipo aplicó prácticas ágiles (priorizar, iterar y entregar por partes) y estabilizó el sistema <b>en semanas</b>.</p>
+        <p><b>Lección:</b> entregar en <b>iteraciones cortas reduce el riesgo</b> y permite corregir rápido.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>Informes de la industria (CHAOS) <span class="tagpill">Dato</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p><b>Ágil vs. cascada.</b> Estudios de la industria reportan que los proyectos ágiles suelen tener <b>mayor tasa de éxito</b> que los de cascada, especialmente en <b>proyectos grandes</b>.</p>
+        <p><b>Lección:</b> el <b>feedback temprano y frecuente</b> ayuda a acertar con lo que el cliente realmente necesita.</p>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>"Agile teatral" (cargo cult) <span class="tagpill">Lección</span></span><span class="chev">▾</span></button>
+      <div class="acc-panel"><div class="acc-panel-inner">
+        <p><b>Rituales sin valores.</b> Algunos equipos hacen dailies y sprints pero sin colaboración real, sin entregar valor ni mejorar. Es ágil <b>solo de nombre</b>.</p>
+        <p><b>Lección:</b> los <b>valores</b> del Manifiesto importan más que las <b>ceremonias</b>.</p>
+      </div></div>
+    </div>
+  </div>
+  <p class="body" style="font-size:.8rem;">Información según reportes públicos; el módulo la cita con fines didácticos.</p>
+
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">S · H · C · T</div>
+    <p>"<b>S</b>in <b>H</b>acer <b>C</b>opias <b>T</b>ontas": <b>S</b>potify (adapta, no copies) · <b>H</b>ealthcare.gov (iteraciones cortas reducen el riesgo) · <b>C</b>HAOS (feedback temprano, más éxito) · <b>T</b>eatral (valores sobre ceremonias).</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Qué tienen en común la lección de Healthcare.gov y la de CHAOS?</p><textarea class="note" data-note="t-casos-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Ambas vienen de entregar en ciclos cortos: las iteraciones cortas reducen el riesgo y permiten corregir rápido, y el feedback temprano y frecuente ayuda a acertar con lo que el cliente necesita.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué advirtió la propia Spotify sobre su modelo?</summary><div class="aa">Que <b>no es una receta para copiar tal cual</b>: lo ágil se adapta a cada organización.</div></details>
+    <details class="aq"><summary>¿Qué prácticas aplicó el equipo de Healthcare.gov?</summary><div class="aa">Priorizar, iterar y entregar por partes.</div></details>
+    <details class="aq"><summary>Según CHAOS, ¿en qué proyectos se nota más la ventaja ágil?</summary><div class="aa">En los <b>proyectos grandes</b>.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     10. SIMULADOR
+     ========================================================= -->
+<section class="topic" id="t-simulador" data-title="Simulador: dentro de un Sprint">
+  <div class="topic-head">
+    <span class="topic-num">10</span>
+    <div>
+      <div class="topic-title">Simulador: dentro de un Sprint</div>
+      <div class="topic-kicker">Eres el Scrum Master · valor, calidad, moral y predictibilidad</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué 4 indicadores mide el simulador?</summary><div class="aa"><b>Valor, calidad, moral</b> del equipo y <b>predictibilidad</b>.</div></details>
+    <details class="aq"><summary>A mitad del Sprint el PO quiere meter una historia urgente. ¿Qué es lo correcto?</summary><div class="aa">Dejarla para el <b>próximo Sprint</b> (o negociar sacar otra de igual tamaño).</div></details>
+  </div>
+
+  <div class="tblwrap"><table>
+    <thead><tr><th>Escenario</th><th>✅ Decisión correcta</th><th>❌ Malas decisiones</th></tr></thead>
+    <tbody>
+      <tr><td><b>1.</b> A mitad del Sprint, el PO quiere meter una historia urgente.</td><td><b>Dejarla para el próximo Sprint</b>: el Sprint Backlog no se cambia a la ligera; protege el foco y la predictibilidad. También válido: <b>negociar sacar otra de igual tamaño</b> (si entra algo, sale algo).</td><td>Agregarla encima de todo: baja calidad y moral y rompe la predictibilidad.</td></tr>
+      <tr><td><b>2.</b> El equipo no terminará todo el Sprint Backlog a tiempo.</td><td><b>Mover lo no terminado al siguiente Sprint</b>: se entrega lo que sí está "Hecho" y lo demás vuelve al backlog.</td><td>Recortar pruebas: genera deuda técnica y defectos (no saltarse la DoD). Horas extra varios días: puede funcionar una vez, pero el ritmo insostenible desgasta.</td></tr>
+      <tr><td><b>3.</b> El Daily se volvió un reporte de 40 min al Scrum Master.</td><td><b>Reenfocarlo: 15 min, equipo e impedimentos</b>. El Daily es del equipo para sincronizarse, no un informe de estado.</td><td>Eliminarlo: aparecen bloqueos ocultos. Dejarlo tal cual: una reunión larga y poco útil desmotiva.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">ESPERA · DEVUELVE · REENFOCA</div>
+    <p>Las 3 respuestas correctas en orden: la historia urgente <b>espera</b> al próximo Sprint · lo no terminado se <b>devuelve</b> al backlog · el Daily largo se <b>reenfoca</b> a 15 min.</p>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ TRAMPA</div>
+    <p>"Pedir horas extra" sube el valor esa vez, pero <b>baja la moral</b>: el ritmo insostenible desgasta al equipo (va contra la sostenibilidad de los principios).</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué recortar pruebas para terminar el Sprint es mala decisión? Conéctalo con la DoD.</p><textarea class="note" data-note="t-sim-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque la DoD exige que las pruebas pasen para que algo esté "Hecho". Saltársela baja la calidad y la moral, y genera deuda técnica y defectos.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué se hace con lo que no se termina en el Sprint?</summary><div class="aa">Se mueve al siguiente Sprint: se entrega lo "Hecho" y lo demás vuelve al backlog.</div></details>
+    <details class="aq"><summary>¿Qué pasa si eliminas el Daily?</summary><div class="aa">Sin sincronización aparecen <b>bloqueos ocultos</b>; mejor mejorarlo que quitarlo.</div></details>
+    <details class="aq"><summary>¿Qué regla resume "negociar sacar otra historia de igual tamaño"?</summary><div class="aa"><b>Si entra algo, sale algo</b>: se mantiene el alcance del Sprint.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     11. PLANTILLAS
+     ========================================================= -->
+<section class="topic" id="t-plantillas" data-title="Plantillas ágiles">
+  <div class="topic-head">
+    <span class="topic-num">11</span>
+    <div>
+      <div class="topic-title">Plantillas ágiles</div>
+      <div class="topic-kicker">Para armar el backlog y organizar el proyecto grupal</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿En qué formato viene la plantilla del Backlog Scrum?</summary><div class="aa">En <b>Excel (.xlsx)</b>, hoja "Backlog".</div></details>
+    <details class="aq"><summary>¿Sirve el Acta de Constitución en un proyecto ágil?</summary><div class="aa">Sí: para <b>enmarcar el proyecto</b>.</div></details>
+  </div>
+
+  <div class="grid1">
+    <div class="card"><div class="cico">📊</div><div class="ctitle">Backlog Scrum (en el cuaderno)</div><div class="cdesc">Excel · hoja <b>"Backlog"</b> con <b>historias de usuario, prioridad, estimación y sprint</b>.</div></div>
+    <div class="card"><div class="cico">📄</div><div class="ctitle">Acta de Constitución</div><div class="cdesc">Word · útil también en proyectos ágiles para <b>enmarcar el proyecto</b>.</div></div>
+  </div>
+  <div class="box mnemo">
+    <div class="blabel">🧠 MNEMOTECNIA</div>
+    <div class="mnemo-word">H · P · E · S</div>
+    <p>Columnas del backlog: "<b>H</b>istorias <b>P</b>ara <b>E</b>l <b>S</b>print": <b>H</b>istoria de usuario · <b>P</b>rioridad · <b>E</b>stimación · <b>S</b>print.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué el backlog lleva prioridad?</p><textarea class="note" data-note="t-plant-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque el Product Backlog es una lista <b>ordenada</b>: el Product Owner lo prioriza para maximizar el valor.</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué columnas tiene la hoja Backlog?</summary><div class="aa">Historias de usuario, prioridad, estimación y sprint.</div></details>
+    <details class="aq"><summary>¿En qué formato está el Acta de Constitución?</summary><div class="aa">Word (.docx).</div></details>
+    <details class="aq"><summary>¿Para qué son estas plantillas?</summary><div class="aa">Para armar el backlog y organizar el <b>proyecto grupal</b>.</div></details>
+  </div>
+</section>
+
+<div class="unit-label">REFERENCIA</div>
+
+<!-- =========================================================
+     12. GLOSARIO
+     ========================================================= -->
+<section class="topic" id="t-glosario" data-title="Glosario de siglas y términos ágiles">
+  <div class="topic-head">
+    <span class="topic-num">12</span>
+    <div>
+      <div class="topic-title">Glosario de siglas y términos ágiles</div>
+      <div class="topic-kicker">13 términos · toca cada tarjeta para ver la definición</div>
+    </div>
+  </div>
+
+  <div class="active pre"><div class="alabel">🎯 ANTES DE LEER · <small>Intenta responder aunque no sepas</small></div>
+    <details class="aq"><summary>¿Qué significa MVP?</summary><div class="aa"><b>Minimum Viable Product</b> (Producto Mínimo Viable).</div></details>
+    <details class="aq"><summary>¿Qué es TDD?</summary><div class="aa"><b>Test-Driven Development</b>: se escribe la prueba antes que el código.</div></details>
+  </div>
+
+  <div class="glo" id="glosario-grid">
+    <div class="glo-item"><div class="gs">PO</div><div class="gn">Product Owner</div><div class="gm">Rol de Scrum que prioriza el backlog y maximiza el valor del producto.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">SM</div><div class="gn">Scrum Master</div><div class="gm">Facilita el proceso, protege al equipo y elimina impedimentos.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">DoD</div><div class="gn">Definition of Done (Definición de Hecho)</div><div class="gm">Criterios que un ítem debe cumplir para considerarse terminado.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">WIP</div><div class="gn">Work In Progress</div><div class="gm">Trabajo en progreso; en Kanban se limita para mejorar el flujo.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">TDD</div><div class="gn">Test-Driven Development</div><div class="gm">Desarrollo guiado por pruebas: se escribe la prueba antes que el código.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">CI</div><div class="gn">Continuous Integration</div><div class="gm">Integración continua: fusionar y probar el código con frecuencia.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">XP</div><div class="gn">eXtreme Programming</div><div class="gm">Metodología ágil centrada en la excelencia técnica.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">MVP</div><div class="gn">Minimum Viable Product</div><div class="gm">Producto Mínimo Viable: la versión más simple que ya aporta valor.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Sprint</div><div class="gn">Iteración</div><div class="gm">Periodo de tiempo fijo (1 a 4 semanas) que produce un incremento.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">Backlog</div><div class="gn">Product / Sprint Backlog</div><div class="gm">Lista priorizada de trabajo pendiente del producto o del sprint.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">PSM / CSM</div><div class="gn">Professional / Certified Scrum Master</div><div class="gm">Certificaciones de Scrum Master (Scrum.org / Scrum Alliance).</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">PSPO / CSPO</div><div class="gn">Professional / Certified Scrum Product Owner</div><div class="gm">Certificaciones de Product Owner.</div><div class="gtoggle">ver ▾</div></div>
+    <div class="glo-item"><div class="gs">PMI-ACP</div><div class="gn">PMI Agile Certified Practitioner</div><div class="gm">Certificación ágil del PMI.</div><div class="gtoggle">ver ▾</div></div>
+  </div>
+  <div class="box error">
+    <div class="blabel">❌ NO CONFUNDIR</div>
+    <p><b>P</b>SM / <b>P</b>SPO = <b>P</b>rofessional (<b>Scrum.org</b>) · <b>C</b>SM / <b>C</b>SPO = <b>C</b>ertified (<b>Scrum Alliance</b>). PMI-ACP es la certificación ágil del <b>PMI</b>.</p>
+  </div>
+
+  <div class="active why"><div class="alabel">🤔 ¿POR QUÉ?</div><p class="aqt">¿Por qué TDD y CI aparecen como prácticas de XP?</p><textarea class="note" data-note="t-glo-why" placeholder="Explícalo con tus palabras antes de ver la respuesta…" aria-label="Tu explicación"></textarea><details class="aq"><summary>Ver respuesta</summary><div class="aa">Porque XP es la metodología centrada en la excelencia técnica, y ambas son prácticas técnicas: escribir la prueba antes que el código (TDD) y fusionar y probar el código con frecuencia (CI).</div></details></div>
+  <div class="active rec"><div class="alabel">🧠 RECUERDA SIN MIRAR</div>
+    <details class="aq"><summary>¿Qué significa DoD?</summary><div class="aa">Definition of Done: Definición de Hecho.</div></details>
+    <details class="aq"><summary>¿Qué es CI?</summary><div class="aa">Continuous Integration: fusionar y probar el código con frecuencia.</div></details>
+    <details class="aq"><summary>¿Quién otorga PSM y quién CSM?</summary><div class="aa">PSM: Scrum.org · CSM: Scrum Alliance.</div></details>
+  </div>
+</section>
+
+<!-- =========================================================
+     CIERRE ACTIVO
+     ========================================================= -->
+<section class="topic" id="t-cierre" data-title="Cierre activo: repaso y plan">
+  <div class="topic-head">
+    <span class="topic-num">★</span>
+    <div>
+      <div class="topic-title">Cierre activo</div>
+      <div class="topic-kicker">Repaso mezclado · explícalo en 3 frases · plan de repaso espaciado</div>
+    </div>
+  </div>
+
+  <div class="active rec"><div class="alabel">🔀 REPASO MEZCLADO · <small>temas distintos, sin seguir el orden</small></div>
+    <details class="aq"><summary>¿Qué rol cuida que el Daily dure 15 min y qué rol pidió meter la historia urgente en el simulador?</summary><div class="aa">El <b>Scrum Master</b> (facilita, elimina impedimentos); el <b>Product Owner</b> pidió la historia urgente.</div></details>
+    <details class="aq"><summary>¿Qué valor del Manifiesto contradice el "Agile teatral"?</summary><div class="aa">Sobre todo <b>individuos e interacciones</b> (no hay colaboración real) y la idea de que los valores importan más que las ceremonias.</div></details>
+    <details class="aq"><summary>¿Qué práctica de XP y qué criterio de la DoD tienen que ver con las pruebas?</summary><div class="aa"><b>TDD</b> (la prueba antes que el código) y "<b>pruebas pasan correctamente</b>".</div></details>
+    <details class="aq"><summary>¿Qué herramienta usarías para un tablero Kanban simple y cuál es el WIP máx del ejemplo?</summary><div class="aa"><b>Trello</b>; WIP máx <b>2</b> en "En progreso".</div></details>
+    <details class="aq"><summary>¿En qué se parecen "Respuesta ante el cambio" y "cambios bienvenidos"?</summary><div class="aa">Son el mismo principio: el valor del Manifiesto y la fila "Cambios" de la comparación Tradicional vs. Ágil.</div></details>
+    <details class="aq"><summary>¿Qué evento muestra el incremento y qué caso real habla del feedback temprano?</summary><div class="aa"><b>Sprint Review</b>; los <b>informes CHAOS</b>.</div></details>
+    <details class="aq"><summary>¿Cuánto dura un Sprint y cuánto es el time-box de la Retrospectiva?</summary><div class="aa">1 a 4 semanas; hasta 3 h.</div></details>
+    <details class="aq"><summary>¿Qué artefacto contiene "los ítems del Sprint más el plan" y qué plantilla sirve para armar el backlog?</summary><div class="aa">El <b>Sprint Backlog</b>; la plantilla <b>Backlog Scrum</b> (Excel, hoja "Backlog").</div></details>
+    <details class="aq"><summary>¿Qué caso real advierte que lo ágil no se copia tal cual y qué rasgo de lo ágil lo explica?</summary><div class="aa"><b>Spotify</b>; lo ágil es <b>adaptativo</b>: se adapta a cada organización.</div></details>
+    <details class="aq"><summary>¿Según qué se elige el enfoque y qué integra el Proyecto Grupal?</summary><div class="aa">Según la <b>estabilidad de los requisitos</b>; integra la planificación tradicional con un <b>backlog ágil</b>.</div></details>
+  </div>
+
+  <div class="active why"><div class="alabel">✍️ EXPLÍCALO EN 3 FRASES</div>
+    <p class="aqt">Explica el Parcial 3 completo en tres frases: qué es ágil (y el Manifiesto), cómo funciona Scrum, y cómo se compara y aplica (XP/Kanban, tradicional vs. ágil, ejemplo).</p>
+    <textarea class="note" data-note="cierre-3frases" placeholder="Frase 1… Frase 2… Frase 3…" aria-label="Tu explicación en 3 frases"></textarea>
+    <details class="aq"><summary>Ver una versión modelo</summary><div class="aa">1. Ágil es un enfoque iterativo e incremental que entrega valor temprano y responde al cambio; el Manifiesto (2001, 17 firmantes) define 4 valores (individuos, software funcionando, colaboración con el cliente, respuesta al cambio) y 12 principios.<br>2. Scrum organiza el trabajo en Sprints de 1 a 4 semanas con 3 pilares (transparencia, inspección, adaptación), 3 roles (PO, SM, Equipo), 3 artefactos (Product Backlog, Sprint Backlog, Incremento con DoD) y eventos con time-box (Planning 8 h, Daily 15 min, Review 4 h, Retro 3 h).<br>3. XP aporta prácticas técnicas y Kanban optimiza el flujo con límite WIP; frente al tradicional, lo ágil tiene alcance flexible, entregas incrementales y cambios bienvenidos, el enfoque se elige según la estabilidad de los requisitos, y el Portal de matrícula lo aplica con historias de usuario, burndown y DoD.</div></details>
+  </div>
+
+  <div class="active pre"><div class="alabel">📅 PLAN DE REPASO ESPACIADO</div>
+    <p class="aqt">Fecha del examen: <input type="date" id="planExam" class="kit-date" aria-label="Fecha del examen"></p>
+    <ul class="kit-plan" id="planList"></ul>
+  </div>
+
+  <div class="active rec"><div class="alabel">🚀 FRASE DE ARRANQUE · <small>toca para editarla</small></div>
+    <div class="kit-frase" id="frase" contenteditable="true" role="textbox" aria-label="Frase de arranque">Cuando me siente en el bus / llegue a la oficina, abro ▶ Continuar y respondo las preguntas de 🎯.</div>
+  </div>
+</section>
+
+<!-- =========================================================
+     RESUMEN FINAL
+     ========================================================= -->
+<section class="topic" id="t-resumen" data-title="Resumen del Parcial 3">
+  <div class="topic-head">
+    <span class="topic-num">✔</span>
+    <div>
+      <div class="topic-title">Resumen del Parcial 3</div>
+      <div class="topic-kicker">Los puntos clave del Módulo 3, todos juntos</div>
+    </div>
+  </div>
+
+  <div class="mm-center">🎓<br>Parcial 3<br>GPI Ágil</div>
+  <div class="mm-branches">
+    <div class="mm-branch" style="border-color:#265c3a;color:#4ade80;">⚡ Ágil · Manifiesto (4 + 12)</div>
+    <div class="mm-branch" style="border-color:#1f4d5c;color:#5ecbe8;">🔁 Ciclo · eventos con time-box</div>
+    <div class="mm-branch" style="border-color:#5c4515;color:#f5b942;">🏉 Scrum · 3 pilares · 3 roles · 3 artefactos</div>
+    <div class="mm-branch" style="border-color:#453262;color:#c9a6f0;">📋 XP · Kanban (WIP)</div>
+    <div class="mm-branch" style="border-color:#265c3a;color:#4ade80;">⚖️ Tradicional vs. Ágil</div>
+    <div class="mm-branch" style="border-color:#1f4d5c;color:#5ecbe8;">🧩 Portal: historias · burndown · DoD</div>
+  </div>
+
+  <ul class="plain" style="margin-top:16px;">
+    <li><b>Ágil</b> entrega valor de forma iterativa e incremental.</li>
+    <li>El <b>Manifiesto Ágil</b> define 4 valores y 12 principios.</li>
+    <li><b>Scrum</b> organiza el trabajo en Sprints con roles, artefactos y eventos.</li>
+    <li><b>XP</b> aporta prácticas técnicas; <b>Kanban</b> optimiza el flujo.</li>
+    <li>El enfoque se elige según la <b>estabilidad de los requisitos</b>.</li>
+    <li>El <b>Proyecto Grupal</b> integra la planificación tradicional con un backlog ágil.</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <p><b>Gerencia de Proyectos Informáticos</b> · Parcial 3 · II Semestre 2026</p>
+  <p>Universidad Tecnológica de Panamá · FISC · Mgtr. Henry D. De Gracia R.</p>
+  <p>Guía de estudio generada solo a partir de Mod3_ProyectosAgiles.html (Módulo 3) — uso académico.</p>
+</footer>
+
+<!-- ============================================================
+     TOC OVERLAY
+     ============================================================ -->
+<div id="tocOverlay">
+  <div class="toc-head">
+    <h2>Índice</h2>
+    <button id="tocClose" aria-label="Cerrar índice">✕</button>
+  </div>
+  <div class="toc-list" id="tocList"></div>
+</div>
+
+<!-- ============================================================
+     BOTTOM NAV
+     ============================================================ -->
+<div id="bottomnav">
+  <div class="navpill">
+    <button class="navbtn" id="btnTop"><span class="nico">↑</span>Inicio</button>
+    <button class="navbtn primary" id="btnToc"><span class="nico">☰</span>Índice</button>
+    <button class="navbtn" id="btnSearchFocus"><span class="nico">🔎</span>Buscar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- PROGRESS BAR ---------- */
+  var progress = document.getElementById('progress');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop || document.body.scrollTop;
+    var height = (h.scrollHeight || document.body.scrollHeight) - h.clientHeight;
+    var pct = height > 0 ? (scrolled/height*100) : 0;
+    progress.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+
+  /* ---------- BUILD TOC ---------- */
+  var topics = Array.prototype.slice.call(document.querySelectorAll('section.topic'));
+  var tocList = document.getElementById('tocList');
+  topics.forEach(function(sec){
+    var num = sec.querySelector('.topic-num').textContent;
+    var title = sec.getAttribute('data-title') || sec.querySelector('.topic-title').textContent;
+    var a = document.createElement('a');
+    a.href = '#' + sec.id;
+    a.innerHTML = '<span class="tn">'+num+'</span><span>'+title+'</span>';
+    a.addEventListener('click', function(){ closeToc(); });
+    tocList.appendChild(a);
+  });
+
+  var tocOverlay = document.getElementById('tocOverlay');
+  function openToc(){ tocOverlay.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeToc(){ tocOverlay.classList.remove('open'); document.body.style.overflow=''; }
+  document.getElementById('btnToc').addEventListener('click', openToc);
+  document.getElementById('tocClose').addEventListener('click', closeToc);
+
+  document.getElementById('btnTop').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+  document.getElementById('btnSearchFocus').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+    setTimeout(function(){ document.getElementById('searchInput').focus(); }, 350);
+  });
+
+  /* ---------- ACCORDIONS (casos reales) ---------- */
+  document.querySelectorAll('.acc-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.parentElement.classList.toggle('open');
+    });
+  });
+
+  /* ---------- GLOSSARY TOGGLE ---------- */
+  document.querySelectorAll('.glo-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      item.classList.toggle('open');
+      var t = item.querySelector('.gtoggle');
+      t.textContent = item.classList.contains('open') ? 'ocultar ▴' : 'ver ▾';
+    });
+  });
+
+  /* ---------- SEARCH / FILTER ---------- */
+  var searchInput = document.getElementById('searchInput');
+  var searchCount = document.getElementById('searchcount');
+  var allTopics = topics;
+
+  function stripMarks(container){
+    container.querySelectorAll('mark.hit').forEach(function(m){
+      var parent = m.parentNode;
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    });
+  }
+
+  function highlightText(node, term){
+    if(node.nodeType === 3){
+      var idx = node.textContent.toLowerCase().indexOf(term);
+      if(idx >= 0){
+        var text = node.textContent;
+        var before = text.slice(0, idx);
+        var match = text.slice(idx, idx+term.length);
+        var after = text.slice(idx+term.length);
+        var frag = document.createDocumentFragment();
+        if(before) frag.appendChild(document.createTextNode(before));
+        var mark = document.createElement('mark');
+        mark.className = 'hit';
+        mark.textContent = match;
+        frag.appendChild(mark);
+        if(after) frag.appendChild(document.createTextNode(after));
+        node.parentNode.replaceChild(frag, node);
+        return true;
+      }
+      return false;
+    }
+    if(node.nodeType === 1 && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE'){
+      var found = false;
+      var children = Array.prototype.slice.call(node.childNodes);
+      for(var i=0;i<children.length;i++){
+        if(highlightText(children[i], term)) { found = true; break; }
+      }
+      return found;
+    }
+    return false;
+  }
+
+  var searchTimer;
+  searchInput.addEventListener('input', function(){
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(runSearch, 120);
+  });
+
+  function runSearch(){
+    var term = searchInput.value.trim().toLowerCase();
+
+    // reset
+    allTopics.forEach(function(sec){
+      stripMarks(sec);
+      sec.classList.remove('hidden-by-search');
+      sec.querySelectorAll('.acc-item, .glo-item, .card-wide').forEach(function(el){
+        el.classList.remove('hidden-by-search');
+      });
+    });
+
+    if(term.length < 2){
+      searchCount.textContent = '';
+      return;
+    }
+
+    var totalMatches = 0;
+    var sectionsMatched = 0;
+
+    allTopics.forEach(function(sec){
+      var text = sec.textContent.toLowerCase();
+      var sectionHasMatch = text.indexOf(term) >= 0;
+
+      // Granular filter for repeating item types
+      var items = sec.querySelectorAll('.acc-item, .glo-item, .card-wide');
+      var anyItemVisible = false;
+      if(items.length){
+        items.forEach(function(it){
+          var itText = it.textContent.toLowerCase();
+          if(itText.indexOf(term) >= 0){
+            anyItemVisible = true;
+            totalMatches++;
+          } else {
+            it.classList.add('hidden-by-search');
+          }
+        });
+      }
+
+      if(sectionHasMatch){
+        sectionsMatched++;
+        if(!items.length) totalMatches++;
+        // highlight first occurrence per block-level element for lightweight marking
+        sec.querySelectorAll('p, li, td, .ctitle, .cdesc, .cname, .gs, .gn').forEach(function(el){
+          highlightText(el, term);
+        });
+      } else if(!anyItemVisible){
+        sec.classList.add('hidden-by-search');
+      }
+    });
+
+    searchCount.innerHTML = sectionsMatched
+      ? '<b>'+sectionsMatched+'</b> sección(es) con coincidencias para "'+searchInput.value.trim()+'"'
+      : 'Sin resultados para "'+searchInput.value.trim()+'"';
+  }
+
+})();
+</script>
+
+<script>
+/* Ajustes de distribución para móvil */
+(function(){
+  "use strict";
+  // Tablas: 3+ columnas se apilan como tarjetas; 2 columnas se ajustan al ancho
+  document.querySelectorAll('.tblwrap table').forEach(function(t){
+    var ths = Array.prototype.map.call(t.querySelectorAll('thead th'), function(th){ return th.textContent.trim(); });
+    if(ths.length >= 3){
+      t.classList.add('stack');
+      t.parentElement.classList.add('stackwrap');
+      // Si la 1ª columna es un código corto (PC1, 3, KGI, S…), código + nombre van en una línea
+      var firsts = Array.prototype.map.call(t.querySelectorAll('tbody tr td:first-child'), function(td){ return td.textContent.trim().length; });
+      if(firsts.length && Math.max.apply(null, firsts) <= 6) t.classList.add('codefirst');
+      t.querySelectorAll('tbody tr').forEach(function(tr){
+        Array.prototype.forEach.call(tr.children, function(td, i){
+          if(ths[i]) td.setAttribute('data-label', ths[i]);
+        });
+      });
+    } else {
+      t.classList.add('fit');
+    }
+  });
+  // Grids de 2 columnas con descripciones largas → 1 columna en móvil
+  document.querySelectorAll('.grid2').forEach(function(g){
+    var long = Array.prototype.some.call(g.querySelectorAll('.cdesc'), function(d){ return d.textContent.trim().length > 70; });
+    if(long) g.classList.add('wide');
+  });
+  // Header compacto al hacer scroll
+  var header = document.querySelector('header');
+  function onScroll(){ header.classList.toggle('compact', window.scrollY > 60); }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+
+<script src="audio/guia.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+/* Configuración del kit para la guía */
+window.KIT_CFG = {
+  prefix:"gpi_p3", posKey:"gpi_p3_guia_pos_v1",
+  sections:"section.topic", header:".header-inner",
+  chunk:true, foldTables:".tblwrap",
+  ttsBlocks:".topic-title, h3.sub, p, li, blockquote, .card, tbody tr, .flow .step, .acc-btn, .mnemo-word, .rpill, .glo-item, .mm-branch",
+  ttsTarget:function(sec){ return sec.querySelector(".topic-head"); },
+  titleOf:function(sec){ var t = sec.querySelector(".topic-title"); return t ? t.textContent : ""; },
+  onMode:function(m){
+    document.querySelectorAll(".acc-item").forEach(function(it){ it.classList.toggle("open", m === "office"); });
+  }
+};
+</script>
+<script>
+/* ============================================================
+   KIT DE ESTUDIO · modos Oficina/Transporte, continuar donde quedé,
+   pausas seguras, temporizador de pausas y lectura en voz alta
+   ============================================================ */
+(function(){
+  "use strict";
+  var CFG = window.KIT_CFG;
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  var root = document.documentElement;
+  var sections = Array.prototype.slice.call(document.querySelectorAll(CFG.sections));
+
+  /* ---------- barra de modo ---------- */
+  var bar = document.createElement("div");
+  bar.className = "kit-bar";
+  bar.innerHTML =
+    '<div class="kit-seg" role="group" aria-label="Modo de estudio">'+
+      '<button type="button" data-mode="office" aria-pressed="false">🏢 Oficina</button>'+
+      '<button type="button" data-mode="transit" aria-pressed="false">🚌 Transporte</button>'+
+    '</div>'+
+    '<button type="button" class="kit-btn kit-transit-only" id="kitCont">▶ Continuar donde quedé</button>'+
+    '<button type="button" class="kit-btn kit-office-only" id="kitPomo" title="Sugiere una pausa a los 25 minutos">⏱ Pomodoro 25 min</button>';
+  var note = document.createElement("div");
+  note.className = "kit-note";
+  note.innerHTML = '<span id="kitNoteTxt"></span><button type="button" aria-label="Ocultar aviso">✕</button>';
+  var host = document.querySelector(CFG.header);
+  host.appendChild(bar); host.appendChild(note);
+  note.querySelector("button").addEventListener("click", function(){ note.hidden = true; });
+
+  var NOTES = {
+    transit:"🚌 Activa No Molestar · música instrumental o silencio, nada con letra.",
+    office:"🏢 Teléfono fuera de la vista y notificaciones en silencio."
+  };
+  function setMode(m, persist){
+    root.setAttribute("data-mode", m);
+    Array.prototype.forEach.call(bar.querySelectorAll(".kit-seg button"), function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-mode")===m ? "true" : "false"); });
+    document.getElementById("kitNoteTxt").textContent = NOTES[m];
+    note.hidden = false;
+    if(persist) save(CFG.prefix+"_modo_v1", m);
+    if(CFG.onMode) CFG.onMode(m);
+    if(m !== "office") stopPomo();
+  }
+  bar.querySelector(".kit-seg").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-mode]"); if(b) setMode(b.getAttribute("data-mode"), true);
+  });
+
+  /* ---------- pausas seguras (bloques de ~5–7 min) ---------- */
+  var checkpoints = [];
+  sections.forEach(function(sec){
+    sec.setAttribute("data-ck", sec.id);
+    checkpoints.push(sec);
+    if(!CFG.chunk) return;
+    var words = 0, n = 0;
+    var kids = Array.prototype.slice.call(CFG.chunkRoot ? sec.querySelector(CFG.chunkRoot).children : sec.children);
+    var total = kids.reduce(function(t,k){ return t + (k.textContent.trim().split(/\s+/).length); }, 0);
+    var seen = 0;
+    kids.forEach(function(k){
+      if(k.matches(".topic-head")) return;
+      var w = k.textContent.trim().split(/\s+/).length;
+      words += w; seen += w;
+      if(words >= 450 && total - seen >= 120){
+        n++;
+        var p = document.createElement("div");
+        p.className = "pausa"; p.id = sec.id+"-p"+n; p.setAttribute("data-ck", p.id);
+        p.textContent = "🚏 Pausa segura: si llegas a tu parada, retoma aquí";
+        k.parentNode.insertBefore(p, k.nextSibling);
+        checkpoints.push(p);
+        words = 0;
+      }
+    });
+  });
+  checkpoints.sort(function(a,b){ return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+
+  var POS = CFG.posKey;
+  var saveTimer;
+  function trackPos(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      var cur = null;
+      for(var i=0;i<checkpoints.length;i++){
+        var el = checkpoints[i];
+        if(el.offsetParent === null && !el.matches(CFG.sections)) continue;   // pausa oculta
+        if(el.getBoundingClientRect().top <= 160) cur = el; else break;
+      }
+      if(cur) save(POS, cur.id);
+    }, 250);
+  }
+  window.addEventListener("scroll", trackPos, {passive:true});
+  document.getElementById("kitCont").addEventListener("click", function(){
+    var id = load(POS), el = id && document.getElementById(id);
+    if(!el){ toast("Aún no hay una posición guardada: empieza a leer y se guardará sola."); return; }
+    var d = el.closest("details"); if(d) d.open = true;
+    if(el.tagName === "DETAILS") el.open = true;
+    el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  /* ---------- tablas grandes plegadas en Transporte ---------- */
+  if(CFG.foldTables){
+    Array.prototype.forEach.call(document.querySelectorAll(CFG.foldTables), function(w){
+      var rows = w.querySelectorAll("tbody tr").length;
+      if(rows <= 5) return;
+      var f = document.createElement("div"); f.className = "kit-fold";
+      w.parentNode.insertBefore(f, w);
+      var b = document.createElement("button"); b.type = "button"; b.className = "kit-btn kit-foldbtn";
+      b.textContent = "📋 Ver tabla ("+rows+" filas)";
+      b.addEventListener("click", function(){ f.classList.toggle("open"); b.textContent = (f.classList.contains("open")?"🙈 Ocultar tabla":"📋 Ver tabla ("+rows+" filas)"); });
+      f.appendChild(b); f.appendChild(w);
+    });
+  }
+
+  /* ---------- notas escritas (Oficina) ---------- */
+  var NK = CFG.prefix+"_notas_v1", notes = load(NK) || {};
+  Array.prototype.forEach.call(document.querySelectorAll("textarea[data-note]"), function(t){
+    t.value = notes[t.getAttribute("data-note")] || "";
+    t.addEventListener("input", function(){ notes[t.getAttribute("data-note")] = t.value; save(NK, notes); });
+  });
+
+  /* ---------- toast + pomodoro ---------- */
+  var toastEl = document.createElement("div"); toastEl.id = "kitToast"; toastEl.setAttribute("role","status"); document.body.appendChild(toastEl);
+  var toastT;
+  function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, 6000); }
+  var pomoEnd = 0, pomoT = null, pomoBtn = document.getElementById("kitPomo");
+  function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), x = s%60; return m+":"+(x<10?"0":"")+x; }
+  function stopPomo(){ clearInterval(pomoT); pomoT = null; pomoEnd = 0; pomoBtn.classList.remove("on"); pomoBtn.textContent = "⏱ Pomodoro 25 min"; }
+  pomoBtn.addEventListener("click", function(){
+    if(pomoT){ stopPomo(); return; }
+    pomoEnd = Date.now() + 25*60000;
+    pomoBtn.classList.add("on");
+    pomoT = setInterval(function(){
+      var left = (pomoEnd - Date.now())/1000;
+      pomoBtn.textContent = "⏱ "+fmt(left)+" · detener";
+      if(left <= 0){ stopPomo(); toast("☕ Llevas 25 minutos: toma una pausa de 5 minutos. Luego responde las preguntas 🧠 del último tema."); try{ navigator.vibrate && navigator.vibrate(300); }catch(e){} }
+    }, 1000);
+  });
+
+  /* ---------- lectura en voz alta (audio/voz.js: MP3 con pantalla apagada o voz del navegador) ---------- */
+  if(window.Voz){
+    Voz.init({
+      sections: sections,
+      key: function(sec){ return sec.id; },
+      title: CFG.titleOf,
+      blocks: CFG.ttsBlocks,
+      skip: ".active,.kit-bar,.pausa,#kitPlayer,.kit-foldbtn",
+      target: CFG.ttsTarget,
+      onOpen: function(sec){ if(sec.tagName === "DETAILS") sec.open = true; },
+      playerId: "kitPlayer", btnClass: "kit-tts", allClass: "kit-btn", allTarget: bar, allBefore: bar.children[1] || null,
+      rateKey: CFG.prefix+"_tts_rate_v1", artist: "Guía · GPI Parcial 3"
+    });
+  }
+
+  /* ---------- modo inicial ---------- */
+  var m = load(CFG.prefix+"_modo_v1");
+  if(m !== "office" && m !== "transit") m = window.matchMedia("(max-width:560px)").matches ? "transit" : "office";
+  setMode(m, false);
+})();
+</script>
+
+<script>
+/* Índice lateral (PC), plan de repaso espaciado y frase de arranque */
+(function(){
+  "use strict";
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  // --- índice lateral ---
+  var side = document.createElement("nav"); side.id = "kitSide"; side.setAttribute("aria-label","Índice");
+  side.innerHTML = '<div class="sh">ÍNDICE</div>';
+  document.querySelectorAll("#tocList a").forEach(function(a){ side.appendChild(a.cloneNode(true)); });
+  document.body.appendChild(side);
+  var header = document.querySelector("header");
+  function hh(){ document.documentElement.style.setProperty("--hh", header.offsetHeight+"px"); }
+  hh(); window.addEventListener("resize", hh);
+  var links = side.querySelectorAll("a"), secs = document.querySelectorAll("section.topic");
+  var spyT;
+  window.addEventListener("scroll", function(){
+    clearTimeout(spyT);
+    spyT = setTimeout(function(){
+      var cur = null;
+      secs.forEach(function(s){ if(s.getBoundingClientRect().top <= 180) cur = s.id; });
+      links.forEach(function(a){
+        var on = a.getAttribute("href") === "#"+cur;
+        if(on && !a.classList.contains("on") && side.offsetParent){
+          var r = a.getBoundingClientRect(), sr = side.getBoundingClientRect();
+          if(r.top < sr.top || r.bottom > sr.bottom) a.scrollIntoView({block:"nearest"});
+        }
+        a.classList.toggle("on", on);
+      });
+    }, 120);
+  }, {passive:true});
+
+  // --- plan de repaso espaciado ---
+  var EX = "gpi_p3_examen_v1", inp = document.getElementById("planExam"), list = document.getElementById("planList");
+  function day(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function add(d,n){ var x = day(d); x.setDate(x.getDate()+n); return x; }
+  function parse(s){ if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+  function lbl(d){ return d.toLocaleDateString("es-PA",{weekday:"short", day:"2-digit", month:"2-digit"}); }
+  function diff(a,b){ return Math.round((day(b)-day(a))/86400000); }
+  var NAMES = [
+    "📖 Lectura de la guía + preguntas 🎯 y 🧠",
+    "🔁 Repaso 1: 🧠 Recuerda sin mirar + tarjetas 📅 Hoy",
+    "🔁 Repaso 2: 🔀 Repaso mezclado + tarjetas 📅 Hoy",
+    "🔁 Repaso 3: Resumen express + tarjetas 📅 Hoy"
+  ];
+  function plan(){
+    var ex = parse(inp.value), today = day(new Date());
+    if(!ex){ list.innerHTML = '<li>Elige la fecha del examen para generar tu plan.</li>'; return; }
+    if(diff(today, ex) <= 0){ list.innerHTML = '<li>El examen es hoy o ya pasó: haz un ⚡ mini simulacro y repasa las siglas y "No confundir".</li>'; return; }
+    var eve = add(ex,-1), sim = add(ex,-2);
+    if(sim < today) sim = today;
+    // los repasos (+0, +1, +3, +7) se comprimen si no caben antes del simulacro
+    var span = Math.max(0, diff(today, sim) - 1);
+    var sc = span >= 7 ? 1 : span / 7;
+    var items = [], last = -1;
+    [0,1,3,7].forEach(function(o,i){
+      var n = Math.round(o * sc);
+      if(i > 0 && n <= last && last + 1 <= span) n = last + 1;
+      last = Math.max(last, n);
+      var d = add(today, n);
+      if(d > eve) d = eve;
+      items.push([d, NAMES[i]]);
+    });
+    items.push([sim, "📝 Simulacro completo (sin verificación, como el examen real)"]);
+    items.push([eve < today ? today : eve, "🔤 Siglas y mnemotecnias + cajas \"No confundir\""]);
+    items.sort(function(a,b){ return a[0]-b[0]; });
+    list.innerHTML = items.map(function(x){ return '<li><b>'+lbl(x[0])+'</b><span>'+x[1]+'</span></li>'; }).join("") +
+      (sc < 1 ? '<li><b>⚡</b><span>El examen está cerca: las fechas se comprimieron sin pasar del día anterior al examen.</span></li>' : '');
+  }
+  inp.value = load(EX) || "";
+  inp.addEventListener("change", function(){ save(EX, inp.value || null); plan(); });
+  plan();
+
+  // --- frase de arranque editable ---
+  var fr = document.getElementById("frase"), FK = "gpi_p3_frase_v1", f = load(FK);
+  if(f) fr.textContent = f;
+  fr.addEventListener("input", function(){ save(FK, fr.textContent.trim()); });
+})();
+</script>
+</body>
+</html>

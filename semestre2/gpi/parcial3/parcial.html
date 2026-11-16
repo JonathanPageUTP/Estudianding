@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Simulacro de Parcial 3 · Gerencia de Proyectos Informáticos</title>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:#0a1410;
+  --bg-grid:#0d1a15;
+  --surface:#101f19;
+  --surface-2:#152720;
+  --line:#1f3a2e;
+  --line-soft:#16281f;
+  --text:#e9f3ec;
+  --text-dim:#a9c2b6;
+  --text-faint:#6f8c7e;
+  --accent:#4ade80;
+  --accent-dim:#1f5233;
+  --cyan:#5ecbe8;
+  --cyan-dim:#173842;
+  --amber:#f5b942;
+  --amber-dim:#4a3510;
+  --red:#f38080;
+  --red-dim:#4a1f1f;
+  --violet:#c9a6f0;
+  --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --maxw:680px;
+  --radius:14px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;font-family:var(--sans);color:var(--text);line-height:1.5;min-height:100vh;
+  background:
+    linear-gradient(var(--bg-grid) 1px,transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px) 0 0/28px 100%,
+    var(--bg);
+}
+h1,h2,h3,p{margin:0;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px;}
+.hidden{display:none !important;}
+a{color:var(--cyan);}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--text);
+  padding:13px 18px;border-radius:12px;font-size:.92rem;font-weight:700;text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.btn.danger{background:var(--red-dim);border-color:#5c2a2a;color:var(--red);}
+.btn.block{width:100%;}
+.btn.sm{padding:9px 13px;font-size:.8rem;border-radius:10px;}
+
+/* ============================================================
+   PORTADA
+   ============================================================ */
+.cover{margin:22px auto 30px;}
+.paper{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:22px 20px;position:relative;overflow:hidden;
+}
+.paper::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+}
+.inst{text-align:center;font-family:var(--serif);}
+.inst .u{font-size:.95rem;font-weight:700;letter-spacing:.02em;}
+.inst .f{font-size:.78rem;color:var(--text-dim);margin-top:2px;}
+.inst .c{font-size:1.02rem;margin-top:12px;font-weight:700;color:var(--accent);}
+.inst .t{font-size:1.45rem;margin-top:4px;font-weight:700;}
+.inst .p{font-size:.8rem;color:var(--text-faint);margin-top:4px;}
+.rule{border:none;border-top:1px dashed var(--line);margin:18px 0;}
+
+.fields{display:grid;grid-template-columns:1fr;gap:10px;}
+.field label{display:block;font-family:var(--mono);font-size:.66rem;color:var(--text-faint);margin-bottom:4px;letter-spacing:.03em;}
+.field input,.field select{
+  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);
+  border-radius:10px;padding:11px 12px;font-size:16px;font-family:var(--sans);
+}
+.field input:focus,.field select:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+.sec-title{font-size:.78rem;font-family:var(--mono);color:var(--accent);letter-spacing:.04em;margin-bottom:8px;}
+ol.rules{margin:0;padding-left:20px;}
+ol.rules li{font-size:.86rem;color:var(--text-dim);margin-bottom:6px;}
+ol.rules li b{color:var(--text);}
+
+.valtable{width:100%;border-collapse:collapse;font-size:.84rem;}
+.valtable td{padding:8px 4px;border-bottom:1px solid var(--line-soft);color:var(--text-dim);}
+.valtable td:last-child{text-align:right;font-family:var(--mono);color:var(--text);white-space:nowrap;}
+.valtable tr:last-child td{border-bottom:none;font-weight:700;color:var(--text);}
+
+.resume{
+  background:var(--amber-dim);border:1px solid #5c4515;border-radius:14px;padding:14px;margin-bottom:14px;
+}
+.resume p{font-size:.86rem;color:var(--text);margin-bottom:10px;}
+.resume .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+.history{margin-top:4px;}
+.hist-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:.82rem;color:var(--text-dim);}
+.hist-item:last-child{border-bottom:none;}
+.hist-item b{font-family:var(--mono);color:var(--text);}
+
+/* ============================================================
+   BARRA DE EXAMEN
+   ============================================================ */
+#topbar{
+  position:sticky;top:0;z-index:50;background:rgba(10,20,16,.94);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.tb-inner{max-width:var(--maxw);margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.timer{
+  font-family:var(--mono);font-weight:800;font-size:1.05rem;color:var(--accent);
+  background:var(--accent-dim);border-radius:10px;padding:7px 10px;min-width:84px;text-align:center;
+}
+.timer.warn{color:var(--amber);background:var(--amber-dim);}
+.timer.crit{color:var(--red);background:var(--red-dim);animation:pulse 1s infinite;}
+@keyframes pulse{50%{opacity:.6}}
+.tb-mid{flex:1;min-width:0;}
+.tb-label{font-size:.68rem;color:var(--text-faint);font-family:var(--mono);}
+.tb-prog{height:6px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:4px;}
+.tb-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .3s;}
+
+/* ============================================================
+   SECCIONES Y PREGUNTAS
+   ============================================================ */
+#exam main{padding:8px 16px 110px;}
+.part{margin-top:22px;}
+.part-head{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:12px;
+}
+.part-head h2{font-size:1rem;font-family:var(--serif);}
+.part-head h2 span{float:right;font-family:var(--mono);font-size:.78rem;color:var(--accent);margin-top:3px;}
+.part-head p{font-size:.8rem;color:var(--text-dim);margin-top:4px;}
+
+.q{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px 14px 12px;margin-bottom:10px;scroll-margin-top:80px;
+}
+.q.unanswered-flag{border-color:var(--amber);}
+.q-top{display:flex;gap:10px;align-items:flex-start;}
+.q-num{
+  font-family:var(--mono);font-size:.72rem;font-weight:800;color:var(--accent);
+  border:1px solid var(--accent-dim);background:var(--accent-dim);border-radius:8px;
+  min-width:30px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.q-text{font-size:.94rem;color:var(--text);flex:1;}
+.q-pts{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);white-space:nowrap;margin-top:4px;}
+
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;text-align:left;
+  background:var(--bg);border:1px solid var(--line);border-radius:11px;
+  padding:11px 12px;font-size:.9rem;color:var(--text-dim);width:100%;
+}
+.opt .l{
+  font-family:var(--mono);font-weight:800;font-size:.75rem;color:var(--text-faint);
+  border:1px solid var(--line);border-radius:6px;min-width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.opt.sel{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.opt.sel .l{border-color:var(--accent);color:var(--accent);}
+.vf{flex-direction:row;}
+.vf .opt{justify-content:center;font-weight:700;}
+
+.defs{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px;}
+.defs li{
+  display:flex;gap:10px;background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;
+  padding:9px 11px;font-size:.85rem;color:var(--text-dim);
+}
+.defs li b{font-family:var(--mono);color:var(--cyan);min-width:18px;}
+.match-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line-soft);}
+.match-row:last-child{border-bottom:none;}
+.match-row .term{flex:1;font-size:.9rem;color:var(--text);font-weight:600;}
+.match-row select,.ord-row select{
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;
+  padding:9px 8px;font-size:16px;font-family:var(--mono);min-width:74px;
+}
+.match-row select.filled,.ord-row select.filled{border-color:var(--accent);color:var(--accent);}
+.ord-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line-soft);}
+.ord-row:last-child{border-bottom:none;}
+.ord-row .item{flex:1;font-size:.88rem;color:var(--text-dim);}
+
+textarea{
+  width:100%;min-height:150px;margin-top:12px;resize:vertical;
+  background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:11px;
+  padding:11px 12px;font-size:16px;font-family:var(--sans);line-height:1.5;
+}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.wc{font-family:var(--mono);font-size:.64rem;color:var(--text-faint);text-align:right;margin-top:4px;}
+
+.submit-zone{margin-top:22px;}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal{position:fixed;inset:0;background:rgba(4,9,7,.82);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:16px;}
+.modal-box{
+  width:100%;max-width:460px;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:20px 18px calc(18px + var(--safe-b));margin-bottom:max(0px,var(--safe-b));
+}
+.modal-box h3{font-size:1.05rem;margin-bottom:8px;}
+.modal-box p{font-size:.88rem;color:var(--text-dim);margin-bottom:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.chip{font-family:var(--mono);font-size:.72rem;background:var(--amber-dim);color:var(--amber);border:none;border-radius:20px;padding:5px 10px;}
+.modal-actions{display:flex;gap:8px;}
+.modal-actions .btn{flex:1;}
+@media (min-width:600px){.modal{align-items:center;}}
+
+/* ============================================================
+   AUTOEVALUACIÓN
+   ============================================================ */
+.sg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;}
+.sg h3{font-size:.95rem;margin-bottom:10px;}
+.sg .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.03em;margin:12px 0 5px;}
+.sg .mine{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);white-space:pre-wrap;word-break:break-word;}
+.sg .model{background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text);}
+.rub{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line-soft);cursor:pointer;}
+.rub:last-child{border-bottom:none;}
+.rub input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;margin-top:1px;}
+.rub span{flex:1;font-size:.86rem;color:var(--text-dim);}
+.rub em{font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;}
+.sg-total{text-align:right;font-family:var(--mono);font-size:.8rem;color:var(--text);margin-top:8px;}
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+.score-card{text-align:center;padding:26px 18px;}
+.score-big{font-size:3.4rem;font-weight:800;line-height:1;font-family:var(--mono);}
+.score-big small{font-size:1.1rem;color:var(--text-faint);}
+.grade{display:inline-block;margin-top:10px;font-family:var(--serif);font-size:1.1rem;font-weight:700;padding:5px 16px;border-radius:30px;}
+.g-A{background:var(--accent-dim);color:var(--accent);}
+.g-B{background:var(--cyan-dim);color:var(--cyan);}
+.g-C{background:var(--violet-dim);color:var(--violet);}
+.g-D{background:var(--amber-dim);color:var(--amber);}
+.g-F{background:var(--red-dim);color:var(--red);}
+.score-meta{font-size:.8rem;color:var(--text-faint);margin-top:10px;}
+.bars{margin-top:6px;}
+.bar-row{margin-bottom:12px;}
+.bar-top{display:flex;justify-content:space-between;font-size:.82rem;color:var(--text-dim);margin-bottom:4px;}
+.bar-top b{font-family:var(--mono);color:var(--text);}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:99px;}
+
+.filters{display:flex;gap:6px;margin:6px 0 12px;overflow-x:auto;scrollbar-width:none;}
+.filters::-webkit-scrollbar{display:none;}
+.fbtn{flex-shrink:0;background:var(--surface);border:1px solid var(--line);color:var(--text-dim);padding:8px 13px;border-radius:30px;font-size:.78rem;font-weight:700;}
+.fbtn.on{background:var(--accent);border-color:var(--accent);color:#06140c;}
+
+.rv{background:var(--surface);border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:12px 13px;margin-bottom:9px;}
+.rv.ok{border-left-color:var(--accent);}
+.rv.bad{border-left-color:var(--red);}
+.rv.part{border-left-color:var(--amber);}
+.rv-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.rv-q{font-size:.88rem;color:var(--text);flex:1;}
+.rv-pts{font-family:var(--mono);font-size:.72rem;white-space:nowrap;}
+.rv-line{font-size:.82rem;color:var(--text-dim);margin-top:6px;}
+.rv-line b{color:var(--text);}
+.rv-exp{font-size:.8rem;color:var(--text-dim);background:var(--bg);border-radius:9px;padding:8px 10px;margin-top:8px;}
+.c-ok{color:var(--accent);}
+.c-bad{color:var(--red);}
+.c-part{color:var(--amber);}
+
+.actions{display:flex;flex-direction:column;gap:8px;margin:20px 0 40px;}
+
+footer{text-align:center;padding:10px 16px 30px;}
+footer p{font-size:.7rem;color:var(--text-faint);}
+
+@media (min-width:600px){
+  .fields{grid-template-columns:1fr 1fr;}
+  .fields .field.full{grid-column:1 / -1;}
+  .actions{flex-direction:row;}
+  .actions .btn{flex:1;}
+}
+/* ============================================================
+   MODOS, VERIFICACIÓN INMEDIATA Y RESPONSIVE
+   ============================================================ */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.seg button{background:var(--bg);border:1px solid var(--line);color:var(--text-dim);border-radius:12px;padding:11px 10px;font-size:.86rem;font-weight:700;text-align:left;min-height:44px;}
+.seg button small{display:block;font-weight:400;font-size:.7rem;color:var(--text-faint);margin-top:2px;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.field label.switch,.switch{display:flex;gap:12px;letter-spacing:0;margin:4px 0 0;align-items:flex-start;cursor:pointer;font-family:var(--sans) !important;font-size:.9rem !important;color:var(--text) !important;}
+.switch input{position:absolute;opacity:0;width:1px;height:1px;}
+.switch .sw{flex-shrink:0;width:46px;height:26px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);position:relative;transition:background .2s;}
+.switch .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--text-faint);transition:transform .2s,background .2s;}
+.switch input:checked + .sw{background:var(--accent-dim);border-color:var(--accent);}
+.switch input:checked + .sw::after{transform:translateX(20px);background:var(--accent);}
+.switch input:focus-visible + .sw{outline:2px solid var(--accent);outline-offset:2px;}
+.swt small{display:block;color:var(--text-faint);font-size:.74rem;margin-top:2px;}
+.live{font-family:var(--mono);font-size:.78rem;color:var(--text-dim);white-space:nowrap;}
+.live b{color:var(--accent);}
+.opt.right{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.opt.wrong{border-color:#5c2a2a;background:var(--red-dim);color:var(--text);}
+.opt:disabled{cursor:default;opacity:1;}
+.q.locked{border-color:var(--line);}
+.fb{margin-top:10px;font-size:.84rem;font-weight:700;border-radius:9px;padding:8px 10px;}
+.fb.ok{background:var(--accent-dim);color:var(--accent);}
+.fb.bad{background:var(--red-dim);color:var(--red);}
+.fb.part{background:var(--amber-dim);color:var(--amber);}
+.fb b{color:var(--text);}
+.fbi{display:block;font-size:.78rem;font-weight:700;margin-top:4px;}
+.fbi.ok{color:var(--accent);} .fbi.bad{color:var(--red);}
+.lnk{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.lnk a{font-size:.78rem;font-weight:700;text-decoration:none;background:var(--cyan-dim);color:var(--cyan);border-radius:20px;padding:7px 12px;min-height:32px;display:inline-flex;align-items:center;}
+.chkbtn{margin-top:10px;}
+.vhint{display:inline-block;margin:10px 0 0 8px;font-size:.72rem;color:var(--text-faint);}
+.vtop{white-space:nowrap;background:var(--surface-2);color:var(--text-dim);}
+.vtop.on{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+@media (max-width:560px){ .vtop{padding:9px 9px;font-size:.72rem;} .tb-inner{gap:6px;} }
+.ovr{display:flex;align-items:center;gap:4px;font-size:.9rem;cursor:pointer;flex-shrink:0;}
+.ovr input{width:20px;height:20px;accent-color:var(--accent);}
+.blank input:disabled{opacity:.85;}
+.vtag{font-size:.66rem;color:var(--accent);font-family:var(--mono);margin-left:4px;}
+.history .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);margin:10px 0 2px;}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){
+  .opt:not(:disabled):hover{border-color:var(--accent);}
+  .btn:hover{filter:brightness(1.08);}
+  .lnk a:hover{background:#1f4d5c;}
+}
+@media (max-width:560px){
+  .btn,.opt,.seg button{min-height:44px;}
+  .live{font-size:.7rem;}
+  .concepts{grid-template-columns:1fr;}
+}
+@media (min-width:561px) and (max-width:1023px){
+  :root{--maxw:720px;}
+}
+@media (min-width:1024px){
+  :root{--maxw:800px;}
+  .cover{margin-top:40px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+
+.sg-inline .lbl{font-family:var(--mono);font-size:.66rem;color:var(--accent);letter-spacing:.03em;margin:12px 0 5px;}
+.sg-inline .model{background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:10px 12px;font-size:.86rem;color:var(--text);}
+.match-row .term .fbi{font-weight:700;}
+.ord-row .item .fbi{font-size:.74rem;}
+textarea[readonly]{opacity:.85;}
+@media (min-width:1024px){ .tb-inner{max-width:800px;} }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PORTADA
+     ============================================================ -->
+<section id="start" class="wrap cover">
+  <div id="resumeBox" class="resume hidden">
+    <p>⏸️ Tienes un intento en curso. <b id="resumeInfo"></b></p>
+    <div class="row">
+      <button class="btn primary sm" id="btnResume">Continuar intento</button>
+      <button class="btn sm" id="btnDiscard">Descartar</button>
+    </div>
+  </div>
+
+  <div class="paper">
+    <div class="inst">
+      <div class="u">UNIVERSIDAD TECNOLÓGICA DE PANAMÁ</div>
+      <div class="f">Facultad de Ingeniería de Sistemas Computacionales</div>
+      <div class="c">Gerencia de Proyectos Informáticos</div>
+      <div class="t">Tercer Examen Parcial</div>
+      <div class="p">Simulacro · Mgtr. Henry D. De Gracia R. · II Semestre 2026</div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="fields">
+      <div class="field"><label>NOMBRE (OPCIONAL)</label><input id="fName" type="text" autocomplete="off" placeholder="Tu nombre"></div>
+      <div class="field"><label>CÉDULA (OPCIONAL)</label><input id="fId" type="text" autocomplete="off" placeholder="8-000-0000"></div>
+      <div class="field full"><label>TIPO</label>
+        <div class="seg" id="fType" role="group" aria-label="Tipo de simulacro">
+          <button type="button" data-m="full" class="on" aria-pressed="true">📝 Simulacro completo<small>100 pts · 5 partes</small></button>
+          <button type="button" data-m="mini" aria-pressed="false">⚡ Mini simulacro<small>10 min · 5 V/F + 5 selección</small></button>
+        </div>
+      </div>
+      <div class="field full" id="timeField"><label>DURACIÓN</label>
+        <select id="fTime">
+          <option value="60">60 minutos</option>
+          <option value="90" selected>90 minutos (recomendado)</option>
+          <option value="120">120 minutos</option>
+          <option value="0">Sin límite de tiempo</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label class="switch"><input type="checkbox" id="fVerif"><span class="sw"></span><span class="swt"><b>⚡ Respuestas instantáneas</b><small>Misma estructura del examen, pero cada respuesta se corrige en el momento: ves si acertaste, la explicación y enlaces a la guía y a las tarjetas. Apagado = examen real.</small></span></label>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="sec-title">INDICACIONES GENERALES</div>
+    <ol class="rules">
+      <li>El examen completo tiene <b>5 partes</b> y vale <b>100 puntos</b>; el mini simulacro tiene 10 preguntas y se califica sobre 100.</li>
+      <li>Cada intento genera una <b>variante distinta</b> a partir del banco de preguntas del Módulo 3 (Gestión de Proyectos Ágiles).</li>
+      <li>El tiempo empieza al presionar <b>Iniciar examen</b>. Al llegar a cero, el examen se entrega solo.</li>
+      <li>La Parte V (desarrollo) la <b>autoevalúas</b> con una rúbrica.</li>
+      <li>Con <b>⚡ respuestas instantáneas</b> cada respuesta queda bloqueada después de corregirse. Puedes activarlas o apagarlas durante el examen con el botón ⚡ de arriba.</li>
+      <li>Tus respuestas se guardan en este dispositivo: si recargas la página, puedes continuar.</li>
+    </ol>
+
+    <hr class="rule">
+
+    <div class="sec-title">DISTRIBUCIÓN DE PUNTOS</div>
+    <table class="valtable" id="valFull">
+      <tr><td>I. Verdadero o falso (10 × 2)</td><td>20 pts</td></tr>
+      <tr><td>II. Selección múltiple (15 × 2)</td><td>30 pts</td></tr>
+      <tr><td>III. Pareo (8 × 2.5)</td><td>20 pts</td></tr>
+      <tr><td>IV. Ordenamiento (2 × 5)</td><td>10 pts</td></tr>
+      <tr><td>V. Desarrollo (2 × 10)</td><td>20 pts</td></tr>
+      <tr><td>Total</td><td>100 pts</td></tr>
+    </table>
+    <table class="valtable hidden" id="valMini">
+      <tr><td>I. Verdadero o falso (5 × 2)</td><td>10 pts</td></tr>
+      <tr><td>II. Selección múltiple (5 × 2)</td><td>10 pts</td></tr>
+      <tr><td>Nota proporcional</td><td>/100</td></tr>
+    </table>
+
+    <hr class="rule">
+    <button class="btn primary block" id="btnStart">✍️ Iniciar examen</button>
+  </div>
+
+  <div class="paper" id="histBox" style="margin-top:14px;display:none;">
+    <div class="sec-title">INTENTOS ANTERIORES</div>
+    <div class="history" id="histList"></div>
+  </div>
+
+  <p style="text-align:center;margin-top:16px;"><a href="index.html">← Volver al índice del parcial</a></p>
+</section>
+
+<!-- ============================================================
+     EXAMEN
+     ============================================================ -->
+<section id="exam" class="hidden">
+  <div id="topbar">
+    <div class="tb-inner">
+      <div class="timer" id="timer">--:--</div>
+      <div class="tb-mid">
+        <div class="tb-label" id="tbLabel">0 de 0 respondidas</div>
+        <div class="tb-prog"><i id="tbProg"></i></div>
+      </div>
+      <div class="live hidden" id="live" aria-live="polite"></div>
+      <button class="btn sm vtop" id="btnVerifTop" type="button" aria-pressed="false">⚡ Instantáneas</button>
+      <button class="btn primary sm" id="btnSubmitTop">Entregar</button>
+    </div>
+  </div>
+  <main class="wrap" id="examBody"></main>
+</section>
+
+<!-- ============================================================
+     AUTOEVALUACIÓN (PARTE V)
+     ============================================================ -->
+<section id="selfgrade" class="wrap hidden" style="padding:22px 16px 40px;">
+  <div class="paper" style="margin-bottom:14px;">
+    <div class="sec-title">PARTE V · AUTOEVALUACIÓN</div>
+    <p style="font-size:.88rem;color:var(--text-dim);">Compara tu respuesta con la respuesta modelo y marca con honestidad los puntos que <b style="color:var(--text)">sí incluiste</b>. Cada criterio suma los puntos indicados.</p>
+  </div>
+  <div id="sgBody"></div>
+  <button class="btn primary block" id="btnFinish">📊 Ver calificación final</button>
+</section>
+
+<!-- ============================================================
+     RESULTADOS
+     ============================================================ -->
+<section id="results" class="wrap hidden" style="padding:22px 16px 0;">
+  <div class="paper score-card">
+    <div class="sec-title" id="rsWho">RESULTADO</div>
+    <div class="score-big" id="rsScore">0<small>/100</small></div>
+    <div class="grade" id="rsGrade">F</div>
+    <div class="score-meta" id="rsMeta"></div>
+  </div>
+
+  <div class="paper" style="margin-top:14px;">
+    <div class="sec-title">PUNTAJE POR PARTE</div>
+    <div class="bars" id="rsBars"></div>
+  </div>
+
+  <div style="margin-top:20px;">
+    <div class="sec-title">REVISIÓN DETALLADA</div>
+    <div class="filters" id="rsFilters">
+      <button class="fbtn on" data-f="all">Todas</button>
+      <button class="fbtn" data-f="bad">❌ Incorrectas</button>
+      <button class="fbtn" data-f="part">⚠️ Parciales</button>
+      <button class="fbtn" data-f="ok">✅ Correctas</button>
+    </div>
+    <div id="rsReview"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="btnRetry">🔄 Nuevo intento (otra variante)</button>
+    <a class="btn" href="guia.html">📘 Repasar en la guía</a>
+    <a class="btn" href="index.html">← Índice del parcial</a>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="modal-box">
+    <h3 id="mTitle">¿Entregar examen?</h3>
+    <p id="mText"></p>
+    <div class="chips" id="mChips"></div>
+    <div class="modal-actions">
+      <button class="btn" id="mCancel">Seguir respondiendo</button>
+      <button class="btn primary" id="mOk">Entregar</button>
+    </div>
+  </div>
+</div>
+
+<footer><p>Simulacro generado solo a partir del Módulo 3 (Mod3_ProyectosAgiles.html) del Parcial 3 · UTP · FISC · uso académico.</p></footer>
+
+<script>
+(function(){
+  "use strict";
+  /* ============================================================
+     BANCO DE PREGUNTAS — Fuente: Mod3_ProyectosAgiles.html
+     (Módulo 3 · Gestión de Proyectos Ágiles)
+     ============================================================ */
+
+  // ---------- PARTE I: Verdadero o falso ----------
+  var VF = [
+    {s:"La gestión ágil es un enfoque iterativo e incremental que entrega valor de forma temprana y continua.", a:true, e:"Es la definición del módulo: responde al cambio en lugar de seguir un plan rígido.", cat:"Ágil"},
+    {s:"La gestión ágil sigue un plan rígido definido al inicio del proyecto.", a:false, e:"Ágil <b>responde al cambio</b> en lugar de seguir un plan rígido.", cat:"Ágil"},
+    {s:"El Manifiesto Ágil fue firmado en 2001 por 17 profesionales.", a:true, e:"Es el origen que cita el módulo.", cat:"Ágil"},
+    {s:"En el enfoque ágil los equipos son autoorganizados.", a:true, e:"Es la característica «Colaborativo».", cat:"Ágil"},
+    {s:"El Manifiesto Ágil tiene 12 valores y 4 principios.", a:false, e:"Es al revés: <b>4 valores</b> y <b>12 principios</b>.", cat:"Manifiesto"},
+    {s:"El Manifiesto valora el software funcionando por encima de la documentación extensiva.", a:true, e:"Es el segundo valor.", cat:"Manifiesto"},
+    {s:"Según el Manifiesto, los procesos y las herramientas no tienen ningún valor.", a:false, e:"Se valoran los elementos de la derecha, pero se valoran <b>más</b> los de la izquierda.", cat:"Manifiesto"},
+    {s:"El Manifiesto valora la negociación contractual por encima de la colaboración con el cliente.", a:false, e:"Es al revés: <b>colaboración con el cliente</b> sobre negociación contractual.", cat:"Manifiesto"},
+    {s:"Cada iteración produce un incremento potencialmente entregable.", a:true, e:"Por eso el ciclo es iterativo e incremental.", cat:"Ciclo y eventos"},
+    {s:"Un Sprint dura de 1 a 4 semanas.", a:true, e:"Es un periodo de tiempo fijo que se repite.", cat:"Ciclo y eventos"},
+    {s:"El Daily Scrum es un reporte de estado del equipo al jefe y puede durar lo que haga falta.", a:false, e:"Dura <b>15 minutos</b>, lo facilita el equipo y <b>no es un reporte al jefe</b>.", cat:"Ciclo y eventos"},
+    {s:"El time-box es la duración máxima fija de un evento.", a:true, e:"Todos los eventos del Sprint tienen time-box.", cat:"Ciclo y eventos"},
+    {s:"La Retrospectiva sirve para mostrar el incremento a los interesados.", a:false, e:"Eso es la <b>Sprint Review</b>. La Retro es para que el equipo mejore su forma de trabajar.", cat:"Ciclo y eventos"},
+    {s:"El Sprint Planning tiene un time-box de hasta 8 h para un Sprint de 1 mes.", a:true, e:"Review hasta 4 h y Retro hasta 3 h.", cat:"Ciclo y eventos"},
+    {s:"Los pilares de Scrum son transparencia, inspección y adaptación.", a:true, e:"Son sus pilares empíricos.", cat:"Scrum"},
+    {s:"El Scrum Master prioriza el Product Backlog.", a:false, e:"Lo prioriza el <b>Product Owner</b>. El Scrum Master facilita y elimina impedimentos.", cat:"Scrum"},
+    {s:"El Scrum Master es el jefe que da órdenes al equipo.", a:false, e:"Es un <b>facilitador</b> (líder-servidor), no el jefe.", cat:"Scrum"},
+    {s:"El Sprint Backlog contiene los ítems del Sprint más el plan para lograrlos.", a:true, e:"El Product Backlog, en cambio, tiene todo lo necesario para el producto.", cat:"Scrum"},
+    {s:"El Incremento son los ítems terminados que cumplen la Definición de Hecho.", a:true, e:"Es el tercer artefacto de Scrum.", cat:"Scrum"},
+    {s:"Kanban organiza el trabajo en sprints fijos de dos semanas.", a:false, e:"Kanban usa <b>flujo continuo</b>, sin sprints fijos.", cat:"XP y Kanban"},
+    {s:"XP se enfoca en la excelencia técnica, con prácticas como pair programming y TDD.", a:true, e:"También integración continua y refactorización.", cat:"XP y Kanban"},
+    {s:"El límite WIP evita empezar demasiadas cosas a la vez.", a:true, e:"WIP = Work In Progress; se limita para mejorar el flujo.", cat:"XP y Kanban"},
+    {s:"Jira es el estándar de la industria para Scrum y Kanban y tiene plan gratuito hasta 10 personas.", a:true, e:"Trello es la opción sencilla para empezar.", cat:"Herramientas"},
+    {s:"Miro es una herramienta de tableros ligados directamente al código.", a:false, e:"Eso es <b>GitHub Projects</b>. Miro es una pizarra colaborativa.", cat:"Herramientas"},
+    {s:"En el enfoque tradicional los cambios son bienvenidos.", a:false, e:"En el tradicional son <b>controlados y costosos</b>; en ágil son bienvenidos.", cat:"Tradicional vs. Ágil"},
+    {s:"El enfoque (tradicional o ágil) se elige según la estabilidad de los requisitos.", a:true, e:"Es una de las conclusiones del resumen del módulo.", cat:"Tradicional vs. Ágil"},
+    {s:"En un Burndown, si la línea real va por encima de la ideal, el equipo va adelantado.", a:false, e:"Va <b>atrasado</b>: le queda más trabajo del que debería.", cat:"Ejemplo guiado"},
+    {s:"La Definición de Hecho indica cuándo una historia está realmente terminada y no solo «casi lista».", a:true, e:"Ej.: código revisado, pruebas pasan, funciona en ambiente de prueba, documentación mínima.", cat:"Ejemplo guiado"},
+    {s:"Spotify recomendó copiar su modelo de squads tal cual en cualquier empresa.", a:false, e:"Advirtió que <b>no es una receta para copiar tal cual</b>: lo ágil se adapta.", cat:"Casos reales"},
+    {s:"El «Agile teatral» enseña que los valores del Manifiesto importan más que las ceremonias.", a:true, e:"Son equipos con dailies y sprints pero sin colaboración real ni valor.", cat:"Casos reales"},
+    {s:"En el simulador, recortar pruebas para terminar el Sprint es la decisión correcta.", a:false, e:"Baja la calidad y genera deuda técnica y defectos: no hay que saltarse la DoD.", cat:"Simulador"},
+    {s:"La plantilla Backlog Scrum incluye historias de usuario, prioridad, estimación y sprint.", a:true, e:"Excel, hoja «Backlog».", cat:"Plantillas"},
+    {s:"TDD significa que el código se escribe antes que la prueba.", a:false, e:"En TDD se escribe la <b>prueba antes que el código</b>.", cat:"Glosario"},
+    {s:"Un MVP es la versión más simple del producto que ya aporta valor.", a:true, e:"Minimum Viable Product: Producto Mínimo Viable.", cat:"Glosario"}
+  ];
+
+  // ---------- PARTE II: Selección múltiple (la primera opción es la correcta) ----------
+  var MC = [
+    {q:"El Manifiesto Ágil valora «individuos e interacciones» por encima de:", o:["Procesos y herramientas","El cliente","El código","La calidad"], e:"Valora a las personas y su interacción sobre los procesos y las herramientas.", cat:"Manifiesto"},
+    {q:"¿Cuántos valores tiene el Manifiesto Ágil?", o:["4","3","12","7"], e:"Son 4 valores (y 12 principios).", cat:"Manifiesto"},
+    {q:"«Respuesta ante el cambio» se valora por encima de:", o:["Seguir un plan","Documentación extensiva","Negociación contractual","Procesos y herramientas"], e:"Es el cuarto valor del Manifiesto.", cat:"Manifiesto"},
+    {q:"¿Cuál NO es una de las ideas de los 12 principios que menciona el módulo?", o:["Documentación exhaustiva","Valor temprano","Bienvenido el cambio","Mejora continua"], e:"Los principios citados son valor temprano, bienvenido el cambio, entregas frecuentes, sostenibilidad y mejora continua.", cat:"Manifiesto"},
+    {q:"¿Qué característica de lo ágil se asocia a «equipos autoorganizados»?", o:["Colaborativo","Adaptativo","Valor temprano","Origen (2001)"], e:"Adaptativo = responde al cambio; Valor temprano = entregas frecuentes.", cat:"Ágil"},
+    {q:"¿Cuál es el orden del ciclo de vida iterativo e incremental?", o:["Backlog → Sprint → Incremento → Retro","Sprint → Backlog → Retro → Incremento","Incremento → Sprint → Backlog → Retro","Retro → Backlog → Incremento → Sprint"], e:"Luego el ciclo se repite.", cat:"Ciclo y eventos"},
+    {q:"La duración típica de un Sprint es:", o:["1 a 4 semanas","1 día","6 meses","1 año"], e:"Es un time-box fijo que se repite.", cat:"Ciclo y eventos"},
+    {q:"El Daily Scrum dura aproximadamente:", o:["15 minutos","1 hora","Media jornada","Lo que haga falta"], e:"Tiene un time-box de 15 minutos.", cat:"Ciclo y eventos"},
+    {q:"¿En qué evento se muestra el incremento a los interesados y se recoge feedback?", o:["Sprint Review","Retrospectiva","Sprint Planning","Daily Scrum"], e:"Time-box: hasta 4 h.", cat:"Ciclo y eventos"},
+    {q:"¿Cuál es el time-box de la Retrospectiva?", o:["Hasta 3 h","Hasta 8 h","15 minutos","Hasta 4 h"], e:"Planning 8 h · Daily 15 min · Review 4 h · Retro 3 h.", cat:"Ciclo y eventos"},
+    {q:"¿Qué se define en el Sprint Planning?", o:["Qué se hará (objetivo) y cómo","Cómo mejorar la forma de trabajar","El incremento terminado","Los impedimentos del día"], e:"Hasta 8 h para un Sprint de 1 mes.", cat:"Ciclo y eventos"},
+    {q:"¿Quién prioriza el Product Backlog?", o:["Product Owner","Scrum Master","El equipo","El patrocinador"], e:"El Product Owner ordena el backlog para maximizar el valor.", cat:"Scrum"},
+    {q:"El Scrum Master principalmente:", o:["Facilita el proceso y elimina impedimentos","Da órdenes al equipo","Escribe el código","Aprueba el presupuesto"], e:"Es un facilitador (líder-servidor), no el jefe del equipo.", cat:"Scrum"},
+    {q:"¿Qué artefacto es la lista ordenada de todo lo necesario para el producto?", o:["Product Backlog","Sprint Backlog","Incremento","Burndown"], e:"El Product Backlog contiene todo el trabajo del producto, priorizado.", cat:"Scrum"},
+    {q:"Los tres pilares de Scrum son:", o:["Transparencia, inspección y adaptación","Roles, artefactos y eventos","Alcance, tiempo y costo","Planificar, hacer y revisar"], e:"Son los pilares empíricos de Scrum.", cat:"Scrum"},
+    {q:"¿Qué rol de Scrum es autoorganizado y construye el incremento?", o:["Equipo de Desarrollo","Product Owner","Scrum Master","Cliente"], e:"El PO maximiza el valor; el SM facilita.", cat:"Scrum"},
+    {q:"¿Para qué usa Scrum el time-boxing?", o:["Para dar ritmo al equipo","Para eliminar el backlog","Para evitar las entregas","Para fijar el alcance del producto"], e:"Los eventos tienen una duración fija.", cat:"Scrum"},
+    {q:"En Kanban, «WIP» se refiere a:", o:["El límite de trabajo en progreso","El presupuesto","El número de sprints","La velocidad"], e:"WIP = Work In Progress; se limita para mejorar el flujo.", cat:"XP y Kanban"},
+    {q:"¿Cuál es una práctica de XP?", o:["Programación en parejas","Tablero visual con columnas","Flujo continuo sin sprints","Límite WIP"], e:"Las otras tres son rasgos de Kanban.", cat:"XP y Kanban"},
+    {q:"Kanban busca optimizar:", o:["El tiempo de ciclo","La documentación","El contrato","El número de reuniones"], e:"Flujo continuo, tablero visual, límite WIP y tiempo de ciclo.", cat:"XP y Kanban"},
+    {q:"Para el proyecto grupal, el módulo recomienda empezar con:", o:["Trello o Jira","Miro o Notion","Asana o ClickUp","monday.com o GitHub Projects"], e:"Trello por su sencillez y Jira por ser el estándar profesional.", cat:"Herramientas"},
+    {q:"¿Qué herramienta es una pizarra colaborativa para retrospectivas y mapas de historias?", o:["Miro","Jira","Trello","GitHub Projects"], e:"Jira es el estándar; Trello, Kanban simple; GitHub Projects, ligado al código.", cat:"Herramientas"},
+    {q:"En el enfoque ágil, la documentación es:", o:["Mínima suficiente","Extensa","Inexistente","Igual que en el tradicional"], e:"En el tradicional es extensa.", cat:"Tradicional vs. Ágil"},
+    {q:"¿Cuál describe al enfoque tradicional?", o:["Alcance fijo y entrega al final","Alcance flexible y entregas incrementales","Cambios bienvenidos","Documentación mínima suficiente"], e:"Las otras tres opciones describen al enfoque ágil.", cat:"Tradicional vs. Ágil"},
+    {q:"La estructura de una historia de usuario es:", o:["Como… quiero… para…","Si… entonces… sino…","Dado… cuando… entonces…","Qué… cuánto… cuándo…"], e:"Ej.: Como estudiante quiero matricularme en línea para evitar filas.", cat:"Ejemplo guiado"},
+    {q:"La «Definición de Hecho» (DoD) sirve para:", o:["Saber cuándo un ítem está realmente terminado","Priorizar el backlog","Estimar costos","Elegir al Product Owner"], e:"La DoD fija los criterios de calidad para considerar terminado un ítem.", cat:"Ejemplo guiado"},
+    {q:"¿Qué muestra un gráfico Burndown?", o:["El trabajo restante del Sprint","El presupuesto gastado","La moral del equipo","Las historias terminadas del producto completo"], e:"Si la línea real va por encima de la ideal, el equipo va atrasado.", cat:"Ejemplo guiado"},
+    {q:"¿Qué lección deja el rescate de Healthcare.gov?", o:["Entregar en iteraciones cortas reduce el riesgo","Copiar un modelo ágil tal cual","Los rituales importan más que los valores","La documentación extensa asegura el éxito"], e:"Priorizar, iterar y entregar por partes estabilizó el sistema en semanas.", cat:"Casos reales"},
+    {q:"Según los informes CHAOS, los proyectos ágiles:", o:["Suelen tener mayor tasa de éxito que los de cascada","Fracasan más en proyectos grandes","No se diferencian de cascada","Solo sirven en proyectos pequeños"], e:"Especialmente en proyectos grandes, por el feedback temprano y frecuente.", cat:"Casos reales"},
+    {q:"A mitad del Sprint, el PO quiere meter una historia urgente. La mejor decisión es:", o:["Dejarla para el próximo Sprint","Agregarla encima de todo lo demás","Eliminar el Daily para ganar tiempo","Recortar pruebas para que quepa"], e:"El Sprint Backlog no se cambia a la ligera; también vale negociar sacar otra de igual tamaño.", cat:"Simulador"},
+    {q:"El Daily se volvió un reporte de 40 min al Scrum Master. ¿Qué haces?", o:["Lo reenfoco: 15 min, equipo e impedimentos","Lo elimino","Lo dejo tal cual","Lo hago semanal"], e:"El Daily es del equipo para sincronizarse, no un informe de estado.", cat:"Simulador"},
+    {q:"CI (Continuous Integration) significa:", o:["Fusionar y probar el código con frecuencia","Escribir la prueba antes que el código","Programar en parejas","Limitar el trabajo en progreso"], e:"Escribir la prueba antes es TDD.", cat:"Glosario"},
+    {q:"¿Qué certificación ágil otorga el PMI?", o:["PMI-ACP","PSM","CSPO","CSM"], e:"PSM: Scrum.org; CSM y CSPO: Scrum Alliance.", cat:"Glosario"}
+  ];
+
+  // ---------- PARTE III: Pareo (se elige un set; 8 pares + 2 distractores) ----------
+  var PAREO = [
+    {title:"Scrum: roles, artefactos y eventos", cat:"Scrum",
+     pairs:[
+      ["Product Owner","Maximiza el valor y prioriza el Product Backlog"],
+      ["Scrum Master","Facilita el proceso y elimina impedimentos"],
+      ["Equipo de Desarrollo","Autoorganizado; construye el incremento"],
+      ["Product Backlog","Lista ordenada de todo lo necesario para el producto"],
+      ["Sprint Backlog","Ítems del Sprint más el plan para lograrlos"],
+      ["Incremento","Ítems terminados que cumplen la Definición de Hecho"],
+      ["Daily Scrum","Sincronización diaria de 15 minutos"],
+      ["Retrospectiva","Reflexionar sobre cómo mejorar la forma de trabajar"]],
+     extra:["Tablero con límite de trabajo en progreso","Firma de 17 profesionales en 2001"]},
+    {title:"Manifiesto, ciclo y comparación", cat:"Manifiesto",
+     pairs:[
+      ["Individuos e interacciones","…sobre procesos y herramientas"],
+      ["Software funcionando","…sobre documentación extensiva"],
+      ["Colaboración con el cliente","…sobre negociación contractual"],
+      ["Respuesta ante el cambio","…sobre seguir un plan"],
+      ["Time-box","Duración máxima fija de un evento"],
+      ["Sprint","Periodo fijo de 1 a 4 semanas que produce un incremento"],
+      ["Enfoque tradicional","Alcance fijo y entrega al final"],
+      ["Enfoque ágil","Alcance flexible y entregas incrementales"]],
+     extra:["Fusionar y probar el código con frecuencia","Pizarra colaborativa"]},
+    {title:"XP, Kanban, herramientas y siglas", cat:"Glosario",
+     pairs:[
+      ["XP","Metodología centrada en la excelencia técnica"],
+      ["Kanban","Flujo continuo con tablero visual"],
+      ["WIP","Trabajo en progreso que se limita"],
+      ["TDD","La prueba se escribe antes que el código"],
+      ["CI","Fusionar y probar el código con frecuencia"],
+      ["MVP","La versión más simple que ya aporta valor"],
+      ["Jira","Estándar de la industria para Scrum y Kanban"],
+      ["Trello","Tableros Kanban simples, ideal para empezar"]],
+     extra:["Maximiza el valor y prioriza el backlog","Reunión diaria de 15 minutos"]},
+    {title:"Ejemplo, casos y simulador", cat:"Casos reales",
+     pairs:[
+      ["Historia de usuario","Como… quiero… para…"],
+      ["Burndown","Muestra el trabajo restante del Sprint"],
+      ["Definición de Hecho","Cuándo una historia está realmente terminada"],
+      ["Spotify","Squads, tribes y chapters; no es receta para copiar"],
+      ["Healthcare.gov","Iteraciones cortas estabilizaron un lanzamiento fallido"],
+      ["Informes CHAOS","Ágil con mayor tasa de éxito que cascada"],
+      ["Agile teatral","Rituales sin valores; ágil solo de nombre"],
+      ["Historia urgente a mitad del Sprint","Dejarla para el próximo Sprint"]],
+     extra:["Alcance fijo y plan detallado","Duración máxima fija de un evento"]}
+  ];
+
+  // ---------- PARTE IV: Ordenamiento (items en orden correcto) ----------
+  var ORD = [
+    {q:"Ordena el ciclo de vida iterativo e incremental.", items:["Backlog","Sprint","Incremento","Retro"], cat:"Ciclo y eventos"},
+    {q:"Ordena los eventos dentro de un Sprint, tal como los presenta el diagrama del módulo.", items:["Sprint Planning","Daily Scrum","Trabajo del Sprint","Sprint Review","Retrospectiva"], cat:"Ciclo y eventos"},
+    {q:"Ordena los time-box de mayor a menor duración.", items:["Sprint Planning (8 h)","Sprint Review (4 h)","Retrospectiva (3 h)","Daily Scrum (15 min)"], cat:"Ciclo y eventos"},
+    {q:"Ordena las partes de una historia de usuario.", items:["Como (quién)","Quiero (qué)","Para (para qué)"], cat:"Ejemplo guiado"},
+    {q:"Ordena las columnas del tablero Kanban de ejemplo.", items:["Por hacer","En progreso","Hecho"], cat:"XP y Kanban"}
+  ];
+
+  // ---------- PARTE V: Desarrollo (rúbrica suma 10) ----------
+  var DES = [
+    {q:"Define la gestión ágil y explica los 4 valores del Manifiesto Ágil.", cat:"Manifiesto",
+     model:"La <b>gestión ágil</b> es un enfoque <b>iterativo e incremental</b> que entrega valor de forma temprana y continua, respondiendo al cambio en lugar de seguir un plan rígido. El <b>Manifiesto Ágil</b> (2001, 17 profesionales) valora: <b>individuos e interacciones</b> sobre procesos y herramientas; <b>software funcionando</b> sobre documentación extensiva; <b>colaboración con el cliente</b> sobre negociación contractual; y <b>respuesta ante el cambio</b> sobre seguir un plan. Se valoran los elementos de la derecha, pero <b>más</b> los de la izquierda; lo guían 12 principios.",
+     rubric:[["Define ágil como iterativo e incremental con valor temprano",2],["Menciona que responde al cambio y no a un plan rígido",1],["Explica correctamente los 4 valores con su contraparte",4],["Aclara que la derecha también se valora, pero menos",2],["Menciona 2001 o los 12 principios",1]]},
+    {q:"Explica el marco Scrum: sus pilares, roles y artefactos.", cat:"Scrum",
+     model:"Scrum se basa en tres <b>pilares</b>: transparencia, inspección y adaptación, y usa time-boxing para dar ritmo. <b>Roles</b>: el <b>Product Owner</b> maximiza el valor y prioriza el Product Backlog; el <b>Scrum Master</b> facilita el proceso y elimina impedimentos (no es el jefe); el <b>Equipo de Desarrollo</b> es autoorganizado y construye el incremento. <b>Artefactos</b>: <b>Product Backlog</b> (lista ordenada de todo lo necesario para el producto), <b>Sprint Backlog</b> (ítems del Sprint más el plan) e <b>Incremento</b> (ítems terminados que cumplen la Definición de Hecho).",
+     rubric:[["Nombra los 3 pilares",2],["Explica los 3 roles",4],["Explica los 3 artefactos",3],["Relaciona el Incremento con la DoD o menciona el time-boxing",1]]},
+    {q:"Describe los eventos del Sprint, qué se hace en cada uno y su time-box.", cat:"Ciclo y eventos",
+     model:"Todo ocurre dentro de un <b>Sprint de 1 a 4 semanas</b>. <b>Sprint Planning</b>: el equipo planifica qué se hará (objetivo) y cómo; hasta <b>8 h</b> para un Sprint de 1 mes. <b>Daily Scrum</b>: reunión diaria de <b>15 min</b> para sincronizarse y detectar impedimentos; la facilita el equipo y no es un reporte al jefe. <b>Trabajo del Sprint</b>: se construye el incremento según el Sprint Backlog. <b>Sprint Review</b>: se muestra el incremento a los interesados y se recoge feedback; hasta <b>4 h</b>. <b>Retrospectiva</b>: el equipo reflexiona sobre cómo mejorar su forma de trabajar; hasta <b>3 h</b>.",
+     rubric:[["Indica que el Sprint dura 1 a 4 semanas",1],["Explica Planning y su time-box",2],["Explica Daily (15 min, no es reporte)",2],["Explica Review y su time-box",2],["Explica Retro y su time-box",2],["Diferencia Review de Retro",1]]},
+    {q:"Compara XP y Kanban, y explica para qué sirve el límite WIP.", cat:"XP y Kanban",
+     model:"<b>XP (eXtreme Programming)</b> se enfoca en la <b>excelencia técnica</b>: programación en parejas, desarrollo guiado por pruebas (TDD), integración continua y refactorización. <b>Kanban</b> trabaja con <b>flujo continuo</b> (sin sprints fijos), un <b>tablero visual</b> con columnas, un <b>límite de trabajo en progreso (WIP)</b> y optimiza el <b>tiempo de ciclo</b>. El <b>límite WIP</b> evita empezar demasiadas cosas a la vez; en el tablero de ejemplo, «En progreso» admite máximo 2. En resumen: XP aporta prácticas técnicas y Kanban optimiza el flujo.",
+     rubric:[["Explica el foco y prácticas de XP",3],["Explica los rasgos de Kanban",3],["Explica el límite WIP",2],["Concluye XP = prácticas técnicas / Kanban = flujo",2]]},
+    {q:"Compara el enfoque tradicional con el ágil e indica cómo se elige entre ellos.", cat:"Tradicional vs. Ágil",
+     model:"<b>Tradicional</b>: alcance fijo con plan detallado, entrega al final, cambios controlados y costosos, documentación extensa. <b>Ágil</b>: alcance flexible con plan adaptativo, entregas incrementales, cambios bienvenidos, documentación mínima suficiente. El enfoque se elige según la <b>estabilidad de los requisitos</b>, y el Proyecto Grupal integra la planificación tradicional con un backlog ágil.",
+     rubric:[["Compara el alcance",2],["Compara la entrega",2],["Compara los cambios",2],["Compara la documentación",2],["Indica que se elige según la estabilidad de los requisitos",2]]},
+    {q:"Con el Portal de matrícula, explica qué es una historia de usuario, un Burndown y la Definición de Hecho.", cat:"Ejemplo guiado",
+     model:"Una <b>historia de usuario</b> sigue la forma <b>Como… quiero… para…</b>: «Como estudiante quiero matricularme en línea para evitar filas» (también ver mi horario y pagar en línea). El <b>Burndown</b> muestra el <b>trabajo restante del Sprint</b> con una línea ideal y una real; si la real va por encima de la ideal, el equipo va <b>atrasado</b>. La <b>Definición de Hecho</b> define cuándo una historia está realmente terminada: código revisado por un compañero, pruebas que pasan, funciona en el ambiente de prueba y documentación mínima actualizada.",
+     rubric:[["Explica la forma Como / quiero / para",2],["Da un ejemplo del Portal",1],["Explica el Burndown",2],["Interpreta real por encima de ideal = atrasado",2],["Explica la DoD con sus criterios",3]]}
+  ];
+
+  /* ============================================================
+     UTILIDADES
+     ============================================================ */
+  var STORE = "gpi_p3_parcial_sim_v1";
+  var HIST = "gpi_p3_parcial_hist_v1";
+  var MINIH = "gpi_p3_parcial_mini_v1";
+  var VERIF = "gpi_p3_parcial_verif_v1";
+  var LET = "ABCDEFGHIJ";
+  var GUIA = {"Ágil":"t-agil","Manifiesto":"t-manifiesto","Ciclo y eventos":"t-ciclo","Scrum":"t-scrum","XP y Kanban":"t-xpkanban","Herramientas":"t-herramientas",
+              "Tradicional vs. Ágil":"t-comparacion","Ejemplo guiado":"t-ejemplo","Casos reales":"t-casos","Simulador":"t-simulador","Plantillas":"t-plantillas","Glosario":"t-glosario"};
+  var $ = function(id){ return document.getElementById(id); };
+
+  function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function range(n){ var r=[]; for(var i=0;i<n;i++) r.push(i); return r; }
+  function pick(n, k){ return shuffle(range(n)).slice(0,k); }
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function fmt(sec){ sec=Math.max(0,Math.round(sec)); var m=Math.floor(sec/60), s=sec%60; return (m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
+  function r1(x){ return Math.round(x*10)/10; }
+  function load(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+  function norm(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9ñ ]+/g," ").replace(/\s+/g," ").trim(); }
+  function slug(c){ return norm(c).replace(/ /g,"-"); }
+  function links(cat){
+    if(!cat || !GUIA[cat]) return "";
+    return '<div class="lnk"><a href="guia.html#'+GUIA[cat]+'">📘 Ver en la guía</a><a href="flash.html#cat-'+slug(cat)+'">🃏 Tarjetas del tema</a></div>';
+  }
+  function show(id){
+    ["start","exam","selfgrade","results"].forEach(function(s){ $(s).classList.toggle("hidden", s!==id); });
+    window.scrollTo({top:0, left:0, behavior:"instant"});
+  }
+
+  /* ============================================================
+     ESTADO
+     ============================================================ */
+  var st = null, tick = null, mode = "full";
+
+  function newAttempt(){
+    var mini = mode === "mini";
+    var pset = Math.floor(Math.random()*PAREO.length), P = PAREO[pset];
+    var verif = $("fVerif").checked;
+    st = {
+      phase:"exam", mode:mode, verif:verif, everVerif:verif,
+      name:$("fName").value.trim(), cid:$("fId").value.trim(),
+      minutes: mini ? 10 : parseInt($("fTime").value,10),
+      startAt:Date.now(), endAt:0,
+      vf:pick(VF.length, mini?5:10),
+      mc:pick(MC.length, mini?5:15).map(function(i){ return {i:i, o:shuffle(range(MC[i].o.length))}; }),
+      pareo: mini ? null : {set:pset, terms:shuffle(range(P.pairs.length)), defs:shuffle(range(P.pairs.length + P.extra.length))},
+      ord: mini ? [] : pick(ORD.length,2).map(function(i){ return {i:i, o:shuffle(range(ORD[i].items.length))}; }),
+      des: mini ? [] : pick(DES.length,2),
+      ans:{vf:{}, mc:{}, pareo:{}, ord:{}, des:{}},
+      self:{}, chk:{}, log:[], submittedAt:0
+    };
+    if(st.minutes>0) st.endAt = st.startAt + st.minutes*60000;
+    save(VERIF, verif);
+    persist();
+  }
+  function persist(){ save(STORE, st); }
+  function verify(key, ok){ if(st.chk[key]) return; st.chk[key] = true; st.log.push(!!ok); }
+  function replace(id, html){ var el = $(id); if(el) el.outerHTML = html; }
+
+  /* ============================================================
+     RENDER DEL EXAMEN
+     ============================================================ */
+  function offs(){
+    var a = st.vf.length, b = a + st.mc.length, c = b + (st.pareo ? st.pareo.terms.length : 0), d = c + st.ord.length;
+    return {mc:a, pa:b, ord:c, des:d};
+  }
+  function part(t, pts, desc){
+    return '<div class="part"><div class="part-head"><h2>'+t+'<span>'+pts+'</span></h2><p>'+desc+'</p></div></div>';
+  }
+  function words(s){ s=(s||"").trim(); return s ? s.split(/\s+/).length : 0; }
+  function fb(ok, right, exp, cat){
+    return '<div class="fb '+(ok?"ok":"bad")+'">'+(ok?"✅ Correcto":"❌ Incorrecto"+(right?" · Correcta: <b>"+right+"</b>":""))+'</div>'+
+           (exp?'<div class="rv-exp">💡 '+exp+'</div>':'')+(ok?"":links(cat));
+  }
+
+  function vfHTML(k){
+    var Q = VF[st.vf[k]], v = st.ans.vf[k], done = !!st.chk["vf-"+k];
+    function cls(val){ var c = "opt"; if(v===val) c += " sel"; if(done){ if(Q.a===val) c += " right"; else if(v===val) c += " wrong"; } return c; }
+    return '<div class="q'+(done?" locked":"")+'" id="q-vf-'+k+'"><div class="q-top"><span class="q-num">'+(k+1)+'</span><div class="q-text">'+Q.s+'</div></div>'+
+      '<div class="opts vf">'+
+      '<button class="'+cls(true)+'" data-t="vf" data-k="'+k+'" data-v="1"'+(done?" disabled":"")+'>Verdadero</button>'+
+      '<button class="'+cls(false)+'" data-t="vf" data-k="'+k+'" data-v="0"'+(done?" disabled":"")+'>Falso</button>'+
+      '</div>'+(done?fb(v===Q.a, Q.a?"Verdadero":"Falso", Q.e, Q.cat):"")+'</div>';
+  }
+  function mcHTML(k){
+    var m = st.mc[k], Q = MC[m.i], v = st.ans.mc[k], done = !!st.chk["mc-"+k];
+    var h = '<div class="q'+(done?" locked":"")+'" id="q-mc-'+k+'"><div class="q-top"><span class="q-num">'+(offs().mc+k+1)+'</span><div class="q-text">'+Q.q+'</div></div><div class="opts">';
+    m.o.forEach(function(oi,pos){
+      var c = "opt"; if(v===oi) c += " sel"; if(done){ if(oi===0) c += " right"; else if(v===oi) c += " wrong"; }
+      h += '<button class="'+c+'" data-t="mc" data-k="'+k+'" data-v="'+oi+'"'+(done?" disabled":"")+'><span class="l">'+LET[pos].toLowerCase()+'</span><span>'+Q.o[oi]+'</span></button>';
+    });
+    return h + '</div>'+(done?fb(v===0, Q.o[0], Q.e, Q.cat):"")+'</div>';
+  }
+  function pareoAll(){ var P = PAREO[st.pareo.set]; return P.pairs.map(function(p){ return p[1]; }).concat(P.extra); }
+  function paRowHTML(k){
+    var P = PAREO[st.pareo.set], ti = st.pareo.terms[k], v = st.ans.pareo[k], done = !!st.chk["pa-"+k];
+    var h = '<div class="match-row'+(done?" locked":"")+'" id="q-pa-'+k+'"><span class="q-num">'+(offs().pa+k+1)+'</span><span class="term">'+P.pairs[ti][0]+
+      (done ? '<span class="fbi '+(v===ti?"ok":"bad")+'">'+(v===ti?"✅ Correcto":"❌ Correcta: "+P.pairs[ti][1])+'</span>' : '')+'</span>'+
+      '<select data-t="pareo" data-k="'+k+'" class="'+(v!=null?"filled":"")+'"'+(done?" disabled":"")+' aria-label="Letra para '+esc(P.pairs[ti][0])+'"><option value="">—</option>';
+    st.pareo.defs.forEach(function(di,pos){ h += '<option value="'+di+'"'+(v===di?" selected":"")+'>'+LET[pos]+'</option>'; });
+    return h + '</select></div>';
+  }
+  function ordGood(k){ var o = st.ord[k], Q = ORD[o.i], v = st.ans.ord[k] || {}, g = 0; Q.items.forEach(function(_,ii){ if(v[ii]===ii+1) g++; }); return g; }
+  function ordHTML(k){
+    var o = st.ord[k], Q = ORD[o.i], N = Q.items.length, v = st.ans.ord[k] || {}, done = !!st.chk["ord-"+k];
+    var h = '<div class="q'+(done?" locked":"")+'" id="q-ord-'+k+'"><div class="q-top"><span class="q-num">'+(offs().ord+k+1)+'</span><div class="q-text">'+Q.q+'</div></div><div style="margin-top:8px;">';
+    o.o.forEach(function(ii){
+      h += '<div class="ord-row"><span class="item">'+Q.items[ii]+(done?'<span class="fbi '+(v[ii]===ii+1?"ok":"bad")+'">'+(v[ii]===ii+1?"✅ posición correcta":"❌ va en la posición "+(ii+1))+'</span>':'')+'</span>'+
+           '<select data-t="ord" data-k="'+k+'" data-i="'+ii+'" class="'+(v[ii]!=null?"filled":"")+'"'+(done?" disabled":"")+' aria-label="Posición"><option value="">#</option>';
+      for(var p=1;p<=N;p++) h += '<option value="'+p+'"'+(v[ii]===p?" selected":"")+'>'+p+'</option>';
+      h += '</select></div>';
+    });
+    h += '</div>';
+    if(done){
+      var g = ordGood(k);
+      h += '<div class="fb '+(g===N?"ok":g===0?"bad":"part")+'">'+(g===N?"✅ Orden correcto":"Posiciones correctas: <b>"+g+" de "+N+"</b>")+'</div>'+
+           '<div class="rv-exp">💡 Orden correcto: '+Q.items.map(function(it,ii){ return "<b>"+(ii+1)+".</b> "+it; }).join(" · ")+'</div>'+(g===N?"":links(Q.cat));
+    } else if(st.verif){
+      h += '<button class="btn sm chkbtn" type="button" data-ordchk="'+k+'">✅ Verificar orden</button>';
+    }
+    return h + '</div>';
+  }
+  function rubricHTML(k, disabled){
+    var D = DES[st.des[k]], sel = st.self[k] || [], h = '';
+    D.rubric.forEach(function(r,ri){
+      h += '<label class="rub"><input type="checkbox" data-k="'+k+'" data-r="'+ri+'"'+(sel[ri]?" checked":"")+(disabled?" disabled":"")+'><span>'+r[0]+'</span><em>+'+r[1]+'</em></label>';
+    });
+    return h;
+  }
+  function desHTML(k){
+    var D = DES[st.des[k]], v = st.ans.des[k] || "", done = !!st.chk["des-"+k];
+    var h = '<div class="q'+(done?" locked":"")+'" id="q-des-'+k+'"><div class="q-top"><span class="q-num">'+(offs().des+k+1)+'</span><div class="q-text">'+D.q+'</div></div>'+
+      '<textarea data-t="des" data-k="'+k+'" placeholder="Escribe tu respuesta aquí…"'+(done?" readonly":"")+'>'+esc(v)+'</textarea>'+
+      '<div class="wc" id="wc-'+k+'">'+words(v)+' palabras</div>';
+    if(done){
+      h += '<div class="sg-inline"><div class="lbl">RESPUESTA MODELO</div><div class="model">'+D.model+'</div>'+
+           '<div class="lbl">RÚBRICA · MARCA LO QUE SÍ INCLUISTE</div><div class="rubwrap" data-sgk="'+k+'">'+rubricHTML(k, !v.trim())+'</div>'+
+           '<div class="sg-total" id="sgi-'+k+'">'+desPts(k)+' / 10 pts</div></div>';
+    } else if(st.verif){
+      h += '<button class="btn sm chkbtn" type="button" data-deschk="'+k+'">👀 Ya respondí, ver respuesta</button>';
+    }
+    return h + '</div>';
+  }
+
+  function renderExam(){
+    var h = "", mini = st.mode === "mini";
+    h += '<div class="paper" style="margin-top:16px;"><div class="inst"><div class="c" style="margin-top:0">'+(mini?"⚡ Mini simulacro":"Tercer Examen Parcial")+' · GPI</div>'+
+         '<div class="p">'+(st.name?esc(st.name):"Estudiante")+(st.cid?" · "+esc(st.cid):"")+' · '+(st.minutes?st.minutes+" min":"sin límite")+' · '+(mini?"nota sobre 100":"100 pts")+(st.verif?" · ⚡ respuestas instantáneas":"")+'</div></div></div>';
+
+    h += part("I. Verdadero o falso", mini?"10 pts":"20 pts", "Selecciona V si el enunciado es verdadero o F si es falso. Valor: 2 puntos c/u.");
+    st.vf.forEach(function(_,k){ h += vfHTML(k); });
+
+    h += part("II. Selección múltiple", mini?"10 pts":"30 pts", "Selecciona la única respuesta correcta. Valor: 2 puntos c/u.");
+    st.mc.forEach(function(_,k){ h += mcHTML(k); });
+
+    if(!mini){
+      var P = PAREO[st.pareo.set], all = pareoAll();
+      h += part("III. Pareo · "+P.title, "20 pts", "Escribe la letra de la definición que corresponde a cada concepto. Sobran 2 definiciones. Valor: 2.5 puntos c/u.");
+      h += '<div class="q" id="q-pareo"><ul class="defs">';
+      st.pareo.defs.forEach(function(di,pos){ h += '<li><b>'+LET[pos]+'</b><span>'+all[di]+'</span></li>'; });
+      h += '</ul>';
+      st.pareo.terms.forEach(function(_,k){ h += paRowHTML(k); });
+      h += '</div>';
+
+      h += part("IV. Ordenamiento", "10 pts", "Asigna a cada elemento su posición correcta (1 = primero). Valor: 5 puntos c/u, proporcional a las posiciones correctas.");
+      st.ord.forEach(function(_,k){ h += ordHTML(k); });
+
+      h += part("V. Desarrollo", "20 pts", "Responde con tus propias palabras. Se autoevalúa con rúbrica"+(st.verif?" (con ⚡, al tocar «Ya respondí»)":" al entregar")+". Valor: 10 puntos c/u.");
+      st.des.forEach(function(_,k){ h += desHTML(k); });
+    }
+
+    h += '<div class="submit-zone"><button class="btn primary block" id="btnSubmitBottom">📤 Entregar examen</button></div>';
+    $("examBody").innerHTML = h;
+    $("btnSubmitBottom").addEventListener("click", askSubmit);
+    updateProgress(); updateLive(); syncVerifTop();
+  }
+
+  // Delegación de eventos en el examen
+  $("examBody").addEventListener("click", function(e){
+    var oc = e.target.closest("[data-ordchk]");
+    if(oc){
+      var k = +oc.getAttribute("data-ordchk");
+      verify("ord-"+k, ordGood(k)===ORD[st.ord[k].i].items.length);
+      replace("q-ord-"+k, ordHTML(k)); persist(); updateProgress(); updateLive(); return;
+    }
+    var dc = e.target.closest("[data-deschk]");
+    if(dc){
+      var kd = +dc.getAttribute("data-deschk");
+      st.chk["des-"+kd] = true;
+      replace("q-des-"+kd, desHTML(kd)); persist(); updateProgress(); updateLive(); return;
+    }
+    var b = e.target.closest(".opt"); if(!b || b.disabled) return;
+    var t = b.getAttribute("data-t"), kk = +b.getAttribute("data-k"), v = +b.getAttribute("data-v");
+    if(t==="vf"){
+      st.ans.vf[kk] = (v===1);
+      if(st.verif){ verify("vf-"+kk, st.ans.vf[kk]===VF[st.vf[kk]].a); replace("q-vf-"+kk, vfHTML(kk)); }
+    }
+    if(t==="mc"){
+      st.ans.mc[kk] = v;
+      if(st.verif){ verify("mc-"+kk, v===0); replace("q-mc-"+kk, mcHTML(kk)); }
+    }
+    if(!st.verif){
+      Array.prototype.forEach.call(b.parentElement.children, function(x){ x.classList.toggle("sel", x===b); });
+      b.closest(".q").classList.remove("unanswered-flag");
+    }
+    persist(); updateProgress(); updateLive();
+  });
+  $("examBody").addEventListener("change", function(e){
+    var s = e.target;
+    if(s.type==="checkbox"){
+      var ck = +s.getAttribute("data-k"), r = +s.getAttribute("data-r");
+      st.self[ck] = st.self[ck] || []; st.self[ck][r] = s.checked;
+      var tot = $("sgi-"+ck); if(tot) tot.textContent = desPts(ck)+" / 10 pts";
+      persist(); updateLive(); return;
+    }
+    if(s.tagName!=="SELECT") return;
+    var t = s.getAttribute("data-t"), k = +s.getAttribute("data-k"), val = s.value===""?null:+s.value;
+    if(t==="pareo"){
+      if(val==null) delete st.ans.pareo[k]; else st.ans.pareo[k]=val;
+      if(st.verif && val!=null){ verify("pa-"+k, val===st.pareo.terms[k]); replace("q-pa-"+k, paRowHTML(k)); }
+      else s.classList.toggle("filled", val!=null);
+      var qp = $("q-pareo"); if(qp) qp.classList.remove("unanswered-flag");
+    }
+    if(t==="ord"){
+      var i = +s.getAttribute("data-i");
+      st.ans.ord[k] = st.ans.ord[k] || {};
+      if(val==null) delete st.ans.ord[k][i]; else st.ans.ord[k][i]=val;
+      s.classList.toggle("filled", val!=null);
+      var q = s.closest(".q"); if(q) q.classList.remove("unanswered-flag");
+    }
+    persist(); updateProgress(); updateLive();
+  });
+  var typing;
+  $("examBody").addEventListener("input", function(e){
+    var t = e.target; if(t.tagName!=="TEXTAREA") return;
+    var k = +t.getAttribute("data-k");
+    st.ans.des[k] = t.value;
+    $("wc-"+k).textContent = words(t.value)+" palabras";
+    t.closest(".q").classList.remove("unanswered-flag");
+    clearTimeout(typing); typing = setTimeout(function(){ persist(); updateProgress(); }, 400);
+  });
+
+  /* ---------- ⚡ instantáneas durante el examen ---------- */
+  function syncVerifTop(){
+    var b = $("btnVerifTop"); if(!b || !st) return;
+    b.classList.toggle("on", !!st.verif);
+    b.setAttribute("aria-pressed", st.verif ? "true" : "false");
+    b.title = st.verif ? "Respuestas instantáneas: activadas" : "Respuestas instantáneas: desactivadas";
+  }
+  $("btnVerifTop").addEventListener("click", function(){
+    st.verif = !st.verif;
+    st.everVerif = st.everVerif || st.verif;
+    save(VERIF, st.verif);
+    persist(); renderExam();
+  });
+
+  /* ---------- marcador en vivo ---------- */
+  function liveScore(){
+    var got = 0, max = 0;
+    st.vf.forEach(function(i,k){ if(st.chk["vf-"+k]){ max += 2; if(st.ans.vf[k]===VF[i].a) got += 2; } });
+    st.mc.forEach(function(_,k){ if(st.chk["mc-"+k]){ max += 2; if(st.ans.mc[k]===0) got += 2; } });
+    if(st.pareo) st.pareo.terms.forEach(function(ti,k){ if(st.chk["pa-"+k]){ max += 2.5; if(st.ans.pareo[k]===ti) got += 2.5; } });
+    st.ord.forEach(function(o,k){ if(st.chk["ord-"+k]){ max += 5; got += 5*ordGood(k)/ORD[o.i].items.length; } });
+    st.des.forEach(function(_,k){ if(st.chk["des-"+k]){ max += 10; got += desPts(k); } });
+    var streak = 0;
+    for(var i=st.log.length-1;i>=0 && st.log[i];i--) streak++;
+    return {got:r1(got), max:r1(max), streak:streak};
+  }
+  function updateLive(){
+    var el = $("live");
+    if(!st || !st.verif){ el.classList.add("hidden"); return; }
+    var L = liveScore();
+    el.classList.remove("hidden");
+    el.innerHTML = '<b>'+L.got+'</b>/'+L.max+' pts'+(L.streak>1?' · 🔥 '+L.streak:'');
+  }
+
+  /* ---------- progreso / pendientes ---------- */
+  function pending(){
+    var list = [], A = st.ans, o = offs();
+    st.vf.forEach(function(_,k){ if(A.vf[k]==null) list.push({n:k+1,id:"q-vf-"+k}); });
+    st.mc.forEach(function(_,k){ if(A.mc[k]==null) list.push({n:o.mc+k+1,id:"q-mc-"+k}); });
+    if(st.pareo) st.pareo.terms.forEach(function(_,k){ if(A.pareo[k]==null) list.push({n:o.pa+k+1,id:"q-pa-"+k}); });
+    st.ord.forEach(function(q,k){ var v=A.ord[k]||{}; if(Object.keys(v).length<ORD[q.i].items.length) list.push({n:o.ord+k+1,id:"q-ord-"+k}); });
+    st.des.forEach(function(_,k){ if(!(A.des[k]||"").trim()) list.push({n:o.des+k+1,id:"q-des-"+k}); });
+    return {list:list, total:o.des+st.des.length};
+  }
+  function updateProgress(){
+    var p = pending(), done = p.total - p.list.length;
+    $("tbLabel").textContent = done+" de "+p.total+" respondidas";
+    $("tbProg").style.width = (p.total?done/p.total*100:0)+"%";
+  }
+
+  /* ---------- temporizador ---------- */
+  function startTimer(){
+    clearInterval(tick);
+    var el = $("timer");
+    function upd(){
+      if(!st || st.phase!=="exam"){ clearInterval(tick); return; }
+      if(!st.endAt){ el.textContent = fmt((Date.now()-st.startAt)/1000); el.className="timer"; return; }
+      var left = (st.endAt - Date.now())/1000;
+      el.textContent = fmt(left);
+      el.className = "timer" + (left<=60?" crit":left<=600?" warn":"");
+      if(left<=0){ clearInterval(tick); submit(true); }
+    }
+    upd(); tick = setInterval(upd, 1000);
+  }
+
+  /* ---------- entrega ---------- */
+  function askSubmit(){
+    var p = pending();
+    $("mTitle").textContent = "¿Entregar examen?";
+    if(p.list.length){
+      $("mText").textContent = "Tienes "+p.list.length+" pregunta(s) sin responder. Toca un número para ir a ella.";
+      $("mChips").innerHTML = p.list.map(function(x){ return '<button class="chip" data-id="'+x.id+'">#'+x.n+'</button>'; }).join("");
+    } else {
+      $("mText").textContent = "Respondiste todas las preguntas. Una vez entregado no podrás modificar tus respuestas.";
+      $("mChips").innerHTML = "";
+    }
+    $("modal").classList.remove("hidden");
+  }
+  $("mChips").addEventListener("click", function(e){
+    var c = e.target.closest(".chip"); if(!c) return;
+    $("modal").classList.add("hidden");
+    var el = $(c.getAttribute("data-id"));
+    if(el){ el.classList.add("unanswered-flag"); el.scrollIntoView({behavior:"smooth",block:"center"}); }
+  });
+  $("mCancel").addEventListener("click", function(){ $("modal").classList.add("hidden"); });
+  $("mOk").addEventListener("click", function(){ $("modal").classList.add("hidden"); submit(false); });
+  $("btnSubmitTop").addEventListener("click", askSubmit);
+
+  function submit(auto){
+    clearInterval(tick);
+    st.submittedAt = Date.now();
+    st.autoSubmitted = !!auto;
+    if(st.des.length){
+      st.phase = "selfgrade"; persist();
+      renderSelfGrade(); show("selfgrade");
+    } else {
+      st.phase = "results"; persist();
+      renderResults(true); show("results");
+    }
+  }
+
+  /* ============================================================
+     AUTOEVALUACIÓN (PARTE V)
+     ============================================================ */
+  function renderSelfGrade(){
+    var h = "";
+    if(st.autoSubmitted) h += '<div class="resume"><p>⏰ Se acabó el tiempo: el examen se entregó automáticamente.</p></div>';
+    st.des.forEach(function(di,k){
+      var D = DES[di], mine = (st.ans.des[k]||"").trim();
+      h += '<div class="sg"><h3>Pregunta de desarrollo '+(k+1)+'</h3><div style="font-size:.88rem;color:var(--text-dim)">'+D.q+'</div>'+
+           '<div class="lbl">TU RESPUESTA</div><div class="mine">'+(mine?esc(mine):'<i>Sin respuesta.</i>')+'</div>'+
+           '<div class="lbl">RESPUESTA MODELO</div><div class="model">'+D.model+'</div>'+
+           '<div class="lbl">RÚBRICA · MARCA LO QUE SÍ INCLUISTE</div>'+rubricHTML(k, !mine)+
+           '<div class="sg-total" id="sgt-'+k+'"></div></div>';
+    });
+    $("sgBody").innerHTML = h;
+    st.des.forEach(function(_,k){ updSg(k); });
+  }
+  $("sgBody").addEventListener("change", function(e){
+    var c = e.target; if(c.type!=="checkbox") return;
+    var k = +c.getAttribute("data-k"), r = +c.getAttribute("data-r");
+    st.self[k] = st.self[k] || [];
+    st.self[k][r] = c.checked;
+    updSg(k); persist();
+  });
+  function desPts(k){
+    var D = DES[st.des[k]], sel = st.self[k] || [], t = 0;
+    if(!(st.ans.des[k]||"").trim()) return 0;
+    D.rubric.forEach(function(r,ri){ if(sel[ri]) t += r[1]; });
+    return r1(t);
+  }
+  function updSg(k){ $("sgt-"+k).textContent = desPts(k)+" / 10 pts"; }
+  $("btnFinish").addEventListener("click", function(){
+    st.phase = "results"; persist();
+    renderResults(true); show("results");
+  });
+
+  /* ============================================================
+     CALIFICACIÓN Y RESULTADOS
+     ============================================================ */
+  function grade(){
+    var A = st.ans, rv = [], o = offs();
+    var parts = {I:0, II:0, III:0, IV:0, V:0};
+    st.vf.forEach(function(i,k){
+      var Q = VF[i], v = A.vf[k], ok = v===Q.a, pts = ok?2:0; parts.I += pts;
+      rv.push({n:k+1, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.s, cat:Q.cat,
+        lines:["Tu respuesta: <b>"+(v==null?"—":v?"Verdadero":"Falso")+"</b>", ok?"":"Correcta: <b class='c-ok'>"+(Q.a?"Verdadero":"Falso")+"</b>"], exp:Q.e});
+    });
+    st.mc.forEach(function(m,k){
+      var Q = MC[m.i], v = A.mc[k], ok = v===0, pts = ok?2:0; parts.II += pts;
+      rv.push({n:o.mc+k+1, cls:ok?"ok":"bad", pts:pts, max:2, q:Q.q, cat:Q.cat,
+        lines:["Tu respuesta: <b>"+(v==null?"—":Q.o[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+Q.o[0]+"</b>"], exp:Q.e});
+    });
+    if(st.pareo){
+      var P = PAREO[st.pareo.set], all = pareoAll();
+      st.pareo.terms.forEach(function(ti,k){
+        var v = A.pareo[k], ok = v===ti, pts = ok?2.5:0; parts.III += pts;
+        rv.push({n:o.pa+k+1, cls:ok?"ok":"bad", pts:pts, max:2.5, q:"Pareo: <b>"+P.pairs[ti][0]+"</b>", cat:P.cat,
+          lines:["Tu respuesta: <b>"+(v==null?"—":all[v])+"</b>", ok?"":"Correcta: <b class='c-ok'>"+P.pairs[ti][1]+"</b>"], exp:""});
+      });
+    }
+    st.ord.forEach(function(q,k){
+      var Q = ORD[q.i], N = Q.items.length, v = A.ord[k] || {}, good = ordGood(k);
+      var pts = r1(5*good/N); parts.IV += pts;
+      var mine = Q.items.map(function(it,ii){ return {it:it, p:v[ii]}; }).filter(function(x){ return x.p!=null; }).sort(function(a,b){ return a.p-b.p; }).map(function(x){ return x.p+". "+x.it; });
+      rv.push({n:o.ord+k+1, cls:good===N?"ok":good===0?"bad":"part", pts:pts, max:5, q:Q.q, cat:Q.cat,
+        lines:["Posiciones correctas: <b>"+good+" de "+N+"</b>", "Tu orden: "+(mine.length?mine.join(" · "):"—")],
+        exp:"Orden correcto: "+Q.items.map(function(it,ii){ return "<b>"+(ii+1)+".</b> "+it; }).join(" · ")});
+    });
+    st.des.forEach(function(di,k){
+      var pts = desPts(k); parts.V += pts;
+      rv.push({n:o.des+k+1, cls:pts>=10?"ok":pts===0?"bad":"part", pts:pts, max:10, q:DES[di].q, cat:DES[di].cat,
+        lines:["Autoevaluación con rúbrica"], exp:DES[di].model});
+    });
+    Object.keys(parts).forEach(function(p){ parts[p] = r1(parts[p]); });
+    var raw = r1(parts.I+parts.II+parts.III+parts.IV+parts.V);
+    var total = st.mode==="mini" ? Math.round(raw/20*100) : raw;
+    return {total:total, raw:raw, parts:parts, rv:rv};
+  }
+
+  function letter(s){ return s>=91?"A":s>=81?"B":s>=71?"C":s>=61?"D":"F"; }
+  var MSG = {A:"¡Excelente! Dominas el material.", B:"Muy bien. Repasa los detalles que fallaste.", C:"Bien, pero hay temas por reforzar.", D:"Aprobado por poco: repasa la guía.", F:"Necesitas repasar el material antes del parcial."};
+
+  function renderResults(addHist){
+    var g = grade(), L = letter(g.total), mini = st.mode==="mini";
+    $("rsWho").textContent = (st.name ? st.name.toUpperCase()+" · " : "") + (mini?"MINI SIMULACRO":"RESULTADO") + (st.everVerif?" · ✅ CON VERIFICACIÓN":"");
+    $("rsScore").innerHTML = g.total+"<small>/100</small>";
+    $("rsGrade").className = "grade g-"+L;
+    $("rsGrade").textContent = "Nota "+L;
+    var used = ((st.submittedAt||Date.now()) - st.startAt)/1000;
+    $("rsMeta").textContent = MSG[L]+(mini?" · "+g.raw+" de 20 pts":"")+" · Tiempo utilizado: "+fmt(used)+(st.minutes?" de "+st.minutes+":00":"")+(st.autoSubmitted?" · entregado por tiempo":"");
+
+    var defs = mini ? [["I. Verdadero o falso","I",10],["II. Selección múltiple","II",10]]
+                    : [["I. Verdadero o falso","I",20],["II. Selección múltiple","II",30],["III. Pareo","III",20],["IV. Ordenamiento","IV",10],["V. Desarrollo","V",20]];
+    $("rsBars").innerHTML = defs.map(function(d){
+      var v = g.parts[d[1]], pct = v/d[2]*100;
+      var col = pct>=81?"var(--accent)":pct>=61?"var(--amber)":"var(--red)";
+      return '<div class="bar-row"><div class="bar-top"><span>'+d[0]+'</span><b>'+v+' / '+d[2]+'</b></div><div class="bar"><i style="width:'+pct+'%;background:'+col+'"></i></div></div>';
+    }).join("");
+
+    renderReview(g.rv, "all");
+    $("rsFilters").onclick = function(e){
+      var b = e.target.closest(".fbtn"); if(!b) return;
+      Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x===b); });
+      renderReview(g.rv, b.getAttribute("data-f"));
+    };
+
+    if(addHist && !st.saved){
+      var key = mini ? MINIH : HIST, h = load(key) || [];
+      h.unshift({d:Date.now(), s:g.total, g:L, v:!!st.everVerif});
+      save(key, h.slice(0,8));
+      st.saved = true; persist();
+    }
+  }
+
+  function renderReview(rv, f){
+    var list = rv.filter(function(r){ return f==="all" || r.cls===f; });
+    $("rsReview").innerHTML = list.length ? list.map(function(r){
+      var c = r.cls==="ok"?"c-ok":r.cls==="bad"?"c-bad":"c-part";
+      var icon = r.cls==="ok"?"✅":r.cls==="bad"?"❌":"⚠️";
+      return '<div class="rv '+r.cls+'"><div class="rv-top"><div class="rv-q"><b>'+r.n+'.</b> '+r.q+'</div><div class="rv-pts '+c+'">'+icon+' '+r.pts+'/'+r.max+'</div></div>'+
+        r.lines.filter(Boolean).map(function(l){ return '<div class="rv-line">'+l+'</div>'; }).join("")+
+        (r.exp?'<div class="rv-exp">💡 '+r.exp+'</div>':'')+(r.cls!=="ok"?links(r.cat):"")+'</div>';
+    }).join("") : '<p style="font-size:.86rem;color:var(--text-faint);padding:10px 0;">No hay preguntas en este filtro.</p>';
+  }
+
+  /* ============================================================
+     PORTADA: tipo, reanudar e historial
+     ============================================================ */
+  function setMode(m){
+    mode = m;
+    Array.prototype.forEach.call(document.querySelectorAll("#fType button"), function(b){
+      var on = b.getAttribute("data-m")===m;
+      b.classList.toggle("on", on); b.setAttribute("aria-pressed", on?"true":"false");
+    });
+    $("timeField").classList.toggle("hidden", m==="mini");
+    $("valFull").classList.toggle("hidden", m==="mini");
+    $("valMini").classList.toggle("hidden", m!=="mini");
+  }
+  $("fType").addEventListener("click", function(e){ var b = e.target.closest("button"); if(b) setMode(b.getAttribute("data-m")); });
+  $("fVerif").addEventListener("change", function(){ save(VERIF, this.checked); });
+
+  function histHTML(list){
+    return list.map(function(x){
+      var d = new Date(x.d);
+      return '<div class="hist-item"><span>'+d.toLocaleDateString("es-PA")+' · '+d.toLocaleTimeString("es-PA",{hour:"2-digit",minute:"2-digit"})+(x.v?' <span class="vtag">✅ con verificación</span>':'')+'</span><span><b>'+x.s+'</b> · <span class="grade g-'+x.g+'" style="margin:0;padding:2px 9px;font-size:.75rem;">'+x.g+'</span></span></div>';
+    }).join("");
+  }
+  function renderStart(){
+    var saved = load(STORE);
+    if(saved && saved.phase && saved.phase!=="results"){
+      var info;
+      if(saved.phase==="exam") info = (saved.mode==="mini"?"Mini simulacro. ":"Simulacro completo. ")+(saved.endAt ? (saved.endAt>Date.now() ? "Quedan "+fmt((saved.endAt-Date.now())/1000)+"." : "El tiempo ya terminó; se entregará al continuar.") : "Sin límite de tiempo.");
+      else info = "Falta autoevaluar la Parte V.";
+      $("resumeInfo").textContent = info;
+      $("resumeBox").classList.remove("hidden");
+    } else {
+      $("resumeBox").classList.add("hidden");
+    }
+    var h = load(HIST) || [], m = load(MINIH) || [];
+    $("histBox").style.display = (h.length || m.length) ? "block" : "none";
+    $("histList").innerHTML = (h.length?'<div class="lbl">📝 SIMULACRO COMPLETO</div>'+histHTML(h):"")+(m.length?'<div class="lbl">⚡ MINI SIMULACRO</div>'+histHTML(m):"");
+    $("fVerif").checked = load(VERIF)===true;
+  }
+
+  function enter(){
+    renderExam(); show("exam");
+    if(st.endAt && st.endAt<=Date.now()) submit(true); else startTimer();
+  }
+  $("btnStart").addEventListener("click", function(){ newAttempt(); enter(); });
+  $("btnResume").addEventListener("click", function(){
+    st = load(STORE); if(!st) return renderStart();
+    st.chk = st.chk || {}; st.log = st.log || []; st.mode = st.mode || "full";
+    if(st.phase==="exam") enter();
+    else if(st.phase==="selfgrade"){ renderSelfGrade(); show("selfgrade"); }
+  });
+  $("btnDiscard").addEventListener("click", function(){ del(STORE); renderStart(); });
+  $("btnRetry").addEventListener("click", function(){ del(STORE); st = null; renderStart(); show("start"); });
+
+  window.addEventListener("beforeunload", function(e){
+    if(st && st.phase==="exam"){ persist(); e.preventDefault(); e.returnValue = ""; }
+  });
+
+  setMode("full");
+  renderStart();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3 — Proyectos Ágiles | GPI 8469</title>
+    <style id="tw-offline">
+/* Reset minimo (equivalente a Tailwind preflight, reducido) */
+*,::before,::after{box-sizing:border-box}
+h1,h2,h3,h4,h5,h6,p,blockquote,figure{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+a{color:inherit;text-decoration:inherit}
+img{display:block;max-width:100%;height:auto}
+table{border-collapse:collapse}
+/* Utilidades base */
+.absolute{position:absolute}
+.bg-blue-100{background-color:#dbeafe}
+.bg-blue-50{background-color:#eff6ff}
+.bg-blue-600{background-color:#2563eb}
+.bg-center{background-position:center}
+.bg-cover{background-size:cover}
+.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-from,transparent), var(--tw-to,transparent))}
+.bg-gray-100{background-color:#f3f4f6}
+.bg-gray-50{background-color:#f9fafb}
+.bg-green-100{background-color:#dcfce7}
+.bg-green-50{background-color:#f0fdf4}
+.bg-green-700{background-color:#15803d}
+.bg-green-900{background-color:#14532d}
+.bg-green-900\/25{background-color:rgba(20,83,45,0.25)}
+.bg-purple-50{background-color:#faf5ff}
+.bg-red-50{background-color:#fef2f2}
+.bg-white{background-color:#fff}
+.bg-white\/10{background-color:rgba(255,255,255,0.1)}
+.bg-white\/15{background-color:rgba(255,255,255,0.15)}
+.bg-yellow-100{background-color:#fef9c3}
+.bg-yellow-50{background-color:#fefce8}
+.border{border-width:1px;border-style:solid;border-color:#e5e7eb}
+.border-blue-200{border-color:#bfdbfe}
+.border-blue-300{border-color:#93c5fd}
+.border-collapse{border-collapse:collapse}
+.border-gray-100{border-color:#f3f4f6}
+.border-gray-200{border-color:#e5e7eb}
+.border-gray-300{border-color:#d1d5db}
+.border-green-200{border-color:#bbf7d0}
+.border-green-300{border-color:#86efac}
+.border-purple-200{border-color:#e9d5ff}
+.border-red-200{border-color:#fecaca}
+.border-t{border-top-width:1px;border-top-style:solid;border-top-color:#e5e7eb}
+.border-white\/20{border-color:rgba(255,255,255,0.2)}
+.border-white\/25{border-color:rgba(255,255,255,0.25)}
+.border-yellow-200{border-color:#fef08a}
+.border-yellow-300{border-color:#fde047}
+.container{width:100%}
+.flex{display:flex}
+.flex-col{flex-direction:column}
+.flex-shrink-0{flex-shrink:0}
+.flex-wrap{flex-wrap:wrap}
+.font-bold{font-weight:700}
+.font-extrabold{font-weight:800}
+.font-semibold{font-weight:600}
+.from-green-50{--tw-from:#f0fdf4}
+.gap-1{gap:0.25rem}
+.gap-2{gap:0.5rem}
+.gap-3{gap:0.75rem}
+.gap-4{gap:1rem}
+.gap-6{gap:1.5rem}
+.grid{display:grid}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.h-10{height:2.5rem}
+.h-9{height:2.25rem}
+.hidden{display:none}
+.hover\:bg-gray-200:hover{background-color:#e5e7eb}
+.hover\:bg-green-200:hover{background-color:#bbf7d0}
+.hover\:bg-green-600:hover{background-color:#16a34a}
+.hover\:bg-white\/20:hover{background-color:rgba(255,255,255,0.2)}
+.hover\:text-white:hover{color:#fff}
+.inline-block{display:inline-block}
+.inset-0{top:0;right:0;bottom:0;left:0}
+.italic{font-style:italic}
+.items-center{align-items:center}
+.items-start{align-items:flex-start}
+.justify-between{justify-content:space-between}
+.justify-center{justify-content:center}
+.justify-start{justify-content:flex-start}
+.leading-relaxed{line-height:1.625}
+.max-w-2xl{max-width:42rem}
+.mb-1{margin-bottom:0.25rem}
+.mb-2{margin-bottom:0.5rem}
+.mb-3{margin-bottom:0.75rem}
+.mb-4{margin-bottom:1rem}
+.mb-5{margin-bottom:1.25rem}
+.mb-6{margin-bottom:1.5rem}
+.mb-8{margin-bottom:2rem}
+.mt-0\.5{margin-top:0.125rem}
+.mt-1{margin-top:0.25rem}
+.mt-12{margin-top:3rem}
+.mt-4{margin-top:1rem}
+.mt-6{margin-top:1.5rem}
+.mx-auto{margin-left:auto;margin-right:auto}
+.object-contain{object-fit:contain}
+.opacity-80{opacity:.8}
+.opacity-90{opacity:.9}
+.overflow-hidden{overflow:hidden}
+.overflow-x-auto{overflow-x:auto}
+.p-0\.5{padding:0.125rem}
+.p-3{padding:0.75rem}
+.p-4{padding:1rem}
+.p-5{padding:1.25rem}
+.p-6{padding:1.5rem}
+.pt-4{padding-top:1rem}
+.px-3{padding-left:0.75rem;padding-right:0.75rem}
+.px-4{padding-left:1rem;padding-right:1rem}
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+.px-6{padding-left:1.5rem;padding-right:1.5rem}
+.py-1{padding-top:0.25rem;padding-bottom:0.25rem}
+.py-10{padding-top:2.5rem;padding-bottom:2.5rem}
+.py-2{padding-top:0.5rem;padding-bottom:0.5rem}
+.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}
+.py-20{padding-top:5rem;padding-bottom:5rem}
+.py-6{padding-top:1.5rem;padding-bottom:1.5rem}
+.relative{position:relative}
+.rounded-full{border-radius:9999px}
+.rounded-lg{border-radius:.5rem}
+.rounded-xl{border-radius:.75rem}
+.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1)}
+.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1)}
+.sticky{position:sticky}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.text-3xl{font-size:1.875rem;line-height:2.25rem}
+.text-4xl{font-size:2.25rem;line-height:2.5rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-blue-700{color:#1d4ed8}
+.text-blue-800{color:#1e40af}
+.text-center{text-align:center}
+.text-gray-200{color:#e5e7eb}
+.text-gray-500{color:#6b7280}
+.text-gray-600{color:#4b5563}
+.text-gray-700{color:#374151}
+.text-gray-800{color:#1f2937}
+.text-gray-900{color:#111827}
+.text-green-200{color:#bbf7d0}
+.text-green-300{color:#86efac}
+.text-green-500{color:#22c55e}
+.text-green-600{color:#16a34a}
+.text-green-700{color:#15803d}
+.text-green-800{color:#166534}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-purple-800{color:#6b21a8}
+.text-red-800{color:#991b1b}
+.text-sm{font-size:0.875rem;line-height:1.25rem}
+.text-white{color:#fff}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-xs{font-size:0.75rem;line-height:1rem}
+.text-yellow-700{color:#a16207}
+.text-yellow-800{color:#854d0e}
+.to-white{--tw-to:#fff}
+.top-0{top:0}
+.top-\[64px\]{top:64px}
+.tracking-widest{letter-spacing:0.1em}
+.transition-colors{transition-property:color,background-color,border-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}
+.uppercase{text-transform:uppercase}
+.w-10{width:2.5rem}
+.w-40{width:10rem}
+.w-44{width:11rem}
+.w-9{width:2.25rem}
+.z-40{z-index:40}
+.z-50{z-index:50}
+.space-y-14 > * + *{margin-top:3.5rem}
+.space-y-2 > * + *{margin-top:0.5rem}
+.space-y-3 > * + *{margin-top:0.75rem}
+@media (min-width:640px){.container{max-width:640px}}
+@media (min-width:768px){.container{max-width:768px}.md\:block{display:block}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:justify-center{justify-content:center}.md\:p-8{padding:2rem}.md\:px-8{padding-left:2rem;padding-right:2rem}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-5xl{font-size:3rem;line-height:1}}
+@media (min-width:1024px){.container{max-width:1024px}.lg\:block{display:block}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f0fdf4; }
+        code, .mono { font-family: 'Fira Code', monospace; }
+        .header-gradient { background: linear-gradient(90deg, #005824, #007336); }
+        .quick-nav { background: #004d22; }
+        .quick-nav a { color: #86efac; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.45rem 0.7rem; border-radius: 6px; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+        .quick-nav a:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .card { background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -4px rgba(0,0,0,0.09); }
+        .card-title { display: flex; align-items: center; gap: 0.75rem; font-size: 1.4rem; font-weight: 700; color: #004d22; }
+        .section-badge { display: inline-block; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; background: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 20px; margin-bottom: 0.5rem; }
+        .animate-on-scroll { opacity: 0; transform: translateY(22px); transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        .concept-card { border-radius: 12px; padding: 1rem 1.25rem; border-left: 4px solid #22c55e; background: #f0fdf4; transition: all 0.2s; }
+        .concept-card:hover { transform: translateX(4px); }
+        blockquote { border-left: 4px solid #22c55e; background: #f0fdf4; border-radius: 0 12px 12px 0; padding: 1rem 1.5rem; font-style: italic; color: #166534; }
+        .step-circle { width: 40px; height: 40px; border-radius: 50%; background: #005824; color: white; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    </style>
+<style id="m3-extra">
+.hbadge{display:inline-block;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:20px;margin-bottom:.4rem;}
+.h3g{font-weight:700;color:#166534;margin:.25rem 0 .75rem;font-size:1.05rem;}
+.noteg{font-size:.78rem;color:#6b7280;margin-top:.6rem;}
+.ibtnrow{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;}
+.ibtn{font-family:inherit;cursor:pointer;border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;font-weight:600;font-size:.85rem;padding:.45rem .9rem;border-radius:9999px;transition:all .15s;}
+.ibtn:hover{background:#dcfce7;}
+.ibtn.active{background:#166534;color:#fff;border-color:#166534;}
+.ipanel{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:1rem 1.25rem;font-size:.9rem;color:#374151;line-height:1.55;}
+.ipanel h4{margin:0 0 .35rem;color:#166534;font-weight:700;font-size:1rem;}
+.igrid2{display:grid;grid-template-columns:1fr;gap:1rem;align-items:center;}
+@media(min-width:768px){.igrid2{grid-template-columns:1fr 1fr;}}
+.icase{cursor:pointer;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;background:#fff;transition:box-shadow .2s,transform .2s;}
+.icase:hover{box-shadow:0 8px 18px -6px rgba(0,0,0,.12);transform:translateY(-2px);}
+.icase-body{display:none;margin-top:.75rem;padding-top:.75rem;border-top:1px dashed #e5e7eb;font-size:.85rem;color:#374151;line-height:1.55;}
+.icase.open .icase-body{display:block;}
+.itag{display:inline-block;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 9px;border-radius:9999px;white-space:nowrap;}
+.itag.ok{background:#dcfce7;color:#166534;}.itag.bad{background:#fee2e2;color:#991b1b;}.itag.info{background:#dbeafe;color:#1e40af;}
+.qopt{display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:10px;padding:.7rem .9rem;margin-bottom:.5rem;font-size:.9rem;color:#374151;transition:all .15s;}
+.qopt:hover{border-color:#16a34a;background:#f0fdf4;}
+.qopt.correct{background:#dcfce7;border-color:#16a34a;color:#166534;font-weight:600;}
+.qopt.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b;}
+.qexp{font-size:.82rem;color:#374151;background:#f0fdf4;border-left:3px solid #22c55e;border-radius:0 8px 8px 0;padding:.6rem .8rem;margin-top:.4rem;line-height:1.5;}
+.eff{display:inline-flex;align-items:center;gap:.25rem;font-size:.8rem;font-weight:600;background:#f9fafb;border:1px solid #e5e7eb;border-radius:9999px;padding:.25rem .6rem;margin:.15rem;}
+.dl-card{display:flex;gap:.9rem;align-items:flex-start;text-decoration:none;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.15rem;transition:box-shadow .2s,transform .2s;}
+.dl-card:hover{box-shadow:0 8px 18px -6px rgba(0,0,0,.12);transform:translateY(-2px);}
+.dl-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.kb-wrap{display:grid;grid-template-columns:1fr;gap:.75rem;}
+@media(min-width:768px){.kb-wrap{grid-template-columns:1fr 1fr 1fr;}}
+.kb-col{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:.7rem;min-height:130px;transition:background .15s,border-color .15s;}
+.kb-col.over{background:#f0fdf4;border-color:#22c55e;}
+.kb-col h5{font-size:.75rem;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;}
+.kb-card{background:#fff;border:1px solid #e5e7eb;border-left:4px solid #22c55e;border-radius:8px;padding:.5rem .6rem;margin-bottom:.5rem;font-size:.82rem;color:#374151;cursor:grab;box-shadow:0 1px 2px rgba(0,0,0,.05);}
+.kb-card:active{cursor:grabbing;}
+.kb-warn{color:#b91c1c!important;}
+.glo-grid{display:grid;grid-template-columns:1fr;gap:.6rem;}
+@media(min-width:640px){.glo-grid{grid-template-columns:1fr 1fr;}}
+@media(min-width:1024px){.glo-grid{grid-template-columns:1fr 1fr 1fr;}}
+.glo-card{cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:.8rem 1rem;transition:box-shadow .2s,transform .2s;}
+.glo-card:hover{box-shadow:0 6px 14px -6px rgba(0,0,0,.12);transform:translateY(-2px);}
+.glo-sigla{font-weight:800;color:#14532d;font-size:1rem;}
+.glo-nom{font-size:.72rem;color:#166534;font-weight:600;margin-top:.1rem;}
+.glo-meaning{display:none;font-size:.82rem;color:#6b7280;margin-top:.5rem;padding-top:.5rem;border-top:1px dashed #e5e7eb;line-height:1.45;}
+.glo-card.open .glo-meaning{display:block;}
+.glo-card.open [style*="ver significado"]{display:none;}
+</style>
+<style id="pr-css">
+#pr-btn{position:fixed;right:18px;bottom:18px;z-index:60;background:#166534;color:#fff;border:none;font-family:inherit;font-weight:700;font-size:.9rem;padding:.6rem 1.1rem;border-radius:9999px;box-shadow:0 6px 16px -4px rgba(0,0,0,.35);cursor:pointer;}
+#pr-btn:hover{background:#14532d;}
+.pr-ov{position:fixed;inset:0;z-index:9999;display:none;background:linear-gradient(135deg,#003d1c,#00461f);color:#fff;flex-direction:column;}
+.pr-ov.open{display:flex;}
+.pr-stage{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:1000px;margin:0 auto;padding:5vh 6vw;width:100%;}
+.pr-badge{display:inline-block;align-self:flex-start;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:4px 14px;border-radius:9999px;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;}
+.pr-title{font-size:clamp(1.8rem,5vw,3.4rem);font-weight:800;line-height:1.12;margin-bottom:1.2rem;}
+.pr-sub{font-size:clamp(1rem,2.5vw,1.5rem);opacity:.85;margin-bottom:1rem;}
+.pr-list{list-style:none;padding:0;margin:0;}
+.pr-list li{font-size:clamp(1.1rem,2.8vw,1.9rem);line-height:1.5;padding:.35rem 0 .35rem 1.7rem;position:relative;}
+.pr-list li::before{content:'▸';position:absolute;left:0;color:#86efac;}
+.pr-two{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.pr-col h3{font-size:clamp(1.2rem,3vw,2rem);margin-bottom:.6rem;color:#bbf7d0;}
+.pr-col ul{list-style:none;padding:0;margin:0;}
+.pr-col li{font-size:clamp(1rem,2.4vw,1.6rem);line-height:1.45;padding:.25rem 0 .25rem 1.4rem;position:relative;}
+.pr-col li::before{content:'•';position:absolute;left:0;color:#86efac;}
+.pr-bar{display:flex;align-items:center;gap:1rem;padding:1rem 6vw 1.5rem;}
+.pr-nav{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:1.4rem;width:52px;height:52px;border-radius:50%;cursor:pointer;line-height:1;}
+.pr-nav:hover{background:rgba(255,255,255,.22);}
+.pr-count{font-size:1rem;font-weight:700;min-width:74px;text-align:center;}
+.pr-close{position:absolute;top:16px;right:22px;background:none;border:none;color:#fff;font-size:1.9rem;cursor:pointer;opacity:.8;line-height:1;}
+.pr-close:hover{opacity:1;}
+.pr-prog{flex:1;height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;}
+.pr-fill{height:100%;background:#22c55e;width:0;transition:width .25s;}
+.pr-hint{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:.72rem;opacity:.55;}
+@media(max-width:640px){.pr-two{grid-template-columns:1fr;gap:1rem;}}
+</style>
+</head>
+<body class="text-gray-800">
+
+<header class="header-gradient text-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img src="UTPLOGO.png" class="h-10 w-10 object-contain bg-white rounded-full p-0.5 shadow" alt="UTP">
+            <img src="SISTEMASLOGO.png" class="h-10 w-10 object-contain rounded-full shadow" alt="FISC">
+            <div class="hidden md:block">
+                <p class="text-xs text-gray-200">GPI · Código 8469 · Grupo 1LS241</p>
+                <p class="text-sm font-bold">FISC — Universidad Tecnológica de Panamá</p>
+            </div>
+        </div>
+        <div class="text-center hidden lg:block">
+            <p class="text-xs text-green-300 uppercase tracking-widest font-bold">Módulo 3</p>
+            <h1 class="text-lg font-bold">Gestión de Proyectos Ágiles</h1>
+        </div>
+        <div class="flex gap-2">
+            <a href="Mod2_ProyectosTradicionales.html" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-2 rounded-lg font-semibold transition-colors">← Mód. 2</a>
+            <a href="Diagrama_GPI.html" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-2 rounded-lg font-semibold transition-colors">Inicio →</a>
+        </div>
+    </div>
+</header>
+
+<nav class="quick-nav sticky top-[64px] z-40 shadow overflow-x-auto">
+    <div class="container mx-auto px-4 py-1 flex gap-1 justify-start md:justify-center">
+        <a href="#agil">⚡ Ágil</a>
+        <a href="#manifiesto">📜 Manifiesto</a>
+        <a href="#ciclo">🔁 Ciclo</a>
+        <a href="#scrum">🏉 Scrum</a>
+        <a href="#otras">📋 XP/Kanban</a>
+        <a href="#herramientas">🛠️ Herramientas</a>
+        <a href="#comparacion">⚖️ Comparación</a>
+        <a href="#ejemplo">🧩 Ejemplo</a>
+        <a href="#casos">📚 Casos</a>
+        <a href="#simulador">🎮 Simulador</a>
+        <a href="#plantillas">📥 Plantillas</a>
+        <a href="#quiz">❓ Quiz</a>
+        <a href="#siglas">📖 Siglas</a>
+        <a href="#resumen">✔️ Resumen</a>
+    </div>
+</nav>
+
+<section id="intro" class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-cover bg-center" style="background:linear-gradient(135deg,#003d1c,#006b32);"><div class="absolute inset-0 bg-green-900/25"></div></div>
+    <div class="relative container mx-auto px-6 py-20 text-center text-white">
+        <span class="inline-block bg-white/15 border border-white/25 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4">Semanas 11 – 15 · 26 Oct → 28 Nov 2026</span>
+        <h2 class="text-4xl md:text-5xl font-extrabold mb-3">Módulo 3</h2>
+        <h3 class="text-2xl md:text-3xl font-semibold mb-5 opacity-90">Gestión de Proyectos Ágiles</h3>
+        <p class="text-base max-w-2xl mx-auto opacity-80 leading-relaxed">Entregar valor de forma iterativa e incremental: el Manifiesto Ágil, Scrum y sus roles, artefactos y eventos.</p>
+    </div>
+</section>
+
+<main class="container mx-auto px-4 md:px-8 py-10 space-y-14">
+
+    <!-- ÁGIL -->
+    <section id="agil" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 3.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">⚡</span>¿Qué es la Gestión Ágil?</h2>
+            <blockquote class="mb-6">Enfoque iterativo e incremental que entrega valor de forma temprana y continua, respondiendo al cambio en lugar de seguir un plan rígido.</blockquote>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">📜</p><p class="font-bold text-green-800 text-sm">Origen (2001)</p><p class="text-xs text-gray-600 mt-1">17 profesionales firman el Manifiesto Ágil.</p></div>
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">🔁</p><p class="font-bold text-blue-800 text-sm">Adaptativo</p><p class="text-xs text-gray-600 mt-1">Responde al cambio.</p></div>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">👥</p><p class="font-bold text-yellow-800 text-sm">Colaborativo</p><p class="text-xs text-gray-600 mt-1">Equipos autoorganizados.</p></div>
+                <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-center"><p class="text-3xl mb-2">🎁</p><p class="font-bold text-purple-800 text-sm">Valor temprano</p><p class="text-xs text-gray-600 mt-1">Entregas frecuentes.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MANIFIESTO -->
+    <section id="manifiesto" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 3.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📜</span>Los 4 Valores del Manifiesto Ágil</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="concept-card"><p class="font-bold text-green-800">🧑‍🤝‍🧑 Individuos e interacciones</p><p class="text-sm text-gray-700">…sobre procesos y herramientas.</p></div>
+                <div class="concept-card"><p class="font-bold text-green-800">💻 Software funcionando</p><p class="text-sm text-gray-700">…sobre documentación extensiva.</p></div>
+                <div class="concept-card"><p class="font-bold text-green-800">🤝 Colaboración con el cliente</p><p class="text-sm text-gray-700">…sobre negociación contractual.</p></div>
+                <div class="concept-card"><p class="font-bold text-green-800">🔄 Respuesta ante el cambio</p><p class="text-sm text-gray-700">…sobre seguir un plan.</p></div>
+            </div>
+            <p class="text-sm text-gray-600 mt-4 italic">Se valoran los elementos de la derecha, pero se valoran <strong>más</strong> los de la izquierda. Los guían 12 principios (valor temprano, bienvenido el cambio, entregas frecuentes, sostenibilidad y mejora continua).</p>
+            <a href="https://agilemanifesto.org/iso/es/manifesto.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;background:#166534;color:#fff;font-weight:700;font-size:.85rem;padding:.55rem 1.1rem;border-radius:9999px;text-decoration:none;">📜 Leer el Manifiesto Ágil original →</a>
+        </div>
+    </section>
+
+    <!-- CICLO -->
+    <section id="ciclo" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 3.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🔁</span>Ciclo de Vida Iterativo e Incremental</h2>
+            <div class="flex flex-wrap items-center gap-2 justify-center mb-4">
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">1</div><p class="text-xs text-center mt-1 text-gray-600">Backlog</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">2</div><p class="text-xs text-center mt-1 text-gray-600">Sprint</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">3</div><p class="text-xs text-center mt-1 text-gray-600">Incremento</p></div>
+                <span class="text-green-500 font-bold text-xl">→</span>
+                <div class="flex flex-col items-center gap-1"><div class="step-circle">4</div><p class="text-xs text-center mt-1 text-gray-600">Retro</p></div>
+                <span class="text-green-500 font-bold text-2xl">↻</span>
+            </div>
+            <p class="text-sm text-gray-600 italic text-center">Cada iteración produce un incremento potencialmente entregable; el ciclo se repite.</p>
+            <div style="margin-top:1.5rem;">
+                <span class="hbadge">Diagrama interactivo</span>
+                <h3 class="h3g">Los eventos del Sprint — haz clic en cada uno</h3>
+                <div class="ibtnrow" id="sp-btns">
+                    <button type="button" class="ibtn active" onclick="spShow(0,this)">📝 Sprint Planning</button>
+                    <button type="button" class="ibtn" onclick="spShow(1,this)">☀️ Daily Scrum</button>
+                    <button type="button" class="ibtn" onclick="spShow(2,this)">🔨 Trabajo del Sprint</button>
+                    <button type="button" class="ibtn" onclick="spShow(3,this)">🎬 Sprint Review</button>
+                    <button type="button" class="ibtn" onclick="spShow(4,this)">🔧 Retrospectiva</button>
+                </div>
+                <div class="ipanel" id="sp-panel"></div>
+                <p class="noteg">Todos los eventos tienen <strong>time-box</strong> (duración máxima fija) y ocurren dentro de un Sprint de 1 a 4 semanas, que se repite. ↻</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRUM -->
+    <section id="scrum" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 3.1 — Scrum</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🏉</span>Marco de Trabajo Scrum</h2>
+            <div class="p-4 bg-green-900 text-white rounded-xl text-sm mb-6"><p><span class="font-bold text-green-300">Pilares:</span> transparencia, inspección y adaptación. Los eventos usan <em>time-boxing</em> (duración fija) para dar ritmo al equipo.</p></div>
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Roles</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="p-4 rounded-xl bg-green-50 border border-green-200"><p class="font-bold text-green-800 mb-1">📌 Product Owner</p><p class="text-xs text-gray-600">Maximiza el valor; gestiona y prioriza el Product Backlog.</p></div>
+                <div class="p-4 rounded-xl bg-blue-50 border border-blue-200"><p class="font-bold text-blue-800 mb-1">🛡️ Scrum Master</p><p class="text-xs text-gray-600">Facilita el proceso y elimina impedimentos.</p></div>
+                <div class="p-4 rounded-xl bg-purple-50 border border-purple-200"><p class="font-bold text-purple-800 mb-1">👨‍💻 Equipo de Desarrollo</p><p class="text-xs text-gray-600">Autoorganizado; construye el incremento.</p></div>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Artefactos</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="concept-card"><p class="font-bold text-green-800">📚 Product Backlog</p><p class="text-sm text-gray-700">Lista ordenada de todo lo necesario para el producto.</p></div>
+                <div class="concept-card"><p class="font-bold text-green-800">🗂️ Sprint Backlog</p><p class="text-sm text-gray-700">Ítems del Sprint más el plan para lograrlos.</p></div>
+                <div class="concept-card"><p class="font-bold text-green-800">📦 Incremento</p><p class="text-sm text-gray-700">Ítems terminados que cumplen la Definición de Hecho.</p></div>
+            </div>
+            <h3 class="font-bold text-gray-900 mb-4 text-lg">Eventos</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-center"><p class="text-2xl mb-1">📝</p><p class="font-bold text-gray-800 text-sm">Sprint Planning</p><p class="text-xs text-gray-500">Planifica el Sprint.</p></div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-center"><p class="text-2xl mb-1">☀️</p><p class="font-bold text-gray-800 text-sm">Daily Scrum</p><p class="text-xs text-gray-500">Sincroniza en 15 min.</p></div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-center"><p class="text-2xl mb-1">🎬</p><p class="font-bold text-gray-800 text-sm">Sprint Review</p><p class="text-xs text-gray-500">Muestra el incremento.</p></div>
+                <div class="p-4 rounded-xl bg-gray-50 border border-gray-200 text-center"><p class="text-2xl mb-1">🔧</p><p class="font-bold text-gray-800 text-sm">Retrospective</p><p class="text-xs text-gray-500">Define mejoras.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- XP / KANBAN -->
+    <section id="otras" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Unidad 3.1</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📋</span>Otras Metodologías: XP y Kanban</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-5 rounded-xl bg-blue-50 border border-blue-200">
+                    <h4 class="font-bold text-blue-800 mb-3">🧪 eXtreme Programming (XP)</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Foco en la excelencia técnica</li><li>• Programación en parejas (pair programming)</li><li>• Desarrollo guiado por pruebas (TDD)</li><li>• Integración continua y refactorización</li></ul>
+                </div>
+                <div class="p-5 rounded-xl bg-green-50 border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-3">📋 Kanban</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Flujo continuo (sin sprints fijos)</li><li>• Tablero visual con columnas</li><li>• Límite de trabajo en progreso (WIP)</li><li>• Optimiza el tiempo de ciclo</li></ul>
+                </div>
+            </div>
+            <div style="margin-top:1.5rem;">
+                <span class="hbadge">Tablero interactivo</span>
+                <h3 class="h3g">Prueba un tablero Kanban — arrastra las tarjetas</h3>
+                <div class="kb-wrap">
+                    <div class="kb-col" ondragover="kbOver(event)" ondragleave="kbLeave(event)" ondrop="kbDrop(event)" data-col="todo">
+                        <h5>📋 Por hacer <span id="c-todo">0</span></h5>
+                        <div class="kb-card" id="k1" draggable="true" ondragstart="kbDrag(event)">Diseñar pantalla de login</div><div class="kb-card" id="k2" draggable="true" ondragstart="kbDrag(event)">Conectar la base de datos</div><div class="kb-card" id="k3" draggable="true" ondragstart="kbDrag(event)">Formulario de matrícula</div>
+                    </div>
+                    <div class="kb-col" ondragover="kbOver(event)" ondragleave="kbLeave(event)" ondrop="kbDrop(event)" data-col="doing" data-wip="2">
+                        <h5>🔨 En progreso <span id="c-doing">0</span> <span style="font-weight:600;color:#9ca3af;">(WIP máx 2)</span></h5>
+                        <div class="kb-card" id="k4" draggable="true" ondragstart="kbDrag(event)">Integrar pasarela de pago</div>
+                    </div>
+                    <div class="kb-col" ondragover="kbOver(event)" ondragleave="kbLeave(event)" ondrop="kbDrop(event)" data-col="done">
+                        <h5>✅ Hecho <span id="c-done">0</span></h5>
+                        <div class="kb-card" id="k5" draggable="true" ondragstart="kbDrag(event)">Levantar requisitos</div>
+                    </div>
+                </div>
+                <p class="noteg">El <strong>límite WIP</strong> (Work In Progress) evita empezar demasiadas cosas a la vez: si "En progreso" supera 2, el contador se pone en rojo.</p>
+            </div>
+        </div>
+    </section>
+
+        <!-- HERRAMIENTAS -->
+    <section id="herramientas" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Herramientas</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🛠️</span>Herramientas para gestionar proyectos ágiles</h2>
+            <p class="text-sm text-gray-600 mb-6">Aplicaciones reales que puedes usar para tu backlog y tablero. Muchas tienen plan gratuito para equipos pequeños o estudiantes.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <a href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#dbeafe;color:#1d4ed8;">🟦</div>
+                    <div><div style="font-weight:700;color:#14532d;">Jira</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">El estándar de la industria para Scrum y Kanban: backlogs, sprints e informes. Plan gratuito hasta 10 personas.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://trello.com" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#dcfce7;color:#166534;">📋</div>
+                    <div><div style="font-weight:700;color:#14532d;">Trello</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Tableros Kanban simples con tarjetas arrastrables. Ideal para empezar; tiene plan gratuito.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://asana.com" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#fee2e2;color:#991b1b;">🎯</div>
+                    <div><div style="font-weight:700;color:#14532d;">Asana</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Gestión de tareas y proyectos con vistas de lista, tablero y cronograma.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://monday.com" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#f3e8ff;color:#6b21a8;">🟪</div>
+                    <div><div style="font-weight:700;color:#14532d;">monday.com</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Tableros visuales muy personalizables con automatizaciones para coordinar al equipo.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://clickup.com" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#ede9fe;color:#5b21b6;">🚀</div>
+                    <div><div style="font-weight:700;color:#14532d;">ClickUp</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Todo en uno: tareas, documentos, metas y tableros en un solo lugar.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://www.notion.com" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#f3f4f6;color:#374151;">📝</div>
+                    <div><div style="font-weight:700;color:#14532d;">Notion</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Documentos + bases de datos + tableros en un mismo espacio de trabajo.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://github.com/features/issues" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#f3f4f6;color:#111827;">💻</div>
+                    <div><div style="font-weight:700;color:#14532d;">GitHub Projects</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Tableros ligados directamente al código; ideal para equipos de desarrollo.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+                <a href="https://miro.com" target="_blank" rel="noopener" class="dl-card">
+                    <div class="dl-ico" style="background:#fef9c3;color:#854d0e;">🧑‍🎨</div>
+                    <div><div style="font-weight:700;color:#14532d;">Miro</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Pizarra colaborativa para retrospectivas, mapas de historias y planificación.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Ir al sitio →</div></div>
+                </a>
+            </div>
+            <p class="noteg" style="text-align:left;">💡 Para el proyecto grupal, <strong>Trello</strong> o <strong>Jira</strong> son excelentes puntos de partida: uno por su sencillez y el otro por ser el estándar profesional.</p>
+        </div>
+    </section>
+
+    <!-- COMPARACIÓN -->
+    <section id="comparacion" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Síntesis</span>
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">⚖️</span>Tradicional vs. Ágil</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-5 rounded-xl bg-gray-50 border border-gray-200">
+                    <h4 class="font-bold text-gray-800 mb-3">🧱 Tradicional</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Alcance fijo, plan detallado</li><li>• Entrega al final</li><li>• Cambios controlados y costosos</li><li>• Documentación extensa</li></ul>
+                </div>
+                <div class="p-5 rounded-xl bg-green-50 border border-green-200">
+                    <h4 class="font-bold text-green-800 mb-3">⚡ Ágil</h4>
+                    <ul class="text-sm text-gray-700 space-y-2"><li>• Alcance flexible, plan adaptativo</li><li>• Entregas incrementales</li><li>• Cambios bienvenidos</li><li>• Documentación mínima suficiente</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- EJEMPLO -->
+    <section id="ejemplo" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Ejemplo guiado</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🧩</span>El proyecto en modo ágil</h2>
+            <p class="text-sm text-gray-600 mb-6">El <strong>&ldquo;Portal de matrícula&rdquo;</strong> gestionado con Scrum: historias, sprint y avance.</p>
+            <h3 class="font-bold text-gray-900 mb-3 text-lg">Historias de usuario</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                <div class="concept-card"><p class="text-sm text-gray-700"><strong>Como</strong> estudiante <strong>quiero</strong> matricularme en línea <strong>para</strong> evitar filas.</p></div>
+                <div class="concept-card"><p class="text-sm text-gray-700"><strong>Como</strong> estudiante <strong>quiero</strong> ver mi horario <strong>para</strong> organizar mis clases.</p></div>
+                <div class="concept-card"><p class="text-sm text-gray-700"><strong>Como</strong> estudiante <strong>quiero</strong> pagar en línea <strong>para</strong> no ir a caja.</p></div>
+            </div>
+            <div class="igrid2">
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2 text-lg">Gráfico Burndown</h3>
+                    <p class="text-sm text-gray-600 mb-3">Muestra el trabajo restante del Sprint. Si la línea real va por encima de la ideal, el equipo va atrasado.</p>
+                    <svg viewBox="0 0 460 240" width="100%" style="max-width:460px;"><line x1="45" y1="20" x2="45" y2="200" stroke="#9ca3af"/><line x1="45" y1="200" x2="440" y2="200" stroke="#9ca3af"/><text x="16" y="110" text-anchor="middle" font-size="9" fill="#6b7280" transform="rotate(-90 16 110)">Puntos restantes</text><text x="242" y="230" text-anchor="middle" font-size="9" fill="#6b7280">Días del Sprint</text><text x="45.0" y="214" text-anchor="middle" font-size="8" fill="#9ca3af">0</text><text x="124.0" y="214" text-anchor="middle" font-size="8" fill="#9ca3af">2</text><text x="203.0" y="214" text-anchor="middle" font-size="8" fill="#9ca3af">4</text><text x="282.0" y="214" text-anchor="middle" font-size="8" fill="#9ca3af">6</text><text x="361.0" y="214" text-anchor="middle" font-size="8" fill="#9ca3af">8</text><text x="440.0" y="214" text-anchor="middle" font-size="8" fill="#9ca3af">10</text><polyline points="45.0,20.0 84.5,38.0 124.0,56.0 163.5,74.0 203.0,92.0 242.5,110.0 282.0,128.0 321.5,146.0 361.0,164.0 400.5,182.0 440.0,200.0" fill="none" stroke="#9ca3af" stroke-width="2" stroke-dasharray="4 3"/><polyline points="45.0,20.0 84.5,24.5 124.0,33.5 163.5,47.0 203.0,65.0 242.5,78.5 282.0,105.5 321.5,132.5 361.0,159.5 400.5,182.0 440.0,200.0" fill="none" stroke="#16a34a" stroke-width="2.5"/><circle cx="45" cy="20" r="0"/><text x="300" y="60" font-size="9" fill="#9ca3af">— — ideal</text><text x="300" y="74" font-size="9" fill="#16a34a">—— real</text></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2 text-lg">Definición de Hecho (DoD)</h3>
+                    <div class="p-4 rounded-xl bg-green-50 border border-green-200">
+                        <p class="text-sm text-gray-700">✔ Código revisado por un compañero<br>✔ Pruebas pasan correctamente<br>✔ Funciona en el ambiente de prueba<br>✔ Documentación mínima actualizada</p>
+                    </div>
+                    <p class="noteg">La DoD define cuándo una historia está <strong>realmente terminada</strong>, no solo "casi lista".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CASOS -->
+    <section id="casos" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Casos reales</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📚</span>Lo ágil en la práctica</h2>
+            <p class="text-sm text-gray-600 mb-6">Haz clic en cada caso para ver qué nos enseña.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="icase" onclick="this.classList.toggle('open')"><div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;"><span style="font-weight:700;color:#14532d;font-size:.95rem;">Spotify — modelo de squads</span><span class="itag ok">Éxito</span></div><div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Escalado ágil</div><div class="icase-body"><p><strong>Qué pasó:</strong> popularizó una forma de organizar equipos ágiles autónomos (<em>squads, tribes, chapters</em>) que inspiró a muchas empresas.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> lo ágil se <strong>adapta</strong> a cada organización; la propia Spotify advirtió que no es una receta para copiar tal cual.</p></div><div style="margin-top:.6rem;"><span style="color:#16a34a;font-weight:700;font-size:.72rem;">▼ ver detalle</span></div></div><div class="icase" onclick="this.classList.toggle('open')"><div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;"><span style="font-weight:700;color:#14532d;font-size:.95rem;">Rescate de Healthcare.gov</span><span class="itag ok">Recuperación</span></div><div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">De cascada fallida a entregas ágiles</div><div class="icase-body"><p><strong>Qué pasó:</strong> tras un lanzamiento fallido, un equipo aplicó prácticas ágiles —priorizar, iterar y entregar por partes— y estabilizó el sistema en semanas.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> entregar en iteraciones cortas reduce el riesgo y permite corregir rápido.</p></div><div style="margin-top:.6rem;"><span style="color:#16a34a;font-weight:700;font-size:.72rem;">▼ ver detalle</span></div></div><div class="icase" onclick="this.classList.toggle('open')"><div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;"><span style="font-weight:700;color:#14532d;font-size:.95rem;">Informes de la industria (CHAOS)</span><span class="itag info">Dato</span></div><div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Ágil vs. cascada — datos</div><div class="icase-body"><p><strong>Qué dicen:</strong> estudios de la industria reportan que los proyectos ágiles suelen tener <strong>mayor tasa de éxito</strong> que los de cascada, especialmente en proyectos grandes.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> el feedback temprano y frecuente ayuda a acertar con lo que el cliente realmente necesita.</p></div><div style="margin-top:.6rem;"><span style="color:#16a34a;font-weight:700;font-size:.72rem;">▼ ver detalle</span></div></div><div class="icase" onclick="this.classList.toggle('open')"><div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;"><span style="font-weight:700;color:#14532d;font-size:.95rem;">"Agile teatral" (cargo cult)</span><span class="itag bad">Lección</span></div><div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">Rituales sin valores</div><div class="icase-body"><p><strong>Qué pasa:</strong> algunos equipos hacen dailies y sprints pero sin colaboración real, sin entregar valor ni mejorar. Es ágil solo de nombre.</p><p style='margin-top:.5rem;'><strong>Lección:</strong> los <strong>valores</strong> del Manifiesto importan más que las ceremonias.</p></div><div style="margin-top:.6rem;"><span style="color:#16a34a;font-weight:700;font-size:.72rem;">▼ ver detalle</span></div></div></div>
+            <p class="noteg" style="text-align:center;">Información según reportes públicos; se cita con fines didácticos.</p>
+        </div>
+    </section>
+
+    <!-- SIMULADOR -->
+    <section id="simulador" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Practica decidiendo</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">🎮</span>Simulador: dentro de un Sprint</h2>
+            <p class="text-sm text-gray-600 mb-6">Eres el Scrum Master. Elige una decisión y observa el efecto en el valor, la calidad, la moral del equipo y la predictibilidad.</p>
+            <div id="sim-box"></div>
+        </div>
+    </section>
+
+    <!-- PLANTILLAS -->
+    <section id="plantillas" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Recursos descargables</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📥</span>Plantillas ágiles</h2>
+            <p class="text-sm text-gray-600 mb-6">Para armar tu backlog y organizar el proyecto grupal.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="Plantillas/Plantillas_Proyecto_GPI.xlsx" class="dl-card" download>
+                    <div class="dl-ico" style="background:#dcfce7;color:#166534;">📊</div>
+                    <div><div style="font-weight:700;color:#14532d;">Backlog Scrum (en el cuaderno)</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Excel · hoja "Backlog" con historias de usuario, prioridad, estimación y sprint.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Descargar .xlsx →</div></div>
+                </a>
+                <a href="Plantillas/Acta_de_Constitucion.docx" class="dl-card" download>
+                    <div class="dl-ico" style="background:#dbeafe;color:#1d4ed8;">📄</div>
+                    <div><div style="font-weight:700;color:#14532d;">Acta de Constitución</div>
+                    <div style="font-size:.8rem;color:#6b7280;margin-top:.2rem;">Word · útil también en proyectos ágiles para enmarcar el proyecto.</div>
+                    <div style="font-size:.78rem;font-weight:700;color:#166534;margin-top:.5rem;">Descargar .docx →</div></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Ponte a prueba</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">❓</span>Autoevaluación del Módulo 3</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;">
+                <p class="text-sm text-gray-600" style="margin:0;">10 preguntas. Elige una opción y verás la respuesta al instante.</p>
+                <div style="display:flex;align-items:center;gap:.75rem;"><span style="font-weight:800;color:#166534;">Aciertos: <span id="quiz-score">0</span>/10</span><button type="button" class="ibtn" onclick="resetQuiz()">↻ Reiniciar</button></div>
+            </div>
+            <div id="quiz-box"></div>
+        </div>
+    </section>
+
+    <!-- SIGLAS -->
+    <section id="siglas" class="animate-on-scroll">
+        <div class="card p-6 md:p-8">
+            <span class="section-badge">Referencia</span>
+            <h2 class="card-title mb-2"><span class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center text-xl">📖</span>Glosario de siglas y términos ágiles</h2>
+            <p class="text-sm text-gray-600 mb-6">Haz clic en cada término para ver su significado.</p>
+            <div class="glo-grid" id="glo-grid"></div>
+        </div>
+    </section>
+
+    <!-- RESUMEN -->
+    <section id="resumen" class="animate-on-scroll">
+        <div class="card p-6 md:p-8 bg-gradient-to-br from-green-50 to-white">
+            <h2 class="card-title mb-6"><span class="w-10 h-10 rounded-xl bg-green-700 flex items-center justify-center text-xl text-white">✔️</span>Resumen del Módulo 3</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm"><strong>Ágil</strong> entrega valor de forma iterativa e incremental.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El <strong>Manifiesto Ágil</strong> define 4 valores y 12 principios.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm"><strong>Scrum</strong> organiza el trabajo en Sprints con roles, artefactos y eventos.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm"><strong>XP</strong> aporta prácticas técnicas; <strong>Kanban</strong> optimiza el flujo.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El enfoque se elige según la <strong>estabilidad de los requisitos</strong>.</p></div>
+                <div class="flex gap-3"><span class="text-green-600 mt-0.5">✔</span><p class="text-sm">El <strong>Proyecto Grupal</strong> integra la planificación tradicional con un backlog ágil.</p></div>
+            </div>
+            <div class="flex flex-wrap gap-3 justify-between pt-4 border-t border-green-200">
+                <a href="Mod2_ProyectosTradicionales.html" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-sm">← 🧱 Módulo 2</a>
+                <a href="#intro" class="px-5 py-2.5 rounded-xl bg-green-100 hover:bg-green-200 text-green-800 font-semibold text-sm">↑ Inicio del Módulo</a>
+                <a href="Diagrama_GPI.html" class="px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-600 text-white font-semibold text-sm">🏠 Inicio del Curso</a>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="header-gradient text-white mt-12 py-6">
+    <div class="container mx-auto px-6 text-center">
+        <p class="font-bold mb-1">GPI 8469 — Módulo 3 · Grupo 1LS241 · II Semestre 2026</p>
+        <p class="text-green-200 text-sm mb-3">Universidad Tecnológica de Panamá · FISC · Mgtr. Henry D. De Gracia R.</p>
+        <div class="flex flex-wrap justify-center gap-3 text-sm">
+            <a href="Diagrama_GPI.html" class="text-green-200 hover:text-white">🏠 Inicio</a>
+            <a href="Mod1_Fundamentos.html" class="text-green-200 hover:text-white">🧭 Mód. 1</a>
+            <a href="Mod2_ProyectosTradicionales.html" class="text-green-200 hover:text-white">🧱 Mód. 2</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var esc=function(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+  function setActive(b){if(!b)return;b.parentNode.querySelectorAll('.ibtn').forEach(function(x){x.classList.remove('active');});b.classList.add('active');}
+
+  // Sprint events
+  var SP=[
+    {t:'📝 Sprint Planning',d:'El equipo planifica el Sprint: qué se hará (objetivo) y cómo. <strong>Time-box:</strong> hasta 8 h para un Sprint de 1 mes.'},
+    {t:'☀️ Daily Scrum',d:'Reunión diaria de <strong>15 minutos</strong>: el equipo se sincroniza y detecta impedimentos. La facilita el equipo, no es un reporte al jefe.'},
+    {t:'🔨 Trabajo del Sprint',d:'Durante el Sprint (1–4 semanas) el equipo construye el <strong>incremento</strong> según el Sprint Backlog.'},
+    {t:'🎬 Sprint Review',d:'Se muestra el incremento a los interesados y se recoge <strong>feedback</strong>. <strong>Time-box:</strong> hasta 4 h.'},
+    {t:'🔧 Retrospectiva',d:'El equipo reflexiona sobre cómo <strong>mejorar</strong> su forma de trabajar. <strong>Time-box:</strong> hasta 3 h.'}
+  ];
+  window.spShow=function(i,b){setActive(b);$('sp-panel').innerHTML='<h4>'+SP[i].t+'</h4>'+SP[i].d;};
+  if($('sp-panel'))spShow(0,document.querySelector('#sp-btns .ibtn'));
+
+  // Kanban drag & drop
+  window.kbDrag=function(e){e.dataTransfer.setData('text',e.target.id);};
+  window.kbOver=function(e){e.preventDefault();e.currentTarget.classList.add('over');};
+  window.kbLeave=function(e){e.currentTarget.classList.remove('over');};
+  window.kbDrop=function(e){e.preventDefault();e.currentTarget.classList.remove('over');
+    var id=e.dataTransfer.getData('text');var card=document.getElementById(id);if(card)e.currentTarget.appendChild(card);kbCount();};
+  function kbCount(){['todo','doing','done'].forEach(function(c){
+    var col=document.querySelector('[data-col="'+c+'"]');if(!col)return;
+    var n=col.querySelectorAll('.kb-card').length;var el=$('c-'+c);if(el)el.textContent=n;
+    if(c==='doing'){var wip=parseInt(col.getAttribute('data-wip'),10);if(el)el.classList.toggle('kb-warn',n>wip);}});}
+  if(document.querySelector('.kb-wrap'))kbCount();
+
+  // Simulador
+  var SIM=[
+    {t:'A mitad del Sprint, el Product Owner quiere meter una historia urgente.',
+     o:[{x:'La dejo para el próximo Sprint',ef:{Valor:'eq',Calidad:'eq',Moral:'eq',Predictibilidad:'up'},l:'Correcto: el Sprint Backlog no se cambia a la ligera; protege el foco y la predictibilidad.'},
+        {x:'Negocio sacar otra historia de igual tamaño',ef:{Valor:'eq',Calidad:'eq',Moral:'eq',Predictibilidad:'eq'},l:'Válido: si entra algo, sale algo. Se mantiene el alcance del Sprint.'},
+        {x:'La agrego encima de todo lo demás',ef:{Valor:'down',Calidad:'down',Moral:'down',Predictibilidad:'down'},l:'Sobrecargar el Sprint suele bajar calidad y moral, y rompe la predictibilidad.'}]},
+    {t:'El equipo no terminará todo el Sprint Backlog a tiempo.',
+     o:[{x:'Muevo lo no terminado al siguiente Sprint',ef:{Valor:'eq',Calidad:'eq',Moral:'eq',Predictibilidad:'up'},l:'Correcto: se entrega lo que sí está "Hecho" y lo demás vuelve al backlog.'},
+        {x:'Recorto pruebas para terminar',ef:{Valor:'eq',Calidad:'down',Moral:'down',Predictibilidad:'eq'},l:'Bajar la calidad genera deuda técnica y defectos; evita saltarte la DoD.'},
+        {x:'Pido horas extra varios días',ef:{Valor:'up',Calidad:'eq',Moral:'down',Predictibilidad:'eq'},l:'Puede funcionar una vez, pero el ritmo insostenible desgasta al equipo.'}]},
+    {t:'El Daily se volvió un reporte de 40 min al Scrum Master.',
+     o:[{x:'Lo reenfoco: 15 min, equipo e impedimentos',ef:{Valor:'up',Calidad:'eq',Moral:'up',Predictibilidad:'up'},l:'Correcto: el Daily es del equipo para sincronizarse, no un informe de estado.'},
+        {x:'Lo elimino porque toma mucho tiempo',ef:{Valor:'down',Calidad:'eq',Moral:'down',Predictibilidad:'down'},l:'Sin sincronización aparecen bloqueos ocultos; mejor mejorarlo que quitarlo.'},
+        {x:'Lo dejo tal cual',ef:{Valor:'down',Calidad:'eq',Moral:'down',Predictibilidad:'eq'},l:'Una reunión larga y poco útil desmotiva; conviene reencauzarla.'}]}
+  ];
+  var simIdx=0,AR={up:{s:'▲ sube',c:'#16a34a'},down:{s:'▼ baja',c:'#dc2626'},eq:{s:'= igual',c:'#6b7280'}};
+  function renderSim(){var sc=SIM[simIdx];
+    var opts=sc.o.map(function(o,k){return '<button type="button" class="qopt" onclick="simPick('+k+')">'+esc(o.x)+'</button>';}).join('');
+    $('sim-box').innerHTML='<div style="font-size:.72rem;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem;">Escenario '+(simIdx+1)+' de '+SIM.length+'</div><div class="ipanel" style="margin-bottom:1rem;"><strong>'+esc(sc.t)+'</strong></div>'+opts+'<div id="sim-res"></div>';}
+  window.simPick=function(k){var o=SIM[simIdx].o[k];
+    var chips=Object.keys(o.ef).map(function(v){var a=AR[o.ef[v]];return '<span class="eff" style="color:'+a.c+';">'+v+' '+a.s+'</span>';}).join('');
+    $('sim-res').innerHTML='<div class="ipanel" style="margin-top:.75rem;"><h4>Consecuencia</h4><div style="margin:.25rem 0 .6rem;">'+chips+'</div>'+esc(o.l)+'<div style="margin-top:.8rem;"><button type="button" class="ibtn" onclick="simNext()">Siguiente escenario →</button></div></div>';};
+  window.simNext=function(){simIdx=(simIdx+1)%SIM.length;renderSim();};
+  if($('sim-box'))renderSim();
+
+  // Quiz
+  var QUIZ=[
+    {q:'El Manifiesto Ágil valora "individuos e interacciones" por encima de:',o:['El cliente','Procesos y herramientas','El código','La calidad'],c:1,e:'Valora a las personas y su interacción sobre los procesos y las herramientas.'},
+    {q:'¿Cuántos valores tiene el Manifiesto Ágil?',o:['3','4','12','7'],c:1,e:'Son 4 valores (y 12 principios).'},
+    {q:'¿Quién prioriza el Product Backlog?',o:['Scrum Master','Product Owner','El equipo','El patrocinador'],c:1,e:'El Product Owner ordena el backlog para maximizar el valor.'},
+    {q:'El Scrum Master principalmente:',o:['Da órdenes al equipo','Facilita el proceso y elimina impedimentos','Escribe el código','Aprueba el presupuesto'],c:1,e:'Es un facilitador (líder-servidor), no el jefe del equipo.'},
+    {q:'La duración típica de un Sprint es:',o:['1 día','1 a 4 semanas','6 meses','1 año'],c:1,e:'Un Sprint dura de 1 a 4 semanas (time-box fijo).'},
+    {q:'El Daily Scrum dura aproximadamente:',o:['15 minutos','1 hora','media jornada','lo que haga falta'],c:0,e:'El Daily tiene un time-box de 15 minutos.'},
+    {q:'¿Qué artefacto es la lista ordenada de todo lo necesario para el producto?',o:['Sprint Backlog','Incremento','Product Backlog','Burndown'],c:2,e:'El Product Backlog contiene todo el trabajo del producto, priorizado.'},
+    {q:'En Kanban, "WIP" se refiere a:',o:['El presupuesto','El límite de trabajo en progreso','El número de sprints','La velocidad'],c:1,e:'WIP = Work In Progress; se limita para mejorar el flujo.'},
+    {q:'La "Definición de Hecho" (DoD) sirve para:',o:['Priorizar el backlog','Saber cuándo un ítem está realmente terminado','Estimar costos','Elegir al Product Owner'],c:1,e:'La DoD fija los criterios de calidad para considerar terminado un ítem.'},
+    {q:'Los tres pilares de Scrum son:',o:['Roles, artefactos y eventos','Transparencia, inspección y adaptación','Alcance, tiempo y costo','Planificar, hacer y revisar'],c:1,e:'Los pilares empíricos de Scrum son transparencia, inspección y adaptación.'}
+  ];
+  var answered={};
+  function renderQuiz(){answered={};$('quiz-score').textContent='0';
+    $('quiz-box').innerHTML=QUIZ.map(function(it,qi){
+      var opts=it.o.map(function(t,oi){return '<button type="button" class="qopt" data-q="'+qi+'" data-o="'+oi+'" onclick="quizPick('+qi+','+oi+')">'+esc(t)+'</button>';}).join('');
+      return '<div class="card" style="padding:1rem 1.15rem;margin-bottom:1rem;box-shadow:none;"><div style="font-weight:700;color:#14532d;margin-bottom:.6rem;font-size:.95rem;">'+(qi+1)+'. '+esc(it.q)+'</div>'+opts+'<div class="qexp" id="qexp-'+qi+'" style="display:none;"></div></div>';}).join('');}
+  window.quizPick=function(qi,oi){if(answered[qi]!==undefined)return;answered[qi]=oi;var it=QUIZ[qi];
+    document.querySelectorAll('.qopt[data-q="'+qi+'"]').forEach(function(b){var o=+b.getAttribute('data-o');b.disabled=true;if(o===it.c)b.classList.add('correct');if(o===oi&&oi!==it.c)b.classList.add('wrong');});
+    var exp=$('qexp-'+qi),ok=(oi===it.c);exp.style.display='block';exp.innerHTML=(ok?'✅ <strong>¡Correcto!</strong> ':'❌ <strong>Incorrecto.</strong> ')+esc(it.e);
+    var sc=0;Object.keys(answered).forEach(function(k){if(answered[k]===QUIZ[k].c)sc++;});$('quiz-score').textContent=sc;
+    if(Object.keys(answered).length===QUIZ.length){var m=sc>=8?'¡Excelente dominio! 🎉':sc>=6?'Vas bien, repasa lo que falló. 💪':'Repasa el módulo y vuelve a intentarlo. 📖';
+      var d=document.createElement('div');d.className='ipanel';d.style.marginTop='.5rem';d.innerHTML='<h4>Resultado final: '+sc+'/'+QUIZ.length+'</h4>'+m;$('quiz-box').appendChild(d);}};
+  window.resetQuiz=function(){renderQuiz();};
+  if($('quiz-box'))renderQuiz();
+
+  // Glosario
+  var GLO=[
+    ['PO','Product Owner','Rol de Scrum que prioriza el backlog y maximiza el valor del producto.'],
+    ['SM','Scrum Master','Facilita el proceso, protege al equipo y elimina impedimentos.'],
+    ['DoD','<i>Definition of Done</i> (Definición de Hecho)','Criterios que un ítem debe cumplir para considerarse terminado.'],
+    ['WIP','<i>Work In Progress</i>','Trabajo en progreso; en Kanban se limita para mejorar el flujo.'],
+    ['TDD','<i>Test-Driven Development</i>','Desarrollo guiado por pruebas: se escribe la prueba antes que el código.'],
+    ['CI','<i>Continuous Integration</i>','Integración continua: fusionar y probar el código con frecuencia.'],
+    ['XP','<i>eXtreme Programming</i>','Metodología ágil centrada en la excelencia técnica.'],
+    ['MVP','<i>Minimum Viable Product</i>','Producto Mínimo Viable: la versión más simple que ya aporta valor.'],
+    ['Sprint','Iteración','Periodo de tiempo fijo (1–4 semanas) que produce un incremento.'],
+    ['Backlog','Product / Sprint Backlog','Lista priorizada de trabajo pendiente del producto o del sprint.'],
+    ['PSM / CSM','<i>Professional / Certified Scrum Master</i>','Certificaciones de Scrum Master (Scrum.org / Scrum Alliance).'],
+    ['PSPO / CSPO','<i>Professional / Certified Scrum Product Owner</i>','Certificaciones de Product Owner.'],
+    ['PMI-ACP','<i>PMI Agile Certified Practitioner</i>','Certificación ágil del PMI.']
+  ];
+  if($('glo-grid'))$('glo-grid').innerHTML=GLO.map(function(g){
+    return '<div class="glo-card" onclick="this.classList.toggle(\'open\')"><div class="glo-sigla">'+g[0]+'</div><div class="glo-nom">'+g[1]+'</div><div class="glo-meaning">'+g[2]+'</div><div style="font-size:.68rem;color:#16a34a;font-weight:700;margin-top:.4rem;">ver significado ▾</div></div>';
+  }).join('');
+})();
+</script>
+<div class="pr-ov" id="pr-ov">
+  <button class="pr-close" onclick="presClose()" aria-label="Cerrar">✕</button>
+  <div class="pr-stage"><div id="pr-slide"></div></div>
+  <div class="pr-bar">
+    <button class="pr-nav" onclick="presPrev()" aria-label="Anterior">‹</button>
+    <span class="pr-count" id="pr-count">1 / 1</span>
+    <button class="pr-nav" onclick="presNext()" aria-label="Siguiente">›</button>
+    <div class="pr-prog"><div class="pr-fill" id="pr-fill"></div></div>
+  </div>
+  <div class="pr-hint">← → o barra espaciadora para avanzar · Esc para salir</div>
+</div>
+<button id="pr-btn" onclick="present()">▶ Presentar</button>
+<script>
+(function(){
+  var SLIDES=[{"badge": "Módulo 3", "t": "Gestión de Proyectos Ágiles", "s": "GPI 8469 · Semanas 13–15"}, {"t": "¿Qué es ágil?", "b": ["Iterativo e incremental", "Entrega valor temprano y continuo", "Responde al cambio", "Equipos autoorganizados"]}, {"t": "Manifiesto Ágil (2001)", "two": [["Se valora más", ["Individuos e interacciones", "Software funcionando", "Colaboración con el cliente", "Respuesta al cambio"]], ["…sobre", ["Procesos y herramientas", "Documentación extensa", "Negociación contractual", "Seguir un plan"]]]}, {"t": "Ciclo iterativo", "b": ["Product Backlog → Sprint", "Cada Sprint produce un Incremento", "Sprint Review y Retrospectiva", "El ciclo se repite"]}, {"t": "Scrum — Roles", "b": ["Product Owner — prioriza el valor", "Scrum Master — facilita y remueve obstáculos", "Equipo de Desarrollo — construye el incremento"]}, {"t": "Scrum — Artefactos", "b": ["Product Backlog", "Sprint Backlog", "Incremento (cumple la Definición de Hecho)"]}, {"t": "Scrum — Eventos (time-box)", "b": ["Sprint Planning", "Daily Scrum (15 minutos)", "Sprint Review", "Retrospectiva"]}, {"t": "XP y Kanban", "two": [["🧪 XP", ["Excelencia técnica", "Pair programming", "TDD", "Integración continua"]], ["📋 Kanban", ["Flujo continuo", "Tablero visual", "Límite WIP", "Optimiza el tiempo de ciclo"]]]}, {"t": "Tradicional vs. Ágil", "two": [["🧱 Tradicional", ["Alcance fijo", "Entrega al final", "Cambios costosos"]], ["⚡ Ágil", ["Alcance flexible", "Entregas incrementales", "Cambios bienvenidos"]]]}, {"t": "En resumen", "b": ["Ágil entrega valor iterativamente", "Manifiesto: 4 valores, 12 principios", "Scrum: roles, artefactos y eventos", "El enfoque se elige según los requisitos"]}];
+  var cur=0;
+  function render(){var s=SLIDES[cur],h='';
+    if(s.badge)h+='<div class="pr-badge">'+s.badge+'</div>';
+    h+='<h1 class="pr-title">'+s.t+'</h1>';
+    if(s.s)h+='<div class="pr-sub">'+s.s+'</div>';
+    if(s.two){h+='<div class="pr-two">';s.two.forEach(function(c){h+='<div class="pr-col"><h3>'+c[0]+'</h3><ul>'+c[1].map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul></div>';});h+='</div>';}
+    else if(s.b){h+='<ul class="pr-list">'+s.b.map(function(i){return '<li>'+i+'</li>';}).join('')+'</ul>';}
+    document.getElementById('pr-slide').innerHTML=h;
+    document.getElementById('pr-count').textContent=(cur+1)+' / '+SLIDES.length;
+    document.getElementById('pr-fill').style.width=((cur+1)/SLIDES.length*100)+'%';}
+  window.present=function(){cur=0;render();document.getElementById('pr-ov').classList.add('open');document.addEventListener('keydown',key);};
+  window.presClose=function(){document.getElementById('pr-ov').classList.remove('open');document.removeEventListener('keydown',key);};
+  window.presNext=function(){if(cur<SLIDES.length-1){cur++;render();}};
+  window.presPrev=function(){if(cur>0){cur--;render();}};
+  function key(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();window.presNext();}else if(e.key==='ArrowLeft'){window.presPrev();}else if(e.key==='Escape'){window.presClose();}}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Siglas con títulos · GPI Parcial 3</title>
+<style>
+:root{
+  --bg:#0a1410; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --dim:#a9c2b6; --faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842;
+  --amber:#f5b942; --amber-dim:#4a3510; --red:#f38080; --red-dim:#4a1f1f;
+  --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.4;padding-bottom:40px;}
+h1,h2,p{margin:0;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:20;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.hd{max-width:760px;margin:0 auto;padding:10px 16px 8px;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:1.05rem;flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.practice{
+  border:1px solid var(--line);background:var(--surface);color:var(--dim);
+  border-radius:30px;padding:8px 12px;font-size:.75rem;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;
+}
+.practice.on{background:var(--amber);border-color:var(--amber);color:#2a1c08;}
+nav.chips{max-width:760px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;text-decoration:none;font-size:.72rem;font-weight:700;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px 11px;}
+
+main{max-width:760px;margin:0 auto;padding:4px 16px 0;}
+.hint{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;}
+
+.part-label{margin:30px 0 -6px;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#06140c;background:var(--accent);border-radius:8px;padding:6px 10px;display:inline-block;}
+/* SECCIONES */
+section{margin-top:22px;scroll-margin-top:100px;}
+section h2{font-size:.72rem;font-family:var(--mono);letter-spacing:.06em;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+section h2::after{content:"";flex:1;height:1px;background:var(--line);}
+.grid{display:grid;grid-template-columns:1fr;gap:7px;}
+@media (min-width:620px){.grid{grid-template-columns:1fr 1fr;}}
+
+/* TARJETA DE SIGLA */
+.s{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:11px;align-items:flex-start;cursor:default;}
+.k{
+  font-family:var(--mono);font-weight:800;font-size:.9rem;letter-spacing:.03em;color:var(--accent);
+  background:var(--accent-dim);border-radius:8px;padding:5px 8px;flex-shrink:0;min-width:58px;text-align:center;
+}
+.k.c{color:var(--cyan);background:var(--cyan-dim);}
+.k.a{color:var(--amber);background:var(--amber-dim);}
+.k.v{color:var(--violet);background:var(--violet-dim);}
+.k.r{color:var(--red);background:var(--red-dim);}
+.b{flex:1;min-width:0;}
+.x{font-size:.84rem;color:var(--text);}
+.x b{color:var(--accent);}
+.m{font-size:.74rem;color:var(--faint);font-style:italic;margin-top:3px;}
+
+/* CONFUSIONES */
+.vs{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:.8rem;}
+.vs .l{color:var(--text);}
+.vs .r{color:var(--text);text-align:right;}
+.vs .l b,.vs .r b{font-family:var(--mono);color:var(--cyan);display:block;font-size:.82rem;}
+.vs .o{font-family:var(--mono);font-size:.68rem;color:var(--red);}
+
+/* NÚMEROS */
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+@media (min-width:620px){.nums{grid-template-columns:repeat(4,1fr);}}
+.n{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;}
+.n .v{font-family:var(--mono);font-size:1.3rem;font-weight:800;color:var(--amber);}
+.n .t{font-size:.7rem;color:var(--dim);margin-top:2px;}
+
+.tt{font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.02em;color:var(--cyan);margin-bottom:4px;line-height:1.35;}
+/* MODO PRÁCTICA */
+body.quiz .s{cursor:pointer;}
+body.quiz .s .b > :not(.tt),body.quiz .vs .l span,body.quiz .vs .r span,body.quiz .n .t{filter:blur(6px);opacity:.5;transition:filter .2s,opacity .2s;user-select:none;}
+body.quiz .s.show .b > :not(.tt),body.quiz .vs.show .l span,body.quiz .vs.show .r span,body.quiz .n.show .t{filter:none;opacity:1;}
+body.quiz .vs,body.quiz .n{cursor:pointer;}
+
+.top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;border:none;background:var(--accent);color:#06140c;font-size:1rem;font-weight:900;display:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+footer{text-align:center;font-size:.68rem;color:var(--faint);margin-top:28px;padding:0 16px;}
+/* RESPONSIVE-P2 */
+body{font-size:clamp(15px, 1rem + 0.2vw, 18px);overflow-wrap:anywhere;}
+.practice{min-height:40px;}
+@media (max-width:560px){ .practice{min-height:44px;} }
+@media (min-width:561px) and (max-width:1023px){
+  .hd,nav.chips,main{max-width:720px;}
+  .grid{grid-template-columns:1fr 1fr;}
+}
+@media (min-width:1024px){
+  .hd,nav.chips,main{max-width:1120px;}
+  .grid{grid-template-columns:1fr 1fr;gap:9px;}
+  nav.chips{flex-wrap:wrap;}
+}
+@media (hover:hover){ nav.chips a:hover,.practice:hover{border-color:var(--accent);} }
+
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <h1>Siglas con <em>títulos</em></h1>
+    <button class="practice" id="practice">🙈 Modo práctica</button>
+  </div>
+  <nav class="chips">
+    <a href="#ag">Ágil</a><a href="#man">Manifiesto</a><a href="#ci">Ciclo</a><a href="#sc">Scrum</a><a href="#xk">XP · Kanban</a><a href="#he">Herramientas</a><a href="#tv">Trad. vs. Ágil</a><a href="#ej">Ejemplo</a><a href="#ca">Casos</a><a href="#si">Simulador</a><a href="#pl">Plantillas</a><a href="#gl">Glosario</a><a href="#n">Números</a><a href="#v">No confundir</a>
+  </nav>
+</header>
+
+<main>
+<p class="hint" id="hint">Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.</p>
+<p class="hint" style="margin-top:4px;">Orden según <b>Mod3_ProyectosAgiles.html</b> (Módulo 3 · Gestión de Proyectos Ágiles)</p>
+
+<div class="part-label">UNIDAD 3.1 · GESTIÓN DE PROYECTOS ÁGILES</div>
+
+<section id="ag">
+  <h2>1 · ¿QUÉ ES LA GESTIÓN ÁGIL?</h2>
+  <div class="grid">
+    <div class="s"><span class="k">I + I</span><div class="b"><div class="tt">¿Qué es la Gestión Ágil?</div><div class="x">Enfoque <b>I</b>terativo e <b>I</b>ncremental que entrega valor temprano y continuo, respondiendo al cambio en lugar de seguir un plan rígido</div><div class="m">Dos «I»: vuelve (itera) y suma (incrementa)</div></div></div>
+    <div class="s"><span class="k">OACV</span><div class="b"><div class="tt">¿Qué es la Gestión Ágil? · tarjetas</div><div class="x"><b>O</b>rigen 2001 (17 profesionales firman el Manifiesto) · <b>A</b>daptativo (responde al cambio) · <b>C</b>olaborativo (equipos autoorganizados) · <b>V</b>alor temprano (entregas frecuentes)</div><div class="m">«Otra Agilidad Con Valor»</div></div></div>
+    <div class="s"><span class="k a">2001 · 17</span><div class="b"><div class="tt">Origen (2001)</div><div class="x">Año del <b>Manifiesto Ágil</b> · <b>17</b> profesionales lo firman</div><div class="m">En 2001 eran 17</div></div></div>
+  </div>
+</section>
+
+<section id="man">
+  <h2>2 · LOS 4 VALORES DEL MANIFIESTO ÁGIL</h2>
+  <div class="grid">
+    <div class="s"><span class="k">ISCR</span><div class="b"><div class="tt">Los 4 Valores del Manifiesto Ágil</div><div class="x"><b>I</b>ndividuos e interacciones · <b>S</b>oftware funcionando · <b>C</b>olaboración con el cliente · <b>R</b>espuesta ante el cambio</div><div class="m">«Individuos Siempre Colaboran Rápido»</div></div></div>
+    <div class="s"><span class="k c">PDNP</span><div class="b"><div class="tt">Los 4 Valores del Manifiesto Ágil · lo que se valora menos</div><div class="x"><b>P</b>rocesos y herramientas · <b>D</b>ocumentación extensiva · <b>N</b>egociación contractual · seguir un <b>P</b>lan</div><div class="m">«Papeles De Ningún Provecho» (se valoran, pero menos)</div></div></div>
+    <div class="s"><span class="k a">4 + 12</span><div class="b"><div class="tt">Los 4 Valores del Manifiesto Ágil · principios</div><div class="x"><b>4</b> valores y <b>12</b> principios: valor temprano · bienvenido el cambio · entregas frecuentes · sostenibilidad · mejora continua</div><div class="m">4 para valorar, 12 para guiar</div></div></div>
+  </div>
+</section>
+
+<section id="ci">
+  <h2>3 · CICLO DE VIDA ITERATIVO E INCREMENTAL</h2>
+  <div class="grid">
+    <div class="s"><span class="k">BSIR</span><div class="b"><div class="tt">Ciclo de Vida Iterativo e Incremental</div><div class="x"><b>B</b>acklog → <b>S</b>print → <b>I</b>ncremento → <b>R</b>etro ↻ (cada iteración da un incremento potencialmente entregable)</div><div class="m">«Bien Sale Iterando y Repitiendo»</div></div></div>
+    <div class="s"><span class="k a">8·15·4·3</span><div class="b"><div class="tt">Los eventos del Sprint · time-box</div><div class="x">Sprint Planning hasta <b>8 h</b> (Sprint de 1 mes) · Daily <b>15 min</b> · Sprint Review hasta <b>4 h</b> · Retrospectiva hasta <b>3 h</b></div><div class="m">«Planeo 8, hablo 15, muestro 4, mejoro 3»</div></div></div>
+    <div class="s"><span class="k a">1–4 S</span><div class="b"><div class="tt">Los eventos del Sprint · duración del Sprint</div><div class="x">Un <b>S</b>print dura de <b>1 a 4 semanas</b> y se repite; todo evento tiene <b>time-box</b> (duración máxima fija)</div><div class="m">Un Sprint cabe en un mes</div></div></div>
+  </div>
+</section>
+
+<section id="sc">
+  <h2>4 · MARCO DE TRABAJO SCRUM</h2>
+  <div class="grid">
+    <div class="s"><span class="k">TIA</span><div class="b"><div class="tt">Marco de Trabajo Scrum · pilares</div><div class="x"><b>T</b>ransparencia · <b>I</b>nspección · <b>A</b>daptación</div><div class="m">Los pilares de Scrum son tu «TIA»</div></div></div>
+    <div class="s"><span class="k v">PO · SM · ED</span><div class="b"><div class="tt">Marco de Trabajo Scrum · roles</div><div class="x"><b>P</b>roduct <b>O</b>wner: maximiza el valor y prioriza el Product Backlog · <b>S</b>crum <b>M</b>aster: facilita y elimina impedimentos · <b>E</b>quipo de <b>D</b>esarrollo: autoorganizado, construye el incremento</div><div class="m">PO = el qué · SM = el cómo del proceso · Equipo = lo construye</div></div></div>
+    <div class="s"><span class="k v">PB · SB · I</span><div class="b"><div class="tt">Marco de Trabajo Scrum · artefactos</div><div class="x"><b>P</b>roduct <b>B</b>acklog: lista ordenada de todo el producto · <b>S</b>print <b>B</b>acklog: ítems del Sprint más el plan · <b>I</b>ncremento: ítems que cumplen la DoD</div><div class="m">Del todo (producto) a lo del Sprint y a lo terminado</div></div></div>
+    <div class="s"><span class="k a">3-3-4</span><div class="b"><div class="tt">Marco de Trabajo Scrum · eventos</div><div class="x"><b>3</b> roles · <b>3</b> artefactos · <b>4</b> eventos: Sprint Planning · Daily Scrum · Sprint Review · Retrospective</div><div class="m">Scrum se cuenta 3-3-4</div></div></div>
+  </div>
+</section>
+
+<section id="xk">
+  <h2>5 · OTRAS METODOLOGÍAS: XP Y KANBAN</h2>
+  <div class="grid">
+    <div class="s"><span class="k">PTIR</span><div class="b"><div class="tt">eXtreme Programming (XP)</div><div class="x">Foco en la excelencia técnica: <b>P</b>areja (pair programming) · <b>T</b>DD · <b>I</b>ntegración continua · <b>R</b>efactorización</div><div class="m">«Programadores Técnicos Impecables y Rigurosos»</div></div></div>
+    <div class="s"><span class="k">FTLC</span><div class="b"><div class="tt">Kanban</div><div class="x"><b>F</b>lujo continuo (sin sprints fijos) · <b>T</b>ablero visual con columnas · <b>L</b>ímite WIP · tiempo de <b>C</b>iclo optimizado</div><div class="m">«Fluye Tranquilo, Limita y Corre»</div></div></div>
+    <div class="s"><span class="k a">WIP ≤ 2</span><div class="b"><div class="tt">Tablero interactivo · límite WIP</div><div class="x"><b>W</b>ork <b>I</b>n <b>P</b>rogress: en el tablero de ejemplo «En progreso» admite máx <b>2</b>; si lo supera, el contador se pone rojo</div><div class="m">No empieces demasiadas cosas a la vez</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">HERRAMIENTAS</div>
+
+<section id="he">
+  <h2>6 · HERRAMIENTAS PARA PROYECTOS ÁGILES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">JTAMCNGM</span><div class="b"><div class="tt">Herramientas para gestionar proyectos ágiles</div><div class="x"><b>J</b>ira · <b>T</b>rello · <b>A</b>sana · <b>M</b>onday.com · <b>C</b>lickUp · <b>N</b>otion · <b>G</b>itHub Projects · <b>M</b>iro</div><div class="m">«Juan Trabaja Así: Muchas Cosas, Nada Grande, Mucho»</div></div></div>
+    <div class="s"><span class="k c">T ≠ J</span><div class="b"><div class="tt">Herramientas · para el proyecto grupal</div><div class="x"><b>T</b>rello por su sencillez · <b>J</b>ira por ser el estándar profesional (gratis hasta 10 personas)</div><div class="m">Trello para empezar, Jira para trabajar como pro</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">SÍNTESIS Y PRÁCTICA</div>
+
+<section id="tv">
+  <h2>7 · TRADICIONAL VS. ÁGIL</h2>
+  <div class="grid">
+    <div class="s"><span class="k">AECD</span><div class="b"><div class="tt">Tradicional vs. Ágil</div><div class="x"><b>A</b>lcance (fijo / flexible) · <b>E</b>ntrega (al final / incremental) · <b>C</b>ambios (costosos / bienvenidos) · <b>D</b>ocumentación (extensa / mínima suficiente)</div><div class="m">«Así Es Cada Diferencia»</div></div></div>
+    <div class="s"><span class="k c">ER</span><div class="b"><div class="tt">Resumen del Módulo 3 · cómo elegir</div><div class="x">El enfoque se elige según la <b>E</b>stabilidad de los <b>R</b>equisitos</div><div class="m">Requisitos estables, tradicional; cambiantes, ágil</div></div></div>
+  </div>
+</section>
+
+<section id="ej">
+  <h2>8 · EL PROYECTO EN MODO ÁGIL</h2>
+  <div class="grid">
+    <div class="s"><span class="k">CQP</span><div class="b"><div class="tt">Historias de usuario</div><div class="x"><b>C</b>omo [quién] · <b>Q</b>uiero [qué] · <b>P</b>ara [para qué]. Ej.: Como estudiante quiero matricularme en línea para evitar filas</div><div class="m">Quién, qué y para qué</div></div></div>
+    <div class="s"><span class="k c">R > I</span><div class="b"><div class="tt">Gráfico Burndown</div><div class="x">Muestra el trabajo restante del Sprint. Si la línea <b>R</b>eal va por encima de la <b>I</b>deal, el equipo va <b>atrasado</b></div><div class="m">Real arriba = más trabajo pendiente del debido</div></div></div>
+    <div class="s"><span class="k">RPAD</span><div class="b"><div class="tt">Definición de Hecho (DoD)</div><div class="x">Código <b>R</b>evisado por un compañero · <b>P</b>ruebas pasan · funciona en el <b>A</b>mbiente de prueba · <b>D</b>ocumentación mínima actualizada</div><div class="m">«Real, Probada, Activa y Documentada»</div></div></div>
+  </div>
+</section>
+
+<section id="ca">
+  <h2>9 · LO ÁGIL EN LA PRÁCTICA</h2>
+  <div class="grid">
+    <div class="s"><span class="k">SHCT</span><div class="b"><div class="tt">Casos reales</div><div class="x"><b>S</b>potify (squads, tribes, chapters) · <b>H</b>ealthcare.gov (rescate) · <b>C</b>HAOS (datos) · Agile <b>T</b>eatral (cargo cult)</div><div class="m">«Sin Hacer Copias Tontas»</div></div></div>
+    <div class="s"><span class="k c">S · H</span><div class="b"><div class="tt">Spotify · Healthcare.gov · lecciones</div><div class="x"><b>S</b>potify: lo ágil se adapta, no es receta para copiar · <b>H</b>ealthcare.gov: iteraciones cortas reducen el riesgo</div><div class="m">Adapta y entrega en partes</div></div></div>
+    <div class="s"><span class="k c">C · T</span><div class="b"><div class="tt">Informes CHAOS · Agile teatral · lecciones</div><div class="x"><b>C</b>HAOS: ágil con mayor tasa de éxito, sobre todo en proyectos grandes (feedback temprano) · <b>T</b>eatral: los valores importan más que las ceremonias</div><div class="m">Feedback sí, teatro no</div></div></div>
+  </div>
+</section>
+
+<section id="si">
+  <h2>10 · SIMULADOR: DENTRO DE UN SPRINT</h2>
+  <div class="grid">
+    <div class="s"><span class="k">VCMP</span><div class="b"><div class="tt">Simulador · indicadores</div><div class="x"><b>V</b>alor · <b>C</b>alidad · <b>M</b>oral del equipo · <b>P</b>redictibilidad</div><div class="m">«Vamos Con Mucha Paciencia»</div></div></div>
+    <div class="s"><span class="k a">EDR</span><div class="b"><div class="tt">Simulador · decisiones correctas</div><div class="x">Historia urgente: <b>E</b>spera al próximo Sprint · lo no terminado se <b>D</b>evuelve al backlog · Daily de 40 min se <b>R</b>eenfoca a 15 min</div><div class="m">Espera · Devuelve · Reenfoca</div></div></div>
+  </div>
+</section>
+
+<section id="pl">
+  <h2>11 · PLANTILLAS ÁGILES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">HPES</span><div class="b"><div class="tt">Backlog Scrum (en el cuaderno)</div><div class="x">Hoja «Backlog» con <b>H</b>istorias de usuario · <b>P</b>rioridad · <b>E</b>stimación · <b>S</b>print</div><div class="m">«Historias Para El Sprint»</div></div></div>
+    <div class="s"><span class="k v">Acta</span><div class="b"><div class="tt">Acta de Constitución</div><div class="x">Word · útil también en proyectos ágiles para <b>enmarcar</b> el proyecto</div><div class="m">Ágil también necesita un marco</div></div></div>
+  </div>
+</section>
+
+<div class="part-label">REFERENCIA</div>
+
+<section id="gl">
+  <h2>12 · GLOSARIO DE SIGLAS Y TÉRMINOS ÁGILES</h2>
+  <div class="grid">
+    <div class="s"><span class="k">DoD</span><div class="b"><div class="tt">Glosario · DoD</div><div class="x"><b>D</b>efinition <b>o</b>f <b>D</b>one: Definición de Hecho, criterios para considerar terminado un ítem</div><div class="m">Hecho es hecho, no «casi listo»</div></div></div>
+    <div class="s"><span class="k">TDD · CI</span><div class="b"><div class="tt">Glosario · TDD · CI</div><div class="x"><b>T</b>est-<b>D</b>riven <b>D</b>evelopment: la prueba antes que el código · <b>C</b>ontinuous <b>I</b>ntegration: fusionar y probar el código con frecuencia</div><div class="m">Primero la prueba; luego integra seguido</div></div></div>
+    <div class="s"><span class="k">MVP</span><div class="b"><div class="tt">Glosario · MVP</div><div class="x"><b>M</b>inimum <b>V</b>iable <b>P</b>roduct: la versión más simple que ya aporta valor</div><div class="m">Lo mínimo que ya sirve</div></div></div>
+    <div class="s"><span class="k c">P ≠ C</span><div class="b"><div class="tt">Glosario · certificaciones</div><div class="x"><b>P</b>SM / <b>P</b>SPO = Professional (Scrum.org) · <b>C</b>SM / <b>C</b>SPO = Certified (Scrum Alliance) · PMI-ACP = certificación ágil del PMI</div><div class="m">P de Professional · C de Certified</div></div></div>
+  </div>
+</section>
+
+<section id="n">
+  <h2>NÚMEROS CLAVE</h2>
+  <div class="grid">
+    <div class="n"><div class="v">2001</div><div class="t">año del Manifiesto Ágil</div></div>
+    <div class="n"><div class="v">17</div><div class="t">profesionales lo firman</div></div>
+    <div class="n"><div class="v">4</div><div class="t">valores del Manifiesto</div></div>
+    <div class="n"><div class="v">12</div><div class="t">principios del Manifiesto</div></div>
+    <div class="n"><div class="v">1–4</div><div class="t">semanas dura un Sprint</div></div>
+    <div class="n"><div class="v">8 h</div><div class="t">Sprint Planning (Sprint de 1 mes)</div></div>
+    <div class="n"><div class="v">15 min</div><div class="t">Daily Scrum</div></div>
+    <div class="n"><div class="v">4 h</div><div class="t">Sprint Review</div></div>
+    <div class="n"><div class="v">3 h</div><div class="t">Retrospectiva</div></div>
+    <div class="n"><div class="v">3</div><div class="t">pilares · roles · artefactos de Scrum</div></div>
+    <div class="n"><div class="v">2</div><div class="t">WIP máx en «En progreso» del ejemplo</div></div>
+    <div class="n"><div class="v">10</div><div class="t">personas gratis en Jira</div></div>
+    <div class="n"><div class="v">8</div><div class="t">herramientas del módulo</div></div>
+    <div class="n"><div class="v">3</div><div class="t">historias de usuario del Portal</div></div>
+    <div class="n"><div class="v">4</div><div class="t">criterios de la DoD</div></div>
+    <div class="n"><div class="v">3</div><div class="t">escenarios del simulador</div></div>
+  </div>
+</section>
+
+<section id="v">
+  <h2>NO CONFUNDIR</h2>
+  <div class="grid">
+    <div class="vs"><div class="l"><b>Review</b><span>muestra el producto</span></div><div class="o">vs</div><div class="r"><b>Retro</b><span>mejora la forma de trabajar</span></div></div>
+    <div class="vs"><div class="l"><b>Product Owner</b><span>prioriza, maximiza el valor</span></div><div class="o">vs</div><div class="r"><b>Scrum Master</b><span>facilita, quita impedimentos</span></div></div>
+    <div class="vs"><div class="l"><b>Product Backlog</b><span>todo el producto</span></div><div class="o">vs</div><div class="r"><b>Sprint Backlog</b><span>ítems del Sprint + plan</span></div></div>
+    <div class="vs"><div class="l"><b>XP</b><span>prácticas técnicas</span></div><div class="o">vs</div><div class="r"><b>Kanban</b><span>optimiza el flujo</span></div></div>
+    <div class="vs"><div class="l"><b>Scrum</b><span>Sprints de 1–4 semanas</span></div><div class="o">vs</div><div class="r"><b>Kanban</b><span>flujo continuo, sin sprints</span></div></div>
+    <div class="vs"><div class="l"><b>Valores (4)</b><span>lo que se valora</span></div><div class="o">vs</div><div class="r"><b>Principios (12)</b><span>lo que guía</span></div></div>
+    <div class="vs"><div class="l"><b>Tradicional</b><span>alcance fijo, entrega al final</span></div><div class="o">vs</div><div class="r"><b>Ágil</b><span>alcance flexible, incremental</span></div></div>
+    <div class="vs"><div class="l"><b>Daily</b><span>sincronizar al equipo</span></div><div class="o">vs</div><div class="r"><b>Reporte</b><span>informe al jefe (no es)</span></div></div>
+    <div class="vs"><div class="l"><b>PSM / PSPO</b><span>Scrum.org</span></div><div class="o">vs</div><div class="r"><b>CSM / CSPO</b><span>Scrum Alliance</span></div></div>
+    <div class="vs"><div class="l"><b>Real > ideal</b><span>atrasado</span></div><div class="o">vs</div><div class="r"><b>Real < ideal</b><span>adelantado</span></div></div>
+  </div>
+</section>
+
+<footer>Gerencia de Proyectos Informáticos · Parcial 3 · generado solo a partir de Mod3_ProyectosAgiles.html · <a href="index.html" style="color:var(--cyan)">← Índice</a></footer>
+</main>
+
+<button class="top" id="top" aria-label="Volver arriba">↑</button>
+<script>
+(function(){
+  "use strict";
+  var body = document.body, btn = document.getElementById("practice"), hint = document.getElementById("hint");
+  function setQuiz(on){
+    body.classList.toggle("quiz", on);
+    btn.classList.toggle("on", on);
+    btn.textContent = on ? "👀 Mostrar todo" : "🙈 Modo práctica";
+    hint.innerHTML = on ? "Usa el título como pista y toca la tarjeta para revelar el significado." : "Toca <b>Modo práctica</b> para ocultar los significados y adivinarlos.";
+    document.querySelectorAll(".show").forEach(function(el){ el.classList.remove("show"); });
+    try{ localStorage.setItem("gpi_p3_siglas_tit_quiz", on ? "1" : "0"); }catch(e){}
+  }
+  btn.addEventListener("click", function(){ setQuiz(!body.classList.contains("quiz")); });
+  document.querySelector("main").addEventListener("click", function(e){
+    if(!body.classList.contains("quiz")) return;
+    var c = e.target.closest(".s, .vs, .n"); if(c) c.classList.toggle("show");
+  });
+  try{ if(localStorage.getItem("gpi_p3_siglas_tit_quiz") === "1") setQuiz(true); }catch(e){}
+
+  var top = document.getElementById("top");
+  top.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  window.addEventListener("scroll", function(){ top.style.display = window.scrollY > 500 ? "block" : "none"; }, {passive:true});
+})();
+</script>
+
+<script>
+/* En modo práctica, las siglas también se revelan con el teclado */
+(function(){
+  document.querySelectorAll(".s").forEach(function(el){
+    el.setAttribute("tabindex","0");
+    el.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); el.click(); } });
+  });
+})();
+</script>
+</body>
+</html>
