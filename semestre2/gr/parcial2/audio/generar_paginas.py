@@ -1,6 +1,6 @@
-"""Genera los MP3 de la guía y el resumen para escucharlos con la pantalla apagada.
+"""Genera los MP3 de la guía, el resumen y el resumen express para escucharlos con la pantalla apagada.
 
-Uso:  python generar_paginas.py            (guia y resumen)
+Uso:  python generar_paginas.py            (guia, resumen y resumen-express)
       python generar_paginas.py resumen    (solo una página)
 Requiere:  pip install edge-tts playwright   (usa el Edge o Chrome instalado)
 
@@ -17,7 +17,7 @@ from playwright.async_api import async_playwright
 
 VOICE = "es-PA-MargaritaNeural"
 HERE = Path(__file__).resolve().parent
-PAGES = ["guia", "resumen"]
+PAGES = ["guia", "resumen", "resumen-express"]
 BYTES_PER_SEC = 48000 / 8  # edge-tts entrega MP3 mono a 48 kbps
 PARALLEL = 6
 
