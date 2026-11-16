@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Cómo Estudiar · GPI Parcial 3</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.55;overflow-wrap:anywhere;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+a{color:var(--cyan);}
+header{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{margin:0;font-size:clamp(1.05rem,1rem + .6vw,1.4rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px;}
+.hero h2{margin:0 0 6px;font-size:clamp(1.15rem,1rem + .8vw,1.6rem);}
+.hero p{margin:0;color:var(--text-dim);max-width:70ch;}
+section{margin:26px 0;scroll-margin-top:120px;}
+section > h2{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;color:var(--amber);margin:0 0 10px;}
+p.lead{color:var(--text-dim);margin:0 0 12px;max-width:70ch;}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{margin:0 0 6px;font-size:1rem;display:flex;gap:8px;align-items:flex-start;}
+.card p,.card li{color:var(--text-dim);font-size:.92rem;}
+.card p{margin:6px 0;}
+.card ul,.card ol{margin:6px 0 0;padding-left:20px;}
+.card li{margin:4px 0;}
+.n{font-family:var(--mono);font-weight:800;color:#06140c;background:var(--accent);border-radius:8px;padding:1px 8px;font-size:.8rem;flex-shrink:0;}
+.ej{margin-top:8px;background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:8px 10px;font-size:.86rem;color:var(--text);}
+.ej b{color:var(--cyan);}
+.no{background:var(--red-dim);border-color:#5c2a2a;}
+.no h3{color:var(--red);}
+.si{background:var(--accent-dim);border-color:#265c3a;}
+/* selector de sesión */
+.picker{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px;}
+.seg button{flex:1 1 120px;min-height:44px;background:var(--bg);border:1px solid var(--line);color:var(--text-dim);border-radius:12px;font:700 .88rem var(--sans);cursor:pointer;padding:8px 10px;}
+.seg button small{display:block;font-weight:400;font-size:.7rem;color:var(--text-faint);}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);letter-spacing:.08em;}
+#plan{border-top:1px dashed var(--line);padding-top:12px;}
+#plan h3{margin:0 0 4px;font-size:1.05rem;}
+#plan .meta{font-size:.8rem;color:var(--amber);margin-bottom:8px;}
+.steps{list-style:none;padding:0;margin:0;counter-reset:s;}
+.steps li{counter-increment:s;display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:.92rem;color:var(--text-dim);}
+.steps li:last-child{border-bottom:none;}
+.steps li::before{content:counter(s);flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--cyan-dim);color:var(--cyan);font:800 .78rem var(--mono);display:flex;align-items:center;justify-content:center;}
+.steps li b{color:var(--text);}
+.steps .t{font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;margin-left:auto;padding-left:8px;}
+.tip{margin-top:10px;font-size:.86rem;background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+/* tablas */
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.86rem;}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.05em;background:var(--surface-2);}
+td{color:var(--text-dim);}
+td b{color:var(--text);}
+/* checklist */
+.check{list-style:none;padding:0;margin:0;}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line-soft);cursor:pointer;font-size:.92rem;color:var(--text-dim);min-height:44px;}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex-shrink:0;margin-top:1px;}
+.check input:checked + span{color:var(--text);text-decoration:line-through;text-decoration-color:var(--accent);}
+.bar{height:8px;background:var(--surface-2);border-radius:8px;overflow:hidden;margin:8px 0 4px;}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s;}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.82rem;color:var(--text-dim);}
+.btn{min-height:40px;background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:0 14px;cursor:pointer;}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.78rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .seg button:hover,.btn:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} .bar i{transition:none;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <a class="back" href="index.html" aria-label="Volver al índice del parcial">←</a>
+    <h1>Cómo <em>estudiar</em> el Parcial 3</h1>
+  </div>
+  <nav class="chips" aria-label="Secciones">
+    <a href="#elige">⏱️ Elige tu sesión</a><a href="#reglas">📜 10 reglas</a><a href="#lugar">🏢 Oficina · 🚌 Transporte</a>
+    <a href="#paginas">🧭 Cada página</a><a href="#tecnicas">🧠 Técnicas</a><a href="#semana">📅 Plan</a><a href="#evita">🚫 Evita</a><a href="#hoy">✅ Hoy</a>
+  </nav>
+</header>
+
+<main>
+  <div class="hero">
+    <h2>Reglas y rutinas para aprender el Módulo 3 en cualquier lugar</h2>
+    <p>Lo que más te ayuda a recordar no es releer: es <b>intentar recordar</b>, <b>repasar espaciado</b> y <b>explicar con tus palabras</b>. Elige abajo cuánto tiempo tienes y dónde estás, y sigue la rutina paso a paso. Los ejemplos usan temas del módulo (Scrum, Manifiesto, Kanban…).</p>
+  </div>
+
+  <!-- ===================== SELECTOR ===================== -->
+  <section id="elige">
+    <h2>⏱️ ELIGE TU SESIÓN DE HOY</h2>
+    <div class="picker">
+      <div class="lbl">¿DÓNDE ESTÁS?</div>
+      <div class="seg" id="segLugar" role="group" aria-label="Lugar">
+        <button type="button" data-v="transit" aria-pressed="false">🚌 Transporte<small>celular · audífonos · cortes</small></button>
+        <button type="button" data-v="office" aria-pressed="false">🏢 Oficina / casa<small>laptop · escritorio</small></button>
+      </div>
+      <div class="lbl">¿CUÁNTO TIEMPO TIENES?</div>
+      <div class="seg" id="segTiempo" role="group" aria-label="Tiempo disponible">
+        <button type="button" data-v="5" aria-pressed="false">5 min<small>una parada</small></button>
+        <button type="button" data-v="15" aria-pressed="false">15 min<small>un trayecto corto</small></button>
+        <button type="button" data-v="30" aria-pressed="false">30 min<small>un pomodoro</small></button>
+        <button type="button" data-v="90" aria-pressed="false">60–90 min<small>sesión larga</small></button>
+      </div>
+      <div id="plan" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===================== REGLAS ===================== -->
+  <section id="reglas">
+    <h2>📜 LAS 10 REGLAS QUE DEBES CUMPLIR</h2>
+    <div class="grid">
+      <div class="card"><h3><span class="n">1</span>Primero pregunta, después lee</h3><p>Antes de cada tema responde las preguntas 🎯 <b>aunque no sepas</b>. Equivocarte antes de leer hace que la respuesta correcta se te quede más.</p><div class="ej"><b>Ejemplo:</b> antes de leer Scrum, intenta: «¿Quién prioriza el Product Backlog?». Luego compruebas: el Product Owner.</div></div>
+      <div class="card"><h3><span class="n">2</span>Recuerda sin mirar</h3><p>Cierra la página y di o escribe lo que recuerdas. Solo después abre la respuesta. Releer da sensación de saber, pero no entrena la memoria.</p><div class="ej"><b>Ejemplo:</b> tapa la tabla y di los 4 valores del Manifiesto con su «sobre…».</div></div>
+      <div class="card"><h3><span class="n">3</span>Repasa espaciado: 1 · 3 · 7 días</h3><p>Mejor 4 repasos cortos en días distintos que 4 horas el día antes. Usa la pestaña <b>📅 Hoy</b> de las flashcards: ya te programa las fechas.</p><div class="ej"><b>Ejemplo:</b> lunes lees Ciclo y eventos; martes repasas los time-box; jueves y el lunes siguiente, otra vez.</div></div>
+      <div class="card"><h3><span class="n">4</span>Explica con tus palabras</h3><p>Si no lo puedes explicar en 3 frases a alguien que no sabe, todavía no lo entiendes. Usa las preguntas 🤔 y «Explícalo en 3 frases».</p><div class="ej"><b>Ejemplo:</b> «Kanban es como la fila de pedidos de un restaurante: un tablero, columnas y un límite de platos en cocina (WIP)».</div></div>
+      <div class="card"><h3><span class="n">5</span>Mezcla temas</h3><p>No repases siempre en el mismo orden. Alternar temas parecidos te obliga a distinguirlos, que es justo lo que pide el examen.</p><div class="ej"><b>Ejemplo:</b> haz el 🔀 Repaso mezclado: Review vs. Retro, XP vs. Kanban, Product vs. Sprint Backlog.</div></div>
+      <div class="card"><h3><span class="n">6</span>Cada sigla con su gancho</h3><p>Aprende la sigla <b>y</b> su frase mnemotécnica juntas, y practícalas con 🙈 Modo práctica.</p><div class="ej"><b>Ejemplo:</b> pilares de Scrum = tu «TIA» (Transparencia, Inspección, Adaptación). Time-box: «Planeo 8, hablo 15, muestro 4, mejoro 3».</div></div>
+      <div class="card"><h3><span class="n">7</span>Cero distracciones</h3><p>Teléfono en No Molestar, notificaciones apagadas, música instrumental o silencio. Una notificación te cuesta varios minutos de concentración.</p></div>
+      <div class="card"><h3><span class="n">8</span>Pausas cortas y reales</h3><p>25–50 min de estudio y 5–10 de pausa, lejos de la pantalla. En la pausa no abras redes sociales: camina o toma agua.</p></div>
+      <div class="card"><h3><span class="n">9</span>Practica como en el examen</h3><p>Haz al menos un simulacro completo <b>sin</b> ⚡ respuestas instantáneas y con tiempo, 2 días antes del examen. Las instantáneas son para aprender; el simulacro real, para medirte.</p></div>
+      <div class="card"><h3><span class="n">10</span>Duerme y anota tus dudas</h3><p>Dormir fija lo estudiado; una noche en vela borra parte. Lo que no entiendas, anótalo de inmediato en <a href="dudas.html">Mis Dudas</a> para resolverlo después.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== LUGAR ===================== -->
+  <section id="lugar">
+    <h2>🏢 OFICINA VS. 🚌 TRANSPORTE</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🚌 En el transporte</h3>
+        <ul>
+          <li>Activa el modo <b>🚌 Transporte</b> en la guía: bloques cortos con «🚏 Pausa segura».</li>
+          <li>Usa <b>▶ Continuar donde quedé</b> al subir: no pierdas tiempo buscando.</li>
+          <li>Con audífonos, toca <b>🎧 Escuchar todo</b> en el resumen express: sigue sonando con la pantalla apagada.</li>
+          <li>Prefiere <b>flashcards</b> y <b>⚡ mini simulacro</b>: se pueden cortar en cualquier momento.</li>
+          <li>Si vas de pie o hay mucho ruido, solo audio. Si vas sentado, flashcards.</li>
+          <li>Antes de bajarte, repite en tu mente <b>1 idea</b> de lo que viste.</li>
+        </ul>
+        <div class="ej"><b>Ejemplo:</b> 3 paradas = 1 sección del resumen express en audio + 10 tarjetas de «Scrum».</div>
+      </div>
+      <div class="card">
+        <h3>🏢 En la oficina o en casa</h3>
+        <ul>
+          <li>Activa el modo <b>🏢 Oficina</b>: todo desplegado, con tablas completas.</li>
+          <li>Escribe en los recuadros de <b>🤔 ¿Por qué?</b> antes de ver la respuesta.</li>
+          <li>Usa el <b>⏱ Pomodoro 25 min</b> de la guía.</li>
+          <li>Ten papel a mano: dibuja el ciclo Backlog → Sprint → Incremento → Retro sin mirar.</li>
+          <li>Haz los <b>simulacros completos</b> aquí: necesitan 90 min y concentración.</li>
+          <li>Teléfono fuera de la vista, no solo boca abajo.</li>
+        </ul>
+        <div class="ej"><b>Ejemplo:</b> 1 tema de la guía con 🎯 → leer → 🤔 escrito → 🧠, y cierras con 15 flashcards.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PÁGINAS ===================== -->
+  <section id="paginas">
+    <h2>🧭 PARA QUÉ SIRVE CADA PÁGINA</h2>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Página</th><th>Úsala para…</th><th>Mejor en</th><th>Tiempo</th></tr></thead>
+      <tbody>
+        <tr><td><a href="guia.html"><b>Guía</b></a></td><td>Aprender un tema por primera vez y entenderlo (🎯 → leer → 🤔 → 🧠)</td><td>🏢 y 🚌</td><td>10–15 min por tema</td></tr>
+        <tr><td><a href="flash.html"><b>FlashCards</b></a></td><td>Recordar sin mirar todos los días (pestaña 📅 Hoy)</td><td>🚌</td><td>5–15 min</td></tr>
+        <tr><td><a href="resumen.html"><b>Resumen</b></a></td><td>Buscar rápido una sigla o repasar un bloque con mnemotecnias</td><td>🏢 y 🚌</td><td>5–10 min</td></tr>
+        <tr><td><a href="resumen-express.html"><b>Resumen Express</b></a></td><td>Repasar el módulo completo en orden; escucharlo con 🎧</td><td>🚌 con audífonos</td><td>~8 min en audio</td></tr>
+        <tr><td><a href="siglas.html"><b>Siglas</b></a> · <a href="siglas-titulos.html"><b>con Títulos</b></a></td><td>Memorizar siglas, números clave y «No confundir» con 🙈 Modo práctica</td><td>🚌</td><td>5–10 min</td></tr>
+        <tr><td><a href="parcial.html"><b>Simulacro</b></a></td><td>Medirte: completo (100 pts) en oficina; ⚡ mini en el bus</td><td>🏢 completo · 🚌 mini</td><td>90 min · 10 min</td></tr>
+        <tr><td><a href="dudas.html"><b>Mis Dudas</b></a></td><td>Anotar y resolver lo que no entiendas</td><td>🏢</td><td>cuando surja</td></tr>
+        <tr><td><a href="Mod3_ProyectosAgiles.html"><b>Mod3 (original)</b></a></td><td>Ver el material del profesor: diagrama del Sprint, tablero Kanban y quiz de 10 preguntas</td><td>🏢</td><td>20 min</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===================== TÉCNICAS ===================== -->
+  <section id="tecnicas">
+    <h2>🧠 TÉCNICAS CON EJEMPLOS DEL MÓDULO</h2>
+    <div class="grid g3">
+      <div class="card"><h3>🧒 Técnica Feynman</h3><p>Explica el tema como si se lo contaras a un niño de 12 años. Donde te trabes, ahí está tu hueco.</p><div class="ej"><b>Scrum:</b> «El dueño del producto decide qué es más importante; el facilitador quita los estorbos; el equipo construye. Cada 1 a 4 semanas muestran algo que ya funciona».</div></div>
+      <div class="card"><h3>🔗 Analogía propia</h3><p>Conecta lo nuevo con algo que ya conoces. Si la inventas tú, se te olvida menos.</p><div class="ej"><b>Tradicional vs. Ágil:</b> tradicional es construir la casa completa y entregarla al final; ágil es entregar cuarto por cuarto habitable.</div></div>
+      <div class="card"><h3>🆚 Tablas de contraste</h3><p>El examen pregunta mucho lo que se parece. Haz tablas de 2 columnas sin mirar.</p><div class="ej"><b>Review vs. Retro:</b> producto ante interesados (4 h) vs. forma de trabajar del equipo (3 h).</div></div>
+      <div class="card"><h3>✍️ Hoja en blanco</h3><p>Al terminar una sesión, escribe en 2 minutos todo lo que recuerdes del tema. Después compara con la guía.</p><div class="ej"><b>Ejemplo:</b> «Kanban: flujo continuo, tablero, límite WIP, tiempo de ciclo… ¿y el WIP máx del ejemplo? → 2».</div></div>
+      <div class="card"><h3>🎨 Dibuja el proceso</h3><p>Un diagrama hecho por ti vale más que uno que solo miras.</p><div class="ej"><b>Ejemplo:</b> dibuja el Sprint con sus 5 eventos y escribe el time-box de cada uno debajo.</div></div>
+      <div class="card"><h3>❓ Inventa preguntas de examen</h3><p>Ponte en el lugar del profesor: ¿qué preguntaría de este tema? Crea 1 V/F y 1 de selección.</p><div class="ej"><b>Ejemplo:</b> «V o F: el Scrum Master prioriza el Product Backlog» → Falso, es el PO.</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== SEMANA ===================== -->
+  <section id="semana">
+    <h2>📅 PLAN HASTA EL EXAMEN</h2>
+    <p class="lead">La guía arma tu plan con fechas reales en <a href="guia.html#t-cierre">📅 Plan de repaso espaciado</a> (pon la fecha del examen). Esta es la idea general:</p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Cuándo</th><th>Qué hacer</th><th>Ejemplo</th></tr></thead>
+      <tbody>
+        <tr><td><b>Día 1</b></td><td>Lectura de la guía con 🎯 y 🧠 (en 2–3 sesiones si no tienes tiempo)</td><td>Temas 1–5 en oficina; 6–12 en el bus con 🚌</td></tr>
+        <tr><td><b>Día 2</b></td><td>Repaso 1: 🧠 Recuerda sin mirar + tarjetas 📅 Hoy</td><td>15 min de flashcards en el trayecto</td></tr>
+        <tr><td><b>Día 4</b></td><td>Repaso 2: 🔀 Repaso mezclado + tarjetas</td><td>Las 10 preguntas mezcladas del cierre activo</td></tr>
+        <tr><td><b>Día 8</b></td><td>Repaso 3: Resumen express + tarjetas</td><td>🎧 Escuchar todo de ida; tarjetas de vuelta</td></tr>
+        <tr><td><b>2 días antes</b></td><td>Simulacro completo, sin ⚡, con tiempo</td><td>Revisa los ❌ y entra a «📘 Ver en la guía»</td></tr>
+        <tr><td><b>Día antes</b></td><td>Siglas, números clave y «No confundir». Dormir bien</td><td>🙈 Modo práctica en siglas; nada de temas nuevos</td></tr>
+        <tr><td><b>Día del examen</b></td><td>Solo un ⚡ mini simulacro para calentar</td><td>10 min en el bus, con instantáneas</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===================== EVITA ===================== -->
+  <section id="evita">
+    <h2>🚫 LO QUE DEBES EVITAR</h2>
+    <div class="grid">
+      <div class="card no"><h3>📖 Releer y subrayar todo</h3><p>Se siente productivo, pero apenas entrena la memoria. Cambia «leer otra vez» por «responder sin mirar».</p></div>
+      <div class="card no"><h3>🌙 Maratón la noche antes</h3><p>Estudiar todo de golpe se olvida rápido y te quita sueño. Reparte en días.</p></div>
+      <div class="card no"><h3>📱 Estudiar con el teléfono a la mano</h3><p>Cada mirada a una notificación rompe la concentración. Modo No Molestar siempre.</p></div>
+      <div class="card no"><h3>✅ Usar siempre ⚡ instantáneas</h3><p>Ayudan a aprender, pero no miden tu nivel real. Haz el simulacro final sin ellas.</p></div>
+      <div class="card no"><h3>👀 Mirar la respuesta enseguida</h3><p>Dale al menos 10 segundos a cada pregunta antes de abrirla. El esfuerzo es lo que hace que recuerdes.</p></div>
+      <div class="card no"><h3>🎶 Música con letra</h3><p>Compite con las palabras que estás leyendo. Mejor instrumental o silencio.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== HOY ===================== -->
+  <section id="hoy">
+    <h2>✅ CHECKLIST DE HOY</h2>
+    <div class="card">
+      <p style="margin-top:0">Marca lo que cumpliste. Se reinicia solo cada día y se guarda en este dispositivo.</p>
+      <ul class="check" id="check">
+        <li><label><input type="checkbox" data-i="0"><span>Activé No Molestar antes de empezar</span></label></li>
+        <li><label><input type="checkbox" data-i="1"><span>Respondí las preguntas 🎯 antes de leer</span></label></li>
+        <li><label><input type="checkbox" data-i="2"><span>Hice mis tarjetas de 📅 Hoy</span></label></li>
+        <li><label><input type="checkbox" data-i="3"><span>Expliqué un tema con mis palabras (🤔 o en voz alta)</span></label></li>
+        <li><label><input type="checkbox" data-i="4"><span>Mezclé al menos dos temas distintos</span></label></li>
+        <li><label><input type="checkbox" data-i="5"><span>Hice una pausa real (sin redes) después de 25–50 min</span></label></li>
+        <li><label><input type="checkbox" data-i="6"><span>Anoté mis dudas en Mis Dudas</span></label></li>
+        <li><label><input type="checkbox" data-i="7"><span>Antes de terminar, escribí o dije 1 idea clave de hoy</span></label></li>
+      </ul>
+      <div class="bar"><i id="checkBar"></i></div>
+      <div class="row"><span id="checkTxt">0 de 8</span><button class="btn" type="button" id="checkReset">↺ Reiniciar</button></div>
+    </div>
+  </section>
+</main>
+
+<footer>Gerencia de Proyectos Informáticos · Parcial 3 · Guía de método de estudio · <a href="index.html">← Índice del parcial</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---------- rutinas por lugar y tiempo ---------- */
+  var R = {
+    transit: {
+      "5": {t:"🚌 5 minutos · una parada", s:[
+        ["Abre las <b>FlashCards</b> en la pestaña 📅 Hoy", "0:30"],
+        ["Responde <b>5–8 tarjetas</b> en tu mente antes de girarlas; marca Difícil o Aprendida con honestidad", "4:00"],
+        ["Al bajarte, repite <b>1 idea</b> que fallaste", "0:30"]],
+        ej:"Ejemplo: tarjeta «¿Qué es el Sprint Backlog?». La dices («ítems del Sprint más el plan») y luego la giras.",
+        tip:"Si vas de pie o con mucho ruido: abre el Resumen Express y toca 🔊 en una sola sección."},
+      "15": {t:"🚌 15 minutos · un trayecto corto", s:[
+        ["Guía en modo <b>🚌 Transporte</b> → <b>▶ Continuar donde quedé</b>", "0:30"],
+        ["Responde las <b>🎯</b> del bloque sin mirar", "2:00"],
+        ["Lee el bloque hasta la próxima <b>🚏 Pausa segura</b>", "6:00"],
+        ["Haz las <b>🧠 Recuerda sin mirar</b> del tema", "3:00"],
+        ["Cierra con <b>10 flashcards</b> de ese tema (filtro 🗂️)", "3:30"]],
+        ej:"Ejemplo: bloque de «XP y Kanban» → 🎯 «¿Kanban usa sprints fijos?» → lees → 🧠 «¿Cuál es el WIP máx del ejemplo?» → 10 tarjetas de XP y Kanban.",
+        tip:"Solo audio: 🎧 Escuchar todo en el Resumen Express (~8 min) y luego di en tu mente los 4 valores del Manifiesto."},
+      "30": {t:"🚌 30 minutos · trayecto largo", s:[
+        ["<b>⚡ Mini simulacro</b> con respuestas instantáneas para ver qué falla", "10:00"],
+        ["Por cada ❌, toca <b>🃏 Tarjetas del tema</b> y repasa ese tema", "10:00"],
+        ["Escucha con 🔊 la sección de la guía del tema más débil", "7:00"],
+        ["Al final, di en voz baja o en tu mente un resumen de 3 frases", "3:00"]],
+        ej:"Ejemplo: fallas «Retro dura hasta 3 h» → tarjetas de Ciclo y eventos → escuchas el tema 3 de la guía.",
+        tip:"Si se corta el viaje, no pasa nada: el simulacro y la guía guardan dónde quedaste."},
+      "90": {t:"🚌 Viaje de una hora o más", s:[
+        ["<b>🎧 Escuchar todo</b> del Resumen Express de principio a fin", "8:00"],
+        ["Guía en 🚌: <b>2 temas</b> completos con 🎯 → leer → 🧠", "25:00"],
+        ["Pausa: mira por la ventana, sin pantalla", "5:00"],
+        ["<b>Siglas</b> con 🙈 Modo práctica", "10:00"],
+        ["<b>⚡ Mini simulacro</b> para cerrar", "10:00"]],
+        ej:"Ejemplo: temas 3 (Ciclo) y 4 (Scrum) seguidos; luego siglas TIA, 3-3-4 y 8·15·4·3.",
+        tip:"En viajes largos alterna pantalla y audio para no cansar la vista."}
+    },
+    office: {
+      "5": {t:"🏢 5 minutos · entre tareas", s:[
+        ["Abre <b>Siglas</b> y activa <b>🙈 Modo práctica</b>", "0:30"],
+        ["Adivina <b>3–4 siglas</b> antes de tocarlas", "3:30"],
+        ["Escribe 1 sigla que fallaste en un papel o nota", "1:00"]],
+        ej:"Ejemplo: ves «PTIR» → dices «Parejas, TDD, Integración continua, Refactorización» → la tocas para comprobar.",
+        tip:"Si no tienes 5 minutos tranquilos, mejor 2 tarjetas de 📅 Hoy."},
+      "15": {t:"🏢 15 minutos · un hueco en el día", s:[
+        ["<b>FlashCards 📅 Hoy</b> hasta vaciar la pestaña o 10 min", "10:00"],
+        ["Elige la tarjeta más difícil y escribe en 3 frases por qué es así", "3:00"],
+        ["Abre el <b>Resumen</b> y busca esa palabra para confirmar", "2:00"]],
+        ej:"Ejemplo: falla «Review vs. Retro» → escribes la diferencia → la confirmas en el Resumen buscando «Retro».",
+        tip:"Con 15 minutos no empieces un tema nuevo largo: repasa lo que ya viste."},
+      "30": {t:"🏢 30 minutos · un pomodoro", s:[
+        ["Guía en modo <b>🏢 Oficina</b> y <b>⏱ Pomodoro 25 min</b>", "0:30"],
+        ["<b>1 tema</b>: 🎯 sin mirar → leer con tablas → 🤔 por escrito en el recuadro → 🧠", "18:00"],
+        ["Dibuja en papel el diagrama o tabla del tema sin mirar", "4:00"],
+        ["<b>10 flashcards</b> del tema", "3:00"],
+        ["Pausa de 5 min lejos de la pantalla", "5:00"]],
+        ej:"Ejemplo: tema 4 Scrum → escribes en 🤔 por qué el Incremento depende de la DoD → dibujas 3 roles · 3 artefactos · 4 eventos.",
+        tip:"Si al leer te surge una duda, anótala en Mis Dudas y sigue: no te detengas a investigar."},
+      "90": {t:"🏢 60–90 minutos · sesión larga", s:[
+        ["Bloque 1 (25 min): <b>2 temas nuevos</b> de la guía con 🎯 / 🤔 / 🧠", "25:00"],
+        ["Pausa 5 min", "5:00"],
+        ["Bloque 2 (25 min): <b>🔀 Repaso mezclado</b> + <b>✍️ Explícalo en 3 frases</b>", "25:00"],
+        ["Pausa 5 min", "5:00"],
+        ["Bloque 3 (25 min): <b>Simulacro completo</b> o la mitad de él; revisa cada ❌ con «📘 Ver en la guía»", "25:00"],
+        ["Cierre: hoja en blanco de 2 min y checklist de hoy", "5:00"]],
+        ej:"Ejemplo: temas 7 (Tradicional vs. Ágil) y 8 (Portal de matrícula) → repaso mezclado → simulacro con 90 min si es la semana del examen.",
+        tip:"Más de 90 minutos seguidos rinde menos: si tienes más tiempo, haz 2 sesiones con una pausa larga en medio."}
+    }
+  };
+  var K = "gpi_p3_metodo_sel_v1", sel = load(K) || {};
+  if(!sel.l) sel.l = window.matchMedia("(max-width:560px)").matches ? "transit" : "office";
+  if(!sel.t) sel.t = "15";
+  function draw(){
+    [["segLugar","l"],["segTiempo","t"]].forEach(function(p){
+      Array.prototype.forEach.call($(p[0]).children, function(b){
+        var on = b.getAttribute("data-v") === sel[p[1]];
+        b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    });
+    var r = R[sel.l][sel.t];
+    $("plan").innerHTML = '<h3>'+r.t+'</h3><div class="meta">Sigue los pasos en orden · el tiempo es aproximado</div>'+
+      '<ol class="steps">'+r.s.map(function(x){ return '<li><span>'+x[0]+'</span><span class="t">'+x[1]+'</span></li>'; }).join("")+'</ol>'+
+      '<div class="ej">💡 '+r.ej+'</div><div class="tip">⚠️ '+r.tip+'</div>';
+  }
+  $("segLugar").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; sel.l = b.getAttribute("data-v"); save(K, sel); draw(); });
+  $("segTiempo").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; sel.t = b.getAttribute("data-v"); save(K, sel); draw(); });
+  draw();
+
+  /* ---------- checklist diaria ---------- */
+  var CK = "gpi_p3_metodo_check_v1", d = new Date(), today = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+  var ck = load(CK); if(!ck || ck.d !== today) ck = {d:today, v:{}};
+  var boxes = document.querySelectorAll("#check input");
+  function upd(){
+    var n = 0; Array.prototype.forEach.call(boxes, function(b){ if(b.checked) n++; });
+    $("checkBar").style.width = (n/boxes.length*100)+"%";
+    $("checkTxt").textContent = n+" de "+boxes.length+(n === boxes.length ? " · ¡Día cumplido! 🎉" : "");
+  }
+  Array.prototype.forEach.call(boxes, function(b){
+    b.checked = !!ck.v[b.getAttribute("data-i")];
+    b.addEventListener("change", function(){ ck.v[b.getAttribute("data-i")] = b.checked; save(CK, ck); upd(); });
+  });
+  $("checkReset").addEventListener("click", function(){ ck.v = {}; save(CK, ck); Array.prototype.forEach.call(boxes, function(b){ b.checked = false; }); upd(); });
+  upd();
+})();
+</script>
+</body>
+</html>
