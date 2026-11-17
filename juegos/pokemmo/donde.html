@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dónde encontrar · PokeMMO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.ty{display:inline-block;background:var(--c);color:#111;font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap;}
+.hint{font-size:.8rem;color:var(--faint);margin-top:8px;}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
+.row2 label.f{flex:1 1 160px;}
+.hl{background:var(--green-dim);}
+td.num,th.num{text-align:right;font-family:var(--mono);}
+
+.res{display:grid;gap:12px;grid-template-columns:1fr;margin-top:12px;}
+@media (min-width:900px){ .res{grid-template-columns:1fr 1fr;} }
+.res h3{display:flex;justify-content:space-between;gap:6px;}
+tr.horda td{background:rgba(95,224,138,.07);}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Dónde <em>encontrarlo</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#buscar">🔎 Por Pokémon</a><a href="#lugar">🗺️ Por lugar</a><a href="#leyenda">📖 Leyenda</a></nav></header>
+<main>
+
+<p class="lead">Datos de encuentros <b>de PokeMMO</b> en las cinco regiones (Kanto, Johto, Hoenn, Sinnoh y Teselia), incluidas las <b>hordas</b>. Los nombres de los lugares están como en la versión en inglés del juego, salvo «Ruta».</p>
+<section id="buscar">
+  <h2>🔎 ¿Dónde está este Pokémon?</h2>
+  <div class="card">
+    <div class="row2">
+      <label class="f">Pokémon<input id="q" type="text" list="dl" placeholder="Escribe: Sandile" autocomplete="off"></label>
+    </div>
+    <datalist id="dl"></datalist>
+    <div class="seg" id="reg" style="margin-top:10px"></div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.88rem;color:var(--dim)"><input type="checkbox" id="onlyH" style="min-height:auto;width:20px;height:20px"> Solo hordas</label>
+    <div id="info" class="hint"></div>
+  </div>
+  <div class="res" id="out"></div>
+</section>
+<section id="lugar">
+  <h2>🗺️ ¿Qué hay en este lugar?</h2>
+  <div class="card">
+    <div class="row2">
+      <label class="f">Región<select id="lr"></select></label>
+      <label class="f">Lugar<select id="ll"></select></label>
+    </div>
+    <div class="tblwrap" style="margin-top:10px"><table><thead><tr><th>Pokémon</th><th>Cómo</th><th>Rareza</th><th class="num">Nivel</th><th>EVs</th></tr></thead><tbody id="lt"></tbody></table></div>
+  </div>
+</section>
+<section id="leyenda">
+  <h2>📖 Cómo leerlo</h2>
+  <div class="grid">
+    <div class="card"><h3>Cómo aparece</h3><ul>
+      <li><b>Hierba / Hierba alta / Cueva / Surf</b>: caminando o nadando.</li>
+      <li><b>Caña Vieja / Buena / Supercaña</b>: pescando.</li>
+      <li><b>Golpe Cabeza / Golpe Roca</b>: usando ese movimiento en árboles o rocas.</li>
+      <li><b>Sombra / Nube de polvo</b>: hierba que se mueve o polvo en cuevas.</li></ul></div>
+    <div class="card"><h3>Rareza</h3><ul>
+      <li><b>Muy común → Muy raro</b>: probabilidad normal de encuentro.</li>
+      <li><b>Horda</b>: aparecen 5 a la vez, sobre todo usando <b>Dulce Aroma</b>. Ideal para <a href="evs.html">entrenar EVs</a>.</li>
+      <li><b>Cebo</b>: solo con cebos (Lure).</li>
+      <li><b>Especial</b>: encuentros especiales (por ejemplo, la hierba que se mueve).</li></ul></div>
+  </div>
+  <p class="hint">Fuente: datos del juego publicados por PokeMMO-Tools (pokemmo-data). Pueden cambiar con actualizaciones del juego.</p>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script src="pokedex.js"></script>
+<script src="pkutil.js"></script>
+<script src="ubicaciones.js"></script>
+<script>
+(function(){
+"use strict";
+function $(id){ return document.getElementById(id); }
+var COL = {"Normal":"#a8a77a","Fuego":"#ee8130","Agua":"#6390f0","Planta":"#7ac74c","Eléctrico":"#f7d02c","Hielo":"#96d9d6","Lucha":"#c22e28","Veneno":"#a33ea1","Tierra":"#e2bf65","Volador":"#a98ff3","Psíquico":"#f95587","Bicho":"#a6b91a","Roca":"#b6a136","Fantasma":"#735797","Dragón":"#6f35fc","Siniestro":"#705746","Acero":"#b7b7ce"};
+function chip(t){ return '<span class="ty" style="--c:' + COL[t] + '">' + t + '</span>'; }
+
+var ORD = [4,0,1,2,3], RN = PKREG, cur = 4, sel = null;
+var RORD = {"Muy común":0,"Común":1,"Poco común":2,"Raro":3,"Muy raro":4,"Horda":5,"Cebo":6,"Especial":7};
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+$("reg").innerHTML = '<button type="button" data-r="-1">Todas</button>' + ORD.map(function(i){ return '<button type="button" data-r="' + i + '">' + RN[i] + '</button>'; }).join("");
+function segOn(){ Array.prototype.forEach.call($("reg").children, function(b){ var on = +b.getAttribute("data-r") === cur; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); }); }
+$("reg").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; cur = +b.getAttribute("data-r"); segOn(); draw(); });
+PK.datalist("dl");
+function lv(r){ return r[3] === r[4] ? r[3] : r[3] + "–" + r[4]; }
+function draw(){
+  var p = sel;
+  if(!p){ $("out").innerHTML = ""; $("info").innerHTML = ""; return; }
+  var rows = (PKLOC[p.id] || []).filter(function(r){ return (cur < 0 || PKLUG[r[0]][0] === cur) && (!$("onlyH").checked || r[2] === "Horda"); });
+  $("info").innerHTML = "<b>" + p.n + "</b> " + p.t.map(chip).join(" ") + " · da " + PK.evText(p) + (p.ok ? "" : ' · <span style="color:var(--red)">no se puede conseguir en estado salvaje</span>') +
+    ' · <a href="guia.html">guía</a> · <a href="mispokemon.html?pk=' + encodeURIComponent(p.n) + '">calculadora</a>';
+  if(!rows.length){
+    var any = (PKLOC[p.id] || []).length;
+    var pre = p.pre ? ' Prueba con su preevolución, <a href="#" data-pk="' + p.pre + '">' + p.pre + "</a>." : "";
+    $("out").innerHTML = '<div class="card"><p>' + (any ? "No aparece con estos filtros. Prueba «Todas»." : "No aparece en estado salvaje: se consigue evolucionando, por regalo, intercambio o crianza.") + pre + '</p></div>';
+    return;
+  }
+  var by = {};
+  rows.forEach(function(r){ (by[r[0]] = by[r[0]] || []).push(r); });
+  var keys = Object.keys(by).sort(function(a, b){ var A = PKLUG[a], B = PKLUG[b]; return ORD.indexOf(A[0]) - ORD.indexOf(B[0]) || A[1].localeCompare(B[1], "es", {numeric:true}); });
+  $("out").innerHTML = keys.map(function(k){
+    var L = PKLUG[k], rs = by[k].sort(function(a, b){ return RORD[a[2]] - RORD[b[2]]; });
+    return '<div class="card"><h3><span>' + esc(L[1]) + '</span><span class="pill">' + RN[L[0]] + '</span></h3><div class="tblwrap"><table><thead><tr><th>Cómo</th><th>Rareza</th><th class="num">Nivel</th></tr></thead><tbody>' +
+      rs.map(function(r){ return '<tr' + (r[2] === "Horda" ? ' class="horda"' : '') + '><td>' + r[1] + '</td><td>' + (r[2] === "Horda" ? "🐾 " : "") + r[2] + '</td><td class="num">' + lv(r) + '</td></tr>'; }).join("") + '</tbody></table></div></div>';
+  }).join("");
+}
+$("out").addEventListener("click", function(e){ var a = e.target.closest("a[data-pk]"); if(!a) return; e.preventDefault(); pick(a.getAttribute("data-pk")); });
+function pick(n){ var p = PK.find(n); if(!p) return; sel = p; $("q").value = p.n; draw(); try{ history.replaceState(null, "", "?pk=" + encodeURIComponent(p.n)); }catch(e){} }
+$("q").addEventListener("input", function(){ if(PK.find(this.value)) pick(this.value); });
+$("onlyH").addEventListener("change", draw);
+/* por lugar */
+var byLoc = {};
+Object.keys(PKLOC).forEach(function(id){ PKLOC[id].forEach(function(r){ (byLoc[r[0]] = byLoc[r[0]] || []).push([+id].concat(r)); }); });
+$("lr").innerHTML = ORD.map(function(i){ return '<option value="' + i + '">' + RN[i] + '</option>'; }).join("");
+function fillLoc(){
+  var reg = +$("lr").value;
+  var ls = PKLUG.map(function(l, i){ return [i, l]; }).filter(function(x){ return x[1][0] === reg; }).sort(function(a, b){ return a[1][1].localeCompare(b[1][1], "es", {numeric:true}); });
+  $("ll").innerHTML = ls.map(function(x){ return '<option value="' + x[0] + '">' + esc(x[1][1]) + '</option>'; }).join("");
+  drawLoc();
+}
+function drawLoc(){
+  var rs = (byLoc[$("ll").value] || []).slice().sort(function(a, b){ return a[2].localeCompare(b[2]) || RORD[a[3]] - RORD[b[3]]; });
+  $("lt").innerHTML = rs.map(function(r){ var p = PK.byId(r[0]);
+    return '<tr' + (r[3] === "Horda" ? ' class="horda"' : '') + '><td><a href="#buscar" data-go="' + p.n + '">' + p.n + '</a></td><td>' + r[2] + '</td><td>' + r[3] + '</td><td class="num">' + (r[4] === r[5] ? r[4] : r[4] + "–" + r[5]) + '</td><td>' + PK.evText(p) + '</td></tr>'; }).join("");
+}
+$("lt").addEventListener("click", function(e){ var a = e.target.closest("a[data-go]"); if(a) pick(a.getAttribute("data-go")); });
+$("lr").addEventListener("change", fillLoc); $("ll").addEventListener("change", drawLoc);
+fillLoc(); segOn();
+var m = /[?&]pk=([^&]+)/.exec(location.search); if(m) pick(decodeURIComponent(m[1].replace(/\+/g, " ")));
+
+})();
+</script>
+</body>
+</html>

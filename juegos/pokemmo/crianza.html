@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Crianza · PokeMMO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.ty{display:inline-block;background:var(--c);color:#111;font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap;}
+.hint{font-size:.8rem;color:var(--faint);margin-top:8px;}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
+.row2 label.f{flex:1 1 160px;}
+.hl{background:var(--green-dim);}
+td.num,th.num{text-align:right;font-family:var(--mono);}
+
+.tree{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.lvl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.lvl .tag{font-size:.74rem;color:var(--faint);font-weight:700;width:100%;}
+.node{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:5px 8px;font-size:.78rem;font-family:var(--mono);}
+.node b{color:var(--green);}
+.node i{font-style:normal;color:var(--accent);}
+.chk{display:flex;flex-wrap:wrap;gap:6px;}
+.chk label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 10px;min-height:44px;font-size:.85rem;font-weight:700;color:var(--dim);cursor:pointer;}
+.chk input{min-height:auto;width:18px;height:18px;}
+.big{font-size:1.5rem;font-weight:800;color:var(--accent);}
+.mates{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;max-height:260px;overflow:auto;}
+.mates span{font-size:.78rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:3px 7px;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Guía de <em>crianza</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#basico">🥚 Lo básico</a><a href="#objetos">🎒 Objetos</a><a href="#piramide">🔺 Pirámide</a><a href="#pareja">💞 Con quién</a><a href="#consejos">💡 Consejos</a></nav></header>
+<main>
+
+<p class="lead">Criar sirve para conseguir Pokémon con <b>buenos IVs</b> y la <b>naturaleza</b> que quieres. En PokeMMO funciona distinto que en los juegos originales: no esperas huevos caminando, pagas y es inmediato, pero <b>los padres se gastan</b>.</p>
+<section id="basico">
+  <h2>🥚 Lo básico en PokeMMO</h2>
+  <div class="grid">
+    <div class="card"><h3>Cómo funciona</h3><ul>
+      <li>Hablas con la <b>Guardería</b>, eliges dos padres y pagas.</li>
+      <li><b>Los dos padres desaparecen</b>: se gastan al criar. Por eso nunca críes con un Pokémon que quieras conservar.</li>
+      <li>La cría es de la especie de la <b>madre</b> (o del que no es Ditto), en su primera etapa.</li></ul></div>
+    <div class="card"><h3>Quién puede criar con quién</h3><ul>
+      <li>Macho + hembra que compartan <b>grupo huevo</b>.</li>
+      <li><b>Ditto</b> cría con casi cualquiera (incluidos los que no tienen sexo, como Magnemite).</li>
+      <li>Los del grupo <b>«No cría»</b> (la mayoría de legendarios) no pueden.</li>
+      <li>Busca el grupo de tu Pokémon <a href="#pareja">más abajo</a>.</li></ul></div>
+    <div class="card"><h3>Elegir el sexo</h3><p>Puedes pagar para que la cría salga macho o hembra. Cuesta más cuanto más raro es ese sexo en la especie (no es lo mismo un 50/50 que un 87,5 % macho).</p></div>
+    <div class="card"><h3>¿Cuánto cuesta?</h3><p>Cada cría cuesta dinero, más los objetos y los padres. Un 5×31 puede costar cientos de miles. Los precios cambian: revísalos en el juego y en el GTL antes de empezar.</p></div>
+  </div>
+</section>
+<section id="objetos">
+  <h2>🎒 Los objetos que lleva cada padre</h2>
+  <div class="grid">
+    <div class="card"><h3>🔒 Objetos Recios → fijan un IV</h3>
+      <p>El padre que lleva uno <b>pasa a la cría su IV de esa estadística</b>. Dos padres con dos objetos distintos = dos IVs asegurados.</p>
+      <div class="tblwrap" style="margin-top:8px"><table><thead><tr><th>Objeto</th><th>En inglés</th><th>IV que pasa</th></tr></thead><tbody>
+        <tr><td><b>Pesa Recia</b></td><td>Power Weight</td><td>PS</td></tr><tr><td><b>Brazal Recio</b></td><td>Power Bracer</td><td>Ataque</td></tr>
+        <tr><td><b>Cinto Recio</b></td><td>Power Belt</td><td>Defensa</td></tr><tr><td><b>Lente Recia</b></td><td>Power Lens</td><td>At. Esp.</td></tr>
+        <tr><td><b>Banda Recia</b></td><td>Power Band</td><td>Def. Esp.</td></tr><tr><td><b>Franja Recia</b></td><td>Power Anklet</td><td>Velocidad</td></tr>
+      </tbody></table></div></div>
+    <div class="card"><h3>🎭 Piedra Eterna → fija la naturaleza</h3>
+      <p>El padre que lleva la <b>Piedra Eterna</b> pasa su <b>naturaleza</b>. Pero entonces ese padre no lleva Objeto Recio: esa cría asegura un IV menos.</p>
+      <p>Por eso conviene meter la naturaleza <b>al principio</b>, en una rama de la pirámide, y no en la última cría.</p>
+      <div class="tip">Lo que no fijas con objetos sale mezclado o al azar: no se puede garantizar.</div></div>
+  </div>
+</section>
+<section id="piramide">
+  <h2>🔺 La pirámide: cuántos padres necesito</h2>
+  <div class="card">
+    <p>Para un Pokémon con <b>N</b> IVs en 31, se juntan dos padres de <b>N−1</b> que comparten casi todo. Elige qué IVs quieres en 31:</p>
+    <div class="chk" id="pv" style="margin-top:10px"></div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;color:var(--dim)"><input type="checkbox" id="pn" style="min-height:auto;width:20px;height:20px"> Además, con naturaleza (Piedra Eterna)</label>
+    <p style="margin-top:12px">Necesitas <span class="big" id="pc">—</span> <span id="pc2"></span></p>
+    <div class="tree" id="pt"></div>
+    <p class="hint">Cada recuadro es un Pokémon. <b>31</b> = IVs en 31 que tiene; <i>[objeto]</i> = lo que lleva al criar.</p>
+  </div>
+</section>
+<section id="pareja">
+  <h2>💞 ¿Con quién puede criar mi Pokémon?</h2>
+  <div class="card">
+    <label class="f">Pokémon<input id="eq" type="text" list="dl" placeholder="Escribe: Sandile" autocomplete="off"></label>
+    <datalist id="dl"></datalist>
+    <div id="eo" style="margin-top:10px"></div>
+  </div>
+</section>
+<section id="consejos">
+  <h2>💡 Consejos para empezar</h2>
+  <div class="card"><ol class="rank">
+    <li><span><b>Para la historia no hace falta.</b> Un Pokémon capturado con buen nivel y buena naturaleza basta.</span></li>
+    <li><span>Empieza con un <b>2×31</b> (el ataque principal y la Velocidad): solo necesitas dos padres 1×31 y dos Objetos Recios.</span></li>
+    <li><span>Los padres <b>1×31</b> se capturan (mira los IVs en su ficha) o se compran baratos en el GTL.</span></li>
+    <li><span>Para naturaleza, captura o compra un padre con la naturaleza buena y dale la Piedra Eterna en la primera cría.</span></li>
+    <li><span>Antes de criar, revisa en la <a href="guia.html">guía</a> qué IVs importan: el IV de lo que no usa (por ejemplo, At. Esp. en un físico) se puede ignorar y ahorras la mitad.</span></li>
+  </ol>
+  <p class="hint">Reglas resumidas de guías de la comunidad de PokeMMO. Si algo no coincide con lo que ves en el juego, manda lo del juego.</p></div>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script src="pokedex.js"></script>
+<script src="pkutil.js"></script>
+<script>
+(function(){
+"use strict";
+function $(id){ return document.getElementById(id); }
+
+var K = PK.K, SN = PK.SN;
+var IT = {hp:"Pesa",atk:"Brazal",def:"Cinto",spa:"Lente",spd:"Banda",spe:"Franja"};
+var AB = {hp:"PS",atk:"Atk",def:"Def",spa:"SpA",spd:"SpD",spe:"Spe"};
+$("pv").innerHTML = K.map(function(k){ return '<label><input type="checkbox" value="' + k + '"' + (k === "atk" || k === "spe" ? " checked" : "") + '> ' + SN[k] + '</label>'; }).join("");
+function node(set, item){ return '<span class="node"><b>' + (set.length ? set.map(function(k){ return AB[k]; }).join(" ") : "—") + '</b>' + (item ? ' <i>[' + item + ']</i>' : '') + '</span>'; }
+/* devuelve las crías por nivel: lvls[n] = lista de [ivs, objeto] */
+function build(set, nat){
+  var lvls = [];
+  (function rec(s, depth, item){
+    (lvls[depth] = lvls[depth] || []).push([s, item]);
+    if(s.length <= 1) return;
+    var a = s.slice(0, -1), b = s.slice(1);
+    rec(a, depth + 1, IT[s[0]]); rec(b, depth + 1, IT[s[s.length - 1]]);
+  })(set, 0, nat ? "" : "");
+  return lvls;
+}
+function draw(){
+  var set = Array.prototype.filter.call($("pv").querySelectorAll("input"), function(i){ return i.checked; }).map(function(i){ return i.value; });
+  var nat = $("pn").checked, n = set.length;
+  if(!n){ $("pc").textContent = "—"; $("pc2").textContent = "Elige al menos uno."; $("pt").innerHTML = ""; return; }
+  var warn = n === 6 ? '<br><span style="color:var(--orange)">Un 6×31 es carísimo y casi nadie lo hace: con 5×31 (ignorando el IV que no usa) basta.</span>' : "";
+  if(n === 1 && !nat){ $("pc").textContent = "1"; $("pc2").innerHTML = "Pokémon: basta con capturar o comprar uno con ese IV en 31."; $("pt").innerHTML = ""; return; }
+  var base = Math.pow(2, n - 1), total = base + (nat ? 1 : 0), crias = base - 1 + (nat ? 1 : 0);
+  $("pc").textContent = total;
+  $("pc2").innerHTML = "padres de partida: " + base + " con un IV en 31" + (nat ? " + 1 con la naturaleza" : "") + ", y unas <b>" + crias + "</b> crías." + warn;
+  var lv = build(set, nat), html = "";
+  for(var d = lv.length - 1; d >= 0; d--){
+    var label = d === 0 ? "🏆 Resultado" : (lv.length - 1 - d === 0 ? "Paso 1 · padres de partida" : "Paso " + (lv.length - d) + "");
+    html += '<div class="lvl"><span class="tag">' + label + ' · ' + lv[d][0][0].length + '×31</span>' +
+      lv[d].map(function(x){ return node(x[0], x[1] && d > 0 ? x[1] : ""); }).join("") + '</div>';
+  }
+  if(nat) html += '<div class="tip">🎭 Con naturaleza: en el primer paso, cría uno de los 1×31 con un padre de la naturaleza buena que lleve la <b>Piedra Eterna</b> (el 1×31 lleva su Objeto Recio). Desde ahí, en cada cría el padre con esa naturaleza lleva la Piedra Eterna en vez del Objeto Recio, así que ese IV puede perderse: revisa cada cría antes de seguir.</div>';
+  $("pt").innerHTML = html;
+}
+$("pv").addEventListener("change", draw); $("pn").addEventListener("change", draw);
+draw();
+/* compatibilidad */
+PK.datalist("dl");
+function ratio(g){ if(g === 255) return "sin sexo"; if(g === 0) return "siempre macho"; if(g === 254) return "siempre hembra"; var f = Math.round(g / 254 * 1000) / 10; return Math.round((100 - f) * 10) / 10 + " % macho · " + f + " % hembra"; }
+function mates(p){
+  var eg = p.eg.filter(function(g){ return g !== "No cría" && g !== "Sin género" && g !== "Ditto"; });
+  if(p.eg.indexOf("No cría") >= 0) return '<div class="warn">' + p.n + ' no puede criar.</div>';
+  if(p.eg.indexOf("Ditto") >= 0) return '<div class="ok">Ditto cría con casi cualquier Pokémon que pueda criar (menos con otro Ditto).</div>';
+  if(p.gr === 255 || !eg.length) return '<div class="tip">' + p.n + ' no tiene sexo: <b>solo puede criar con Ditto</b>.</div>';
+  var list = PK.all().filter(function(o){ return !o.pre && o.id !== p.id && o.gr !== 255 && o.eg.some(function(g){ return eg.indexOf(g) >= 0; }); });
+  return '<div class="ok">Puede criar con <b>Ditto</b> y con cualquier Pokémon de su grupo huevo del sexo contrario (o su evolución). Primeras etapas compatibles (' + list.length + '):</div><div class="mates">' + list.map(function(o){ return '<span>' + o.n + '</span>'; }).join("") + '</div>';
+}
+$("eq").addEventListener("input", function(){
+  var p = PK.find(this.value); if(!p) return;
+  $("eo").innerHTML = "<p><b>" + p.n + "</b> · grupo huevo: <b>" + p.eg.join(" y ") + "</b> · " + ratio(p.gr) + "</p>" + mates(p);
+});
+
+})();
+</script>
+</body>
+</html>

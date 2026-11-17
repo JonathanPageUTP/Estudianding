@@ -78,14 +78,38 @@ table.tt td.x0{background:#111;color:#888;font-weight:800;}
 @media (min-width:561px){ .out{grid-template-columns:1fr 1fr;} }
 .out .card h3{font-size:.9rem;}
 .out .list{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.team-add{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.team-add input{flex:1 1 180px;}
+.team{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.team .mem{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:20px;padding:4px 4px 4px 12px;font-size:.85rem;font-weight:700;}
+.team .mem button{min-width:32px;min-height:32px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--dim);cursor:pointer;}
+table.tm td,table.tm th{text-align:center;padding:5px 6px;}
+table.tm tbody th{text-align:left;}
+table.tm td.x4{background:#6b1f1f;color:#ffd0d0;font-weight:800;}
+table.tm td.x2w{background:#4a1f26;color:#ffc2c2;font-weight:800;}
+table.tm td.xr{background:#1f5233;color:#c8ffd9;font-weight:800;}
+table.tm td.xi{background:#111;color:#888;font-weight:800;}
+table.tm tr.alert th{box-shadow:inset 4px 0 0 var(--red);}
 
 </style>
 </head>
 <body>
-<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Tabla de <em>tipos</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#def">🛡️ Defiendo</a><a href="#atk">⚔️ Ataco</a><a href="#tabla">🧩 Tabla</a></nav></header>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Tabla de <em>tipos</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#equipo">👥 Mi equipo</a><a href="#def">🛡️ Defiendo</a><a href="#atk">⚔️ Ataco</a><a href="#tabla">🧩 Tabla</a></nav></header>
 <main>
 
 <p class="lead">PokeMMO usa la tabla de la <b>5.ª generación</b> (sin tipo Hada). Súper eficaz = <b>×2</b>, poco eficaz = <b>×½</b>, no afecta = <b>×0</b>. Con dos tipos se multiplican: puede quedar ×4 o ×¼. Súmale el <b>+50 % si el ataque es del mismo tipo</b> que el Pokémon que lo usa.</p>
+<section id="equipo">
+  <h2>👥 Mi equipo: ¿a qué tipos es débil?</h2>
+  <div class="card">
+    <p>Añade hasta 6 Pokémon y te digo qué tipos de ataque le hacen daño a muchos de tu equipo a la vez.</p>
+    <div class="team-add"><input id="tm-q" type="text" list="dl-tm" placeholder="Escribe: Krokorok" autocomplete="off" aria-label="Añadir Pokémon al equipo"><button class="btn pri" type="button" id="tm-add">➕ Añadir</button><button class="btn" type="button" id="tm-mis">📦 Traer de Mis Pokémon</button></div>
+    <datalist id="dl-tm"></datalist>
+    <div class="team" id="tm-list"></div>
+    <div id="tm-msg"></div>
+    <div class="tblwrap" id="tm-tbl" style="margin-top:10px" hidden></div>
+    <p style="font-size:.78rem;color:var(--faint);margin-top:8px">Cuenta solo los tipos. Habilidades como Levitación (inmune a Tierra) o Absorbe Agua cambian el resultado.</p>
+  </div>
+</section>
 <section id="def">
   <h2>🛡️ Mi Pokémon defiende: ¿qué le pega fuerte?</h2>
   <div class="card"><p>Elige uno o dos tipos de tu Pokémon:</p><div class="pick" id="pDef"></div><div class="out" id="oDef"></div></div>
@@ -102,6 +126,8 @@ table.tt td.x0{background:#111;color:#888;font-weight:800;}
 
 </main>
 <footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script src="pokedex.js"></script>
+<script src="pkutil.js"></script>
 <script>
 (function(){
 "use strict";
@@ -125,6 +151,61 @@ picker("pDef", 2, function(sel){
   T.forEach(function(a){ var m = sel.reduce(function(x, d){ return x * M[a][d]; }, 1); if(g[m]) g[m].push(a); });
   $("oDef").innerHTML = box("💥 ×4 · muy débil", g[4]) + box("🔥 ×2 · débil", g[2]) + box("🛡️ ×½ · resiste", g[.5]) + box("🧱 ×¼ · resiste mucho", g[.25]) + box("🚫 ×0 · inmune", g[0]);
 });
+/* ---------- equipo ---------- */
+var TK = "pokemmo_equipo_v1", team = [];
+try{ team = JSON.parse(localStorage.getItem(TK)) || []; }catch(e){ team = []; }
+function saveTeam(){ try{ localStorage.setItem(TK, JSON.stringify(team)); }catch(e){} }
+function mult(a, types){ return types.reduce(function(x, d){ return x * M[a][d]; }, 1); }
+function fromMis(){
+  var L = []; try{ L = JSON.parse(localStorage.getItem("pokemmo_mis_v1")) || []; }catch(e){}
+  return L.map(function(d){ return d.sp; }).filter(function(n){ return PK.find(n); });
+}
+function fx(m){ return m === 4 ? "×4" : m === 2 ? "×2" : m === .5 ? "½" : m === .25 ? "¼" : m === 0 ? "0" : ""; }
+function renderTeam(){
+  var mem = team.map(PK.find).filter(Boolean);
+  $("tm-list").innerHTML = mem.length ? mem.map(function(p, i){ return '<span class="mem">' + p.n + ' ' + p.t.map(chip).join(" ") + '<button type="button" data-i="' + i + '" aria-label="Quitar ' + p.n + '">✕</button></span>'; }).join("")
+    : '<span style="color:var(--faint);font-size:.88rem">Tu equipo está vacío.</span>';
+  if(!mem.length){ $("tm-msg").innerHTML = ""; $("tm-tbl").hidden = true; return; }
+  var rows = T.map(function(a){
+    var ms = mem.map(function(p){ return mult(a, p.t); });
+    return {a:a, ms:ms, weak:ms.filter(function(m){ return m > 1; }).length, res:ms.filter(function(m){ return m < 1; }).length};
+  }).sort(function(x, y){ return (y.weak - y.res * .5) - (x.weak - x.res * .5); });
+  var msgs = [], half = Math.max(2, Math.ceil(mem.length / 2));
+  rows.forEach(function(r){
+    if(r.weak >= half && r.res === 0) msgs.push(["warn", "⚠️ <b>" + r.weak + " de " + mem.length + "</b> son débiles a " + chip(r.a) + " y ninguno lo resiste. Te conviene uno que lo aguante."]);
+    else if(r.weak >= half) msgs.push(["tip", "👀 " + r.weak + " de " + mem.length + " son débiles a " + chip(r.a) + " (" + r.res + (r.res === 1 ? " lo resiste)." : " lo resisten).")]);
+  });
+  /* cobertura ofensiva con los tipos del propio equipo (STAB) */
+  var own = []; mem.forEach(function(p){ p.t.forEach(function(t){ if(own.indexOf(t) < 0) own.push(t); }); });
+  var nohit = T.filter(function(d){ return !own.some(function(a){ return M[a][d] > 1; }); });
+  if(nohit.length) msgs.push(["tip", "⚔️ Con ataques de sus propios tipos, tu equipo no le pega súper eficaz a: " + nohit.map(chip).join(" ") + ". Un ataque de otro tipo (MT) puede cubrirlo."]);
+  else msgs.push(["ok", "⚔️ Con ataques de sus propios tipos, tu equipo le pega súper eficaz a todos los tipos."]);
+  if(!msgs.some(function(m){ return m[0] === "warn"; })) msgs.unshift(["ok", "✅ Ningún tipo pilla a la mitad de tu equipo sin que alguno lo resista."]);
+  $("tm-msg").innerHTML = msgs.map(function(m){ return '<div class="' + m[0] + '">' + m[1] + '</div>'; }).join("");
+  $("tm-tbl").hidden = false;
+  $("tm-tbl").innerHTML = '<table class="tm"><thead><tr><th>Ataque</th>' + mem.map(function(p){ return '<th>' + p.n + '</th>'; }).join("") + '<th>Débiles</th><th>Resisten</th></tr></thead><tbody>' +
+    rows.map(function(r){ return '<tr' + (r.weak >= half && r.res === 0 ? ' class="alert"' : '') + '><th>' + chip(r.a) + '</th>' + r.ms.map(function(m){
+      return '<td class="' + (m >= 4 ? "x4" : m > 1 ? "x2w" : m === 0 ? "xi" : m < 1 ? "xr" : "") + '">' + fx(m) + '</td>'; }).join("") +
+      '<td><b>' + (r.weak || "") + '</b></td><td>' + (r.res || "") + '</td></tr>'; }).join("") + '</tbody></table>';
+}
+function addTeam(n){
+  var p = PK.find(n); if(!p) return false;
+  if(team.length >= 6){ $("tm-msg").innerHTML = '<div class="warn">Máximo 6 Pokémon. Quita uno primero.</div>'; return false; }
+  team.push(p.n); saveTeam(); renderTeam(); return true;
+}
+PK.datalist("dl-tm");
+$("tm-add").addEventListener("click", function(){ if(addTeam($("tm-q").value)) $("tm-q").value = ""; else $("tm-q").focus(); });
+$("tm-q").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); $("tm-add").click(); } });
+$("tm-q").addEventListener("change", function(){ if(PK.find(this.value) && addTeam(this.value)) this.value = ""; });
+$("tm-mis").addEventListener("click", function(){
+  var l = fromMis();
+  if(!l.length){ $("tm-msg").innerHTML = '<div class="tip">En <a href="mispokemon.html">Mis Pokémon</a> no hay ninguno con la especie elegida todavía.</div>'; return; }
+  team = l.slice(0, 6); saveTeam(); renderTeam();
+});
+$("tm-list").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; team.splice(+b.getAttribute("data-i"), 1); saveTeam(); renderTeam(); });
+if(!team.length) team = fromMis().slice(0, 6);
+renderTeam();
+
 picker("pAtk", 1, function(sel){
   if(!sel.length){ $("oAtk").innerHTML = ""; return; }
   var a = sel[0], g = {2:[], .5:[], 0:[]};

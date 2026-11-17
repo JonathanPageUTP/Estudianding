@@ -65,7 +65,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
 
 .form{display:grid;gap:10px;grid-template-columns:1fr 1fr;}
-@media (min-width:768px){ .form{grid-template-columns:2fr 1fr 2fr 2fr;} }
+@media (min-width:768px){ .form{grid-template-columns:2fr 2fr 1fr 2fr 2fr;} }
 .form input,.form select{width:100%;}
 .st{overflow-x:auto;margin-top:12px;border:1px solid var(--line);border-radius:12px;}
 .st table{min-width:0;}
@@ -91,6 +91,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .pk .ivs span{font-family:var(--mono);font-size:.74rem;border-radius:6px;padding:2px 6px;background:var(--surface-2);}
 .pk .row{display:flex;gap:6px;margin-top:8px;}
 .pk .row .btn{min-height:38px;padding:4px 10px;font-size:.78rem;}
+.spinfo{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:.86rem;color:var(--dim);margin-top:10px;}
+.spinfo b{color:var(--text);}
 
 </style>
 </head>
@@ -103,11 +105,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   <h2>🧮 Calculadora</h2>
   <div class="card">
     <div class="form">
+      <label class="f">Especie<input id="sp" type="text" list="dl-sp" placeholder="Escribe: Krokorok" autocomplete="off"></label>
       <label class="f">Nombre o apodo<input id="nm" type="text" placeholder="Krokorok"></label>
       <label class="f">Nivel<input id="lv" type="number" min="1" max="100" value="50" inputmode="numeric"></label>
       <label class="f">Naturaleza<select id="nat"></select></label>
       <label class="f">¿Cómo ataca?<select id="rol"><option value="fis">💪 Físico</option><option value="esp">🔮 Especial</option><option value="mix">⚔️ Los dos</option></select></label>
     </div>
+    <div id="spInfo" class="spinfo" hidden></div>
+    <datalist id="dl-sp"></datalist>
     <div class="st"><table><thead><tr><th>Stat</th><th>Base<br><small>(Pokédex)</small></th><th>IV<br><small>0–31</small></th><th>EV<br><small>0–252</small></th><th>Final</th></tr></thead><tbody id="rows"></tbody></table></div>
     <div class="sum" id="sum"></div>
     <div id="an"></div>
@@ -116,7 +121,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <button class="btn" type="button" id="ex">🐊 Cargar ejemplo (Krokorok)</button>
       <button class="btn" type="button" id="clr">↺ Limpiar</button>
     </div>
-    <p style="font-size:.78rem;color:var(--faint);margin-top:8px">Las estadísticas <b>base</b> son de la especie (búscalas en la Pokédex del juego). Si no las pones, igual te analizo IVs, EVs y naturaleza.</p>
+    <p style="font-size:.78rem;color:var(--faint);margin-top:8px">Elige la <b>especie</b> y las estadísticas base se rellenan solas con los datos de PokeMMO. También puedes escribirlas a mano; si no las pones, igual te analizo IVs, EVs y naturaleza.</p>
   </div>
 </section>
 <section id="mis">
@@ -126,6 +131,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 
 </main>
 <footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script src="pokedex.js"></script>
+<script src="pkutil.js"></script>
 <script>
 (function(){
 "use strict";
@@ -156,7 +163,7 @@ function calc(k, b, iv, ev, lv, n){
   return Math.floor((core + 5) * m);
 }
 function read(){
-  var d = {name: $("nm").value.trim(), lv: clamp(+$("lv").value || 50, 1, 100), nat: $("nat").value, rol: $("rol").value, b:{}, iv:{}, ev:{}};
+  var d = {sp: (PK.find($("sp").value) || {}).n || "", name: $("nm").value.trim(), lv: clamp(+$("lv").value || 50, 1, 100), nat: $("nat").value, rol: $("rol").value, b:{}, iv:{}, ev:{}};
   K.forEach(function(k){ d.b[k] = val(k,"b"); d.iv[k] = val(k,"iv"); d.ev[k] = val(k,"ev") || 0; });
   return d;
 }
@@ -198,13 +205,14 @@ function analyze(){
 }
 document.querySelector("#calc .card").addEventListener("input", analyze);
 function fill(d){
+  $("sp").value = d.sp || ""; showSp(PK.find(d.sp));
   $("nm").value = d.name || ""; $("lv").value = d.lv || 50; $("nat").value = d.nat || "Seria"; $("rol").value = d.rol || "fis";
   K.forEach(function(k){ setv(k,"b",d.b ? d.b[k] : null); setv(k,"iv",d.iv ? d.iv[k] : null); setv(k,"ev",d.ev ? d.ev[k] : 0); });
   analyze();
 }
 $("ex").addEventListener("click", function(){
   editing = null;
-  fill({name:"Krokorok (ejemplo)", lv:30, nat:"Firme", rol:"fis", b:{hp:60,atk:82,def:45,spa:45,spd:45,spe:74}, iv:{hp:26,atk:17,def:4,spa:26,spd:15,spe:31}, ev:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}});
+  fill({sp:"Krokorok", name:"Krokorok (ejemplo)", lv:30, nat:"Firme", rol:"fis", b:{hp:60,atk:82,def:45,spa:45,spd:45,spe:74}, iv:{hp:26,atk:17,def:4,spa:26,spd:15,spe:31}, ev:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}});
 });
 $("clr").addEventListener("click", function(){ editing = null; fill({}); $("save").textContent = "💾 Guardar en Mis Pokémon"; });
 function render(){
@@ -212,7 +220,8 @@ function render(){
   $("mine").innerHTML = L.length ? L.map(function(d, i){
     var n = NAT.filter(function(m){ return m.es === d.nat; })[0] || NAT[12], t = 0, c = 0;
     var ivs = K.map(function(k){ var iv = d.iv[k]; if(iv != null){ t += iv; c++; } var q = quality(iv); return '<span class="'+q[0]+'">'+EN[k]+' '+(iv == null ? "?" : iv)+'</span>'; }).join("");
-    return '<div class="pk"><h3><span>' + esc(d.name || "Sin nombre") + '</span><span class="pill">Nv. ' + d.lv + '</span></h3>' +
+    var spp = PK.find(d.sp);
+    return '<div class="pk"><h3><span>' + esc(d.name || "Sin nombre") + (spp && spp.n !== d.name ? ' <small style="color:var(--faint)">(' + spp.n + ')</small>' : '') + '</span><span class="pill">Nv. ' + d.lv + '</span></h3>' +
       '<div class="meta">' + n.es + (n.up ? ' · <span class="up">+' + SN[n.up] + '</span> <span class="down">−' + SN[n.down] + '</span>' : ' · neutra') + ' · ' + ({fis:"físico",esp:"especial",mix:"mixto"}[d.rol]) + (c ? ' · IVs ' + t + '/' + (c*31) : '') + '</div>' +
       '<div class="ivs">' + ivs + '</div><div class="row"><button class="btn" type="button" data-e="'+i+'">✏️ Ver / editar</button><button class="btn" type="button" data-d="'+i+'">🗑 Borrar</button></div></div>';
   }).join("") : '<p class="lead">Aún no guardas ninguno. Llena la calculadora y toca 💾 Guardar.</p>';
@@ -229,7 +238,30 @@ $("mine").addEventListener("click", function(e){
   if(b.hasAttribute("data-d")){ var i = +b.getAttribute("data-d"); if(confirm("¿Borrar a " + (L[i].name || "este Pokémon") + "?")){ L.splice(i,1); store(L); render(); } }
   if(b.hasAttribute("data-e")){ editing = +b.getAttribute("data-e"); fill(L[editing]); $("save").textContent = "💾 Guardar cambios"; $("calc").scrollIntoView({behavior:"smooth"}); }
 });
+var autoName = "";
+function showSp(p){
+  var box = $("spInfo");
+  if(!p){ box.hidden = true; return; }
+  var ab = p.a.map(function(a, i){ return a ? (i === 2 ? a + " (oculta)" : a) : ""; }).filter(Boolean).join(", ");
+  box.innerHTML = "<b>" + p.n + "</b> · " + p.t.join(" / ") + " · da " + PK.evText(p) + " al derrotarlo<br>Habilidades: " + ab +
+    ' · <a href="donde.html?pk=' + encodeURIComponent(p.n) + '">📍 dónde encontrarlo</a>';
+  box.hidden = false;
+}
+function useSp(p){
+  if(!p) return;
+  showSp(p);
+  K.forEach(function(k){ setv(k, "b", p.b[k]); });
+  var r = PK.rol(p); $("rol").value = r === "def" ? (p.b.atk >= p.b.spa ? "fis" : "esp") : r;
+  var nm = $("nm").value.trim();
+  if(!nm || nm === autoName) $("nm").value = autoName = p.n;
+  analyze();
+}
+PK.datalist("dl-sp");
+$("sp").addEventListener("change", function(){ var p = PK.find(this.value); if(p){ this.value = p.n; useSp(p); } else showSp(null); });
+$("sp").addEventListener("input", function(){ var p = PK.find(this.value); if(p) useSp(p); });
 analyze(); render();
+(function(){ var m = /[?&]pk=([^&]+)/.exec(location.search), p = m && PK.find(decodeURIComponent(m[1].replace(/\+/g, " ")));
+  if(p){ editing = null; fill({sp:p.n}); useSp(p); $("calc").scrollIntoView(); } })();
 })();
 </script>
 </body>

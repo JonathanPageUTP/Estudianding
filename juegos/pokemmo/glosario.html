@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Glosario · PokeMMO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.ty{display:inline-block;background:var(--c);color:#111;font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap;}
+.hint{font-size:.8rem;color:var(--faint);margin-top:8px;}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
+.row2 label.f{flex:1 1 160px;}
+.hl{background:var(--green-dim);}
+td.num,th.num{text-align:right;font-family:var(--mono);}
+
+.gl{display:grid;gap:10px;grid-template-columns:1fr;margin-top:12px;}
+@media (min-width:768px){ .gl{grid-template-columns:1fr 1fr;} }
+.gl .card h3{display:flex;justify-content:space-between;gap:6px;font-size:.98rem;}
+.gl .card h3 small{color:var(--accent);font-weight:700;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Glo<em>sario</em></h1></div></header>
+<main>
+
+<p class="lead">Palabras en inglés y jerga que salen en foros, vídeos y en el chat de PokeMMO.</p>
+<div class="card">
+  <label class="f">Buscar<input id="q" type="search" placeholder="Escribe: STAB, horda, sweeper…" autocomplete="off"></label>
+  <div class="seg" id="cat" style="margin-top:10px"></div>
+</div>
+<div class="gl" id="out"></div>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script>
+(function(){
+"use strict";
+function $(id){ return document.getElementById(id); }
+var GL = [["Básico", "STAB", "Same Type Attack Bonus", "+50 % de daño si el ataque es del mismo tipo que el Pokémon.", "guia.html#ataques"], ["Básico", "IV", "Individual Values", "Talento de nacimiento: 0 a 31 en cada estadística. «5×31» = cinco IVs perfectos.", "guia.html#ivs"], ["Básico", "EV", "Effort Values", "Puntos de entrenamiento al derrotar Pokémon. Máx. 252 por estadística y 510 en total.", "evs.html"], ["Básico", "Base stats / BST", "Base Stat Total", "Estadísticas base de la especie y su suma.", "guia.html#ejemplo"], ["Básico", "Nature", "Naturaleza", "+10 % a una estadística, −10 % a otra.", "naturalezas.html"], ["Básico", "HA", "Hidden Ability", "Habilidad oculta: la tercera habilidad posible, más difícil de conseguir.", "guia.html#habilidad"], ["Básico", "Physical / Special", "Físico / especial", "Categoría del ataque: usa Ataque o At. Esp.", "guia.html#stats"], ["Básico", "Crit", "Golpe crítico", "Golpe que hace más daño e ignora algunas subidas de defensa del rival.", ""], ["Básico", "Priority", "Prioridad", "Ataques que van primero sin importar la Velocidad (Ataque Rápido, Puño Bala…).", ""], ["Básico", "OHKO / 2HKO", "One-Hit KO", "Debilitar de un golpe / en dos golpes.", ""], ["Básico", "PP", "Power Points", "Cuántas veces puedes usar un ataque.", ""], ["PokeMMO", "Horde", "Horda", "5 Pokémon salvajes a la vez. Se provocan con Dulce Aroma. Dan 5 veces los EVs.", "evs.html"], ["PokeMMO", "Sweet Scent", "Dulce Aroma", "Movimiento que provoca un encuentro (u horda) al instante.", "evs.html"], ["PokeMMO", "GTL", "Global Trade Link", "El mercado del juego para comprar y vender Pokémon y objetos.", ""], ["PokeMMO", "BP / PB", "Battle Points", "Puntos de Batalla del Metro Batalla; se cambian por objetos.", "objetos.html"], ["PokeMMO", "Lure", "Cebo", "Objeto que atrae encuentros especiales.", "donde.html"], ["PokeMMO", "Daycare", "Guardería", "Donde se cría. En PokeMMO los padres se gastan.", "crianza.html"], ["PokeMMO", "Brace / Power item", "Objeto Recio", "Pasan un IV al criar y suman EVs al entrenar.", "crianza.html#objetos"], ["PokeMMO", "Everstone", "Piedra Eterna", "Pasa la naturaleza al criar e impide evolucionar.", "crianza.html#objetos"], ["PokeMMO", "Egg moves", "Movimientos huevo", "Ataques que solo se consiguen criando.", ""], ["PokeMMO", "Shiny", "Variocolor", "Pokémon de color distinto, muy raro.", ""], ["PokeMMO", "OT", "Original Trainer", "Entrenador original: quien lo capturó.", "guia.html#ficha"], ["PokeMMO", "Pickup / Payday", "Recogida / Día de Pago", "Formas de ganar objetos o dinero extra.", ""], ["Competitivo", "Sweeper", "Barredor", "Pokémon rápido y fuerte que intenta debilitar a varios seguidos.", ""], ["Competitivo", "Wall / Tank", "Muro / tanque", "Pokémon que aguanta mucho daño.", ""], ["Competitivo", "Pivot", "Pivote", "Entra, recibe un golpe o ataca y sale (Ida y Vuelta, Voltiocambio).", ""], ["Competitivo", "Setup", "Preparación", "Usar un turno para subir estadísticas (Danza Espada, Paz Mental) y luego barrer.", ""], ["Competitivo", "Stall", "Desgaste", "Estilo que gana aguantando y desgastando al rival poco a poco.", ""], ["Competitivo", "Lead", "Abridor", "El Pokémon con el que empiezas el combate.", ""], ["Competitivo", "Revenge killer", "Vengador", "Entra tras caer un aliado para debilitar al rival dañado.", ""], ["Competitivo", "Check / Counter", "Freno / contra", "Pokémon que aguanta a otro (check) o lo vence siempre (counter).", ""], ["Competitivo", "Coverage", "Cobertura", "Ataques de otros tipos para pegarle a más rivales.", "tipos.html"], ["Competitivo", "Hazards", "Trampas de entrada", "Púas, Trampa Rocas…: dañan al rival cada vez que cambia.", ""], ["Competitivo", "Trick Room", "Espacio Raro", "Durante 5 turnos, el más lento ataca primero.", ""], ["Competitivo", "Spread", "Reparto", "Cómo repartes los 510 EVs, por ejemplo 252 Atk / 252 Spe / 4 HP.", "evs.html"], ["Competitivo", "Speed tier", "Escalón de velocidad", "A quién superas en Velocidad con tu reparto y naturaleza.", ""], ["Competitivo", "Tier (OU, UU, NU)", "Categoría", "Niveles de uso en competitivo: OU es lo más usado.", ""], ["Naturalezas", "Adamant / Jolly", "Firme / Alegre", "+Ataque / +Velocidad, ambas −At. Esp. Para físicos.", "naturalezas.html"], ["Naturalezas", "Modest / Timid", "Modesta / Miedosa", "+At. Esp. / +Velocidad, ambas −Ataque. Para especiales.", "naturalezas.html"], ["Naturalezas", "Bold / Impish", "Osada / Agitada", "+Defensa (−Ataque / −At. Esp.). Para muros físicos.", "naturalezas.html"], ["Naturalezas", "Calm / Careful", "Serena / Cauta", "+Def. Esp. (−Ataque / −At. Esp.). Para muros especiales.", "naturalezas.html"], ["Stats", "HP / Atk / Def", "PS / Ataque / Defensa", "Abreviaturas en inglés de las estadísticas.", "guia.html#stats"], ["Stats", "SpA / SpD / Spe", "At. Esp. / Def. Esp. / Velocidad", "Ídem. A veces escritas SpAtk, SpDef, Spd.", "guia.html#stats"]];
+var cats = ["Todas"]; GL.forEach(function(g){ if(cats.indexOf(g[0]) < 0) cats.push(g[0]); });
+var cur = "Todas";
+function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+$("cat").innerHTML = cats.map(function(c){ return '<button type="button" data-c="' + c + '">' + c + '</button>'; }).join("");
+$("cat").addEventListener("click", function(e){ var b = e.target.closest("button"); if(b){ cur = b.getAttribute("data-c"); draw(); } });
+$("q").addEventListener("input", draw);
+function draw(){
+  Array.prototype.forEach.call($("cat").children, function(b){ var o = b.getAttribute("data-c") === cur; b.classList.toggle("on", o); b.setAttribute("aria-pressed", o); });
+  var q = norm($("q").value.trim());
+  var l = GL.filter(function(g){ return (cur === "Todas" || g[0] === cur) && (!q || norm(g.slice(1, 4).join(" ")).indexOf(q) >= 0); });
+  $("out").innerHTML = l.length ? l.map(function(g){ return '<div class="card"><h3><span>' + g[1] + '</span><small>' + g[2] + '</small></h3><p>' + g[3] + (g[4] ? ' <a href="' + g[4] + '">Ver →</a>' : '') + '</p></div>'; }).join("") : '<p class="lead">Nada con esa palabra.</p>';
+}
+draw();
+
+})();
+</script>
+</body>
+</html>

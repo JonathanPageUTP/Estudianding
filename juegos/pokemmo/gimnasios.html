@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Gimnasios de Teselia · PokeMMO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<style>
+:root{
+  --bg:#0d0f1a; --grid:#121628; --surface:#151a2e; --surface-2:#1b2139; --line:#283053; --line-soft:#1e2541;
+  --text:#eef0fa; --dim:#aab1d1; --faint:#737ba0;
+  --accent:#ffcb3d; --accent-dim:#4d3d0f; --red:#ff7a7a; --red-dim:#4a1f26; --blue:#6fb6ff; --blue-dim:#16304d;
+  --green:#5fe08a; --green-dim:#173d26; --violet:#c7a4ff; --violet-dim:#2d2350; --orange:#ffa95c;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  font-size:clamp(15px,1rem + .2vw,18px);line-height:1.55;overflow-wrap:anywhere;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--blue);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.76rem;font-weight:700;text-decoration:none;color:var(--dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+section{margin:22px 0;scroll-margin-top:120px;}
+section>h2{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);margin-bottom:10px;}
+.lead{color:var(--dim);max-width:70ch;margin-bottom:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{font-size:1rem;margin-bottom:6px;}
+.card p,.card li{color:var(--dim);font-size:.93rem;}
+.card p+p{margin-top:6px;}
+.card ul{margin:6px 0 0;padding-left:20px;} .card li{margin:4px 0;}
+.card b,.lead b{color:var(--text);}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.tip{background:var(--accent-dim);border:1px solid #6b5517;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.ok{background:var(--green-dim);border:1px solid #2a6b42;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.warn{background:var(--red-dim);border:1px solid #6b2a35;border-radius:12px;padding:10px 12px;font-size:.9rem;margin-top:10px;}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.88rem;}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-size:.72rem;font-family:var(--mono);color:var(--faint);background:var(--surface-2);letter-spacing:.04em;}
+td{color:var(--dim);} td b{color:var(--text);}
+.up{color:var(--red);font-weight:700;} .down{color:var(--blue);font-weight:700;} .neu{color:var(--faint);}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:22px;padding:8px 14px;min-height:44px;font:700 .85rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#2a1f00;}
+.seg{display:flex;flex-wrap:wrap;gap:6px;}
+.seg button{min-height:44px;border:1px solid var(--line);background:var(--surface);color:var(--dim);border-radius:12px;padding:6px 12px;font:700 .84rem var(--sans);cursor:pointer;}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+input,select{font-size:16px;font-family:var(--sans);background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;min-height:44px;padding:0 10px;}
+input[type=number]{width:100%;}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--faint);}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.76rem;color:var(--faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;} }
+
+.pill{display:inline-block;font-size:.72rem;font-weight:700;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--dim);background:var(--surface-2);}
+.ty{display:inline-block;background:var(--c);color:#111;font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap;}
+.hint{font-size:.8rem;color:var(--faint);margin-top:8px;}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;}
+.row2 label.f{flex:1 1 160px;}
+.hl{background:var(--green-dim);}
+td.num,th.num{text-align:right;font-family:var(--mono);}
+
+.gym{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:768px){ .gym{grid-template-columns:1fr 1fr;} }
+.gym .card h3{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.gym .n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#2a1f00;font-weight:800;flex-shrink:0;margin-right:6px;}
+.team{display:flex;flex-direction:column;gap:4px;margin:8px 0;}
+.team div{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-size:.86rem;}
+.team b{color:var(--text);}
+.lv{font-family:var(--mono);font-size:.78rem;color:var(--faint);}
+.adv{font-size:.82rem;margin-top:6px;}
+.adv .l{color:var(--faint);font-weight:700;margin-right:4px;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Gimnasios de <em>Teselia</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#gyms">🏟️ Gimnasios</a><a href="#liga">👑 Alto Mando</a><a href="#prep">🎒 Preparación</a></nav></header>
+<main>
+
+<div class="warn">⚠️ Los equipos y niveles son los de <b>Pokémon Negro y Blanco</b>, en los que se basa la Teselia de PokeMMO. PokeMMO puede cambiar niveles y Pokémon, así que tómalos como referencia aproximada.</div>
+<section id="gyms">
+  <h2>🏟️ Los 8 gimnasios, en orden</h2>
+  <p class="lead">Debajo de cada uno: los tipos que le pegan súper eficaz (✅) y los tipos de <b>tu</b> equipo que sufren con sus ataques (⚠️). Repasa la <a href="tipos.html#equipo">tabla de tipos de tu equipo</a>.</p>
+  <div class="gym" id="g"></div>
+</section>
+<section id="liga">
+  <h2>👑 Liga Pokémon: Alto Mando</h2>
+  <p class="lead">Se enfrentan en el orden que quieras. Al vencer a los cuatro sigue la historia (en Negro/Blanco, N y Ghetsis); el Campeón Mirto (Alder) queda para después.</p>
+  <div class="gym" id="e"></div>
+</section>
+<section id="prep">
+  <h2>🎒 Antes de cada gimnasio</h2>
+  <div class="card"><ol class="rank">
+    <li><span>Lleva tu equipo <b>al nivel del Pokémon más fuerte del líder</b> o un poco más.</span></li>
+    <li><span>Al menos un Pokémon con un ataque <b>súper eficaz</b> contra su tipo (con STAB, mejor).</span></li>
+    <li><span>Compra <b>Superpociones</b> y <b>Revivir</b>; los líderes usan curaciones.</span></li>
+    <li><span>Los entrenadores del gimnasio dan buena experiencia: pelea con todos antes del líder.</span></li>
+  </ol></div>
+</section>
+
+</main>
+<footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script src="pokedex.js"></script>
+<script src="pkutil.js"></script>
+<script>
+(function(){
+"use strict";
+function $(id){ return document.getElementById(id); }
+var COL = {"Normal":"#a8a77a","Fuego":"#ee8130","Agua":"#6390f0","Planta":"#7ac74c","Eléctrico":"#f7d02c","Hielo":"#96d9d6","Lucha":"#c22e28","Veneno":"#a33ea1","Tierra":"#e2bf65","Volador":"#a98ff3","Psíquico":"#f95587","Bicho":"#a6b91a","Roca":"#b6a136","Fantasma":"#735797","Dragón":"#6f35fc","Siniestro":"#705746","Acero":"#b7b7ce"};
+function chip(t){ return '<span class="ty" style="--c:' + COL[t] + '">' + t + '</span>'; }
+var T = ["Normal", "Fuego", "Agua", "Planta", "Eléctrico", "Hielo", "Lucha", "Veneno", "Tierra", "Volador", "Psíquico", "Bicho", "Roca", "Fantasma", "Dragón", "Siniestro", "Acero"], M = {"Normal": {"Normal": 1, "Fuego": 1, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 1, "Lucha": 1, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 1, "Bicho": 1, "Roca": 0.5, "Fantasma": 0, "Dragón": 1, "Siniestro": 1, "Acero": 0.5}, "Fuego": {"Normal": 1, "Fuego": 0.5, "Agua": 0.5, "Planta": 2, "Eléctrico": 1, "Hielo": 2, "Lucha": 1, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 1, "Bicho": 2, "Roca": 0.5, "Fantasma": 1, "Dragón": 0.5, "Siniestro": 1, "Acero": 2}, "Agua": {"Normal": 1, "Fuego": 2, "Agua": 0.5, "Planta": 0.5, "Eléctrico": 1, "Hielo": 1, "Lucha": 1, "Veneno": 1, "Tierra": 2, "Volador": 1, "Psíquico": 1, "Bicho": 1, "Roca": 2, "Fantasma": 1, "Dragón": 0.5, "Siniestro": 1, "Acero": 1}, "Planta": {"Normal": 1, "Fuego": 0.5, "Agua": 2, "Planta": 0.5, "Eléctrico": 1, "Hielo": 1, "Lucha": 1, "Veneno": 0.5, "Tierra": 2, "Volador": 0.5, "Psíquico": 1, "Bicho": 0.5, "Roca": 2, "Fantasma": 1, "Dragón": 0.5, "Siniestro": 1, "Acero": 0.5}, "Eléctrico": {"Normal": 1, "Fuego": 1, "Agua": 2, "Planta": 0.5, "Eléctrico": 0.5, "Hielo": 1, "Lucha": 1, "Veneno": 1, "Tierra": 0, "Volador": 2, "Psíquico": 1, "Bicho": 1, "Roca": 1, "Fantasma": 1, "Dragón": 0.5, "Siniestro": 1, "Acero": 1}, "Hielo": {"Normal": 1, "Fuego": 0.5, "Agua": 0.5, "Planta": 2, "Eléctrico": 1, "Hielo": 0.5, "Lucha": 1, "Veneno": 1, "Tierra": 2, "Volador": 2, "Psíquico": 1, "Bicho": 1, "Roca": 1, "Fantasma": 1, "Dragón": 2, "Siniestro": 1, "Acero": 0.5}, "Lucha": {"Normal": 2, "Fuego": 1, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 2, "Lucha": 1, "Veneno": 0.5, "Tierra": 1, "Volador": 0.5, "Psíquico": 0.5, "Bicho": 0.5, "Roca": 2, "Fantasma": 0, "Dragón": 1, "Siniestro": 2, "Acero": 2}, "Veneno": {"Normal": 1, "Fuego": 1, "Agua": 1, "Planta": 2, "Eléctrico": 1, "Hielo": 1, "Lucha": 1, "Veneno": 0.5, "Tierra": 0.5, "Volador": 1, "Psíquico": 1, "Bicho": 1, "Roca": 0.5, "Fantasma": 0.5, "Dragón": 1, "Siniestro": 1, "Acero": 0}, "Tierra": {"Normal": 1, "Fuego": 2, "Agua": 1, "Planta": 0.5, "Eléctrico": 2, "Hielo": 1, "Lucha": 1, "Veneno": 2, "Tierra": 1, "Volador": 0, "Psíquico": 1, "Bicho": 0.5, "Roca": 2, "Fantasma": 1, "Dragón": 1, "Siniestro": 1, "Acero": 2}, "Volador": {"Normal": 1, "Fuego": 1, "Agua": 1, "Planta": 2, "Eléctrico": 0.5, "Hielo": 1, "Lucha": 2, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 1, "Bicho": 2, "Roca": 0.5, "Fantasma": 1, "Dragón": 1, "Siniestro": 1, "Acero": 0.5}, "Psíquico": {"Normal": 1, "Fuego": 1, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 1, "Lucha": 2, "Veneno": 2, "Tierra": 1, "Volador": 1, "Psíquico": 0.5, "Bicho": 1, "Roca": 1, "Fantasma": 1, "Dragón": 1, "Siniestro": 0, "Acero": 0.5}, "Bicho": {"Normal": 1, "Fuego": 0.5, "Agua": 1, "Planta": 2, "Eléctrico": 1, "Hielo": 1, "Lucha": 0.5, "Veneno": 0.5, "Tierra": 1, "Volador": 0.5, "Psíquico": 2, "Bicho": 1, "Roca": 1, "Fantasma": 0.5, "Dragón": 1, "Siniestro": 2, "Acero": 0.5}, "Roca": {"Normal": 1, "Fuego": 2, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 2, "Lucha": 0.5, "Veneno": 1, "Tierra": 0.5, "Volador": 2, "Psíquico": 1, "Bicho": 2, "Roca": 1, "Fantasma": 1, "Dragón": 1, "Siniestro": 1, "Acero": 0.5}, "Fantasma": {"Normal": 0, "Fuego": 1, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 1, "Lucha": 1, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 2, "Bicho": 1, "Roca": 1, "Fantasma": 2, "Dragón": 1, "Siniestro": 0.5, "Acero": 0.5}, "Dragón": {"Normal": 1, "Fuego": 1, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 1, "Lucha": 1, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 1, "Bicho": 1, "Roca": 1, "Fantasma": 1, "Dragón": 2, "Siniestro": 1, "Acero": 0.5}, "Siniestro": {"Normal": 1, "Fuego": 1, "Agua": 1, "Planta": 1, "Eléctrico": 1, "Hielo": 1, "Lucha": 0.5, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 2, "Bicho": 1, "Roca": 1, "Fantasma": 2, "Dragón": 1, "Siniestro": 0.5, "Acero": 0.5}, "Acero": {"Normal": 1, "Fuego": 0.5, "Agua": 0.5, "Planta": 1, "Eléctrico": 0.5, "Hielo": 2, "Lucha": 1, "Veneno": 1, "Tierra": 1, "Volador": 1, "Psíquico": 1, "Bicho": 1, "Roca": 2, "Fantasma": 1, "Dragón": 1, "Siniestro": 1, "Acero": 0.5}};
+var GYMS = [["Ciudad Gres", "Striaton City", "Millo / Zeo / Maíz", "Cilan / Chili / Cress", "Inicial", [["Lillipup", 12], ["Pansage / Pansear / Panpour", 14]], "Te enfrentas al de tipo con ventaja sobre tu inicial: Planta (Millo) si elegiste Oshawott, Fuego (Zeo) si elegiste Snivy, Agua (Maíz) si elegiste Tepig. Antes del gimnasio te regalan el mono que le gana."], ["Ciudad Esmalte", "Nacrene City", "Aloe", "Lenora", "Normal", [["Herdier", 18], ["Watchog", 20]], "Watchog conoce Rayo Confuso y Hipnosis. Lucha es tu mejor tipo."], ["Ciudad Porcelana", "Castelia City", "Camus", "Burgh", "Bicho", [["Whirlipede", 21], ["Dwebble", 21], ["Leavanny", 23]], "Fuego, Volador y Roca van genial. Cuidado con Leavanny y su Tijera X."], ["Ciudad Mayólica", "Nimbasa City", "Camila", "Elesa", "Eléctrico", [["Emolga", 25], ["Emolga", 25], ["Zebstrika", 27]], "Emolga es Eléctrico/Volador: Tierra no le afecta. Usa Roca o Hielo contra ellos; Tierra contra Zebstrika."], ["Ciudad Fayenza", "Driftveil City", "Yakón", "Clay", "Tierra", [["Krokorok", 29], ["Palpitoad", 29], ["Excadrill", 31]], "Excadrill pega muy fuerte. Agua y Lucha lo debilitan; Planta va bien contra Krokorok y Palpitoad."], ["Ciudad Loza", "Mistralton City", "Gerania", "Skyla", "Volador", [["Swoobat", 33], ["Unfezant", 33], ["Swanna", 35]], "Eléctrico, Roca y Hielo. Swanna es Agua/Volador: Eléctrico le hace ×4."], ["Ciudad Teja", "Icirrus City", "Junco", "Brycen", "Hielo", [["Vanillish", 37], ["Cryogonal", 37], ["Beartic", 39]], "Fuego, Lucha, Roca y Acero. Cryogonal tiene mucha Def. Esp.: atácalo con ataques físicos."], ["Ciudad Caolín", "Opelucid City", "Lirio (Negro) / Iris (Blanco)", "Drayden / Iris", "Dragón", [["Fraxure", 41], ["Druddigon", 41], ["Haxorus", 43]], "Hielo y Dragón son súper eficaces. Haxorus es muy fuerte: un ataque de Hielo rápido es ideal."]], E4 = [["Anís", "Shauntal", "Fantasma", [["Cofagrigus", 48], ["Jellicent", 48], ["Golurk", 48], ["Chandelure", 50]]], ["Aza", "Grimsley", "Siniestro", [["Scrafty", 48], ["Liepard", 48], ["Krookodile", 48], ["Bisharp", 50]]], ["Catleya", "Caitlin", "Psíquico", [["Reuniclus", 48], ["Musharna", 48], ["Sigilyph", 48], ["Gothitelle", 50]]], ["Lotto", "Marshal", "Lucha", [["Throh", 48], ["Sawk", 48], ["Mienshao", 48], ["Conkeldurr", 50]]]];
+
+function strong(t){ return T.filter(function(a){ return M[a][t] > 1; }); }
+function hits(t){ return T.filter(function(d){ return M[t][d] > 1; }); }
+function mem(m){
+  var names = m[0].split(" / "), p = PK.find(names[0]);
+  return '<div><b>' + m[0] + '</b> <span class="lv">Nv. ' + m[1] + '</span> ' + (p && names.length === 1 ? p.t.map(chip).join(" ") : "") + '</div>';
+}
+function adv(t){
+  if(t === "Inicial") return '<div class="adv">Depende de tu inicial: ver la nota.</div>';
+  return '<div class="adv"><span class="l">✅ Úsale</span>' + strong(t).map(chip).join(" ") + '</div><div class="adv"><span class="l">⚠️ Sufren</span>' + hits(t).map(chip).join(" ") + '</div>';
+}
+$("g").innerHTML = GYMS.map(function(g, i){
+  return '<div class="card"><h3><span><span class="n">' + (i + 1) + '</span>' + g[2] + ' <small style="color:var(--faint)">(' + g[3] + ')</small></span>' + (g[4] === "Inicial" ? '<span class="pill">según tu inicial</span>' : chip(g[4])) + '</h3>' +
+    '<p style="font-size:.84rem">📍 ' + g[0] + ' <span style="color:var(--faint)">(' + g[1] + ')</span></p>' +
+    '<div class="team">' + g[5].map(mem).join("") + '</div>' + adv(g[4]) + '<p style="margin-top:8px;font-size:.86rem">💡 ' + g[6] + '</p></div>';
+}).join("");
+$("e").innerHTML = E4.map(function(g){
+  return '<div class="card"><h3><span>' + g[0] + ' <small style="color:var(--faint)">(' + g[1] + ')</small></span>' + chip(g[2]) + '</h3><div class="team">' + g[3].map(mem).join("") + '</div>' + adv(g[2]) + '</div>';
+}).join("");
+
+})();
+</script>
+</body>
+</html>

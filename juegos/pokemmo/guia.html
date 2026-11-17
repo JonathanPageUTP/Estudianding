@@ -103,7 +103,7 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
   <h2>🏃 Un Pokémon es como un atleta</h2>
   <p>Sus estadísticas finales (PS, Ataque…) salen de sumar cinco cosas. Entiende cada una y vas a saber leer la ficha de cualquier Pokémon.</p>
   <div class="atleta">
-    <div><div class="e">🐎</div><b>Especie</b><span>Su «raza». Un <span class="x-name"></span> siempre será más fuerte que un <span class="x-pre"></span>.</span></div>
+    <div><div class="e">🐎</div><b>Especie</b><span id="x-esp"></span></div>
     <div><div class="e">🧬</div><b>IVs</b><span>Talento natural. Nació así; no se entrena.</span></div>
     <div><div class="e">🏋️</div><b>EVs</b><span>Entrenamiento en el gimnasio: lo que gana peleando.</span></div>
     <div><div class="e">🎭</div><b>Naturaleza</b><span>Personalidad: mejor en una cosa, peor en otra.</span></div>
@@ -114,6 +114,8 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
 <div class="picker" role="group" aria-labelledby="pk-lbl">
   <div class="lbl" id="pk-lbl">🎯 Pokémon de ejemplo para toda la guía (elige uno):</div>
   <div class="seg" id="pk"></div>
+  <label class="f" style="margin-top:8px">🔎 O busca cualquier otro (los 649 de PokeMMO)<input id="pk-q" type="text" list="dl-pk" placeholder="Escribe: Lucario, Gengar…" autocomplete="off"></label>
+  <datalist id="dl-pk"></datalist>
 </div>
 
 <section id="ejemplo">
@@ -122,7 +124,8 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
     <div class="card"><h3><span id="x-emoji"></span> <span class="x-name"></span></h3>
       <div class="types" id="x-types"></div>
       <p id="x-rolTxt"></p>
-      <p style="font-size:.82rem;margin-top:8px">¿El tuyo no está? Mete sus datos en la <a href="mispokemon.html">calculadora de Mis Pokémon</a>.</p>
+      <p id="x-gen" class="tip" hidden>🤖 Este ejemplo se armó solo con los datos de PokeMMO (rol según sus stats base, IVs inventados). Los 8 de los botones tienen consejos escritos a mano.</p>
+      <div class="seg" style="margin-top:10px"><a class="btn pri" id="x-calc" href="mispokemon.html">🧮 Analizar uno mío</a><a class="btn" id="x-donde" href="donde.html">📍 Dónde encontrarlo</a></div>
     </div>
     <div class="card bars base"><h3>Estadísticas base de la especie</h3><div id="x-base"></div>
       <p style="font-size:.8rem;margin-top:6px">Total: <b id="x-baseT"></b>. Son iguales para todos los <span class="x-name"></span>; lo que cambia entre uno y otro son IVs, EVs, naturaleza y nivel.</p></div>
@@ -263,6 +266,8 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
 
 </main>
 <footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script src="pokedex.js"></script>
+<script src="pkutil.js"></script>
 <script>
 (function(){
 "use strict";
@@ -285,7 +290,7 @@ var P = [
  {id:"pignite",n:"Pignite",e:"🐷",t:["Fuego","Lucha"],pre:"Tepig",rol:"mix",b:[90,93,55,70,55,55],key:"atk",un:[],
   ev:"+2 Ataque",spread:"252 Ataque / 252 At. Esp. o Velocidad / 4 PS",
   nat:[["ok","Activa","+Velocidad, −Defensa"],["ok","Huraña","+Ataque, −Defensa"],["bad","Osada","+Defensa, −Ataque: le quita fuerza a sus golpes físicos"]],
-  ab:[["Mar Llamas","Con poca vida (⅓ o menos), sus ataques de Fuego pegan un 50 % más."],["Audaz <span class='pill'>oculta</span>","Potencia los ataques con retroceso, como Envite Ígneo o Derribo."]],
+  ab:[["Mar Llamas","Con poca vida (⅓ o menos), sus ataques de Fuego pegan un 50 % más."],["Sebo <span class='pill'>oculta</span>","Recibe la mitad de daño de los ataques de Fuego y de Hielo."]],
   stab:["Demolición","Lucha",75,"Cabezazo","Normal",70],iv:[20,28,12,18,22,9]},
  {id:"excadrill",n:"Excadrill",e:"⛏️",t:["Tierra","Acero"],pre:"Drilbur",rol:"fis",b:[110,135,60,50,65,88],key:"atk",un:["spa"],
   ev:"+2 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
@@ -325,16 +330,46 @@ function q(iv){ if(iv === 31) return ["var(--green)","perfecto"]; if(iv >= 26) r
 function list(a){ return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " y " + a[a.length - 1]; }
 function row(lbl, w, col, v){ return '<div class="row"><span>'+lbl+'</span><div class="bar"><i style="width:'+w+'%;background:'+col+'"></i></div><span class="v">'+v+'</span></div>'; }
 
+var CMP = {F:[["Cabezazo","Normal",70],["Triturar","Siniestro",80],["Garra Dragón","Dragón",80]], E:[["Pulso Umbrío","Siniestro",80],["Rayo Hielo","Hielo",90],["Psíquico","Psíquico",90]]};
+var NATR = {
+  fis:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
+  esp:[["ok","Modesta","+At. Esp., −Ataque"],["ok","Miedosa","+Velocidad, −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
+  def:[["ok","Plácida","+Defensa, −Velocidad"],["ok","Grosera","+Def. Esp., −Velocidad"],["bad","Activa","+Velocidad, −Defensa: sube lo que no usa y baja lo que lo mantiene vivo"]],
+  mix:[["ok","Activa","+Velocidad, −Defensa"],["ok","Ingenua","+Velocidad, −Def. Esp."],["bad","Serena","+Def. Esp., −Ataque: le quita fuerza a sus golpes físicos"]]
+};
+var SPREAD = {fis:"252 Ataque / 252 Velocidad / 4 PS", esp:"252 At. Esp. / 252 Velocidad / 4 PS", def:"252 PS / 252 Defensa o Def. Esp. / 4 en la otra", mix:"252 Ataque / 252 At. Esp. o Velocidad / 4 PS"};
+/* arma un ejemplo automático para cualquier Pokémon de pokedex.js */
+function gen(d){
+  var r = PK.rol(d), b = d.b, seed = d.id * 9301 + 49297;
+  var key = r === "fis" ? "atk" : r === "esp" ? "spa" : r === "def" ? (b.def >= b.spd ? "def" : "spd") : (b.atk >= b.spa ? "atk" : "spa");
+  var un = r === "fis" ? ["spa"] : r === "esp" ? ["atk"] : r === "def" ? [b.atk >= b.spa ? "spa" : "atk", "spe"] : [];
+  var st = null;
+  if(d.stab){ var c = CMP[d.stab[3]].filter(function(x){ return d.t.indexOf(x[1]) < 0; })[0]; st = [d.stab[0], d.stab[1], d.stab[2]].concat(c); }
+  var ab = d.a.map(function(a, i){ return a ? [a + (i === 2 ? " <span class='pill'>oculta</span>" : ""), (window.PKAB && PKAB[a]) || ""] : null; }).filter(Boolean);
+  return {id:"pk-" + d.id, n:d.n, e:"🔎", t:d.t, pre:d.pre, rol:r, b:K.map(function(k){ return b[k]; }), key:key, un:un,
+    ev:PK.evText(d), spread:SPREAD[r], nat:NATR[r], ab:ab, stab:st,
+    iv:K.map(function(){ seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * 32); }), gen:true};
+}
+PK.datalist("dl-pk");
+$("pk-q").addEventListener("input", function(){
+  var d = PK.find(this.value); if(!d) return;
+  var cur = P.filter(function(x){ return x.n === d.n; })[0];
+  this.value = d.n; this.blur(); show(cur || gen(d), true);
+});
 $("pk").innerHTML = P.map(function(p){ return '<button type="button" data-id="'+p.id+'" aria-pressed="false">'+p.e+' '+p.n+'</button>'; }).join("");
-$("pk").addEventListener("click", function(ev){ var b = ev.target.closest("button"); if(b) show(b.getAttribute("data-id"), true); });
+$("pk").addEventListener("click", function(ev){ var b = ev.target.closest("button"); if(b){ $("pk-q").value = ""; show(b.getAttribute("data-id"), true); } });
 
 function show(id, save){
-  var p = P.filter(function(x){ return x.id === id; })[0] || P[0], i;
+  var p = typeof id === "object" ? id : P.filter(function(x){ return x.id === id; })[0] || P[0], i;
   var bs = $("pk").querySelectorAll("button");
   for(i = 0; i < bs.length; i++){ var on = bs[i].getAttribute("data-id") === p.id; bs[i].classList.toggle("on", on); bs[i].setAttribute("aria-pressed", on); }
-  if(save){ try{ localStorage.setItem(KEYST, p.id); }catch(e){} }
+  if(save){ try{ localStorage.setItem(KEYST, p.gen ? p.n : p.id); }catch(e){} }
+  $("x-gen").hidden = !p.gen;
+  $("x-calc").href = "mispokemon.html?pk=" + encodeURIComponent(p.n);
+  $("x-donde").href = "donde.html?pk=" + encodeURIComponent(p.n);
+  $("x-esp").innerHTML = p.pre ? "Su «raza». Un " + p.n + " siempre será más fuerte que un " + p.pre + "." : "Su «raza». Cada especie tiene sus propias estadísticas base: es lo que más pesa.";
   var b = {}; K.forEach(function(k, j){ b[k] = p.b[j]; });
-  all("x-name", p.n); all("x-pre", p.pre); all("x-keyStat", SN[p.key]);
+  all("x-name", p.n); all("x-keyStat", SN[p.key]);
   $("x-emoji").textContent = p.e;
   $("x-types").innerHTML = p.t.map(function(t){ return '<span class="pill">'+t+'</span>'; }).join("");
   $("x-rolTxt").innerHTML = ROL[p.rol];
@@ -377,13 +412,15 @@ function show(id, save){
   $("x-catTip").innerHTML = p.rol === "fis" ? p.n + " es físico, así que su At. Esp. da igual."
     : p.rol === "esp" ? p.n + " es especial, así que su Ataque da igual."
     : p.rol === "mix" ? p.n + " usa los dos: sus ataques de un tipo pueden ser físicos y los de otro, especiales."
-    : p.n + " es defensivo: le importan PS, Defensa y Def. Esp.; su At. Esp. y su Velocidad dan igual.";
-  var s = p.stab, ef = Math.round(s[2] * 1.5);
+    : p.n + " es defensivo: le importan PS, Defensa y Def. Esp.; su " + list(p.un.map(function(k){ return SN[k]; })) + " dan igual.";
+  var s = p.stab, ef = s ? Math.round(s[2] * 1.5) : 0;
+  if(!s){ $("x-stab").innerHTML = p.n + " no aprende subiendo de nivel ataques de su tipo que hagan daño: búscalos por MT o tutor."; return; }
   $("x-stab").innerHTML = "En " + p.n + " (" + p.t.join("/") + "), <b>" + s[0] + "</b> (" + s[1] + ", " + s[2] + ") pega como si tuviera <b>" + ef + "</b> de poder; <b>" + s[3] + "</b> (" + s[4] + ", " + s[5] + ") se queda en " + s[5] + ".";
 }
 
 var saved = null; try{ saved = localStorage.getItem(KEYST); }catch(e){}
-show(saved || "krokorok", false);
+var sd = saved && PK.find(saved);
+show(sd ? (P.filter(function(x){ return x.n === sd.n; })[0] || gen(sd)) : (saved || "krokorok"), false);
 
 /* el selector se pega justo debajo de la cabecera */
 function hdh(){ document.documentElement.style.setProperty("--hdh", document.querySelector("header.top").offsetHeight + "px"); }
