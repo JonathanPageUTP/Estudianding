@@ -243,7 +243,7 @@ function showSp(p){
   var box = $("spInfo");
   if(!p){ box.hidden = true; return; }
   var ab = p.a.map(function(a, i){ return a ? (i === 2 ? a + " (oculta)" : a) : ""; }).filter(Boolean).join(", ");
-  box.innerHTML = "<b>" + p.n + "</b> · " + p.t.join(" / ") + " · da " + PK.evText(p) + " al derrotarlo<br>Habilidades: " + ab +
+  box.innerHTML = "<b>" + p.n + "</b> · " + p.t.join(" / ") + " · da " + PK.evText(p) + " al derrotarlo<br>Habilidades: " + ab + (PK.chain(p) ? "<br>🔁 " + PK.chain(p).join("<br>🔁 ") : "") +
     ' · <a href="donde.html?pk=' + encodeURIComponent(p.n) + '">📍 dónde encontrarlo</a>';
   box.hidden = false;
 }
