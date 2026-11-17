@@ -93,6 +93,31 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
 @media (max-width:767px){ .picker{position:static;} }
 .evo{font-size:.86rem;color:var(--dim);margin-top:8px;}
 .evo small{color:var(--faint);}
+.vs{width:100%;}
+.vs td:first-child{white-space:nowrap;}
+.vs .yes{color:var(--violet);font-weight:700;} .vs .no{color:var(--green);font-weight:700;}
+.fam .row{grid-template-columns:110px 1fr 46px;}
+.fam .row.cur span:first-child{color:var(--accent);font-weight:800;}
+.regs{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-top:8px;}
+.regs div{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:.82rem;color:var(--dim);}
+.regs b{display:block;color:var(--text);font-size:.95rem;}
+.regs .on{border-color:var(--accent);background:var(--accent-dim);}
+.tiers{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.tiers div{display:grid;grid-template-columns:90px 1fr;gap:8px;font-size:.86rem;color:var(--dim);padding:6px 8px;border-radius:10px;border:1px solid var(--line-soft);}
+.tiers div b{color:var(--text);font-family:var(--mono);}
+.tiers .on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.fx{display:grid;gap:10px;grid-template-columns:1fr 1fr;}
+@media (min-width:768px){ .fx{grid-template-columns:repeat(3,1fr);} }
+.fx input[type=range]{width:100%;min-height:44px;accent-color:var(--accent);}
+.steps{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.steps div{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:8px 10px;font-size:.88rem;color:var(--dim);}
+.steps div b{color:var(--text);}
+.steps .n{font-family:var(--mono);font-size:1rem;color:var(--text);font-weight:800;}
+.steps small{display:block;color:var(--faint);font-size:.78rem;margin-top:2px;}
+.stack{display:flex;height:22px;border-radius:8px;overflow:hidden;margin-top:12px;border:1px solid var(--line);}
+.stack i{display:block;height:100%;}
+.leg{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-size:.8rem;color:var(--dim);}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:5px;vertical-align:-1px;}
 .ficha{display:grid;gap:12px;grid-template-columns:1fr;}
 @media (min-width:561px){ .ficha{grid-template-columns:1fr 1.3fr;} }
 .ficha .types{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;}
@@ -100,7 +125,7 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
 </style>
 </head>
 <body>
-<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Guía · <em>tu Pokémon</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#ejemplo">🎯 Ejemplo</a><a href="#cuanto">⚖️ Cuánto aporta</a><a href="#ivs">🧬 IVs</a><a href="#evs">🏋️ EVs</a><a href="#naturaleza">🎭 Naturaleza</a><a href="#habilidad">✨ Habilidad</a><a href="#stats">📊 Stats</a><a href="#ataques">⚔️ Ataques</a><a href="#ficha">📋 Ficha</a><a href="#importa">🎯 Qué importa</a></nav></header>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Guía · <em>tu Pokémon</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#ejemplo">🎯 Ejemplo</a><a href="#especie">🐎 Especie</a><a href="#formula">🔬 Fórmula</a><a href="#cuanto">⚖️ Cuánto aporta</a><a href="#ivs">🧬 IVs</a><a href="#evs">🏋️ EVs</a><a href="#naturaleza">🎭 Naturaleza</a><a href="#habilidad">✨ Habilidad</a><a href="#stats">📊 Stats</a><a href="#ataques">⚔️ Ataques</a><a href="#ficha">📋 Ficha</a><a href="#importa">🎯 Qué importa</a></nav></header>
 <main>
 
 <div class="hero">
@@ -136,6 +161,75 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
     </div>
     <div class="card bars base"><h3>Estadísticas base de la especie</h3><div id="x-base"></div>
       <p style="font-size:.8rem;margin-top:6px">Total: <b id="x-baseT"></b>. Son iguales para todos los <span class="x-name"></span>; lo que cambia entre uno y otro son IVs, EVs, naturaleza y nivel.</p></div>
+  </div>
+</section>
+
+<section id="especie">
+  <h2>🐎 La especie: la «raza» de tu Pokémon</h2>
+  <p class="lead">Una <b>especie</b> es el tipo de Pokémon: «Krokorok», «Pikachu», «Snivy». Tu Pokémon es <b>un individuo</b> de esa especie. Todos los <span class="x-name"></span> del mundo comparten lo que da la especie; lo que cambia entre el tuyo y el de otro jugador son IVs, EVs, naturaleza, nivel y cuál de sus habilidades tiene.</p>
+  <div class="grid">
+    <div class="card"><h3>📌 Qué fija la especie de <span class="x-name"></span></h3>
+      <div class="tblwrap"><table class="vs"><tbody id="x-fija"></tbody></table></div>
+    </div>
+    <div class="card"><h3>👤 Qué cambia en cada individuo</h3>
+      <ul>
+        <li><b>IVs</b>: talento de nacimiento, 0–31 por estadística.</li>
+        <li><b>EVs</b>: lo que ha entrenado, hasta 252 por estadística.</li>
+        <li><b>Naturaleza</b>: una de 25; ±10 % en dos estadísticas.</li>
+        <li><b>Nivel</b>: 1 a 100.</li>
+        <li><b>Habilidad</b>: <i>una</i> de las que permite la especie.</li>
+        <li><b>Sexo, ataques que sabe, objeto, apodo</b>.</li>
+      </ul>
+      <div class="tip">💡 Por eso dos <span class="x-name"></span> al mismo nivel se parecen mucho, pero nunca son idénticos.</div>
+    </div>
+  </div>
+
+  <h3 style="margin:18px 0 8px">🗺️ ¿Cuántas especies hay?</h3>
+  <div class="card">
+    <p>En PokeMMO hay <b>649 especies</b>: las de las cinco primeras generaciones. Cada región trajo las suyas, y el número de la Pokédex nacional te dice de cuál es. <span class="x-name"></span> es la <b id="x-num"></b>.</p>
+    <div class="regs" id="x-regs"></div>
+    <p style="margin-top:10px">Ojo: <b>cada etapa de evolución es una especie distinta</b>, con sus propias estadísticas base. Al evolucionar, tu Pokémon cambia de especie y conserva sus IVs, EVs, naturaleza y nivel.</p>
+  </div>
+
+  <h3 style="margin:18px 0 8px">🌱 La familia de <span class="x-name"></span></h3>
+  <div class="card bars fam"><div id="x-fam"></div>
+    <p style="font-size:.84rem;margin-top:8px" id="x-famTxt"></p></div>
+
+  <h3 style="margin:18px 0 8px">🏆 ¿Es una especie fuerte?</h3>
+  <div class="grid">
+    <div class="card"><p>El <b>total de estadísticas base</b> (la suma de las seis) es la mejor medida rápida de lo fuerte que es una especie. Va de 180 a 720.</p>
+      <div class="tiers" id="x-tiers"></div></div>
+    <div class="card"><h3>📊 <span class="x-name"></span> frente a las 649 especies</h3>
+      <div class="bars" id="x-rank"></div>
+      <p style="font-size:.8rem;margin-top:6px">El porcentaje es cuántas especies tienen esa estadística más baja que <span class="x-name"></span>. Te dice en qué destaca de verdad.</p></div>
+  </div>
+</section>
+
+<section id="formula">
+  <h2>🔬 La fórmula por partes: qué aporta cada cosa y por qué</h2>
+  <p class="lead">Mueve los controles y mira cómo se calcula, paso a paso, una estadística de <b class="x-name"></b>.</p>
+  <div class="card">
+    <div class="fx">
+      <label class="f">Estadística<select id="f-st"></select></label>
+      <label class="f">Base de la especie<input id="f-b" type="number" min="1" max="255" inputmode="numeric"></label>
+      <label class="f">Nivel <b id="f-lvv"></b><input id="f-lv" type="range" min="1" max="100" value="50"></label>
+      <label class="f">IV <b id="f-ivv"></b><input id="f-iv" type="range" min="0" max="31" value="31"></label>
+      <label class="f">EVs <b id="f-evv"></b><input id="f-ev" type="range" min="0" max="252" step="4" value="252"></label>
+      <label class="f">Naturaleza<select id="f-nat"><option value="1.1">Le sube (+10 %)</option><option value="1" selected>Neutra</option><option value="0.9">Le baja (−10 %)</option></select></label>
+    </div>
+    <div class="steps" id="f-steps"></div>
+    <div class="stack" id="f-stack" aria-hidden="true"></div>
+    <div class="leg" id="f-leg"></div>
+  </div>
+  <div class="grid" style="margin-top:12px">
+    <div class="card"><h3>🐎 ¿Por qué la base va × 2?</h3>
+      <p>La base es lo único que distingue a una especie de otra, así que el juego le da el mayor peso: a nivel 100, <b>cada punto de base vale 2 puntos</b> en la estadística final, mientras que cada punto de IV vale 1 y cada 4 EVs valen 1.</p>
+      <p>Las bases van de 1 a 255, así que la especie puede aportar <b>de 2 a 510</b> puntos. Los IVs, como mucho 31, y los EVs, 63. Con el × 2 se asegura que <b>la especie pese más que el entrenamiento</b>: un Magikarp perfecto nunca pegará como un Gyarados normal.</p></div>
+    <div class="card"><h3>🧬 IV: + IV</h3><p>Se suma tal cual: de 0 a 31. Es la variación natural entre individuos, como la altura entre personas. Aporta como mucho 31: menos de una cuarta parte de lo que da una especie con base media (70 × 2 = 140).</p></div>
+    <div class="card"><h3>🏋️ EV: + EV ÷ 4</h3><p>Los EVs se dividen entre 4 (redondeando hacia abajo), por eso 252 EVs dan 63 y 2 EVs sueltos no dan nada. Es el entrenamiento: puede casi duplicar lo que da el IV, pero solo en las estadísticas que elijas.</p></div>
+    <div class="card"><h3>⭐ Nivel: × Nivel ÷ 100</h3><p>Todo lo anterior se multiplica por el nivel y se divide entre 100. A nivel 100 cuenta entero; a nivel 50, la mitad; a nivel 10, una décima parte. Por eso a nivel bajo los IVs casi no se notan.</p></div>
+    <div class="card"><h3>➕ El + 5 (y el + Nivel + 10 de los PS)</h3><p>Es un pequeño mínimo para que ninguna estadística sea 0. Los <b>PS</b> no suman 5: suman <b>Nivel + 10</b>, por eso los PS crecen más rápido que el resto al subir de nivel.</p></div>
+    <div class="card"><h3>🎭 Naturaleza: × 1,1 o × 0,9</h3><p>Se aplica <b>al final</b>, sobre el total. Por eso su efecto crece con la estadística: en una de 100 son 10 puntos; en una de 300, 30. Nunca afecta a los PS.</p></div>
   </div>
 </section>
 
@@ -437,6 +531,69 @@ function markBtns(){
   var bs = $("pk").querySelectorAll("button"), i;
   for(i = 0; i < bs.length; i++){ var on = bs[i].getAttribute("data-id") === curId; bs[i].classList.toggle("on", on); bs[i].setAttribute("aria-pressed", on); if(on && bs[i].scrollIntoView) $("pk").scrollLeft = bs[i].offsetLeft - 20; }
 }
+/* ----- especie ----- */
+var REGS = [["Kanto",1,151],["Johto",152,251],["Hoenn",252,386],["Sinnoh",387,493],["Teselia",494,649]];
+var TIERS = [[0,299,"Menos de 300","Primeras etapas y Pokémon débiles (Magikarp, Sandile, Snivy)."],[300,449,"300 – 449","Etapas intermedias y especies que no evolucionan."],[450,579,"450 – 579","Evoluciones finales: la mayoría de los Pokémon de un equipo."],[580,679,"580 – 679","Pseudolegendarios y legendarios (Dragonite, Garchomp, Hydreigon…)."],[680,999,"680 o más","Los legendarios más fuertes."]];
+var ALL = PK.all(), SUM = function(d){ return K.reduce(function(a, k){ return a + d.b[k]; }, 0); };
+function pct(d, k){ var v = k ? d.b[k] : SUM(d), lo = ALL.filter(function(o){ return (k ? o.b[k] : SUM(o)) < v; }).length; return Math.round(lo / ALL.length * 100); }
+function family(d){
+  var base = d, g = 0; while(base.pre && g++ < 5){ var q = PK.find(base.pre); if(!q) break; base = q; }
+  var out = [], seen = {};
+  (function walk(x, how){ if(seen[x.n]) return; seen[x.n] = 1; out.push([x, how]); x.evo.forEach(function(e){ var n = PK.find(e[0]); if(n) walk(n, e[1]); }); })(base, "");
+  return out;
+}
+function especie(p){
+  var d = PK.find(p.n); if(!d) return;
+  var ab = d.a.map(function(a, i){ return a ? a + (i === 2 ? " (oculta)" : "") : ""; }).filter(Boolean).join(", ");
+  var g = d.gr === 255 ? "Sin sexo" : d.gr === 0 ? "Siempre macho" : d.gr === 254 ? "Siempre hembra" : Math.round((254 - d.gr) / 254 * 1000) / 10 + " % macho";
+  $("x-fija").innerHTML = [
+    ["Tipos", d.t.join(" / ")], ["Stats base", K.map(function(k){ return SN[k] + " " + d.b[k]; }).join(" · ") + " (total " + SUM(d) + ")"],
+    ["Habilidades posibles", ab], ["EVs que da al derrotarlo", PK.evText(d)], ["Grupo huevo", d.eg.join(", ")], ["Sexo", g],
+    ["Evoluciona", d.evo.length ? d.evo.map(function(e){ return e[0] + " (" + e[1] + ")"; }).join(", ") : "No evoluciona más"]
+  ].map(function(x){ return '<tr><td><b>' + x[0] + '</b></td><td>' + x[1] + '</td></tr>'; }).join("");
+  var reg = REGS.filter(function(x){ return d.id >= x[1] && d.id <= x[2]; })[0];
+  $("x-num").textContent = "nº " + ("00" + d.id).slice(-3) + ", de " + (reg ? reg[0] : "?");
+  $("x-regs").innerHTML = REGS.map(function(x){ return '<div class="' + (x === reg ? "on" : "") + '"><b>' + x[0] + '</b>nº ' + x[1] + '–' + x[2] + '<br>' + (x[2] - x[1] + 1) + ' especies</div>'; }).join("");
+  var fam = family(d), mx = Math.max.apply(null, fam.map(function(f){ return SUM(f[0]); }));
+  $("x-fam").innerHTML = fam.map(function(f){ var t = SUM(f[0]);
+    return '<div class="row' + (f[0].n === d.n ? " cur" : "") + '"><span>' + f[0].n + '</span><div class="bar"><i style="width:' + Math.round(t / 720 * 100) + '%;background:' + (f[0].n === d.n ? "var(--accent)" : "var(--violet)") + '"></i></div><span class="v">' + t + '</span></div>'; }).join("");
+  if(fam.length > 1){
+    var a = fam[0][0], z = fam[fam.length - 1][0], sp = SUM(z) - SUM(a);
+    $("x-famTxt").innerHTML = "Son " + fam.length + " especies distintas. De " + a.n + " a " + z.n + " el total de base sube <b>" + sp + " puntos</b>. Como la base cuenta × 2, a nivel 100 eso son unos <b>" + sp * 2 + " puntos</b> repartidos entre sus estadísticas. Unos IVs perfectos en todo darían como mucho 186.";
+  } else $("x-famTxt").innerHTML = d.n + " no tiene evoluciones: es una especie sola.";
+  var tot = SUM(d);
+  $("x-tiers").innerHTML = TIERS.map(function(t){ return '<div class="' + (tot >= t[0] && tot <= t[1] ? "on" : "") + '"><b>' + t[2] + '</b><span>' + t[3] + (tot >= t[0] && tot <= t[1] ? " ← <b>" + d.n + " (" + tot + ")</b>" : "") + '</span></div>'; }).join("");
+  $("x-rank").innerHTML = [null].concat(K).map(function(k){ var v = pct(d, k);
+    return '<div class="row"><span>' + (k ? SN[k] : "<b>Total</b>") + '</span><div class="bar"><i style="width:' + v + '%;background:' + (v >= 75 ? "var(--green)" : v >= 40 ? "var(--accent)" : "var(--red)") + '"></i></div><span class="v">' + v + ' %</span></div>'; }).join("");
+  /* fórmula */
+  fBase = d.b; $("f-st").value = p.key; $("f-b").value = d.b[p.key]; formula();
+}
+var fBase = null;
+$("f-st").innerHTML = K.map(function(k){ return '<option value="' + k + '">' + SN[k] + '</option>'; }).join("");
+$("f-st").addEventListener("change", function(){ if(fBase) $("f-b").value = fBase[this.value]; formula(); });
+["f-b","f-lv","f-iv","f-ev","f-nat"].forEach(function(id){ $(id).addEventListener("input", formula); });
+function formula(){
+  var k = $("f-st").value, hp = k === "hp", B = Math.max(1, Math.min(255, +$("f-b").value || 1)), L = +$("f-lv").value, I = +$("f-iv").value, E = +$("f-ev").value, N = hp ? 1 : +$("f-nat").value;
+  $("f-lvv").textContent = L; $("f-ivv").textContent = I; $("f-evv").textContent = E;
+  $("f-nat").disabled = hp;
+  var a = 2 * B, b = a + I, ev4 = Math.floor(E / 4), c = b + ev4, d = Math.floor(c * L / 100), e = hp ? d + L + 10 : d + 5, f = hp ? e : Math.floor(e * N);
+  var st = [
+    ["var(--violet)", "🐎 2 × Base", "2 × " + B, a, "La especie, con doble peso."],
+    ["var(--blue)", "🧬 + IV", "+ " + I, b, "Talento de nacimiento (0–31)."],
+    ["var(--green)", "🏋️ + EV ÷ 4", "+ " + E + " ÷ 4 = " + ev4, c, "Entrenamiento: cada 4 EVs, 1 punto."],
+    ["var(--orange)", "⭐ × Nivel ÷ 100", "× " + L + " ÷ 100", d, "Se escala por nivel y se redondea hacia abajo."],
+    ["var(--faint)", hp ? "➕ + Nivel + 10" : "➕ + 5", hp ? "+ " + L + " + 10" : "+ 5", e, hp ? "Los PS suman el nivel: crecen más rápido." : "Mínimo fijo."]
+  ];
+  if(!hp) st.push(["var(--accent)", "🎭 × Naturaleza", "× " + String(N).replace(".", ","), f, N === 1 ? "Neutra: no cambia nada." : "Se aplica al final, sobre el total."]);
+  $("f-steps").innerHTML = st.map(function(x){ return '<div style="--c:' + x[0] + '"><span><b>' + x[1] + '</b> <span style="font-family:var(--mono)">' + x[2] + '</span><small>' + x[4] + '</small></span><span class="n">' + x[3] + '</span></div>'; }).join("") +
+    '<div style="--c:var(--accent)"><span><b>= ' + SN[k] + ' final a nivel ' + L + '</b></span><span class="n" style="color:var(--accent)">' + f + '</span></div>';
+  /* reparto aproximado de cada factor en el resultado */
+  var parts = [["Especie", a * L / 100, "var(--violet)"], ["IV", I * L / 100, "var(--blue)"], ["EV", ev4 * L / 100, "var(--green)"], [hp ? "Nivel + 10" : "+5", hp ? L + 10 : 5, "var(--faint)"]];
+  if(!hp && N !== 1) parts.push(["Naturaleza", Math.abs(f - e), N > 1 ? "var(--accent)" : "var(--red)"]);
+  var tot = parts.reduce(function(s, x){ return s + x[1]; }, 0) || 1;
+  $("f-stack").innerHTML = parts.map(function(x){ return '<i style="width:' + (x[1] / tot * 100) + '%;background:' + x[2] + '" title="' + x[0] + '"></i>'; }).join("");
+  $("f-leg").innerHTML = parts.map(function(x){ return '<span style="--c:' + x[2] + '">' + x[0] + ' ' + Math.round(x[1] / tot * 100) + ' %' + (x[0] === "Naturaleza" && N < 1 ? " (resta)" : "") + '</span>'; }).join("");
+}
 function show(id, save){
   var p = typeof id === "object" ? id : P.filter(function(x){ return x.id === id; })[0] || P[0], i;
   curId = p.id;
@@ -452,6 +609,7 @@ function show(id, save){
   $("x-esp").innerHTML = p.pre ? "Su «raza». Un " + p.n + " siempre será más fuerte que un " + p.pre + "." : "Su «raza». Cada especie tiene sus propias estadísticas base: es lo que más pesa.";
   var b = {}; K.forEach(function(k, j){ b[k] = p.b[j]; });
   all("x-name", p.n); all("x-keyStat", SN[p.key]);
+  especie(p);
   $("x-emoji").textContent = p.e;
   $("x-types").innerHTML = p.t.map(function(t){ return '<span class="pill">'+t+'</span>'; }).join("");
   $("x-rolTxt").innerHTML = ROL[p.rol];
