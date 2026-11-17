@@ -502,6 +502,8 @@ function show(id, save){
 
 drawBtns();
 var saved = null; try{ saved = localStorage.getItem(KEYST); }catch(e){}
+var qm = /[?&]pk=([^&]+)/.exec(location.search);
+if(qm && PK.find(decodeURIComponent(qm[1].replace(/\+/g, " ")))) saved = decodeURIComponent(qm[1].replace(/\+/g, " "));
 var sd = saved && PK.find(saved);
 show(sd ? (P.filter(function(x){ return x.n === sd.n; })[0] || gen(sd)) : (saved || "krokorok"), false);
 
