@@ -1,7 +1,7 @@
 # Genera pokedex.js y ubicaciones.js.
 # Uso: python3 generar_datos.py <carpeta con monster.json, moves.json y CSV de PokeAPI> <carpeta de salida>
-# Fuentes: github.com/PokeMMO-Tools/pokemmo-data (data/monster.json, data/moves.json)
-#          github.com/PokeAPI/pokeapi (data/v2/csv: abilities, ability_names, ability_flavor_text, moves, move_names)
+# Fuentes: github.com/PokeMMO-Tools/pokemmo-data (data/monster.json, data/moves.json, data/items.json -> items_mmo.json)
+#          github.com/PokeAPI/pokeapi (data/v2/csv: abilities, ability_names, ability_flavor_text, moves, move_names, items, item_names)
 import json, csv, re, sys, os, collections
 D = sys.argv[1]; OUT = sys.argv[2]
 def rd(f): return list(csv.DictReader(open(os.path.join(D, f), encoding="utf-8")))
@@ -28,11 +28,47 @@ def ab(name):
     if not i or i not in abes: miss["ab:"+name] += 1; return name
     es = abes[i]; ABD[es] = abtx.get(i, (0, ""))[1]; return es
 def mv(name):
-    i = mvid.get(norm(name)) or {"hijumpkick":"high-jump-kick"}.get(norm(name))
+    i = mvid.get(norm(name)) or {"hijumpkick":"high-jump-kick","faintattack":"feint-attack"}.get(norm(name))
     if i and not i.isdigit(): i = mvid.get(norm(i))
     if not i or i not in mves: miss["mv:"+name] += 1; return name
     return mves[i]
 ABD = {}
+itid = {norm(r["identifier"]): r["id"] for r in rd("items.csv")}
+ites = {r["item_id"]: r["name"] for r in rd("item_names.csv") if r["local_language_id"] == "7"}
+mmoit = {i["id"]: i["name"] for i in json.load(open(os.path.join(D, "items_mmo.json")))}
+mvbyid = {m["id"]: m["name"] for m in moves.values()}
+names = {m["id"]: m["name"] for m in mons}
+def it(n):
+    i = itid.get(norm(n)) or itid.get({"thunderstone":"thunderstone","deepseatooth":"deepseatooth","deepseascale":"deepseascale","upgrade":"upgrade"}.get(norm(n), ""))
+    if not i or i not in ites: miss["it:"+n] += 1; return n
+    return ites[i]
+def how(e):
+    t, v = e["type"], e["val"]; itn = e.get("item_name") or mmoit.get(v, "")
+    if t == "LEVEL": return "nivel %d" % v
+    if t == "ITEM": return it(itn)
+    if t == "ITEM_MALE": return it(itn) + " (macho)"
+    if t == "ITEM_FEMALE": return it(itn) + " (hembra)"
+    if t == "TRADE": return "intercambio"
+    if t == "TRADE_WITH_ITEM": return "intercambio llevando " + it(itn)
+    if t == "TRADE_FOR_OPPOSITE": return "intercambio por un " + ("Shelmet" if e["name"] == "Escavalier" else "Karrablast")
+    if t == "HAPPINESS": return "amistad alta"
+    if t == "HAPPINESS_DAY": return "amistad alta, de día"
+    if t == "HAPPINESS_NIGHT": return "amistad alta, de noche"
+    if t == "LEVEL_ITEM_NIGHT": return "subir de nivel de noche llevando " + it(itn)
+    if t == "LEVEL_ITEM_DAY": return "subir de nivel de día llevando " + it(itn)
+    if t == "LEVEL_WITH_SKILL": return "subir de nivel sabiendo " + mv(mvbyid.get(v, ""))
+    if t == "LEVEL_WITH_MONSTER": return "subir de nivel con " + names.get(v, "?") + " en el equipo"
+    if t.startswith("LEVEL_LOCATION"): return "subir de nivel en un lugar especial"
+    if t == "LEVEL_FEMALE": return "nivel %d (hembra)" % v
+    if t == "LEVEL_MALE": return "nivel %d (macho)" % v
+    if t == "ATK_GREATER_THAN_DEF": return "nivel %d con más Ataque que Defensa" % v
+    if t == "ATK_LESS_THAN_DEF": return "nivel %d con menos Ataque que Defensa" % v
+    if t == "ATK_EQUAL_TO_DEF": return "nivel %d con Ataque igual a Defensa" % v
+    if t in ("PERSONALITY_HIGH", "PERSONALITY_LOW"): return "nivel %d (al azar)" % v
+    if t == "ALLOW_MONSTER_CREATION": return "nivel %d" % v
+    if t == "CREATE_EXTRA_MONSTER": return "nivel %d con hueco libre y Poké Ball" % v
+    if t == "MAX_BEAUTY": return "belleza al máximo"
+    miss["evo:"+t] += 1; return t
 pre = {}
 for m in mons:
     for e in m.get("evolutions") or []:
@@ -49,16 +85,19 @@ for m in sorted(mons, key=lambda x: x["id"]):
     t = list(dict.fromkeys(TY[x] for x in m["types"]))
     a = [ab(x["name"]) for x in m["abilities"]] + ["", "", ""]
     if a[1] == a[0]: a[1] = ""
-    best = None
+    # mejor ataque con STAB que aprende subiendo de nivel, uno físico y uno especial
+    best = {"PHYSICAL": None, "SPECIAL": None}
     for x in m["moves"]:
         if x["type"] != "level": continue
         mm = moves.get(x["name"])
         if not mm or mm["base_power"] <= 1 or mm["skill_damage_type"] not in ("PHYSICAL","SPECIAL") or mm["type"] not in m["types"]: continue
         if mm["base_power"] > 120: continue
-        if best is None or mm["base_power"] > best["base_power"]: best = mm
-    st = [mv(best["name"]), TY[best["type"]], best["base_power"], "F" if best["skill_damage_type"] == "PHYSICAL" else "E"] if best else 0
+        c = mm["skill_damage_type"]
+        if best[c] is None or mm["base_power"] > best[c]["base_power"]: best[c] = mm
+    st = [[mv(b["name"]), TY[b["type"]], b["base_power"], "F" if c == "PHYSICAL" else "E"] if b else 0 for c, b in (("PHYSICAL", best["PHYSICAL"]), ("SPECIAL", best["SPECIAL"]))]
     EG = {"field":"Campo","water a":"Agua 1","water b":"Agua 2","water c":"Agua 3","monster":"Monstruo","bug":"Bicho","plant":"Planta","humanoid":"Humanoide","chaos":"Amorfo","flying":"Volador","fairy":"Hada","dragon":"Dragón","mineral":"Mineral","genderless":"Sin género","cannot breed":"No cría","ditto":"Ditto"}
-    e = [m["id"], m["name"], t, b, ev, a[:3], pre.get(m["id"], ""), st, 1 if m["obtainable"] else 0, [EG[g] for g in m["egg_groups"]], m["gender_ratio"]]
+    e = [m["id"], m["name"], t, b, ev, a[:3], pre.get(m["id"], ""), st, 1 if m["obtainable"] else 0, [EG[g] for g in m["egg_groups"]], m["gender_ratio"],
+         [[e["name"], how(e)] for e in m.get("evolutions") or [] if e["id"] <= 649 and e["id"] != m["id"]]]
     DEX.append(e)
     rows = []
     seen = set()

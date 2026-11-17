@@ -89,6 +89,10 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
 .picker .seg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
 .picker .seg::-webkit-scrollbar{display:none;}
 .picker .seg button{flex-shrink:0;}
+#pk-g button{min-height:38px;font-size:.78rem;padding:4px 10px;}
+@media (max-width:767px){ .picker{position:static;} }
+.evo{font-size:.86rem;color:var(--dim);margin-top:8px;}
+.evo small{color:var(--faint);}
 .ficha{display:grid;gap:12px;grid-template-columns:1fr;}
 @media (min-width:561px){ .ficha{grid-template-columns:1fr 1.3fr;} }
 .ficha .types{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;}
@@ -113,7 +117,8 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
 
 <div class="picker" role="group" aria-labelledby="pk-lbl">
   <div class="lbl" id="pk-lbl">🎯 Pokémon de ejemplo para toda la guía (elige uno):</div>
-  <div class="seg" id="pk"></div>
+  <div class="seg" id="pk-g"></div>
+  <div class="seg" id="pk" style="margin-top:6px"></div>
   <label class="f" style="margin-top:8px">🔎 O busca cualquier otro (los 649 de PokeMMO)<input id="pk-q" type="text" list="dl-pk" placeholder="Escribe: Lucario, Gengar…" autocomplete="off"></label>
   <datalist id="dl-pk"></datalist>
 </div>
@@ -124,7 +129,9 @@ section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
     <div class="card"><h3><span id="x-emoji"></span> <span class="x-name"></span></h3>
       <div class="types" id="x-types"></div>
       <p id="x-rolTxt"></p>
-      <p id="x-gen" class="tip" hidden>🤖 Este ejemplo se armó solo con los datos de PokeMMO (rol según sus stats base, IVs inventados). Los 8 de los botones tienen consejos escritos a mano.</p>
+      <p id="x-nota" style="margin-top:8px"></p>
+      <div class="evo" id="x-evo"></div>
+      <p id="x-gen" class="tip" hidden>🤖 Este ejemplo se armó solo con los datos de PokeMMO (rol según sus stats base, IVs inventados). Los de los botones tienen notas escritas a mano.</p>
       <div class="seg" style="margin-top:10px"><a class="btn pri" id="x-calc" href="mispokemon.html">🧮 Analizar uno mío</a><a class="btn" id="x-donde" href="donde.html">📍 Dónde encontrarlo</a></div>
     </div>
     <div class="card bars base"><h3>Estadísticas base de la especie</h3><div id="x-base"></div>
@@ -282,42 +289,42 @@ var ROL = {
 };
 /* b = estadísticas base (PS, Atk, Def, AtEsp, DefEsp, Vel) · un = estadísticas que no usa · iv = ejemplo */
 var P = [
- {id:"krokorok",n:"Krokorok",e:"🐊",t:["Tierra","Siniestro"],pre:"Sandile",rol:"fis",b:[60,82,45,45,45,74],key:"spe",un:["spa"],
+ {id:"krokorok",g:"tipo",n:"Krokorok",e:"🐊",t:["Tierra","Siniestro"],pre:"Sandile",rol:"fis",b:[60,82,45,45,45,74],key:"spe",un:["spa"],
   ev:"+2 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
   nat:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
   ab:[["Intimidación","Baja el Ataque del rival al entrar."],["Autoestima","+1 de Ataque cada vez que derrota a uno. Si ves «+1 Atk» tras debilitar a un rival, es esta, y es excelente para barrer."],["Irascible","Si le dan un golpe crítico, su Ataque sube al máximo."]],
   stab:["Triturar","Siniestro",80,"Cabezazo","Normal",70],iv:[26,17,4,26,15,31],mine:true},
- {id:"pignite",n:"Pignite",e:"🐷",t:["Fuego","Lucha"],pre:"Tepig",rol:"mix",b:[90,93,55,70,55,55],key:"atk",un:[],
+ {id:"pignite",g:"ini",n:"Pignite",e:"🐷",t:["Fuego","Lucha"],pre:"Tepig",rol:"mix",b:[90,93,55,70,55,55],key:"atk",un:[],
   ev:"+2 Ataque",spread:"252 Ataque / 252 At. Esp. o Velocidad / 4 PS",
   nat:[["ok","Activa","+Velocidad, −Defensa"],["ok","Huraña","+Ataque, −Defensa"],["bad","Osada","+Defensa, −Ataque: le quita fuerza a sus golpes físicos"]],
   ab:[["Mar Llamas","Con poca vida (⅓ o menos), sus ataques de Fuego pegan un 50 % más."],["Sebo <span class='pill'>oculta</span>","Recibe la mitad de daño de los ataques de Fuego y de Hielo."]],
   stab:["Demolición","Lucha",75,"Cabezazo","Normal",70],iv:[20,28,12,18,22,9]},
- {id:"excadrill",n:"Excadrill",e:"⛏️",t:["Tierra","Acero"],pre:"Drilbur",rol:"fis",b:[110,135,60,50,65,88],key:"atk",un:["spa"],
+ {id:"excadrill",g:"tipo",n:"Excadrill",e:"⛏️",t:["Tierra","Acero"],pre:"Drilbur",rol:"fis",b:[110,135,60,50,65,88],key:"atk",un:["spa"],
   ev:"+2 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
   nat:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
   ab:[["Ímpetu Arena","Dobla su Velocidad durante una tormenta de arena."],["Poder Arena","En tormenta de arena, sus ataques de Tierra, Roca y Acero pegan un 30 % más."],["Rompemoldes <span class='pill'>oculta</span>","Ignora habilidades del rival que le estorben, como Levitación: su Terremoto le da igual."]],
   stab:["Terremoto","Tierra",100,"Cabezazo","Normal",70],iv:[31,24,8,3,19,27]},
- {id:"haxorus",n:"Haxorus",e:"🐉",t:["Dragón"],pre:"Fraxure",rol:"fis",b:[76,147,90,60,70,97],key:"atk",un:["spa"],
+ {id:"haxorus",g:"tipo",n:"Haxorus",e:"🐉",t:["Dragón"],pre:"Fraxure",rol:"fis",b:[76,147,90,60,70,97],key:"atk",un:["spa"],
   ev:"+3 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
   nat:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
   ab:[["Rivalidad","Pega más a rivales de su mismo sexo y menos a los del sexo contrario."],["Rompemoldes","Ignora habilidades del rival que le estorben."],["Nerviosismo <span class='pill'>oculta</span>","El rival no puede comer bayas mientras esté en el campo."]],
   stab:["Garra Dragón","Dragón",80,"Cabezazo","Normal",70],iv:[22,31,16,11,9,29]},
- {id:"chandelure",n:"Chandelure",e:"🕯️",t:["Fantasma","Fuego"],pre:"Lampent",rol:"esp",b:[60,55,90,145,90,80],key:"spa",un:["atk"],
+ {id:"chandelure",g:"tipo",n:"Chandelure",e:"🕯️",t:["Fantasma","Fuego"],pre:"Lampent",rol:"esp",b:[60,55,90,145,90,80],key:"spa",un:["atk"],
   ev:"+3 At. Esp.",spread:"252 At. Esp. / 252 Velocidad / 4 PS",
   nat:[["ok","Modesta","+At. Esp., −Ataque"],["ok","Miedosa","+Velocidad, −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
   ab:[["Absorbe Fuego","Los ataques de Fuego no le hacen daño; además, potencian sus propios ataques de Fuego."],["Cuerpo Llama","Puede quemar al que lo golpea con contacto. Fuera de combate, acelera la eclosión de huevos."],["Allanamiento <span class='pill'>oculta</span>","Sus ataques ignoran barreras como Reflejo y Pantalla Luz."]],
   stab:["Bola Sombra","Fantasma",80,"Pulso Umbrío","Siniestro",80],iv:[14,6,21,30,25,18]},
- {id:"volcarona",n:"Volcarona",e:"🦋",t:["Bicho","Fuego"],pre:"Larvesta",rol:"esp",b:[85,60,65,135,105,100],key:"spa",un:["atk"],
+ {id:"volcarona",g:"tipo",n:"Volcarona",e:"🦋",t:["Bicho","Fuego"],pre:"Larvesta",rol:"esp",b:[85,60,65,135,105,100],key:"spa",un:["atk"],
   ev:"+3 At. Esp.",spread:"252 At. Esp. / 252 Velocidad / 4 PS",
   nat:[["ok","Modesta","+At. Esp., −Ataque"],["ok","Miedosa","+Velocidad, −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
   ab:[["Cuerpo Llama","Puede quemar al que lo golpea con contacto. Fuera de combate, acelera la eclosión de huevos."],["Enjambre <span class='pill'>oculta</span>","Con poca vida (⅓ o menos), sus ataques de Bicho pegan un 50 % más."]],
   stab:["Zumbido","Bicho",90,"Pulso Umbrío","Siniestro",80],iv:[18,4,13,31,27,24]},
- {id:"serperior",n:"Serperior",e:"🐍",t:["Planta"],pre:"Servine",rol:"esp",b:[75,75,95,75,95,113],key:"spe",un:["atk"],
+ {id:"serperior",g:"ini",n:"Serperior",e:"🐍",t:["Planta"],pre:"Servine",rol:"esp",b:[75,75,95,75,95,113],key:"spe",un:["atk"],
   ev:"+3 Velocidad",spread:"252 At. Esp. / 252 Velocidad / 4 PS",
   nat:[["ok","Miedosa","+Velocidad, −Ataque"],["ok","Modesta","+At. Esp., −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
   ab:[["Espesura","Con poca vida (⅓ o menos), sus ataques de Planta pegan un 50 % más."],["Respondón <span class='pill'>oculta</span>","Los cambios de estadísticas se le invierten: Lluevehojas le <b>sube</b> el At. Esp. en vez de bajarlo."]],
   stab:["Gigadrenado","Planta",75,"Pulso Umbrío","Siniestro",80],iv:[25,10,20,28,17,30]},
- {id:"ferrothorn",n:"Ferrothorn",e:"🌰",t:["Planta","Acero"],pre:"Ferroseed",rol:"def",b:[74,94,131,54,116,20],key:"def",un:["spa","spe"],
+ {id:"ferrothorn",g:"tipo",n:"Ferrothorn",e:"🌰",t:["Planta","Acero"],pre:"Ferroseed",rol:"def",b:[74,94,131,54,116,20],key:"def",un:["spa","spe"],
   ev:"+2 Defensa",spread:"252 PS / 252 Defensa o Def. Esp. / 4 en la otra",
   nat:[["ok","Plácida","+Defensa, −Velocidad"],["ok","Grosera","+Def. Esp., −Velocidad"],["bad","Miedosa","+Velocidad, −Ataque: sube lo que no usa y baja lo que sí"]],
   ab:[["Punta Acero","Hace daño al rival que lo golpea con un ataque de contacto."],["Anticipación <span class='pill'>oculta</span>","Avisa al entrar si el rival tiene un ataque súper eficaz contra él."]],
@@ -339,30 +346,105 @@ var NATR = {
 };
 var SPREAD = {fis:"252 Ataque / 252 Velocidad / 4 PS", esp:"252 At. Esp. / 252 Velocidad / 4 PS", def:"252 PS / 252 Defensa o Def. Esp. / 4 en la otra", mix:"252 Ataque / 252 At. Esp. o Velocidad / 4 PS"};
 /* arma un ejemplo automático para cualquier Pokémon de pokedex.js */
-function gen(d){
-  var r = PK.rol(d), b = d.b, seed = d.id * 9301 + 49297;
+function gen(d, r0){
+  var r = r0 || PK.rol(d), b = d.b, seed = d.id * 9301 + 49297;
   var key = r === "fis" ? "atk" : r === "esp" ? "spa" : r === "def" ? (b.def >= b.spd ? "def" : "spd") : (b.atk >= b.spa ? "atk" : "spa");
   var un = r === "fis" ? ["spa"] : r === "esp" ? ["atk"] : r === "def" ? [b.atk >= b.spa ? "spa" : "atk", "spe"] : [];
-  var st = null;
-  if(d.stab){ var c = CMP[d.stab[3]].filter(function(x){ return d.t.indexOf(x[1]) < 0; })[0]; st = [d.stab[0], d.stab[1], d.stab[2]].concat(c); }
+  var cat = r === "fis" ? "F" : r === "esp" ? "E" : r === "def" ? (b.atk >= b.spa ? "F" : "E") : null;
+  var sm = (cat && d.stabs[cat]) || d.stab, st = null;
+  if(sm){ var c = CMP[sm[3]].filter(function(x){ return d.t.indexOf(x[1]) < 0; })[0]; st = [sm[0], sm[1], sm[2]].concat(c); }
   var ab = d.a.map(function(a, i){ return a ? [a + (i === 2 ? " <span class='pill'>oculta</span>" : ""), (window.PKAB && PKAB[a]) || ""] : null; }).filter(Boolean);
   return {id:"pk-" + d.id, n:d.n, e:"🔎", t:d.t, pre:d.pre, rol:r, b:K.map(function(k){ return b[k]; }), key:key, un:un,
     ev:PK.evText(d), spread:SPREAD[r], nat:NATR[r], ab:ab, stab:st,
     iv:K.map(function(){ seed = (seed * 9301 + 49297) % 233280; return Math.floor(seed / 233280 * 32); }), gen:true};
 }
+var GRP = [["ini","🌱 Iniciales de Teselia"],["tipo","🎨 Uno de cada tipo"],["fam","⭐ Famosos"]];
+/* [nombre, emoji, grupo, rol (null = según sus stats), nota] */
+var MAS = [
+ ["Snivy","🌱","ini","esp","El inicial de tipo Planta de Teselia. Es el más rápido de los tres, pero pega poco al principio: súbelo con ataques de Planta (STAB)."],
+ ["Servine","🌿","ini","esp","Etapa intermedia de Snivy. Rápido y con buenas defensas; su daño sigue siendo bajo hasta que evoluciona a Serperior."],
+ ["Tepig","🐖","ini",null,"El inicial de tipo Fuego. Tiene muchos PS y Ataque para su nivel; es el más fácil para empezar la aventura."],
+ ["Emboar","🔥","ini",null,"Final de Tepig: Fuego/Lucha con mucho Ataque y PS, pero lento. Agua, Tierra, Volador y Psíquico le pegan fuerte."],
+ ["Oshawott","🦦","ini","mix","El inicial de tipo Agua. Equilibrado: aprende buenos ataques físicos y especiales, así que puedes llevarlo como prefieras."],
+ ["Dewott","💧","ini","mix","Etapa intermedia de Oshawott. Sigue siendo equilibrado; elige si lo entrenas físico o especial y dale la naturaleza que toque."],
+ ["Samurott","⚔️","ini","mix","Final de Oshawott: Ataque y At. Esp. muy parecidos, ideal para un atacante mixto. Solo Planta y Eléctrico le pegan súper eficaz."],
+ ["Braviary","🦅","tipo",null,"Normal/Volador con mucho Ataque. Con Potencia Bruta, los ataques con efecto secundario pegan un 30 % más pero pierden el efecto."],
+ ["Jellicent","🪼","tipo",null,"Agua/Fantasma: no le afectan los ataques Normal ni Lucha. Con Absorbe Agua, los ataques de Agua lo curan en vez de dañarlo."],
+ ["Zebstrika","⚡","tipo","esp","Eléctrico muy rápido. Con Electromotor, si le pegan con Eléctrico, en vez de recibir daño le sube la Velocidad."],
+ ["Galvantula","🕷️","tipo",null,"Bicho/Eléctrico rápido. Con Ojo Compuesto sube la precisión de sus ataques: Trueno casi nunca falla."],
+ ["Vanilluxe","🍦","tipo",null,"Hielo con buen At. Esp. El Hielo pega súper eficaz a Dragón, Volador, Planta y Tierra, pero resiste muy pocos tipos."],
+ ["Conkeldurr","🏗️","tipo",null,"Lucha lento con muchísimo Ataque. Con Agallas, si lo queman o envenenan, su Ataque sube. Gurdurr evoluciona por intercambio."],
+ ["Scolipede","🐛","tipo",null,"Bicho/Veneno rápido y físico. Fuego, Volador, Psíquico y Roca le pegan súper eficaz."],
+ ["Reuniclus","🧪","tipo",null,"Psíquico lento, resistente y con mucho At. Esp. Brilla con Espacio Raro, donde el más lento ataca primero."],
+ ["Gigalith","🪨","tipo",null,"Roca con Ataque y Defensa altísimos, pero lentísimo. Con Chorro Arena invoca una tormenta de arena que sube la Def. Esp. de los tipo Roca."],
+ ["Bisharp","🗡️","tipo",null,"Siniestro/Acero con muchas resistencias, pero Lucha le hace ×4. Con Competitivo, si le bajan una estadística, su Ataque sube mucho."],
+ ["Hydreigon","🐲","tipo",null,"El dragón final de Teselia (Deino evoluciona a nivel 50 y 64). Levitación lo hace inmune a Tierra. Débil a Hielo, Dragón, Lucha y Bicho."],
+ ["Pikachu","⚡","fam","esp","El más famoso, pero flojo por sí solo: con Piedra Trueno evoluciona a Raichu, que es bastante más fuerte."],
+ ["Eevee","🦊","fam",null,"Evoluciona a 7 Pokémon distintos según cómo lo hagas (mira la cadena de evolución). Elige primero qué evolución quieres."],
+ ["Charizard","🔥","fam","esp","Inicial de Fuego de Kanto. Fuego/Volador: Roca le hace ×4. Mejor con ataques especiales."],
+ ["Blastoise","🐢","fam",null,"Inicial de Agua de Kanto. Muy resistente, sobre todo a los ataques especiales."],
+ ["Venusaur","🌺","fam",null,"Inicial de Planta de Kanto. Planta/Veneno resistente; con Clorofila duplica su Velocidad bajo el sol."],
+ ["Gyarados","🌊","fam",null,"Magikarp evoluciona a nivel 20. Con Intimidación baja el Ataque rival al entrar. Eléctrico le hace ×4."],
+ ["Gengar","👻","fam",null,"Rápido y con mucho At. Esp. Fantasma/Veneno: no le afectan Normal ni Lucha. Haunter evoluciona por intercambio."],
+ ["Lucario","🐺","fam","mix","Riolu evoluciona con amistad alta de día. Lucha/Acero con Ataque y At. Esp. parecidos: puede ser físico o especial."],
+ ["Garchomp","🦈","fam",null,"De los mejores que hay: rápido, fuerte y resistente. Dragón/Tierra: Hielo le hace ×4."],
+ ["Dragonite","🐉","fam",null,"Con Multiescamas recibe la mitad de daño cuando tiene los PS llenos. Dragón/Volador: Hielo le hace ×4."],
+ ["Tyranitar","🦖","fam",null,"Con Chorro Arena invoca una tormenta de arena al entrar. Roca/Siniestro: Lucha le hace ×4."],
+ ["Metagross","🤖","fam",null,"Acero/Psíquico con Ataque y Defensa altísimos. Cuerpo Puro impide que el rival le baje las estadísticas."],
+ ["Alakazam","🥄","fam",null,"De los más rápidos y con altísimo At. Esp., pero muy frágil ante golpes físicos. Kadabra evoluciona por intercambio."],
+ ["Machamp","💪","fam",null,"Lucha con mucho Ataque. Con Indefenso, todos los ataques aciertan, los suyos y los del rival. Machoke evoluciona por intercambio."],
+ ["Arcanine","🐕","fam","fis","Growlithe evoluciona con Piedra Fuego. Con Intimidación baja el Ataque rival al entrar."],
+ ["Snorlax","😴","fam",null,"Muchísimos PS y Def. Esp. Con Sebo recibe la mitad de daño de Fuego y Hielo."],
+ ["Lapras","🦕","fam","esp","Agua/Hielo con muchísimos PS. Muy bueno contra Dragón, Volador y Tierra."],
+ ["Zoroark","🦊","fam",null,"Su habilidad Ilusión lo hace entrar disfrazado del último Pokémon de tu equipo. Rápido y especial, pero frágil."]
+];
+var NOTAS = {
+  Krokorok:"Sandile evoluciona a nivel 29 y Krokorok a Krookodile a nivel 40. Tierra/Siniestro: Agua, Planta, Hielo, Lucha y Bicho le pegan fuerte.",
+  Pignite:"Etapa intermedia de Tepig: al evolucionar gana el tipo Lucha. A nivel 36 evoluciona a Emboar.",
+  Excadrill:"Drilbur evoluciona a nivel 31. De los mejores atacantes físicos de Teselia.",
+  Haxorus:"Axew evoluciona a nivel 38 y Fraxure a nivel 48. Tiene uno de los Ataques más altos del juego.",
+  Chandelure:"Litwick evoluciona a nivel 41 y Lampent con Piedra Noche. Uno de los At. Esp. más altos.",
+  Volcarona:"Larvesta evoluciona a nivel 59: hay que tenerle paciencia, pero vale la pena.",
+  Serperior:"Final de Snivy. El más rápido de los tres iniciales de Teselia.",
+  Ferrothorn:"Ferroseed evoluciona a nivel 40. Resiste muchísimo, pero Fuego le hace ×4."
+};
+P.forEach(function(p){ p.nota = NOTAS[p.n] || ""; });
+MAS.forEach(function(m){
+  var d = PK.find(m[0]); if(!d) return;
+  var o = gen(d, m[3]); o.id = d.n.toLowerCase(); o.e = m[1]; o.g = m[2]; o.nota = m[4]; o.gen = false;
+  P.push(o);
+});
+var ORDEN = {ini:["Snivy","Servine","Serperior","Tepig","Pignite","Emboar","Oshawott","Dewott","Samurott"]};
+var grp = "ini";
+function drawBtns(){
+  $("pk-g").innerHTML = GRP.map(function(g){ return '<button type="button" data-g="' + g[0] + '" class="' + (g[0] === grp ? "on" : "") + '" aria-pressed="' + (g[0] === grp) + '">' + g[1] + '</button>'; }).join("");
+  var l = P.filter(function(p){ return p.g === grp; });
+  if(ORDEN[grp]) l.sort(function(a, b){ return ORDEN[grp].indexOf(a.n) - ORDEN[grp].indexOf(b.n); });
+  $("pk").innerHTML = l.map(function(p){ return '<button type="button" data-id="'+p.id+'" aria-pressed="false">'+p.e+' '+p.n+'</button>'; }).join("");
+}
+$("pk-g").addEventListener("click", function(ev){ var b = ev.target.closest("button"); if(!b) return; grp = b.getAttribute("data-g"); drawBtns(); markBtns(); });
 PK.datalist("dl-pk");
 $("pk-q").addEventListener("input", function(){
   var d = PK.find(this.value); if(!d) return;
   var cur = P.filter(function(x){ return x.n === d.n; })[0];
+  if(cur) curId = cur.id;
   this.value = d.n; this.blur(); show(cur || gen(d), true);
 });
-$("pk").innerHTML = P.map(function(p){ return '<button type="button" data-id="'+p.id+'" aria-pressed="false">'+p.e+' '+p.n+'</button>'; }).join("");
 $("pk").addEventListener("click", function(ev){ var b = ev.target.closest("button"); if(b){ $("pk-q").value = ""; show(b.getAttribute("data-id"), true); } });
 
+var curId = null;
+function markBtns(){
+  var bs = $("pk").querySelectorAll("button"), i;
+  for(i = 0; i < bs.length; i++){ var on = bs[i].getAttribute("data-id") === curId; bs[i].classList.toggle("on", on); bs[i].setAttribute("aria-pressed", on); if(on && bs[i].scrollIntoView) $("pk").scrollLeft = bs[i].offsetLeft - 20; }
+}
 function show(id, save){
   var p = typeof id === "object" ? id : P.filter(function(x){ return x.id === id; })[0] || P[0], i;
-  var bs = $("pk").querySelectorAll("button");
-  for(i = 0; i < bs.length; i++){ var on = bs[i].getAttribute("data-id") === p.id; bs[i].classList.toggle("on", on); bs[i].setAttribute("aria-pressed", on); }
+  curId = p.id;
+  if(p.g && p.g !== grp){ grp = p.g; drawBtns(); }
+  markBtns();
+  $("x-nota").innerHTML = p.nota ? "📝 " + p.nota : ""; $("x-nota").hidden = !p.nota;
+  var dd = PK.find(p.n), ch = dd ? PK.chain(dd) : "";
+  $("x-evo").innerHTML = ch ? "🔁 <b>Evolución</b><br>" + ch.join("<br>") : "🔁 No evoluciona.";
   if(save){ try{ localStorage.setItem(KEYST, p.gen ? p.n : p.id); }catch(e){} }
   $("x-gen").hidden = !p.gen;
   $("x-calc").href = "mispokemon.html?pk=" + encodeURIComponent(p.n);
@@ -418,6 +500,7 @@ function show(id, save){
   $("x-stab").innerHTML = "En " + p.n + " (" + p.t.join("/") + "), <b>" + s[0] + "</b> (" + s[1] + ", " + s[2] + ") pega como si tuviera <b>" + ef + "</b> de poder; <b>" + s[3] + "</b> (" + s[4] + ", " + s[5] + ") se queda en " + s[5] + ".";
 }
 
+drawBtns();
 var saved = null; try{ saved = localStorage.getItem(KEYST); }catch(e){}
 var sd = saved && PK.find(saved);
 show(sd ? (P.filter(function(x){ return x.n === sd.n; })[0] || gen(sd)) : (saved || "krokorok"), false);
