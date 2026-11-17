@@ -83,17 +83,27 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .rank li::before{content:counter(r);flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#2a1f00;font-weight:800;display:flex;align-items:center;justify-content:center;}
 .rank li b{color:var(--text);}
 
+section{scroll-margin-top:calc(var(--hdh,104px) + 90px);}
+.picker{position:sticky;top:var(--hdh,104px);z-index:40;background:rgba(13,15,26,.95);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:10px;margin-top:14px;}
+.picker .lbl{font-size:.76rem;color:var(--faint);font-weight:700;margin-bottom:6px;}
+.picker .seg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+.picker .seg::-webkit-scrollbar{display:none;}
+.picker .seg button{flex-shrink:0;}
+.ficha{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .ficha{grid-template-columns:1fr 1.3fr;} }
+.ficha .types{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0;}
+.base .row{grid-template-columns:90px 1fr 40px;}
 </style>
 </head>
 <body>
-<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Guía · <em>tu Pokémon</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#cuanto">⚖️ Cuánto aporta</a><a href="#ivs">🧬 IVs</a><a href="#evs">🏋️ EVs</a><a href="#naturaleza">🎭 Naturaleza</a><a href="#habilidad">✨ Habilidad</a><a href="#stats">📊 Stats</a><a href="#ataques">⚔️ Ataques</a><a href="#ficha">📋 Ficha</a><a href="#importa">🎯 Qué importa</a></nav></header>
+<header class="top"><div class="hd"><a class="back" href="index.html" aria-label="Volver al menú de PokeMMO">←</a><h1>Guía · <em>tu Pokémon</em></h1></div><nav class="chips" aria-label="Secciones"><a href="#ejemplo">🎯 Ejemplo</a><a href="#cuanto">⚖️ Cuánto aporta</a><a href="#ivs">🧬 IVs</a><a href="#evs">🏋️ EVs</a><a href="#naturaleza">🎭 Naturaleza</a><a href="#habilidad">✨ Habilidad</a><a href="#stats">📊 Stats</a><a href="#ataques">⚔️ Ataques</a><a href="#ficha">📋 Ficha</a><a href="#importa">🎯 Qué importa</a></nav></header>
 <main>
 
 <div class="hero">
   <h2>🏃 Un Pokémon es como un atleta</h2>
-  <p>Sus estadísticas finales (PS, Ataque…) salen de sumar cinco cosas. Entiende cada una y vas a saber leer toda la ficha.</p>
+  <p>Sus estadísticas finales (PS, Ataque…) salen de sumar cinco cosas. Entiende cada una y vas a saber leer la ficha de cualquier Pokémon.</p>
   <div class="atleta">
-    <div><div class="e">🐎</div><b>Especie</b><span>Su «raza». Un Krokorok siempre será más fuerte que un Sandile.</span></div>
+    <div><div class="e">🐎</div><b>Especie</b><span>Su «raza». Un <span class="x-name"></span> siempre será más fuerte que un <span class="x-pre"></span>.</span></div>
     <div><div class="e">🧬</div><b>IVs</b><span>Talento natural. Nació así; no se entrena.</span></div>
     <div><div class="e">🏋️</div><b>EVs</b><span>Entrenamiento en el gimnasio: lo que gana peleando.</span></div>
     <div><div class="e">🎭</div><b>Naturaleza</b><span>Personalidad: mejor en una cosa, peor en otra.</span></div>
@@ -101,16 +111,28 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   </div>
 </div>
 
+<div class="picker" role="group" aria-labelledby="pk-lbl">
+  <div class="lbl" id="pk-lbl">🎯 Pokémon de ejemplo para toda la guía (elige uno):</div>
+  <div class="seg" id="pk"></div>
+</div>
+
+<section id="ejemplo">
+  <h2>🎯 Tu ejemplo: <span class="x-name"></span></h2>
+  <div class="ficha">
+    <div class="card"><h3><span id="x-emoji"></span> <span class="x-name"></span></h3>
+      <div class="types" id="x-types"></div>
+      <p id="x-rolTxt"></p>
+      <p style="font-size:.82rem;margin-top:8px">¿El tuyo no está? Mete sus datos en la <a href="mispokemon.html">calculadora de Mis Pokémon</a>.</p>
+    </div>
+    <div class="card bars base"><h3>Estadísticas base de la especie</h3><div id="x-base"></div>
+      <p style="font-size:.8rem;margin-top:6px">Total: <b id="x-baseT"></b>. Son iguales para todos los <span class="x-name"></span>; lo que cambia entre uno y otro son IVs, EVs, naturaleza y nivel.</p></div>
+  </div>
+</section>
+
 <section id="cuanto">
   <h2>⚖️ ¿Cuánto aporta cada cosa?</h2>
-  <p class="lead">Ejemplo con la <b>Velocidad de Krokorok</b> (base 74) a <b>nivel 100</b>. Así ves qué pesa más:</p>
-  <div class="card bars">
-    <div class="row"><span>🐎 Especie (2 × 74)</span><div class="bar"><i style="width:100%;background:var(--violet)"></i></div><span class="v">148</span></div>
-    <div class="row"><span>🏋️ EVs (252)</span><div class="bar"><i style="width:43%;background:var(--green)"></i></div><span class="v">+63</span></div>
-    <div class="row"><span>🧬 IV (31)</span><div class="bar"><i style="width:21%;background:var(--blue)"></i></div><span class="v">+31</span></div>
-    <div class="row"><span>🎭 Naturaleza</span><div class="bar"><i style="width:16%;background:var(--accent)"></i></div><span class="v">≈ +24</span></div>
-    <p style="font-size:.84rem;margin-top:8px">Con todo al máximo: <b>(148 + 31 + 63 + 5) × 1.1 ≈ 271</b>. Sin IVs, sin EVs y con naturaleza en contra serían <b>(148 + 5) × 0.9 ≈ 137</b>. A <b>nivel 50</b> todo vale la mitad: un IV 31 da ~+15 y 252 EVs dan ~+31.</p>
-  </div>
+  <p class="lead">Ejemplo con <b>el <span class="x-keyStat"></span> de <span class="x-name"></span></b> (base <span id="x-keyBase"></span>) a <b>nivel 100</b>. Así ves qué pesa más:</p>
+  <div class="card bars" id="x-bars"></div>
   <div class="formula">Estadística = ((2 × Base + IV + EV ÷ 4) × Nivel ÷ 100 + 5) × Naturaleza<br>PS = (2 × Base + IV + EV ÷ 4) × Nivel ÷ 100 + Nivel + 10</div>
   <p class="lead" style="margin-top:8px">No hace falta memorizarla: la <a href="mispokemon.html">calculadora</a> la hace por ti.</p>
 </section>
@@ -126,13 +148,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     </div>
     <div class="card"><h3>Cómo leer los números</h3>
       <div class="iv"><span style="color:var(--red)">0–9 malo</span><span style="color:var(--orange)">10–19 regular</span><span style="color:var(--accent)">20–25 bueno</span><span style="color:var(--green)">26–30 muy bueno</span><span style="color:var(--green);border-color:var(--green)">31 perfecto</span></div>
-      <p style="margin-top:8px">Dos Krokorok iguales, uno con Velocidad 31 y otro con 0, tienen ~31 puntos de diferencia a nivel 100. En la historia es poco; en competitivo decide quién ataca primero.</p>
+      <p style="margin-top:8px">Dos <span class="x-name"></span> iguales, uno con <span class="x-keyStat"></span> 31 y otro con 0, tienen ~31 puntos de diferencia a nivel 100. En la historia es poco; en competitivo puede decidir el combate.</p>
     </div>
   </div>
-  <div class="card" style="margin-top:12px"><h3>🐊 Tu Krokorok (total 119/186)</h3>
-    <div class="iv"><span>PS <b style="color:var(--green)">26</b></span><span>Ataque <b style="color:var(--orange)">17</b></span><span>Defensa <b style="color:var(--red)">4</b></span><span>At. Esp. <b style="color:var(--green)">26</b></span><span>Def. Esp. <b style="color:var(--orange)">15</b></span><span>Velocidad <b style="color:var(--green)">31</b></span></div>
-    <ul><li><b>PS 26 y Velocidad 31</b>: muy bien.</li><li><b>Ataque 17</b>: normal.</li><li><b>Defensa 4</b>: muy baja; recibe más daño de golpes físicos.</li><li><b>At. Esp. 26</b>: no le sirve, porque ataca con movimientos físicos.</li></ul>
-    <p style="font-size:.8rem">Def. Esp. 15 sale de restar al total 119 los otros cinco. Para la historia está perfectamente bien.</p>
+  <div class="card" style="margin-top:12px"><h3 id="x-ivTitle"></h3>
+    <div class="iv" id="x-ivs"></div>
+    <ul id="x-ivNotes"></ul>
   </div>
 </section>
 
@@ -142,12 +163,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     <div class="card"><h3>Cómo se ganan</h3>
       <ul><li>Al <b>derrotar</b> Pokémon. Cada especie da EVs de una estadística concreta.</li>
       <li>Sandile → +1 Ataque · Krokorok → +2 Ataque · Woobat → +1 Velocidad.</li>
+      <li>Derrotar a un <span class="x-name"></span> da <b id="x-evY"></b>.</li>
       <li>En las <b>hordas</b> de PokeMMO (5 a la vez) sumas los EVs de los cinco.</li></ul>
     </div>
     <div class="card"><h3>Límites</h3>
       <ul><li>Máximo <b>252 por estadística</b> y <b>510 en total</b>.</li>
       <li>A nivel 100, cada <b>4 EVs = +1 punto</b>: 252 EVs ≈ <b>+63</b>, el doble que un IV perfecto.</li>
-      <li>Por eso en competitivo se reparten así: <b>252 + 252 + 4</b> en lo que más importa.</li></ul>
+      <li>Por eso en competitivo se reparten así: <b>252 + 252 + 4</b> en lo que más importa.</li>
+      <li>Para <span class="x-name"></span>: <b id="x-spread"></b>.</li></ul>
     </div>
     <div class="card"><h3>Objetos</h3>
       <ul><li><b>Brazal Firme</b>: duplica los EVs que ganas, pero baja la Velocidad mientras lo lleva.</li>
@@ -171,19 +194,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
   <h2>🎭 Naturaleza</h2>
   <div class="card">
     <p>Sube <b>+10 %</b> una estadística y baja <b>−10 %</b> otra. Cinco no cambian nada. En el resumen, la que sube sale en <span class="up">rojo</span> y la que baja en <span class="down">azul</span>.</p>
-    <ul><li><b>Firme</b>: +Ataque, −At. Esp. → ideal para Krokorok, que no usa At. Esp.</li>
-    <li><b>Alegre</b>: +Velocidad, −At. Esp. → también ideal.</li>
-    <li><b>Modesta</b>: +At. Esp., −Ataque → mala: sube lo que no usa y baja lo que sí.</li></ul>
-    <div class="tip">💡 Truco: la naturaleza buena <b>baja la estadística que tu Pokémon no usa</b>. Físico → que baje At. Esp. Especial → que baje Ataque. <a href="naturalezas.html">Ver las 25 →</a></div>
+    <p style="margin-top:8px">Para <b class="x-name"></b>:</p>
+    <ul id="x-nat"></ul>
+    <div class="tip">💡 Truco: la naturaleza buena <b>baja la estadística que tu Pokémon no usa</b>. Físico → que baje At. Esp. Especial → que baje Ataque. Lento y defensivo → que baje Velocidad. <a href="naturalezas.html">Ver las 25 →</a></div>
   </div>
 </section>
 
 <section id="habilidad">
   <h2>✨ Habilidad</h2>
-  <div class="card"><p>Un efecto pasivo. Krokorok puede tener:</p>
-    <ul><li><b>Intimidación</b>: baja el Ataque del rival al entrar.</li>
-    <li><b>Autoestima</b>: +1 de Ataque cada vez que derrota a uno. Si viste «+1 Atk» tras debilitar a un rival, es esta, y es excelente para barrer.</li>
-    <li><b>Irascible</b>: si le dan un golpe crítico, su Ataque sube al máximo.</li></ul></div>
+  <div class="card"><p>Un efecto pasivo. Cada especie tiene 1 a 3 posibles; cada Pokémon tiene solo una. <b class="x-name"></b> puede tener:</p>
+    <ul id="x-abil"></ul></div>
 </section>
 
 <section id="stats">
@@ -196,7 +216,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
     <tr><td><b>Def. Esp.</b></td><td>SpD</td><td>Aguanta los ataques <b>especiales</b>.</td></tr>
     <tr><td><b>Velocidad</b></td><td>Spe</td><td>Quién ataca primero.</td></tr>
   </tbody></table></div>
-  <div class="tip">💡 Lo que importa es <b>la categoría del ataque</b>, no el tipo: Krokorok es físico, así que su At. Esp. da igual. Pignite usa los dos: Lanzallamas es especial y Demolición es física.</div>
+  <div class="tip">💡 Lo que importa es <b>la categoría del ataque</b>, no el tipo. <span id="x-catTip"></span></div>
 </section>
 
 <section id="ataques">
@@ -208,7 +228,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
       <li><b>PP</b>: cuántas veces lo puedes usar antes de curarte.</li>
       <li><b>Categoría</b>: físico o especial.</li></ul></div>
     <div class="card"><h3>Regla del mismo tipo (STAB)</h3><p>Si el ataque es <b>del mismo tipo que el Pokémon</b>, pega un <b>50 % más</b>.</p>
-      <p>Triturar en Krokorok (Siniestro) pega más que Cabezazo (Normal), aunque tengan poder parecido.</p>
+      <p id="x-stab"></p>
       <p>Y súmale la <a href="tipos.html">tabla de tipos</a>: súper eficaz ×2, poco eficaz ×½.</p></div>
   </div>
 </section>
@@ -216,11 +236,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 <section id="ficha">
   <h2>📋 Otros datos de la ficha</h2>
   <div class="tblwrap"><table><thead><tr><th>Dato</th><th>Qué es</th><th>¿Afecta al combate?</th></tr></thead><tbody>
-    <tr><td><b>Objeto equipado</b></td><td>Tu Krokorok lleva <b>Repartir Exp</b>: gana experiencia aunque no pelee. Ideal para subir a uno atrasado.</td><td>Depende del objeto</td></tr>
+    <tr><td><b>Objeto equipado</b></td><td>Por ejemplo, <b>Repartir Exp</b>: gana experiencia aunque no pelee. Ideal para subir a uno atrasado.</td><td>Depende del objeto</td></tr>
     <tr><td><b>Entrenador original, ID, lugar y fecha</b></td><td>Datos de origen.</td><td class="neu">No</td></tr>
     <tr><td><b>Pokéball</b></td><td>En la que fue capturado.</td><td class="neu">No</td></tr>
     <tr><td><b>Cariño (amistad)</b></td><td>Sube al usarlo, curarlo y caminar con él. Afecta a ciertas evoluciones y a ataques como Retribución.</td><td>A veces</td></tr>
-    <tr><td><b>Característica</b></td><td>Frase como «Le encanta correr»: pista de cuál es su <b>IV más alto</b> (aquí, Velocidad).</td><td class="neu">No (es una pista)</td></tr>
+    <tr><td><b>Característica</b></td><td>Frase como «Le encanta correr»: pista de cuál es su <b>IV más alto</b> (en ese caso, Velocidad).</td><td class="neu">No (es una pista)</td></tr>
     <tr><td><b>Candado</b></td><td>Probablemente protege al Pokémon para que no lo liberes ni lo intercambies por error.</td><td class="neu">No</td></tr>
     <tr><td><b>Marcas</b> (● ▲ ★ ◆)</td><td>Para organizarte en la PC.</td><td class="neu">No</td></tr>
     <tr><td><b>Cintas</b></td><td>Recuerdos de logros.</td><td class="neu">No</td></tr>
@@ -243,5 +263,132 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 
 </main>
 <footer>PokeMMO · apuntes personales · <a href="index.html">← Menú</a></footer>
+<script>
+(function(){
+"use strict";
+var K = ["hp","atk","def","spa","spd","spe"];
+var SN = {hp:"PS",atk:"Ataque",def:"Defensa",spa:"At. Esp.",spd:"Def. Esp.",spe:"Velocidad"};
+var COL = {hp:"var(--green)",atk:"var(--red)",def:"var(--orange)",spa:"var(--violet)",spd:"var(--blue)",spe:"var(--accent)"};
+var ROL = {
+  fis:"<b>Atacante físico</b>: pega con Ataque. Su At. Esp. no le sirve.",
+  esp:"<b>Atacante especial</b>: pega con At. Esp. Su Ataque no le sirve.",
+  mix:"<b>Mixto</b>: tiene buenos ataques físicos y especiales, así que usa los dos.",
+  def:"<b>Defensivo</b>: aguanta golpes y desgasta. Es lentísimo, así que la Velocidad no le importa."
+};
+/* b = estadísticas base (PS, Atk, Def, AtEsp, DefEsp, Vel) · un = estadísticas que no usa · iv = ejemplo */
+var P = [
+ {id:"krokorok",n:"Krokorok",e:"🐊",t:["Tierra","Siniestro"],pre:"Sandile",rol:"fis",b:[60,82,45,45,45,74],key:"spe",un:["spa"],
+  ev:"+2 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
+  nat:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
+  ab:[["Intimidación","Baja el Ataque del rival al entrar."],["Autoestima","+1 de Ataque cada vez que derrota a uno. Si ves «+1 Atk» tras debilitar a un rival, es esta, y es excelente para barrer."],["Irascible","Si le dan un golpe crítico, su Ataque sube al máximo."]],
+  stab:["Triturar","Siniestro",80,"Cabezazo","Normal",70],iv:[26,17,4,26,15,31],mine:true},
+ {id:"pignite",n:"Pignite",e:"🐷",t:["Fuego","Lucha"],pre:"Tepig",rol:"mix",b:[90,93,55,70,55,55],key:"atk",un:[],
+  ev:"+2 Ataque",spread:"252 Ataque / 252 At. Esp. o Velocidad / 4 PS",
+  nat:[["ok","Activa","+Velocidad, −Defensa"],["ok","Huraña","+Ataque, −Defensa"],["bad","Osada","+Defensa, −Ataque: le quita fuerza a sus golpes físicos"]],
+  ab:[["Mar Llamas","Con poca vida (⅓ o menos), sus ataques de Fuego pegan un 50 % más."],["Audaz <span class='pill'>oculta</span>","Potencia los ataques con retroceso, como Envite Ígneo o Derribo."]],
+  stab:["Demolición","Lucha",75,"Cabezazo","Normal",70],iv:[20,28,12,18,22,9]},
+ {id:"excadrill",n:"Excadrill",e:"⛏️",t:["Tierra","Acero"],pre:"Drilbur",rol:"fis",b:[110,135,60,50,65,88],key:"atk",un:["spa"],
+  ev:"+2 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
+  nat:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
+  ab:[["Ímpetu Arena","Dobla su Velocidad durante una tormenta de arena."],["Poder Arena","En tormenta de arena, sus ataques de Tierra, Roca y Acero pegan un 30 % más."],["Rompemoldes <span class='pill'>oculta</span>","Ignora habilidades del rival que le estorben, como Levitación: su Terremoto le da igual."]],
+  stab:["Terremoto","Tierra",100,"Cabezazo","Normal",70],iv:[31,24,8,3,19,27]},
+ {id:"haxorus",n:"Haxorus",e:"🐉",t:["Dragón"],pre:"Fraxure",rol:"fis",b:[76,147,90,60,70,97],key:"atk",un:["spa"],
+  ev:"+3 Ataque",spread:"252 Ataque / 252 Velocidad / 4 PS",
+  nat:[["ok","Firme","+Ataque, −At. Esp."],["ok","Alegre","+Velocidad, −At. Esp."],["bad","Modesta","+At. Esp., −Ataque: sube lo que no usa y baja lo que sí"]],
+  ab:[["Rivalidad","Pega más a rivales de su mismo sexo y menos a los del sexo contrario."],["Rompemoldes","Ignora habilidades del rival que le estorben."],["Nerviosismo <span class='pill'>oculta</span>","El rival no puede comer bayas mientras esté en el campo."]],
+  stab:["Garra Dragón","Dragón",80,"Cabezazo","Normal",70],iv:[22,31,16,11,9,29]},
+ {id:"chandelure",n:"Chandelure",e:"🕯️",t:["Fantasma","Fuego"],pre:"Lampent",rol:"esp",b:[60,55,90,145,90,80],key:"spa",un:["atk"],
+  ev:"+3 At. Esp.",spread:"252 At. Esp. / 252 Velocidad / 4 PS",
+  nat:[["ok","Modesta","+At. Esp., −Ataque"],["ok","Miedosa","+Velocidad, −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
+  ab:[["Absorbe Fuego","Los ataques de Fuego no le hacen daño; además, potencian sus propios ataques de Fuego."],["Cuerpo Llama","Puede quemar al que lo golpea con contacto. Fuera de combate, acelera la eclosión de huevos."],["Allanamiento <span class='pill'>oculta</span>","Sus ataques ignoran barreras como Reflejo y Pantalla Luz."]],
+  stab:["Bola Sombra","Fantasma",80,"Pulso Umbrío","Siniestro",80],iv:[14,6,21,30,25,18]},
+ {id:"volcarona",n:"Volcarona",e:"🦋",t:["Bicho","Fuego"],pre:"Larvesta",rol:"esp",b:[85,60,65,135,105,100],key:"spa",un:["atk"],
+  ev:"+3 At. Esp.",spread:"252 At. Esp. / 252 Velocidad / 4 PS",
+  nat:[["ok","Modesta","+At. Esp., −Ataque"],["ok","Miedosa","+Velocidad, −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
+  ab:[["Cuerpo Llama","Puede quemar al que lo golpea con contacto. Fuera de combate, acelera la eclosión de huevos."],["Enjambre <span class='pill'>oculta</span>","Con poca vida (⅓ o menos), sus ataques de Bicho pegan un 50 % más."]],
+  stab:["Zumbido","Bicho",90,"Pulso Umbrío","Siniestro",80],iv:[18,4,13,31,27,24]},
+ {id:"serperior",n:"Serperior",e:"🐍",t:["Planta"],pre:"Servine",rol:"esp",b:[75,75,95,75,95,113],key:"spe",un:["atk"],
+  ev:"+3 Velocidad",spread:"252 At. Esp. / 252 Velocidad / 4 PS",
+  nat:[["ok","Miedosa","+Velocidad, −Ataque"],["ok","Modesta","+At. Esp., −Ataque"],["bad","Firme","+Ataque, −At. Esp.: sube lo que no usa y baja lo que sí"]],
+  ab:[["Espesura","Con poca vida (⅓ o menos), sus ataques de Planta pegan un 50 % más."],["Respondón <span class='pill'>oculta</span>","Los cambios de estadísticas se le invierten: Lluevehojas le <b>sube</b> el At. Esp. en vez de bajarlo."]],
+  stab:["Gigadrenado","Planta",75,"Pulso Umbrío","Siniestro",80],iv:[25,10,20,28,17,30]},
+ {id:"ferrothorn",n:"Ferrothorn",e:"🌰",t:["Planta","Acero"],pre:"Ferroseed",rol:"def",b:[74,94,131,54,116,20],key:"def",un:["spa","spe"],
+  ev:"+2 Defensa",spread:"252 PS / 252 Defensa o Def. Esp. / 4 en la otra",
+  nat:[["ok","Plácida","+Defensa, −Velocidad"],["ok","Grosera","+Def. Esp., −Velocidad"],["bad","Miedosa","+Velocidad, −Ataque: sube lo que no usa y baja lo que sí"]],
+  ab:[["Punta Acero","Hace daño al rival que lo golpea con un ataque de contacto."],["Anticipación <span class='pill'>oculta</span>","Avisa al entrar si el rival tiene un ataque súper eficaz contra él."]],
+  stab:["Cabeza de Hierro","Acero",80,"Cabezazo","Normal",70],iv:[29,19,26,7,30,2]}
+];
+var KEYST = "pokemmo_guia_pk";
+function $(id){ return document.getElementById(id); }
+function all(c, v){ var l = document.querySelectorAll("." + c); for(var i = 0; i < l.length; i++) l[i].innerHTML = v; }
+function q(iv){ if(iv === 31) return ["var(--green)","perfecto"]; if(iv >= 26) return ["var(--green)","muy bueno"]; if(iv >= 20) return ["var(--accent)","bueno"]; if(iv >= 10) return ["var(--orange)","regular"]; return ["var(--red)","malo"]; }
+function list(a){ return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " y " + a[a.length - 1]; }
+function row(lbl, w, col, v){ return '<div class="row"><span>'+lbl+'</span><div class="bar"><i style="width:'+w+'%;background:'+col+'"></i></div><span class="v">'+v+'</span></div>'; }
+
+$("pk").innerHTML = P.map(function(p){ return '<button type="button" data-id="'+p.id+'" aria-pressed="false">'+p.e+' '+p.n+'</button>'; }).join("");
+$("pk").addEventListener("click", function(ev){ var b = ev.target.closest("button"); if(b) show(b.getAttribute("data-id"), true); });
+
+function show(id, save){
+  var p = P.filter(function(x){ return x.id === id; })[0] || P[0], i;
+  var bs = $("pk").querySelectorAll("button");
+  for(i = 0; i < bs.length; i++){ var on = bs[i].getAttribute("data-id") === p.id; bs[i].classList.toggle("on", on); bs[i].setAttribute("aria-pressed", on); }
+  if(save){ try{ localStorage.setItem(KEYST, p.id); }catch(e){} }
+  var b = {}; K.forEach(function(k, j){ b[k] = p.b[j]; });
+  all("x-name", p.n); all("x-pre", p.pre); all("x-keyStat", SN[p.key]);
+  $("x-emoji").textContent = p.e;
+  $("x-types").innerHTML = p.t.map(function(t){ return '<span class="pill">'+t+'</span>'; }).join("");
+  $("x-rolTxt").innerHTML = ROL[p.rol];
+
+  /* estadísticas base */
+  var tot = 0; $("x-base").innerHTML = K.map(function(k){ tot += b[k]; return row(SN[k], Math.round(b[k] / 160 * 100), COL[k], b[k]); }).join("");
+  $("x-baseT").textContent = tot;
+
+  /* cuánto aporta */
+  var kb = b[p.key], sp = 2 * kb, nat = Math.floor((sp + 31 + 63 + 5) * 0.1);
+  $("x-keyBase").textContent = kb;
+  $("x-bars").innerHTML =
+    row("🐎 Especie (2 × "+kb+")", 100, "var(--violet)", sp) +
+    row("🏋️ EVs (252)", Math.round(63 / sp * 100), "var(--green)", "+63") +
+    row("🧬 IV (31)", Math.round(31 / sp * 100), "var(--blue)", "+31") +
+    row("🎭 Naturaleza", Math.round(nat / sp * 100), "var(--accent)", "≈ +" + nat) +
+    '<p style="font-size:.84rem;margin-top:8px">Con todo al máximo: <b>('+sp+' + 31 + 63 + 5) × 1.1 ≈ '+Math.floor((sp + 99) * 1.1)+'</b>. Sin IVs, sin EVs y con naturaleza en contra serían <b>('+sp+' + 5) × 0.9 ≈ '+Math.floor((sp + 5) * 0.9)+'</b>. A <b>nivel 50</b> todo vale la mitad: un IV 31 da ~+15 y 252 EVs dan ~+31.</p>';
+
+  /* IVs */
+  var t = 0, good = [], low = [], unused = [];
+  $("x-ivTitle").textContent = p.e + " " + (p.mine ? "Tu " : "Ejemplo: un ") + p.n + " (total " + p.iv.reduce(function(a, c){ return a + c; }, 0) + "/186)";
+  $("x-ivs").innerHTML = K.map(function(k, j){ var v = p.iv[j], c = q(v); t += v;
+    if(p.un.indexOf(k) >= 0) unused.push(SN[k] + " " + v); else if(v >= 26) good.push(SN[k] + " " + v); else if(v < 10) low.push(SN[k] + " " + v);
+    return '<span>'+SN[k]+' <b style="color:'+c[0]+'">'+v+'</b></span>'; }).join("");
+  var notes = [];
+  if(good.length) notes.push("<b>" + list(good) + "</b>: muy bien en lo que sí usa.");
+  if(low.length) notes.push("<b>" + list(low) + "</b>: bajo" + (low.length > 1 ? "s" : "") + "; ahí notará la diferencia.");
+  if(unused.length) notes.push("<b>" + list(unused) + "</b>: da igual, porque no usa esa estadística" + (p.key === "def" && unused.join("").indexOf("Velocidad") >= 0 ? " (en un Pokémon tan lento, una Velocidad baja hasta ayuda con Giro Bola)" : "") + ".");
+  notes.push("Para la historia, unos IVs así están perfectamente bien.");
+  $("x-ivNotes").innerHTML = notes.map(function(n){ return "<li>" + n + "</li>"; }).join("");
+
+  /* EVs */
+  $("x-evY").textContent = p.ev; $("x-spread").textContent = p.spread;
+
+  /* naturaleza y habilidad */
+  $("x-nat").innerHTML = p.nat.map(function(n){ return '<li><b>'+n[1]+'</b>: '+n[2]+' → '+(n[0] === "ok" ? '<span style="color:var(--green)">ideal</span>' : '<span style="color:var(--red)">mala</span>')+'.</li>'; }).join("");
+  $("x-abil").innerHTML = p.ab.map(function(a){ return '<li><b>'+a[0]+'</b>: '+a[1]+'</li>'; }).join("");
+
+  /* categoría y STAB */
+  $("x-catTip").innerHTML = p.rol === "fis" ? p.n + " es físico, así que su At. Esp. da igual."
+    : p.rol === "esp" ? p.n + " es especial, así que su Ataque da igual."
+    : p.rol === "mix" ? p.n + " usa los dos: sus ataques de un tipo pueden ser físicos y los de otro, especiales."
+    : p.n + " es defensivo: le importan PS, Defensa y Def. Esp.; su At. Esp. y su Velocidad dan igual.";
+  var s = p.stab, ef = Math.round(s[2] * 1.5);
+  $("x-stab").innerHTML = "En " + p.n + " (" + p.t.join("/") + "), <b>" + s[0] + "</b> (" + s[1] + ", " + s[2] + ") pega como si tuviera <b>" + ef + "</b> de poder; <b>" + s[3] + "</b> (" + s[4] + ", " + s[5] + ") se queda en " + s[5] + ".";
+}
+
+var saved = null; try{ saved = localStorage.getItem(KEYST); }catch(e){}
+show(saved || "krokorok", false);
+
+/* el selector se pega justo debajo de la cabecera */
+function hdh(){ document.documentElement.style.setProperty("--hdh", document.querySelector("header.top").offsetHeight + "px"); }
+hdh(); window.addEventListener("resize", hdh);
+})();
+</script>
 </body>
 </html>
