@@ -1,0 +1,37 @@
+﻿id;nombre;fase;responsable;inicio;fin;duracion;avance;hito;depende
+A01;1.1.1 Elaborar el Acta de constitución y obtener su aprobación;1.1 Gestión del proyecto;Gerente de Proyecto;2027-01-04;2027-01-08;5;0;no;
+H1;1.1.1 Hito: Acta de constitución aprobada;1.1 Gestión del proyecto;Gerente de Proyecto;2027-01-08;2027-01-08;1;0;si;A01
+A02;1.1.2 Elaborar el plan de gestión del proyecto;1.1 Gestión del proyecto;Gerente de Proyecto;2027-01-11;2027-01-22;12;0;no;A01
+A03;1.1.3 Dar seguimiento y control al proyecto (informes, valor ganado, control de cambios);1.1 Gestión del proyecto;Gerente de Proyecto;2027-02-03;2027-05-26;113;0;no;H2
+A04;1.2.1 Realizar entrevistas y encuestas a estudiantes, tutores y coordinación;1.2 Requisitos;Analista de Sistemas;2027-01-11;2027-01-20;10;0;no;A01
+A05;1.2.1 Gestionar con la DITIC la autorización de credenciales institucionales;1.2 Requisitos;Gerente de Proyecto;2027-01-11;2027-01-29;19;0;no;A01
+A06;1.2.2 Especificar los requisitos (SRS) y construir el Product Backlog;1.2 Requisitos;Analista de Sistemas;2027-01-21;2027-01-29;9;0;no;A04
+A07;1.2.2 Validar los requisitos y el Product Backlog con el patrocinador;1.2 Requisitos;Analista de Sistemas;2027-02-01;2027-02-02;2;0;no;A06
+H2;1.2.2 Hito: Plan de gestión y requisitos aprobados;1.2 Requisitos;Gerente de Proyecto;2027-02-02;2027-02-02;1;0;si;A02 A07
+A08;1.3.1 Diseñar wireframes y flujos de navegación;1.3 Diseño UX/UI y arquitectura;Diseñador UX/UI;2027-02-03;2027-02-12;10;0;no;A07
+A09;1.3.1 Elaborar el prototipo de alta fidelidad y validarlo con usuarios;1.3 Diseño UX/UI y arquitectura;Diseñador UX/UI;2027-02-15;2027-02-19;5;0;no;A08
+A10;1.3.2 Definir la arquitectura y el modelo de datos;1.3 Diseño UX/UI y arquitectura;Desarrollador 1;2027-02-03;2027-02-12;10;0;no;A07
+A11;1.3.3 Configurar hosting, base de datos, dominio, repositorio y CI/CD;1.3 Diseño UX/UI y arquitectura;Desarrollador 2;2027-02-15;2027-02-19;5;0;no;A10
+H3;1.3.3 Hito: Diseño y arquitectura aprobados;1.3 Diseño UX/UI y arquitectura;Gerente de Proyecto;2027-02-19;2027-02-19;1;0;si;A09 A11
+A12;1.4.1 Desarrollar el inicio de sesión con credenciales institucionales y el perfil del estudiante;1.4 Módulo de usuarios y tutores;Desarrollador 1;2027-02-22;2027-03-05;12;0;no;H3 A05
+A13;1.4.2 Desarrollar el registro y la validación de tutores por materia;1.4 Módulo de usuarios y tutores;Desarrollador 2;2027-02-22;2027-03-05;12;0;no;H3
+A14;1.5.1 Desarrollar la búsqueda y el perfil público de tutores;1.5 Módulo de búsqueda, agenda y notificaciones;Desarrollador 2;2027-03-08;2027-03-19;12;0;no;A12 A13
+A15;1.5.2 Desarrollar la gestión de disponibilidad (agenda) del tutor;1.5 Módulo de búsqueda, agenda y notificaciones;Desarrollador 1;2027-03-08;2027-03-19;12;0;no;A12 A13
+A16;1.5.2 Desarrollar la reserva, cancelación y reprogramación de sesiones;1.5 Módulo de búsqueda, agenda y notificaciones;Desarrollador 1;2027-03-22;2027-04-05;15;0;no;A14 A15
+A17;1.5.3 Desarrollar las notificaciones y los recordatorios;1.5 Módulo de búsqueda, agenda y notificaciones;Desarrollador 2;2027-03-22;2027-04-05;15;0;no;A14 A15
+H4;1.5.3 Hito: Producto mínimo viable (registro, búsqueda y agenda);1.5 Módulo de búsqueda, agenda y notificaciones;Gerente de Proyecto;2027-04-05;2027-04-05;1;0;si;A16 A17
+A18;1.6.1 Desarrollar la evaluación y calificación del tutor;1.6 Módulo de evaluación y reportes;Desarrollador 2;2027-04-06;2027-04-19;14;0;no;A16 A17
+A19;1.6.2 Desarrollar los reportes para la coordinación;1.6 Módulo de evaluación y reportes;Desarrollador 1;2027-04-06;2027-04-19;14;0;no;A16 A17
+H5;1.6.2 Hito: Desarrollo completo (fin del Sprint 4);1.6 Módulo de evaluación y reportes;Gerente de Proyecto;2027-04-19;2027-04-19;1;0;si;A18 A19
+A20;1.7.1 Elaborar el plan y los casos de prueba;1.7 Pruebas;QA / Tester;2027-02-03;2027-02-16;14;0;no;A07
+A21;1.7.1 Ejecutar pruebas de integración, sistema, rendimiento y seguridad;1.7 Pruebas;QA / Tester;2027-04-20;2027-04-29;10;0;no;H5 A20
+A22;1.7.2 Ejecutar pruebas de aceptación (UAT) y de usabilidad;1.7 Pruebas;QA / Tester;2027-04-30;2027-05-07;8;0;no;A21
+H6;1.7.2 Hito: Sistema aceptado por el patrocinador;1.7 Pruebas;Gerente de Proyecto;2027-05-07;2027-05-07;1;0;si;A22
+A23;1.8.1 Elaborar manuales y material de capacitación;1.8 Capacitación y piloto;Analista de Sistemas;2027-04-20;2027-04-26;7;0;no;H5
+A24;1.8.1 Capacitar a coordinadores, tutores y estudiantes;1.8 Capacitación y piloto;Analista de Sistemas;2027-05-10;2027-05-12;3;0;no;H6 A23
+A25;1.8.2 Desplegar la plataforma en producción;1.8 Capacitación y piloto;Desarrollador 1;2027-05-10;2027-05-11;2;0;no;H6
+A26;1.8.2 Ejecutar el piloto con estudiantes de primer año;1.8 Capacitación y piloto;Gerente de Proyecto;2027-05-13;2027-05-26;14;0;no;A24 A25
+H7;1.8.2 Hito: Piloto concluido;1.8 Capacitación y piloto;Gerente de Proyecto;2027-05-26;2027-05-26;1;0;si;A26
+A27;1.9.1 Evaluar los resultados del piloto y elaborar el informe final;1.9 Cierre del proyecto;Gerente de Proyecto;2027-05-27;2027-06-01;6;0;no;H7
+A28;1.9.2 Documentar lecciones aprendidas y formalizar el cierre;1.9 Cierre del proyecto;Gerente de Proyecto;2027-06-02;2027-06-04;3;0;no;A27
+H8;1.9.2 Hito: Cierre formal del proyecto;1.9 Cierre del proyecto;Gerente de Proyecto;2027-06-04;2027-06-04;1;0;si;A28
