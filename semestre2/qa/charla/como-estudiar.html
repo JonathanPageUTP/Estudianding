@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Cómo estudiar · Funcionamiento de DefectDojo</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.55;overflow-wrap:anywhere;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));}
+a{color:var(--cyan);}
+header{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;}
+.hd{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;}
+.hd h1{margin:0;font-size:clamp(1.05rem,1rem + .6vw,1.4rem);flex:1;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+nav.chips{max-width:1100px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:16px;}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px;}
+.hero h2{margin:0 0 6px;font-size:clamp(1.15rem,1rem + .8vw,1.6rem);}
+.hero p{margin:0;color:var(--text-dim);max-width:70ch;}
+section{margin:26px 0;scroll-margin-top:120px;}
+section > h2{font-family:var(--mono);font-size:.8rem;letter-spacing:.1em;color:var(--amber);margin:0 0 10px;}
+p.lead{color:var(--text-dim);margin:0 0 12px;max-width:70ch;}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;}
+@media (min-width:561px){ .grid{grid-template-columns:1fr 1fr;} }
+@media (min-width:1024px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;}
+.card h3{margin:0 0 6px;font-size:1rem;display:flex;gap:8px;align-items:flex-start;}
+.card p,.card li{color:var(--text-dim);font-size:.92rem;}
+.card p{margin:6px 0;}
+.card ul,.card ol{margin:6px 0 0;padding-left:20px;}
+.card li{margin:4px 0;}
+.n{font-family:var(--mono);font-weight:800;color:#06140c;background:var(--accent);border-radius:8px;padding:1px 8px;font-size:.8rem;flex-shrink:0;}
+.ej{margin-top:8px;background:var(--cyan-dim);border:1px solid #1f4d5c;border-radius:10px;padding:8px 10px;font-size:.86rem;color:var(--text);}
+.ej b{color:var(--cyan);}
+.no{background:var(--red-dim);border-color:#5c2a2a;}
+.no h3{color:var(--red);}
+.si{background:var(--accent-dim);border-color:#265c3a;}
+/* selector de sesión */
+.picker{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px;}
+.seg button{flex:1 1 120px;min-height:44px;background:var(--bg);border:1px solid var(--line);color:var(--text-dim);border-radius:12px;font:700 .88rem var(--sans);cursor:pointer;padding:8px 10px;}
+.seg button small{display:block;font-weight:400;font-size:.7rem;color:var(--text-faint);}
+.seg button.on{border-color:var(--accent);background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);letter-spacing:.08em;}
+#plan{border-top:1px dashed var(--line);padding-top:12px;}
+#plan h3{margin:0 0 4px;font-size:1.05rem;}
+#plan .meta{font-size:.8rem;color:var(--amber);margin-bottom:8px;}
+.steps{list-style:none;padding:0;margin:0;counter-reset:s;}
+.steps li{counter-increment:s;display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:.92rem;color:var(--text-dim);}
+.steps li:last-child{border-bottom:none;}
+.steps li::before{content:counter(s);flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--cyan-dim);color:var(--cyan);font:800 .78rem var(--mono);display:flex;align-items:center;justify-content:center;}
+.steps li b{color:var(--text);}
+.steps .t{font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;margin-left:auto;padding-left:8px;}
+.tip{margin-top:10px;font-size:.86rem;background:var(--amber-dim);border:1px solid #5c4515;border-radius:10px;padding:8px 10px;}
+/* tablas */
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);}
+table{border-collapse:collapse;width:100%;font-size:.86rem;}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.05em;background:var(--surface-2);}
+td{color:var(--text-dim);}
+td b{color:var(--text);}
+/* checklist */
+.check{list-style:none;padding:0;margin:0;}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line-soft);cursor:pointer;font-size:.92rem;color:var(--text-dim);min-height:44px;}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex-shrink:0;margin-top:1px;}
+.check input:checked + span{color:var(--text);text-decoration:line-through;text-decoration-color:var(--accent);}
+.bar{height:8px;background:var(--surface-2);border-radius:8px;overflow:hidden;margin:8px 0 4px;}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s;}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.82rem;color:var(--text-dim);}
+.btn{min-height:40px;background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:0 14px;cursor:pointer;}
+footer{max-width:1100px;margin:20px auto 0;padding:0 16px;font-size:.78rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media (hover:hover){ .seg button:hover,.btn:hover,nav.chips a:hover{border-color:var(--accent);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} .bar i{transition:none;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+    <h1>Cómo <em>preparar</em> la charla</h1>
+  </div>
+  <nav class="chips" aria-label="Secciones">
+    <a href="#elige">⏱️ Elige tu sesión</a><a href="#reglas">📜 10 reglas</a><a href="#lugar">🏢 Oficina · 🚌 Transporte</a>
+    <a href="#paginas">🧭 Cada página</a><a href="#tecnicas">🧠 Técnicas</a><a href="#semana">📅 Plan</a><a href="#evita">🚫 Evita</a><a href="#hoy">✅ Hoy</a>
+  </nav>
+</header>
+
+<main>
+  <div class="hero">
+    <h2>Reglas y rutinas para dominar tus 3 minutos: cómo funciona DefectDojo</h2>
+    <p>Para exponer bien no hace falta memorizar palabra por palabra: necesitas el <b>orden</b>, las <b>transiciones</b> y las <b>palabras clave</b> de cada punto, y haberlo <b>dicho en voz alta</b> varias veces. Elige abajo dónde estás y cuánto tiempo tienes, y sigue la rutina. Los ejemplos usan puntos de tu charla.</p>
+  </div>
+
+  <!-- ===================== SELECTOR ===================== -->
+  <section id="elige">
+    <h2>⏱️ ELIGE TU SESIÓN DE HOY</h2>
+    <div class="picker">
+      <div class="lbl">¿DÓNDE ESTÁS?</div>
+      <div class="seg" id="segLugar" role="group" aria-label="Lugar">
+        <button type="button" data-v="transit" aria-pressed="false">🚌 Transporte<small>celular · audífonos · cortes</small></button>
+        <button type="button" data-v="office" aria-pressed="false">🏢 Oficina / casa<small>puedes hablar en voz alta</small></button>
+      </div>
+      <div class="lbl">¿CUÁNTO TIEMPO TIENES?</div>
+      <div class="seg" id="segTiempo" role="group" aria-label="Tiempo disponible">
+        <button type="button" data-v="5" aria-pressed="false">5 min<small>una parada</small></button>
+        <button type="button" data-v="15" aria-pressed="false">15 min<small>un trayecto corto</small></button>
+        <button type="button" data-v="30" aria-pressed="false">30 min<small>un pomodoro</small></button>
+        <button type="button" data-v="90" aria-pressed="false">60–90 min<small>sesión larga</small></button>
+      </div>
+      <div id="plan" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===================== REGLAS ===================== -->
+  <section id="reglas">
+    <h2>📜 LAS 10 REGLAS QUE DEBES CUMPLIR</h2>
+    <div class="grid">
+      <div class="card"><h3><span class="n">1</span>Primero el orden, después los detalles</h3><p>Si sabes qué punto sigue, nunca te quedas en blanco. Aprende la secuencia antes que las siglas.</p><div class="ej"><b>Ejemplo:</b> tu lámina 02 se lee de izquierda a derecha: <b>Entrada</b> → <b>Proceso</b> → <b>Salida</b>, y abajo la <b>Clave</b>.</div></div>
+      <div class="card"><h3><span class="n">2</span>Dilo antes de leerlo</h3><p>Antes de abrir un bloque del guion, di lo que recuerdas de él o responde la 🎯. Equivocarte antes de leer hace que se te quede.</p><div class="ej"><b>Ejemplo:</b> antes de abrir «2 · Proceso», intenta: «¿cuáles son los cuatro verbos?» → importa, agrupa, identifica duplicados, administra el estado.</div></div>
+      <div class="card"><h3><span class="n">3</span>Palabras clave, no párrafos</h3><p>No memorices frases completas: memoriza las palabras clave de cada punto y arma la frase en el momento. Suena más natural y no te pierdes si te interrumpen.</p><div class="ej"><b>Ejemplo:</b> en la Salida te basta «SEMIS»: severidad, estado, métricas, informes, seguimiento.</div></div>
+      <div class="card"><h3><span class="n">4</span>Aprende las transiciones de memoria</h3><p>Las transiciones son lo que más se olvida con nervios. Son una sola frase: apréndelas literal.</p><div class="ej"><b>Ejemplo:</b> de la Entrada al Proceso: «Una vez dentro, DefectDojo no solo guarda: organiza y depura».</div></div>
+      <div class="card"><h3><span class="n">5</span>Ensaya en voz alta y de pie</h3><p>Pensarlo no es lo mismo que decirlo. En voz alta descubres dónde te trabas y cuánto tardas de verdad.</p><div class="ej"><b>Ejemplo:</b> «SAST, DAST y SCA» seguidas se traban: ensáyalas con su significado («código sin ejecutar, app en funcionamiento, dependencias»).</div></div>
+      <div class="card"><h3><span class="n">6</span>Cronométrate</h3><p>Son 3 minutos en total. Usa el <a href="ensayo.html">Ensayo</a>: te dice qué bloque se pasa de tiempo.</p><div class="ej"><b>Ejemplo:</b> Entrada, Proceso y Salida 0:45 cada uno · Intro 0:20 · Cierre 0:25.</div></div>
+      <div class="card"><h3><span class="n">7</span>Repasa espaciado</h3><p>Mejor varios ensayos cortos separados que uno largo seguido. La pestaña <b>📅 Hoy</b> de las flashcards te programa los repasos hasta el día de la charla.</p></div>
+      <div class="card"><h3><span class="n">8</span>Un dato por punto, con su gancho</h3><p>El público recuerda pocos datos. Domina uno por punto y su mnemotecnia.</p><div class="ej"><b>Ejemplo:</b> Entrada: «más de 500 herramientas». Proceso: «IADE». Salida: «4 hallazgos, 1 media y 3 bajas». Clave: «no escanea por sí solo».</div></div>
+      <div class="card"><h3><span class="n">9</span>Prepárate para las preguntas</h3><p>Lee las «🙋 Posibles preguntas del público» de cada punto y responde cada una en una sola frase.</p><div class="ej"><b>Ejemplo:</b> «¿DefectDojo encuentra vulnerabilidades?» → No por sí solo: recibe los resultados de otras herramientas y los administra.</div></div>
+      <div class="card"><h3><span class="n">10</span>Duerme y anota tus dudas</h3><p>Dormir fija lo ensayado. Lo que no entiendas, anótalo en <a href="dudas.html">Mis Dudas</a>: no expongas algo que no sabrías explicar.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== LUGAR ===================== -->
+  <section id="lugar">
+    <h2>🏢 OFICINA VS. 🚌 TRANSPORTE</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🚌 En el transporte</h3>
+        <ul>
+          <li>Guion en modo <b>🚌 Transporte</b>: bloques plegados y «🚏 Pausa segura» entre columnas.</li>
+          <li>Al subir, <b>▶ Continuar donde quedé</b>.</li>
+          <li>Con audífonos, <b>🎧 Escuchar toda la charla</b> en el guion (~3 min): sigue sonando con la pantalla apagada.</li>
+          <li><b>🚌 Ensayo mental</b>: repasas cada bloque en silencio y marcas las palabras clave.</li>
+          <li><b>FlashCards</b> de 📅 Hoy y <b>Palabras Clave</b> con 🙈 Modo práctica.</li>
+          <li>Antes de bajarte, di en tu mente la <b>transición</b> del último punto que viste.</li>
+        </ul>
+        <div class="ej"><b>Ejemplo:</b> 3 paradas = 🎧 tu parte entera dos veces + 8 tarjetas de «Orden».</div>
+      </div>
+      <div class="card">
+        <h3>🏢 En la oficina o en casa</h3>
+        <ul>
+          <li>Guion en modo <b>🏢 Oficina</b>: todo desplegado, con las tablas «por si preguntan».</li>
+          <li><b>🎤 Ensayo completo en voz alta</b>, de pie, con el cronómetro.</li>
+          <li>Ensaya con el <b>🎤 Modo escenario</b> del guion, como si fueran tus notas el día de la charla.</li>
+          <li>Grábate con el teléfono y escúchate: ¿se entiende? ¿hablas muy rápido?</li>
+          <li>Escribe tus <b>3 frases</b> al final del guion.</li>
+          <li>Teléfono fuera de la vista (salvo para grabarte).</li>
+        </ul>
+        <div class="ej"><b>Ejemplo:</b> ensayo completo → revisas los bloques en rojo → los repites solos con ⚡ Ensayo rápido.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PÁGINAS ===================== -->
+  <section id="paginas">
+    <h2>🧭 PARA QUÉ SIRVE CADA PÁGINA</h2>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Página</th><th>Úsala para…</th><th>Mejor en</th><th>Tiempo</th></tr></thead>
+      <tbody>
+        <tr><td><a href="guion.html"><b>Guion</b></a></td><td>Aprender qué decir en cada bloque, con 🎯, 🧠, transiciones y 🎤 Modo escenario</td><td>🏢 y 🚌</td><td>10 min la primera vez</td></tr>
+        <tr><td><a href="claves.html"><b>Palabras Clave</b></a></td><td>Memorizar siglas (SAST, DAST, SCA), mnemotecnias y «No confundir» con 🙈 Modo práctica</td><td>🚌</td><td>5 min</td></tr>
+        <tr><td><a href="tema.html"><b>Resumen Completo del Tema</b></a></td><td>Entender toda la sustentación (las 5 láminas) y lo que solo está en el trabajo escrito: historia, demostración, comparación</td><td>🏢 y 🚌</td><td>15 min</td></tr>
+        <tr><td><a href="resumen.html"><b>Resumen General</b></a></td><td>Ver tu parte entera, qué dicen las otras láminas y tu plan de repaso</td><td>🏢 y 🚌</td><td>3 min</td></tr>
+        <tr><td><a href="puntos.html"><b>Resumen por Punto</b></a></td><td>Saber todo lo que dice el material de cada punto y las preguntas del público</td><td>🏢</td><td>10 min</td></tr>
+        <tr><td><a href="flash.html"><b>FlashCards</b></a></td><td>Recordar sin mirar el orden, las siglas y las transiciones (pestaña 📅 Hoy)</td><td>🚌</td><td>5–10 min</td></tr>
+        <tr><td><a href="ensayo.html"><b>Ensayo</b></a></td><td>Medirte: 🎤 en voz alta en la oficina, 🚌 mental en el bus, ⚡ rápido para tus puntos débiles</td><td>🏢 voz alta · 🚌 mental</td><td>3–5 min</td></tr>
+        <tr><td><a href="dudas.html"><b>Mis Dudas</b></a></td><td>Anotar y resolver lo que no entiendas</td><td>🏢</td><td>cuando surja</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===================== TÉCNICAS ===================== -->
+  <section id="tecnicas">
+    <h2>🧠 TÉCNICAS CON EJEMPLOS DE TU CHARLA</h2>
+    <div class="grid g3">
+      <div class="card"><h3>🏛️ Palacio de la memoria</h3><p>Asocia cada punto a un lugar de un recorrido que conoces bien (tu casa, el camino a la UTP).</p><div class="ej"><b>Ejemplo:</b> buzón de la entrada = Entrada (llegan los reportes) · cocina donde se lava y ordena = Proceso (depurar) · mesa servida = Salida (hallazgos listos) · cartel en la puerta = «no escanea por sí solo».</div></div>
+      <div class="card"><h3>🧒 Explícalo a alguien</h3><p>Cuéntaselo a alguien que no sabe de seguridad en 1 minuto. Donde te trabes, ahí está tu hueco.</p><div class="ej"><b>Ejemplo:</b> «Varias herramientas revisan una app y cada una da su informe; DefectDojo los junta, quita los repetidos y te deja una lista ordenada por gravedad para ir corrigiendo».</div></div>
+      <div class="card"><h3>🔗 Analogía propia</h3><p>Conecta lo nuevo con algo que ya conoces; si la inventas tú, se te olvida menos.</p><div class="ej"><b>No escanea por sí solo:</b> es como el médico que recibe los análisis del laboratorio: no saca la sangre, pero ordena los resultados y decide qué tratar primero.</div></div>
+      <div class="card"><h3>✍️ Hoja en blanco</h3><p>En 2 minutos dibuja tu lámina sin mirar: tres columnas, sus palabras y la barra de abajo. Luego compara con el Resumen General.</p></div>
+      <div class="card"><h3>🎙️ Grábate</h3><p>Grábate diciendo tu parte completa y escúchala en el bus. Detectas muletillas y partes donde corres.</p><div class="ej"><b>Ejemplo:</b> si en la Entrada dices las tres siglas sin explicarlas, el público se pierde: di siempre qué analiza cada una.</div></div>
+      <div class="card"><h3>❓ Anticipa preguntas</h3><p>Ponte en el lugar del profesor: ¿qué preguntaría de cada punto? Responde en una frase.</p><div class="ej"><b>Ejemplo:</b> «¿Qué es un falso positivo?» → un hallazgo que la herramienta reporta pero no es real; DefectDojo permite clasificarlo.</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PLAN ===================== -->
+  <section id="semana">
+    <h2>📅 PLAN HASTA LA CHARLA</h2>
+    <p class="lead">La sustentación es el <b>jueves 26/11</b>. El <a href="resumen.html#r-plan">📅 Plan de repaso</a> del Resumen General lo arma con fechas reales. Si la charla es hoy, sigue el plan exprés:</p>
+    <div class="tblwrap"><table>
+      <thead><tr><th>Cuándo</th><th>Qué hacer</th><th>Ejemplo</th></tr></thead>
+      <tbody>
+        <tr><td><b>Primero (10 min)</b></td><td>Leer el guion completo con 🎯 y 🧠; aprender el flujo Entrada → Proceso → Salida</td><td>«IADE» y «SEMIS»</td></tr>
+        <tr><td><b>Luego (10 min)</b></td><td>🎧 Escuchar tu parte + flashcards de «Orden»</td><td>Las transiciones literales</td></tr>
+        <tr><td><b>Luego (10 min)</b></td><td>Tres 🎤 ensayos cronometrados en voz alta + ⚡ rápido de los débiles</td><td>Si la Entrada pasa de 0:45, quédate con sus palabras clave</td></tr>
+        <tr><td><b>Antes de entrar</b></td><td>Un 🚌 ensayo mental, el 🎤 Modo escenario y un vistazo al Resumen Completo del Tema</td><td>Repite la frase con la que recibes de la lámina 01 y la que pasa a la 03</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ===================== EVITA ===================== -->
+  <section id="evita">
+    <h2>🚫 LO QUE DEBES EVITAR</h2>
+    <div class="grid">
+      <div class="card no"><h3>📖 Leer la lámina</h3><p>El público ya la ve. Di primero de memoria y usa la lámina como apoyo.</p></div>
+      <div class="card no"><h3>📝 Memorizar palabra por palabra</h3><p>Si olvidas una palabra te bloqueas. Memoriza el orden y las palabras clave.</p></div>
+      <div class="card no"><h3>🔍 Decir que DefectDojo «escanea»</h3><p>Es el error más fácil de cometer en tu parte: recibe y organiza resultados de otras herramientas, no los produce.</p></div>
+      <div class="card no"><h3>⏩ Ignorar el reloj</h3><p>Son 3 minutos. Pasarte le quita tiempo a la lámina 03.</p></div>
+      <div class="card no"><h3>🧩 Robarle la lámina 03</h3><p>Capacidades, integraciones y métricas en detalle son de la lámina siguiente: menciónalas, no las desarrolles.</p></div>
+      <div class="card no"><h3>📱 Ensayar con notificaciones</h3><p>Cada interrupción rompe el hilo. Modo No Molestar siempre.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================== HOY ===================== -->
+  <section id="hoy">
+    <h2>✅ CHECKLIST DE HOY</h2>
+    <div class="card">
+      <p style="margin-top:0">Marca lo que cumpliste. Se reinicia solo cada día y se guarda en este dispositivo.</p>
+      <ul class="check" id="check">
+        <li><label><input type="checkbox" data-i="0"><span>Activé No Molestar antes de empezar</span></label></li>
+        <li><label><input type="checkbox" data-i="1"><span>Dije el contenido de la lámina 02 sin mirar</span></label></li>
+        <li><label><input type="checkbox" data-i="2"><span>Hice mis tarjetas de 📅 Hoy</span></label></li>
+        <li><label><input type="checkbox" data-i="3"><span>Hice un ensayo (🎤 en voz alta o 🚌 mental)</span></label></li>
+        <li><label><input type="checkbox" data-i="4"><span>Repetí las transiciones de memoria</span></label></li>
+        <li><label><input type="checkbox" data-i="5"><span>Respondí al menos 2 preguntas del público</span></label></li>
+        <li><label><input type="checkbox" data-i="6"><span>Anoté mis dudas en Mis Dudas</span></label></li>
+        <li><label><input type="checkbox" data-i="7"><span>Dije la frase con la que paso a la lámina 03</span></label></li>
+      </ul>
+      <div class="bar"><i id="checkBar"></i></div>
+      <div class="row"><span id="checkTxt">0 de 8</span><button class="btn" type="button" id="checkReset">↺ Reiniciar</button></div>
+    </div>
+  </section>
+</main>
+
+<footer>Charla · DefectDojo · Funcionamiento general · Guía de método de estudio · <a href="index.html">← Menú de la charla</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+  function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---------- rutinas por lugar y tiempo ---------- */
+  var R = {
+    transit: {
+      "5": {t:"🚌 5 minutos · una parada", s:[
+        ["Abre el <b>Guion</b> y toca 🔊 en un solo bloque", "0:30"],
+        ["Escúchalo con los ojos cerrados", "1:00"],
+        ["Di en tu mente sus <b>palabras clave</b> y la <b>transición</b> al siguiente", "2:30"],
+        ["Al bajarte, repite el flujo: Entrada → Proceso → Salida → «no escanea por sí solo»", "1:00"]],
+        ej:"Ejemplo: bloque «2 · Proceso» → en tu mente: «importa, agrupa, identifica duplicados, administra el estado» → «¿Y qué sale de todo esto? Hallazgos con los que se puede trabajar».",
+        tip:"Si vas sentado y prefieres pantalla: 8 tarjetas de 📅 Hoy en FlashCards."},
+      "15": {t:"🚌 15 minutos · un trayecto corto", s:[
+        ["<b>🎧 Escuchar toda la charla</b> en el Guion dos veces (sigue con la pantalla apagada)", "6:00"],
+        ["<b>🚌 Ensayo mental</b>: cada bloque en silencio, revelas y marcas las palabras clave", "4:00"],
+        ["Repasa en <b>Palabras Clave</b> (🙈) el punto con menos claves", "5:00"]],
+        ej:"Ejemplo: en el ensayo mental olvidas «métricas» en la Salida → en Palabras Clave repasas «SEMIS».",
+        tip:"Si se corta el viaje, el ensayo queda guardado: «⏸️ Tienes un ensayo en curso»."},
+      "30": {t:"🚌 30 minutos · trayecto largo", s:[
+        ["Guion en <b>🚌 Transporte</b>: abre cada bloque, responde la 🎯 y lee «Qué decir»", "8:00"],
+        ["Haz las <b>🧠 Recuerda sin mirar</b> y el <b>🔀 Repaso mezclado</b>", "6:00"],
+        ["<b>FlashCards</b> de 📅 Hoy", "8:00"],
+        ["Lee el <b>Resumen Completo del Tema</b>: láminas 01, 03, 04 y 05", "8:00"]],
+        ej:"Ejemplo: 🎯 «¿Qué significa SAST?» → análisis estático: el código fuente sin ejecutar la aplicación.",
+        tip:"En cada 🚏 Pausa segura puedes bajarte sin perder el hilo."},
+      "90": {t:"🚌 Viaje de una hora o más", s:[
+        ["<b>🎧 Escuchar toda la charla</b> tres veces seguidas", "9:00"],
+        ["<b>Resumen Completo del Tema</b> con 🎧 Escuchar todo", "20:00"],
+        ["Pausa: mira por la ventana, sin pantalla", "5:00"],
+        ["<b>🚌 Ensayo mental</b> completo dos veces", "6:00"],
+        ["<b>FlashCards</b> y <b>Palabras Clave</b> (🙈) de tus puntos débiles", "15:00"]],
+        ej:"Ejemplo: tu punto débil es la Entrada → en Palabras Clave «SAST · DAST · SCA» y en FlashCards el filtro «1 · Entrada».",
+        tip:"Alterna audio y pantalla para no cansar la vista."}
+    },
+    office: {
+      "5": {t:"🏢 5 minutos · entre tareas", s:[
+        ["Abre el <b>Guion</b> y activa <b>🎤 Modo escenario</b>", "0:30"],
+        ["Di en voz baja la <b>intro</b> y el <b>cierre</b> mirando solo las viñetas", "2:30"],
+        ["Repite de memoria las <b>3 transiciones</b>", "2:00"]],
+        ej:"Ejemplo: intro «Ya vimos qué es DefectDojo y el problema que resuelve…» y cierre «…veamos qué permite hacer: sus capacidades principales».",
+        tip:"La intro y el cierre son lo que más recuerda el público: que salgan perfectos."},
+      "15": {t:"🏢 15 minutos · un hueco en el día", s:[
+        ["<b>🎤 Ensayo completo en voz alta</b> con cronómetro, dos veces", "7:00"],
+        ["Revisa el resultado: bloques en ámbar o rojo y palabras clave olvidadas", "2:00"],
+        ["<b>⚡ Ensayo rápido</b> solo de los puntos débiles", "3:00"],
+        ["Abre «📜 Ver en el guion» del peor bloque y léelo una vez", "3:00"]],
+        ej:"Ejemplo: «1 · Entrada» en 1:10 de 0:45 → en el ensayo rápido lo dices solo con sus 5 palabras clave.",
+        tip:"Hazlo de pie, como el día de la charla."},
+      "30": {t:"🏢 30 minutos · un pomodoro", s:[
+        ["Guion en <b>🏢 Oficina</b>: 🎯 → lee → 🧠 de los bloques que menos dominas", "10:00"],
+        ["Grábate con el teléfono diciendo tu parte completa", "4:00"],
+        ["Escúchate y anota dónde dudaste o corriste", "6:00"],
+        ["Pausa de 5 min lejos de la pantalla", "5:00"],
+        ["Escribe tus <b>3 frases</b> al final del guion y repasa las 🙋 preguntas del Resumen por Punto", "5:00"]],
+        ej:"Ejemplo: al escucharte notas que en la Salida dices «eh…» antes de las métricas → usa «SEMIS».",
+        tip:"Si te surge una duda («¿qué es CWE?»), anótala en Mis Dudas y sigue."},
+      "90": {t:"🏢 60–90 minutos · sesión larga", s:[
+        ["Bloque 1 (25 min): <b>Resumen Completo del Tema</b> y <b>Resumen por Punto</b> con 🙋 preguntas", "25:00"],
+        ["Pausa 5 min", "5:00"],
+        ["Bloque 2 (25 min): <b>4 ensayos 🎤 en voz alta</b> seguidos, cronometrados", "25:00"],
+        ["Pausa 5 min", "5:00"],
+        ["Bloque 3 (20 min): <b>🎤 Modo escenario</b> frente a alguien o grabándote; responde 3 preguntas improvisadas", "20:00"],
+        ["Cierre: hoja en blanco con el flujo Entrada → Proceso → Salida y checklist de hoy", "5:00"]],
+        ej:"Ejemplo: alguien te pregunta «¿entonces DefectDojo encuentra vulnerabilidades?» → «No por sí solo: recibe los resultados de SAST, DAST y SCA y los vuelve hallazgos rastreables».",
+        tip:"Más de 90 minutos seguidos rinde menos: mejor dos sesiones con una pausa larga."}
+    }
+  };
+  var K = "qa_charla1_metodo_sel_v1", sel = load(K) || {};
+  if(!sel.l) sel.l = window.matchMedia("(max-width:560px)").matches ? "transit" : "office";
+  if(!sel.t) sel.t = "15";
+  function draw(){
+    [["segLugar","l"],["segTiempo","t"]].forEach(function(p){
+      Array.prototype.forEach.call($(p[0]).children, function(b){
+        var on = b.getAttribute("data-v") === sel[p[1]];
+        b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    });
+    var r = R[sel.l][sel.t];
+    $("plan").innerHTML = '<h3>'+r.t+'</h3><div class="meta">Sigue los pasos en orden · el tiempo es aproximado</div>'+
+      '<ol class="steps">'+r.s.map(function(x){ return '<li><span>'+x[0]+'</span><span class="t">'+x[1]+'</span></li>'; }).join("")+'</ol>'+
+      '<div class="ej">💡 '+r.ej+'</div><div class="tip">⚠️ '+r.tip+'</div>';
+  }
+  $("segLugar").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; sel.l = b.getAttribute("data-v"); save(K, sel); draw(); });
+  $("segTiempo").addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; sel.t = b.getAttribute("data-v"); save(K, sel); draw(); });
+  draw();
+
+  /* ---------- checklist diaria ---------- */
+  var CK = "qa_charla1_metodo_check_v1", d = new Date(), today = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+  var ck = load(CK); if(!ck || ck.d !== today) ck = {d:today, v:{}};
+  var boxes = document.querySelectorAll("#check input");
+  function upd(){
+    var n = 0; Array.prototype.forEach.call(boxes, function(b){ if(b.checked) n++; });
+    $("checkBar").style.width = (n/boxes.length*100)+"%";
+    $("checkTxt").textContent = n+" de "+boxes.length+(n === boxes.length ? " · ¡Día cumplido! 🎉" : "");
+  }
+  Array.prototype.forEach.call(boxes, function(b){
+    b.checked = !!ck.v[b.getAttribute("data-i")];
+    b.addEventListener("change", function(){ ck.v[b.getAttribute("data-i")] = b.checked; save(CK, ck); upd(); });
+  });
+  $("checkReset").addEventListener("click", function(){ ck.v = {}; save(CK, ck); Array.prototype.forEach.call(boxes, function(b){ b.checked = false; }); upd(); });
+  upd();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen por punto · Funcionamiento de DefectDojo</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px;}
+main{max-width:720px;margin:0 auto;}
+aside.side{display:none;}
+.tools{max-width:1180px;margin:8px auto 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.tools input[type=search]{flex:1;min-width:180px;min-height:44px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:0 14px;}
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+.notice{font-size:.8rem;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--amber-dim);border:1px solid #5c4515;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;scroll-margin-top:150px;}
+.ph{display:flex;align-items:center;gap:8px;cursor:pointer;flex-wrap:wrap;}
+.ph h2{font-size:1.05rem;flex:1;min-width:140px;}
+.num{font-family:var(--mono);font-size:.72rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.car{color:var(--text-faint);transition:transform .2s;}
+.pt.closed .car{transform:rotate(-90deg);}
+.pt.closed .body{display:none;}
+.pt .kit-tts{margin-left:auto;}
+.src{font-size:.76rem;color:var(--cyan);margin-top:10px;}
+ul.det{padding-left:20px;margin:8px 0 0;}
+ul.det li{margin:6px 0;max-width:70ch;color:var(--text-dim);}
+ul.det b{color:var(--text);}
+blockquote.q{margin:12px 0 0;border-left:3px solid var(--cyan);background:var(--cyan-dim);padding:8px 12px;border-radius:0 10px 10px 0;font-style:italic;}
+.mnemo{display:flex;gap:12px;align-items:flex-start;margin-top:12px;background:var(--violet-dim);border:1px solid #47336b;border-radius:12px;padding:10px 12px;}
+.mk{font-family:var(--mono);font-weight:900;color:var(--violet);font-size:1.05rem;white-space:nowrap;}
+.mt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.mx{font-size:.88rem;}
+.mx b{color:var(--violet);}
+.mm{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+.error{margin-top:10px;background:var(--red-dim);border:1px solid #5c2a2a;border-radius:12px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);}
+.error b{color:var(--red);}
+.qs{margin-top:12px;border-top:1px solid var(--line);}
+details.qa{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:10px;padding:2px 10px;margin-top:6px;}
+details.qa summary{font-size:.88rem;font-weight:600;}
+details.qa .ans{font-size:.86rem;color:var(--text-dim);padding:2px 0 8px 14px;}
+.pausa{display:none;font-size:.8rem;color:var(--amber);text-align:center;margin-top:16px;border:1px dashed #5c4515;border-radius:10px;padding:8px;}
+body.transit .pausa{display:block;}
+.nores{display:none;text-align:center;color:var(--text-dim);margin-top:24px;}
+mark{background:var(--amber);color:#2a1c08;border-radius:3px;}
+@media (min-width:561px){ .mnemo{padding:12px 14px;} }
+@media (min-width:1024px){
+  .wrap{display:grid;grid-template-columns:240px 1fr;gap:28px;}
+  main{max-width:800px;margin:0;}
+  nav.chips{display:none;}
+  aside.side{display:block;position:sticky;top:120px;align-self:start;max-height:calc(100vh - 140px);overflow:auto;padding-top:14px;}
+  aside.side a{display:block;text-decoration:none;color:var(--text-dim);font-size:.84rem;padding:7px 10px;border-radius:10px;border-left:3px solid transparent;}
+  aside.side a b{font-family:var(--mono);color:var(--accent);margin-right:4px;}
+  aside.side a.cur{background:var(--surface);border-left-color:var(--accent);color:var(--text);}
+}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Resumen por punto · <em>Funcionamiento de DefectDojo</em></h1>
+  <div class="seg" role="group" aria-label="Modo de estudio"><button type="button" data-m="office">🏢 Oficina</button><button type="button" data-m="transit">🚌 Transporte</button></div>
+</div>
+<div class="tools"><input type="search" id="q" placeholder="Buscar: SAST, duplicados, severidad…" aria-label="Buscar en los puntos"><button class="btn" type="button" id="fold">Plegar todo</button></div>
+<nav class="chips" aria-label="Puntos"><a href="#p-intro">0 Intro</a><a href="#p-entrada">1 Entrada: reportes de seguridad</a><a href="#p-proceso">2 Proceso: organizar y depurar</a><a href="#p-salida">3 Salida: hallazgos gestionables</a><a href="#p-clave">FIN Cierre: la clave</a></nav>
+</header>
+<div class="wrap">
+<aside class="side" aria-label="Puntos"><a href="#p-intro" data-id="p-intro"><b>0</b> Intro</a><a href="#p-entrada" data-id="p-entrada"><b>1</b> Entrada: reportes de seguridad</a><a href="#p-proceso" data-id="p-proceso"><b>2</b> Proceso: organizar y depurar</a><a href="#p-salida" data-id="p-salida"><b>3</b> Salida: hallazgos gestionables</a><a href="#p-clave" data-id="p-clave"><b>FIN</b> Cierre: la clave</a></aside>
+<main>
+<p class="hint">Basado en <b>DefectDojo_Sustentacion_Conceptual_Cyber.pdf</b> (lámina 02) y en <b>Proyecto Final Defect Dojo 1LS241 Calidad de Software (1).pdf</b> (secciones B.2, B.3, B.4, C, E y H: la demostración práctica). Todo lo que dice el material de cada punto, por si te preguntan.</p>
+<div class="notice" id="notice"></div>
+<div class="actions" id="actions"><button class="btn" type="button" id="btnCont">▶ Continuar donde quedé</button></div>
+<section class="pt" id="p-intro"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">0</span><h2>Intro</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Apertura de la lámina 02 · 📄 Secciones B.2 y D</div><ul class="det"><li>Lámina 02: «<b>De los informes a decisiones útiles</b>» · «Entrada, procesamiento y resultados de una plataforma de gestión».</li><li>Vienes de la lámina 01: DefectDojo es una <b>plataforma de código abierto</b> que centraliza los hallazgos de seguridad; resuelve <b>informes dispersos, resultados duplicados y poca trazabilidad</b> de las correcciones.</li><li>El trabajo escrito explica el problema: cada herramienta genera <b>informes independientes</b>, lo que dificulta el control centralizado, duplica información, complica decidir qué atender y comprobar si se corrigió.</li><li>Objetivo principal (doc. D): <b>centralizar la gestión de vulnerabilidades</b> en una sola plataforma.</li></ul><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Por qué no basta con los informes de cada herramienta?</summary><div class="ans">Porque quedan dispersos: hay duplicados, cuesta decidir qué atender y comprobar si se corrigió (doc. B.2).</div></details></div></div></section>
+<section class="pt" id="p-entrada"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">1</span><h2>Entrada: reportes de seguridad</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Lámina 02, columna Entrada · 📄 Sección B.4 · ¿Qué tipo de análisis o servicios realiza?</div><ul class="det"><li>La entrada son <b>reportes de seguridad</b>: resultados de herramientas <b>SAST, DAST y SCA</b>, por <b>importaciones o integraciones</b>.</li><li>DefectDojo <b>no funciona principalmente como un escáner independiente</b>: recibe y administra resultados obtenidos con otras herramientas.</li><li>También gestiona resultados de <b>evaluaciones de infraestructura y API</b>: servicios, recursos tecnológicos e interfaces de programación.</li><li>Puede <b>importar y reimportar</b> resultados de <b>más de 500 herramientas</b> (doc. E).</li><li>Integraciones: <b>API REST</b>, <b>Jira</b> y flujos de <b>CI/CD</b>, lo que facilita el enfoque <b>DevSecOps</b> (doc. E; lámina 03).</li><li>Demostración: se importó un informe XML de ejemplo de <b>OWASP ZAP</b>, incluido en el repositorio de DefectDojo, con <b>Import Scan Results</b>, tipo <b>ZAP Scan</b>, archivo <b>0_zap_sample.xml</b>.</li></ul><div class="tblwrap"><table><caption>Los tipos de análisis (doc. B.4)</caption><thead><tr><th>Tipo</th><th>Qué evalúa</th></tr></thead><tbody><tr><td>SAST</td><td>El código fuente, sin ejecutar la aplicación.</td></tr><tr><td>DAST</td><td>Una aplicación en funcionamiento.</td></tr><tr><td>SCA</td><td>Bibliotecas y dependencias del sistema.</td></tr><tr><td>Infraestructura y API</td><td>Servicios, recursos tecnológicos e interfaces de programación.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">S · D · C</span><div><div class="mt">Los tres reportes de la lámina</div><div class="mx"><b>S</b>AST = código quieto · <b>D</b>AST = app corriendo · S<b>C</b>A = piezas de terceros</div><div class="mm">Static, Dynamic, Composición</div></div></div><div class="error"><b>⚠️ No confundir: SAST ≠ DAST</b><br>SAST analiza el código sin ejecutarlo; DAST analiza la aplicación en funcionamiento.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿DefectDojo encuentra vulnerabilidades?</summary><div class="ans">No por sí solo: recibe los resultados de otras herramientas (SAST, DAST, SCA) y los administra.</div></details><details class="qa"><summary>¿Con cuántas herramientas es compatible?</summary><div class="ans">Puede importar resultados de más de 500 (doc. E).</div></details><details class="qa"><summary>¿Qué se importó en la demostración?</summary><div class="ans">Un XML de ejemplo de OWASP ZAP (0_zap_sample.xml), con Import Scan Results y el tipo ZAP Scan.</div></details></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="p-proceso"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">2</span><h2>Proceso: organizar y depurar</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Lámina 02, columna Proceso · 📄 Secciones B.1, B.2 y H</div><ul class="det"><li>El proceso es <b>organizar y depurar</b>: <b>importa, agrupa, identifica duplicados y administra el estado</b> de los hallazgos.</li><li>OWASP la describe como una herramienta DevSecOps con funciones de <b>seguimiento, eliminación de registros duplicados, gestión de correcciones y elaboración de informes</b> (doc. B.1).</li><li>Gestiona decisiones como la <b>clasificación de falsos positivos</b> o la <b>aceptación de determinados riesgos</b> (doc. B.2).</li><li>Su propósito <b>no es solo almacenar</b> información, sino que los equipos de desarrollo y seguridad administren los problemas y den seguimiento a su resolución (doc. B.2).</li><li>Demostración: desde el panel principal se administran <b>productos, compromisos y hallazgos</b>. Se creó el producto <b>«Proyecto de demostración de seguridad»</b>, que muestra hallazgos, métricas, componentes y compromisos; al inicio todo está en <b>cero</b>.</li></ul><div class="mnemo"><span class="mk">IADE</span><div><div class="mt">Los 4 verbos</div><div class="mx"><b>I</b>mporta · <b>A</b>grupa · identifica <b>D</b>uplicados · administra el <b>E</b>stado</div><div class="mm">Lo que le pasa a cada informe al entrar</div></div></div><div class="error"><b>⚠️ No confundir: falso positivo ≠ riesgo aceptado</b><br>Falso positivo: el hallazgo no es real. Riesgo aceptado: es real, pero se decide asumirlo.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué gana el equipo con quitar duplicados?</summary><div class="ans">Menos ruido: se enfoca en los problemas reales (doc. D y E: «reducción del ruido»).</div></details><details class="qa"><summary>¿Qué es «administrar el estado»?</summary><div class="ans">Llevar en qué punto está cada hallazgo: por ejemplo, clasificarlo como falso positivo, aceptar el riesgo o dar seguimiento a su corrección.</div></details><details class="qa"><summary>¿Cómo se organiza la información?</summary><div class="ans">Por productos; dentro de cada uno, compromisos y hallazgos (demostración, doc. H).</div></details></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="p-salida"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">3</span><h2>Salida: hallazgos gestionables</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Lámina 02, columna Salida · 📄 Secciones B.4, E y H</div><ul class="det"><li>La salida son <b>hallazgos gestionables</b>: <b>severidad, estado, métricas, informes y seguimiento de la corrección</b>.</li><li>Con eso los responsables conocen los problemas detectados y el <b>estado de las actividades</b> para solucionarlos (doc. B.4).</li><li>Permite controlar los hallazgos mediante <b>SLA</b> y generar informes sobre el estado de seguridad de cada producto (doc. E).</li><li>Demostración: la importación registró <b>4 vulnerabilidades</b>, <b>1 de severidad media</b> y <b>3 de severidad baja</b>.</li><li>Se relacionaban con la <b>configuración de cookies</b>, las <b>directivas CSP</b> y la <b>exposición de marcas de tiempo</b>.</li><li>Se revisó el detalle de <b>Cookie Without Secure Flag (CWE-614)</b>: <b>descripción, endpoints afectados y recomendación de mitigación</b>.</li></ul><div class="mnemo"><span class="mk">SEMIS</span><div><div class="mt">Lo que entrega</div><div class="mx"><b>S</b>everidad · <b>E</b>stado · <b>M</b>étricas · <b>I</b>nformes · <b>S</b>eguimiento</div><div class="mm">Las «semillas» de las decisiones</div></div></div><div class="error"><b>⚠️ No confundir: severidad ≠ estado</b><br>Severidad: qué tan grave es (media, baja). Estado: en qué punto de su gestión está.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué significa «gestionable»?</summary><div class="ans">Que el hallazgo ya tiene severidad, estado y seguimiento: se puede priorizar, asignar y verificar su corrección.</div></details><details class="qa"><summary>¿Qué mostró el detalle de CWE-614?</summary><div class="ans">Su descripción, los endpoints afectados y la recomendación de mitigación.</div></details><details class="qa"><summary>¿Cuántos hallazgos salieron en la demostración?</summary><div class="ans">4: 1 de severidad media y 3 de severidad baja.</div></details></div></div></section>
+<section class="pt" id="p-clave"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">FIN</span><h2>Cierre: la clave</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Barra CLAVE de la lámina 02 · 📄 Secciones D y F</div><ul class="det"><li>«<b>DefectDojo no escanea por sí solo</b>: transforma los resultados externos en <b>hallazgos rastreables</b>.»</li><li>Doc. D: «No reemplaza a los escáneres, sino que organiza sus resultados y los convierte en <b>acciones de mejora</b>».</li><li>Por eso su primera limitación (doc. F; lámina 04) es que <b>depende de otras herramientas</b>: su utilidad está ligada a la calidad de esos escáneres.</li><li>Responde la pregunta de investigación (lámina 05): mejora el seguimiento de vulnerabilidades <b>sin reemplazar los escáneres</b>.</li><li>Después sigue la <b>lámina 03</b>: capacidades principales.</li></ul><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>Si no escanea, ¿para qué sirve?</summary><div class="ans">Para centralizar, depurar y dar seguimiento: transforma resultados externos en hallazgos rastreables.</div></details><details class="qa"><summary>¿Y si el escáner se equivoca?</summary><div class="ans">Los hallazgos importados pueden contener falsos positivos: deben verificarse (lámina 04).</div></details></div></div></section>
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra sigla o palabra.</p>
+<footer>Resumen por punto generado solo a partir del material del proyecto DefectDojo · UTP · uso académico.</footer>
+</main></div>
+<script src="audio/puntos.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+(function(){
+"use strict";
+function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
+
+var PRE = "qa_charla1_";
+var pts = Array.prototype.slice.call(document.querySelectorAll("section.pt"));
+var mode = load(PRE+"modo_v1") || (matchMedia("(max-width:560px)").matches ? "transit" : "office");
+function setOpen(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); if(open) save(PRE+"puntos_pos_v1", s.id); }
+function applyMode(){
+  document.body.classList.toggle("transit", mode === "transit");
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ var on = b.getAttribute("data-m") === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $("notice").textContent = mode === "transit" ? "🚌 Activa No Molestar · música instrumental o silencio, nada con letra." : "🏢 Teléfono fuera de la vista y notificaciones en silencio.";
+  $("btnCont").style.display = mode === "transit" ? "" : "none";
+  pts.forEach(function(s){ setOpenQuiet(s, mode !== "transit"); });
+}
+function setOpenQuiet(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); }
+Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ b.addEventListener("click", function(){ mode = b.getAttribute("data-m"); save(PRE+"modo_v1", mode); applyMode(); }); });
+pts.forEach(function(s){
+  var h = s.querySelector(".ph");
+  function tog(e){ if(e.target.closest(".kit-tts")) return; setOpen(s, s.classList.contains("closed")); }
+  h.addEventListener("click", tog);
+  h.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(e); } });
+});
+applyMode();
+$("fold").addEventListener("click", function(){
+  var anyOpen = pts.some(function(s){ return !s.classList.contains("closed"); });
+  pts.forEach(function(s){ setOpenQuiet(s, !anyOpen); });
+  $("fold").textContent = anyOpen ? "Desplegar todo" : "Plegar todo";
+});
+$("btnCont").addEventListener("click", function(){ var id = load(PRE+"puntos_pos_v1"), s = id && $(id); if(!s) s = pts[0]; setOpen(s, true); s.scrollIntoView({behavior:"smooth", block:"start"}); });
+document.querySelectorAll("nav.chips a, aside.side a").forEach(function(a){ a.addEventListener("click", function(){ var s = $(a.getAttribute("href").slice(1)); if(s) setOpen(s, true); }); });
+
+/* buscador */
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+$("q").addEventListener("input", function(){
+  var q = norm(this.value.trim()), n = 0;
+  pts.forEach(function(s){
+    var hit = !q || norm(s.textContent).indexOf(q) >= 0;
+    s.style.display = hit ? "" : "none"; if(hit) n++;
+    if(q && hit) setOpenQuiet(s, true);
+  });
+  document.querySelectorAll(".pausa").forEach(function(p){ p.style.visibility = q ? "hidden" : ""; });
+  $("nores").style.display = n ? "none" : "block";
+});
+
+/* barra lateral */
+var side = document.querySelectorAll("aside.side a");
+addEventListener("scroll", function(){
+  var cur = null; pts.forEach(function(s){ if(s.style.display !== "none" && s.getBoundingClientRect().top < 180) cur = s; });
+  if(cur) Array.prototype.forEach.call(side, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); });
+}, {passive:true});
+
+if(window.Voz){
+  Voz.init({
+    sections: pts, key: function(s){ return s.id; },
+    title: function(s){ return s.querySelector(".num").textContent + " · " + s.querySelector("h2").textContent; },
+    blocks: "ul.det li, blockquote, tr, .mnemo, .error", skip: ".qs, caption",
+    target: function(s){ return s.querySelector(".ph"); },
+    onOpen: function(s){ if(s.classList.contains("closed")) setOpen(s, true); },
+    playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
+    rateKey: PRE+"tts_rate_v1", artist: "Resumen por punto · Funcionamiento de DefectDojo"
+  });
+}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Palabras Clave · Funcionamiento de DefectDojo</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:0 16px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+section{margin-top:22px;scroll-margin-top:130px;}
+section h2{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;color:var(--amber);margin-bottom:8px;display:flex;gap:8px;align-items:center;}
+.num{font-size:.7rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:2px 7px;}
+.kws{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.kws span{font-family:var(--mono);font-size:.72rem;color:var(--amber);background:var(--amber-dim);border-radius:7px;padding:3px 8px;}
+.grid{display:grid;gap:8px;grid-template-columns:1fr;}
+@media (min-width:1024px){ .grid{grid-template-columns:1fr 1fr;} }
+.s{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;align-items:flex-start;}
+.k{font-family:var(--mono);font-weight:900;font-size:1rem;color:var(--accent);min-width:74px;max-width:40%;}
+.k.a{color:var(--amber);} .k.c{color:var(--red);} .k.v{color:var(--violet);}
+.b{flex:1;min-width:0;}
+.tt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.x{font-size:.9rem;}
+.x b{color:var(--accent);}
+.m{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+body.prac .x,body.prac .m{filter:blur(6px);cursor:pointer;user-select:none;}
+body.prac .s.rev .x,body.prac .s.rev .m{filter:none;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Palabras clave · <em>Funcionamiento de DefectDojo</em></h1>
+  <button class="btn" type="button" id="prac" aria-pressed="false">🙈 Modo práctica</button>
+</div><nav class="chips" aria-label="Puntos"><a href="#k-intro">0 Intro</a><a href="#k-entrada">1 Entrada: reportes de seguridad</a><a href="#k-proceso">2 Proceso: organizar y depurar</a><a href="#k-salida">3 Salida: hallazgos gestionables</a><a href="#k-clave">FIN Cierre: la clave</a><a href="#k-secuencia">🧭 Secuencia</a><a href="#k-numeros">🔢 Números</a><a href="#k-noconf">⚠️ No confundir</a></nav></header>
+<main>
+<p class="hint">Lo que no puede faltar en cada punto. Con <b>🙈 Modo práctica</b> se ocultan las definiciones: intenta decirlas y toca para revelar.</p>
+<section id="k-intro"><h2><span class="num">0</span> Intro</h2><div class="kws"><span>de los informes a decisiones útiles</span><span>entrada · proceso · salida</span></div><div class="grid"><div class="s"><span class="k v">E → P → S</span><div class="b"><div class="tt">El flujo de la lámina</div><div class="x"><b>E</b>ntrada (reportes) → <b>P</b>roceso (organizar y depurar) → <b>S</b>alida (hallazgos gestionables)</div><div class="m">Como cualquier sistema: entra, se procesa, sale</div></div></div><div class="s"><span class="k">I → D</span><div class="b"><div class="tt">El título</div><div class="x">De los <b>I</b>nformes a <b>D</b>ecisiones útiles</div></div></div></div></section>
+<section id="k-entrada"><h2><span class="num">1</span> Entrada: reportes de seguridad</h2><div class="kws"><span>reportes de seguridad</span><span>SAST · código sin ejecutar</span><span>DAST · app en funcionamiento</span><span>SCA · dependencias</span><span>importaciones o integraciones</span></div><div class="grid"><div class="s"><span class="k">SAST</span><div class="b"><div class="tt">Análisis estático</div><div class="x">Revisa el <b>código fuente sin ejecutar</b> la aplicación</div><div class="m">S de <i>static</i>: el código quieto</div></div></div><div class="s"><span class="k">DAST</span><div class="b"><div class="tt">Análisis dinámico</div><div class="x">Evalúa la <b>aplicación en funcionamiento</b></div><div class="m">D de <i>dynamic</i>: la app corriendo</div></div></div><div class="s"><span class="k">SCA</span><div class="b"><div class="tt">Composición de software</div><div class="x">Riesgos en <b>bibliotecas y dependencias</b></div><div class="m">Las piezas de terceros</div></div></div><div class="s"><span class="k">IMP · INT</span><div class="b"><div class="tt">Cómo llegan</div><div class="x"><b>Importaciones</b> o <b>integraciones</b> (API REST, Jira, CI/CD)</div></div></div><div class="s"><span class="k a">+500</span><div class="b"><div class="tt">Herramientas compatibles (doc.)</div><div class="x">Importa y reimporta resultados de <b>más de 500</b> herramientas</div></div></div></div></section>
+<section id="k-proceso"><h2><span class="num">2</span> Proceso: organizar y depurar</h2><div class="kws"><span>organizar y depurar</span><span>importa</span><span>agrupa</span><span>identifica duplicados</span><span>administra el estado</span><span>falso positivo · riesgo aceptado</span></div><div class="grid"><div class="s"><span class="k">IADE</span><div class="b"><div class="tt">Los 4 verbos del proceso</div><div class="x"><b>I</b>mporta · <b>A</b>grupa · identifica <b>D</b>uplicados · administra el <b>E</b>stado</div><div class="m">«IADE»: lo que hace con cada informe</div></div></div><div class="s"><span class="k c">FP · RA</span><div class="b"><div class="tt">Decisiones sobre el estado (doc.)</div><div class="x">Clasificar <b>F</b>alsos <b>P</b>ositivos · <b>R</b>iesgo <b>A</b>ceptado</div><div class="m">No todo lo que entra es real ni se corrige ya</div></div></div><div class="s"><span class="k">PRODUCTO</span><div class="b"><div class="tt">Demostración</div><div class="x">«Proyecto de demostración de seguridad»: hallazgos, métricas, componentes y compromisos; empieza en cero</div></div></div></div></section>
+<section id="k-salida"><h2><span class="num">3</span> Salida: hallazgos gestionables</h2><div class="kws"><span>hallazgos gestionables</span><span>severidad</span><span>estado</span><span>métricas e informes</span><span>seguimiento de la corrección</span><span>4 hallazgos: 1 media + 3 bajas</span></div><div class="grid"><div class="s"><span class="k">SEMIS</span><div class="b"><div class="tt">Lo que entrega</div><div class="x"><b>S</b>everidad · <b>E</b>stado · <b>M</b>étricas · <b>I</b>nformes · <b>S</b>eguimiento de la corrección</div><div class="m">«SEMIS»: las semillas de las decisiones</div></div></div><div class="s"><span class="k a">4 = 1 + 3</span><div class="b"><div class="tt">Resultado de la demostración</div><div class="x"><b>4</b> vulnerabilidades: <b>1</b> media + <b>3</b> bajas (cookies, CSP, marcas de tiempo)</div></div></div><div class="s"><span class="k a">CWE-614</span><div class="b"><div class="tt">Detalle revisado</div><div class="x"><b>Cookie Without Secure Flag</b>: descripción, endpoints afectados y mitigación</div><div class="m">La cookie sin la bandera «Secure»</div></div></div></div></section>
+<section id="k-clave"><h2><span class="num">FIN</span> Cierre: la clave</h2><div class="kws"><span>no escanea por sí solo</span><span>resultados externos → hallazgos rastreables</span><span>pasa a la lámina 03</span></div><div class="grid"><div class="s"><span class="k c">≠ ESCÁNER</span><div class="b"><div class="tt">La idea clave</div><div class="x">DefectDojo <b>no escanea por sí solo</b>: transforma resultados externos en <b>hallazgos rastreables</b></div><div class="m">Es el organizador, no el detector</div></div></div></div></section>
+<section id="k-secuencia"><h2>🧭 SECUENCIA DE LA CHARLA</h2><div class="grid"><div class="s"><span class="k v">01 ▸ 02 ▸ 03</span><div class="b"><div class="tt">Dónde va tu lámina</div><div class="x"><b>01</b> Identidad y propósito · <b>02</b> Funcionamiento general (tú) · <b>03</b> Capacidades principales</div><div class="m">Qué es → cómo funciona → qué permite hacer</div></div></div><div class="s"><span class="k v">E-P-S + CLAVE</span><div class="b"><div class="tt">Orden de tu parte</div><div class="x">Intro · <b>1</b> Entrada · <b>2</b> Proceso · <b>3</b> Salida · <b>Cierre</b> con la clave</div><div class="m">Tres columnas y la barra de abajo</div></div></div></div></section>
+<section id="k-numeros"><h2>🔢 NÚMEROS Y DATOS CLAVE</h2><div class="grid"><div class="s"><span class="k a">3</span><div class="b"><div class="x">Columnas de la lámina: entrada, proceso y salida</div></div></div><div class="s"><span class="k a">3 tipos</span><div class="b"><div class="x">Reportes de la entrada: SAST, DAST y SCA</div></div></div><div class="s"><span class="k a">4 verbos</span><div class="b"><div class="x">Proceso: importa, agrupa, identifica duplicados, administra el estado</div></div></div><div class="s"><span class="k a">5</span><div class="b"><div class="x">Elementos de la salida: severidad, estado, métricas, informes y seguimiento</div></div></div><div class="s"><span class="k a">+500</span><div class="b"><div class="x">Herramientas de las que puede importar resultados (doc.)</div></div></div><div class="s"><span class="k a">4 = 1 + 3</span><div class="b"><div class="x">Hallazgos de la demostración: 1 media y 3 bajas</div></div></div><div class="s"><span class="k a">CWE-614</span><div class="b"><div class="x">Cookie Without Secure Flag, revisada en detalle</div></div></div><div class="s"><span class="k a">3:00</span><div class="b"><div class="x">Duración de tu parte</div></div></div></div></section>
+<section id="k-noconf"><h2>⚠️ NO CONFUNDIR</h2><div class="grid"><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">DefectDojo ≠ escáner</div><div class="x">No detecta vulnerabilidades por sí solo: recibe y organiza los resultados de otras herramientas.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">SAST ≠ DAST</div><div class="x">SAST: código fuente sin ejecutar. DAST: aplicación en funcionamiento.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">SCA ≠ SAST</div><div class="x">SCA: bibliotecas y dependencias de terceros. SAST: tu propio código fuente.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Importación ≠ integración</div><div class="x">Importar: subir un informe (como el XML de ZAP). Integrar: conectar con API REST, Jira o CI/CD.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Falso positivo ≠ riesgo aceptado</div><div class="x">Falso positivo: el hallazgo no es real. Riesgo aceptado: es real, pero se decide asumirlo.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Severidad ≠ estado</div><div class="x">Severidad: qué tan grave es (media, baja…). Estado: en qué punto de su gestión está.</div></div></div></div></section>
+<footer>Palabras clave generadas solo a partir de tu lámina 02 y el Proyecto Final DefectDojo · UTP · uso académico.</footer>
+</main>
+<script>
+(function(){
+  var b = document.getElementById("prac");
+  b.addEventListener("click", function(){ var on = document.body.classList.toggle("prac"); b.setAttribute("aria-pressed", on); b.textContent = on ? "👀 Mostrar todo" : "🙈 Modo práctica"; document.querySelectorAll(".s.rev").forEach(function(s){ s.classList.remove("rev"); }); });
+  document.querySelectorAll(".s").forEach(function(s){ s.addEventListener("click", function(){ if(document.body.classList.contains("prac")) s.classList.toggle("rev"); }); });
+})();
+</script>
+</body>
+</html>

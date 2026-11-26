@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Ensayo · Funcionamiento de DefectDojo</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+body{padding-bottom:0;}
+.app{max-width:640px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom,0px));}
+.clock{font-family:var(--mono);font-size:1rem;font-weight:800;color:var(--accent);}
+.clock.over{color:var(--red);}
+.live{font-family:var(--mono);font-size:.74rem;color:var(--cyan);white-space:nowrap;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px;}
+.card h2{font-size:1.15rem;}
+.card p{font-size:.9rem;color:var(--text-dim);margin-top:6px;}
+.btn.w{width:100%;}
+.col{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.mode{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;}
+.mode small{font-weight:400;color:var(--text-faint);font-size:.74rem;}
+.btn.mode.pri small{color:#0b3a1f;}
+.resume{background:var(--amber-dim);border-color:#5c4515;}
+.hidden{display:none!important;}
+.steps{display:flex;gap:4px;}
+.steps span{flex:1;height:5px;border-radius:3px;background:var(--line);}
+.steps span.done{background:var(--accent);} .steps span.cur{background:var(--amber);}
+.bn{font-family:var(--mono);font-size:.72rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.tag{font-size:.72rem;color:var(--cyan);margin-left:6px;}
+.bt{font-size:clamp(1.2rem,1.1rem + .6vw,1.6rem);font-weight:800;margin-top:8px;}
+.timer{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px;font-family:var(--mono);}
+.timer .big{font-size:2.1rem;font-weight:900;}
+.ok{color:var(--accent);} .warn{color:var(--amber);} .bad{color:var(--red);}
+.goal{font-size:.8rem;color:var(--text-faint);}
+.prompt{font-size:.9rem;color:var(--text-dim);margin-top:6px;}
+ul.say{margin:0;padding-left:18px;font-size:.88rem;}
+ul.say li{margin:4px 0;}
+ul.say b{color:var(--accent);}
+.kw{display:flex;flex-direction:column;gap:6px;}
+.kw label{display:flex;gap:10px;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;min-height:44px;font-family:var(--mono);font-size:.84rem;color:var(--amber);cursor:pointer;}
+.kw input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0;}
+.res-top{text-align:center;}
+.res-top .t{font-family:var(--mono);font-size:2rem;font-weight:900;}
+.res-top .s{font-size:.82rem;color:var(--text-dim);}
+td.n{text-align:right;font-family:var(--mono);white-space:nowrap;}
+.weak{background:var(--red-dim);border-radius:12px;padding:10px 12px;font-size:.86rem;margin-top:8px;}
+.weak a{display:inline-block;margin:6px 8px 0 0;}
+.hist div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding:7px 0;font-family:var(--mono);font-size:.78rem;color:var(--text-dim);}
+/* bloque: todo en una pantalla */
+body.blockmode{height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;}
+body.blockmode header.top{flex-shrink:0;}
+body.blockmode .app{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;padding-bottom:0;}
+body.blockmode footer{display:none;}
+#vBlock{display:flex;flex-direction:column;flex:1;min-height:0;padding-top:12px;}
+#vBlock .card{flex:1;min-height:0;display:flex;flex-direction:column;margin-top:10px;}
+#scroll{flex:1;min-height:0;overflow:auto;margin-top:6px;}
+.bbar{display:flex;gap:8px;padding:10px 0 calc(12px + env(safe-area-inset-bottom,0px));}
+.bbar .btn{flex:1;min-height:50px;font-size:.95rem;}
+@media (max-height:640px){ .timer .big{font-size:1.6rem;} .bt{margin-top:4px;} }
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Ensayo · <em>3:00</em></h1>
+  <span class="live" id="live" title="Palabras clave dichas hasta ahora"></span>
+  <span class="clock" id="clock">0:00</span>
+</div></header>
+<div class="app">
+
+<div id="vStart">
+  <div class="card resume hidden" id="resume"><h2>⏸️ Tienes un ensayo en curso</h2><p id="resumeTxt"></p>
+    <div class="col"><button class="btn pri w" type="button" id="btnResume">▶ Continuar</button><button class="btn w" type="button" id="btnDiscard">🗑 Descartar</button></div></div>
+  <div class="card">
+    <h2>Ensaya tu parte</h2>
+    <p>1. Mira el título del bloque y dilo <b>de memoria</b>. 2. Toca <b>Revelar</b> (ya no se puede volver a ocultar). 3. Marca las palabras clave que <b>sí dijiste</b> y sigue.</p>
+    <p>El tiempo de cada bloque se pone <span class="ok">verde</span> dentro del objetivo, <span class="warn">ámbar</span> hasta +20 % y <span class="bad">rojo</span> si te pasas más.</p>
+    <div class="col">
+      <button class="btn pri w mode" type="button" data-mode="full">🎤 Ensayo completo en voz alta<small>Los 5 bloques con cronómetro · 3:00</small></button>
+      <button class="btn w mode" type="button" data-mode="quick" id="btnQuick">⚡ Ensayo rápido<small id="quickTxt">Solo los puntos débiles del último ensayo</small></button>
+      <button class="btn w mode" type="button" data-mode="mental">🚌 Ensayo mental<small>Para el transporte: repásalo en silencio, sin tiempo por bloque</small></button>
+    </div>
+  </div>
+  <div class="card" id="histCard"><div class="lbl" style="margin-top:0">HISTORIAL DE ENSAYOS</div><div class="hist" id="hist"></div></div>
+</div>
+
+<div id="vBlock" class="hidden">
+  <div class="steps" id="steps"></div>
+  <div class="card">
+    <div><span class="bn" id="bN"></span><span class="tag" id="bTag"></span></div>
+    <div class="bt" id="bT"></div>
+    <div class="timer"><span class="big ok" id="bTime">0:00</span><span class="goal" id="bGoal"></span></div>
+    <div id="scroll">
+      <div class="prompt" id="bPrompt">Dilo de memoria. Cuando termines, toca <b>Revelar</b>.</div>
+      <div id="reveal" class="hidden">
+        <div class="lbl">LO QUE TENÍAS QUE DECIR</div><ul class="say" id="bSay"></ul>
+        <div class="lbl">MARCA LAS PALABRAS CLAVE QUE DIJISTE</div><div class="kw" id="bKw"></div>
+      </div>
+    </div>
+  </div>
+  <div class="bbar"><button class="btn" type="button" id="btnQuit" style="flex:0 0 auto">✕</button><button class="btn pri" type="button" id="btnReveal">👁 Revelar</button><button class="btn pri hidden" type="button" id="btnNext">Siguiente ›</button></div>
+</div>
+
+<div id="vRes" class="hidden">
+  <div class="card res-top"><div class="lbl" style="margin-top:0">TIEMPO TOTAL</div><div class="t" id="rTime"></div><div class="s" id="rTimeS"></div>
+    <div class="lbl">PALABRAS CLAVE DICHAS</div><div class="t" id="rKw"></div></div>
+  <div class="card"><div class="lbl" style="margin-top:0">POR BLOQUE</div><div class="tblwrap"><table id="rTable"></table></div><div id="rWeak"></div></div>
+  <div class="col"><button class="btn pri w" type="button" id="again">🔄 Ensayar otra vez</button><a href="guion.html" class="btn w">📜 Repasar el guion</a></div>
+</div>
+<footer>Basado en tu lámina 02 (DefectDojo_Sustentacion_Conceptual_Cyber.pdf) y el trabajo escrito, secciones B.3, B.4 y H.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
+
+var BLOCKS = [{"id": "b-intro", "n": "0", "t": "Intro", "sec": 20, "say": ["Ya vimos qué es DefectDojo y el problema que resuelve: <b>informes dispersos, resultados duplicados y poca trazabilidad</b>.", "Ahora veamos <b>cómo funciona</b>: cómo pasa <b>de los informes a decisiones útiles</b>.", "Lo hace en tres pasos, como se lee en la lámina de izquierda a derecha: <b>entrada, procesamiento y resultados</b>."], "keys": ["de los informes a decisiones útiles", "entrada · proceso · salida"], "slug": "0-intro"}, {"id": "b-entrada", "n": "1", "t": "Entrada: reportes de seguridad", "sec": 45, "say": ["La entrada son <b>reportes de seguridad</b>: los <b>resultados de otras herramientas</b>.", "<b>SAST</b> revisa el <b>código fuente sin ejecutar</b> la aplicación.", "<b>DAST</b> evalúa la <b>aplicación en funcionamiento</b>.", "<b>SCA</b> busca riesgos en las <b>bibliotecas y dependencias</b>.", "Esos resultados llegan por <b>importaciones o integraciones</b>.", "Por ejemplo, en nuestra demostración se importó un <b>informe de OWASP ZAP</b>; y la plataforma acepta resultados de <b>más de 500 herramientas</b>."], "keys": ["reportes de seguridad", "SAST · código sin ejecutar", "DAST · app en funcionamiento", "SCA · dependencias", "importaciones o integraciones"], "slug": "1-entrada-reportes-de-seguridad"}, {"id": "b-proceso", "n": "2", "t": "Proceso: organizar y depurar", "sec": 45, "say": ["En el proceso, DefectDojo <b>organiza y depura</b>.", "<b>Importa</b> los resultados y los <b>agrupa</b>.", "<b>Identifica duplicados</b>, para que el mismo problema no aparezca repetido.", "Y <b>administra el estado</b> de cada hallazgo, por ejemplo marcarlo como <b>falso positivo</b> o como <b>riesgo aceptado</b>.", "Así el equipo trabaja con información unificada y se enfoca en los <b>problemas reales</b>."], "keys": ["organizar y depurar", "importa", "agrupa", "identifica duplicados", "administra el estado", "falso positivo · riesgo aceptado"], "slug": "2-proceso-organizar-y-depurar"}, {"id": "b-salida", "n": "3", "t": "Salida: hallazgos gestionables", "sec": 45, "say": ["La salida son <b>hallazgos gestionables</b>.", "Cada uno tiene <b>severidad</b> y <b>estado</b>.", "Además hay <b>métricas e informes</b> sobre la seguridad del producto.", "Y sobre todo, el <b>seguimiento de la corrección</b>: saber si lo que se encontró ya se corrigió.", "Con eso el equipo puede <b>priorizar</b> qué atender primero y <b>comunicar el estado de seguridad</b> de cada producto.", "En la demostración, el informe de ZAP dejó <b>4 vulnerabilidades: 1 de severidad media y 3 bajas</b>."], "keys": ["hallazgos gestionables", "severidad", "estado", "métricas e informes", "seguimiento de la corrección", "4 hallazgos: 1 media + 3 bajas"], "slug": "3-salida-hallazgos-gestionables"}, {"id": "b-clave", "n": "FIN", "t": "Cierre: la clave", "sec": 25, "say": ["La clave es esta: <b>DefectDojo no escanea por sí solo</b>.", "Lo que hace es <b>transformar los resultados externos en hallazgos rastreables</b>: no reemplaza a los escáneres, organiza sus resultados y los convierte en <b>acciones de mejora</b>.", "Con este flujo claro, veamos <b>qué permite hacer</b>: sus <b>capacidades principales</b>."], "keys": ["no escanea por sí solo", "resultados externos → hallazgos rastreables", "pasa a la lámina 03"], "slug": "fin-cierre-la-clave"}];
+var PRE = "qa_charla1_", SK = PRE+"ensayo_v1", HK = PRE+"ensayo_hist_v1", WK = PRE+"ensayo_debiles_v1";
+var GOAL = BLOCKS.reduce(function(s,b){ return s+b.sec; }, 0);
+function cls(t,g){ return t<=g ? "ok" : t<=g*1.2 ? "warn" : "bad"; }
+var S = null, seg = 0, tick = null, lock = null;
+function now(){ return Date.now()/1000; }
+function persist(){ if(S) save(SK, S); }
+function view(v){
+  ["vStart","vBlock","vRes"].forEach(function(x){ $(x).classList.toggle("hidden", x !== v); });
+  document.body.classList.toggle("blockmode", v === "vBlock"); scrollTo(0,0);
+}
+function weakList(){ return load(WK) || []; }
+function renderStart(){
+  var h = load(HK) || [];
+  $("histCard").style.display = h.length ? "" : "none";
+  $("hist").innerHTML = h.slice().reverse().map(function(e){ return '<div><span>'+e.d+'</span><span>'+(e.m === "mental" ? "🚌 mental" : e.m === "quick" ? "⚡ rápido" : "🎤 voz alta")+'</span><span class="'+(e.m === "full" ? cls(e.t,GOAL) : "")+'">'+fmt(e.t)+'</span><span>'+e.k+' %</span></div>'; }).join("");
+  var w = weakList(); $("btnQuick").disabled = !w.length; $("btnQuick").style.opacity = w.length ? "" : ".5";
+  $("quickTxt").textContent = w.length ? "Solo los puntos débiles del último ensayo: " + w.map(function(i){ return BLOCKS[i].n; }).join(" · ") : "Haz primero un ensayo completo";
+  var cur = load(SK);
+  $("resume").classList.toggle("hidden", !cur);
+  if(cur) $("resumeTxt").textContent = "Bloque " + (cur.pos+1) + " de " + cur.list.length + " · " + fmt(cur.acc) + " transcurridos.";
+  $("clock").textContent = "0:00"; $("clock").classList.remove("over"); $("live").textContent = "";
+}
+function totalNow(){ return S.acc + (seg ? now()-seg : 0); }
+function blockNow(){ var i = S.list[S.pos]; return (S.times[i] || 0) + (seg && !S.rev[i] ? now()-seg : 0); }
+function loop(){
+  if(!S) return;
+  var tot = totalNow(), i = S.list[S.pos], b = BLOCKS[i], bl = blockNow();
+  $("clock").textContent = fmt(tot); $("clock").classList.toggle("over", S.mode === "full" && tot > GOAL);
+  var el = $("bTime");
+  if(S.mode === "mental"){ el.textContent = "—"; el.className = "big"; }
+  else { el.textContent = fmt(bl); el.className = "big " + cls(bl, b.sec); }
+}
+function live(){
+  var said = 0, tot = 0;
+  S.list.forEach(function(i){ if(S.rev[i]){ tot += BLOCKS[i].keys.length; said += (S.said[i] || []).length; } });
+  $("live").textContent = tot ? "🔑 " + Math.round(said/tot*100) + " %" : "";
+}
+function pause(){ if(!S || !seg) return; var d = now()-seg, i = S.list[S.pos]; S.acc += d; if(!S.rev[i]) S.times[i] = (S.times[i] || 0) + d; seg = 0; persist(); }
+function resumeSeg(){ seg = now(); }
+function renderBlock(){
+  var i = S.list[S.pos], b = BLOCKS[i], rev = !!S.rev[i];
+  $("steps").innerHTML = S.list.map(function(_, j){ return '<span class="'+(j < S.pos ? "done" : j === S.pos ? "cur" : "")+'"></span>'; }).join("");
+  $("bN").textContent = b.n; $("bT").textContent = b.t;
+  $("bTag").textContent = S.mode === "mental" ? "🚌 mental" : S.mode === "quick" ? "⚡ rápido" : "";
+  $("bGoal").textContent = S.mode === "mental" ? "sin tiempo por bloque" : "objetivo " + fmt(b.sec);
+  $("bSay").innerHTML = b.say.map(function(s){ return "<li>"+s+"</li>"; }).join("");
+  var sd = S.said[i] || [];
+  $("bKw").innerHTML = b.keys.map(function(k, j){ return '<label><input type="checkbox" data-j="'+j+'"'+(sd.indexOf(j) >= 0 ? " checked" : "")+'> '+k+'</label>'; }).join("");
+  $("reveal").classList.toggle("hidden", !rev); $("bPrompt").classList.toggle("hidden", rev);
+  $("btnReveal").classList.toggle("hidden", rev); $("btnNext").classList.toggle("hidden", !rev);
+  $("btnNext").textContent = S.pos === S.list.length-1 ? "Terminar ✓" : "Siguiente ›";
+  $("scroll").scrollTop = 0; loop(); live();
+}
+function start(mode, list){
+  S = {mode:mode, list:list, pos:0, acc:0, times:{}, said:{}, rev:{}};
+  persist(); go();
+}
+function go(){
+  view("vBlock"); resumeSeg(); renderBlock();
+  clearInterval(tick); tick = setInterval(function(){ loop(); }, 250);
+  try{ if(navigator.wakeLock) navigator.wakeLock.request("screen").then(function(l){ lock = l; }).catch(function(){}); }catch(e){}
+}
+function stopTick(){ clearInterval(tick); tick = null; try{ if(lock) lock.release(); }catch(e){} lock = null; }
+document.querySelectorAll("[data-mode]").forEach(function(btn){ btn.addEventListener("click", function(){
+  var m = btn.getAttribute("data-mode");
+  if(m === "quick"){ var w = weakList(); if(!w.length) return; start("quick", w); }
+  else start(m, BLOCKS.map(function(_, i){ return i; }));
+}); });
+$("btnResume").addEventListener("click", function(){ S = load(SK); if(S) go(); });
+$("btnDiscard").addEventListener("click", function(){ try{ localStorage.removeItem(SK); }catch(e){} S = null; renderStart(); });
+$("btnReveal").addEventListener("click", function(){
+  var i = S.list[S.pos]; pause(); S.rev[i] = true; resumeSeg(); persist(); renderBlock();
+});
+$("bKw").addEventListener("change", function(){
+  var i = S.list[S.pos];
+  S.said[i] = Array.prototype.filter.call($("bKw").querySelectorAll("input"), function(c){ return c.checked; }).map(function(c){ return +c.getAttribute("data-j"); });
+  persist(); live();
+});
+$("btnNext").addEventListener("click", function(){
+  pause();
+  if(S.pos < S.list.length-1){ S.pos++; persist(); resumeSeg(); renderBlock(); return; }
+  stopTick(); finish();
+});
+$("btnQuit").addEventListener("click", function(){ pause(); stopTick(); view("vStart"); renderStart(); });
+addEventListener("pagehide", function(){ if(S && tick) pause(); });
+document.addEventListener("visibilitychange", function(){ if(!S || !tick) return; if(document.hidden) pause(); else resumeSeg(); });
+function finish(){
+  var tot = S.list.reduce(function(s, i){ return s + (S.times[i] || 0); }, 0);
+  var goal = S.list.reduce(function(s, i){ return s + BLOCKS[i].sec; }, 0);
+  var kT = 0, kS = 0, weak = [], rows = "";
+  S.list.forEach(function(i){
+    var b = BLOCKS[i], s = (S.said[i] || []).length, p = Math.round(s/b.keys.length*100), t = S.times[i] || 0;
+    kT += b.keys.length; kS += s;
+    var slow = S.mode !== "mental" && t > b.sec*1.2;
+    if(p < 70 || slow) weak.push(i);
+    rows += '<tr><td>'+b.n+' · '+b.t+'</td><td class="n '+(S.mode === "mental" ? "" : cls(t, b.sec))+'">'+fmt(t)+(S.mode === "mental" ? "" : ' / '+fmt(b.sec))+'</td><td class="n '+(p >= 100 ? "ok" : p >= 70 ? "warn" : "bad")+'">'+s+'/'+b.keys.length+'</td></tr>';
+  });
+  var pct = kT ? Math.round(kS/kT*100) : 0;
+  $("rTime").textContent = fmt(tot); $("rTime").className = "t " + (S.mode === "mental" ? "" : cls(tot, goal));
+  $("rTimeS").textContent = S.mode === "mental" ? "Ensayo mental · el tiempo es solo de referencia" : "Objetivo " + fmt(goal) + " · " + (tot <= goal ? "dentro del tiempo" : "te pasaste " + fmt(tot-goal));
+  $("rKw").textContent = kS + " / " + kT + " · " + pct + " %";
+  $("rTable").innerHTML = '<thead><tr><th>Bloque</th><th style="text-align:right">Tiempo</th><th style="text-align:right">Claves</th></tr></thead><tbody>' + rows + '</tbody>';
+  $("rWeak").innerHTML = weak.length ? weak.map(function(i){ var b = BLOCKS[i]; return '<div class="weak"><b>Repasa '+b.n+' · '+b.t+'</b><br><a class="btn" href="guion.html#'+b.id+'">📜 Ver en el guion</a><a class="btn" href="flash.html#cat-'+b.slug+'">🃏 Tarjetas del punto</a></div>'; }).join("")
+    : '<div class="weak" style="background:var(--accent-dim)">🎉 Todos los bloques dentro del tiempo y con sus palabras clave.</div>';
+  if(S.mode !== "quick" || weak.length) save(WK, weak); else save(WK, []);
+  var h = load(HK) || [], d = new Date();
+  h.push({d: d.toLocaleDateString("es-PA", {day:"2-digit", month:"2-digit"}) + " " + d.toLocaleTimeString("es-PA", {hour:"2-digit", minute:"2-digit"}), t: Math.round(tot), k: pct, m: S.mode});
+  save(HK, h.slice(-20));
+  try{ localStorage.removeItem(SK); }catch(e){}
+  S = null; view("vRes"); $("live").textContent = "";
+}
+$("again").addEventListener("click", function(){ view("vStart"); renderStart(); });
+renderStart();
+})();
+</script>
+</body>
+</html>

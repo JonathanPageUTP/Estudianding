@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen completo del tema · DefectDojo · Funcionamiento general</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px;}
+main{max-width:720px;margin:0 auto;}
+aside.side{display:none;}
+.tools{max-width:1180px;margin:8px auto 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.tools input[type=search]{flex:1;min-width:180px;min-height:44px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:0 14px;}
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+.notice{font-size:.8rem;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--amber-dim);border:1px solid #5c4515;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;scroll-margin-top:150px;}
+.ph{display:flex;align-items:center;gap:8px;cursor:pointer;flex-wrap:wrap;}
+.ph h2{font-size:1.05rem;flex:1;min-width:140px;}
+.num{font-family:var(--mono);font-size:.72rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.car{color:var(--text-faint);transition:transform .2s;}
+.pt.closed .car{transform:rotate(-90deg);}
+.pt.closed .body{display:none;}
+.pt .kit-tts{margin-left:auto;}
+.src{font-size:.76rem;color:var(--cyan);margin-top:10px;}
+ul.det{padding-left:20px;margin:8px 0 0;}
+ul.det li{margin:6px 0;max-width:70ch;color:var(--text-dim);}
+ul.det b{color:var(--text);}
+blockquote.q{margin:12px 0 0;border-left:3px solid var(--cyan);background:var(--cyan-dim);padding:8px 12px;border-radius:0 10px 10px 0;font-style:italic;}
+.mnemo{display:flex;gap:12px;align-items:flex-start;margin-top:12px;background:var(--violet-dim);border:1px solid #47336b;border-radius:12px;padding:10px 12px;}
+.mk{font-family:var(--mono);font-weight:900;color:var(--violet);font-size:1.05rem;white-space:nowrap;}
+.mt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.mx{font-size:.88rem;}
+.mx b{color:var(--violet);}
+.mm{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+.error{margin-top:10px;background:var(--red-dim);border:1px solid #5c2a2a;border-radius:12px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);}
+.error b{color:var(--red);}
+.qs{margin-top:12px;border-top:1px solid var(--line);}
+details.qa{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:10px;padding:2px 10px;margin-top:6px;}
+details.qa summary{font-size:.88rem;font-weight:600;}
+details.qa .ans{font-size:.86rem;color:var(--text-dim);padding:2px 0 8px 14px;}
+.pausa{display:none;font-size:.8rem;color:var(--amber);text-align:center;margin-top:16px;border:1px dashed #5c4515;border-radius:10px;padding:8px;}
+body.transit .pausa{display:block;}
+.nores{display:none;text-align:center;color:var(--text-dim);margin-top:24px;}
+mark{background:var(--amber);color:#2a1c08;border-radius:3px;}
+@media (min-width:561px){ .mnemo{padding:12px 14px;} }
+@media (min-width:1024px){
+  .wrap{display:grid;grid-template-columns:240px 1fr;gap:28px;}
+  main{max-width:800px;margin:0;}
+  nav.chips{display:none;}
+  aside.side{display:block;position:sticky;top:120px;align-self:start;max-height:calc(100vh - 140px);overflow:auto;padding-top:14px;}
+  aside.side a{display:block;text-decoration:none;color:var(--text-dim);font-size:.84rem;padding:7px 10px;border-radius:10px;border-left:3px solid transparent;}
+  aside.side a b{font-family:var(--mono);color:var(--accent);margin-right:4px;}
+  aside.side a.cur{background:var(--surface);border-left-color:var(--accent);color:var(--text);}
+}
+
+.pt.mine{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-dim) inset;}
+.you{font-family:var(--mono);font-size:.62rem;font-weight:800;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:2px 6px;}
+nav.chips a.mine,aside.side a.mine{color:var(--accent);}
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Resumen completo · <em>toda la presentación</em></h1>
+  <div class="seg" role="group" aria-label="Modo de estudio"><button type="button" data-m="office">🏢 Oficina</button><button type="button" data-m="transit">🚌 Transporte</button></div>
+</div>
+<div class="tools"><input type="search" id="q" placeholder="Buscar: Faraday, SBOM, Docker, CWE-614…" aria-label="Buscar en el tema"><button class="btn" type="button" id="fold">Plegar todo</button></div>
+<nav class="chips" aria-label="Partes"><a href="#t-mapa">★ Todo el tema en 1 minuto</a><a href="#t-identidad">01 Identidad y propósito</a><a href="#t-funcionamiento" class="mine">02 Funcionamiento general</a><a href="#t-capacidades">03 Capacidades principales</a><a href="#t-beneficios">04 Beneficios y limitaciones</a><a href="#t-comparacion">05a Cuándo conviene: comparación</a><a href="#t-conclusion">05b Pregunta y conclusión del equipo</a><a href="#t-historia">+1 Historia y evolución (solo en el trabajo)</a><a href="#t-demo">+2 Demostración práctica (solo en el trabajo)</a><a href="#t-relevancia">+3 Relevancia y conclusiones (solo en el trabajo)</a></nav>
+</header>
+<div class="wrap">
+<aside class="side" aria-label="Partes"><a href="#t-mapa" data-id="t-mapa"><b>★</b> Todo el tema en 1 minuto</a><a href="#t-identidad" data-id="t-identidad"><b>01</b> Identidad y propósito</a><a href="#t-funcionamiento" data-id="t-funcionamiento" class="mine"><b>02</b> Funcionamiento general</a><a href="#t-capacidades" data-id="t-capacidades"><b>03</b> Capacidades principales</a><a href="#t-beneficios" data-id="t-beneficios"><b>04</b> Beneficios y limitaciones</a><a href="#t-comparacion" data-id="t-comparacion"><b>05a</b> Cuándo conviene: comparación</a><a href="#t-conclusion" data-id="t-conclusion"><b>05b</b> Pregunta y conclusión del equipo</a><a href="#t-historia" data-id="t-historia"><b>+1</b> Historia y evolución (solo en el trabajo)</a><a href="#t-demo" data-id="t-demo"><b>+2</b> Demostración práctica (solo en el trabajo)</a><a href="#t-relevancia" data-id="t-relevancia"><b>+3</b> Relevancia y conclusiones (solo en el trabajo)</a></aside>
+<main>
+<p class="hint">Todo el contenido de las <b>5 láminas</b> de <b>DefectDojo_Sustentacion_Conceptual_Cyber.pdf</b>, en su orden, completado con <b>Proyecto Final Defect Dojo 1LS241 Calidad de Software (1).pdf</b>, y al final lo que <b>solo está en el trabajo escrito</b> (historia, demostración, relevancia, conclusiones). La parte con borde verde es la tuya (lámina 02); su detalle completo está en <a href="puntos.html">Resumen por Punto</a>.</p>
+<div class="notice" id="notice"></div>
+<div class="actions" id="actions"><button class="btn" type="button" id="btnCont">▶ Continuar donde quedé</button></div>
+<section class="pt" id="t-mapa"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">★</span><h2>Todo el tema en 1 minuto</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Panorama · 🖥️ láminas 01–05 · 📄 Todo el trabajo escrito</div><ul class="det"><li><b>DefectDojo</b> es una plataforma de <b>código abierto</b> de <b>gestión de vulnerabilidades</b>: centraliza los hallazgos de seguridad de muchas herramientas y facilita su seguimiento.</li><li>Resuelve tres problemas: <b>informes dispersos</b>, <b>resultados duplicados</b> y <b>poca trazabilidad</b> de las correcciones.</li><li>Funciona en tres pasos: <b>entrada</b> (reportes SAST, DAST y SCA) → <b>proceso</b> (importa, agrupa, quita duplicados, administra estados) → <b>salida</b> (hallazgos con severidad, estado, métricas, informes y seguimiento).</li><li>Idea clave: <b>no escanea por sí solo</b>; transforma resultados externos en hallazgos rastreables.</li><li>Se integra con <b>API REST, Jira y CI/CD</b>: encaja en el enfoque <b>DevSecOps</b>, que lleva la seguridad a todo el ciclo de vida.</li><li>Ventajas: gratuito (BSD de 3 cláusulas), <b>más de 500 herramientas</b>, menos ruido, proyecto insignia de OWASP. Límites: depende de otros escáneres, exige conocimientos técnicos y parte de sus funciones es de pago (<b>DefectDojo Pro</b>).</li><li>Frente a <b>Faraday</b> (pentesting colaborativo) y <b>Dependency-Track</b> (dependencias y SBOM), DefectDojo es la opción de <b>gestión integral</b>.</li><li>Conclusión del equipo: <b>centraliza resultados, facilita la priorización y hace trazable la corrección de riesgos</b>.</li></ul><div class="tblwrap"><table><caption>LAS 5 LÁMINAS</caption><thead><tr><th>Lámina</th><th>Título</th><th>Idea</th></tr></thead><tbody><tr><td>01</td><td>Identidad y propósito</td><td>Qué es, qué problema resuelve y dónde se usa</td></tr><tr><td>02</td><td><b>Funcionamiento general (tú)</b></td><td><b>Entrada → Proceso → Salida; no escanea por sí solo</b></td></tr><tr><td>03</td><td>Capacidades principales</td><td>Importación, depuración, seguimiento e integraciones</td></tr><tr><td>04</td><td>Beneficios y limitaciones</td><td>Valor para el equipo y sus límites; verificar falsos positivos</td></tr><tr><td>05</td><td>Aplicación y conclusión</td><td>Comparación con Faraday y Dependency-Track; pregunta y conclusión</td></tr></tbody></table></div><div class="mnemo"><span class="mk">C-D-T</span><div><div class="mt">Los 3 problemas que resuelve</div><div class="mx">Informes <b>d</b>ispersos → <b>C</b>entraliza · <b>D</b>uplicados → depura · poca <b>T</b>razabilidad → seguimiento</div><div class="mm">Centralizar, Depurar, Trazar</div></div></div></div></section>
+<section class="pt" id="t-identidad"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">01</span><h2>Identidad y propósito</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Expositor de la lámina 01 · 🖥️ lámina 01 · 📄 Secciones A, B.1, B.2 y B.3</div><ul class="det"><li>Título: «<b>DefectDojo: de hallazgos a acciones</b>» · gestión de vulnerabilidades para el aseguramiento de la calidad del software.</li><li><b>Qué es</b>: plataforma de código abierto que <b>centraliza los hallazgos de seguridad</b> y facilita su seguimiento.</li><li><b>Problema que resuelve</b>: <b>informes dispersos, resultados duplicados y poca trazabilidad</b> de las correcciones.</li><li><b>Dónde se usa</b>: desarrollo, pruebas, mantenimiento y flujos <b>DevSecOps / CI/CD</b>.</li><li>Flujo conceptual de la lámina: <b>SAST, DAST, SCA → DefectDojo</b> → organización, priorización y seguimiento de correcciones.</li><li>Trabajo escrito (A): la seguridad es parte de la calidad, porque las vulnerabilidades comprometen la <b>confidencialidad, integridad y disponibilidad</b>; según Souppaya et al. (2022, NIST SSDF), el desarrollo seguro en todo el ciclo de vida reduce vulnerabilidades.</li><li>Fases del ciclo de vida (B.3): en <b>desarrollo</b> recibe análisis de código y dependencias; en <b>pruebas</b> administra lo encontrado; en <b>mantenimiento y operación</b> sigue lo pendiente y comprueba las correcciones.</li></ul><div class="qs"><div class="lbl">🙋 POSIBLE PREGUNTA</div><details class="qa"><summary>¿En qué fase del ciclo de vida se usa?</summary><div class="ans">En varias: desarrollo, pruebas, verificación y mantenimiento, e integrado a CI/CD (doc. B.3).</div></details></div></div></section>
+<section class="pt mine" id="t-funcionamiento"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">02</span><h2>Funcionamiento general</h2><span class="you">TU PARTE</span><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Jonathan Page (tú) · 🖥️ lámina 02 · 📄 Secciones B.4 y H</div><ul class="det"><li>«<b>De los informes a decisiones útiles</b>»: entrada, procesamiento y resultados de una plataforma de gestión.</li><li><b>Entrada · reportes de seguridad</b>: resultados de herramientas SAST, DAST y SCA; importaciones o integraciones.</li><li><b>Proceso · organizar y depurar</b>: importa, agrupa, identifica duplicados y administra el estado de los hallazgos.</li><li><b>Salida · hallazgos gestionables</b>: severidad, estado, métricas, informes y seguimiento de la corrección.</li><li><b>Clave</b>: DefectDojo no escanea por sí solo; transforma los resultados externos en hallazgos rastreables.</li></ul><div class="tblwrap"><table><caption>SIGLAS DE LA ENTRADA</caption><thead><tr><th>Sigla</th><th>Qué analiza</th></tr></thead><tbody><tr><td>SAST</td><td>El código fuente, sin ejecutar la aplicación</td></tr><tr><td>DAST</td><td>Una aplicación en funcionamiento</td></tr><tr><td>SCA</td><td>Bibliotecas y dependencias</td></tr></tbody></table></div><div class="mnemo"><span class="mk">IADE · SEMIS</span><div><div class="mt">Proceso y salida</div><div class="mx"><b>I</b>mporta · <b>A</b>grupa · <b>D</b>uplicados · <b>E</b>stado — <b>S</b>everidad · <b>E</b>stado · <b>M</b>étricas · <b>I</b>nformes · <b>S</b>eguimiento</div></div></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="t-capacidades"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">03</span><h2>Capacidades principales</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Expositor de la lámina 03 · 🖥️ lámina 03 · 📄 Secciones B.4 y E</div><ul class="det"><li>Subtítulo: contribución específica a la calidad: <b>seguridad y trazabilidad de vulnerabilidades</b>.</li></ul><div class="tblwrap"><table><caption>LAS 4 CAPACIDADES</caption><thead><tr><th>Capacidad</th><th>Qué hace</th></tr></thead><tbody><tr><td>Importación multiherramienta</td><td>Gestiona informes SAST, DAST, SCA y otras evaluaciones de seguridad</td></tr><tr><td>Depuración de hallazgos</td><td>Identifica duplicados y ayuda a clasificar falsos positivos</td></tr><tr><td>Seguimiento y métricas</td><td>Administra prioridades, estados, riesgos aceptados e informes</td></tr><tr><td>Integraciones DevSecOps</td><td>Conecta procesos mediante API REST, Jira y flujos CI/CD</td></tr></tbody></table></div><ul class="det"><li><b>Aporte a la calidad</b>: visibilidad, priorización y trazabilidad de riesgos de seguridad.</li><li>Trabajo escrito (E): importa y <b>reimporta</b> resultados de <b>más de 500 herramientas</b> y controla los hallazgos mediante <b>SLA</b>.</li></ul><div class="mnemo"><span class="mk">I-D-S-I</span><div><div class="mt">Las 4 capacidades</div><div class="mx"><b>I</b>mportación · <b>D</b>epuración · <b>S</b>eguimiento · <b>I</b>ntegraciones</div><div class="mm">Aporte: visibilidad, priorización, trazabilidad</div></div></div></div></section>
+<section class="pt" id="t-beneficios"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">04</span><h2>Beneficios y limitaciones</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Expositor de la lámina 04 · 🖥️ lámina 04 · 📄 Secciones E y F</div><ul class="det"><li>«Valor para el equipo… y sus límites»: uso profesional en equipos de desarrollo, QA y seguridad.</li><li><b>Atención al interpretar</b>: los hallazgos importados <b>pueden contener falsos positivos</b> y deben verificarse.</li></ul><div class="tblwrap"><table><caption>LÁMINA 04</caption><thead><tr><th>Beneficios</th><th>Limitaciones</th></tr></thead><tbody><tr><td>Centraliza resultados en una sola vista</td><td>Depende de análisis realizados por otras herramientas</td></tr><tr><td>Reduce duplicados y ordena prioridades</td><td>Requiere configuración y conocimientos técnicos</td></tr><tr><td>Facilita colaboración e integración CI/CD</td><td>Algunas funciones avanzadas son comerciales</td></tr></tbody></table></div><div class="tblwrap"><table><caption>VENTAJAS DEL TRABAJO ESCRITO (E)</caption><thead><tr><th>Ventaja</th><th>Detalle</th></tr></thead><tbody><tr><td>Código abierto y gratuito</td><td>Edición OWASP con licencia BSD de 3 cláusulas: sin costo de licencias</td></tr><tr><td>Amplia compatibilidad</td><td>Importa y reimporta resultados de más de 500 herramientas</td></tr><tr><td>Reducción del ruido</td><td>Elimina duplicados y gestiona falsos positivos y aceptaciones de riesgo</td></tr><tr><td>Integración con el desarrollo</td><td>API REST, Jira y CI/CD: enfoque DevSecOps</td></tr><tr><td>Seguimiento y métricas</td><td>Control mediante SLA e informes por producto</td></tr><tr><td>Instalación sencilla</td><td>Contenedores con Docker Compose, como en la demostración</td></tr><tr><td>Respaldo de la comunidad</td><td>Proyecto insignia de OWASP con comunidad activa</td></tr></tbody></table></div><div class="tblwrap"><table><caption>LIMITACIONES DEL TRABAJO ESCRITO (F)</caption><thead><tr><th>Limitación</th><th>Detalle</th></tr></thead><tbody><tr><td>No detecta por sí mismo</td><td>Su utilidad depende de la calidad de los escáneres</td></tr><tr><td>Edición gratuita limitada</td><td>Interfaz y métricas básicas, sin soporte completo para Kubernetes; paneles personalizables, conectores empresariales y puntuación de riesgo están en Pro (de pago)</td></tr><tr><td>Interfaz poco intuitiva</td><td>Algunos usuarios la encuentran difícil y con documentación insuficiente en ciertas integraciones (G2)</td></tr><tr><td>Soporte técnico limitado</td><td>Sin canal dedicado en la edición gratuita: GitHub o comunidad (Capterra, 2026)</td></tr><tr><td>Requiere conocimientos técnicos</td><td>Docker, bases de datos y seguridad: barrera para equipos pequeños</td></tr></tbody></table></div><div class="error"><b>⚠️ No confundir: falso positivo ≠ vulnerabilidad real</b><br>Un hallazgo importado puede no ser real: hay que verificarlo antes de corregirlo.</div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="t-comparacion"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">05a</span><h2>Cuándo conviene: comparación</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Expositor de la lámina 05 · 🖥️ lámina 05 · 📄 Sección G</div><ul class="det"><li>DefectDojo = <b>gestión integral</b> (hallazgos de múltiples escáneres) · Faraday = <b>colaboración en pentesting</b> · Dependency-Track = <b>seguridad de dependencias</b> (análisis continuo de SBOM).</li><li>Faraday es la alternativa más parecida: también normaliza y sigue resultados de varias herramientas, pero está orientada a equipos de <b>pruebas de penetración</b>.</li><li>Dependency-Track se especializa en las <b>dependencias y la cadena de suministro</b>, analizando continuamente los SBOM frente a nuevas vulnerabilidades.</li><li>DefectDojo destaca por su <b>mayor cantidad de integraciones</b> y por cubrir todo tipo de análisis en una sola plataforma.</li></ul><div class="tblwrap"><table><caption>COMPARACIÓN (TRABAJO ESCRITO, G)</caption><thead><tr><th>Criterio</th><th>DefectDojo</th><th>Faraday</th><th>Dependency-Track</th></tr></thead><tbody><tr><td>Enfoque</td><td>Gestión centralizada de vulnerabilidades (DevSecOps)</td><td>Vulnerabilidades y pentesting colaborativo</td><td>SCA a partir de SBOM</td></tr><tr><td>Herramientas</td><td>Más de 500</td><td>Más de 90</td><td>Recibe SBOM en formato CycloneDX</td></tr><tr><td>Licencia</td><td>BSD 3 cláusulas</td><td>GPL-3.0</td><td>Apache 2.0</td></tr><tr><td>OWASP</td><td>Proyecto insignia</td><td>No pertenece</td><td>Proyecto insignia</td></tr><tr><td>CI/CD</td><td>Sí</td><td>Sí</td><td>Sí</td></tr><tr><td>Versión comercial</td><td>DefectDojo Pro</td><td>Profesional y corporativa</td><td>No</td></tr></tbody></table></div><div class="mnemo"><span class="mk">G · P · D</span><div><div class="mt">Para qué es cada una</div><div class="mx">DefectDojo = <b>G</b>estión integral · Faraday = <b>P</b>entesting · Dependency-Track = <b>D</b>ependencias</div></div></div></div></section>
+<section class="pt" id="t-conclusion"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">05b</span><h2>Pregunta y conclusión del equipo</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Expositor de la lámina 05 · 🖥️ lámina 05 · 📄 Secciones D y J</div><ul class="det"><li><b>Pregunta de investigación</b>: ¿cómo mejora DefectDojo el seguimiento de vulnerabilidades <b>sin reemplazar los escáneres</b>?</li><li><b>Conclusión del equipo</b>: centraliza resultados, facilita la priorización y hace trazable la corrección de riesgos.</li><li>Sitio oficial: docs.defectdojo.com.</li><li>Objetivo principal (D): centralizar la gestión de vulnerabilidades en una plataforma que <b>orquesta las pruebas de seguridad</b>, sigue los hallazgos, elimina duplicados, gestiona correcciones y genera informes.</li></ul><blockquote class="q">«No reemplaza a los escáneres, sino que organiza sus resultados y los convierte en acciones de mejora» (trabajo escrito, D).</blockquote></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="t-historia"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">+1</span><h2>Historia y evolución (solo en el trabajo)</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Trabajo escrito · 🖥️ no está en las láminas · 📄 Sección C</div><ul class="det"><li>Nació en <b>2013 en Rackspace</b> como solución interna, creada por <b>Greg Anderson</b> con <b>Matt Tesauro</b>, para gestionar y reportar los hallazgos de seguridad de los productos de la empresa.</li><li>Se liberó como <b>código abierto</b> y entró a la <b>OWASP Foundation</b>, donde hoy es <b>proyecto insignia</b> (Flagship Project), la categoría más alta.</li><li>Pasó de ser un registro de vulnerabilidades a una <b>plataforma DevSecOps</b>: más de 500 herramientas, eliminación de duplicados, SLA, Jira y CI/CD.</li><li>Su crecimiento dio origen a <b>DefectDojo, Inc.</b>, que mantiene la edición abierta y vende <b>DefectDojo Pro</b>.</li></ul><div class="mnemo"><span class="mk">2013 · R · OWASP</span><div><div class="mt">Origen</div><div class="mx"><b>2013</b> · <b>R</b>ackspace (Anderson y Tesauro) · luego <b>OWASP</b> insignia · hoy DefectDojo, Inc. y Pro</div></div></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="t-demo"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">+2</span><h2>Demostración práctica (solo en el trabajo)</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Jack Salazar · 🖥️ no está en las láminas · 📄 Sección H</div><ul class="det"><li>Entorno: <b>Windows, WSL 2 con Ubuntu 22.04, Git y Docker Desktop</b>.</li><li>Se descargó el repositorio oficial de GitHub y se levantó con <b>Docker Compose</b>; se verificó que los <b>seis contenedores</b> estuvieran activos con <b>docker compose ps</b>.</li><li>Se entró por el navegador en <b>localhost:8080</b> (pantalla de inicio de sesión) y luego al panel principal: productos, compromisos, hallazgos y estadísticas.</li><li>Se creó el producto «<b>Proyecto de demostración de seguridad</b>» (indicadores en cero al inicio).</li><li>Se importó un informe XML de ejemplo de <b>OWASP ZAP</b> (0_zap_sample.xml) con <b>Import Scan Results</b> y el tipo <b>ZAP Scan</b>.</li><li>Resultado: <b>4 vulnerabilidades</b> (1 media y 3 bajas) sobre cookies, directivas CSP y marcas de tiempo; detalle de <b>Cookie Without Secure Flag (CWE-614)</b>: descripción, endpoints afectados y mitigación.</li></ul><div class="tblwrap"><table><caption>LA DEMO EN EL FLUJO DE TU LÁMINA</caption><thead><tr><th>Paso</th><th>En la demostración</th></tr></thead><tbody><tr><td>Entrada</td><td>Informe XML de OWASP ZAP importado</td></tr><tr><td>Proceso</td><td>Organizado en el producto «Proyecto de demostración de seguridad»</td></tr><tr><td>Salida</td><td>4 hallazgos con severidad; detalle de CWE-614</td></tr></tbody></table></div></div></section>
+<section class="pt" id="t-relevancia"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">+3</span><h2>Relevancia y conclusiones (solo en el trabajo)</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🎤 Trabajo escrito · 🖥️ no está en las láminas · 📄 Secciones I y J</div><ul class="det"><li><b>Educativa</b>: permite practicar el ciclo de vida de un defecto, la severidad y la verificación de correcciones; es gratuito y fácil de instalar con Docker.</li><li><b>Profesional</b>: responde al enfoque DevSecOps; aporta competencias para desarrollador, analista de QA o ingeniero DevSecOps: interpretar escáneres, priorizar riesgos e integrar pruebas de seguridad en pipelines de CI/CD.</li><li><b>Tu conclusión</b> (Jonathan Page): la calidad del software no termina al detectar un error, sino cuando ese hallazgo <b>se prioriza, se corrige y se verifica</b>.</li><li>César Aburto: centraliza resultados, identifica duplicados y da seguimiento; no reemplaza a los detectores, los complementa.</li><li>Alexander Moreno: no hay herramienta perfecta, sino la más adecuada; DefectDojo centraliza sin costo de licencias, pero exige conocimientos y tiene funciones de pago.</li><li>Jack Salazar: la práctica con Docker, un producto de prueba y el informe de ZAP mostró cuatro hallazgos y sus medidas de mitigación.</li></ul><blockquote class="q">«La calidad del software no termina al detectar un error, sino cuando ese hallazgo se prioriza, se corrige y se verifica» (tu conclusión).</blockquote></div></section>
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra palabra.</p>
+<footer>Resumen completo generado solo a partir de la sustentación y el Proyecto Final DefectDojo · UTP · uso académico.</footer>
+</main></div>
+<script src="audio/tema.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+(function(){
+"use strict";
+function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
+
+var PRE = "qa_charla1_";
+var pts = Array.prototype.slice.call(document.querySelectorAll("section.pt"));
+var mode = load(PRE+"modo_v1") || (matchMedia("(max-width:560px)").matches ? "transit" : "office");
+function setOpen(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); if(open) save(PRE+"tema_pos_v1", s.id); }
+function applyMode(){
+  document.body.classList.toggle("transit", mode === "transit");
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ var on = b.getAttribute("data-m") === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $("notice").textContent = mode === "transit" ? "🚌 Activa No Molestar · música instrumental o silencio, nada con letra." : "🏢 Teléfono fuera de la vista y notificaciones en silencio.";
+  $("btnCont").style.display = mode === "transit" ? "" : "none";
+  pts.forEach(function(s){ setOpenQuiet(s, mode !== "transit"); });
+}
+function setOpenQuiet(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); }
+Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ b.addEventListener("click", function(){ mode = b.getAttribute("data-m"); save(PRE+"modo_v1", mode); applyMode(); }); });
+pts.forEach(function(s){
+  var h = s.querySelector(".ph");
+  function tog(e){ if(e.target.closest(".kit-tts")) return; setOpen(s, s.classList.contains("closed")); }
+  h.addEventListener("click", tog);
+  h.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(e); } });
+});
+applyMode();
+$("fold").addEventListener("click", function(){
+  var anyOpen = pts.some(function(s){ return !s.classList.contains("closed"); });
+  pts.forEach(function(s){ setOpenQuiet(s, !anyOpen); });
+  $("fold").textContent = anyOpen ? "Desplegar todo" : "Plegar todo";
+});
+$("btnCont").addEventListener("click", function(){ var id = load(PRE+"tema_pos_v1"), s = id && $(id); if(!s) s = pts[0]; setOpen(s, true); s.scrollIntoView({behavior:"smooth", block:"start"}); });
+document.querySelectorAll("nav.chips a, aside.side a").forEach(function(a){ a.addEventListener("click", function(){ var s = $(a.getAttribute("href").slice(1)); if(s) setOpen(s, true); }); });
+
+/* buscador */
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+$("q").addEventListener("input", function(){
+  var q = norm(this.value.trim()), n = 0;
+  pts.forEach(function(s){
+    var hit = !q || norm(s.textContent).indexOf(q) >= 0;
+    s.style.display = hit ? "" : "none"; if(hit) n++;
+    if(q && hit) setOpenQuiet(s, true);
+  });
+  document.querySelectorAll(".pausa").forEach(function(p){ p.style.visibility = q ? "hidden" : ""; });
+  $("nores").style.display = n ? "none" : "block";
+});
+
+/* barra lateral */
+var side = document.querySelectorAll("aside.side a");
+addEventListener("scroll", function(){
+  var cur = null; pts.forEach(function(s){ if(s.style.display !== "none" && s.getBoundingClientRect().top < 180) cur = s; });
+  if(cur) Array.prototype.forEach.call(side, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); });
+}, {passive:true});
+
+if(window.Voz){
+  Voz.init({
+    sections: pts, key: function(s){ return s.id; },
+    title: function(s){ return s.querySelector(".num").textContent + " · " + s.querySelector("h2").textContent; },
+    blocks: "ul.det li, blockquote, tbody tr, .mnemo, .error", skip: ".qs, caption",
+    target: function(s){ return s.querySelector(".ph"); },
+    onOpen: function(s){ if(s.classList.contains("closed")) setOpen(s, true); },
+    playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
+    rateKey: PRE+"tts_rate_v1", artist: "Resumen completo · DefectDojo · Funcionamiento general"
+  });
+}
+})();
+</script>
+</body>
+</html>
