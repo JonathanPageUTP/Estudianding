@@ -17,7 +17,7 @@ from playwright.async_api import async_playwright
 
 VOICE = "es-PA-MargaritaNeural"
 HERE = Path(__file__).resolve().parent
-PAGES = ["guion", "puntos", "resumen", "tema"]
+PAGES = ["guion", "guion-natural", "puntos", "resumen", "tema"]
 BYTES_PER_SEC = 48000 / 8  # edge-tts entrega MP3 mono a 48 kbps
 PARALLEL = 6
 
@@ -28,7 +28,10 @@ async def dump(page_name):
         try:
             browser = await p.chromium.launch(channel="msedge")
         except Exception:
-            browser = await p.chromium.launch(channel="chrome")
+            try:
+                browser = await p.chromium.launch(channel="chrome")
+            except Exception:
+                browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 412, "height": 900})
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))

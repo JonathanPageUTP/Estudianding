@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Guion hablado · Riesgos, Estado y consumidor</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;z-index:60;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px;display:block;}
+main{max-width:720px;margin:0 auto;}
+aside.side{display:none;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+.notice{font-size:.8rem;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--amber-dim);border:1px solid #5c4515;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.unit{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--violet);margin:26px 0 0;border-bottom:1px solid var(--violet-dim);padding-bottom:4px;}
+.pausa{display:none;font-size:.8rem;color:var(--amber);text-align:center;margin-top:16px;border:1px dashed #5c4515;border-radius:10px;padding:8px;}
+body.transit .pausa{display:block;}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;scroll-margin-top:110px;}
+.bh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer;}
+.num{font-family:var(--mono);font-size:.72rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.bh h2{font-size:1.05rem;flex:1;min-width:140px;}
+.time{font-family:var(--mono);font-size:.74rem;color:var(--amber);white-space:nowrap;}
+.time i{font-style:normal;color:var(--text-faint);}
+.car{color:var(--text-faint);transition:transform .2s;}
+.blk.closed .car{transform:rotate(-90deg);}
+.blk.closed .body{display:none;}
+.slide{font-size:.76rem;color:var(--cyan);margin-top:10px;}
+.obj{font-size:.86rem;color:var(--text-dim);margin-top:8px;border-left:3px solid var(--violet);padding-left:8px;}
+ul.say{margin:0;padding-left:20px;}
+ul.say li{margin:6px 0;max-width:70ch;}
+ul.say b{color:var(--accent);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chips span{font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--amber);background:var(--amber-dim);border-radius:7px;padding:3px 8px;}
+.dato{font-size:.84rem;background:var(--cyan-dim);border-radius:10px;padding:8px 10px;}
+.dato small{color:var(--text-faint);}
+.trans{font-size:.9rem;font-style:italic;background:var(--surface-2);border:1px dashed var(--accent-dim);border-radius:10px;padding:8px 10px;}
+.trans::before{content:"➜ ";color:var(--accent);font-style:normal;}
+.pre,.mem{margin-top:6px;}
+.mem{border-top:1px solid var(--line);margin-top:14px;padding-top:4px;}
+details.qa{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:10px;padding:2px 10px;margin-top:6px;}
+details.qa summary{font-size:.88rem;font-weight:600;}
+details.qa .ans{font-size:.86rem;color:var(--text-dim);padding:2px 0 8px 14px;}
+details.qa .ans b{color:var(--accent);}
+details.more{margin-top:12px;border-top:1px solid var(--line);padding-top:4px;}
+details.more summary{font-size:.82rem;color:var(--text-dim);}
+details.more .tblwrap{margin-top:8px;}
+.cierre{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;}
+.cierre h2{font-size:1rem;margin-bottom:4px;}
+.cierre p{font-size:.86rem;color:var(--text-dim);}
+textarea{width:100%;min-height:90px;margin-top:8px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font-family:var(--sans);}
+body.transit .office-only{display:none;}
+body:not(.transit) .transit-only{display:none;}
+input.arr{width:100%;margin-top:8px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;min-height:44px;}
+.blk .kit-tts{margin-left:auto;}
+.who{display:block;margin-top:6px;color:var(--violet);}
+.blk.mine{border-left:4px solid var(--violet);}
+@media (min-width:1024px){
+  .wrap{display:grid;grid-template-columns:250px 1fr;gap:28px;}
+  main{max-width:780px;margin:0;}
+  aside.side{display:block;position:sticky;top:90px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;padding-top:14px;}
+  aside.side a{display:block;text-decoration:none;color:var(--text-dim);font-size:.84rem;padding:7px 10px;border-radius:10px;border-left:3px solid transparent;}
+  aside.side a b{font-family:var(--mono);color:var(--accent);margin-right:4px;}
+  aside.side a i{font-style:normal;font-family:var(--mono);font-size:.7rem;color:var(--text-faint);float:right;}
+  aside.side a.cur{background:var(--surface);border-left-color:var(--accent);color:var(--text);}
+}
+@media (hover:hover){ aside.side a:hover{background:var(--surface);} }
+
+
+.txt{margin-top:10px;}
+p.hab{font-size:1.06em;line-height:1.7;margin:0 0 12px;max-width:68ch;}
+p.hab b{color:var(--accent);font-weight:700;}
+body.big p.hab{font-size:1.38em;line-height:1.6;}
+.dir{font-size:.8rem;font-style:italic;color:var(--violet);margin:2px 0 12px;padding-left:10px;border-left:2px solid var(--violet-dim);}
+.dir::before{content:"🎭 ";font-style:normal;}
+body.nodir .dir{display:none;}
+.blk{border-left:4px solid var(--violet);}
+.bh{cursor:default;}
+.tog.on{background:var(--accent-dim);border-color:var(--accent);}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Guion hablado · <em>Riesgos, Estado y consumidor</em></h1>
+  <span class="tot">⏱ ≈ 4:55</span>
+</div></header>
+<div class="wrap">
+<aside class="side" aria-label="Partes de la charla"><div class="lbl" style="margin:0 0 6px 10px">PARTES · ≈ 4:55</div><a href="#n-intro" data-id="n-intro"><b>0</b> Arranque <i>0:40</i></a><a href="#n-riesgos" data-id="n-riesgos"><b>1</b> Riesgos profesionales <i>1:05</i></a><a href="#n-estado" data-id="n-estado"><b>2</b> Responsabilidad del Estado <i>1:05</i></a><a href="#n-consumo" data-id="n-consumo"><b>3</b> Derechos del consumidor <i>1:00</i></a><a href="#n-ruta" data-id="n-ruta"><b>4</b> La ruta del reclamo <i>0:40</i></a><a href="#n-cierre" data-id="n-cierre"><b>FIN</b> Cierre y paso a Samuel <i>0:25</i></a></aside>
+<main>
+<p class="hint">Tu parte tal como la dirías en voz alta, de corrido, siguiendo tus diapositivas <b>16 a 19</b>. No hace falta decirlo palabra por palabra: lo que va en <b style="color:var(--accent)">verde</b> es lo que no puede faltar; lo demás dilo con tus palabras. Las notas en <span style="color:var(--violet)">violeta</span> son indicaciones para ti, no se dicen. <span class="who">◀ Antes: <b>Alexander Moreno</b> (diap. 15) · Después ▶ <b>Samuel Pimentel</b> (diap. 20)</span></p>
+<div class="actions" id="actions">
+  <button class="btn tog" type="button" id="tBig" aria-pressed="false">🔠 Letra grande</button>
+  <button class="btn tog" type="button" id="tDir" aria-pressed="false">🎭 Ocultar notas</button>
+</div>
+<section class="blk" id="n-intro" data-i="0">
+<div class="bh"><span class="num">0</span><h2>Arranque</h2><span class="time">⏱ 0:40 <i>→ 0:40</i></span></div>
+<div class="slide">🖥️ Diapositiva 16 · recibes la palabra de Alexander</div>
+<div class="txt"><div class="dir">Mira al público, no a la pantalla. Sonríe y respira antes de empezar.</div><p class="hab">Gracias, Alexander. Acabamos de ver, con el caso de Ana, cuánto le toca pagar a un empleador cuando hay un <b>despido</b>.</p><p class="hab">Pero no todos los daños se reclaman por ese mismo camino. Hay casos que van por <b>vías especiales</b>: cuando alguien se accidenta o se enferma <b>por su trabajo</b>, cuando el que causa el daño es <b>el propio Estado</b>, o cuando compramos un <b>producto que sale defectuoso</b>.</p><p class="hab">Y cada uno de esos caminos tiene <b>su propia autoridad, sus propias pruebas y sus propios plazos</b>. De eso les voy a hablar.</p></div>
+</section><section class="blk" id="n-riesgos" data-i="1">
+<div class="bh"><span class="num">1</span><h2>Riesgos profesionales</h2><span class="time">⏱ 1:05 <i>→ 1:45</i></span></div>
+<div class="slide">🖥️ Diapositiva 16 · Seguridad social · Riesgos profesionales</div>
+<div class="txt"><p class="hab">Empecemos por el trabajo. Cuando un trabajador sufre un daño por su trabajo, quien responde es la <b>Caja de Seguro Social</b>, a través del seguro obligatorio que viene del <b>Decreto de Gabinete 68 de 1970</b>.</p><p class="hab">Aquí hay que distinguir dos cosas. Un <b>accidente de trabajo</b> es una lesión que uno sufre <b>con ocasión o por consecuencia del trabajo</b>. Una <b>enfermedad profesional</b>, en cambio, es la que aparece por <b>las condiciones o las sustancias propias de la actividad</b> que uno realiza.</p><div class="dir">Señala en la diapositiva las cinco prestaciones mientras las nombras.</div><p class="hab">En cualquiera de los dos casos, la Caja puede dar <b>cinco prestaciones</b>: la atención médica, un subsidio temporal, una prestación por incapacidad permanente, una pensión para los beneficiarios y, en el peor de los casos, los gastos funerarios.</p><p class="hab">Y ojo, que este tema se está moviendo ahora mismo: la <b>Ley 462 de 2025</b> modificó ese decreto, y en <b>abril de 2026</b> salió un <b>nuevo reglamento</b> de prestaciones, la Resolución 58,443 de la Junta Directiva.</p></div>
+</section><section class="blk" id="n-estado" data-i="2">
+<div class="bh"><span class="num">2</span><h2>Responsabilidad del Estado</h2><span class="time">⏱ 1:05 <i>→ 2:50</i></span></div>
+<div class="slide">🖥️ Diapositiva 17 · Responsabilidad del Estado</div>
+<div class="txt"><div class="dir">Pausa corta. La pregunta de entrada es para enganchar.</div><p class="hab">Ahora, ¿qué pasa cuando el que causa el daño es el propio Estado? Pues el <b>Estado también responde</b>.</p><p class="hab">Cuando un funcionario o un servicio público le causa un daño a alguien, la base para reclamar está en el <b>artículo 1645 del Código Civil</b> y en el <b>artículo 97 del Código Judicial</b>, en sus numerales 9 y 10.</p><p class="hab">Pero no basta con decir «me pasó algo». Hay que probar dos cosas: que hay un <b>daño cierto</b>, y que hay un <b>nexo causal</b>; es decir, que ese daño viene de una acción, de una omisión o de un mal funcionamiento del servicio público.</p><p class="hab">La demanda se presenta ante la <b>Sala Tercera de la Corte Suprema de Justicia</b>, y en los casos de culpa hay <b>un año</b> para hacerlo, según el artículo 1706 del Código Civil.</p><p class="hab">Y algo importante: <b>no todo daño que ocurre cerca de una entidad pública se le carga automáticamente al Estado</b>. La causalidad hay que demostrarla.</p></div>
+</section><section class="blk" id="n-consumo" data-i="3">
+<div class="bh"><span class="num">3</span><h2>Derechos del consumidor</h2><span class="time">⏱ 1:00 <i>→ 3:50</i></span></div>
+<div class="slide">🖥️ Diapositiva 18 · Consumo · Derechos del consumidor</div>
+<div class="txt"><div class="dir">Cambia el tono: esto es lo más cercano a la vida diaria del público.</div><p class="hab">Y del Estado pasamos a algo mucho más cotidiano: <b>lo que compramos</b>.</p><p class="hab">En consumo, la norma principal es la <b>Ley 45 de 2007</b>, que es la que organiza a la ACODECO. Esta ley le da al proveedor <b>treinta días</b>, contados desde el reclamo, para <b>reparar o reemplazar</b> el producto. Eso está en el artículo 46, que reformó la <b>Ley 14 de 2018</b>.</p><p class="hab">Entonces, el consumidor tiene <b>cuatro remedios</b>: que le reparen el bien, que se lo reemplacen, que le devuelvan lo que pagó, o que lo indemnicen; pero esto último <b>solo si logra probar perjuicios</b>.</p><p class="hab">Por eso no hay que confundirse: que te devuelvan el dinero por la garantía <b>no significa automáticamente que te estén indemnizando</b>.</p><p class="hab">Y un detalle de vigencia: la <b>Ley 473 de 2025 todavía no se aplica</b>, porque la Ley 531 de 2026 aplazó su vigencia hasta el <b>1 de julio de 2027</b>.</p></div>
+</section><section class="blk" id="n-ruta" data-i="4">
+<div class="bh"><span class="num">4</span><h2>La ruta del reclamo</h2><span class="time">⏱ 0:40 <i>→ 4:30</i></span></div>
+<div class="slide">🖥️ Diapositiva 19 · Consumo paso a paso</div>
+<div class="txt"><div class="dir">Cuenta los pasos con los dedos: uno, dos, tres, cuatro.</div><p class="hab">Ahora, en la práctica, ¿cómo se reclama? Es una ruta de <b>cuatro pasos</b>.</p><p class="hab">Primero, uno le hace un <b>reclamo por escrito</b> al proveedor, con la factura, la garantía y las pruebas del defecto.</p><p class="hab">Segundo, se esperan los <b>treinta días</b> que tiene el proveedor para reparar o reemplazar el bien.</p><p class="hab">Tercero, si no se resuelve, se presenta la <b>queja ante la ACODECO</b>, que orienta al consumidor, recibe la queja y busca una conciliación.</p><p class="hab">Y cuarto, si el asunto se sale de la competencia de la ACODECO, o si lo que se reclaman son perjuicios, entonces ya se va a los <b>tribunales</b>.</p></div>
+</section><section class="blk" id="n-cierre" data-i="5">
+<div class="bh"><span class="num">FIN</span><h2>Cierre y paso a Samuel</h2><span class="time">⏱ 0:25 <i>→ 4:55</i></span></div>
+<div class="slide">🖥️ Sigues en la diapositiva 19 · después habla Samuel (diap. 20)</div>
+<div class="txt"><div class="dir">Baja el ritmo. Esta es la idea que quieres que se lleven.</div><p class="hab">Entonces, para resumir mi parte: <b>trabajo, Estado y consumo</b> son tres vías especiales.</p><p class="hab">Cada una tiene su autoridad, la <b>Caja de Seguro Social</b>, la <b>Sala Tercera</b> y la <b>ACODECO</b>, y cada una tiene <b>sus propias pruebas y sus propios plazos</b>.</p><p class="hab">Y estas vías no están solas: se refuerzan con los <b>tratados internacionales</b>, que es justo lo que nos va a presentar Samuel.</p><div class="dir">Gira hacia Samuel y cédele la palabra con la mirada.</div></div>
+</section>
+<div class="unit">POR SI PREGUNTAN</div>
+<div class="cierre"><h2>💬 Respuestas cortas, dichas con naturalidad</h2><p>Esto no va en la exposición; tenlo listo para las preguntas.</p><details class="qa"><summary>¿Lo que paga la Caja es una indemnización?</summary><div class="ans">No exactamente. Son prestaciones de seguridad social, y no se calculan como una indemnización civil. Ahora, si el daño se debió a una falta del empleador, su responsabilidad propia se analiza por separado. Y el empleador sí tiene deberes: inscribir al trabajador, prevenir los riesgos y notificar el accidente.</div></details><details class="qa"><summary>¿Qué cambió con el reglamento de 2026?</summary><div class="ans">Que derogó el reglamento de 1995. Por eso, cualquier porcentaje o cuantía hay que verificarlo con la versión vigente.</div></details><details class="qa"><summary>¿Tienes un ejemplo de daño causado por el Estado?</summary><div class="ans">Sí, el que trabajamos en el grupo: un conductor de una entidad pública, en una diligencia oficial, choca por imprudencia el auto de un particular. Se prueba con el informe de tránsito, la orden de comisión y un peritaje, y se pide la reparación ante la Sala Tercera dentro de un año.</div></details><details class="qa"><summary>¿Y uno de consumo?</summary><div class="ans">Un celular que sale defectuoso a las dos semanas. Con la factura, la garantía y la nota de reclamo, se pide la reparación, el reemplazo o la devolución, y si no responden, se va a la ACODECO. En el trabajo escrito, el formato B.2 es justamente esa nota de reclamo.</div></details><details class="qa"><summary>¿Hay reglas especiales en el artículo 46?</summary><div class="ans">Sí, el artículo tiene reglas especiales para vehículos y equipos tecnológicos.</div></details><details class="qa"><summary>¿Qué cambiaba la Ley 473 de 2025?</summary><div class="ans">Modificaba reglas de precios y ventas especiales. Pero por el aplazamiento, hoy todavía no se aplica.</div></details></div>
+<footer>Basado en La indemnización en Panamá — Grupo 3.pdf (diap. 16–19) y el trabajo escrito del grupo · UTP · Ética Profesional · uso académico.</footer>
+</main>
+</div>
+<script src="audio/guion-natural.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+(function(){
+var PRE = "et_charla1_", $ = function(i){ return document.getElementById(i); };
+function get(k){ try{ return localStorage.getItem(PRE+k); }catch(e){ return null; } }
+function set(k,v){ try{ localStorage.setItem(PRE+k,v); }catch(e){} }
+function tog(id, cls, key, on){
+  var b = $(id), apply = function(v){ document.body.classList.toggle(cls, v); b.classList.toggle("on", v); b.setAttribute("aria-pressed", v); };
+  apply(get(key) === "1");
+  b.addEventListener("click", function(){ var v = !document.body.classList.contains(cls); apply(v); set(key, v ? "1" : "0"); });
+}
+tog("tBig", "big", "natural_big_v1"); tog("tDir", "nodir", "natural_nodir_v1");
+var blks = Array.prototype.slice.call(document.querySelectorAll(".blk"));
+var links = document.querySelectorAll("aside.side a");
+function onScroll(){
+  var h = document.documentElement, p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
+  $("prog").style.width = (p*100) + "%";
+  var cur = blks[0]; blks.forEach(function(b){ if(b.getBoundingClientRect().top < 160) cur = b; });
+  Array.prototype.forEach.call(links, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); });
+}
+window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+if (window.Voz) {
+  Voz.init({
+    sections: blks, key: function(s){ return s.id; },
+    title: function(s){ return s.querySelector("h2").textContent; },
+    blocks: "p.hab", skip: ".dir, details",
+    target: function(s){ return s.querySelector(".bh"); },
+    playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
+    rateKey: PRE+"tts_rate_v1", artist: "Charla · La indemnización en Panamá · Guion hablado"
+  });
+  var all = $("actions").querySelector(".btn:last-child"); if(all && /Escuchar todo/.test(all.textContent)) all.textContent = "🎧 Escuchar todo el guion";
+}
+})();
+</script>
+</body>
+</html>
