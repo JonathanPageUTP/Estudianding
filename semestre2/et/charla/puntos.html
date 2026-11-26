@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen por punto · Riesgos, Estado y consumidor</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px;}
+main{max-width:720px;margin:0 auto;}
+aside.side{display:none;}
+.tools{max-width:1180px;margin:8px auto 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.tools input[type=search]{flex:1;min-width:180px;min-height:44px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:0 14px;}
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+.notice{font-size:.8rem;margin-top:8px;padding:8px 12px;border-radius:10px;background:var(--amber-dim);border:1px solid #5c4515;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;scroll-margin-top:150px;}
+.ph{display:flex;align-items:center;gap:8px;cursor:pointer;flex-wrap:wrap;}
+.ph h2{font-size:1.05rem;flex:1;min-width:140px;}
+.num{font-family:var(--mono);font-size:.72rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:3px 7px;}
+.car{color:var(--text-faint);transition:transform .2s;}
+.pt.closed .car{transform:rotate(-90deg);}
+.pt.closed .body{display:none;}
+.pt .kit-tts{margin-left:auto;}
+.src{font-size:.76rem;color:var(--cyan);margin-top:10px;}
+ul.det{padding-left:20px;margin:8px 0 0;}
+ul.det li{margin:6px 0;max-width:70ch;color:var(--text-dim);}
+ul.det b{color:var(--text);}
+blockquote.q{margin:12px 0 0;border-left:3px solid var(--cyan);background:var(--cyan-dim);padding:8px 12px;border-radius:0 10px 10px 0;font-style:italic;}
+.mnemo{display:flex;gap:12px;align-items:flex-start;margin-top:12px;background:var(--violet-dim);border:1px solid #47336b;border-radius:12px;padding:10px 12px;}
+.mk{font-family:var(--mono);font-weight:900;color:var(--violet);font-size:1.05rem;white-space:nowrap;}
+.mt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.mx{font-size:.88rem;}
+.mx b{color:var(--violet);}
+.mm{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+.error{margin-top:10px;background:var(--red-dim);border:1px solid #5c2a2a;border-radius:12px;padding:10px 12px;font-size:.86rem;color:var(--text-dim);}
+.error b{color:var(--red);}
+.qs{margin-top:12px;border-top:1px solid var(--line);}
+details.qa{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:10px;padding:2px 10px;margin-top:6px;}
+details.qa summary{font-size:.88rem;font-weight:600;}
+details.qa .ans{font-size:.86rem;color:var(--text-dim);padding:2px 0 8px 14px;}
+.pausa{display:none;font-size:.8rem;color:var(--amber);text-align:center;margin-top:16px;border:1px dashed #5c4515;border-radius:10px;padding:8px;}
+body.transit .pausa{display:block;}
+.nores{display:none;text-align:center;color:var(--text-dim);margin-top:24px;}
+mark{background:var(--amber);color:#2a1c08;border-radius:3px;}
+@media (min-width:561px){ .mnemo{padding:12px 14px;} }
+@media (min-width:1024px){
+  .wrap{display:grid;grid-template-columns:240px 1fr;gap:28px;}
+  main{max-width:800px;margin:0;}
+  nav.chips{display:none;}
+  aside.side{display:block;position:sticky;top:120px;align-self:start;max-height:calc(100vh - 140px);overflow:auto;padding-top:14px;}
+  aside.side a{display:block;text-decoration:none;color:var(--text-dim);font-size:.84rem;padding:7px 10px;border-radius:10px;border-left:3px solid transparent;}
+  aside.side a b{font-family:var(--mono);color:var(--accent);margin-right:4px;}
+  aside.side a.cur{background:var(--surface);border-left-color:var(--accent);color:var(--text);}
+}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Resumen por punto · <em>Riesgos, Estado y consumidor</em></h1>
+  <div class="seg" role="group" aria-label="Modo de estudio"><button type="button" data-m="office">🏢 Oficina</button><button type="button" data-m="transit">🚌 Transporte</button></div>
+</div>
+<div class="tools"><input type="search" id="q" placeholder="Buscar: CSS, Sala Tercera, ACODECO…" aria-label="Buscar en los puntos"><button class="btn" type="button" id="fold">Plegar todo</button></div>
+<nav class="chips" aria-label="Puntos"><a href="#p-intro">0 Intro</a><a href="#p-riesgos">1 Riesgos profesionales</a><a href="#p-estado">2 Responsabilidad del Estado</a><a href="#p-consumo">3 Derechos del consumidor</a><a href="#p-ruta">4 La ruta del reclamo</a><a href="#p-cierre">FIN Cierre</a></nav>
+</header>
+<div class="wrap">
+<aside class="side" aria-label="Puntos"><a href="#p-intro" data-id="p-intro"><b>0</b> Intro</a><a href="#p-riesgos" data-id="p-riesgos"><b>1</b> Riesgos profesionales</a><a href="#p-estado" data-id="p-estado"><b>2</b> Responsabilidad del Estado</a><a href="#p-consumo" data-id="p-consumo"><b>3</b> Derechos del consumidor</a><a href="#p-ruta" data-id="p-ruta"><b>4</b> La ruta del reclamo</a><a href="#p-cierre" data-id="p-cierre"><b>FIN</b> Cierre</a></aside>
+<main>
+<p class="hint">Basado en <b>La indemnización en Panamá — Grupo 3.pdf</b> (diap. 16–19) y en <b>pro_Indemnizacion_Etica_Profesional_Grupo3_Trabajo_Final_2026.pdf</b> (secciones 6, 7, 8, 11 y 12; Anexos A y B). Todo lo que dice el material de cada punto, por si te preguntan.</p>
+<div class="notice" id="notice"></div>
+<div class="actions" id="actions"><button class="btn" type="button" id="btnCont">▶ Continuar donde quedé</button></div>
+<section class="pt" id="p-intro"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">0</span><h2>Intro</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Apertura de la diapositiva 16 · 📄 Introducción y conclusión 5</div><ul class="det"><li>En Panamá <b>no existe un régimen único</b>: el derecho civil, laboral, de seguridad social, administrativo, del consumidor e internacional regulan supuestos con <b>responsables, pruebas, plazos y autoridades distintas</b> (diap. 3).</li><li>Tu parte cubre tres de esos regímenes: <b>seguridad social</b> (riesgos profesionales), <b>administrativo</b> (responsabilidad del Estado) y <b>consumidor</b>.</li><li>Conclusión 5 del grupo: los riesgos profesionales, la responsabilidad del Estado y el consumo <b>siguen vías especiales</b>; las convenciones internacionales refuerzan esa protección.</li><li>Antes de ti, Alexander cierra lo laboral con el <b>caso de Ana</b> (despido sin causa: B/. 7,615.42 entre indemnización y prima de antigüedad).</li></ul><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Por qué no se reclama todo por la vía civil?</summary><div class="ans">Porque no existe un régimen único: cada uno tiene su autoridad, sus pruebas y sus plazos.</div></details></div></div></section>
+<section class="pt" id="p-riesgos"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">1</span><h2>Riesgos profesionales</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Diapositiva 16 · 📄 Sección 6, pág. 7 · Riesgos profesionales y seguridad social</div><ul class="det"><li>El <b>Decreto de Gabinete 68 de 1970</b> confió a la <b>Caja de Seguro Social</b> la cobertura obligatoria de los riesgos profesionales.</li><li>El empleador debe <b>inscribir</b> al trabajador, <b>prevenir</b> riesgos y <b>notificar</b> el accidente.</li><li>Según el tipo de contingencia, la CSS puede otorgar <b>atención médica</b>, <b>subsidio por incapacidad temporal</b>, prestaciones por <b>incapacidad permanente</b>, <b>pensiones a beneficiarios</b> y <b>gastos funerarios</b>.</li><li>Estas prestaciones <b>no se calculan como una indemnización civil</b>.</li><li>La <b>Ley 462 de 2025</b> modificó artículos del Decreto 68, y la <b>Resolución 58,443-2026-J.D.</b> (6 de abril de 2026) aprobó un nuevo reglamento de prestaciones que <b>derogó el de 1995</b>: cualquier porcentaje o cuantía debe verificarse con la versión vigente.</li><li>Si el daño se debe a una <b>falta del empleador</b> (por ejemplo, no inscribir al trabajador u omitir medidas de seguridad), su responsabilidad propia se analiza <b>por separado</b>.</li><li>Línea de tiempo (diap. 6 de José): <b>1941</b> la Ley 23 crea la CSS · <b>1970</b> el D. G. 68 crea el seguro obligatorio de riesgos profesionales · <b>2025-26</b> Ley 462 y nuevo reglamento.</li></ul><blockquote class="q">«El accidente de trabajo es la lesión sufrida con ocasión o por consecuencia del trabajo; la enfermedad profesional es la causada por las condiciones o sustancias propias de la actividad» (trabajo escrito, sección 6).</blockquote><div class="mnemo"><span class="mk">ASIPG</span><div><div class="mt">Las 5 prestaciones</div><div class="mx"><b>A</b>tención médica · <b>S</b>ubsidio temporal · <b>I</b>ncapacidad permanente · <b>P</b>ensión a beneficiarios · <b>G</b>astos funerarios</div><div class="mm">«Al Sufrir Incapacidad, Pagan Gastos»</div></div></div><div class="error"><b>⚠️ No confundir: prestación de seguridad social ≠ indemnización</b><br>La paga un seguro obligatorio, con independencia de la culpa (diap. 7), y no se calcula como una indemnización civil.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Qué papel cumple la CSS en los riesgos profesionales?</summary><div class="ans">Administra el seguro obligatorio y otorga atención médica, subsidios, pensiones y otras prestaciones según la contingencia (Anexo A, pregunta 7).</div></details><details class="qa"><summary>¿Cuánto paga la CSS por una incapacidad?</summary><div class="ans">El material no da cifras: el reglamento de 2026 derogó el de 1995, así que cualquier porcentaje o cuantía debe verificarse con la versión vigente.</div></details><details class="qa"><summary>Si el empleador no me inscribió, ¿qué pasa?</summary><div class="ans">Esa es una falta del empleador: su responsabilidad propia se analiza por separado.</div></details><details class="qa"><summary>¿Qué plazo hay para reclamar a la CSS?</summary><div class="ans">La síntesis del grupo (diap. 24) dice «según el reglamento 2026»; el material no da un número.</div></details></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="p-estado"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">2</span><h2>Responsabilidad del Estado</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Diapositiva 17 · 📄 Sección 7, págs. 7–8 · Responsabilidad patrimonial del Estado</div><ul class="det"><li>El Estado también responde cuando sus <b>funcionarios o servicios públicos</b> causan daños.</li><li>La reparación exige un <b>perjuicio cierto</b> y un <b>nexo causal</b> con la acción, omisión o funcionamiento defectuoso del servicio.</li><li>El <b>art. 1645 del Código Civil</b> sustenta la responsabilidad por hechos de los funcionarios.</li><li>El <b>art. 97 del Código Judicial</b> (numerales 9 y 10) asigna a la <b>Sala Tercera de la Corte Suprema</b> las demandas de indemnización contra el Estado.</li><li>No todo daño ocurrido cerca de una entidad pública se imputa automáticamente al Estado: <b>la Sala Tercera exige demostrar la causalidad</b>.</li><li>En las demandas por culpa o negligencia se aplica el plazo de <b>un año</b> del <b>art. 1706</b> del Código Civil (desde que el agraviado conoce el daño, diap. 12).</li><li>Base constitucional (diap. 11 de Camilo): <b>arts. 17-18</b>, deber de proteger los derechos y responsabilidad de particulares y servidores públicos.</li></ul><div class="tblwrap"><table><caption>Caso estatal del grupo (diap. 23, Aldhier)</caption><thead><tr><th>Elemento</th><th>Detalle</th></tr></thead><tbody><tr><td>Hechos</td><td>Un conductor de una entidad pública, durante una diligencia oficial, choca por imprudencia el auto de un particular.</td></tr><tr><td>Fundamento</td><td>Art. 1645 CC y art. 97 del Código Judicial.</td></tr><tr><td>Prueba</td><td>Informe de tránsito, orden de comisión, peritaje y presupuestos.</td></tr><tr><td>Vía</td><td>Demanda de indemnización ante la Sala Tercera dentro de un año.</td></tr><tr><td>Resultado probable</td><td>Reparación de los daños vinculados al servicio público.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">1645 + 97</span><div><div class="mt">Base legal</div><div class="mx">Art. <b>1645</b> del Código Civil (responde) · art. <b>97</b> del Código Judicial (ante quién)</div><div class="mm">El Civil dice que responde; el Judicial, ante quién</div></div></div><div class="error"><b>⚠️ No confundir: cerca de una entidad pública ≠ culpa del Estado</b><br>Hay que probar el nexo causal con la acción, omisión o mal funcionamiento del servicio público.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Ante quién se reclama una indemnización al Estado?</summary><div class="ans">Ante la Sala Tercera de la Corte Suprema de Justicia (art. 97 del Código Judicial), demostrando el nexo entre el daño y el servicio público (Anexo A, pregunta 8).</div></details><details class="qa"><summary>Si me caigo frente a un ministerio, ¿me indemniza el Estado?</summary><div class="ans">No automáticamente: hay que probar daño cierto y nexo causal con la acción, omisión o mal funcionamiento del servicio.</div></details><details class="qa"><summary>¿Desde cuándo corre el año?</summary><div class="ans">Desde que el agraviado conoce el daño (art. 1706 CC, diap. 12).</div></details><details class="qa"><summary>¿Qué pruebas sirven?</summary><div class="ans">En el caso del grupo: informe de tránsito, orden de comisión, peritaje y presupuestos.</div></details></div></div></section>
+<section class="pt" id="p-consumo"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">3</span><h2>Derechos del consumidor</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Diapositiva 18 · 📄 Sección 8, pág. 8 · Indemnización y derechos del consumidor</div><ul class="det"><li>La <b>Ley 45 de 2007</b> protege a los consumidores y organiza la <b>ACODECO</b>.</li><li>Remedios: <b>reparación, reemplazo, devolución de lo pagado</b> y, <b>si se prueban los perjuicios</b>, una indemnización.</li><li>Una devolución por garantía <b>no equivale automáticamente</b> a una indemnización civil.</li><li>El <b>art. 46</b>, reformado por la <b>Ley 14 de 2018</b>, fija como regla un plazo de <b>30 días desde la reclamación</b> para reparar o reemplazar ciertos bienes, con <b>reglas especiales para vehículos y equipos tecnológicos</b>.</li><li>El consumidor debe conservar <b>factura, garantía, comunicaciones y pruebas del defecto</b>.</li><li>La <b>Ley 473 de 2025</b> modificó reglas de precios y ventas especiales, pero la <b>Ley 531 de 2026</b> aplazó su vigencia al <b>1 de julio de 2027</b>: no se aplica en noviembre de 2026.</li><li>Base constitucional (diap. 11): <b>art. 49</b>, derechos del consumidor y de los usuarios.</li></ul><div class="tblwrap"><table><caption>Las leyes de consumo de tu diapositiva</caption><thead><tr><th>Norma</th><th>Qué dice</th></tr></thead><tbody><tr><td>Ley 45 de 2007</td><td>Protección al consumidor y ACODECO.</td></tr><tr><td>Ley 14 de 2018</td><td>Reformó el art. 46: 30 días para reparar o reemplazar.</td></tr><tr><td>Ley 473 de 2025</td><td>Reglas de precios y ventas especiales; aún no se aplica.</td></tr><tr><td>Ley 531 de 2026</td><td>Aplazó la vigencia de la Ley 473 al 1 de julio de 2027.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">RRDI</span><div><div class="mt">Los 4 remedios</div><div class="mx"><b>R</b>eparar · <b>R</b>eemplazar · <b>D</b>evolver lo pagado · <b>I</b>ndemnizar (solo con perjuicios probados)</div><div class="mm">Las tres primeras son garantía; la I necesita prueba</div></div></div><div class="error"><b>⚠️ No confundir: devolución por garantía ≠ indemnización</b><br>La garantía repara, reemplaza o devuelve el bien; la indemnización exige probar perjuicios adicionales.</div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Una devolución por garantía equivale a una indemnización?</summary><div class="ans">No. La garantía repara, reemplaza o devuelve el bien; la indemnización exige probar perjuicios adicionales (Anexo A, pregunta 9).</div></details><details class="qa"><summary>¿Por qué mencionan la Ley 473 si no se aplica?</summary><div class="ans">Porque modificó reglas de precios y ventas especiales, pero la Ley 531 de 2026 aplazó su vigencia al 1 de julio de 2027.</div></details><details class="qa"><summary>¿Los 30 días valen para todo?</summary><div class="ans">Es la regla general del art. 46; hay reglas especiales para vehículos y equipos tecnológicos.</div></details><details class="qa"><summary>¿Cuándo hay indemnización en consumo?</summary><div class="ans">Solo si se prueban perjuicios: en el caso del celular, si el equipo causó otros daños demostrables.</div></details></div></div></section>
+<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
+<section class="pt" id="p-ruta"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">4</span><h2>La ruta del reclamo</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Diapositiva 19 · 📄 Pág. 8, caso 11.4 y Anexo B.2</div><ul class="det"><li><b>Reclamo escrito</b>: nota al proveedor con factura, garantía y pruebas del defecto.</li><li><b>30 días</b>: plazo general para reparar o reemplazar el bien (art. 46).</li><li><b>Queja ante ACODECO</b>: orientación, recepción de la queja y conciliación.</li><li><b>Tribunales</b>: si el asunto excede la competencia de ACODECO o se reclaman perjuicios.</li><li>Formato <b>B.2</b> (nota de reclamo al proveedor): datos de la compra (producto, fecha, factura y monto), defecto dentro de la garantía, fundamento en la Ley 45 de 2007 y su art. 46, pedido de reparar, reemplazar o devolver en no más de 30 días, copia de factura, garantía y evidencia, y aviso de que, sin respuesta, se presentará la queja ante ACODECO.</li><li>Los formatos muestran cómo documentar una reclamación; <b>no sustituyen la asesoría legal</b>.</li></ul><div class="tblwrap"><table><caption>Caso de consumo del grupo (diap. 23)</caption><thead><tr><th>Elemento</th><th>Detalle</th></tr></thead><tbody><tr><td>Hechos</td><td>Un celular nuevo deja de funcionar a las dos semanas.</td></tr><tr><td>Fundamento</td><td>Ley 45 de 2007, art. 46.</td></tr><tr><td>Prueba</td><td>Factura, garantía y nota de reclamo.</td></tr><tr><td>Vía</td><td>Reclamo al proveedor y, si no responde, queja ante ACODECO.</td></tr><tr><td>Resultado probable</td><td>Reparación, reemplazo o devolución; solo si el equipo causó otros daños demostrables se discutiría además una indemnización.</td></tr></tbody></table></div><div class="mnemo"><span class="mk">E-E-Q-D</span><div><div class="mt">La ruta</div><div class="mx"><b>E</b>scribe · <b>E</b>spera 30 días · <b>Q</b>uéjate ante ACODECO · <b>D</b>emanda en tribunales</div><div class="mm">Cuatro verbos en orden</div></div></div><div class="qs"><div class="lbl">🙋 POSIBLES PREGUNTAS DEL PÚBLICO</div><details class="qa"><summary>¿Puedo ir directo a ACODECO?</summary><div class="ans">La ruta del grupo empieza con el reclamo escrito: la nota B.2 es «previa a la queja ante ACODECO».</div></details><details class="qa"><summary>¿Qué guardo como prueba?</summary><div class="ans">Factura, garantía, comunicaciones y pruebas del defecto.</div></details><details class="qa"><summary>¿Y si ACODECO no puede resolverlo?</summary><div class="ans">Si excede su competencia o se reclaman perjuicios, corresponde acudir a los tribunales.</div></details></div></div></section>
+<section class="pt" id="p-cierre"><div class="ph" role="button" tabindex="0" aria-expanded="true"><span class="num">FIN</span><h2>Cierre</h2><span class="car" aria-hidden="true">▾</span></div><div class="body"><div class="src">🖥️ Cierre, aún en la diapositiva 19 · 📄 Conclusión 5, síntesis (diap. 24) y recomendación 5</div><ul class="det"><li>Trabajo, Estado y consumo <b>siguen vías especiales</b>.</li><li>Autoridades (síntesis, diap. 24): <b>CSS</b> · <b>Sala Tercera de la Corte Suprema</b> · <b>ACODECO o juzgados</b>.</li><li>Plazos (diap. 24): riesgos, según el reglamento 2026 · Estado, <b>1 año</b> (art. 1706) · consumo, <b>30 días</b> para reparar.</li><li>Recomendación 5: distinguir garantía, seguro social, reembolso e indemnización, y acudir a MITRADEL, ACODECO o un abogado cuando exista duda.</li><li>Después: <b>Samuel Pimentel</b>, instrumentos internacionales; los tratados refuerzan esa protección.</li></ul></div></section>
+<p class="nores" id="nores">😶 Sin resultados. Prueba con otra sigla o palabra.</p>
+<footer>Resumen por punto generado solo a partir del material del Grupo 3 · UTP · uso académico.</footer>
+</main></div>
+<script src="audio/puntos.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+(function(){
+"use strict";
+function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
+
+var PRE = "et_charla1_";
+var pts = Array.prototype.slice.call(document.querySelectorAll("section.pt"));
+var mode = load(PRE+"modo_v1") || (matchMedia("(max-width:560px)").matches ? "transit" : "office");
+function setOpen(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); if(open) save(PRE+"puntos_pos_v1", s.id); }
+function applyMode(){
+  document.body.classList.toggle("transit", mode === "transit");
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ var on = b.getAttribute("data-m") === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  $("notice").textContent = mode === "transit" ? "🚌 Activa No Molestar · música instrumental o silencio, nada con letra." : "🏢 Teléfono fuera de la vista y notificaciones en silencio.";
+  $("btnCont").style.display = mode === "transit" ? "" : "none";
+  pts.forEach(function(s){ setOpenQuiet(s, mode !== "transit"); });
+}
+function setOpenQuiet(s, open){ s.classList.toggle("closed", !open); s.querySelector(".ph").setAttribute("aria-expanded", open ? "true" : "false"); }
+Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ b.addEventListener("click", function(){ mode = b.getAttribute("data-m"); save(PRE+"modo_v1", mode); applyMode(); }); });
+pts.forEach(function(s){
+  var h = s.querySelector(".ph");
+  function tog(e){ if(e.target.closest(".kit-tts")) return; setOpen(s, s.classList.contains("closed")); }
+  h.addEventListener("click", tog);
+  h.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(e); } });
+});
+applyMode();
+$("fold").addEventListener("click", function(){
+  var anyOpen = pts.some(function(s){ return !s.classList.contains("closed"); });
+  pts.forEach(function(s){ setOpenQuiet(s, !anyOpen); });
+  $("fold").textContent = anyOpen ? "Desplegar todo" : "Plegar todo";
+});
+$("btnCont").addEventListener("click", function(){ var id = load(PRE+"puntos_pos_v1"), s = id && $(id); if(!s) s = pts[0]; setOpen(s, true); s.scrollIntoView({behavior:"smooth", block:"start"}); });
+document.querySelectorAll("nav.chips a, aside.side a").forEach(function(a){ a.addEventListener("click", function(){ var s = $(a.getAttribute("href").slice(1)); if(s) setOpen(s, true); }); });
+
+/* buscador */
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+$("q").addEventListener("input", function(){
+  var q = norm(this.value.trim()), n = 0;
+  pts.forEach(function(s){
+    var hit = !q || norm(s.textContent).indexOf(q) >= 0;
+    s.style.display = hit ? "" : "none"; if(hit) n++;
+    if(q && hit) setOpenQuiet(s, true);
+  });
+  document.querySelectorAll(".pausa").forEach(function(p){ p.style.visibility = q ? "hidden" : ""; });
+  $("nores").style.display = n ? "none" : "block";
+});
+
+/* barra lateral */
+var side = document.querySelectorAll("aside.side a");
+addEventListener("scroll", function(){
+  var cur = null; pts.forEach(function(s){ if(s.style.display !== "none" && s.getBoundingClientRect().top < 180) cur = s; });
+  if(cur) Array.prototype.forEach.call(side, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); });
+}, {passive:true});
+
+if(window.Voz){
+  Voz.init({
+    sections: pts, key: function(s){ return s.id; },
+    title: function(s){ return s.querySelector(".num").textContent + " · " + s.querySelector("h2").textContent; },
+    blocks: "ul.det li, blockquote, tr, .mnemo, .error", skip: ".qs, caption",
+    target: function(s){ return s.querySelector(".ph"); },
+    onOpen: function(s){ if(s.classList.contains("closed")) setOpen(s, true); },
+    playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
+    rateKey: PRE+"tts_rate_v1", artist: "Resumen por punto · Riesgos, Estado y consumidor"
+  });
+}
+})();
+</script>
+</body>
+</html>

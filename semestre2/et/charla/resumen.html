@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Resumen general · Riesgos, Estado y consumidor</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+main{max-width:760px;margin:0 auto;padding:0 16px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+section.r{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:14px;}
+.rh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.rh h2{font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;color:var(--amber);flex:1;}
+.idea{font-size:clamp(1.2rem,1rem + 1vw,1.7rem);font-weight:800;line-height:1.3;}
+.idea b{color:var(--accent);}
+ul.c{padding-left:20px;margin:6px 0 0;}
+ul.c li{margin:5px 0;color:var(--text-dim);max-width:70ch;}
+ul.c b{color:var(--text);}
+.flow{position:relative;margin-top:6px;}
+.step{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-left:2px solid var(--accent-dim);margin-left:12px;padding-left:14px;position:relative;}
+.step .num{position:absolute;left:-13px;top:8px;font-family:var(--mono);font-size:.66rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:2px 5px;min-width:24px;text-align:center;}
+.step>div{margin-left:12px;}
+.step b{font-size:.94rem;}
+.step .tm{font-family:var(--mono);font-size:.72rem;color:var(--amber);margin-left:8px;}
+.step .one{font-size:.84rem;color:var(--text-dim);}
+.part{border:1px solid var(--line-soft);border-radius:12px;padding:10px 12px;margin-top:8px;background:var(--surface-2);}
+.part.mine{border-color:var(--accent);background:var(--accent-dim);}
+.pt-h{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;}
+.pt-h span{font-family:var(--mono);font-size:.7rem;color:var(--text-faint);}
+.pt-h em{font-style:normal;font-size:.72rem;color:var(--cyan);margin-left:auto;}
+.pt-h em.me{color:var(--accent);font-weight:800;}
+.part ul{margin:4px 0 0;padding-left:18px;font-size:.84rem;color:var(--text-dim);}
+.cta{font-size:1.05rem;font-weight:700;}
+.plan input{min-height:44px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:0 10px;}
+.plan ol{list-style:none;padding:0;margin:10px 0 0;}
+.plan li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line-soft);font-size:.9rem;color:var(--text-dim);}
+.plan li .d{font-family:var(--mono);color:var(--accent);min-width:88px;font-weight:700;}
+.plan li.today .d{color:var(--amber);}
+@media (min-width:1024px){ main{max-width:1100px;} .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;} .grid2>section.r{margin-top:14px;} }
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Resumen general · <em>Riesgos, Estado y consumidor</em></h1><span class="tot">⏱ 4:00</span>
+</div></header>
+<main>
+<p class="hint">Basado en <b>La indemnización en Panamá — Grupo 3.pdf</b> (tus diapositivas 16–19) y en <b>pro_Indemnizacion_Etica_Profesional_Grupo3_Trabajo_Final_2026.pdf</b>. Tu parte completa en una o dos pantallas.</p>
+<div class="actions" id="actions"></div>
+<section class="r" id="r-idea"><div class="rh"><h2>💡 IDEA CENTRAL</h2></div>
+  <p class="idea">Hay daños que no se reclaman por la vía común: los del <b>trabajo</b> los cubre la <b>CSS</b>, los que causa el <b>Estado</b> se demandan ante la <b>Sala Tercera</b> y los de <b>consumo</b> pasan por la <b>ACODECO</b>, cada uno con sus <b>propias pruebas y plazos</b>.</p></section>
+<div class="grid2">
+<section class="r" id="r-mapa"><div class="rh"><h2>🗺️ MAPA DE LA CHARLA · 4:00</h2></div><div class="flow"><div class="step"><span class="num">0</span><div><small style="color:var(--violet)">🖥️ DIAP. 16</small><br><b>Intro</b> <span class="tm">0:20</span><div class="one">Que entiendan que hay daños que no se reclaman por la vía civil o laboral común, sino por vías especiales.</div></div></div><div class="step"><span class="num">1</span><div><b>Riesgos profesionales</b> <span class="tm">1:00</span><div class="one">Que distingan accidente de trabajo y enfermedad profesional y sepan qué paga la CSS.</div></div></div><div class="step"><span class="num">2</span><div><small style="color:var(--violet)">🖥️ DIAP. 17</small><br><b>Responsabilidad del Estado</b> <span class="tm">0:50</span><div class="one">Que sepan que el Estado también indemniza, con qué base, qué hay que probar y ante quién.</div></div></div><div class="step"><span class="num">3</span><div><small style="color:var(--violet)">🖥️ DIAP. 18</small><br><b>Derechos del consumidor</b> <span class="tm">0:55</span><div class="one">Que distingan los remedios de garantía de una indemnización y sepan qué ley aplica hoy.</div></div></div><div class="step"><span class="num">4</span><div><small style="color:var(--violet)">🖥️ DIAP. 19</small><br><b>La ruta del reclamo</b> <span class="tm">0:35</span><div class="one">Que se lleven los cuatro pasos para reclamar como consumidor.</div></div></div><div class="step"><span class="num">FIN</span><div><b>Cierre</b> <span class="tm">0:20</span><div class="one">Dejar una sola idea y pasar la palabra.</div></div></div></div></section>
+<div>
+<section class="r" id="r-contenido"><div class="rh"><h2>📌 EL CONTENIDO EN 7 VIÑETAS</h2></div><ul class="c"><li><b>Riesgos profesionales</b>: la CSS los cubre con el seguro obligatorio del Decreto de Gabinete 68 de 1970.</li><li><b>Accidente de trabajo</b> (lesión con ocasión o por consecuencia del trabajo) ≠ <b>enfermedad profesional</b> (condiciones o sustancias de la actividad).</li><li>Cinco prestaciones: atención médica, subsidio temporal, incapacidad permanente, pensión a beneficiarios y gastos funerarios; reformas: Ley 462 de 2025 y reglamento de abril de 2026.</li><li><b>Estado</b>: art. 1645 CC y art. 97 CJ; daño cierto y nexo causal; Sala Tercera; 1 año. No todo daño cerca de una entidad pública es del Estado.</li><li><b>Consumidor</b>: Ley 45 de 2007 y ACODECO; 30 días para reparar o reemplazar (art. 46, Ley 14 de 2018); reparar, reemplazar, devolver o indemnizar si se prueban perjuicios.</li><li>Una devolución por garantía <b>no es automáticamente</b> una indemnización; la Ley 473 de 2025 está aplazada hasta el 1 de julio de 2027.</li><li><b>Ruta del reclamo</b>: reclamo escrito → 30 días → queja ante ACODECO → tribunales.</li></ul></section>
+<section class="r" id="r-cierre"><div class="rh"><h2>🎯 MENSAJE DE CIERRE</h2></div>
+  <p class="cta">«Trabajo, Estado y consumo: tres vías especiales, cada una con su autoridad, sus pruebas y sus plazos.»</p>
+  <ul class="c"><li>CSS · Sala Tercera · ACODECO.</li><li>Pasas la palabra a <b>Samuel</b>: los tratados internacionales refuerzan esa protección.</li></ul></section>
+<section class="r plan" id="r-plan"><div class="rh"><h2>📅 PLAN DE REPASO</h2></div>
+  <label>Fecha de la charla: <input type="date" id="fecha" aria-label="Fecha de la charla"></label>
+  <ol id="planList"></ol></section>
+</div></div>
+<section class="r" id="r-partes"><div class="rh"><h2>📚 LA PRESENTACIÓN, PARTE POR PARTE</h2></div>
+  <p style="font-size:.8rem;color:var(--text-faint)">Para saber qué dicen los demás y enlazar con ellos. Orden del PPT del Grupo 3 (29 láminas); tu parte resaltada.</p><div class="part"><div class="pt-h"><b>Portada, introducción, objetivo y contenido</b><span>diap. 1–4</span><em>🎤 David Rodríguez</em></div><ul><li>La indemnización procura que quien sufre un daño injusto no cargue solo con sus consecuencias.</li><li>No hay régimen único: civil, laboral, seguridad social, Estado, consumo e internacional.</li><li>Objetivo: analizar antecedentes, naturaleza jurídica, fundamento normativo y aplicación práctica, con énfasis en la ética profesional.</li></ul></div><div class="part"><div class="pt-h"><b>Antecedentes, evolución en Panamá y concepto</b><span>diap. 5–7</span><em>🎤 José Castillo</em></div><ul><li>De la venganza y el talión a la Lex Aquilia (c. 286 a. C.), el Código Napoleón (1804) y la reparación internacional (desde 1945).</li><li>Panamá: Código Civil 1916 · Ley 23 de 1941 (CSS) · D. G. 68 de 1970 · Código de Trabajo 1971 · Ley 18 de 1992 (daño moral) · Ley 45 de 2007 · Ley 462 y reglamento CSS 2025-26.</li><li>Indemnización = prestación para reparar un perjuicio; no es multa, restitución ni prestación de seguridad social.</li></ul></div><div class="part"><div class="pt-h"><b>Naturaleza jurídica, clases de daño y Constitución</b><span>diap. 8–11</span><em>🎤 Camilo González</em></div><ul><li>Cuatro fuentes: contrato incumplido, hecho ilícito culposo, mandato de la ley y sentencia internacional.</li><li>Resarcitoria, proporcional, patrimonial, condicionada y sujeta a plazos; daño emergente, lucro cesante y daño moral.</li><li>Constitución: arts. 17-18 (responsabilidad de servidores públicos), 48 (expropiación), 49 (consumidor) y 74 (despido).</li></ul></div><div class="part"><div class="pt-h"><b>Responsabilidad civil y derecho laboral</b><span>diap. 12–15</span><em>🎤 Alexander Moreno</em></div><ul><li>Contractual (arts. 986 y 991) y extracontractual (arts. 1644, 1644-A y 1645): hecho, daño, atribución y nexo causal; 1 año (art. 1706).</li><li>Prima de antigüedad (1 semana por año) ≠ indemnización por despido (3.4 semanas por año los 10 primeros); 60 días hábiles para reclamar.</li><li>Caso de Ana: 7.5 años, B/. 1,000 mensuales → B/. 7,615.42. <b>Te pasa la palabra.</b></li></ul></div><div class="part mine"><div class="pt-h"><b>Riesgos profesionales, Estado y consumidor</b><span>diap. 16–19</span><em class="me">🎤 Jonathan Page (tú)</em></div><ul><li>Riesgos profesionales: CSS, D. G. 68 de 1970, accidente vs. enfermedad, 5 prestaciones, reformas 2025-2026.</li><li>Estado: art. 1645 CC y 97 CJ, daño cierto y nexo causal, Sala Tercera, 1 año.</li><li>Consumidor: Ley 45 de 2007, 30 días, 4 remedios, Ley 473 aplazada; ruta: reclamo → 30 días → ACODECO → tribunales.</li></ul></div><div class="part"><div class="pt-h"><b>Instrumentos internacionales y ética</b><span>diap. 20–22</span><em>🎤 Samuel Pimentel</em></div><ul><li>Convención Americana (Ley 15 de 1977: arts. 10, 63.1 y 68), Protocolo de San Salvador (art. 7.d) y Pacto de Derechos Civiles y Políticos (arts. 9.5 y 14.6).</li><li>Corte IDH contra Panamá: Baena Ricardo y otros (2001) y Vélez Loor (2010).</li><li>La indemnización llega cuando el daño ya ocurrió; la ética actúa antes.</li></ul></div><div class="part"><div class="pt-h"><b>Casos, síntesis, plazos y formatos</b><span>diap. 23–26</span><em>🎤 Aldhier Torres</em></div><ul><li>Casos: instalación informática defectuosa (civil), choque en comisión oficial (estatal) y celular defectuoso (consumo).</li><li>Síntesis por ámbito y plazos: 1 año civil y Estado · 60 días hábiles despido · 30 días proveedor.</li><li>Formatos del Anexo B: B.1 liquidación laboral · B.2 nota de reclamo al proveedor · B.3 reclamación extrajudicial.</li></ul></div><div class="part"><div class="pt-h"><b>Conclusiones y recomendaciones</b><span>diap. 27–29</span><em>🎤 David Rodríguez</em></div><ul><li>La indemnización repara, no castiga, y no es automática; riesgos, Estado y consumo siguen vías especiales.</li><li>Documentar, verificar la norma vigente, respetar plazos y distinguir garantía, seguro social, reembolso e indemnización.</li></ul></div></section>
+<footer>Resumen basado en el PPT y el trabajo escrito del Grupo 3 · UTP · uso académico.</footer>
+</main>
+<script src="audio/resumen.js"></script>
+<script src="audio/voz.js"></script>
+<script>
+(function(){
+"use strict";
+function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function $(id){ return document.getElementById(id); }
+function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
+
+var PRE = "et_charla1_", DEF = "2026-11-26";
+function ymd(d){ var m = d.getMonth()+1, x = d.getDate(); return d.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(x<10?"0":"")+x; }
+function parse(s){ if(!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var p = s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+function add(d, n){ var x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate()+n); return x; }
+var STEPS = [[0, "Leer el guion completo y responder 🎯 y 🧠"], [1, "Escuchar 🎧 la charla y hacer las flashcards de 📅 Hoy"], [3, "Primer ensayo cronometrado en voz alta"], [-1, "Ensayo completo + 🎤 Modo escenario. Dormir bien"]];
+function draw(){
+  var f = parse($("fecha").value), t = new Date(), today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  if(!f){ $("planList").innerHTML = "<li>Pon la fecha de la charla para ver el plan.</li>"; return; }
+  var eve = add(f, -1), map = {}, order = [];
+  STEPS.forEach(function(s){
+    var d = s[0] < 0 ? eve : add(today, s[0]);
+    if(d > eve) d = eve; if(d < today) d = today;
+    var k = ymd(d); if(!map[k]){ map[k] = []; order.push(k); } map[k].push(s[1]);
+  });
+  order.sort();
+  var html = order.map(function(k){ var d = parse(k); return '<li class="'+(k === ymd(today) ? "today" : "")+'"><span class="d">'+(k === ymd(today) ? "Hoy" : d.toLocaleDateString("es-PA", {weekday:"short", day:"2-digit", month:"2-digit"}))+'</span><span>'+map[k].join(" · ")+'</span></li>'; }).join("");
+  html += '<li><span class="d">'+f.toLocaleDateString("es-PA", {weekday:"short", day:"2-digit", month:"2-digit"})+'</span><span>🎤 Día de la charla: solo un repaso del modo escenario y respirar.</span></li>';
+  if(eve < today) html = "<li>La charla ya pasó o es hoy: un repaso rápido del modo escenario.</li>";
+  $("planList").innerHTML = html;
+}
+$("fecha").value = load(PRE+"fecha_v1") || DEF;
+$("fecha").addEventListener("change", function(){ save(PRE+"fecha_v1", this.value); draw(); });
+draw();
+if(window.Voz){
+  Voz.init({
+    sections: Array.prototype.slice.call(document.querySelectorAll("section.r")).filter(function(s){ return s.id !== "r-plan"; }),
+    key: function(s){ return s.id; }, title: function(s){ return s.querySelector("h2").textContent; },
+    blocks: "p.idea, p.cta, li, .step", skip: ".rh",
+    target: function(s){ return s.querySelector(".rh"); },
+    playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
+    rateKey: PRE+"tts_rate_v1", artist: "Resumen general · Riesgos, Estado y consumidor"
+  });
+}
+})();
+</script>
+</body>
+</html>

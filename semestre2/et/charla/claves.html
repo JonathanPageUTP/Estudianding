@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>Palabras Clave · Riesgos, Estado y consumidor</title>
+<style>
+:root{
+  --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
+  --text:#e9f3ec; --text-dim:#a9c2b6; --text-faint:#6f8c7e;
+  --accent:#4ade80; --accent-dim:#1f5233; --cyan:#5ecbe8; --cyan-dim:#173842; --amber:#f5b942; --amber-dim:#4a3510;
+  --red:#f38080; --red-dim:#4a1f1f; --violet:#c9a6f0; --violet-dim:#2e2144;
+  --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:var(--sans);color:var(--text);background-color:var(--bg);
+  background-image:linear-gradient(var(--bg-grid) 1px,transparent 1px),linear-gradient(90deg,var(--bg-grid) 1px,transparent 1px);
+  background-size:28px 28px;font-size:clamp(15px,1rem + 0.2vw,18px);line-height:1.5;overflow-wrap:anywhere;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom,0px));}
+h1,h2,h3,p{margin:0;}
+a{color:var(--cyan);}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,20,16,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + env(safe-area-inset-top,0px)) 16px 8px;}
+.hd{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hd h1{font-size:clamp(1rem,.95rem + .5vw,1.3rem);flex:1;min-width:150px;}
+.hd h1 em{font-style:normal;color:var(--accent);}
+.back{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:22px;color:var(--text);text-decoration:none;background:var(--surface);font-weight:700;padding:0 12px;}
+.tot{font-family:var(--mono);font-size:.78rem;color:var(--amber);white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:30px;padding:8px 14px;min-height:44px;font:700 .82rem var(--sans);cursor:pointer;text-decoration:none;}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#06140c;}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--surface);}
+.seg button{border:none;background:transparent;color:var(--text-dim);font:700 .78rem var(--sans);padding:0 12px;min-height:40px;cursor:pointer;}
+.seg button.on{background:var(--accent-dim);color:var(--text);}
+.lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.07em;color:var(--text-faint);margin:12px 0 5px;}
+.tblwrap{overflow-x:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;}
+table{border-collapse:collapse;width:100%;font-size:.82rem;}
+caption{caption-side:top;text-align:left;font-family:var(--mono);font-size:.68rem;color:var(--accent);padding:8px 10px 4px;letter-spacing:.04em;}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top;}
+th{font-family:var(--mono);font-size:.68rem;color:var(--text-faint);background:var(--surface-2);}
+td{color:var(--text-dim);}
+td:first-child{color:var(--text);font-weight:600;}
+details>summary{cursor:pointer;min-height:36px;display:flex;align-items:center;gap:6px;}
+details>summary::-webkit-details-marker{display:none;}
+details>summary::before{content:"▸";color:var(--accent);font-size:.8em;transition:transform .2s;}
+details[open]>summary::before{transform:rotate(90deg);}
+footer{max-width:1180px;margin:28px auto 0;padding:0 16px;font-size:.74rem;color:var(--text-faint);text-align:center;}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+input,textarea,select{font-size:16px;}
+/* voz */
+.kit-tts{background:var(--cyan-dim);border:1px solid #1f4d5c;color:var(--cyan);border-radius:20px;font:700 .72rem var(--sans);padding:6px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;}
+.tts-on{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;background:rgba(94,203,232,.08);}
+#vozPlayer{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:170;display:none;gap:6px;align-items:center;background:rgba(16,31,25,.97);border:1px solid #1f4d5c;border-radius:30px;padding:6px 8px;box-shadow:0 8px 24px -6px rgba(0,0,0,.6);max-width:calc(100% - 32px);}
+#vozPlayer.show{display:flex;}
+#vozPlayer button,#vozPlayer select{background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:20px;font:700 .8rem var(--sans);padding:7px 11px;cursor:pointer;min-height:40px;}
+#vozPlayer .now{flex:1;min-width:0;font-size:.72rem;color:var(--cyan);max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (max-width:430px){#vozPlayer .now{display:none;}}
+@media (hover:hover){ .btn:hover,.back:hover,.seg button:hover,.kit-tts:hover{filter:brightness(1.15);} }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{transition:none!important;animation:none!important;} }
+
+nav.chips{max-width:1180px;margin:8px auto 0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;}
+nav.chips::-webkit-scrollbar{display:none;}
+nav.chips a{flex-shrink:0;font-size:.74rem;font-weight:700;text-decoration:none;color:var(--text-dim);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:7px 11px;}
+main{max-width:1100px;margin:0 auto;padding:0 16px;}
+.hint{font-size:.8rem;color:var(--text-faint);margin:14px 0 0;}
+section{margin-top:22px;scroll-margin-top:130px;}
+section h2{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;color:var(--amber);margin-bottom:8px;display:flex;gap:8px;align-items:center;}
+.num{font-size:.7rem;font-weight:800;color:#06140c;background:var(--accent);border-radius:6px;padding:2px 7px;}
+.kws{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.kws span{font-family:var(--mono);font-size:.72rem;color:var(--amber);background:var(--amber-dim);border-radius:7px;padding:3px 8px;}
+.grid{display:grid;gap:8px;grid-template-columns:1fr;}
+@media (min-width:1024px){ .grid{grid-template-columns:1fr 1fr;} }
+.s{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;align-items:flex-start;}
+.k{font-family:var(--mono);font-weight:900;font-size:1rem;color:var(--accent);min-width:74px;max-width:40%;}
+.k.a{color:var(--amber);} .k.c{color:var(--red);} .k.v{color:var(--violet);}
+.b{flex:1;min-width:0;}
+.tt{font-size:.72rem;color:var(--text-faint);font-family:var(--mono);}
+.x{font-size:.9rem;}
+.x b{color:var(--accent);}
+.m{font-size:.82rem;color:var(--text-dim);font-style:italic;margin-top:2px;}
+body.prac .x,body.prac .m{filter:blur(6px);cursor:pointer;user-select:none;}
+body.prac .s.rev .x,body.prac .s.rev .m{filter:none;}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="hd">
+  <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
+  <h1>Palabras clave · <em>Riesgos, Estado y consumidor</em></h1>
+  <button class="btn" type="button" id="prac" aria-pressed="false">🙈 Modo práctica</button>
+</div><nav class="chips" aria-label="Puntos"><a href="#k-intro">0 Intro</a><a href="#k-riesgos">1 Riesgos profesionales</a><a href="#k-estado">2 Responsabilidad del Estado</a><a href="#k-consumo">3 Derechos del consumidor</a><a href="#k-ruta">4 La ruta del reclamo</a><a href="#k-cierre">FIN Cierre</a><a href="#k-secuencia">🧭 Secuencia</a><a href="#k-numeros">🔢 Números</a><a href="#k-noconf">⚠️ No confundir</a></nav></header>
+<main>
+<p class="hint">Lo que no puede faltar en cada punto. Con <b>🙈 Modo práctica</b> se ocultan las definiciones: intenta decirlas y toca para revelar.</p>
+<section id="k-intro"><h2><span class="num">0</span> Intro</h2><div class="kws"><span>vías especiales</span><span>trabajo · Estado · consumo</span><span>autoridad, pruebas y plazos</span></div><div class="grid"><div class="s"><span class="k">T-E-C</span><div class="b"><div class="tt">Las tres vías especiales</div><div class="x"><b>T</b>rabajo (CSS) · <b>E</b>stado (Sala Tercera) · <b>C</b>onsumo (ACODECO)</div><div class="m">«TEC»: como la Tecnológica</div></div></div><div class="s"><span class="k">A-P-P</span><div class="b"><div class="tt">Lo que cambia en cada vía</div><div class="x"><b>A</b>utoridad · <b>P</b>ruebas · <b>P</b>lazos</div><div class="m">Cada vía tiene su propia «APP»</div></div></div></div></section>
+<section id="k-riesgos"><h2><span class="num">1</span> Riesgos profesionales</h2><div class="kws"><span>Caja de Seguro Social</span><span>Decreto de Gabinete 68 de 1970</span><span>accidente de trabajo</span><span>enfermedad profesional</span><span>5 prestaciones</span><span>Ley 462 de 2025</span><span>reglamento abril 2026</span></div><div class="grid"><div class="s"><span class="k a">68 · 70</span><div class="b"><div class="tt">Norma base</div><div class="x">Decreto de Gabinete <b>68</b> de 19<b>70</b> · seguro obligatorio administrado por la CSS</div><div class="m">«El 68 del 70»: dos números casi seguidos</div></div></div><div class="s"><span class="k c">LES ≠ ENF</span><div class="b"><div class="tt">Accidente vs. enfermedad</div><div class="x">Accidente = <b>lesión</b> con ocasión o por consecuencia del trabajo · Enfermedad = causada por las <b>condiciones o sustancias</b> propias de la actividad</div><div class="m">El accidente es un golpe; la enfermedad, un desgaste</div></div></div><div class="s"><span class="k">ASIPG</span><div class="b"><div class="tt">5 prestaciones posibles</div><div class="x"><b>A</b>tención médica · <b>S</b>ubsidio temporal · <b>I</b>ncapacidad permanente · <b>P</b>ensión a beneficiarios · <b>G</b>astos funerarios</div><div class="m">«Al Sufrir Incapacidad, Pagan Gastos»</div></div></div><div class="s"><span class="k a">462 · 58,443</span><div class="b"><div class="tt">Reformas</div><div class="x">Ley <b>462</b> de 2025 · Resolución <b>58,443</b>-2026-J.D. (nuevo reglamento, abril de 2026; derogó el de 1995)</div><div class="m">En 2025 la ley, en 2026 el reglamento</div></div></div><div class="s"><span class="k">I-P-N</span><div class="b"><div class="tt">Deberes del empleador (doc.)</div><div class="x"><b>I</b>nscribir al trabajador · <b>P</b>revenir riesgos · <b>N</b>otificar el accidente</div><div class="m">Si falla, su responsabilidad se analiza aparte</div></div></div></div></section>
+<section id="k-estado"><h2><span class="num">2</span> Responsabilidad del Estado</h2><div class="kws"><span>el Estado también responde</span><span>art. 1645 CC</span><span>art. 97 CJ (num. 9 y 10)</span><span>daño cierto + nexo causal</span><span>Sala Tercera</span><span>1 año (art. 1706)</span><span>no es automático</span></div><div class="grid"><div class="s"><span class="k a">1645 + 97</span><div class="b"><div class="tt">Base legal</div><div class="x">Art. <b>1645</b> del Código Civil · art. <b>97</b> del Código Judicial, numerales <b>9 y 10</b></div><div class="m">El Civil dice que responde; el Judicial dice ante quién</div></div></div><div class="s"><span class="k">D + N</span><div class="b"><div class="tt">Requisito</div><div class="x"><b>D</b>año cierto + <b>N</b>exo causal con la acción, omisión o mal funcionamiento del servicio público</div><div class="m">Sin nexo no hay Estado que pague</div></div></div><div class="s"><span class="k a">3.ª · 1 año</span><div class="b"><div class="tt">Vía y plazo</div><div class="x">Sala <b>Tercera</b> de la Corte Suprema · <b>1 año</b> en casos de culpa (art. 1706 CC)</div><div class="m">«Tercera sala, primer año»</div></div></div><div class="s"><span class="k c">≠ auto</span><div class="b"><div class="tt">Advertencia</div><div class="x">No todo daño ocurrido <b>cerca</b> de una entidad pública se imputa <b>automáticamente</b> al Estado</div><div class="m">Estar cerca no es causar</div></div></div></div></section>
+<section id="k-consumo"><h2><span class="num">3</span> Derechos del consumidor</h2><div class="kws"><span>Ley 45 de 2007</span><span>ACODECO</span><span>30 días · art. 46</span><span>Ley 14 de 2018</span><span>reparar · reemplazar · devolver · indemnizar</span><span>garantía ≠ indemnización</span><span>Ley 473 → 1 jul. 2027</span></div><div class="grid"><div class="s"><span class="k a">45 · 2007</span><div class="b"><div class="tt">Ley base</div><div class="x">Ley <b>45</b> de 2007 · protección al consumidor · organiza la <b>ACODECO</b></div></div></div><div class="s"><span class="k a">30 · 46 · 14</span><div class="b"><div class="tt">Plazo del proveedor</div><div class="x"><b>30</b> días desde el reclamo para reparar o reemplazar · art. <b>46</b> · reformado por la Ley <b>14</b> de 2018</div><div class="m">Treinta días, artículo cuarenta y seis</div></div></div><div class="s"><span class="k">RRDI</span><div class="b"><div class="tt">Los 4 remedios</div><div class="x"><b>R</b>eparar · <b>R</b>eemplazar · <b>D</b>evolver lo pagado · <b>I</b>ndemnizar (solo si se prueban perjuicios)</div><div class="m">Las tres primeras son garantía; la I necesita prueba</div></div></div><div class="s"><span class="k a">473 → 2027</span><div class="b"><div class="tt">Vigencia</div><div class="x">Ley <b>473</b> de 2025 no se aplica aún · la Ley <b>531</b> de 2026 la aplazó al <b>1 de julio de 2027</b></div><div class="m">La 473 espera a julio del 27</div></div></div></div></section>
+<section id="k-ruta"><h2><span class="num">4</span> La ruta del reclamo</h2><div class="kws"><span>reclamo escrito</span><span>factura · garantía · pruebas</span><span>30 días</span><span>queja ante ACODECO</span><span>orientación · queja · conciliación</span><span>tribunales</span></div><div class="grid"><div class="s"><span class="k v">E-E-Q-D</span><div class="b"><div class="tt">La ruta en 4 pasos</div><div class="x"><b>E</b>scribe el reclamo · <b>E</b>spera 30 días · <b>Q</b>uéjate ante ACODECO · <b>D</b>emanda en tribunales</div><div class="m">Cuatro verbos: escribe, espera, quéjate, demanda</div></div></div><div class="s"><span class="k">F-G-P</span><div class="b"><div class="tt">El reclamo escrito lleva</div><div class="x"><b>F</b>actura · <b>G</b>arantía · <b>P</b>ruebas del defecto</div><div class="m">«Fácil Ganar con Pruebas»</div></div></div><div class="s"><span class="k">O-Q-C</span><div class="b"><div class="tt">Qué hace ACODECO</div><div class="x"><b>O</b>rientación · recepción de la <b>Q</b>ueja · <b>C</b>onciliación</div><div class="m">Orienta, oye y concilia</div></div></div><div class="s"><span class="k c">> ACODECO</span><div class="b"><div class="tt">Cuándo ir a tribunales</div><div class="x">Si el asunto <b>excede su competencia</b> o se <b>reclaman perjuicios</b></div><div class="m">Perjuicios = juez</div></div></div></div></section>
+<section id="k-cierre"><h2><span class="num">FIN</span> Cierre</h2><div class="kws"><span>tres vías especiales</span><span>CSS · Sala Tercera · ACODECO</span><span>pruebas y plazos propios</span><span>pasa a Samuel</span></div><div class="grid"><div class="s"><span class="k v">CSS · 3.ª · ACODECO</span><div class="b"><div class="tt">Las tres autoridades</div><div class="x">Trabajo → <b>CSS</b> · Estado → <b>Sala Tercera</b> · Consumo → <b>ACODECO</b></div><div class="m">Y pasas la palabra a Samuel (tratados)</div></div></div></div></section>
+<section id="k-secuencia"><h2>🧭 SECUENCIA DE LA CHARLA</h2><div class="grid"><div class="s"><span class="k v">16 → 19</span><div class="b"><div class="tt">Orden de tu parte</div><div class="x"><b>16</b> Riesgos profesionales · <b>17</b> Responsabilidad del Estado · <b>18</b> Derechos del consumidor · <b>19</b> La ruta del reclamo</div><div class="m">«TEC y la ruta»: Trabajo, Estado, Consumo… y cómo reclamar</div></div></div><div class="s"><span class="k v">Alex ▸ tú ▸ Samuel</span><div class="b"><div class="tt">Quién va antes y después</div><div class="x">Antes: <b>Alexander Moreno</b> (diap. 15, caso de Ana: despido) · Después: <b>Samuel Pimentel</b> (diap. 20, instrumentos internacionales)</div><div class="m">Del despido a los tratados, pasando por tus tres vías</div></div></div></div></section>
+<section id="k-numeros"><h2>🔢 NÚMEROS Y DATOS CLAVE</h2><div class="grid"><div class="s"><span class="k a">68 · 1970</span><div class="b"><div class="x">Decreto de Gabinete del seguro obligatorio de riesgos profesionales (CSS)</div></div></div><div class="s"><span class="k a">5</span><div class="b"><div class="x">Prestaciones posibles de la CSS</div></div></div><div class="s"><span class="k a">462 · 2025</span><div class="b"><div class="x">Ley que modificó el Decreto de Gabinete 68</div></div></div><div class="s"><span class="k a">58,443-2026-J.D.</span><div class="b"><div class="x">Resolución del nuevo reglamento de la CSS (6 de abril de 2026)</div></div></div><div class="s"><span class="k a">1645 CC</span><div class="b"><div class="x">Responsabilidad por hechos de los funcionarios</div></div></div><div class="s"><span class="k a">97 CJ · 9 y 10</span><div class="b"><div class="x">La Sala Tercera conoce las demandas de indemnización contra el Estado</div></div></div><div class="s"><span class="k a">1 año · 1706</span><div class="b"><div class="x">Plazo para demandar al Estado por culpa</div></div></div><div class="s"><span class="k a">45 · 2007</span><div class="b"><div class="x">Ley de protección al consumidor y ACODECO</div></div></div><div class="s"><span class="k a">30 días · art. 46</span><div class="b"><div class="x">Plazo para reparar o reemplazar (reformado por la Ley 14 de 2018)</div></div></div><div class="s"><span class="k a">473 → 1/7/2027</span><div class="b"><div class="x">Ley 473 de 2025, aplazada por la Ley 531 de 2026</div></div></div><div class="s"><span class="k a">4 + 4</span><div class="b"><div class="x">Remedios del consumidor · pasos de la ruta del reclamo</div></div></div></div></section>
+<section id="k-noconf"><h2>⚠️ NO CONFUNDIR</h2><div class="grid"><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Accidente de trabajo ≠ enfermedad profesional</div><div class="x">Lesión con ocasión o por consecuencia del trabajo ≠ causada por las condiciones o sustancias propias de la actividad.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Prestación de la CSS ≠ indemnización civil</div><div class="x">La paga un seguro obligatorio, con independencia de la culpa, y no se calcula como indemnización civil; la falta del empleador se analiza aparte.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Devolución por garantía ≠ indemnización</div><div class="x">La garantía repara, reemplaza o devuelve; indemnizar exige probar perjuicios.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Ley 462 de 2025 ≠ Ley 473 de 2025</div><div class="x">462: reforma de riesgos profesionales (CSS). 473: consumo, aún no se aplica (aplazada al 1 de julio de 2027).</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Ley 14 de 2018 ≠ Ley 531 de 2026</div><div class="x">14: reformó el art. 46 (30 días). 531: aplazó la vigencia de la Ley 473.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Sala Tercera ≠ ACODECO</div><div class="x">Sala Tercera: demandas de indemnización contra el Estado. ACODECO: orienta, recibe quejas y concilia en consumo.</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">30 días ≠ 60 días hábiles</div><div class="x">30 días: el proveedor repara o reemplaza. 60 días hábiles: reclamo por despido (parte de Alexander).</div></div></div><div class="s"><span class="k c">≠</span><div class="b"><div class="tt">Art. 1645 ≠ art. 1706</div><div class="x">1645: responsabilidad (incluye hechos de los funcionarios). 1706: plazo de 1 año.</div></div></div></div></section>
+<footer>Palabras clave generadas solo a partir de tus diapositivas 16–19 y el trabajo escrito del Grupo 3 · UTP · uso académico.</footer>
+</main>
+<script>
+(function(){
+  var b = document.getElementById("prac");
+  b.addEventListener("click", function(){ var on = document.body.classList.toggle("prac"); b.setAttribute("aria-pressed", on); b.textContent = on ? "👀 Mostrar todo" : "🙈 Modo práctica"; document.querySelectorAll(".s.rev").forEach(function(s){ s.classList.remove("rev"); }); });
+  document.querySelectorAll(".s").forEach(function(s){ s.addEventListener("click", function(){ if(document.body.classList.contains("prac")) s.classList.toggle("rev"); }); });
+})();
+</script>
+</body>
+</html>
