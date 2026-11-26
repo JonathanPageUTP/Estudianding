@@ -44,6 +44,7 @@ tablet y PC).
 | `como-estudiar.html` | Cómo Estudiar | Reglas y rutinas para ensayar según el lugar (🏢/🚌) y el tiempo disponible, con ejemplos de la charla |
 | `guion.html` | Guion | El guion de la charla, punto por punto, con modos Oficina/Transporte y 🔊 Escuchar (MP3) |
 | `claves.html` | Palabras Clave | Palabras y frases que no pueden faltar, por punto, con modo práctica |
+| `tema.html` | Resumen Completo del Tema | **Todo** el contenido de la presentación (todas las láminas, de todos los expositores) completado con el trabajo escrito, para entender el tema entero, con 🔊 (MP3) |
 | `resumen.html` | Resumen General | La charla completa en una sola pantalla: idea central + mapa de puntos, con 🔊 (MP3) |
 | `puntos.html` | Resumen por Punto | Un resumen denso de cada punto específico, plegable, con 🔊 (MP3) |
 | `flash.html` | FlashCards | Tarjetas con repetición espaciada hasta el día de la charla |
@@ -90,11 +91,11 @@ Claves con prefijo: `<sigla>_charla<N>_…_v1` (ej. `gpi_charla1_flash_v1`).
 
 Breakpoints (detalle en `PROMPT-PARCIAL.md`): teléfono ≤ 560px una columna; tablet 561–1023px
 columna de ~720px; PC ≥ 1024px contenedor de ~1100–1200px. En PC:
-- `guion.html` y `puntos.html`: índice de bloques como **barra lateral fija** a la izquierda.
+- `guion.html`, `puntos.html` y `tema.html`: índice de bloques como **barra lateral fija** a la izquierda.
 - `claves.html`: items en 2 columnas.
 - `flash.html` y `ensayo.html`: tarjeta / bloque centrado (máx. ~640px) con atajos de teclado.
 
-## Modos de estudio (`guion.html` y `puntos.html`)
+## Modos de estudio (`guion.html`, `puntos.html` y `tema.html`)
 
 La charla se practica en la oficina (laptop, se puede hablar en voz alta) y en el transporte
 (celular con audífonos, sesiones cortas que se cortan en cada parada). Priorizar **recordar
@@ -106,7 +107,7 @@ activamente** (decirlo sin mirar) sobre releer.
 - **Oficina**: todo desplegado, aviso "Teléfono fuera de la vista · ensaya de pie y en voz alta"
   y temporizador opcional que sugiere una pausa cada 25–30 min.
 
-## Lectura en voz alta con MP3 (`guion.html`, `puntos.html`, `resumen.html` y `dudas.html`)
+## Lectura en voz alta con MP3 (`guion.html`, `puntos.html`, `tema.html`, `resumen.html` y `dudas.html`)
 
 La voz del navegador (`speechSynthesis`) **se corta al apagar la pantalla del teléfono**. Por eso
 cada página trae audio MP3 pregenerado, que sigue sonando con la pantalla apagada y en el bus.
@@ -126,8 +127,8 @@ Aplicar lo de `PROMPT-PARCIAL.md` (*Lectura en voz alta con MP3*), adaptado:
   - Respaldo `speechSynthesis`: **no usar `pause()`/`resume()`** (en Chrome de Android no
     reanuda). Pausar = `cancel()` recordando el párrafo; reanudar = volver a leer ese párrafo;
     ignorar el `onend`/`onerror` de la frase cancelada (contador de generación).
-- **Generar los MP3**: `python audio/generar_paginas.py [guion|puntos|resumen]` con
-  `PAGES = ["guion", "puntos", "resumen"]` (`pip install edge-tts playwright`, usa el Edge
+- **Generar los MP3**: `python audio/generar_paginas.py [guion|puntos|resumen|tema]` con
+  `PAGES = ["guion", "puntos", "resumen", "tema"]` (`pip install edge-tts playwright`, usa el Edge
   instalado). Pide a `Voz.dump()` los textos exactos, sintetiza con la voz neural
   **`es-PA-MargaritaNeural`**, crea `audio/<pagina>/<bloque>.mp3` (clave = `id` del bloque) y
   `audio/<pagina>.js` con `{src, t, h}`; solo regenera los bloques cuyo texto cambió.
@@ -198,7 +199,8 @@ secciones) y adaptarlo a preparar una exposición:
   puntos), **NÚMEROS Y DATOS CLAVE** y **NO CONFUNDIR**.
 
 ### `resumen.html` — Resumen general
-- Cabe idealmente en una o dos pantallas del celular.
+- Cabe idealmente en una o dos pantallas del celular. Es solo un vistazo: **no sustituye** a
+  `tema.html`, que es donde se explica todo el tema (enlazarlo desde "parte por parte").
 - **Idea central** en una frase grande (lo que el público debe recordar).
 - **La presentación, parte por parte**: un resumen corto (2–3 viñetas) de **cada parte del PPT**,
   en su orden, con el expositor y las láminas de cada una; mi parte resaltada. Así sé qué dicen
@@ -212,6 +214,28 @@ secciones) y adaptarlo a preparar una exposición:
   página): hoy leer el guion, +1 día escuchar 🎧 y flashcards, +3 días primer ensayo
   cronometrado, día anterior ensayo completo + modo escenario. Si la fecha está cerca, comprimir
   sin pasar del día anterior.
+
+### `tema.html` — Resumen completo del tema
+Mi parte es solo un trozo de la exposición: para responder preguntas y enlazar con los demás
+necesito **entender todo el tema**, no solo mis láminas. Esta página resume **todo el contenido
+de la presentación** (todas las láminas, de todos los expositores), en el orden del PPT y
+completado con el trabajo escrito donde la lámina se queda corta.
+- Misma estructura que `puntos.html` (buscador, chips, barra lateral en PC, **Plegar todo**,
+  🏢/🚌, pausas 🚏, ▶ Continuar donde quedé con `<sigla>_charla<N>_tema_pos_v1`).
+- Primera sección **★ Todo el tema en 1 minuto**: la idea general en 6–8 viñetas (qué es, sus
+  vías o regímenes, requisitos, cifras y plazos clave, la idea ética o de cierre del grupo) y una
+  tabla **Quién expone qué** (láminas · expositor · tema).
+- Luego **una sección por tema del PPT** (no por expositor: si alguien tiene 4 láminas de temas
+  distintos, van separadas), cada una con: `🎤 expositor · 🖥️ diap. X–Y · 📄 sección del trabajo`,
+  viñetas densas con **todo** lo que dice la lámina (no 2–3 viñetas), definiciones textuales en
+  `blockquote`, **las tablas de la lámina como tablas** (líneas de tiempo, comparativas, plazos,
+  cálculos de casos paso a paso), caja `mnemo`, caja `error` y, si el material tiene cuestionario,
+  la pregunta que corresponde a esa sección con su respuesta en `<details>`.
+- Mis secciones van **resaltadas** (borde de acento y etiqueta "TU PARTE") y en versión corta, con
+  enlace a `puntos.html` para el detalle.
+- Termina con conclusiones y recomendaciones del grupo.
+- 🔊 por sección y 🎧 Escuchar todo con MP3 (manifiesto `audio/tema.js`).
+- Las láminas que son solo imagen se renderizan y se leen: también van aquí.
 
 ### `puntos.html` — Resumen por punto
 - Buscador (con mensaje "😶 Sin resultados"), chips de navegación, botón **Plegar todo** e
@@ -279,7 +303,8 @@ Copiar `semestre2/gr/parcial2/index.html` tal cual (estilo, modo oscuro, botones
 asegurando que cumpla *Diseño responsive*, y cambiar:
 - `<title>Charla | <Tema></title>` y `<h1>` con el tema de la charla.
 - Enlaces: volver = `../index.html`, inicio = `../../../index.html`.
-- Botones en este orden: Cómo Estudiar, Guion, Palabras Clave, Resumen General, Resumen por
+- Botones en este orden: Cómo Estudiar, Guion, Palabras Clave, Resumen Completo del Tema,
+  Resumen General, Resumen por
   Punto, FlashCards, Ensayo, Mis Dudas; luego `<div class="separator"></div>` y un botón por cada
   archivo del material (`<Nombre corto> (PDF)`).
 
@@ -288,14 +313,14 @@ asegurando que cumpla *Diseño responsive*, y cambiar:
 - Cada página en **412px**, **768px** y **1366px** (Playwright con el Edge instalado,
   `channel='msedge'` y `viewport`; o `Emulation.setDeviceMetricsOverride`, porque Chrome headless
   no baja de 500px con `--window-size`): sin scroll horizontal, nada oculto ni cortado, ningún
-  error JS en consola; en PC la barra lateral del guion y de los puntos se ve (comprobar con
+  error JS en consola; en PC la barra lateral del guion, de los puntos y del tema se ve (comprobar con
   `getComputedStyle`, no con `offsetParent`, que es `null` en elementos `fixed`). El modo
   escenario se lee bien con el teléfono a un brazo de distancia.
 - `flash.html` y `ensayo.html` en el teléfono (412×740, 412×600 y 360×560, con la tarjeta girada /
   el bloque revelado): sin scroll de página y con los botones de abajo completos.
 - Modos 🏢/🚌, pausas 🚏 y "Continuar donde quedé" funcionan; ninguna respuesta de 🎯/🧠 se ve
   sin tocarla.
-- Audio: cada bloque del guion, los puntos y el resumen tiene su MP3 (el script muestra
+- Audio: cada bloque del guion, los puntos, el tema y el resumen tiene su MP3 (el script muestra
   "N bloques, X min" por página). Al tocar 🔊 suena el MP3, se resalta el bloque correcto, ⏮/⏭
   cambian de bloque, sigue con la pantalla apagada y aparecen los controles en la pantalla de
   bloqueo. Sin MP3, la voz del navegador pausa y reanuda. Los MP3 y `audio/*.js` están commiteados.
