@@ -19,7 +19,7 @@
     t = t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu, " ");
     t = t.replace(/↔/g, " y viceversa ").replace(/→/g, " lleva a ").replace(/≥/g, " mayor o igual que ").replace(/≤/g, " menor o igual que ")
          .replace(/≠/g, " distinto de ").replace(/⊃/g, " contiene a ").replace(/(\d)\s?×/g, "$1 por").replace(/×/g, " por ")
-         .replace(/·/g, ", ").replace(/[—–]/g, ", ").replace(/\|/g, ", y ").replace(/\t/g, ": ")
+         .replace(/·/g, ", ").replace(/(\d)\s?–\s?(\d)/g, "$1 a $2").replace(/÷/g, " entre ").replace(/[—–]/g, ", ").replace(/\|/g, ", y ").replace(/\t/g, ": ")
          .replace(/▾|▴|▸/g, "").replace(/(\d)\s?%/g, "$1 por ciento")
          .replace(/\bRRHH\b/g, "recursos humanos").replace(/\bTI\b/g, "T I").replace(/\bHW\b/g, "hardware").replace(/\bSW\b/g, "software")
          .replace(/\s=\s/g, " es ").replace(/\s\/\s/g, " o ").replace(/[\[\]…«»]/g, " ").replace(/\bvs\.\s/g, "versus ")
@@ -33,7 +33,7 @@
     t = t.replace(/58,443-2026-J\.D\./g, "58 443 de 2026 de la Junta Directiva").replace(/\bD\. G\./g, "Decreto de Gabinete")
          .replace(/\b[Aa]rts\.\s?/g, "artículos ").replace(/\b[Aa]rt\.\s?/g, "artículo ").replace(/\bnum\.\s?/g, "numerales ").replace(/\bdiap\.\s?/gi, "diapositiva ")
          .replace(/\bCC\b/g, "del Código Civil").replace(/\bCJ\b/g, "del Código Judicial").replace(/\bCT\b/g, "del Código de Trabajo")
-         .replace(/\bCorte IDH\b/g, "Corte Interamericana").replace(/\bjul\.\s?/g, "julio ").replace(/\b3\.ª/g, "tercera")
+         .replace(/\bCorte IDH\b/g, "Corte Interamericana").replace(/\bCIDH\b/g, "Comisión Interamericana").replace(/\bc\. (\d)/g, "hacia el $1").replace(/\ba\. C\./g, "antes de Cristo").replace(/\bRes\. /g, "Resolución ").replace(/\bjul\.\s?/g, "julio ").replace(/\b3\.ª/g, "tercera")
          .replace(/\b(\d{2,4})-(\d{2,4})\b/g, "$1 y $2")
          .replace(/B\/\.\s?([\d,]+)(?:\.(\d\d))?/g, function (m, a, c) { return a.replace(/,/g, "") + " balboas" + (c && c !== "00" ? " con " + c : ""); });
     t = t.replace(KEYS, function (m) { if (said[m]) return m; said[m] = 1; return EXPAND[m]; });
