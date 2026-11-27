@@ -21,7 +21,7 @@
     t = t.replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu, " ");
     t = t.replace(/↔/g, " y viceversa ").replace(/→/g, " lleva a ").replace(/≥/g, " mayor o igual que ").replace(/≤/g, " menor o igual que ")
          .replace(/≠/g, " distinto de ").replace(/⊃/g, " contiene a ").replace(/(\d)\s?×/g, "$1 por").replace(/×/g, " por ")
-         .replace(/·/g, ", ").replace(/[—–]/g, ", ").replace(/\|/g, ", y ").replace(/\t/g, ": ")
+         .replace(/÷/g, " entre ").replace(/·/g, ", ").replace(/[—–]/g, ", ").replace(/\|/g, ", y ").replace(/\t/g, ": ")
          .replace(/▾|▴|▸/g, "").replace(/(\d)\s?%/g, "$1 por ciento")
          .replace(/\bRRHH\b/g, "recursos humanos").replace(/\bTI\b/g, "T I").replace(/\bHW\b/g, "hardware").replace(/\bSW\b/g, "software")
          .replace(/\s=\s/g, " es ").replace(/\s\/\s/g, " o ").replace(/[\[\]…«»]/g, " ").replace(/\bvs\.\s/g, "versus ")
@@ -30,10 +30,14 @@
          .replace(/\bSSD\b/g, "S S D").replace(/\bTPM 2\.0\b/g, "T P M dos punto cero").replace(/24\/7/g, "24 por 7")
          .replace(/\bOAuth 2\.0\b/g, "O auth dos punto cero").replace(/\bSAML 2\.0\b/g, "SAML dos punto cero")
          .replace(/\bPR-0(\d)/g, "P R $1").replace(/\b0{1,2}(\d+)-(\d{4})\b/g, "número $1 de $2")
-         .replace(/\b(BAI|APO|MEA)0(\d)\b/g, "$1 cero $2").replace(/\b(APP|INF|SRV)-0(\d)\b/g, "$1 $2")
+         .replace(/\b(BAI|APO|MEA|EDM|DSS)0(\d)\.0(\d)\b/g, "$1 cero $2, práctica $3").replace(/\b(BAI|APO|MEA|EDM|DSS)0(\d)\b/g, "$1 cero $2").replace(/\b(APP|INF|SRV)-0(\d)\b/g, "$1 $2")
          .replace(/\bISO 20022\b/g, "ISO 2 0 0 2 2").replace(/\bCISO\b/g, "C I S O").replace(/\bAPIs\b/g, "A P I s");
+    t = t.replace(/\bdiap\.\s?/gi, "diapositiva ").replace(/\bpágs?\.\s?/g, "página ").replace(/\bart\.\s?/g, "artículo ")
+         .replace(/\bIng\.\s?/g, "ingeniera ").replace(/\b1LS241\b/g, "1 L S 241")
+         .replace(/USD\s?([\d,]+)/g, function (m, a) { return a.replace(/,/g, "") + " dólares"; })
+         .replace(/(\d),(\d{3})\b/g, "$1$2");
     t = t.replace(KEYS, function (m) { if (said[m]) return m; said[m] = 1; return EXPAND[m]; });
-    return t.replace(/\s+/g, " ").trim();
+    return t.replace(/,\s*([,.;:)])/g, "$1").replace(/\s+([,.;:])/g, "$1").replace(/\s+/g, " ").trim();
   }
 
   var o, synth, hasTTS, AUD, items = [], audio, player, rate = 1, voice = null;

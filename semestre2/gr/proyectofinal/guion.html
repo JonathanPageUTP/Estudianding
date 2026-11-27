@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-<title>Guion · Política de Adquisición Tecnológica</title>
+<title>Guion hablado · Política de Adquisición Tecnológica</title>
 <style>
 :root{
   --bg:#0a1410; --bg-grid:#0d1a15; --surface:#101f19; --surface-2:#152720; --line:#1f3a2e; --line-soft:#16281f;
@@ -106,23 +106,8 @@ body.transit .office-only{display:none;}
 body:not(.transit) .transit-only{display:none;}
 input.arr{width:100%;margin-top:8px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;min-height:44px;}
 .blk .kit-tts{margin-left:auto;}
-/* escenario */
-#stage{position:fixed;inset:0;background:#000;color:#fff;z-index:200;display:none;flex-direction:column;padding:calc(14px + env(safe-area-inset-top,0px)) 20px calc(14px + env(safe-area-inset-bottom,0px));}
-#stage.on{display:flex;}
-#stage .sh{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.85rem;color:#9aa;position:relative;z-index:2;}
-#stage .sh button{background:#222;color:#fff;border:none;border-radius:22px;padding:10px 16px;min-height:44px;font-size:.9rem;}
-#stage .st{font-size:clamp(1.5rem,1.2rem + 1.5vw,2.4rem);font-weight:800;color:var(--accent);margin-top:12px;}
-#stage .stime{font-family:var(--mono);color:var(--amber);font-size:1.05rem;margin-top:2px;}
-#stage ul{font-size:clamp(1.25rem,1.1rem + .9vw,1.9rem);line-height:1.35;padding-left:24px;margin:14px 0 0;flex:1;overflow:auto;max-width:60ch;}
-#stage ul li{margin:10px 0;}
-#stage ul b{color:#fff;}
-#stage .sk{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-#stage .sk span{font-family:var(--mono);font-size:1rem;color:var(--amber);border:1px solid var(--amber-dim);border-radius:8px;padding:4px 8px;}
-#stage .stran{font-size:1.1rem;font-style:italic;color:#bbb;margin-top:10px;}
-#stage .tap{position:absolute;top:80px;bottom:0;width:50%;z-index:1;}
-#stage .tap.l{left:0;} #stage .tap.r{right:0;}
-#stage .sfoot{font-size:.72rem;color:#666;text-align:center;margin-top:8px;}
-#toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(70px + env(safe-area-inset-top,0px));background:var(--amber);color:#2a1c08;font-weight:800;padding:10px 16px;border-radius:20px;z-index:80;display:none;}
+.who{display:block;margin-top:6px;color:var(--violet);}
+.blk.mine{border-left:4px solid var(--violet);}
 @media (min-width:1024px){
   .wrap{display:grid;grid-template-columns:250px 1fr;gap:28px;}
   main{max-width:780px;margin:0;}
@@ -134,268 +119,100 @@ input.arr{width:100%;margin-top:8px;background:var(--bg);color:var(--text);borde
 }
 @media (hover:hover){ aside.side a:hover{background:var(--surface);} }
 
+
+.txt{margin-top:10px;}
+p.hab{font-size:1.06em;line-height:1.7;margin:0 0 12px;max-width:68ch;}
+p.hab b{color:var(--accent);font-weight:700;}
+body.big p.hab{font-size:1.38em;line-height:1.6;}
+.dir{font-size:.8rem;font-style:italic;color:var(--violet);margin:2px 0 12px;padding-left:10px;border-left:2px solid var(--violet-dim);}
+.dir::before{content:"🎭 ";font-style:normal;}
+body.nodir .dir{display:none;}
+.blk{border-left:4px solid var(--violet);}
+.bh{cursor:default;}
+.tog.on{background:var(--accent-dim);border-color:var(--accent);}
 </style>
 </head>
 <body>
 <div id="prog"></div>
 <header class="top"><div class="hd">
   <a class="back" href="index.html" aria-label="Volver al menú de la charla">←</a>
-  <h1>Guion · <em>Política de Adquisición</em></h1>
-  <span class="tot">⏱ 5:00</span>
-  <div class="seg" role="group" aria-label="Modo de estudio"><button type="button" data-m="office">🏢 Oficina</button><button type="button" data-m="transit">🚌 Transporte</button></div>
+  <h1>Guion hablado · <em>Política de Adquisición</em></h1>
+  <span class="tot">⏱ ≈ 3:45</span>
 </div></header>
 <div class="wrap">
-<aside class="side" aria-label="Bloques de la charla"><div class="lbl" style="margin:0 0 6px 10px">BLOQUES · 5:00</div><a href="#b-intro" data-id="b-intro"><b>0</b> Intro <i>0:30</i></a><a href="#b-principios" data-id="b-principios"><b>1</b> Principios generales <i>0:25</i></a><a href="#b-hwsw" data-id="b-hwsw"><b>2</b> Hardware, software y criterios <i>0:45</i></a><a href="#b-compat" data-id="b-compat"><b>3</b> Compatibilidad e interoperabilidad <i>0:40</i></a><a href="#b-seguridad" data-id="b-seguridad"><b>4</b> Seguridad <i>0:30</i></a><a href="#b-costos" data-id="b-costos"><b>5</b> Costos y costo total de propiedad <i>0:30</i></a><a href="#b-sostenible" data-id="b-sostenible"><b>6</b> Sostenibilidad <i>0:20</i></a><a href="#b-cumplimiento" data-id="b-cumplimiento"><b>7</b> Marco normativo <i>0:30</i></a><a href="#b-proceso" data-id="b-proceso"><b>8</b> Flujo de aprobación y contrato <i>0:25</i></a><a href="#b-cierre" data-id="b-cierre"><b>FIN</b> Cierre <i>0:25</i></a></aside>
+<aside class="side" aria-label="Partes de la charla"><div class="lbl" style="margin:0 0 6px 10px">PARTES · ≈ 3:45</div><a href="#n-intro" data-id="n-intro"><b>0</b> Arranque <i>0:25</i></a><a href="#n-proposito" data-id="n-proposito"><b>1</b> Propósito y marco <i>0:35</i></a><a href="#n-principios" data-id="n-principios"><b>2</b> Principios generales <i>0:35</i></a><a href="#n-hwsw" data-id="n-hwsw"><b>3</b> Hardware y software <i>0:35</i></a><a href="#n-compat" data-id="n-compat"><b>4</b> Compatibilidad e interoperabilidad <i>0:40</i></a><a href="#n-criterios" data-id="n-criterios"><b>5</b> Criterios de evaluación <i>0:30</i></a><a href="#n-cierre" data-id="n-cierre"><b>FIN</b> Cierre y paso a Manuel <i>0:25</i></a></aside>
 <main>
-<p class="hint">Sigue tus <b>4 diapositivas</b> (<b>Politica_Adquisicion_Tecnologica.pdf</b>): 1 Propósito y principios · 2 Parte 1: hardware y software · 3 Parte 2: seguridad, costos y sostenibilidad · 4 Cumplimiento y aprobación. Las páginas del documento quedan como respaldo «por si preguntan».</p>
-<div class="notice" id="notice"></div>
+<p class="hint">Tu parte tal como la dirías en voz alta, de corrido, siguiendo tus diapositivas <b>17 y 18</b> del PPT del grupo. No hace falta decirlo palabra por palabra: lo que va en <b style="color:var(--accent)">verde</b> es lo que no puede faltar; lo demás dilo con tus palabras. Las notas en <span style="color:var(--violet)">violeta</span> son indicaciones para ti, no se dicen. <span class="who">◀ Antes: <b>Jeremy Lamas</b> (arquitectura de TI y mapa COBIT 5, diap. 14–16) · Después ▶ <b>Manuel Pérez</b> (Parte 2, diap. 19)</span></p>
 <div class="actions" id="actions">
-  <button class="btn pri" type="button" id="goStage">🎤 Modo escenario</button>
-  <button class="btn transit-only" type="button" id="btnCont">▶ Continuar donde quedé</button>
-  <button class="btn office-only" type="button" id="btnPomo">⏱ Pausa en 25 min</button>
+  <button class="btn tog" type="button" id="tBig" aria-pressed="false">🔠 Letra grande</button>
+  <button class="btn tog" type="button" id="tDir" aria-pressed="false">🎭 Ocultar notas</button>
 </div>
-<div class="unit">DIAPOSITIVA 1 · PROPÓSITO, MARCO Y PRINCIPIOS</div>
-<section class="blk" id="b-intro" data-i="0">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">0</span><h2>Intro</h2><span class="time">⏱ 0:30 <i>→ 0:30</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿A qué tipos de adquisición aplica la política?</summary><div class="ans">A toda <b>compra, arrendamiento, suscripción o renovación</b> tecnológica, incluidos los proyectos PR-02 a PR-09 y los servicios en la nube.</div></details></div>
-<div class="slide">🖥️ Diapositiva 1 · Título, Propósito y Marco de referencia <small>(doc. pág. 27)</small></div>
-<div class="obj">Que sepan qué es la política, para qué sirve y en qué se basa.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li>Después del mapa de COBIT 5, paso a la <b>Política de Adquisición Tecnológica</b>: <b>qué se compra, cómo se integra y quién lo aprueba</b>.</li><li>Su propósito: que cada compra de <b>hardware, software o servicios en la nube</b> <b>responda a los objetivos del PETI</b> y sea <b>compatible con la plataforma actual</b>.</li><li>Y que se <b>integre sin crear riesgos ni dependencias innecesarias</b>.</li><li>Se apoya en tres referencias: <b>COBIT 5</b>, con BAI03, APO03 y BAI09; el <b>Acuerdo 003-2012</b> de la Superintendencia de Bancos; y la <b>ISO/IEC 25010</b>, por coexistencia e interoperabilidad.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>qué se compra · cómo se integra · quién lo aprueba</span><span>hardware · software · nube</span><span>objetivos del PETI</span><span>sin riesgos ni dependencias</span><span>BAI03 · APO03 · BAI09</span><span>Acuerdo 003-2012</span><span>ISO/IEC 25010</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Alcance (no está en la diapositiva, solo si preguntan): toda compra, arrendamiento, suscripción o renovación tecnológica, incluida la nube.<br><small>Documento, pág. 27</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">En la misma diapositiva están los cinco principios que valen para cualquier compra.</div>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>¿Qué tres preguntas responde la política, según el subtítulo de tu diapositiva?</summary><div class="ans"><b>Qué se compra, cómo se integra y quién lo aprueba.</b></div></details><details class="qa"><summary>¿En qué tres referencias se fundamenta?</summary><div class="ans">COBIT 5 (BAI03, APO03, BAI09), Acuerdo No. 003-2012 de la Superintendencia de Bancos e ISO/IEC 25010 (coexistencia e interoperabilidad).</div></details></div>
-</div></section>
-<section class="blk" id="b-principios" data-i="1">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">1</span><h2>Principios generales</h2><span class="time">⏱ 0:25 <i>→ 0:55</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Se elige la opción más barata?</summary><div class="ans">No: se evalúa por su <b>costo total de propiedad</b>, no solo por su precio.</div></details></div>
-<div class="slide">🖥️ Diapositiva 1 · Principios generales <small>(doc. pág. 27)</small></div>
-<div class="obj">Que recuerden las reglas que valen para toda compra.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li>Toda compra está <b>vinculada a un objetivo o proyecto del PETI</b>.</li><li>Se prefiere el <b>catálogo de estándares</b> aprobado por el <b>Comité de TI</b>.</li><li>Se evalúa por <b>costo total de propiedad</b>, no solo por precio.</li><li>No se compra tecnología cuyo <b>soporte termine antes de su vida útil</b>.</li><li>Y <b>todo activo se registra en el inventario</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>objetivo o proyecto del PETI</span><span>catálogo del Comité de TI</span><span>costo total, no solo precio</span><span>soporte ≥ vida útil</span><span>todo al inventario</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Catálogo: la <b>Gerencia de TI</b> lo mantiene y el <b>Comité de TI</b> lo aprueba cada año.<br><small>Pág. 27</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Con esas reglas pasamos a la Parte 1: hardware y software.</div>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>¿Quién mantiene y quién aprueba el catálogo de estándares?</summary><div class="ans">Lo mantiene la Gerencia de TI; lo aprueba el Comité de TI cada año.</div></details><details class="qa"><summary>¿Qué tecnología no se adquiere?</summary><div class="ans">La que pierde el soporte antes de terminar su vida útil.</div></details></div>
-</div></section>
-<div class="unit">DIAPOSITIVA 2 · PARTE 1: HARDWARE Y SOFTWARE</div>
-<section class="blk" id="b-hwsw" data-i="2">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">2</span><h2>Hardware, software y criterios</h2><span class="time">⏱ 0:45 <i>→ 1:40</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Con cuántos puntos se descarta una alternativa?</summary><div class="ans">Con <b>menos de 70</b> puntos.</div></details><details class="qa"><summary>¿Cuánto pesa la seguridad en la calificación?</summary><div class="ans"><b>20 %</b>; solo la funcionalidad pesa más (25 %).</div></details></div>
-<div class="slide">🖥️ Diapositiva 2 · Hardware, Software y Criterios de evaluación <small>(doc. págs. 27–28)</small></div>
-<div class="obj">Que sepan qué se le exige al hardware y al software y cómo se califican las alternativas.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li><b>Hardware</b>: compatible con la plataforma vigente, <b>administrado de forma centralizada</b> y con <b>renovación a los 4–5 años</b>.</li><li><b>Software</b>: <b>licencia válida</b>, <b>dentro del catálogo</b> y con <b>al menos 3 años de parches de seguridad</b>.</li><li>Las alternativas se califican con seis criterios: <b>funcionalidad 25 %</b> y <b>seguridad 20 %</b>; compatibilidad, interoperabilidad y costo total, <b>15 % cada uno</b>; y <b>soporte 10 %</b>.</li><li>El <b>mínimo para continuar es 70 puntos</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>administrado centralmente</span><span>renovación 4–5 años</span><span>licencia válida · catálogo</span><span>3 años de parches</span><span>25-20-15-15-15-10</span><span>mínimo 70 puntos</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Renovación: <b>4 años</b> los equipos de usuario, <b>5 años</b> servidores, red y respaldo. Las cifras de la Tabla 10 (16 GB, SSD 512, TPM 2.0) no están en la diapositiva: solo si preguntan.<br><small>Tabla 10 · Documento, págs. 27–28</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Pero cumplir no basta: en la misma diapositiva, tiene que convivir con lo que existe y hablar con los demás sistemas.</div>
-<details class="more"><summary>📋 Ver el detalle (por si preguntan)</summary><div class="tblwrap"><table><caption>Tabla 10 · Requisitos mínimos de hardware</caption><thead><tr><th>Categoría</th><th>Requisitos mínimos, garantía y vida útil</th></tr></thead><tbody><tr><td>Equipos de usuario</td><td>64 bits, 16 GB de RAM, SSD de 512 GB, TPM 2.0 y compatibilidad con el EDR (SRV-01); garantía de 3 años; renovación a los 4 años.</td></tr><tr><td>Servidores (INF-02)</td><td>Certificados para la plataforma de virtualización; fuentes redundantes y RAID; soporte 24/7 con reposición en 4 horas; vida útil de 5 años.</td></tr><tr><td>Red y seguridad (INF-03)</td><td>VLAN 802.1Q, IPv4/IPv6, SNMPv3, administración centralizada y envío de registros al SOC (SRV-02); vida útil de 5 años.</td></tr><tr><td>Respaldo (INF-04, SRV-03)</td><td>Cifrado en reposo, copias inmutables y replicación al sitio alterno en la nube; soporte 24/7; vida útil de 5 años.</td></tr></tbody></table></div><div class="tblwrap"><table><caption>Software</caption><thead><tr><th>Requisito</th><th>Qué exige</th></tr></thead><tbody><tr><td>Licenciamiento</td><td>Solo software con licencia válida e incluido en el catálogo autorizado; los usuarios no pueden instalar software por su cuenta.</td></tr><tr><td>Soporte</td><td>Actualizaciones de seguridad garantizadas por al menos tres años y hoja de ruta pública del producto.</td></tr><tr><td>Seguridad</td><td>Integración con el directorio corporativo, MFA, control de acceso por roles, cifrado TLS 1.2 o superior y registros de auditoría.</td></tr><tr><td>Datos y nube</td><td>Derechos de los titulares (Ley 81 de 2019), acceso de la SBP y devolución de los datos al terminar el servicio.</td></tr></tbody></table></div><div class="tblwrap"><table><caption>Criterios ponderados (se descarta con menos de 70 puntos)</caption><thead><tr><th>Criterio</th><th>Peso</th></tr></thead><tbody><tr><td>Funcionalidad</td><td>25 %</td></tr><tr><td>Seguridad</td><td>20 %</td></tr><tr><td>Compatibilidad</td><td>15 %</td></tr><tr><td>Interoperabilidad</td><td>15 %</td></tr><tr><td>Costo total de propiedad</td><td>15 %</td></tr><tr><td>Soporte</td><td>10 %</td></tr></tbody></table></div></details>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>¿Qué tres cosas pide la diapositiva al hardware?</summary><div class="ans">Compatible con la plataforma vigente, administrado de forma centralizada y renovación a los 4–5 años (4 equipos de usuario, 5 servidores, red y respaldo).</div></details><details class="qa"><summary>¿Qué tres cosas pide al software?</summary><div class="ans">Licencia válida, dentro del catálogo y al menos 3 años de parches de seguridad.</div></details><details class="qa"><summary>Di los seis pesos de la calificación y el mínimo.</summary><div class="ans">Funcionalidad 25 · Seguridad 20 · Compatibilidad 15 · Interoperabilidad 15 · Costo total 15 · Soporte 10. Mínimo para continuar: 70 puntos.</div></details></div>
-</div></section>
-<section class="blk" id="b-compat" data-i="3">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">3</span><h2>Compatibilidad e interoperabilidad</h2><span class="time">⏱ 0:40 <i>→ 2:20</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Qué diferencia hay entre compatibilidad e interoperabilidad?</summary><div class="ans">Compatibilidad = <b>coexistir</b> sin afectar a los demás sistemas. Interoperabilidad = <b>intercambiar información</b> y usarla correctamente.</div></details></div>
-<div class="slide">🖥️ Diapositiva 2 · Compatibilidad e Interoperabilidad <small>(doc. pág. 28)</small></div>
-<div class="obj">Que distingan coexistir de intercambiar información.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li><b>Compatibilidad</b>: la solución <b>coexiste sin afectar otros sistemas</b>.</li><li>En <b>servicios críticos</b>, como el core bancario o la red, se exige <b>prueba de concepto</b> y <b>dictamen del CISO</b>.</li><li><b>Interoperabilidad</b>: intercambiar información con <b>APIs REST con OAuth 2.0</b>, <b>inicio de sesión único</b>, <b>ISO 20022</b> para pagos y <b>exportación en formatos abiertos</b>.</li><li>Son las dos características de la <b>ISO/IEC 25010</b> del marco de referencia.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>coexiste sin afectar</span><span>servicios críticos</span><span>prueba de concepto · dictamen del CISO</span><span>APIs REST · OAuth 2.0</span><span>inicio de sesión único</span><span>ISO 20022</span><span>formatos abiertos</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Servicios críticos: APP-01 Core bancario · APP-02 Banca en línea y móvil · INF-02 Servidores y virtualización · INF-03 Red de cinco sucursales.<br><small>Pág. 28 · Arquitectura de TI, pág. 25</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Así cierra la Parte 1; vamos con la Parte 2: seguridad, costos y sostenibilidad.</div>
-<details class="more"><summary>📋 Ver el detalle (por si preguntan)</summary><div class="tblwrap"><table><caption>Interoperabilidad: lo que se exige</caption><thead><tr><th>Ámbito</th><th>Estándar</th></tr></thead><tbody><tr><td>Integraciones</td><td>APIs REST documentadas (OpenAPI) en una puerta de enlace con OAuth 2.0; sin acceso directo a la base de datos de otro sistema.</td></tr><tr><td>Identidad</td><td>Inicio de sesión único con SAML 2.0 u OpenID Connect.</td></tr><tr><td>Pagos</td><td>Mensajería ISO 20022.</td></tr><tr><td>Datos y registros</td><td>Exportación en formatos abiertos (CSV, JSON o XML) para la BI (APP-04) y para migrar de proveedor; registros por syslog al SOC.</td></tr></tbody></table></div></details>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>¿Cuándo se exige prueba de concepto?</summary><div class="ans">Cuando la compra afecta servicios críticos: APP-01, APP-02, INF-02 e INF-03.</div></details><details class="qa"><summary>¿Qué pasa si no hay dictamen técnico?</summary><div class="ans">La compra no continúa. El dictamen lo revisa el CISO.</div></details><details class="qa"><summary>¿Qué estándar se usa para los pagos?</summary><div class="ans">ISO 20022.</div></details></div>
-</div></section>
-<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
-<div class="unit">DIAPOSITIVA 3 · PARTE 2: SEGURIDAD, COSTOS Y SOSTENIBILIDAD</div>
-<section class="blk" id="b-seguridad" data-i="4">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">4</span><h2>Seguridad</h2><span class="time">⏱ 0:30 <i>→ 2:50</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿La seguridad es un criterio opcional de selección?</summary><div class="ans">No: es un <b>requisito obligatorio</b>, desde la evaluación inicial hasta la implementación y el retiro.</div></details></div>
-<div class="slide">🖥️ Diapositiva 3 · Seguridad <small>(doc. pág. 29)</small></div>
-<div class="obj">Que vean qué exige la política en seguridad y quién la valida.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li>La seguridad empieza por <b>evaluar riesgos</b> sobre la <b>confidencialidad, integridad y disponibilidad</b>.</li><li>Se exige <b>cifrado, MFA y prevención de fugas</b>, con <b>parches y monitoreo continuo</b>.</li><li>El <b>proveedor notifica incidentes y acepta auditorías</b>.</li><li>Y en las <b>compras críticas</b>, el <b>CISO emite su dictamen</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>confidencialidad · integridad · disponibilidad</span><span>cifrado · MFA · prevención de fugas</span><span>parches y monitoreo continuo</span><span>notifica incidentes · acepta auditorías</span><span>dictamen del CISO</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Es un requisito obligatorio, no opcional, desde la evaluación hasta el retiro. El dictamen del CISO responde al Acuerdo 003-2012.<br><small>Documento, pág. 29</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Segura, sí; pero también tiene que tener sentido económico.</div>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>Di los cinco puntos de seguridad de la diapositiva.</summary><div class="ans">Evaluar riesgos (confidencialidad, integridad, disponibilidad) · Cifrado, MFA y prevención de fugas · Parches y monitoreo continuo · El proveedor notifica incidentes y acepta auditorías · Dictamen del CISO en compras críticas.</div></details><details class="qa"><summary>¿Quién emite el dictamen de seguridad y cuándo?</summary><div class="ans">El CISO, en las compras críticas (Acuerdo 003-2012).</div></details></div>
-</div></section>
-<section class="blk" id="b-costos" data-i="5">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">5</span><h2>Costos y costo total de propiedad</h2><span class="time">⏱ 0:30 <i>→ 3:20</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Cuál es el último costo que se considera?</summary><div class="ans">El <b>costo de salida</b>: migrar la información, terminar el contrato y sustituir al proveedor.</div></details></div>
-<div class="slide">🖥️ Diapositiva 3 · Costos (TCO) <small>(doc. pág. 30)</small></div>
-<div class="obj">Que vean que el precio es solo el primero de cinco costos.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li>El <b>costo total de propiedad</b> suma cinco costos: <b>adquisición</b>; <b>implementación y capacitación</b>; <b>operación y soporte</b>; <b>renovación</b>; y <b>salida y cambio de proveedor</b>.</li><li>El precio de compra es solo el primero.</li><li>Y cada compra lleva una <b>justificación económica ligada al PETI</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>adquisición</span><span>implementación y capacitación</span><span>operación y soporte</span><span>renovación</span><span>salida y cambio de proveedor</span><span>justificación ligada al PETI</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Si supera el presupuesto aprobado, la revisan el <b>Comité de TI</b> y la <b>Gerencia Financiera</b> (no está en la diapositiva).<br><small>Documento, pág. 30</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Y además de rentable a largo plazo, que sea responsable con el ambiente.</div>
-<details class="more"><summary>📋 Ver el detalle (por si preguntan)</summary><div class="tblwrap"><table><caption>Los cinco componentes del TCO</caption><thead><tr><th>Costo</th><th>Incluye</th></tr></thead><tbody><tr><td>Adquisición</td><td>Compra de equipos, licencias, suscripciones y servicios iniciales.</td></tr><tr><td>Implementación</td><td>Instalación, configuración, integración, migración de datos y capacitación.</td></tr><tr><td>Operación</td><td>Mantenimiento, soporte técnico, consumo energético, almacenamiento y servicios recurrentes.</td></tr><tr><td>Renovación</td><td>Actualizaciones, ampliaciones de capacidad y reemplazo de componentes.</td></tr><tr><td>Salida</td><td>Migración de información, terminación contractual y sustitución del proveedor.</td></tr></tbody></table></div></details>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>Di los cinco costos del TCO como están en la diapositiva.</summary><div class="ans">Adquisición · Implementación y capacitación · Operación y soporte · Renovación · Salida y cambio de proveedor.</div></details><details class="qa"><summary>¿A qué va ligada la justificación económica?</summary><div class="ans">Al PETI.</div></details></div>
-</div></section>
-<section class="blk" id="b-sostenible" data-i="6">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">6</span><h2>Sostenibilidad</h2><span class="time">⏱ 0:20 <i>→ 3:40</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Qué se hace antes de reemplazar un equipo?</summary><div class="ans">Evaluar su <b>reutilización, reasignación o actualización</b>.</div></details></div>
-<div class="slide">🖥️ Diapositiva 3 · Sostenibilidad <small>(doc. págs. 30–31)</small></div>
-<div class="obj">Que recuerden los criterios ambientales de una compra.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li><b>Eficiencia energética</b>, y <b>durabilidad y repuestos</b>.</li><li><b>Reutilizar antes de reemplazar</b>.</li><li><b>Residuos electrónicos</b> con <b>gestores autorizados</b>, y <b>proveedores de nube sostenibles</b>.</li><li>Estos <b>criterios ambientales</b> entran <b>en cada evaluación</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>eficiencia energética</span><span>durabilidad y repuestos</span><span>reutilizar antes de reemplazar</span><span>gestores autorizados</span><span>nube sostenible</span><span>en cada evaluación</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Referencias del documento (no están en la diapositiva): ISO 14001 e ISO 20400.<br><small>Documento, págs. 30–31</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Y todo esto tiene que cumplir la ley y pasar por una aprobación.</div>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>Di los cinco criterios de sostenibilidad de la diapositiva.</summary><div class="ans">Eficiencia energética · Durabilidad y repuestos · Reutilizar antes de reemplazar · Residuos electrónicos con gestores autorizados · Proveedores de nube sostenibles. Y entran en cada evaluación.</div></details></div>
-</div></section>
-<div class="pausa">🚏 Pausa segura: si llegas a tu parada, retoma aquí</div>
-<div class="unit">DIAPOSITIVA 4 · CUMPLIMIENTO Y APROBACIÓN</div>
-<section class="blk" id="b-cumplimiento" data-i="7">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">7</span><h2>Marco normativo</h2><span class="time">⏱ 0:30 <i>→ 4:10</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Qué ley protege los datos personales en Panamá?</summary><div class="ans">La <b>Ley 81 de 2019</b>, reglamentada por el <b>Decreto Ejecutivo 285 de 2021</b>.</div></details></div>
-<div class="slide">🖥️ Diapositiva 4 · Marco normativo <small>(doc. págs. 31–32)</small></div>
-<div class="obj">Que sepan qué normas aplican a una compra.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li>El <b>marco normativo</b>: el <b>Acuerdo 003-2012</b> de la Superintendencia de Bancos y el <b>Acuerdo 007-2011</b> de riesgo operativo.</li><li>La <b>Ley 81 de 2019</b> de datos personales, reglamentada por el <b>Decreto Ejecutivo 285 de 2021</b>.</li><li>La <b>Ley 23 de 2015</b> de prevención de blanqueo, y <b>COBIT 5</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>003-2012 · SBP</span><span>007-2011 · riesgo operativo</span><span>Ley 81 de 2019 · datos personales</span><span>Decreto 285 de 2021</span><span>Ley 23 de 2015 · blanqueo</span><span>COBIT 5</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Ley 23 de 2015: prevención de blanqueo de capitales, financiamiento del terrorismo y otros riesgos, cuando aplique a la solución.<br><small>Pág. 31</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Con ese marco, así se aprueba una compra: en ocho pasos.</div>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>¿Qué regula el Acuerdo 003-2012 y qué el 007-2011?</summary><div class="ans">003-2012: gestión del riesgo de tecnología de la información (SBP). 007-2011: gestión del riesgo operativo.</div></details><details class="qa"><summary>Di las seis normas de la diapositiva en orden.</summary><div class="ans">Acuerdo 003-2012 · Acuerdo 007-2011 · Ley 81 de 2019 · Decreto Ejecutivo 285 de 2021 · Ley 23 de 2015 · COBIT 5.</div></details></div>
-</div></section>
-<section class="blk" id="b-proceso" data-i="8">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">8</span><h2>Flujo de aprobación y contrato</h2><span class="time">⏱ 0:25 <i>→ 4:35</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="pre"><div class="lbl">🎯 ANTES DE LEER · intenta responder aunque no sepas</div><details class="qa"><summary>¿Quién autoriza las adquisiciones?</summary><div class="ans">El <b>Comité de TI</b>, según su criticidad y presupuesto.</div></details></div>
-<div class="slide">🖥️ Diapositiva 4 · Flujo de aprobación y contrato <small>(doc. págs. 32–33)</small></div>
-<div class="obj">Que vean el camino completo de una compra y qué lleva todo contrato.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li>El <b>flujo de aprobación</b> tiene ocho pasos: empieza con la <b>solicitud</b>, y siguen tres evaluaciones: <b>integral, económica y del proveedor</b>.</li><li>Luego la <b>aprobación del Comité de TI</b> y la <b>formalización del contrato</b>.</li><li>Todo contrato incluye <b>SLA, confidencialidad, auditoría, continuidad y devolución de los datos</b>.</li><li>Y no termina al firmar: <b>seguimiento de SLA y riesgos</b>, y <b>revisión anual</b>.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>8 pasos</span><span>solicitud</span><span>evaluación integral · económica · del proveedor</span><span>aprobación del Comité de TI</span><span>SLA · confidencialidad · auditoría · continuidad · devolución</span><span>seguimiento · revisión anual</span></div>
-<div class="lbl">DATO QUE LO RESPALDA</div><div class="dato">Excepciones (no están en la diapositiva, solo si preguntan): por escrito, las aprueba el Comité de TI, máximo 12 meses en la parte técnica y con aceptación formal de los riesgos; nunca eximen de la ley.<br><small>Documento, págs. 32–33</small></div>
-<div class="lbl">TRANSICIÓN</div><div class="trans">Para cerrar…</div>
-<details class="more"><summary>📋 Ver el detalle (por si preguntan)</summary><div class="tblwrap"><table><caption>Flujo de aprobación (detalle del documento)</caption><thead><tr><th>Paso</th><th>Qué pasa</th></tr></thead><tbody><tr><td>1. Solicitud</td><td>El área solicitante presenta la necesidad y su relación con el PETI.</td></tr><tr><td>2. Evaluación integral</td><td>TI, CISO, Gestión de Riesgos, Cumplimiento y Finanzas revisan los criterios.</td></tr><tr><td>3. Evaluación económica</td><td>Se calcula el TCO y se verifica el presupuesto.</td></tr><tr><td>4. Evaluación del proveedor</td><td>Capacidades, antecedentes, condiciones contractuales y riesgos.</td></tr><tr><td>5. Aprobación</td><td>El Comité de TI autoriza según criticidad y presupuesto.</td></tr><tr><td>6. Formalización</td><td>Se documentan las condiciones contractuales y los requisitos de seguridad y cumplimiento.</td></tr><tr><td>7. Seguimiento</td><td>TI supervisa el desempeño, los SLA, las renovaciones y los riesgos.</td></tr><tr><td>8. Revisión</td><td>La política se revisa cada año o ante cambios regulatorios, tecnológicos o de riesgo.</td></tr></tbody></table></div><div class="tblwrap"><table><caption>Las 8 cláusulas mínimas del documento (la diapositiva resume 5: SLA, confidencialidad, auditoría, continuidad y devolución de los datos)</caption><thead><tr><th>#</th><th>Cláusula</th></tr></thead><tbody><tr><td>1</td><td>Alcance, condiciones, responsabilidades y niveles de servicio (SLA).</td></tr><tr><td>2</td><td>Obligaciones de confidencialidad y protección de datos.</td></tr><tr><td>3</td><td>Requisitos de seguridad y notificación de incidentes.</td></tr><tr><td>4</td><td>Derechos de auditoría y acceso a evidencias de cumplimiento.</td></tr><tr><td>5</td><td>Condiciones de continuidad operativa y recuperación de servicios.</td></tr><tr><td>6</td><td>Propiedad, acceso, portabilidad y devolución de los datos.</td></tr><tr><td>7</td><td>Condiciones de terminación, renovación y transferencia del servicio.</td></tr><tr><td>8</td><td>Responsabilidades por incumplimientos contractuales y regulatorios.</td></tr></tbody></table></div></details>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>Di los ocho pasos del flujo.</summary><div class="ans">Solicitud · Evaluación integral · Evaluación económica · Evaluación del proveedor · Aprobación del Comité de TI · Formalización del contrato · Seguimiento de SLA y riesgos · Revisión anual.</div></details><details class="qa"><summary>¿Qué cinco cosas incluye todo contrato, según la diapositiva?</summary><div class="ans">SLA, confidencialidad, auditoría, continuidad y devolución de los datos.</div></details><details class="qa"><summary>¿Cuánto dura como máximo una excepción de la parte técnica?</summary><div class="ans">Doce meses, aprobada por el Comité de TI.</div></details></div>
-</div></section>
-<div class="unit">CIERRE · AÚN EN LA DIAPOSITIVA 4</div>
-<section class="blk" id="b-cierre" data-i="9">
-<div class="bh" role="button" tabindex="0" aria-expanded="true"><span class="num">FIN</span><h2>Cierre</h2><span class="time">⏱ 0:25 <i>→ 5:00</i></span><span class="car" aria-hidden="true">▾</span></div>
-<div class="body">
-<div class="slide">🖥️ Sigues en la diapositiva 4 · después viene la Conclusión del grupo</div>
-<div class="obj">Dejar una sola idea.</div>
-<div class="lbl">QUÉ DECIR</div><ul class="say"><li><b>Comprar tecnología en un banco no es solo una decisión de precio.</b></li><li>Lo que no es compatible, no se integra o pierde soporte <b>termina costando más y aumentando el riesgo</b>.</li><li>Por eso la política define <b>qué se compra, cómo se integra y quién lo aprueba</b>, para que cada compra <b>aporte al PETI</b>. Gracias.</li></ul>
-<div class="lbl">PALABRAS CLAVE</div><div class="chips"><span>no es solo precio</span><span>cuesta más y aumenta el riesgo</span><span>qué · cómo · quién</span><span>aporta al PETI</span></div>
-<div class="mem"><div class="lbl">🧠 RECUERDA SIN MIRAR</div><details class="qa"><summary>¿Con qué frase cierras?</summary><div class="ans">«Comprar tecnología en un banco no es solo una decisión de precio.»</div></details></div>
-</div></section>
-<div class="unit">CIERRE ACTIVO</div>
-<div class="cierre" id="c-mezcla"><h2>🔀 Repaso mezclado</h2><p>Preguntas que cruzan puntos distintos. Respóndelas antes de abrirlas.</p><details class="qa"><summary>¿Qué tienen en común el principio general y la Parte 2 sobre el costo?</summary><div class="ans">Los dos piden evaluar el <b>costo total de propiedad</b> y no solo el precio.</div></details><details class="qa"><summary>¿Quién emite dictámenes en la política?</summary><div class="ans">El <b>CISO</b>: revisa el dictamen técnico de compatibilidad y emite el dictamen de seguridad de las compras críticas.</div></details><details class="qa"><summary>¿Qué hace el Comité de TI en la política?</summary><div class="ans">Aprueba el catálogo de estándares (diap. 1) y autoriza las compras en el paso 5 del flujo (diap. 4). Fuera de la diapositiva: aprueba excepciones y revisa con Finanzas lo que supera el presupuesto.</div></details><details class="qa"><summary>¿Dónde aparece la Ley 81 de 2019?</summary><div class="ans">En el <b>marco normativo</b> de la diapositiva 4 (datos personales, con el Decreto 285 de 2021).</div></details><details class="qa"><summary>¿Dónde aparece el Acuerdo 003-2012?</summary><div class="ans">En el <b>marco de referencia</b> (diap. 1) y en el <b>marco normativo</b> (diap. 4).</div></details><details class="qa"><summary>¿Qué tienen en común la interoperabilidad y el costo de salida?</summary><div class="ans">La <b>exportación en formatos abiertos</b> (diap. 2) facilita la <b>salida y cambio de proveedor</b> (diap. 3).</div></details><details class="qa"><summary>¿En qué diapositivas aparece el CISO?</summary><div class="ans">En la <b>2</b> (dictamen en servicios críticos, junto a la prueba de concepto) y en la <b>3</b> (dictamen en compras críticas).</div></details></div>
-<div class="cierre" id="c-3f"><h2>✍️ Dila en 3 frases</h2><p>Di o escribe la charla completa en tres frases. Luego compara.</p>
-  <textarea class="office-only" id="tres" placeholder="Mis 3 frases…" aria-label="Mis tres frases"></textarea>
-  <details class="qa"><summary>Ver una versión modelo</summary><div class="ans">La Política de Adquisición Tecnológica define qué compra Banco Horizonte, cómo se integra y quién lo aprueba: alineado al PETI, del catálogo y por su costo total. La Parte 1 pide hardware y software compatibles e interoperables, calificados con un mínimo de 70 puntos; la Parte 2 suma seguridad, TCO y sostenibilidad. Todo cumple el marco normativo y pasa por un flujo de ocho pasos que aprueba el Comité de TI y se revisa cada año.</div></details></div>
-<div class="cierre" id="c-arr"><h2>🚀 Frase de arranque</h2><p>Edítala a tu gusto; se guarda en este dispositivo.</p>
-  <input class="arr" id="arr" type="text" aria-label="Frase de arranque"></div>
-<footer>Charla basada en Politica_Adquisicion_Tecnologica.pdf (tus diapositivas) y Proyecto Final GRTIC 1LS241 (1).pdf · UTP · FISC · uso académico.</footer>
+<section class="blk" id="n-intro" data-i="0">
+<div class="bh"><span class="num">0</span><h2>Arranque</h2><span class="time">⏱ 0:25 <i>→ 0:25</i></span></div>
+<div class="slide">🖥️ Diapositiva 17 · recibes la palabra de Jeremy</div>
+<div class="txt"><div class="dir">Mira al público, no a la pantalla. Respira antes de empezar.</div><p class="hab">Gracias, Jeremy. Ya vimos cómo está armada la tecnología del banco y cómo se conectan sus procesos de COBIT 5.</p><p class="hab">Ahora, cuando Banco Horizonte necesita <b>comprar tecnología nueva</b>, ¿cómo decide? Para eso está la <b>Política de Adquisición Tecnológica</b>, que responde tres preguntas: <b>qué se compra, cómo se integra y quién lo aprueba</b>.</p></div>
+</section><section class="blk" id="n-proposito" data-i="1">
+<div class="bh"><span class="num">1</span><h2>Propósito y marco</h2><span class="time">⏱ 0:35 <i>→ 1:00</i></span></div>
+<div class="slide">🖥️ Diapositiva 17 · Propósito y Marco de referencia</div>
+<div class="txt"><p class="hab">Su propósito es sencillo: que <b>cada compra</b> de hardware, software o servicios en la nube <b>responda a los objetivos del PETI</b>, sea <b>compatible con la plataforma actual</b> y se integre <b>sin crear riesgos ni dependencias innecesarias</b>.</p><div class="dir">Señala el recuadro «Marco de referencia» de la diapositiva.</div><p class="hab">Y no es algo que nos inventamos: se apoya en tres referencias. Primero, <b>COBIT 5</b>, con los procesos <b>BAI03, APO03 y BAI09</b>. Segundo, el <b>Acuerdo 003-2012 de la Superintendencia de Bancos</b>. Y tercero, la <b>ISO/IEC 25010</b>, que es la que habla de <b>coexistencia e interoperabilidad</b>.</p></div>
+</section><section class="blk" id="n-principios" data-i="2">
+<div class="bh"><span class="num">2</span><h2>Principios generales</h2><span class="time">⏱ 0:35 <i>→ 1:35</i></span></div>
+<div class="slide">🖥️ Diapositiva 17 · Principios generales</div>
+<div class="txt"><p class="hab">Antes de entrar en lo técnico, hay <b>cinco reglas</b> que valen para cualquier compra.</p><div class="dir">Cuenta con los dedos: uno, dos, tres, cuatro, cinco.</div><p class="hab">Una: toda compra tiene que estar <b>vinculada a un objetivo o proyecto del PETI</b>. Dos: se prefiere lo que está en el <b>catálogo de estándares que aprueba el Comité de TI</b>.</p><p class="hab">Tres: se evalúa por el <b>costo total de propiedad, no solo por el precio</b>. Cuatro: <b>no se compra tecnología cuyo soporte termine antes de su vida útil</b>. Y cinco: <b>todo activo se registra en el inventario</b>.</p></div>
+</section><section class="blk" id="n-hwsw" data-i="3">
+<div class="bh"><span class="num">3</span><h2>Hardware y software</h2><span class="time">⏱ 0:35 <i>→ 2:10</i></span></div>
+<div class="slide">🖥️ Diapositiva 18 · Parte 1: Hardware y Software</div>
+<div class="txt"><div class="dir">Cambia de diapositiva y haz una pausa corta.</div><p class="hab">Con esas reglas claras, pasamos a la <b>Parte 1: hardware y software</b>.</p><p class="hab">En <b>hardware</b>, cualquier equipo tiene que ser <b>compatible con la plataforma vigente</b> y <b>administrarse de forma centralizada</b>. Y se renueva a los <b>cuatro o cinco años</b>.</p><p class="hab">En <b>software</b>, pedimos tres cosas: <b>licencia válida</b>, que esté <b>dentro del catálogo</b>, y que tenga <b>al menos tres años de parches de seguridad</b>.</p></div>
+</section><section class="blk" id="n-compat" data-i="4">
+<div class="bh"><span class="num">4</span><h2>Compatibilidad e interoperabilidad</h2><span class="time">⏱ 0:40 <i>→ 2:50</i></span></div>
+<div class="slide">🖥️ Diapositiva 18 · Compatibilidad · Interoperabilidad</div>
+<div class="txt"><p class="hab">Pero cumplir esos requisitos no basta. Lo nuevo tiene que <b>convivir con lo que ya existe</b> y <b>hablar con los demás sistemas</b>.</p><p class="hab">Lo primero es la <b>compatibilidad</b>: que la solución <b>coexista sin afectar a otros sistemas</b>. Y si toca <b>servicios críticos</b>, como el core bancario, se exige una <b>prueba de concepto</b> y el <b>dictamen del CISO</b>.</p><p class="hab">Lo segundo es la <b>interoperabilidad</b>, o sea, poder <b>intercambiar información</b>. Para eso pedimos <b>APIs REST con OAuth 2.0</b>, <b>inicio de sesión único</b>, <b>ISO 20022</b> para los pagos y <b>exportación en formatos abiertos</b>.</p><div class="dir">Truco para ti: compatibilidad es convivir; interoperabilidad es conversar.</div></div>
+</section><section class="blk" id="n-criterios" data-i="5">
+<div class="bh"><span class="num">5</span><h2>Criterios de evaluación</h2><span class="time">⏱ 0:30 <i>→ 3:20</i></span></div>
+<div class="slide">🖥️ Diapositiva 18 · Criterios de evaluación</div>
+<div class="txt"><div class="dir">Señala la fila de criterios de abajo.</div><p class="hab">Y al final, ¿cómo se elige entre varias opciones? Con una <b>calificación de seis criterios</b>.</p><p class="hab">La <b>funcionalidad</b> pesa un <b>25 %</b> y la <b>seguridad</b> un <b>20 %</b>. <b>Compatibilidad, interoperabilidad y costo total de propiedad</b>, un <b>15 % cada uno</b>. Y el <b>soporte</b>, un <b>10 %</b>.</p><p class="hab">Si una alternativa saca <b>menos de 70 puntos</b>, se descarta: <b>el mínimo para continuar es 70</b>.</p></div>
+</section><section class="blk" id="n-cierre" data-i="6">
+<div class="bh"><span class="num">FIN</span><h2>Cierre y paso a Manuel</h2><span class="time">⏱ 0:25 <i>→ 3:45</i></span></div>
+<div class="slide">🖥️ Sigues en la diapositiva 18 · después habla Manuel (diap. 19)</div>
+<div class="txt"><div class="dir">Baja el ritmo. Esta es la idea que quieres que se lleven.</div><p class="hab">Entonces, para resumir: comprar tecnología en un banco <b>no es solo una decisión de precio</b>. Lo que <b>no es compatible, no se integra o pierde soporte</b> termina <b>costando más y aumentando el riesgo</b>.</p><p class="hab">Esa es la Parte 1. La <b>Parte 2</b>, con la <b>seguridad de las adquisiciones y la gestión de costos</b>, nos la presenta <b>Manuel</b>.</p><div class="dir">Gira hacia Manuel y cédele la palabra con la mirada.</div></div>
+</section>
+<div class="unit">POR SI PREGUNTAN</div>
+<div class="cierre"><h2>💬 Respuestas cortas, dichas con naturalidad</h2><p>Esto no va en la exposición; tenlo listo para las preguntas. Sale del trabajo escrito (págs. 27–29).</p><details class="qa"><summary>¿A qué compras aplica la política?</summary><div class="ans">A toda compra, arrendamiento, suscripción o renovación tecnológica, incluidos los proyectos PR-02 a PR-09 del PETI y los servicios en la nube.</div></details><details class="qa"><summary>¿Quién mantiene el catálogo de estándares?</summary><div class="ans">Lo mantiene la Gerencia de TI y lo aprueba el Comité de TI cada año.</div></details><details class="qa"><summary>¿Por qué cuatro o cinco años de renovación?</summary><div class="ans">Cuatro años para los equipos de usuario; cinco para servidores, red y respaldo. Por ejemplo, un equipo de usuario pide 64 bits, 16 GB de RAM, SSD de 512 GB y TPM 2.0, con garantía de tres años.</div></details><details class="qa"><summary>¿Cuáles son los servicios críticos?</summary><div class="ans">El core bancario, la banca en línea y móvil, los servidores y la virtualización, y la red de las cinco sucursales. Si no hay dictamen técnico revisado por el CISO, la compra no continúa.</div></details><details class="qa"><summary>¿Qué es eso de inicio de sesión único y formatos abiertos?</summary><div class="ans">Inicio de sesión único con SAML 2.0 u OpenID Connect, para entrar a todo con una sola cuenta. Formatos abiertos son CSV, JSON o XML, para alimentar la BI y para poder migrar de proveedor. Y nada de acceder directo a la base de datos de otro sistema: todo va por APIs documentadas.</div></details><details class="qa"><summary>¿Y si una compra no cumple la política?</summary><div class="ans">Puede pedirse una excepción: la aprueba el Comité de TI por un máximo de doce meses.</div></details></div>
+<footer>Basado en Proyecto Final PPT. GRTIC.pdf (diap. 17–18) y Proyecto Final GRTIC 1LS241 (1).pdf (págs. 27–29) · UTP · GRTIC · uso académico.</footer>
 </main>
-</div>
-<div id="toast" role="status"></div>
-<div id="stage" aria-modal="true" role="dialog" aria-label="Modo escenario">
-  <div class="sh"><span id="sPos"></span><button type="button" id="sClose">✕ Salir</button></div>
-  <div class="st" id="sT"></div><div class="stime" id="sTime"></div>
-  <ul id="sSay"></ul><div class="sk" id="sKeys"></div><div class="stran" id="sTran"></div>
-  <div class="sfoot">Toca la derecha → siguiente · izquierda → anterior</div>
-  <div class="tap l" id="tapL"></div><div class="tap r" id="tapR"></div>
 </div>
 <script src="audio/guion.js"></script>
 <script src="audio/voz.js"></script>
 <script>
 (function(){
-"use strict";
-function load(k){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
-function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
-function $(id){ return document.getElementById(id); }
-function fmt(s){ s = Math.max(0, Math.round(s)); var m = Math.floor(s/60), r = s%60; return m+":"+(r<10?"0":"")+r; }
-
-var STAGE = [{"n": "0", "t": "Intro", "sec": 30, "say": ["Después del mapa de COBIT 5, paso a la <b>Política de Adquisición Tecnológica</b>: <b>qué se compra, cómo se integra y quién lo aprueba</b>.", "Su propósito: que cada compra de <b>hardware, software o servicios en la nube</b> <b>responda a los objetivos del PETI</b> y sea <b>compatible con la plataforma actual</b>.", "Y que se <b>integre sin crear riesgos ni dependencias innecesarias</b>.", "Se apoya en tres referencias: <b>COBIT 5</b>, con BAI03, APO03 y BAI09; el <b>Acuerdo 003-2012</b> de la Superintendencia de Bancos; y la <b>ISO/IEC 25010</b>, por coexistencia e interoperabilidad."], "keys": ["qué se compra · cómo se integra · quién lo aprueba", "hardware · software · nube", "objetivos del PETI", "sin riesgos ni dependencias", "BAI03 · APO03 · BAI09", "Acuerdo 003-2012", "ISO/IEC 25010"], "tran": "En la misma diapositiva están los cinco principios que valen para cualquier compra.", "d": "Diap. 1"}, {"n": "1", "t": "Principios generales", "sec": 25, "say": ["Toda compra está <b>vinculada a un objetivo o proyecto del PETI</b>.", "Se prefiere el <b>catálogo de estándares</b> aprobado por el <b>Comité de TI</b>.", "Se evalúa por <b>costo total de propiedad</b>, no solo por precio.", "No se compra tecnología cuyo <b>soporte termine antes de su vida útil</b>.", "Y <b>todo activo se registra en el inventario</b>."], "keys": ["objetivo o proyecto del PETI", "catálogo del Comité de TI", "costo total, no solo precio", "soporte ≥ vida útil", "todo al inventario"], "tran": "Con esas reglas pasamos a la Parte 1: hardware y software.", "d": "Diap. 1"}, {"n": "2", "t": "Hardware, software y criterios", "sec": 45, "say": ["<b>Hardware</b>: compatible con la plataforma vigente, <b>administrado de forma centralizada</b> y con <b>renovación a los 4–5 años</b>.", "<b>Software</b>: <b>licencia válida</b>, <b>dentro del catálogo</b> y con <b>al menos 3 años de parches de seguridad</b>.", "Las alternativas se califican con seis criterios: <b>funcionalidad 25 %</b> y <b>seguridad 20 %</b>; compatibilidad, interoperabilidad y costo total, <b>15 % cada uno</b>; y <b>soporte 10 %</b>.", "El <b>mínimo para continuar es 70 puntos</b>."], "keys": ["administrado centralmente", "renovación 4–5 años", "licencia válida · catálogo", "3 años de parches", "25-20-15-15-15-10", "mínimo 70 puntos"], "tran": "Pero cumplir no basta: en la misma diapositiva, tiene que convivir con lo que existe y hablar con los demás sistemas.", "d": "Diap. 2"}, {"n": "3", "t": "Compatibilidad e interoperabilidad", "sec": 40, "say": ["<b>Compatibilidad</b>: la solución <b>coexiste sin afectar otros sistemas</b>.", "En <b>servicios críticos</b>, como el core bancario o la red, se exige <b>prueba de concepto</b> y <b>dictamen del CISO</b>.", "<b>Interoperabilidad</b>: intercambiar información con <b>APIs REST con OAuth 2.0</b>, <b>inicio de sesión único</b>, <b>ISO 20022</b> para pagos y <b>exportación en formatos abiertos</b>.", "Son las dos características de la <b>ISO/IEC 25010</b> del marco de referencia."], "keys": ["coexiste sin afectar", "servicios críticos", "prueba de concepto · dictamen del CISO", "APIs REST · OAuth 2.0", "inicio de sesión único", "ISO 20022", "formatos abiertos"], "tran": "Así cierra la Parte 1; vamos con la Parte 2: seguridad, costos y sostenibilidad.", "d": "Diap. 2"}, {"n": "4", "t": "Seguridad", "sec": 30, "say": ["La seguridad empieza por <b>evaluar riesgos</b> sobre la <b>confidencialidad, integridad y disponibilidad</b>.", "Se exige <b>cifrado, MFA y prevención de fugas</b>, con <b>parches y monitoreo continuo</b>.", "El <b>proveedor notifica incidentes y acepta auditorías</b>.", "Y en las <b>compras críticas</b>, el <b>CISO emite su dictamen</b>."], "keys": ["confidencialidad · integridad · disponibilidad", "cifrado · MFA · prevención de fugas", "parches y monitoreo continuo", "notifica incidentes · acepta auditorías", "dictamen del CISO"], "tran": "Segura, sí; pero también tiene que tener sentido económico.", "d": "Diap. 3"}, {"n": "5", "t": "Costos y costo total de propiedad", "sec": 30, "say": ["El <b>costo total de propiedad</b> suma cinco costos: <b>adquisición</b>; <b>implementación y capacitación</b>; <b>operación y soporte</b>; <b>renovación</b>; y <b>salida y cambio de proveedor</b>.", "El precio de compra es solo el primero.", "Y cada compra lleva una <b>justificación económica ligada al PETI</b>."], "keys": ["adquisición", "implementación y capacitación", "operación y soporte", "renovación", "salida y cambio de proveedor", "justificación ligada al PETI"], "tran": "Y además de rentable a largo plazo, que sea responsable con el ambiente.", "d": "Diap. 3"}, {"n": "6", "t": "Sostenibilidad", "sec": 20, "say": ["<b>Eficiencia energética</b>, y <b>durabilidad y repuestos</b>.", "<b>Reutilizar antes de reemplazar</b>.", "<b>Residuos electrónicos</b> con <b>gestores autorizados</b>, y <b>proveedores de nube sostenibles</b>.", "Estos <b>criterios ambientales</b> entran <b>en cada evaluación</b>."], "keys": ["eficiencia energética", "durabilidad y repuestos", "reutilizar antes de reemplazar", "gestores autorizados", "nube sostenible", "en cada evaluación"], "tran": "Y todo esto tiene que cumplir la ley y pasar por una aprobación.", "d": "Diap. 3"}, {"n": "7", "t": "Marco normativo", "sec": 30, "say": ["El <b>marco normativo</b>: el <b>Acuerdo 003-2012</b> de la Superintendencia de Bancos y el <b>Acuerdo 007-2011</b> de riesgo operativo.", "La <b>Ley 81 de 2019</b> de datos personales, reglamentada por el <b>Decreto Ejecutivo 285 de 2021</b>.", "La <b>Ley 23 de 2015</b> de prevención de blanqueo, y <b>COBIT 5</b>."], "keys": ["003-2012 · SBP", "007-2011 · riesgo operativo", "Ley 81 de 2019 · datos personales", "Decreto 285 de 2021", "Ley 23 de 2015 · blanqueo", "COBIT 5"], "tran": "Con ese marco, así se aprueba una compra: en ocho pasos.", "d": "Diap. 4"}, {"n": "8", "t": "Flujo de aprobación y contrato", "sec": 25, "say": ["El <b>flujo de aprobación</b> tiene ocho pasos: empieza con la <b>solicitud</b>, y siguen tres evaluaciones: <b>integral, económica y del proveedor</b>.", "Luego la <b>aprobación del Comité de TI</b> y la <b>formalización del contrato</b>.", "Todo contrato incluye <b>SLA, confidencialidad, auditoría, continuidad y devolución de los datos</b>.", "Y no termina al firmar: <b>seguimiento de SLA y riesgos</b>, y <b>revisión anual</b>."], "keys": ["8 pasos", "solicitud", "evaluación integral · económica · del proveedor", "aprobación del Comité de TI", "SLA · confidencialidad · auditoría · continuidad · devolución", "seguimiento · revisión anual"], "tran": "Para cerrar…", "d": "Diap. 4"}, {"n": "FIN", "t": "Cierre", "sec": 25, "say": ["<b>Comprar tecnología en un banco no es solo una decisión de precio.</b>", "Lo que no es compatible, no se integra o pierde soporte <b>termina costando más y aumentando el riesgo</b>.", "Por eso la política define <b>qué se compra, cómo se integra y quién lo aprueba</b>, para que cada compra <b>aporte al PETI</b>. Gracias."], "keys": ["no es solo precio", "cuesta más y aumenta el riesgo", "qué · cómo · quién", "aporta al PETI"], "tran": "", "d": "Diap. 4"}];
-var PRE = "gr_charlapf_";
-var blks = Array.prototype.slice.call(document.querySelectorAll("section.blk"));
-var acc = 0; STAGE.forEach(function(b){ acc += b.sec; b.acc = acc; });
-
-/* ---------- modo 🏢 / 🚌 ---------- */
-var mode = load(PRE+"modo_v1") || (matchMedia("(max-width:560px)").matches ? "transit" : "office");
-function setOpen(sec, open){ sec.classList.toggle("closed", !open); sec.querySelector(".bh").setAttribute("aria-expanded", open ? "true" : "false"); if(open) save(PRE+"pos_v1", sec.id); }
-function applyMode(){
-  document.body.classList.toggle("transit", mode === "transit");
-  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ var on = b.getAttribute("data-m") === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
-  $("notice").textContent = mode === "transit" ? "🚌 Activa No Molestar · repasa en silencio o susurrando · los bloques están plegados: toca uno para abrirlo." : "🏢 Teléfono fuera de la vista · ensaya de pie y en voz alta.";
-  blks.forEach(function(s){ s.classList.toggle("closed", mode === "transit"); s.querySelector(".bh").setAttribute("aria-expanded", mode === "transit" ? "false" : "true"); });
+var PRE = "gr_charlapf_", $ = function(i){ return document.getElementById(i); };
+function get(k){ try{ return localStorage.getItem(PRE+k); }catch(e){ return null; } }
+function set(k,v){ try{ localStorage.setItem(PRE+k,v); }catch(e){} }
+function tog(id, cls, key, on){
+  var b = $(id), apply = function(v){ document.body.classList.toggle(cls, v); b.classList.toggle("on", v); b.setAttribute("aria-pressed", v); };
+  apply(get(key) === "1");
+  b.addEventListener("click", function(){ var v = !document.body.classList.contains(cls); apply(v); set(key, v ? "1" : "0"); });
 }
-Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function(b){ b.addEventListener("click", function(){ mode = b.getAttribute("data-m"); save(PRE+"modo_v1", mode); applyMode(); }); });
-blks.forEach(function(s){
-  var h = s.querySelector(".bh");
-  function tog(e){ if(e.target.closest(".kit-tts")) return; setOpen(s, s.classList.contains("closed")); }
-  h.addEventListener("click", tog);
-  h.addEventListener("keydown", function(e){ if(e.key === "Enter" || e.key === " "){ e.preventDefault(); tog(e); } });
-});
-applyMode();
-$("btnCont").addEventListener("click", function(){
-  var id = load(PRE+"pos_v1"), s = id && $(id); if(!s) s = blks[0];
-  setOpen(s, true); s.scrollIntoView({behavior:"smooth", block:"start"});
-});
-
-/* ---------- progreso, posición y barra lateral ---------- */
-var side = document.querySelectorAll("aside.side a");
+tog("tBig", "big", "natural_big_v1"); tog("tDir", "nodir", "natural_nodir_v1");
+var blks = Array.prototype.slice.call(document.querySelectorAll(".blk"));
+var links = document.querySelectorAll("aside.side a");
 function onScroll(){
-  var h = document.documentElement; $("prog").style.width = (h.scrollTop/(h.scrollHeight-h.clientHeight)*100 || 0) + "%";
-  var cur = null; blks.forEach(function(s){ if(s.getBoundingClientRect().top < 160) cur = s; });
-  if(cur){ Array.prototype.forEach.call(side, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); }); if(!cur.classList.contains("closed")) save(PRE+"pos_v1", cur.id); }
+  var h = document.documentElement, p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
+  $("prog").style.width = (p*100) + "%";
+  var cur = blks[0]; blks.forEach(function(b){ if(b.getBoundingClientRect().top < 160) cur = b; });
+  Array.prototype.forEach.call(links, function(a){ a.classList.toggle("cur", a.getAttribute("data-id") === cur.id); });
 }
-addEventListener("scroll", onScroll, {passive:true}); onScroll();
-Array.prototype.forEach.call(side, function(a){ a.addEventListener("click", function(){ var s = $(a.getAttribute("data-id")); if(s) setOpen(s, true); }); });
-
-/* ---------- pausa sugerida (oficina) ---------- */
-var pomo = null;
-function toast(t){ var el = $("toast"); el.textContent = t; el.style.display = "block"; setTimeout(function(){ el.style.display = "none"; }, 6000); }
-$("btnPomo").addEventListener("click", function(){
-  if(pomo){ clearInterval(pomo); pomo = null; $("btnPomo").textContent = "⏱ Pausa en 25 min"; return; }
-  var end = Date.now() + 25*60000;
-  pomo = setInterval(function(){
-    var left = (end - Date.now())/1000;
-    if(left <= 0){ clearInterval(pomo); pomo = null; $("btnPomo").textContent = "⏱ Pausa en 25 min"; toast("☕ Pausa de 5 min lejos de la pantalla"); return; }
-    $("btnPomo").textContent = "⏱ " + fmt(left) + " · detener";
-  }, 1000);
-});
-
-/* ---------- 3 frases y frase de arranque ---------- */
-var tres = $("tres"); tres.value = load(PRE+"tres_v1") || ""; tres.addEventListener("input", function(){ save(PRE+"tres_v1", tres.value); });
-var arr = $("arr"); arr.value = load(PRE+"arranque_v1") || "Cuando me siente en el bus / llegue a la oficina, abro ▶ Continuar y digo la transición del último punto.";
-arr.addEventListener("input", function(){ save(PRE+"arranque_v1", arr.value); });
-
-/* ---------- modo escenario ---------- */
-var st = $("stage"), cur = 0, lock = null;
-function show(i){
-  cur = Math.max(0, Math.min(STAGE.length-1, i)); var b = STAGE[cur];
-  $("sPos").textContent = (cur+1) + " / " + STAGE.length + " · " + b.n + (b.d ? " · 🖥️ " + b.d : "");
-  $("sT").textContent = b.t; $("sTime").textContent = "⏱ " + fmt(b.sec) + "  → " + fmt(b.acc);
-  $("sSay").innerHTML = b.say.map(function(s){ return "<li>"+s+"</li>"; }).join("");
-  $("sKeys").innerHTML = b.keys.map(function(k){ return "<span>"+k+"</span>"; }).join("");
-  $("sTran").textContent = b.tran ? "➜ " + b.tran : "";
-}
-$("goStage").addEventListener("click", function(){
-  st.classList.add("on"); show(0); document.body.style.overflow = "hidden";
-  try{ if(navigator.wakeLock) navigator.wakeLock.request("screen").then(function(l){ lock = l; }).catch(function(){}); }catch(e){}
-});
-$("sClose").addEventListener("click", function(){ st.classList.remove("on"); document.body.style.overflow = ""; try{ if(lock) lock.release(); }catch(e){} lock = null; });
-$("tapR").addEventListener("click", function(){ show(cur+1); });
-$("tapL").addEventListener("click", function(){ show(cur-1); });
-addEventListener("keydown", function(e){ if(!st.classList.contains("on")) return; if(e.key === "ArrowRight" || e.key === " "){ e.preventDefault(); show(cur+1); } if(e.key === "ArrowLeft") show(cur-1); if(e.key === "Escape") $("sClose").click(); });
-
-/* ---------- 🔊 escuchar (MP3 con respaldo de voz del navegador) ---------- */
-if(window.Voz){
+window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+if (window.Voz) {
   Voz.init({
     sections: blks, key: function(s){ return s.id; },
-    title: function(s){ var i = +s.getAttribute("data-i"); return STAGE[i].n + " · " + STAGE[i].t; },
-    blocks: ".say li, .trans", skip: ".pre, .mem, details",
+    title: function(s){ return s.querySelector("h2").textContent; },
+    blocks: "p.hab", skip: ".dir, details",
     target: function(s){ return s.querySelector(".bh"); },
-    onOpen: function(s){ if(s.classList.contains("closed")) setOpen(s, true); },
     playerId: "vozPlayer", btnClass: "kit-tts", allClass: "btn", allTarget: $("actions"),
-    rateKey: PRE+"tts_rate_v1", artist: "Charla · Política de Adquisición Tecnológica"
+    rateKey: PRE+"tts_rate_v1", artist: "Charla · Política de Adquisición Tecnológica · Guion hablado"
   });
-  var all = $("actions").querySelector(".btn:last-child"); if(all && /Escuchar todo/.test(all.textContent)) all.textContent = "🎧 Escuchar toda la charla";
+  var all = $("actions").querySelector(".btn:last-child"); if(all && /Escuchar todo/.test(all.textContent)) all.textContent = "🎧 Escuchar todo el guion";
 }
 })();
 </script>

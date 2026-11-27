@@ -17,7 +17,7 @@ from playwright.async_api import async_playwright
 
 VOICE = "es-PA-MargaritaNeural"
 HERE = Path(__file__).resolve().parent
-PAGES = ["guion", "puntos", "resumen"]
+PAGES = ["guion", "puntos", "resumen", "tema"]
 BYTES_PER_SEC = 48000 / 8  # edge-tts entrega MP3 mono a 48 kbps
 PARALLEL = 6
 
